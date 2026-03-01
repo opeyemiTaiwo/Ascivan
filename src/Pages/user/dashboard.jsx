@@ -1,7 +1,7 @@
 // src/Pages/user/dashboard.jsx - FULLY RESPONSIVE WITH UNIVERSAL NAVBAR
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { usePWA } from '../../hooks/usePWA';
 import Navbar from '../../components/Navbar';
@@ -299,8 +299,12 @@ const DeleteAccountModal = ({ isOpen, onClose, currentUser, onDeleted }) => {
 
 const UserDashboard = ({ currentUser, onNavigate }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('community');
+  const [activeSection, setActiveSection] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('tab') || 'community';
+  });
   
   const { isInstallable, isInstalled, installing, installApp } = usePWA();
   const [showPWADebug, setShowPWADebug] = useState(process.env.NODE_ENV === 'development');

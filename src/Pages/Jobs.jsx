@@ -221,7 +221,7 @@ const Jobs = () => {
           <section className="mb-10 text-center">
             <div className="mb-4 inline-block px-4 py-2 bg-orange-500/10 border border-orange-500/20 rounded-xl">
               <p className="text-orange-400 font-semibold text-sm">
-                👋 Welcome, {currentUser.displayName?.split(' ')[0] || 'User'}! Find your next opportunity.
+                Welcome, {currentUser.displayName?.split(' ')[0] || 'User'}! Find your next opportunity.
               </p>
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-3 sm:mb-4">Jobs</h1>
@@ -309,7 +309,7 @@ const Jobs = () => {
                   <span className={`w-4 h-4 rounded flex items-center justify-center text-xs border ${visaFilter ? 'bg-green-500 border-green-400' : 'border-gray-500'}`}>
                     {visaFilter && '✓'}
                   </span>
-                  🛂 Visa-Compliant / Sponsorship Available
+                  Visa-Compliant / Sponsorship Available
                 </button>
 
                 <div className="flex items-center gap-4 text-sm">
@@ -330,7 +330,6 @@ const Jobs = () => {
           <section>
             {filteredPosts.length === 0 ? (
               <div className="text-center py-16">
-                <div className="text-4xl sm:text-5xl mb-4">💼</div>
                 <h3 className="text-2xl font-bold text-white mb-3">
                   {posts.length === 0 ? 'No jobs posted yet' : 'No jobs match your filters'}
                 </h3>
@@ -369,7 +368,7 @@ const Jobs = () => {
                             </span>
                             {post.visaCompliant && (
                               <span className="bg-green-500/20 text-green-300 px-2.5 py-1 rounded-lg text-xs font-semibold">
-                                🛂 Visa OK
+                                Visa OK
                               </span>
                             )}
                             {post.sponsorshipAvailable && (

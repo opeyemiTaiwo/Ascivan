@@ -853,18 +853,30 @@ const CommunityPosts = () => {
 
     try {
       await safeFirestoreOperation(async () => {
+        // If reposting a repost, trace back to the root original content
+        const isRepostOfRepost = originalPost.type === 'repost';
+        const rootAuthorId = isRepostOfRepost ? originalPost.originalAuthorId : originalPost.authorId;
+        const rootAuthorName = isRepostOfRepost ? originalPost.originalAuthorName : (originalPost.authorName || 'Unknown');
+        const rootAuthorEmail = isRepostOfRepost ? originalPost.originalAuthorEmail : (originalPost.authorEmail || '');
+        const rootAuthorPhoto = isRepostOfRepost ? originalPost.originalAuthorPhoto : (originalPost.authorPhoto || null);
+        const rootContent = isRepostOfRepost ? originalPost.originalContent : (originalPost.content || '');
+        const rootTitle = isRepostOfRepost ? originalPost.originalTitle : (originalPost.title || '');
+        const rootCreatedAt = isRepostOfRepost ? originalPost.originalCreatedAt : originalPost.createdAt;
+        const rootMedia = isRepostOfRepost ? (originalPost.originalMedia || []) : (originalPost.media || []);
+        const rootTaggedUsers = isRepostOfRepost ? (originalPost.originalTaggedUsers || []) : (originalPost.taggedUsers || []);
+
         const repostData = {
           type: 'repost',
           originalPostId: originalPostId,
-          originalAuthorId: originalPost.authorId,
-          originalAuthorName: originalPost.authorName || 'Unknown',
-          originalAuthorEmail: originalPost.authorEmail || '',
-          originalAuthorPhoto: originalPost.authorPhoto || null,
-          originalContent: originalPost.content || '',
-          originalTitle: originalPost.title || '',
-          originalCreatedAt: originalPost.createdAt,
-          originalMedia: originalPost.media || [],
-          originalTaggedUsers: originalPost.taggedUsers || [],
+          originalAuthorId: rootAuthorId,
+          originalAuthorName: rootAuthorName,
+          originalAuthorEmail: rootAuthorEmail,
+          originalAuthorPhoto: rootAuthorPhoto,
+          originalContent: rootContent,
+          originalTitle: rootTitle,
+          originalCreatedAt: rootCreatedAt,
+          originalMedia: rootMedia,
+          originalTaggedUsers: rootTaggedUsers,
           authorName: currentUser.displayName || currentUser.email,
           authorId: currentUser.uid,
           authorEmail: currentUser.email,

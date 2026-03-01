@@ -161,24 +161,24 @@ const Finance = () => {
 
   const getTypeBadge = (type) => {
     const map = {
-      'scholarships': { label: '🎓 Scholarship', cls: 'bg-yellow-500/20 text-yellow-300' },
-      'loans': { label: '💰 Loan', cls: 'bg-blue-500/20 text-blue-300' },
-      'work-study': { label: '💼 Work-Study', cls: 'bg-indigo-500/20 text-indigo-300' },
-      'grants': { label: '🏆 Grant', cls: 'bg-emerald-500/20 text-emerald-300' },
-      'assistantships': { label: '📚 Assistantship', cls: 'bg-cyan-500/20 text-cyan-300' },
-      'fellowships': { label: '🏅 Fellowship', cls: 'bg-amber-500/20 text-amber-300' },
+      'scholarships': { label: ' Scholarship', cls: 'bg-yellow-500/20 text-yellow-300' },
+      'loans': { label: ' Loan', cls: 'bg-blue-500/20 text-blue-300' },
+      'work-study': { label: ' Work-Study', cls: 'bg-indigo-500/20 text-indigo-300' },
+      'grants': { label: ' Grant', cls: 'bg-emerald-500/20 text-emerald-300' },
+      'assistantships': { label: ' Assistantship', cls: 'bg-cyan-500/20 text-cyan-300' },
+      'fellowships': { label: ' Fellowship', cls: 'bg-amber-500/20 text-amber-300' },
     };
     return map[type] || { label: type || 'Financial Resource', cls: 'bg-orange-500/20 text-orange-300' };
   };
 
   const getSourceBadge = (source) => {
     const map = {
-      'university': { label: '🏫 University', cls: 'bg-blue-600/20 text-blue-200' },
-      'federal': { label: '🏛️ Federal', cls: 'bg-slate-500/20 text-slate-300' },
-      'state': { label: '🗺️ State', cls: 'bg-violet-500/20 text-violet-300' },
-      'private': { label: '🏢 Private', cls: 'bg-pink-500/20 text-pink-300' },
-      'nonprofit': { label: '💚 Nonprofit', cls: 'bg-green-600/20 text-green-200' },
-      'employer': { label: '👔 Employer', cls: 'bg-amber-600/20 text-amber-200' },
+      'university': { label: ' University', cls: 'bg-blue-600/20 text-blue-200' },
+      'federal': { label: ' Federal', cls: 'bg-slate-500/20 text-slate-300' },
+      'state': { label: ' State', cls: 'bg-violet-500/20 text-violet-300' },
+      'private': { label: ' Private', cls: 'bg-pink-500/20 text-pink-300' },
+      'nonprofit': { label: ' Nonprofit', cls: 'bg-green-600/20 text-green-200' },
+      'employer': { label: ' Employer', cls: 'bg-amber-600/20 text-amber-200' },
     };
     return map[source] || null;
   };
@@ -208,7 +208,7 @@ const Finance = () => {
           {/* Hero */}
           <section className="mb-10 text-center">
             <div className="mb-4 inline-block px-4 py-2 bg-orange-500/10 border border-orange-500/20 rounded-xl">
-              <p className="text-orange-400 font-semibold text-sm">💰 Financial resources for international students</p>
+              <p className="text-orange-400 font-semibold text-sm"> Financial resources for international students</p>
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-3 sm:mb-4">Finance</h1>
             <p className="text-gray-300 text-base sm:text-lg mb-6">Scholarships · Loans · Work-Study · Grants · Fellowships · Banking · Tax Help</p>
@@ -300,7 +300,6 @@ const Finance = () => {
           <section>
             {filteredPosts.length === 0 ? (
               <div className="text-center py-16">
-                <div className="text-4xl sm:text-5xl mb-4">💰</div>
                 <h3 className="text-2xl font-bold text-white mb-3">
                   {posts.length === 0 ? 'No resources listed yet' : 'No resources match your search'}
                 </h3>
@@ -328,7 +327,7 @@ const Finance = () => {
                             {sourceBadge && <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${sourceBadge.cls}`}>{sourceBadge.label}</span>}
                             {post.noSSNRequired && <span className="bg-green-500/20 text-green-300 px-2.5 py-1 rounded-lg text-xs font-semibold">No SSN Req.</span>}
                             {post.internationalFriendly && <span className="bg-blue-500/20 text-blue-300 px-2.5 py-1 rounded-lg text-xs font-semibold">Intl. Friendly</span>}
-                            {post.availableNationwide && <span className="bg-teal-500/20 text-teal-300 px-2.5 py-1 rounded-lg text-xs font-semibold">🌎 Nationwide</span>}
+                            {post.availableNationwide && <span className="bg-teal-500/20 text-teal-300 px-2.5 py-1 rounded-lg text-xs font-semibold"> Nationwide</span>}
                             {isClosed && <span className="bg-white/10 text-gray-400 px-2.5 py-1 rounded-lg text-xs font-semibold">Closed</span>}
                           </div>
                           {isOwnPost && (
@@ -343,7 +342,7 @@ const Finance = () => {
 
                         <h3 className={`text-lg font-bold mb-1 line-clamp-2 ${isClosed ? 'text-gray-500' : 'text-white'}`}>{post.title}</h3>
                         {post.providerName && <p className="text-orange-400 text-sm font-semibold mb-1">{post.providerName}</p>}
-                        {post.university && <p className="text-blue-400 text-xs font-semibold mb-2">🏫 {post.university}</p>}
+                        {post.university && <p className="text-blue-400 text-xs font-semibold mb-2"> {post.university}</p>}
 
                         {/* Location */}
                         {(post.city || post.availableNationwide) && (
@@ -365,7 +364,7 @@ const Finance = () => {
 
                         {/* Deadline */}
                         {post.deadline && (
-                          <p className="text-yellow-400 text-xs font-semibold mb-2">⏰ Deadline: {post.deadline}</p>
+                          <p className="text-yellow-400 text-xs font-semibold mb-2"> Deadline: {post.deadline}</p>
                         )}
 
                         <p className={`text-sm mb-4 line-clamp-3 flex-grow ${isClosed ? 'text-gray-500' : 'text-gray-300'}`}>{post.description}</p>
@@ -381,7 +380,7 @@ const Finance = () => {
 
                         <div className="mt-auto pt-4 border-t border-white/10">
                           <div className="flex justify-between text-xs text-gray-400 mb-3">
-                            <span className="truncate max-w-[140px] flex items-center gap-1">{post.posterName}{post.isCompanyPost && <span className="text-blue-400 text-[10px]">🏢</span>}</span>
+                            <span className="truncate max-w-[140px] flex items-center gap-1">{post.posterName}{post.isCompanyPost && <span className="text-blue-400 text-[10px]"></span>}</span>
                             <span>{formatTimeAgo(post.createdAt)}</span>
                           </div>
                           <button

@@ -215,7 +215,7 @@ const PostJobs = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen" style={{ backgroundColor: '#000000' }} className="min-h-screen overflow-x-hidden">
+      <div className="min-h-screen overflow-x-hidden pt-20 sm:pt-24" style={{ backgroundColor: '#000000' }}>
         <main className="pb-16 sm:pb-20 md:pb-24">
           <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 md:py-10 max-w-3xl">
 

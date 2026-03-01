@@ -5,7 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { usePWA } from '../../hooks/usePWA';
 import Navbar from '../../components/Navbar';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { GoogleAuthProvider, reauthenticateWithPopup } from 'firebase/auth';
 import { deleteUserAccount } from '../../utils/deleteUserContent';
@@ -607,7 +607,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           } else {
             updateData.companyProfile = null;
           }
-          await updateDoc(doc(db, 'users', currentUser.uid), updateData);
+          await setDoc(doc(db, 'users', currentUser.uid), updateData, { merge: true });
           setUserProfile(prev => ({ ...prev, name: updateData.displayName }));
           setProfileData(prev => ({ ...prev, ...updateData }));
           setProfileEditing(false);

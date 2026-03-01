@@ -194,7 +194,7 @@ const UserProfile = () => {
                 </div>
                 {isOwnProfile && (
                   <button
-                    onClick={() => navigate('/dashboard')}
+                    onClick={() => navigate('/dashboard?tab=profile')}
                     className="self-start sm:self-auto px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-sm font-semibold transition-colors"
                   >
                     Edit Profile
@@ -259,7 +259,7 @@ const UserProfile = () => {
                   </p>
                   {isOwnProfile && (
                     <button
-                      onClick={() => navigate('/dashboard')}
+                      onClick={() => navigate('/dashboard?tab=profile')}
                       className="mt-3 px-4 py-2 bg-orange-500 text-white rounded-lg text-sm font-semibold"
                     >
                       Complete Your Profile

@@ -10,7 +10,8 @@ import {
   doc, 
   getDoc, 
   setDoc, 
-  updateDoc 
+  updateDoc,
+  serverTimestamp
 } from "firebase/firestore";
 import { auth, db } from "../firebase/config";
 
@@ -45,8 +46,8 @@ export const AuthProvider = ({ children }) => {
             email: user.email,
             displayName: user.displayName || user.email?.split('@')[0] || 'User',
             photoURL: user.photoURL || null,
-            createdAt: new Date(),
-            lastLogin: new Date(),
+            createdAt: serverTimestamp(),
+            lastLogin: serverTimestamp(),
             
             // ✅ AUTO-SETUP EMAIL PREFERENCES FOR NEW USERS (BOTH DIGESTS ON)
             emailPreferences: {
@@ -77,7 +78,7 @@ export const AuthProvider = ({ children }) => {
           const userData = userDoc.data();
           
           await updateDoc(userDocRef, {
-            lastLogin: new Date(),
+            lastLogin: serverTimestamp(),
             photoURL: user.photoURL || userData.photoURL // Update photo if changed
           });
 

@@ -7,6 +7,7 @@ import {
   collection, 
   query, 
   getDocs,
+  onSnapshot,
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
@@ -52,77 +53,50 @@ const MembersDirectory = () => {
   useEffect(() => {
     if (authLoading || !currentUser) return;
 
-    const fetchMembers = async () => {
-      try {
-        setLoading(true);
-        
-        const usersQuery = query(collection(db, 'users'));
-        const usersSnapshot = await getDocs(usersQuery);
-
-        if (usersSnapshot.size === 0) {
-          setMembers([]);
-          setFilteredMembers([]);
-          setLoading(false);
-          return;
+    const processSnapshot = (snapshot) => {
+      const membersData = snapshot.docs.map((userDoc) => {
+        try {
+          const userData = userDoc.data();
+          const email = userData.email;
+          if (!email || !email.includes('@')) return null;
+          return {
+            uid: userDoc.id,
+            email,
+            name: userData.displayName || email.split('@')[0],
+            displayName: userData.displayName || email.split('@')[0],
+            photoURL: userData.photoURL || null,
+            university: userData.university || '',
+            major: userData.major || '',
+            city: userData.city || '',
+            state: userData.state || '',
+            visaStatus: userData.visaStatus || '',
+            joinedDate: userData.createdAt?.toDate?.() || null,
+            lastActive: userData.lastLogin?.toDate?.()?.getTime() || userData.createdAt?.toDate?.()?.getTime() || 0,
+            isActive: userData.lastLogin?.toDate?.()
+              ? userData.lastLogin.toDate().getTime() > (Date.now() - 90 * 24 * 60 * 60 * 1000)
+              : false,
+          };
+        } catch (e) {
+          return null;
         }
-
-        const membersData = usersSnapshot.docs.map((userDoc) => {
-          try {
-            const userData = userDoc.data();
-            const email = userData.email;
-            
-            if (!email || !email.includes('@')) return null;
-
-            return {
-              uid: userDoc.id,
-              email,
-              name: userData.displayName || email.split('@')[0],
-              displayName: userData.displayName || email.split('@')[0],
-              firstName: userData.firstName || '',
-              lastName: userData.lastName || '',
-              photoURL: userData.photoURL || null,
-              initials: userData.initials || '',
-              university: userData.university || '',
-              major: userData.major || '',
-              city: userData.city || '',
-              state: userData.state || '',
-              visaStatus: userData.visaStatus || '',
-              joinedDate: userData.createdAt && typeof userData.createdAt.toDate === 'function' 
-                ? userData.createdAt.toDate() 
-                : userData.createdAt instanceof Date 
-                ? userData.createdAt 
-                : null,
-              lastLogin: userData.lastLogin && typeof userData.lastLogin.toDate === 'function'
-                ? userData.lastLogin.toDate()
-                : userData.lastLogin instanceof Date
-                ? userData.lastLogin
-                : null,
-              lastActive: (userData.lastLogin && typeof userData.lastLogin.toDate === 'function')
-                ? userData.lastLogin.toDate().getTime()
-                : (userData.createdAt && typeof userData.createdAt.toDate === 'function')
-                ? userData.createdAt.toDate().getTime()
-                : Date.now() - (365 * 24 * 60 * 60 * 1000),
-              isActive: userData.lastLogin && typeof userData.lastLogin.toDate === 'function'
-                ? userData.lastLogin.toDate().getTime() > (Date.now() - (90 * 24 * 60 * 60 * 1000))
-                : false,
-            };
-          } catch (e) {
-            console.error(`Error processing member ${userDoc.id}:`, e);
-            return null;
-          }
-        }).filter(m => m && m.email);
-
-        setMembers(membersData);
-        setFilteredMembers(membersData);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching members:', error);
-        toast.error('Failed to load member directory');
-        setLoading(false);
-      }
+      }).filter(m => m && m.email);
+      setMembers(membersData);
+      setFilteredMembers(membersData);
+      setLoading(false);
     };
 
-    fetchMembers();
+    setLoading(true);
+    const unsubscribe = onSnapshot(
+      collection(db, 'users'),
+      processSnapshot,
+      (error) => {
+        console.error('Members snapshot error:', error);
+        toast.error('Failed to load member directory. Check Firestore rules.');
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribe();
   }, [currentUser, authLoading]);
 
   // Apply filters
@@ -387,7 +361,7 @@ const MembersDirectory = () => {
                         {/* Action Buttons */}
                         <div className="flex gap-2 mt-auto">
                           <button
-                            onClick={() => openMemberModal(member)}
+                            onClick={() => navigate(`/profile/${member.uid}`)}
                             className="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white px-3 py-3 rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 text-xs"
                           >
                             View Profile

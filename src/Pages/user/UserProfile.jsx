@@ -30,20 +30,44 @@ const UserProfile = () => {
       try {
         let userData = null;
 
-        // 1. Try direct UID lookup
-        if (!userParam.includes('@')) {
+        // STEP 1: If the param matches the current user (by email or uid), load their own doc directly
+        const isOwnEmail = currentUser.email?.toLowerCase() === userParam.toLowerCase();
+        const isOwnUID = currentUser.uid === userParam;
+
+        if (isOwnEmail || isOwnUID) {
+          const snap = await getDoc(doc(db, 'users', currentUser.uid));
+          if (snap.exists()) {
+            userData = { uid: currentUser.uid, ...snap.data() };
+          } else {
+            // Doc doesn't exist yet — use auth data as fallback
+            userData = {
+              uid: currentUser.uid,
+              email: currentUser.email,
+              displayName: currentUser.displayName || currentUser.email?.split('@')[0],
+              photoURL: currentUser.photoURL || null,
+              createdAt: null,
+            };
+          }
+        }
+
+        // STEP 2: UID lookup for other users
+        if (!userData && !userParam.includes('@')) {
           const snap = await getDoc(doc(db, 'users', userParam));
           if (snap.exists()) userData = { uid: snap.id, ...snap.data() };
         }
 
-        // 2. Try email query
-        if (!userData) {
-          const q = query(collection(db, 'users'), where('email', '==', userParam.toLowerCase()), limit(1));
-          const snap = await getDocs(q);
-          if (!snap.empty) userData = { uid: snap.docs[0].id, ...snap.docs[0].data() };
+        // STEP 3: Email query for other users
+        if (!userData && userParam.includes('@')) {
+          try {
+            const q = query(collection(db, 'users'), where('email', '==', userParam.toLowerCase()), limit(1));
+            const snap = await getDocs(q);
+            if (!snap.empty) userData = { uid: snap.docs[0].id, ...snap.docs[0].data() };
+          } catch (e) {
+            console.warn('Email query failed, trying full scan:', e.message);
+          }
         }
 
-        // 3. Fallback: scan all users
+        // STEP 4: Full scan fallback
         if (!userData) {
           const snap = await getDocs(collection(db, 'users'));
           for (const d of snap.docs) {
@@ -225,7 +249,7 @@ const UserProfile = () => {
                 )}
               </div>
 
-              {/* Empty state if no profile fields filled */}
+              {/* Empty state */}
               {!profile.university && !profile.major && !profile.visaStatus && !profile.city && !profile.state && (
                 <div className="mt-5 text-center py-6 bg-white/3 rounded-xl border border-white/10">
                   <p className="text-gray-500 text-sm">

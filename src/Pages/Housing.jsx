@@ -174,7 +174,7 @@ const Housing = () => {
           {/* Hero */}
           <section className="mb-10 text-center">
             <div className="mb-4 inline-block px-4 py-2 bg-orange-500/10 border border-orange-500/20 rounded-xl">
-              <p className="text-orange-400 font-semibold text-sm">🏠 Verified, affordable housing for international students</p>
+              <p className="text-orange-400 font-semibold text-sm"> Verified, affordable housing for international students</p>
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-3 sm:mb-4">Housing</h1>
             <p className="text-gray-300 text-base sm:text-lg mb-6">Apartments · Rooms · Studios · Student Housing</p>
@@ -259,7 +259,6 @@ const Housing = () => {
           <section>
             {filteredPosts.length === 0 ? (
               <div className="text-center py-16">
-                <div className="text-4xl sm:text-5xl mb-4">🏠</div>
                 <h3 className="text-2xl font-bold text-white mb-3">
                   {posts.length === 0 ? 'No listings yet' : 'No listings match your search'}
                 </h3>
@@ -340,7 +339,7 @@ const Housing = () => {
                         {/* Footer */}
                         <div className="mt-auto pt-4 border-t border-white/10">
                           <div className="flex justify-between text-xs text-gray-400 mb-3">
-                            <span className="truncate max-w-[140px] flex items-center gap-1">{post.posterName}{post.isCompanyPost && <span className="text-blue-400 text-[10px]">🏢</span>}</span>
+                            <span className="truncate max-w-[140px] flex items-center gap-1">{post.posterName}{post.isCompanyPost }</span>
                             <span>{formatTimeAgo(post.createdAt)}</span>
                           </div>
                           <button

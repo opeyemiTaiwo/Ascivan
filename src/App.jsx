@@ -1,4 +1,4 @@
-// src/App.jsx - FULLY RESPONSIVE WITH UNIVERSAL NAVBAR
+// src/App.jsx
 
 import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';

@@ -24,13 +24,13 @@ const Finance = () => {
   const [loading, setLoading] = useState(true);
 
   const serviceTypes = [
-    { id: 'all', label: 'All Resources', icon: '📋' },
-    { id: 'scholarships', label: 'Scholarships', icon: '🎓' },
-    { id: 'loans', label: 'Loans', icon: '💰' },
-    { id: 'work-study', label: 'Work-Study', icon: '💼' },
-    { id: 'grants', label: 'Grants', icon: '🏆' },
-    { id: 'assistantships', label: 'Assistantships', icon: '📚' },
-    { id: 'fellowships', label: 'Fellowships', icon: '🏅' },
+    { id: 'all', label: 'All Resources' },
+    { id: 'scholarships', label: 'Scholarships' },
+    { id: 'loans', label: 'Loans' },
+    { id: 'work-study', label: 'Work-Study' },
+    { id: 'grants', label: 'Grants' },
+    { id: 'assistantships', label: 'Assistantships' },
+    { id: 'fellowships', label: 'Fellowships' },
   ];
 
   const sourceTypes = [
@@ -221,9 +221,8 @@ const Finance = () => {
           </section>
 
           {/* Category Filter */}
-          <section className="mb-4">
+          <section className="mb-6">
             <div className="bg-white/5 rounded-xl border border-white/20 p-4">
-              <p className="text-xs text-gray-400 font-semibold mb-2 uppercase tracking-wider">Category</p>
               <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide justify-start sm:justify-center flex-nowrap sm:flex-wrap">
                 {serviceTypes.map(type => (
                   <button
@@ -235,39 +234,17 @@ const Finance = () => {
                         : 'bg-white/10 text-gray-300 hover:bg-white/20'
                     }`}
                   >
-                    {type.icon} {type.label}
+                    {type.label}
                   </button>
                 ))}
               </div>
             </div>
           </section>
 
-          {/* Source / Funding Type Filter */}
-          <section className="mb-6">
-            <div className="bg-white/5 rounded-xl border border-white/20 p-4">
-              <p className="text-xs text-gray-400 font-semibold mb-2 uppercase tracking-wider">Source / Funding Type</p>
-              <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide justify-start sm:justify-center flex-nowrap sm:flex-wrap">
-                {sourceTypes.map(source => (
-                  <button
-                    key={source.id}
-                    onClick={() => setSelectedSource(source.id)}
-                    className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all flex-shrink-0 ${
-                      selectedSource === source.id
-                        ? 'bg-orange-500 text-white shadow-md'
-                        : 'bg-white/10 text-gray-300 hover:bg-white/20'
-                    }`}
-                  >
-                    {source.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Search, Location & Sort */}
+          {/* Search, Filters & Sort */}
           <section className="mb-8">
             <div className="bg-white/5 rounded-xl border border-white/20 p-4 sm:p-6">
-              <div className="flex flex-col sm:grid sm:grid-cols-3 gap-3 mb-3">
+              <div className="flex flex-col sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
                 <input
                   type="text"
                   placeholder="Search resources..."
@@ -278,15 +255,25 @@ const Finance = () => {
                 <div className="relative">
                   <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                   <input
                     type="text"
-                    placeholder="City, state, university, or 'nationwide'..."
+                    placeholder="Filter by city or state..."
                     value={locationFilter}
                     onChange={(e) => setLocationFilter(e.target.value)}
                     className="w-full bg-white/10 border border-white/20 rounded-lg pl-10 pr-4 py-2.5 text-white placeholder-gray-400 focus:border-orange-400 focus:outline-none text-sm"
                   />
                 </div>
+                <select
+                  value={selectedSource}
+                  onChange={(e) => setSelectedSource(e.target.value)}
+                  className="bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-white focus:border-orange-400 focus:outline-none text-sm"
+                >
+                  {sourceTypes.map(source => (
+                    <option key={source.id} value={source.id}>{source.label}</option>
+                  ))}
+                </select>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}

@@ -348,19 +348,19 @@ const CareerHome = () => {
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 justify-center items-center mb-6 sm:mb-8 md:mb-10">
               <button onClick={handleContactUs}
-                className="group relative bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 text-white px-8 sm:px-10 md:px-14 py-4 sm:py-5 md:py-6 rounded-full font-bold text-base sm:text-lg md:text-xl transition-all duration-300 transform hover:scale-105 sm:hover:scale-110 shadow-2xl overflow-hidden w-full sm:w-auto max-w-sm hover:shadow-green-500/50"
+                className="group relative bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 text-white px-8 sm:px-10 md:px-14 py-4 sm:py-5 md:py-6 rounded-full font-bold text-base sm:text-lg md:text-xl transition-all duration-300 shadow-2xl overflow-hidden w-full sm:w-auto max-w-sm hover:shadow-green-500/50"
                 style={{ boxShadow: "0 10px 50px rgba(249, 115, 22, 0.4), 0 0 30px rgba(249, 115, 22, 0.2)", fontFamily: '"Inter", sans-serif' }}>
                 <span className="relative drop-shadow-lg">Start Your Transformation</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-yellow-400 opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
               </button>
               <button onClick={handleExploreServices}
-                className="group relative border-2 border-white/80 text-white px-8 sm:px-10 md:px-14 py-4 sm:py-5 md:py-6 rounded-full font-bold text-base sm:text-lg md:text-xl transition-all duration-300 transform hover:scale-105 sm:hover:scale-110 shadow-2xl overflow-hidden backdrop-blur-sm w-full sm:w-auto max-w-sm hover:shadow-white/50 hover:bg-white/10 hover:border-white"
+                className="group relative border-2 border-white/80 text-white px-8 sm:px-10 md:px-14 py-4 sm:py-5 md:py-6 rounded-full font-bold text-base sm:text-lg md:text-xl transition-all duration-300 shadow-2xl overflow-hidden w-full sm:w-auto max-w-sm hover:shadow-white/50 hover:bg-white/10 hover:border-white"
                 style={{ background: 'rgba(255, 255, 255, 0.05)', fontFamily: '"Inter", sans-serif' }}>
                 <span className="relative drop-shadow-lg">Explore Our Services</span>
               </button>
             </div>
 
-            <div className="inline-flex items-center bg-white/10 backdrop-blur-xl rounded-full px-4 sm:px-6 md:px-8 py-3 sm:py-4 border-2 border-white/30 shadow-xl">
+            <div className="inline-flex items-center bg-white/10 rounded-full px-4 sm:px-6 md:px-8 py-3 sm:py-4 border-2 border-white/30 shadow-xl">
               <span className="text-white font-bold text-sm sm:text-base md:text-lg text-center"
                     style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.9)', fontFamily: '"Inter", sans-serif' }}>
                  Building Intelligent Digital Systems
@@ -402,9 +402,9 @@ const CareerHome = () => {
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 w-full max-w-6xl mx-auto">
             {CORE_VALUES.map((item, index) => (
-              <div key={index} className="group transform hover:scale-105 transition-all duration-300">
-                <div className="bg-gradient-to-br from-green-950/30 via-gray-900/40 to-black/60 backdrop-blur-2xl rounded-xl p-4 sm:p-6 md:p-8 border border-green-500/20 shadow-xl hover:border-orange-400/40 transition-all duration-300 text-center h-full flex flex-col">
-                  <div className="text-3xl sm:text-4xl md:text-5xl mb-2 sm:mb-3 transform group-hover:scale-110 transition-all duration-300">{item.icon}</div>
+              <div key={index} className="group transition-all duration-300">
+                <div className="bg-gradient-to-br from-green-950/30 via-gray-900/40 to-black/60 rounded-xl p-4 sm:p-6 md:p-8 border border-green-500/20 shadow-xl hover:border-orange-400/40 transition-all duration-300 text-center h-full flex flex-col">
+                  <div className="text-3xl sm:text-4xl md:text-5xl mb-2 sm:mb-3 transform">{item.icon}</div>
                   <h3 className="text-lg sm:text-xl md:text-2xl font-black mb-1 sm:mb-2 text-white group-hover:text-orange-400 transition-colors"
                       style={{ fontFamily: '"Inter", sans-serif' }}>{item.value}</h3>
                   <p className="text-gray-200 text-sm sm:text-base leading-relaxed flex-grow"
@@ -437,7 +437,7 @@ const CareerHome = () => {
                 <div className="w-full max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-10 sm:py-16 md:py-20">
                   <div className={`flex flex-col ${isReversed ? 'lg:flex-row-reverse' : 'lg:flex-row'} items-center gap-6 sm:gap-10 lg:gap-16 xl:gap-20`}>
                     <div className="w-full lg:w-5/12 flex justify-center">
-                      <div className={`relative w-36 h-36 sm:w-48 sm:h-48 md:w-64 md:h-64 lg:w-72 lg:h-72 xl:w-80 xl:h-80 rounded-3xl ${t.iconBg} flex items-center justify-center shadow-2xl transform hover:scale-105 transition-all duration-500`}>
+                      <div className={`relative w-36 h-36 sm:w-48 sm:h-48 md:w-64 md:h-64 lg:w-72 lg:h-72 xl:w-80 xl:h-80 rounded-3xl ${t.iconBg} flex items-center justify-center shadow-2xl transition-all duration-500`}>
                         <span className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl">{service.icon}</span>
                         <div className={`absolute -top-2 -right-2 w-4 h-4 sm:w-6 sm:h-6 rounded-full ${t.checkBg}`}></div>
                         <div className={`absolute -bottom-3 -left-3 w-6 h-6 sm:w-8 sm:h-8 rounded-full ${t.checkBg}`}></div>
@@ -461,7 +461,7 @@ const CareerHome = () => {
                         ))}
                       </div>
                       <button onClick={handleContactUs}
-                        className={`${t.btnBg} ${t.btnText} px-6 sm:px-8 md:px-10 py-2.5 sm:py-3 md:py-4 rounded-full font-bold text-sm sm:text-base md:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg`}
+                        className={`${t.btnBg} ${t.btnText} px-6 sm:px-8 md:px-10 py-2.5 sm:py-3 md:py-4 rounded-full font-bold text-sm sm:text-base md:text-lg transition-all duration-300 shadow-lg`}
                         style={{ fontFamily: '"Inter", sans-serif' }}>
                         Get Started
                       </button>
@@ -488,8 +488,8 @@ const CareerHome = () => {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 w-full max-w-6xl mx-auto">
             {OUTCOMES.map((outcome, index) => (
-              <div key={index} className="bg-gradient-to-br from-green-950/30 via-gray-900/40 to-black/60 backdrop-blur-2xl rounded-xl p-3 sm:p-4 md:p-5 border border-green-500/20 hover:border-orange-400/40 transition-all duration-300 text-center group hover:scale-105">
-                <div className="text-orange-400 text-base sm:text-lg md:text-xl mb-1.5 sm:mb-2 group-hover:scale-110 transition-transform">✓</div>
+              <div key={index} className="bg-gradient-to-br from-green-950/30 via-gray-900/40 to-black/60 rounded-xl p-3 sm:p-4 md:p-5 border border-green-500/20 hover:border-orange-400/40 transition-all duration-300 text-center group">
+                <div className="text-orange-400 text-base sm:text-lg md:text-xl mb-1.5 sm:mb-2">✓</div>
                 <p className="text-white text-sm sm:text-base md:text-lg font-medium" style={{ fontFamily: '"Inter", sans-serif' }}>{outcome}</p>
               </div>
             ))}
@@ -509,7 +509,7 @@ const CareerHome = () => {
               From startups to established enterprises, we've delivered exceptional digital solutions
             </p>
           </div>
-          <div className="w-full relative overflow-hidden bg-gradient-to-r from-green-950/40 via-gray-900/50 to-green-950/40 backdrop-blur-xl rounded-2xl border border-green-500/20 py-5 sm:py-8">
+          <div className="w-full relative overflow-hidden bg-gradient-to-r from-green-950/40 via-gray-900/50 to-green-950/40 rounded-2xl border border-green-500/20 py-5 sm:py-8">
             <div className="flex animate-scroll">
               {[0, 1].map((set) => (
                 <div key={set} className="flex space-x-6 sm:space-x-12 px-4 sm:px-6">
@@ -545,7 +545,7 @@ const CareerHome = () => {
 
             {/* Header */}
             <div className="text-center mb-10 sm:mb-14">
-              <div className="inline-flex items-center bg-green-500/10 backdrop-blur-xl rounded-full px-5 py-2 border border-green-400/25 mb-6">
+              <div className="inline-flex items-center bg-green-500/10 rounded-full px-5 py-2 border border-green-400/25 mb-6">
                 <span className="text-green-300 font-bold text-sm sm:text-base" style={{ fontFamily: '"Inter", sans-serif' }}>
                    How We Work Together
                 </span>
@@ -568,7 +568,7 @@ const CareerHome = () => {
 
               {/* Step 1 */}
               <div className="relative group">
-                <div className="bg-gradient-to-br from-green-950/40 via-gray-900/50 to-black/70 backdrop-blur-2xl rounded-2xl p-6 sm:p-8 border border-green-500/20 hover:border-green-400/50 transition-all duration-300 hover:scale-105 h-full flex flex-col">
+                <div className="bg-gradient-to-br from-green-950/40 via-gray-900/50 to-black/70 rounded-2xl p-6 sm:p-8 border border-green-500/20 hover:border-green-400/50 transition-all duration-300 h-full flex flex-col">
                   <div className="text-green-400 text-xs font-bold tracking-widest uppercase mb-2" style={{ fontFamily: '"Inter", sans-serif' }}>Step 01</div>
                   <h3 className="text-white text-lg sm:text-xl font-black mb-3" style={{ fontFamily: '"Inter", sans-serif' }}>
                     Consultation Fee
@@ -583,7 +583,7 @@ const CareerHome = () => {
 
               {/* Step 2 */}
               <div className="relative group">
-                <div className="bg-gradient-to-br from-green-950/40 via-gray-900/50 to-black/70 backdrop-blur-2xl rounded-2xl p-6 sm:p-8 border border-green-500/20 hover:border-orange-400/50 transition-all duration-300 hover:scale-105 h-full flex flex-col">
+                <div className="bg-gradient-to-br from-green-950/40 via-gray-900/50 to-black/70 rounded-2xl p-6 sm:p-8 border border-green-500/20 hover:border-orange-400/50 transition-all duration-300 h-full flex flex-col">
                   <div className="text-green-400 text-xs font-bold tracking-widest uppercase mb-2" style={{ fontFamily: '"Inter", sans-serif' }}>Step 02</div>
                   <h3 className="text-white text-lg sm:text-xl font-black mb-3" style={{ fontFamily: '"Inter", sans-serif' }}>
                     Custom Proposal Delivered
@@ -597,7 +597,7 @@ const CareerHome = () => {
 
               {/* Step 3 */}
               <div className="group">
-                <div className="bg-gradient-to-br from-green-950/40 via-gray-900/50 to-black/70 backdrop-blur-2xl rounded-2xl p-6 sm:p-8 border border-green-500/20 hover:border-orange-400/50 transition-all duration-300 hover:scale-105 h-full flex flex-col">
+                <div className="bg-gradient-to-br from-green-950/40 via-gray-900/50 to-black/70 rounded-2xl p-6 sm:p-8 border border-green-500/20 hover:border-orange-400/50 transition-all duration-300 h-full flex flex-col">
                   <div className="text-orange-400 text-xs font-bold tracking-widest uppercase mb-2" style={{ fontFamily: '"Inter", sans-serif' }}>Step 03</div>
                   <h3 className="text-white text-lg sm:text-xl font-black mb-3" style={{ fontFamily: '"Inter", sans-serif' }}>
                     Build & Transform Together
@@ -611,7 +611,7 @@ const CareerHome = () => {
             </div>
 
             {/* Note + CTA bar */}
-            <div className="bg-gradient-to-r from-green-950/30 via-gray-900/40 to-green-950/30 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="bg-gradient-to-r from-green-950/30 via-gray-900/40 to-green-950/30 rounded-2xl border border-white/10 p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
               <div className="text-center sm:text-left">
                 <p className="text-white font-bold text-base sm:text-lg mb-1" style={{ fontFamily: '"Inter", sans-serif' }}>
                   Transparency is one of our core values.
@@ -621,7 +621,7 @@ const CareerHome = () => {
                 </p>
               </div>
               <a href="/solutions/terms"
-                className="group flex-shrink-0 inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-7 sm:px-9 py-3 sm:py-4 rounded-full font-bold text-sm sm:text-base transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-orange-500/30 whitespace-nowrap"
+                className="group flex-shrink-0 inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-7 sm:px-9 py-3 sm:py-4 rounded-full font-bold text-sm sm:text-base transition-all duration-300 shadow-xl hover:shadow-orange-500/30 whitespace-nowrap"
                 style={{ fontFamily: '"Inter", sans-serif' }}>
                 Read Full Terms
                 <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -647,7 +647,7 @@ const CareerHome = () => {
             {FAQs.map((faq, index) => (
               <div key={index} className="mb-3">
                 <button
-                  className="w-full text-left p-4 sm:p-5 transition-all duration-300 rounded-xl bg-gradient-to-br from-green-950/30 via-gray-900/40 to-black/60 backdrop-blur-2xl border border-green-500/20 hover:border-green-400/40"
+                  className="w-full text-left p-4 sm:p-5 transition-all duration-300 rounded-xl bg-gradient-to-br from-green-950/30 via-gray-900/40 to-black/60 border border-green-500/20 hover:border-green-400/40"
                   onClick={() => setExpandedFAQ(expandedFAQ === index ? null : index)}
                   aria-expanded={expandedFAQ === index}>
                   <div className="flex justify-between items-center">
@@ -693,22 +693,22 @@ const CareerHome = () => {
               </div>
               <div className="flex justify-center items-center gap-4 sm:gap-6">
                 <a href="https://www.instagram.com/loomiq/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-green-600 via-emerald-500 to-green-400 flex items-center justify-center hover:scale-110 transition-transform">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-green-600 via-emerald-500 to-green-400 flex items-center justify-center">
                     <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/></svg>
                   </div>
                 </a>
                 <a href="https://www.facebook.com/loomiqinc/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-green-700 to-green-600 flex items-center justify-center hover:scale-110 transition-transform">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-green-700 to-green-600 flex items-center justify-center">
                     <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg>
                   </div>
                 </a>
                 <a href="https://www.linkedin.com/company/loomiq/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-emerald-700 to-emerald-600 flex items-center justify-center hover:scale-110 transition-transform">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-emerald-700 to-emerald-600 flex items-center justify-center">
                     <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg>
                   </div>
                 </a>
                 <a href="https://www.youtube.com/@loomiqinc" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-orange-600 to-orange-500 flex items-center justify-center hover:scale-110 transition-transform">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-orange-600 to-orange-500 flex items-center justify-center">
                     <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
                   </div>
                 </a>

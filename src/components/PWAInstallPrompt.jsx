@@ -38,7 +38,7 @@ const PWAInstallPrompt = () => {
 
   return (
     <div className="fixed bottom-3 sm:bottom-4 left-3 right-3 sm:left-4 sm:right-4 md:left-auto md:right-4 md:max-w-sm z-50 animate-slide-up">
-      <div className="bg-gradient-to-br from-black/95 via-gray-900/95 to-black/95 backdrop-blur-xl border border-lime-500/30 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 shadow-2xl">
+      <div className="bg-gradient-to-br from-black/95 via-gray-900/95 to-black/95 border border-lime-500/30 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 shadow-2xl">
         <div className="flex items-start gap-2.5 sm:gap-3">
           {/* App Icon */}
           <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-lime-500 to-green-500 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">

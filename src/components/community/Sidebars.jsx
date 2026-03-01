@@ -45,7 +45,7 @@ export const UserQuickLinksSidebar = ({ currentUser, onNavigate, isMobile = fals
 
   const contentClass = isMobile
     ? "h-full flex flex-col"
-    : "bg-black/20 backdrop-blur-xl rounded-xl xs:rounded-2xl border border-orange-500/10 p-3 xs:p-4 sm:p-6 shadow-2xl sidebar-content h-full flex flex-col";
+    : "bg-black/20 rounded-xl xs:rounded-2xl border border-orange-500/10 p-3 xs:p-4 sm:p-6 shadow-2xl sidebar-content h-full flex flex-col";
 
   return (
     <div className={containerClass}>
@@ -61,18 +61,16 @@ export const UserQuickLinksSidebar = ({ currentUser, onNavigate, isMobile = fals
           </div>
         )}
         
-        <div className={`space-y-2 xs:space-y-3 ${isMobile ? 'flex-1 overflow-y-auto' : 'flex-1 overflow-y-auto sidebar-scrollable'}`} style={{
-          maxHeight: isMobile ? '100%' : 'calc(100vh - 16rem)'
-        }}>
+        <div className={`space-y-2 xs:space-y-3 ${isMobile ? 'flex-1' : 'flex-1'}`}>
           {quickLinks.map((link, index) => (
             <button
               key={index}
               onClick={() => handleLinkClick(link.path)}
-              className={`flex items-center gap-2 xs:gap-3 p-2.5 xs:p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 active:bg-white/15 transition-all duration-300 cursor-pointer w-full text-left group hover:scale-105 active:scale-100 hover:shadow-lg sidebar-item ${
+              className={`flex items-center gap-2 xs:gap-3 p-2.5 xs:p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 active:bg-white/15 cursor-pointer w-full text-left group sidebar-item ${
                 isMobile ? 'py-3 xs:py-4' : ''
               }`}
             >
-              <div className={`w-8 h-8 xs:w-10 xs:h-10 bg-gradient-to-r ${link.gradient} rounded-lg flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform flex-shrink-0`}>
+              <div className={`w-8 h-8 xs:w-10 xs:h-10 bg-gradient-to-r ${link.gradient} rounded-lg flex items-center justify-center text-white flex-shrink-0`}>
                 <svg className="w-4 h-4 xs:w-5 xs:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -281,7 +279,7 @@ export const FollowSuggestionsSidebar = ({ currentUser, isMobile = false }) => {
 
   const contentClass = isMobile
     ? "h-full flex flex-col"
-    : "bg-black/20 backdrop-blur-xl rounded-xl xs:rounded-2xl border border-orange-500/10 p-3 xs:p-4 sm:p-6 shadow-2xl sidebar-content h-full flex flex-col";
+    : "bg-black/20 rounded-xl xs:rounded-2xl border border-orange-500/10 p-3 xs:p-4 sm:p-6 shadow-2xl sidebar-content h-full flex flex-col";
 
   return (
     <div className={containerClass}>
@@ -435,7 +433,7 @@ export const CompanyInfoSidebar = ({ isMobile = false }) => {
 
   const contentClass = isMobile
     ? "h-full flex flex-col"
-    : "bg-black/20 backdrop-blur-xl rounded-xl xs:rounded-2xl border border-orange-500/10 p-3 xs:p-4 sm:p-6 shadow-2xl sidebar-content h-full flex flex-col";
+    : "bg-black/20 rounded-xl xs:rounded-2xl border border-orange-500/10 p-3 xs:p-4 sm:p-6 shadow-2xl sidebar-content h-full flex flex-col";
 
   return (
     <div className={containerClass}>
@@ -464,7 +462,7 @@ export const CompanyInfoSidebar = ({ isMobile = false }) => {
             <button
               key={index}
               onClick={() => handleLinkClick(link)}
-              className={`flex flex-col items-center justify-center p-2.5 xs:p-3 sm:p-4 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 active:bg-white/15 transition-all duration-300 cursor-pointer text-center group hover:scale-105 active:scale-100 hover:shadow-lg sidebar-item ${
+              className={`flex flex-col items-center justify-center p-2.5 xs:p-3 sm:p-4 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 active:bg-white/15 cursor-pointer text-center group sidebar-item ${
                 isMobile ? 'min-h-[56px] xs:min-h-[60px]' : 'min-h-[48px] xs:min-h-[50px]'
               }`}
             >

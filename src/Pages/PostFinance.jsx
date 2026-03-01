@@ -41,21 +41,21 @@ const PostFinance = () => {
   const { posterName: profilePosterName, isCompany: profileIsCompany } = usePosterName(currentUser);
 
   const serviceTypes = [
-    { id: 'scholarships', label: '🎓 Scholarships', description: 'Merit-based, need-based, or diversity scholarships' },
-    { id: 'loans', label: '💰 Loans', description: 'Student loans available to international students' },
-    { id: 'work-study', label: '💼 Work-Study', description: 'On-campus or CPT/OPT work opportunities' },
-    { id: 'grants', label: '🏆 Grants', description: 'Need-based grants or research grants' },
-    { id: 'assistantships', label: '📚 Assistantships', description: 'Graduate teaching or research assistantships' },
-    { id: 'fellowships', label: '🏅 Fellowships', description: 'Research or professional fellowships' },
+    { id: 'scholarships', label: 'Scholarships', description: 'Merit-based, need-based, or diversity scholarships' },
+    { id: 'loans', label: 'Loans', description: 'Student loans available to international students' },
+    { id: 'work-study', label: 'Work-Study', description: 'On-campus or CPT/OPT work opportunities' },
+    { id: 'grants', label: 'Grants', description: 'Need-based grants or research grants' },
+    { id: 'assistantships', label: 'Assistantships', description: 'Graduate teaching or research assistantships' },
+    { id: 'fellowships', label: 'Fellowships', description: 'Research or professional fellowships' },
   ];
 
   const fundingSources = [
-    { id: 'university', label: '🏫 University', description: 'Offered by a specific college or university' },
-    { id: 'federal', label: '🏛️ Federal', description: 'U.S. federal government programs' },
-    { id: 'state', label: '🗺️ State', description: 'State-level programs and aid' },
-    { id: 'private', label: '🏢 Private', description: 'Private organizations or companies' },
-    { id: 'nonprofit', label: '💚 Nonprofit', description: 'Nonprofit or foundation programs' },
-    { id: 'employer', label: '👔 Employer', description: 'Employer-sponsored benefits or programs' },
+    { id: 'university', label: 'University', description: 'Offered by a specific college or university' },
+    { id: 'federal', label: 'Federal', description: 'U.S. federal government programs' },
+    { id: 'state', label: 'State', description: 'State-level programs and aid' },
+    { id: 'private', label: 'Private', description: 'Private organizations or companies' },
+    { id: 'nonprofit', label: 'Nonprofit', description: 'Nonprofit or foundation programs' },
+    { id: 'employer', label: 'Employer', description: 'Employer-sponsored benefits or programs' },
   ];
 
   const expirationOptions = [
@@ -187,7 +187,7 @@ const PostFinance = () => {
             {/* Header */}
             <section className="text-center mb-10">
               <div className="inline-block mb-4 px-4 py-2 bg-orange-500/10 border border-orange-500/20 rounded-xl">
-                <p className="text-orange-400 font-semibold text-sm">💰 Help international students access financial resources</p>
+                <p className="text-orange-400 font-semibold text-sm">Help international students access financial resources</p>
               </div>
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-2 sm:mb-3">
                 List a <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Resource</span>
@@ -195,7 +195,7 @@ const PostFinance = () => {
               <p className="text-gray-300">Share financial resources with international students</p>
             </section>
 
-            <div className="bg-white/5 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 p-4 sm:p-6 md:p-8 shadow-2xl">
+            <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-white/20 p-4 sm:p-6 md:p-8">
               <form onSubmit={handleSubmit} className="space-y-8">
 
                 {/* Resource Type */}
@@ -207,9 +207,9 @@ const PostFinance = () => {
                         key={type.id}
                         type="button"
                         onClick={() => setFormData(prev => ({ ...prev, serviceType: type.id }))}
-                        className={`p-4 rounded-xl border-2 text-left transition-all duration-200 active:scale-95 ${
+                        className={`p-4 rounded-xl border-2 text-left ${
                           formData.serviceType === type.id
-                            ? 'border-orange-400 bg-orange-500/20 shadow-lg scale-105'
+                            ? 'border-orange-400 bg-orange-500/20'
                             : 'border-white/20 bg-white/5 hover:bg-white/10'
                         }`}
                       >
@@ -229,9 +229,9 @@ const PostFinance = () => {
                         key={source.id}
                         type="button"
                         onClick={() => setFormData(prev => ({ ...prev, fundingSource: prev.fundingSource === source.id ? '' : source.id }))}
-                        className={`p-4 rounded-xl border-2 text-left transition-all duration-200 active:scale-95 ${
+                        className={`p-4 rounded-xl border-2 text-left ${
                           formData.fundingSource === source.id
-                            ? 'border-orange-400 bg-orange-500/20 shadow-lg scale-105'
+                            ? 'border-orange-400 bg-orange-500/20'
                             : 'border-white/20 bg-white/5 hover:bg-white/10'
                         }`}
                       >
@@ -286,7 +286,7 @@ const PostFinance = () => {
                   <h2 className="text-lg sm:text-xl font-bold text-white">Location / Availability</h2>
                   <label className="flex items-center gap-3 cursor-pointer">
                     <input type="checkbox" name="availableNationwide" checked={formData.availableNationwide} onChange={handleInputChange} className={checkboxClass} />
-                    <span className="text-white text-sm font-semibold">🌎 Available Nationwide (online or all states)</span>
+                    <span className="text-white text-sm font-semibold">Available Nationwide (online or all states)</span>
                   </label>
                   {!formData.availableNationwide && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -308,11 +308,11 @@ const PostFinance = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <label className="flex items-center gap-3 cursor-pointer">
                       <input type="checkbox" name="noSSNRequired" checked={formData.noSSNRequired} onChange={handleInputChange} className={checkboxClass} />
-                      <span className="text-white text-sm font-semibold">✅ No SSN Required</span>
+                      <span className="text-white text-sm font-semibold">No SSN Required</span>
                     </label>
                     <label className="flex items-center gap-3 cursor-pointer">
                       <input type="checkbox" name="internationalFriendly" checked={formData.internationalFriendly} onChange={handleInputChange} className={checkboxClass} />
-                      <span className="text-white text-sm font-semibold">🌍 International Student Friendly</span>
+                      <span className="text-white text-sm font-semibold">International Student Friendly</span>
                     </label>
                   </div>
                 </div>
@@ -361,8 +361,8 @@ const PostFinance = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-8 sm:px-12 py-4 w-full sm:w-auto bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 text-white font-black text-base sm:text-lg rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                    style={{ boxShadow: '0 0 40px rgba(249,115,22,0.4)' }}
+                    className="px-8 sm:px-12 py-4 w-full sm:w-auto bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 text-white font-black text-base sm:text-lg rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{}}
                   >
                     {isSubmitting ? (
                       <span className="flex items-center gap-3">

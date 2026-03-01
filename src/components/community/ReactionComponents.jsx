@@ -97,7 +97,7 @@ export const ReactionAvatars = ({ postId, userIds = [], reactionCount, onClick }
               className="relative group"
               style={{ zIndex: MAX_AVATARS - index }}
             >
-              <div className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 rounded-full border border-gray-800 xs:border-2 overflow-hidden bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center hover:scale-110 active:scale-95 transition-transform duration-200 cursor-pointer">
+              <div className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 rounded-full border border-gray-800 xs:border-2 overflow-hidden bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center cursor-pointer">
                 {user.photoURL ? (
                   <img 
                     src={user.photoURL} 
@@ -133,7 +133,7 @@ export const ReactionAvatars = ({ postId, userIds = [], reactionCount, onClick }
         )}
         
         {reactionCount > MAX_AVATARS && (
-          <div className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 rounded-full border border-gray-800 xs:border-2 bg-gray-700 flex items-center justify-center text-white text-[10px] xs:text-xs font-bold cursor-pointer hover:scale-110 active:scale-95 transition-transform duration-200">
+          <div className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 rounded-full border border-gray-800 xs:border-2 bg-gray-700 flex items-center justify-center text-white text-[10px] xs:text-xs font-bold cursor-pointer">
             +{reactionCount - MAX_AVATARS}
           </div>
         )}
@@ -171,11 +171,11 @@ export const ReactionsModal = ({ isOpen, onClose, postId, reactions, reactionCou
 
   return (
     <div 
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-3 xs:p-4"
+      className="fixed inset-0 bg-black/50 z-[150] flex items-center justify-center p-3 xs:p-4"
       onClick={onClose}
     >
       <div 
-        className="bg-gradient-to-br from-gray-900/95 via-black/95 to-gray-900/95 backdrop-blur-xl rounded-xl xs:rounded-2xl border border-orange-500/20 shadow-2xl w-full max-w-[calc(100vw-1.5rem)] xs:max-w-sm sm:max-w-md max-h-[90vh] sm:max-h-[32rem] overflow-hidden"
+        className="bg-gradient-to-br from-gray-900/95 via-black/95 to-gray-900/95 rounded-xl xs:rounded-2xl border border-orange-500/20 shadow-2xl w-full max-w-[calc(100vw-1.5rem)] xs:max-w-sm sm:max-w-md max-h-[90vh] sm:max-h-[32rem] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}

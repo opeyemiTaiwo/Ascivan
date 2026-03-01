@@ -32,7 +32,7 @@ const SectionHeader = ({ title, description, gradientColors }) => (
 );
 
 const DashboardCard = ({ card, onCardClick }) => (
-  <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-lg xs:rounded-xl p-3 xs:p-4 sm:p-5 md:p-6 border border-white/20 shadow-2xl">
+  <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-lg xs:rounded-xl p-3 xs:p-4 sm:p-5 md:p-6 border border-white/20 shadow-2xl">
     <div className="flex items-center mb-3 xs:mb-4 sm:mb-6">
       <h3 className="text-sm xs:text-base sm:text-lg md:text-xl font-black text-white flex items-center" 
           style={{textShadow: '0 0 15px rgba(255,255,255,0.3), 1px 1px 2px rgba(0,0,0,0.8)'}}>
@@ -168,7 +168,7 @@ const DeleteAccountModal = ({ isOpen, onClose, currentUser, onDeleted }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[200] flex items-center justify-center p-3 xs:p-4" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/70 z-[200] flex items-center justify-center p-3 xs:p-4" onClick={onClose}>
       <div 
         className="bg-gradient-to-br from-gray-900 via-black to-gray-900 rounded-xl xs:rounded-2xl border border-red-500/30 shadow-2xl w-full max-w-md overflow-hidden"
         onClick={(e) => e.stopPropagation()}
@@ -633,7 +633,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         <div className="space-y-4 sm:space-y-6">
           <SectionHeader title="Profile" description="View and update your personal and company information." gradientColors="from-orange-300 via-orange-400 to-orange-500" />
 
-          <div className="bg-white/5 backdrop-blur-sm border border-white/20 rounded-xl p-4 sm:p-6">
+          <div className="bg-white/5 border border-white/20 rounded-xl p-4 sm:p-6">
             {!profileEditing ? (
               /* ─── VIEW MODE ─── */
               <div className="space-y-5">
@@ -824,7 +824,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       <>
         <Navbar />
         <div className="min-h-screen flex items-center justify-center px-3 xs:px-4" style={{ backgroundColor: '#000' }}>
-          <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-2xl xs:rounded-3xl p-5 xs:p-6 sm:p-8 border border-white/20 shadow-2xl max-w-md w-full">
+          <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl xs:rounded-3xl p-5 xs:p-6 sm:p-8 border border-white/20 shadow-2xl max-w-md w-full">
             <div className="animate-spin rounded-full h-10 w-10 xs:h-12 xs:w-12 border-b-2 border-orange-400 mx-auto mb-4"></div>
             <p className="text-white text-center font-medium text-sm xs:text-base" 
                style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>

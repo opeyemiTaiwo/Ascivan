@@ -113,8 +113,8 @@ const SubmitApplication = () => {
               
               {/* Animated Badge */}
               <div className="flex items-center justify-center gap-1.5 xs:gap-2 sm:gap-3 mb-4 xs:mb-5 sm:mb-6 md:mb-8 animate-pulse">
-                <div className="h-1.5 w-1.5 xs:h-2 xs:w-2 sm:h-3 sm:w-3 md:h-4 md:w-4 bg-green-400 rounded-full animate-ping shadow-lg" 
-                     style={{boxShadow: '0 0 20px rgba(34,197,94,0.7)'}}></div>
+                <div className="h-1.5 w-1.5 xs:h-2 xs:w-2 sm:h-3 sm:w-3 md:h-4 md:w-4 bg-green-400 rounded-full" 
+                     ></div>
                 <span className="text-green-300 uppercase tracking-wider xs:tracking-widest text-[10px] xs:text-xs sm:text-sm md:text-base lg:text-lg font-black" 
                       style={{
                         textShadow: '0 0 20px rgba(34,197,94,0.7), 2px 2px 4px rgba(0,0,0,0.9)',
@@ -123,8 +123,8 @@ const SubmitApplication = () => {
                       }}>
                   Join Our Platform
                 </span>
-                <div className="h-1.5 w-1.5 xs:h-2 xs:w-2 sm:h-3 sm:w-3 md:h-4 md:w-4 bg-green-400 rounded-full animate-ping shadow-lg" 
-                     style={{boxShadow: '0 0 20px rgba(34,197,94,0.7)'}}></div>
+                <div className="h-1.5 w-1.5 xs:h-2 xs:w-2 sm:h-3 sm:w-3 md:h-4 md:w-4 bg-green-400 rounded-full" 
+                     ></div>
               </div>
               
               {/* Main Title */}
@@ -142,7 +142,7 @@ const SubmitApplication = () => {
                       style={{
                         textShadow: 'none',
                         filter: 'drop-shadow(0 0 20px rgba(34,197,94,0.45))',
-                        animation: 'glow 2s ease-in-out infinite alternate'
+                        
                       }}>
                   Application
                 </span>
@@ -158,17 +158,17 @@ const SubmitApplication = () => {
               </p>
               
               <div className="h-0.5 xs:h-1 sm:h-1.5 md:h-2 w-12 xs:w-16 sm:w-20 md:w-24 lg:w-32 bg-gradient-to-r from-green-400 to-orange-400 mx-auto rounded-full shadow-2xl mb-6 xs:mb-8 sm:mb-10 md:mb-12 lg:mb-16"
-                   style={{boxShadow: '0 0 40px rgba(34,197,94,0.35)'}}></div>
+                   ></div>
             </div>
           </section>
 
           {/* Application Form */}
           <section className="mb-8 xs:mb-10 sm:mb-12 md:mb-16 lg:mb-20">
-            <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl sm:rounded-3xl p-4 xs:p-5 sm:p-6 md:p-8 lg:p-10 xl:p-12 border border-white/20 shadow-2xl">
+            <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl sm:rounded-3xl p-4 xs:p-5 sm:p-6 md:p-8 lg:p-10 xl:p-12 border border-white/20 shadow-2xl">
               
               {/* Status Messages */}
               {submitStatus === 'success' && (
-                <div className="mb-6 xs:mb-7 sm:mb-8 p-4 xs:p-5 sm:p-6 bg-gradient-to-r from-green-500/12 to-orange-500/12 border border-green-500/30 rounded-lg xs:rounded-xl backdrop-blur-sm">
+                <div className="mb-6 xs:mb-7 sm:mb-8 p-4 xs:p-5 sm:p-6 bg-gradient-to-r from-green-500/12 to-orange-500/12 border border-green-500/30 rounded-lg xs:rounded-xl">
                   <div className="flex items-start xs:items-center">
                     <div className="text-green-400 text-xl xs:text-2xl mr-3 xs:mr-4 flex-shrink-0">✓</div>
                     <div className="flex-1">
@@ -180,7 +180,7 @@ const SubmitApplication = () => {
               )}
 
               {submitStatus === 'error' && (
-                <div className="mb-6 xs:mb-7 sm:mb-8 p-4 xs:p-5 sm:p-6 bg-gradient-to-r from-orange-500/12 to-orange-400/12 border border-orange-500/30 rounded-lg xs:rounded-xl backdrop-blur-sm">
+                <div className="mb-6 xs:mb-7 sm:mb-8 p-4 xs:p-5 sm:p-6 bg-gradient-to-r from-orange-500/12 to-orange-400/12 border border-orange-500/30 rounded-lg xs:rounded-xl">
                   <div className="flex items-start xs:items-center">
                     <div className="text-orange-400 text-xl xs:text-2xl mr-3 xs:mr-4 flex-shrink-0">⚠</div>
                     <div className="flex-1">
@@ -215,7 +215,7 @@ const SubmitApplication = () => {
                         value={formData.firstName}
                         onChange={handleInputChange}
                         required
-                        className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-5 md:px-6 py-2.5 xs:py-3 sm:py-3.5 md:py-4 text-sm xs:text-base text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300"
+                        className="w-full bg-white/10 border border-white/20 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-5 md:px-6 py-2.5 xs:py-3 sm:py-3.5 md:py-4 text-sm xs:text-base text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300"
                         placeholder="Enter your first name"
                       />
                     </div>
@@ -231,7 +231,7 @@ const SubmitApplication = () => {
                         value={formData.lastName}
                         onChange={handleInputChange}
                         required
-                        className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-5 md:px-6 py-2.5 xs:py-3 sm:py-3.5 md:py-4 text-sm xs:text-base text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300"
+                        className="w-full bg-white/10 border border-white/20 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-5 md:px-6 py-2.5 xs:py-3 sm:py-3.5 md:py-4 text-sm xs:text-base text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300"
                         placeholder="Enter your last name"
                       />
                     </div>
@@ -245,7 +245,7 @@ const SubmitApplication = () => {
                         type="email"
                         value={currentUser.email}
                         disabled
-                        className="w-full bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-5 md:px-6 py-2.5 xs:py-3 sm:py-3.5 md:py-4 text-sm xs:text-base text-gray-400 cursor-not-allowed"
+                        className="w-full bg-white/5 border border-white/10 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-5 md:px-6 py-2.5 xs:py-3 sm:py-3.5 md:py-4 text-sm xs:text-base text-gray-400 cursor-not-allowed"
                       />
                       <p className="text-gray-400 text-xs xs:text-sm mt-1 xs:mt-2">This is your account email and cannot be changed</p>
                     </div>
@@ -261,7 +261,7 @@ const SubmitApplication = () => {
                         value={formData.phone}
                         onChange={handleInputChange}
                         required
-                        className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-5 md:px-6 py-2.5 xs:py-3 sm:py-3.5 md:py-4 text-sm xs:text-base text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300"
+                        className="w-full bg-white/10 border border-white/20 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-5 md:px-6 py-2.5 xs:py-3 sm:py-3.5 md:py-4 text-sm xs:text-base text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300"
                         placeholder="+1 (555) 123-4567"
                       />
                     </div>
@@ -289,7 +289,7 @@ const SubmitApplication = () => {
                       onChange={handleInputChange}
                       required
                       rows={5}
-                      className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-5 md:px-6 py-2.5 xs:py-3 sm:py-3.5 md:py-4 text-sm xs:text-base text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300 resize-vertical"
+                      className="w-full bg-white/10 border border-white/20 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-5 md:px-6 py-2.5 xs:py-3 sm:py-3.5 md:py-4 text-sm xs:text-base text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300 resize-vertical"
                       placeholder="Describe your professional experience, including roles, companies, and key achievements..."
                     />
                   </div>
@@ -305,7 +305,7 @@ const SubmitApplication = () => {
                       onChange={handleInputChange}
                       required
                       rows={4}
-                      className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-5 md:px-6 py-2.5 xs:py-3 sm:py-3.5 md:py-4 text-sm xs:text-base text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300 resize-vertical"
+                      className="w-full bg-white/10 border border-white/20 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-5 md:px-6 py-2.5 xs:py-3 sm:py-3.5 md:py-4 text-sm xs:text-base text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300 resize-vertical"
                       placeholder="List your technical skills, programming languages, frameworks, tools, and technologies you're proficient in..."
                     />
                   </div>
@@ -320,7 +320,7 @@ const SubmitApplication = () => {
                       name="portfolio"
                       value={formData.portfolio}
                       onChange={handleInputChange}
-                      className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-5 md:px-6 py-2.5 xs:py-3 sm:py-3.5 md:py-4 text-sm xs:text-base text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300"
+                      className="w-full bg-white/10 border border-white/20 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-5 md:px-6 py-2.5 xs:py-3 sm:py-3.5 md:py-4 text-sm xs:text-base text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300"
                       placeholder="https://your-portfolio.com"
                     />
                   </div>
@@ -347,7 +347,7 @@ const SubmitApplication = () => {
                       onChange={handleInputChange}
                       required
                       rows={5}
-                      className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-5 md:px-6 py-2.5 xs:py-3 sm:py-3.5 md:py-4 text-sm xs:text-base text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300 resize-vertical"
+                      className="w-full bg-white/10 border border-white/20 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-5 md:px-6 py-2.5 xs:py-3 sm:py-3.5 md:py-4 text-sm xs:text-base text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300 resize-vertical"
                       placeholder="Tell us why you're interested in joining our platform and what you hope to achieve..."
                     />
                   </div>
@@ -361,7 +361,7 @@ const SubmitApplication = () => {
                       name="availability"
                       value={formData.availability}
                       onChange={handleInputChange}
-                      className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-5 md:px-6 py-2.5 xs:py-3 sm:py-3.5 md:py-4 text-sm xs:text-base text-white focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300 appearance-none cursor-pointer"
+                      className="w-full bg-white/10 border border-white/20 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-5 md:px-6 py-2.5 xs:py-3 sm:py-3.5 md:py-4 text-sm xs:text-base text-white focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300 appearance-none cursor-pointer"
                       style={{
                         backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ffffff'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                         backgroundRepeat: 'no-repeat',
@@ -382,7 +382,7 @@ const SubmitApplication = () => {
                 </div>
 
                 {/* Application Guidelines */}
-                <div className="bg-green-500/10 border border-green-500/30 rounded-lg xs:rounded-xl p-4 xs:p-5 sm:p-6 backdrop-blur-sm">
+                <div className="bg-green-500/10 border border-green-500/30 rounded-lg xs:rounded-xl p-4 xs:p-5 sm:p-6">
                   <h3 className="text-green-300 font-bold text-base xs:text-lg mb-3 xs:mb-4">Application Guidelines</h3>
                   <ul className="text-gray-300 space-y-1.5 xs:space-y-2 text-xs xs:text-sm">
                     <li>• <strong>Be authentic:</strong> Tell us your real story and motivations</li>
@@ -398,7 +398,7 @@ const SubmitApplication = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting || !formData.firstName.trim() || !formData.lastName.trim() || !formData.experience.trim() || !formData.motivation.trim()}
-                    className="group relative bg-gradient-to-r from-green-500 to-orange-500 text-white px-6 xs:px-8 sm:px-10 md:px-12 py-3 xs:py-4 sm:py-5 md:py-6 rounded-full font-black text-sm xs:text-base sm:text-lg md:text-xl transition-all duration-500 transform hover:scale-105 sm:hover:scale-110 shadow-2xl overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 min-h-[44px]"
+                    className="group relative bg-gradient-to-r from-green-500 to-orange-500 text-white px-6 xs:px-8 sm:px-10 md:px-12 py-3 xs:py-4 sm:py-5 md:py-6 rounded-full font-black text-sm xs:text-base sm:text-lg md:text-xl transition-all duration-500 shadow-2xl overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px]"
                     style={{
                       boxShadow: '0 0 40px rgba(34,197,94,0.18), 0 20px 40px rgba(0,0,0,0.3)',
                       fontFamily: '"Inter", sans-serif'
@@ -442,7 +442,7 @@ const SubmitApplication = () => {
                 <img 
                   src="/Images/512X512.png" 
                   alt="Loomiq Logo" 
-                  className="w-7 h-7 xs:w-8 xs:h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 mr-2 xs:mr-2.5 sm:mr-3 md:mr-4 transform hover:scale-110 transition-transform duration-300"
+                  className="w-7 h-7 xs:w-8 xs:h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 mr-2 xs:mr-2.5 sm:mr-3 md:mr-4 transform"
                 />
                 <span className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl font-black" 
                       style={{

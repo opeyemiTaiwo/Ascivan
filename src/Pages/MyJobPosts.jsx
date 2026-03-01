@@ -175,7 +175,7 @@ const MyJobPosts = () => {
           className="min-h-screen flex items-center justify-center"
           style={{ backgroundColor: '#000000' }}
         >
-          <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-6 xs:p-7 sm:p-8 border border-white/20 text-center">
+          <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-6 xs:p-7 sm:p-8 border border-white/20 text-center">
             <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-2 border-green-400 mx-auto mb-4"></div>
             <p className="text-white text-base xs:text-lg">Loading...</p>
           </div>
@@ -238,7 +238,7 @@ const MyJobPosts = () => {
 
             {/* Filters */}
             <section className="mb-6 xs:mb-7 sm:mb-8">
-              <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/20">
+              <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/20">
                 
                 {/* Category Filter */}
                 <div className="mb-4 xs:mb-5 sm:mb-6">
@@ -317,7 +317,7 @@ const MyJobPosts = () => {
                     return (
                       <div
                         key={post.id}
-                        className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/20 hover:border-green-400/40 transition-all"
+                        className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/20 hover:border-green-400/40 transition-all"
                       >
                         {/* Header */}
                         <div className="flex items-start justify-between mb-3 xs:mb-4 gap-2">

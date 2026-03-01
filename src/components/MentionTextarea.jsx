@@ -161,7 +161,7 @@ export const MentionTextarea = ({
       {showSuggestions && suggestions.length > 0 && (
         <div 
           ref={suggestionsRef}
-          className="absolute z-50 w-full sm:max-w-sm md:max-w-md lg:max-w-lg bg-gray-900/95 backdrop-blur-xl border border-white/20 rounded-lg shadow-2xl max-h-60 sm:max-h-72 overflow-y-auto"
+          className="absolute z-50 w-full sm:max-w-sm md:max-w-md lg:max-w-lg bg-gray-900/95 border border-white/20 rounded-lg shadow-2xl max-h-60 sm:max-h-72 overflow-y-auto"
           style={{
             top: '100%',
             left: 0,

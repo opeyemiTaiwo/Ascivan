@@ -224,7 +224,7 @@ const MentionTextarea = ({
       {/* Mention Suggestions Dropdown */}
       {showSuggestions && suggestions.length > 0 && (
         <div 
-          className="absolute z-50 w-full max-w-[calc(100vw-2rem)] xs:max-w-xs bg-gray-900/95 backdrop-blur-xl border border-orange-500/20 rounded-lg shadow-2xl max-h-48 xs:max-h-56 overflow-y-auto"
+          className="absolute z-50 w-full max-w-[calc(100vw-2rem)] xs:max-w-xs bg-gray-900/95 border border-orange-500/20 rounded-lg shadow-2xl max-h-48 xs:max-h-56 overflow-y-auto"
           style={{
             top: '100%',
             left: 0,

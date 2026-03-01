@@ -176,7 +176,7 @@ const PostBanking = () => {
               <p className="text-gray-300">Share banking and financial resources with the community</p>
             </section>
 
-            <div className="bg-white/5 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 p-4 sm:p-6 md:p-8 shadow-2xl">
+            <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-white/20 p-4 sm:p-6 md:p-8">
               <form onSubmit={handleSubmit} className="space-y-8">
 
                 {/* Service Type */}
@@ -188,9 +188,9 @@ const PostBanking = () => {
                         key={type.id}
                         type="button"
                         onClick={() => setFormData(prev => ({ ...prev, serviceType: type.id }))}
-                        className={`p-4 rounded-xl border-2 text-left transition-all duration-200 active:scale-95 ${
+                        className={`p-4 rounded-xl border-2 text-left ${
                           formData.serviceType === type.id
-                            ? 'border-orange-400 bg-orange-500/20 shadow-lg scale-105'
+                            ? 'border-orange-400 bg-orange-500/20'
                             : 'border-white/20 bg-white/5 hover:bg-white/10'
                         }`}
                       >
@@ -306,8 +306,8 @@ const PostBanking = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-8 sm:px-12 py-4 w-full sm:w-auto bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 text-white font-black text-base sm:text-lg rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                    style={{ boxShadow: '0 0 40px rgba(249,115,22,0.4)' }}
+                    className="px-8 sm:px-12 py-4 w-full sm:w-auto bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 text-white font-black text-base sm:text-lg rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{}}
                   >
                     {isSubmitting ? (
                       <span className="flex items-center gap-3">

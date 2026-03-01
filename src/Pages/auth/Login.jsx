@@ -91,13 +91,13 @@ const Login = () => {
 
       {/* Main Content */}
       <main className="flex-grow flex items-center justify-center px-3 sm:px-4 relative z-10 py-8">
-        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl sm:rounded-2xl md:rounded-3xl shadow-2xl p-5 sm:p-6 md:p-8 lg:p-10 w-full max-w-md border border-white/20 transform hover:scale-105 transition-all duration-500">
+        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl sm:rounded-2xl md:rounded-3xl shadow-2xl p-5 sm:p-6 md:p-8 lg:p-10 w-full max-w-md border border-white/20">
           <div className="text-center">
             {/* Hero Section */}
             <div className="mb-5 sm:mb-6 md:mb-8">
               <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-3 sm:mb-4 animate-pulse">
-                <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 md:h-3 md:w-3 bg-orange-400 rounded-full animate-ping shadow-lg" 
-                     style={{boxShadow: '0 0 20px rgba(251, 146, 60, 0.8)'}}></div>
+                <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 md:h-3 md:w-3 bg-orange-400 rounded-full" 
+                     ></div>
                 <span className="text-orange-300 uppercase tracking-widest text-xs sm:text-sm font-black" 
                       style={{
                         textShadow: '0 0 20px rgba(251, 146, 60, 0.8), 2px 2px 4px rgba(0,0,0,0.9)',
@@ -106,8 +106,8 @@ const Login = () => {
                       }}>
                   Secure Access
                 </span>
-                <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 md:h-3 md:w-3 bg-orange-400 rounded-full animate-ping shadow-lg" 
-                     style={{boxShadow: '0 0 20px rgba(251, 146, 60, 0.8)'}}></div>
+                <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 md:h-3 md:w-3 bg-orange-400 rounded-full" 
+                     ></div>
               </div>
 
               <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white mb-2 sm:mb-3 px-2" 
@@ -120,7 +120,7 @@ const Login = () => {
                       style={{
                         textShadow: 'none',
                         filter: 'drop-shadow(0 0 20px rgba(34, 197, 94, 0.5))',
-                        animation: 'glow 2s ease-in-out infinite alternate'
+                        
                       }}>
                   Loomiq
                 </span>
@@ -132,12 +132,12 @@ const Login = () => {
               </p>
 
               <div className="h-0.5 sm:h-1 w-12 sm:w-16 md:w-20 bg-gradient-to-r from-orange-400 to-green-500 mx-auto rounded-full shadow-2xl mt-3 sm:mt-4"
-                   style={{boxShadow: '0 0 30px rgba(34, 197, 94, 0.6)'}}></div>
+                   ></div>
             </div>
             
             {/* Error Display */}
             {error && (
-              <div className="bg-gradient-to-br from-red-900/40 via-red-800/40 to-red-900/40 backdrop-blur-xl border border-red-500/30 text-red-300 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl mb-4 sm:mb-5 md:mb-6 shadow-2xl">
+              <div className="bg-gradient-to-br from-red-900/40 via-red-800/40 to-red-900/40 border border-red-500/30 text-red-300 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl mb-4 sm:mb-5 md:mb-6 shadow-2xl">
                 <div className="flex items-start">
                   <svg className="w-4 h-4 sm:w-5 sm:h-5 text-red-400 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
@@ -165,7 +165,7 @@ const Login = () => {
 
             {/* Mobile Browser Info Banner */}
             {hasStorageIssues && !error && (
-              <div className="bg-gradient-to-br from-green-900/40 via-green-800/40 to-green-900/40 backdrop-blur-xl border border-green-500/30 text-green-300 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl mb-4 sm:mb-5 md:mb-6 shadow-2xl">
+              <div className="bg-gradient-to-br from-green-900/40 via-green-800/40 to-green-900/40 border border-green-500/30 text-green-300 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl mb-4 sm:mb-5 md:mb-6 shadow-2xl">
                 <div className="flex items-start">
                   <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
@@ -186,7 +186,7 @@ const Login = () => {
               <button 
                 onClick={handleGoogleSignIn} 
                 disabled={isLoading}
-                className="w-full bg-gradient-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-xl border border-white/20 text-white py-2.5 sm:py-3 md:py-4 px-3 sm:px-4 rounded-xl shadow-2xl hover:shadow-3xl flex items-center justify-center space-x-2 sm:space-x-3 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105 group"
+                className="w-full bg-gradient-to-br from-white/10 via-white/5 to-white/10 border border-white/20 text-white py-2.5 sm:py-3 md:py-4 px-3 sm:px-4 rounded-xl shadow-2xl hover:shadow-3xl flex items-center justify-center space-x-2 sm:space-x-3 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 group"
                 style={{
                   boxShadow: '0 10px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)'
                 }}
@@ -201,7 +201,7 @@ const Login = () => {
                   </>
                 ) : (
                   <>
-                    <svg width="20" height="20" viewBox="0 0 24 24" className="group-hover:scale-110 transition-transform duration-300 sm:w-6 sm:h-6 flex-shrink-0">
+                    <svg width="20" height="20" viewBox="0 0 24 24" className="sm:w-6 sm:h-6 flex-shrink-0">
                       <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
                       <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
                       <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
@@ -214,7 +214,7 @@ const Login = () => {
               </button>
 
               {/* FREE ACCESS MESSAGE */}
-              <div className="bg-gradient-to-br from-green-900/40 via-green-800/40 to-green-900/40 backdrop-blur-xl border border-green-500/30 text-green-300 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl shadow-2xl">
+              <div className="bg-gradient-to-br from-green-900/40 via-green-800/40 to-green-900/40 border border-green-500/30 text-green-300 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl shadow-2xl">
                 <div className="flex items-start">
                   <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 mr-2 sm:mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -255,7 +255,7 @@ const Login = () => {
               <img 
                 src="/Images/512X512.png" 
                 alt="Loomiq Logo" 
-                className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 transform hover:scale-110 transition-transform duration-300 flex-shrink-0"
+                className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 flex-shrink-0"
               />
               <span className="text-base sm:text-lg md:text-xl font-black" 
                     style={{

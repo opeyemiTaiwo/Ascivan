@@ -454,14 +454,14 @@ const SubmitPost = () => {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Header - Responsive */}
-      <header className="sticky top-0 z-50 bg-black/80 backdrop-blur-xl border-b border-orange-500/20">
+      <header className="sticky top-0 z-50 bg-black/80 border-b border-orange-500/20">
         <div className="max-w-4xl mx-auto px-3 sm:px-4 lg:px-8">
           <div className="flex items-center justify-between h-14 sm:h-16">
             <Link to="/community" className="flex items-center space-x-2 sm:space-x-3 group">
               <img 
                 src="/Images/512X512.png" 
                 alt="Loomiq" 
-                className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg group-hover:scale-110 transition-transform duration-300"
+                className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg"
               />
               <div>
                 <h1 className="text-base sm:text-xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
@@ -490,7 +490,7 @@ const SubmitPost = () => {
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           
           {/* Post Form Card */}
-          <div className="bg-gradient-to-br from-gray-900/50 via-black/50 to-gray-900/50 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-orange-500/10 shadow-2xl overflow-hidden">
+          <div className="bg-gradient-to-br from-gray-900/50 via-black/50 to-gray-900/50 rounded-xl sm:rounded-2xl border border-orange-500/10 shadow-2xl overflow-hidden">
             <div className="p-4 sm:p-6 lg:p-8">
               
               {/* Author Info - Responsive */}
@@ -661,7 +661,7 @@ const SubmitPost = () => {
                         </button>
 
                         {/* File Info - Responsive */}
-                        <div className="absolute bottom-0 left-0 right-0 bg-black/70 backdrop-blur-sm p-1.5 sm:p-2 rounded-b-lg">
+                        <div className="absolute bottom-0 left-0 right-0 bg-black/70 p-1.5 sm:p-2 rounded-b-lg">
                           <p className="text-[10px] sm:text-xs text-white truncate">{file.name}</p>
                           <p className="text-[9px] sm:text-xs text-gray-400">{formatFileSize(file.size)}</p>
                         </div>
@@ -730,7 +730,7 @@ const SubmitPost = () => {
                   <button
                     type="submit"
                     disabled={submitting || uploading || !formData.content.trim()}
-                    className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 text-sm"
+                    className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                   >
                     {submitting ? (
                       <span className="flex items-center justify-center">
@@ -750,7 +750,7 @@ const SubmitPost = () => {
           </div>
 
           {/* Tips Card - Responsive */}
-          <div className="bg-gradient-to-br from-gray-900/30 via-black/30 to-gray-900/30 backdrop-blur-xl rounded-xl border border-orange-500/10 p-4 sm:p-6">
+          <div className="bg-gradient-to-br from-gray-900/30 via-black/30 to-gray-900/30 rounded-xl border border-orange-500/10 p-4 sm:p-6">
             <h3 className="text-white font-bold mb-2 sm:mb-3 flex items-center text-sm sm:text-base">
               <span className="text-orange-400 mr-1.5 sm:mr-2">✨</span>
               Tips for Great Posts

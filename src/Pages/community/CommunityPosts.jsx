@@ -918,11 +918,11 @@ const CommunityPosts = () => {
 
     return (
       <div 
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-3 xs:p-4"
+        className="fixed inset-0 bg-black/50 z-[150] flex items-center justify-center p-3 xs:p-4"
         onClick={closeRepostModal}
       >
         <div 
-          className="bg-gradient-to-br from-gray-900/95 via-black/95 to-gray-900/95 backdrop-blur-xl rounded-xl xs:rounded-2xl border border-green-500/20 shadow-2xl w-full max-w-md"
+          className="bg-gradient-to-br from-gray-900/95 via-black/95 to-gray-900/95 rounded-xl xs:rounded-2xl border border-green-500/20 shadow-2xl w-full max-w-md"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex items-center justify-between p-4 xs:p-5 sm:p-6 border-b border-green-500/10">
@@ -1001,7 +1001,7 @@ const CommunityPosts = () => {
               <button
                 onClick={() => handleRepost(postId)}
                 disabled={submittingRepost}
-                className="flex-1 px-3 xs:px-4 py-2 xs:py-2.5 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95 min-h-[44px] text-sm xs:text-base"
+                className="flex-1 px-3 xs:px-4 py-2 xs:py-2.5 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] text-sm xs:text-base"
               >
                 {submittingRepost ? (
                   <span className="flex items-center justify-center gap-2">
@@ -1086,7 +1086,7 @@ const CommunityPosts = () => {
                     </svg>
                   </button>
                   {showViewMenu && (
-                    <div className="absolute top-full mt-2 w-48 xs:w-56 bg-gray-900/95 backdrop-blur-xl border border-green-500/20 rounded-lg xs:rounded-xl shadow-2xl overflow-hidden z-50">
+                    <div className="absolute top-full mt-2 w-48 xs:w-56 bg-gray-900/95 border border-green-500/20 rounded-lg xs:rounded-xl shadow-2xl overflow-hidden z-50">
                       <button
                         onClick={() => changeViewMode('all')}
                         className={`w-full text-left px-3 xs:px-4 py-2.5 xs:py-3 hover:bg-white/10 transition-colors text-sm xs:text-base ${
@@ -1135,7 +1135,7 @@ const CommunityPosts = () => {
                     {viewMode !== 'mentions' && (
                       <Link
                         to="/community/submit"
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 min-h-[56px]"
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 min-h-[56px]"
                       >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -1148,7 +1148,7 @@ const CommunityPosts = () => {
                   posts.map((post) => (
                     <article
                       key={post.id}
-                      className="bg-gradient-to-br from-gray-900/50 via-black/50 to-gray-900/50 backdrop-blur-xl rounded-xl xs:rounded-2xl border border-green-500/10 hover:border-green-500/30 transition-all duration-300 shadow-2xl overflow-hidden"
+                      className="bg-gradient-to-br from-gray-900/50 via-black/50 to-gray-900/50 rounded-xl xs:rounded-2xl border border-green-500/10 hover:border-green-500/30 transition-all duration-300 shadow-2xl overflow-hidden"
                     >
                       <div className="p-3 xs:p-4 sm:p-6">
                         <div className="flex items-start justify-between mb-3 xs:mb-4">
@@ -1652,7 +1652,7 @@ const CommunityPosts = () => {
                     <button
                       onClick={loadMorePosts}
                       disabled={loadingMore}
-                      className="px-6 xs:px-8 py-3 xs:py-4 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 text-white rounded-lg xs:rounded-xl font-semibold transition-all duration-300 disabled:opacity-50 transform hover:scale-105 active:scale-95 min-h-[56px] text-sm xs:text-base"
+                      className="px-6 xs:px-8 py-3 xs:py-4 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 text-white rounded-lg xs:rounded-xl font-semibold transition-all duration-300 disabled:opacity-50 min-h-[56px] text-sm xs:text-base"
                     >
                       {loadingMore ? (
                         <span className="flex items-center gap-2">

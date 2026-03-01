@@ -264,7 +264,7 @@ const AdminEmailTester = () => {
     <div className="space-y-8">
       
       {/* Email Testing Header */}
-      <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-2xl p-6 border border-white/20">
+      <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl p-6 border border-white/20">
         <h3 className="text-2xl font-bold text-white mb-4">🧪 Email System Testing</h3>
         <p className="text-gray-300 mb-6">Test all email notifications to verify functionality and templates</p>
         
@@ -278,7 +278,7 @@ const AdminEmailTester = () => {
             value={testEmail}
             onChange={(e) => setTestEmail(e.target.value)}
             placeholder="admin@yourcompany.com"
-            className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:border-lime-400 focus:outline-none focus:ring-2 focus:ring-lime-400/20 transition-all duration-300"
+            className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:border-lime-400 focus:outline-none focus:ring-2 focus:ring-lime-400/20 transition-all duration-300"
           />
           <p className="text-gray-400 text-sm mt-2">
             All test emails will be sent to this address. Use your own email to verify templates and functionality.
@@ -290,7 +290,7 @@ const AdminEmailTester = () => {
           <button
             onClick={testAllEmails}
             disabled={isLoading || !testEmail}
-            className="bg-gradient-to-r from-green-600 to-orange-600 hover:from-green-700 hover:to-green-700 disabled:from-gray-600 disabled:to-gray-700 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 disabled:cursor-not-allowed flex items-center"
+            className="bg-gradient-to-r from-green-600 to-orange-600 hover:from-green-700 hover:to-green-700 disabled:from-gray-600 disabled:to-gray-700 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 disabled:cursor-not-allowed flex items-center"
           >
             {isLoading ? (
               <>
@@ -315,7 +315,7 @@ const AdminEmailTester = () => {
       </div>
 
       {/* Individual Email Tests */}
-      <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-2xl p-6 border border-white/20">
+      <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl p-6 border border-white/20">
         <h4 className="text-xl font-bold text-white mb-4">📧 Individual Email Tests</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {emailTests.map((emailTest) => (
@@ -341,7 +341,7 @@ const AdminEmailTester = () => {
 
       {/* Test Results */}
       {testResults.length > 0 && (
-        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-2xl p-6 border border-white/20">
+        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl p-6 border border-white/20">
           <h4 className="text-xl font-bold text-white mb-4">📊 Test Results</h4>
           <div className="space-y-3 max-h-96 overflow-y-auto">
             {testResults.map((result, index) => (
@@ -388,7 +388,7 @@ const AdminEmailTester = () => {
       )}
 
       {/* Email System Status */}
-      <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-2xl p-6 border border-white/20">
+      <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl p-6 border border-white/20">
         <h4 className="text-xl font-bold text-white mb-4">📈 Email System Status</h4>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

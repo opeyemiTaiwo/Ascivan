@@ -456,7 +456,7 @@ const UserProfile = () => {
       <>
         <Navbar />
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center p-3 xs:p-4">
-          <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-6 xs:p-7 sm:p-8 border border-white/20 text-center max-w-lg w-full">
+          <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-6 xs:p-7 sm:p-8 border border-white/20 text-center max-w-lg w-full">
             <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-2 border-green-400 mx-auto mb-4"></div>
             <p className="text-white text-base xs:text-lg">Loading profile...</p>
             <div className="text-xs xs:text-sm text-gray-400 mt-3 xs:mt-4">
@@ -490,7 +490,7 @@ const UserProfile = () => {
       <>
         <Navbar />
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center p-3 xs:p-4">
-          <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-6 xs:p-8 sm:p-10 md:p-12 border border-white/20 text-center max-w-md w-full">
+          <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-6 xs:p-8 sm:p-10 md:p-12 border border-white/20 text-center max-w-md w-full">
             <div className="w-20 h-20 xs:w-24 xs:h-24 rounded-full bg-gradient-to-br from-green-500 to-orange-500 flex items-center justify-center mx-auto mb-4 ring-4 ring-green-400/30">
               <span className="text-2xl xs:text-3xl text-black font-bold">
                 {derivedName.charAt(0)?.toUpperCase() || '?'}
@@ -547,7 +547,7 @@ const UserProfile = () => {
             
             {/* Profile Header */}
             <section className="mb-8 xs:mb-10 sm:mb-12">
-              <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 md:p-8 border border-white/20">
+              <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 md:p-8 border border-white/20">
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                   <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 xs:gap-5 sm:gap-6">
                     <div className="relative flex-shrink-0">
@@ -612,19 +612,19 @@ const UserProfile = () => {
                   
                   {/* Quick Stats */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 xs:gap-3 sm:gap-4">
-                    <div className="bg-green-500/10 backdrop-blur-xl rounded-lg xs:rounded-xl p-2.5 xs:p-3 sm:p-4 border border-green-500/20 text-center">
+                    <div className="bg-green-500/10 rounded-lg xs:rounded-xl p-2.5 xs:p-3 sm:p-4 border border-green-500/20 text-center">
                       <div className="text-lg xs:text-xl sm:text-2xl font-black text-green-400">{userProfile.badgesEarned}</div>
                       <div className="text-[10px] xs:text-xs text-green-300 font-bold uppercase">Badges</div>
                     </div>
-                    <div className="bg-orange-500/10 backdrop-blur-xl rounded-lg xs:rounded-xl p-2.5 xs:p-3 sm:p-4 border border-orange-500/20 text-center">
+                    <div className="bg-orange-500/10 rounded-lg xs:rounded-xl p-2.5 xs:p-3 sm:p-4 border border-orange-500/20 text-center">
                       <div className="text-lg xs:text-xl sm:text-2xl font-black text-orange-400">{userProfile.certificatesEarned}</div>
                       <div className="text-[10px] xs:text-xs text-orange-300 font-bold uppercase">Certificates</div>
                     </div>
-                    <div className="bg-green-500/10 backdrop-blur-xl rounded-lg xs:rounded-xl p-2.5 xs:p-3 sm:p-4 border border-green-500/20 text-center">
+                    <div className="bg-green-500/10 rounded-lg xs:rounded-xl p-2.5 xs:p-3 sm:p-4 border border-green-500/20 text-center">
                       <div className="text-lg xs:text-xl sm:text-2xl font-black text-green-400">{userProfile.projectsCompleted}</div>
                       <div className="text-[10px] xs:text-xs text-green-300 font-bold uppercase">Completed</div>
                     </div>
-                    <div className="bg-orange-500/10 backdrop-blur-xl rounded-lg xs:rounded-xl p-2.5 xs:p-3 sm:p-4 border border-orange-500/20 text-center">
+                    <div className="bg-orange-500/10 rounded-lg xs:rounded-xl p-2.5 xs:p-3 sm:p-4 border border-orange-500/20 text-center">
                       <div className="text-lg xs:text-xl sm:text-2xl font-black text-orange-400">{userProfile.ongoingProjects}</div>
                       <div className="text-[10px] xs:text-xs text-orange-300 font-bold uppercase">Ongoing</div>
                     </div>
@@ -641,7 +641,7 @@ const UserProfile = () => {
                 
                 {/* No Activity State */}
                 {recentBadges.length === 0 && recentCertificates.length === 0 && projectHistory.length === 0 && (
-                  <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-6 xs:p-7 sm:p-8 border border-white/20 text-center">
+                  <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-6 xs:p-7 sm:p-8 border border-white/20 text-center">
                     <svg className="w-16 h-16 xs:w-20 xs:h-20 mx-auto mb-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
@@ -668,7 +668,7 @@ const UserProfile = () => {
                 
                 {/* Recent Badges */}
                 {recentBadges.length > 0 && (
-                  <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/20">
+                  <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/20">
                     <h3 className="text-base xs:text-lg sm:text-xl font-bold text-white mb-4 xs:mb-5 sm:mb-6 flex items-center flex-wrap gap-2">
                       <span>Recent Badges</span>
                       <span className="text-xs xs:text-sm bg-green-500/20 text-green-400 px-2 xs:px-3 py-1 rounded-full">
@@ -679,7 +679,7 @@ const UserProfile = () => {
                       {recentBadges.map((badge) => {
                         const categoryInfo = badgeCategories[badge.badgeCategory] || badgeCategories['development'];
                         return (
-                          <div key={badge.id} className={`bg-gradient-to-r ${categoryInfo.bgColor} backdrop-blur-xl rounded-lg xs:rounded-xl p-3 xs:p-4 border ${categoryInfo.borderColor}`}>
+                          <div key={badge.id} className={`bg-gradient-to-r ${categoryInfo.bgColor} rounded-lg xs:rounded-xl p-3 xs:p-4 border ${categoryInfo.borderColor}`}>
                             <div className="flex items-center justify-between gap-2">
                               <div className="flex items-center gap-3 xs:gap-4 flex-1 min-w-0">
                                 <svg className="w-8 h-8 xs:w-10 xs:h-10 flex-shrink-0 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -710,7 +710,7 @@ const UserProfile = () => {
 
                 {/* Recent Certificates */}
                 {recentCertificates.length > 0 && (
-                  <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/20">
+                  <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/20">
                     <h3 className="text-base xs:text-lg sm:text-xl font-bold text-white mb-4 xs:mb-5 sm:mb-6 flex items-center flex-wrap gap-2">
                       <span>Certificates</span>
                       <span className="text-xs xs:text-sm bg-orange-500/20 text-orange-400 px-2 xs:px-3 py-1 rounded-full">
@@ -719,7 +719,7 @@ const UserProfile = () => {
                     </h3>
                     <div className="space-y-3 xs:space-y-4">
                       {recentCertificates.map((certificate) => (
-                        <div key={certificate.id} className="bg-gradient-to-r from-orange-500/10 to-green-500/10 backdrop-blur-xl rounded-lg xs:rounded-xl p-3 xs:p-4 border border-orange-500/20">
+                        <div key={certificate.id} className="bg-gradient-to-r from-orange-500/10 to-green-500/10 rounded-lg xs:rounded-xl p-3 xs:p-4 border border-orange-500/20">
                           <div className="flex items-center gap-3 xs:gap-4">
                             <svg className="w-8 h-8 xs:w-10 xs:h-10 flex-shrink-0 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -744,7 +744,7 @@ const UserProfile = () => {
 
                 {/* Project History */}
                 {projectHistory.length > 0 && (
-                  <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/20">
+                  <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/20">
                     <h3 className="text-base xs:text-lg sm:text-xl font-bold text-white mb-4 xs:mb-5 sm:mb-6">Project History</h3>
                     <div className="space-y-3 xs:space-y-4">
                       {projectHistory.map((project) => (
@@ -796,7 +796,7 @@ const UserProfile = () => {
                 
                 {/* Badge Categories */}
                 {Object.keys(badgesByCategory).length > 0 && (
-                  <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/20 lg:sticky lg:top-28">
+                  <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/20 lg:sticky lg:top-28">
                     <h3 className="text-base xs:text-lg sm:text-xl font-bold text-white mb-4 xs:mb-5 sm:mb-6">Badge Categories</h3>
                     <div className="space-y-3 xs:space-y-4">
                       {Object.entries(badgesByCategory).map(([category, count]) => {
@@ -807,7 +807,7 @@ const UserProfile = () => {
                           borderColor: 'border-gray-500/30'
                         };
                         return (
-                          <div key={category} className={`bg-gradient-to-r ${categoryInfo.bgColor} backdrop-blur-xl rounded-lg xs:rounded-xl p-3 xs:p-4 border ${categoryInfo.borderColor}`}>
+                          <div key={category} className={`bg-gradient-to-r ${categoryInfo.bgColor} rounded-lg xs:rounded-xl p-3 xs:p-4 border ${categoryInfo.borderColor}`}>
                             <div className="flex items-center justify-between gap-2">
                               <div className="flex items-center gap-2 xs:gap-3 flex-1 min-w-0">
                                 <svg className="w-6 h-6 xs:w-7 xs:h-7 flex-shrink-0 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -834,7 +834,7 @@ const UserProfile = () => {
                 )}
 
                 {/* Profile Stats Summary */}
-                <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/20">
+                <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/20">
                   <h3 className="text-base xs:text-lg sm:text-xl font-bold text-white mb-4 xs:mb-5 sm:mb-6">Profile Summary</h3>
                   <div className="space-y-3 xs:space-y-4">
                     <div className="flex items-center justify-between p-2.5 xs:p-3 bg-white/5 rounded-lg xs:rounded-xl">

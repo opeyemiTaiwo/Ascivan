@@ -41,7 +41,7 @@ const Navbar = () => {
               <img
                 src="/Images/512X512.png"
                 alt="Loomiq"
-                className="h-10 w-10 sm:h-12 sm:w-12 transform group-hover:scale-110 transition-transform duration-300"
+                className="h-10 w-10 sm:h-12 sm:w-12"
               />
               <span className="hidden sm:block font-bold text-gray-900 text-lg">Loomiq</span>
             </Link>

@@ -117,7 +117,7 @@ const TestDailyDigest = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
+        <div className="bg-white/10 rounded-3xl p-8 border border-white/20">
           <h1 className="text-3xl font-bold text-white mb-8 text-center">
             🔍 Daily Digest Testing Tool
           </h1>

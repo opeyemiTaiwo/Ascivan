@@ -175,7 +175,7 @@ const Onboarding = () => {
         <span className="text-white font-black text-xl sm:text-2xl">Loomiq</span>
       </div>
 
-      <div className="w-full max-w-lg bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl overflow-hidden" style={{maxWidth: "min(512px, calc(100vw - 2rem))"}}>
+      <div className="w-full max-w-lg bg-white/5 border border-white/20 rounded-2xl shadow-2xl overflow-hidden" style={{maxWidth: "min(512px, calc(100vw - 2rem))"}}>
         <div className="w-full h-1 bg-white/10">
           <div className="h-full bg-gradient-to-r from-orange-400 to-orange-600 transition-all duration-500" style={{ width: `${progress}%` }} />
         </div>
@@ -355,7 +355,7 @@ const Onboarding = () => {
             ) : (
               <button onClick={handleComplete} disabled={saving}
                 className="px-8 py-2.5 min-h-[44px] bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black rounded-xl text-sm transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ boxShadow: '0 0 30px rgba(249,115,22,0.3)' }}>
+                >
                 {saving ? (<span className="flex items-center gap-2"><span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>Setting up...</span>) : "Let's Go! 🚀"}
               </button>
             )}

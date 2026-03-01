@@ -740,14 +740,14 @@ const AdminDashboard = () => {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                         <button
                           onClick={() => approveProjectCompletion(completion.id, completion)}
-                          className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-6 py-4 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-xl flex items-center justify-center"
+                          className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-6 py-4 rounded-xl font-bold transition-all duration-300 shadow-xl flex items-center justify-center"
                         >
                           ✅ Approve Project Review
                         </button>
                         
                         <button
                           onClick={() => rejectProjectCompletion(completion.id, completion)}
-                          className="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white px-6 py-4 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-xl flex items-center justify-center"
+                          className="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white px-6 py-4 rounded-xl font-bold transition-all duration-300 shadow-xl flex items-center justify-center"
                         >
                           <span className="mr-2 text-xl">❌</span>
                           Request Changes

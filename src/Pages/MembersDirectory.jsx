@@ -199,7 +199,7 @@ const MembersDirectory = () => {
   if (authLoading || (currentUser && loading)) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#000000' }}>
-        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-2xl p-5 sm:p-8 border border-white/20 text-center">
+        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl p-5 sm:p-8 border border-white/20 text-center">
           <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-green-500 mx-auto mb-4"></div>
           <p className="text-white text-lg">
             {authLoading ? 'Checking authentication...' : 'Loading member directory...'}
@@ -224,14 +224,14 @@ const MembersDirectory = () => {
             <div className="max-w-4xl mx-auto">
               
               <div className="flex items-center justify-center gap-4 mb-8">
-                <div className="h-4 w-4 bg-green-500 rounded-full animate-ping shadow-lg" 
-                     style={{boxShadow: '0 0 20px rgba(76, 175, 80, 0.8)'}}></div>
+                <div className="h-4 w-4 bg-green-500 rounded-full" 
+                     ></div>
                 <span className="text-green-400 uppercase tracking-widest text-lg font-black" 
                       style={{ textShadow: '0 0 20px rgba(76, 175, 80, 0.8), 2px 2px 4px rgba(0,0,0,0.9)' }}>
                    Member Directory
                 </span>
-                <div className="h-4 w-4 bg-green-500 rounded-full animate-ping shadow-lg" 
-                     style={{boxShadow: '0 0 20px rgba(76, 175, 80, 0.8)'}}></div>
+                <div className="h-4 w-4 bg-green-500 rounded-full" 
+                     ></div>
               </div>
               
               <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-4 sm:mb-6 md:mb-8 leading-[0.9]"
@@ -255,11 +255,11 @@ const MembersDirectory = () => {
 
               {/* Directory Stats */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12 max-w-lg mx-auto">
-                <div className="bg-gradient-to-br from-green-500/20 to-orange-500/20 backdrop-blur-sm rounded-xl p-4 border border-green-500/30">
+                <div className="bg-gradient-to-br from-green-500/20 to-orange-500/20 rounded-xl p-4 border border-green-500/30">
                   <div className="text-2xl font-bold text-green-400">{members.length}</div>
                   <div className="text-sm text-green-100">Total Members</div>
                 </div>
-                <div className="bg-gradient-to-br from-orange-500/20 to-orange-600/20 backdrop-blur-sm rounded-xl p-4 border border-orange-500/30">
+                <div className="bg-gradient-to-br from-orange-500/20 to-orange-600/20 rounded-xl p-4 border border-orange-500/30">
                   <div className="text-2xl font-bold text-orange-300">{members.filter(m => m.isActive).length}</div>
                   <div className="text-sm text-orange-100">Recently Active</div>
                 </div>
@@ -269,7 +269,7 @@ const MembersDirectory = () => {
 
           {/* Search and Filters */}
           <section className="mb-12">
-            <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-2xl p-6 sm:p-8 border border-white/20">
+            <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl p-6 sm:p-8 border border-white/20">
               
               <div className="mb-6">
                 <input
@@ -277,7 +277,7 @@ const MembersDirectory = () => {
                   placeholder="Search by name, university, major, or city..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-6 py-4 text-white placeholder-gray-400 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300 text-lg"
+                  className="w-full bg-white/10 border border-white/20 rounded-xl px-6 py-4 text-white placeholder-gray-400 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300 text-lg"
                 />
               </div>
 
@@ -285,7 +285,7 @@ const MembersDirectory = () => {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white focus:border-green-500 focus:outline-none transition-all duration-300"
+                  className="bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white focus:border-green-500 focus:outline-none transition-all duration-300"
                 >
                   <option value="recent">Recently Active</option>
                   <option value="name">Name A-Z</option>
@@ -329,7 +329,7 @@ const MembersDirectory = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                   {currentMembers.map((member) => (
                     <div key={member.email} className="group">
-                      <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-2xl p-6 border border-white/20 shadow-2xl transform hover:scale-105 transition-all duration-500 h-full flex flex-col">
+                      <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl p-6 border border-white/20 shadow-2xl h-full flex flex-col">
                         
                         {/* Member Header */}
                         <div className="flex items-center mb-4">
@@ -422,7 +422,7 @@ const MembersDirectory = () => {
                 {/* Pagination */}
                 {totalPages > 1 && (
                   <div className="flex justify-center items-center mt-12 space-x-4">
-                    <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-2xl p-6 border border-white/20">
+                    <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl p-6 border border-white/20">
                       <div className="flex items-center space-x-4">
                         <button
                           onClick={goToPrevPage}
@@ -489,8 +489,8 @@ const MembersDirectory = () => {
 
       {/* Member Detail Modal */}
       {showMemberModal && selectedMember && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-black/90 via-gray-900/90 to-black/90 backdrop-blur-2xl rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 border border-white/20 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-br from-black/90 via-gray-900/90 to-black/90 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 border border-white/20 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             
             {/* Modal Header */}
             <div className="flex justify-between items-start mb-6">

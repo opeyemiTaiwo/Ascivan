@@ -236,7 +236,7 @@ const Jobs = () => {
 
           {/* Job Type Pills */}
           <section className="mb-5">
-            <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/20 p-4">
+            <div className="bg-white/5 rounded-xl border border-white/20 p-4">
               <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide justify-start sm:justify-center flex-nowrap sm:flex-wrap">
                 {jobTypes.map(type => (
                   <button
@@ -257,7 +257,7 @@ const Jobs = () => {
 
           {/* Filters Row */}
           <section className="mb-8">
-            <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/20 p-4 sm:p-5">
+            <div className="bg-white/5 rounded-xl border border-white/20 p-4 sm:p-5">
               <div className="flex flex-col sm:grid sm:grid-cols-3 gap-3 mb-4">
                 {/* Search */}
                 <input
@@ -357,8 +357,8 @@ const Jobs = () => {
 
                   return (
                     <div key={post.id} className="group">
-                      <div className={`bg-white/5 backdrop-blur-sm border rounded-xl p-5 sm:p-6 hover:shadow-lg hover:shadow-orange-500/10 transition-all duration-300 h-full flex flex-col ${
-                        isClosed ? 'border-white/10 opacity-75' : 'border-white/20 hover:border-orange-500/30'
+                      <div className={`bg-white/5 border rounded-xl p-5 sm:p-6 h-full flex flex-col ${
+                        isClosed ? 'border-white/10 opacity-75' : 'border-white/20 border-white/20'
                       }`}>
 
                         {/* Header row */}

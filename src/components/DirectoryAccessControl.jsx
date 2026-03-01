@@ -168,7 +168,7 @@ const DirectoryAccessControl = () => {
         className="min-h-screen flex items-center justify-center p-4"
         style={{}}
       >
-        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20 text-center max-w-sm w-full">
+        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20 text-center max-w-sm w-full">
           <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-lime-400 mx-auto mb-3 sm:mb-4"></div>
           <p className="text-white text-base sm:text-lg">Checking access permissions...</p>
         </div>
@@ -197,7 +197,7 @@ const DirectoryAccessControl = () => {
               <img 
                 src="/Images/512X512.png" 
                 alt="Loomiq Logo" 
-                className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 mr-2 sm:mr-3 md:mr-4 transform group-hover:scale-110 transition-transform duration-300 flex-shrink-0"
+                className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 mr-2 sm:mr-3 md:mr-4 transform flex-shrink-0"
               />
               <span className="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-white tracking-wide truncate" 
                     style={{
@@ -260,7 +260,7 @@ const DirectoryAccessControl = () => {
 
             {/* Status-specific Content */}
             {accessStatus === 'unauthorized' && (
-              <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20 mb-6 sm:mb-8">
+              <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20 mb-6 sm:mb-8">
                 <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Login Required</h2>
                 <p className="text-gray-300 text-sm sm:text-base mb-4 sm:mb-6">Please log in to access the Members Directory.</p>
                 <button 
@@ -276,7 +276,7 @@ const DirectoryAccessControl = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
                 
                 {/* Request Manual Approval */}
-                <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20">
+                <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20">
                   <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">📋</div>
                   <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Request Access</h3>
                   <p className="text-gray-300 text-sm sm:text-base mb-4 sm:mb-6">
@@ -295,7 +295,7 @@ const DirectoryAccessControl = () => {
                 </div>
 
                 {/* Purchase Monthly Access */}
-                <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20 relative">
+                <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20 relative">
                   <div className="absolute -top-2 sm:-top-3 left-1/2 transform -translate-x-1/2">
                     <span className="bg-gradient-to-r from-lime-500 to-green-500 text-black px-3 sm:px-4 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-bold">
                       POPULAR
@@ -321,7 +321,7 @@ const DirectoryAccessControl = () => {
             )}
 
             {accessStatus === 'pending' && (
-              <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20">
+              <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20">
                 <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">⏳</div>
                 <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Request Under Review</h2>
                 <p className="text-gray-300 text-sm sm:text-base mb-4 sm:mb-6">
@@ -343,7 +343,7 @@ const DirectoryAccessControl = () => {
             )}
 
             {accessStatus === 'expired' && (
-              <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20">
+              <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20">
                 <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">🔄</div>
                 <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Access Expired</h2>
                 <p className="text-gray-300 text-sm sm:text-base mb-4 sm:mb-6">
@@ -365,7 +365,7 @@ const DirectoryAccessControl = () => {
             )}
 
             {/* Features Section */}
-            <div className="mt-12 sm:mt-14 md:mt-16 bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20">
+            <div className="mt-12 sm:mt-14 md:mt-16 bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20">
               <h3 className="text-xl sm:text-2xl font-bold text-white mb-6 sm:mb-8">What's Included</h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
                 <div className="text-center">
@@ -391,8 +391,8 @@ const DirectoryAccessControl = () => {
 
       {/* Payment Modal */}
       {showPaymentModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-3 sm:p-4">
-          <div className="bg-gradient-to-br from-black/90 via-gray-900/90 to-black/90 backdrop-blur-2xl rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20 shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-3 sm:p-4">
+          <div className="bg-gradient-to-br from-black/90 via-gray-900/90 to-black/90 rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20 shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
             <div className="text-center">
               <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">💳</div>
               <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Complete Payment</h3>

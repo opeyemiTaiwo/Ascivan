@@ -59,7 +59,7 @@ const Support = () => {
             <h2 className="text-2xl font-bold text-white mb-6">Frequently Asked Questions</h2>
             <div className="space-y-3">
               {faqs.map((faq, i) => (
-                <details key={i} className="group bg-white/5 backdrop-blur-sm rounded-xl border border-white/20 overflow-hidden">
+                <details key={i} className="group bg-white/5 rounded-xl border border-white/20 overflow-hidden">
                   <summary className="cursor-pointer px-5 py-4 text-white font-semibold text-sm sm:text-base flex items-center justify-between list-none">
                     {faq.q}
                     <svg className="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform flex-shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -76,7 +76,7 @@ const Support = () => {
 
           {/* Contact Form */}
           <section className="mb-12">
-            <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/20 p-6 sm:p-8">
+            <div className="bg-white/5 rounded-xl border border-white/20 p-6 sm:p-8">
               <h2 className="text-2xl font-bold text-white mb-6">Send Us a Message</h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

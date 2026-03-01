@@ -104,11 +104,11 @@ const LinkInsertModal = ({ isOpen, onClose, onInsert }) => {
 
   return (
     <div 
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[150] flex items-center justify-center p-3 xs:p-4"
+      className="fixed inset-0 bg-black/50 z-[150] flex items-center justify-center p-3 xs:p-4"
       onClick={handleClose}
     >
       <div 
-        className="bg-gradient-to-br from-gray-900/95 via-black/95 to-gray-900/95 backdrop-blur-xl rounded-xl xs:rounded-2xl border border-orange-500/20 shadow-2xl w-full max-w-[calc(100vw-1.5rem)] xs:max-w-md"
+        className="bg-gradient-to-br from-gray-900/95 via-black/95 to-gray-900/95 rounded-xl xs:rounded-2xl border border-orange-500/20 shadow-2xl w-full max-w-[calc(100vw-1.5rem)] xs:max-w-md"
         onClick={(e) => e.stopPropagation()}
         onKeyDown={handleKeyDown}
       >
@@ -208,7 +208,7 @@ const LinkInsertModal = ({ isOpen, onClose, onInsert }) => {
             <button
               onClick={handleInsert}
               disabled={!linkData.url.trim() || validating}
-              className="flex-1 px-3 xs:px-4 py-2 xs:py-2.5 text-sm xs:text-base bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 active:from-orange-700 active:to-orange-800 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95"
+              className="flex-1 px-3 xs:px-4 py-2 xs:py-2.5 text-sm xs:text-base bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 active:from-orange-700 active:to-orange-800 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {validating ? (
                 <span className="flex items-center justify-center gap-1.5 xs:gap-2">

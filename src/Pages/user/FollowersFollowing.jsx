@@ -766,13 +766,13 @@ const FollowersFollowing = () => {
   };
 
   const UserCard = ({ user }) => (
-    <div className="bg-black/20 backdrop-blur-xl rounded-lg xs:rounded-xl border border-white/10 p-3 xs:p-4 sm:p-5 hover:bg-black/30 active:bg-black/35 transition-all duration-300 hover:border-lime-400/30">
+    <div className="bg-black/20 rounded-lg xs:rounded-xl border border-white/10 p-3 xs:p-4 sm:p-5">
       <div className="flex items-center gap-2 xs:gap-3 sm:gap-4">
         <button
           onClick={() => handleUserClick(user)}
           className="relative flex-shrink-0 group active:scale-95 transition-transform"
         >
-          <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full overflow-hidden bg-gradient-to-br from-lime-400 to-green-500 flex items-center justify-center text-white font-bold shadow-lg group-hover:scale-110 transition-transform duration-300 cursor-pointer">
+          <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full overflow-hidden bg-gradient-to-br from-lime-400 to-green-500 flex items-center justify-center text-white font-bold shadow-lg cursor-pointer">
             {user.photoURL ? (
               <img 
                 src={user.photoURL} 
@@ -844,7 +844,7 @@ const FollowersFollowing = () => {
     
     return (
       <div className="group">
-        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-5 md:p-6 border border-white/20 shadow-2xl transform hover:scale-105 active:scale-100 transition-all duration-500 h-full flex flex-col">
+        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-5 md:p-6 border border-white/20 shadow-2xl h-full flex flex-col">
           
           <div className="flex items-center mb-3 xs:mb-4 sm:mb-6">
             <div className="relative flex-shrink-0 mr-2 xs:mr-3 sm:mr-4">
@@ -856,10 +856,10 @@ const FollowersFollowing = () => {
                   <img 
                     src={member.photoURL} 
                     alt={`${member.name}'s profile`}
-                    className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full object-cover ring-2 xs:ring-3 sm:ring-4 ring-lime-400/50 group-hover:scale-110 transition-transform duration-300"
+                    className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full object-cover ring-2 xs:ring-3 sm:ring-4 ring-lime-400/50"
                   />
                 ) : (
-                  <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-lime-500 to-green-500 flex items-center justify-center ring-2 xs:ring-3 sm:ring-4 ring-lime-400/50 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-lime-500 to-green-500 flex items-center justify-center ring-2 xs:ring-3 sm:ring-4 ring-lime-400/50">
                     <span className="text-base xs:text-lg sm:text-xl md:text-2xl text-black font-bold">
                       {member.name?.charAt(0)?.toUpperCase() || '?'}
                     </span>
@@ -1007,7 +1007,7 @@ const FollowersFollowing = () => {
       <>
         <Navbar />
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center px-3 xs:px-4">
-          <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-6 xs:p-7 sm:p-8 border border-white/20 text-center max-w-sm w-full">
+          <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-6 xs:p-7 sm:p-8 border border-white/20 text-center max-w-sm w-full">
             <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-2 border-lime-400 mx-auto mb-4"></div>
             <p className="text-white text-sm xs:text-base sm:text-lg">Loading...</p>
           </div>
@@ -1026,13 +1026,13 @@ const FollowersFollowing = () => {
             
             {userProfile && activeTab !== 'members' && (
               <section className="mb-4 xs:mb-5 sm:mb-6 md:mb-8">
-                <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-5 md:p-6 lg:p-8 border border-white/20">
+                <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-5 md:p-6 lg:p-8 border border-white/20">
                   <div className="flex items-center gap-2 xs:gap-3 sm:gap-4 md:gap-6 mb-3 xs:mb-4 sm:mb-6">
                     <button
                       onClick={() => handleUserClick(userProfile)}
                       className="relative flex-shrink-0 group active:scale-95 transition-transform"
                     >
-                      <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full overflow-hidden bg-gradient-to-br from-lime-400 to-green-500 flex items-center justify-center text-white font-bold shadow-lg group-hover:scale-110 transition-transform duration-300 cursor-pointer">
+                      <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full overflow-hidden bg-gradient-to-br from-lime-400 to-green-500 flex items-center justify-center text-white font-bold shadow-lg cursor-pointer">
                         {userProfile?.photoURL ? (
                           <img 
                             src={userProfile.photoURL} 
@@ -1084,7 +1084,7 @@ const FollowersFollowing = () => {
 
             {/* Tabs */}
             <div className="mb-4 xs:mb-5 sm:mb-6 md:mb-8">
-              <div className="bg-black/20 backdrop-blur-xl rounded-xl xs:rounded-2xl border border-white/10 p-1 xs:p-1.5 sm:p-2">
+              <div className="bg-black/20 rounded-xl xs:rounded-2xl border border-white/10 p-1 xs:p-1.5 sm:p-2">
                 <div className="flex gap-1">
                   {userProfile && (
                     <>
@@ -1142,7 +1142,7 @@ const FollowersFollowing = () => {
             {/* Members Filters */}
             {activeTab === 'members' && (
               <section className="mb-4 xs:mb-5 sm:mb-6 md:mb-8">
-                <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-5 md:p-6 border border-white/20">
+                <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-5 md:p-6 border border-white/20">
                   
                   <div className="mb-3 xs:mb-4 sm:mb-6">
                     <input
@@ -1150,7 +1150,7 @@ const FollowersFollowing = () => {
                       placeholder="Search by name, email, or skills..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-6 py-2.5 xs:py-3 sm:py-4 text-white placeholder-gray-400 focus:border-lime-400 focus:outline-none focus:ring-2 focus:ring-lime-400/20 transition-all duration-300 text-xs xs:text-sm sm:text-base"
+                      className="w-full bg-white/10 border border-white/20 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-6 py-2.5 xs:py-3 sm:py-4 text-white placeholder-gray-400 focus:border-lime-400 focus:outline-none focus:ring-2 focus:ring-lime-400/20 transition-all duration-300 text-xs xs:text-sm sm:text-base"
                     />
                   </div>
 
@@ -1197,7 +1197,7 @@ const FollowersFollowing = () => {
                     <select
                       value={selectedBadgeCategory}
                       onChange={(e) => setSelectedBadgeCategory(e.target.value)}
-                      className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg xs:rounded-xl px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-white focus:border-lime-400 focus:outline-none transition-all duration-300 text-xs xs:text-sm sm:text-base"
+                      className="bg-white/10 border border-white/20 rounded-lg xs:rounded-xl px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-white focus:border-lime-400 focus:outline-none transition-all duration-300 text-xs xs:text-sm sm:text-base"
                     >
                       <option value="all">All Badge Types</option>
                       {Object.entries(badgeCategories).map(([key, category]) => (
@@ -1208,7 +1208,7 @@ const FollowersFollowing = () => {
                     <select
                       value={selectedSkill}
                       onChange={(e) => setSelectedSkill(e.target.value)}
-                      className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg xs:rounded-xl px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-white focus:border-lime-400 focus:outline-none transition-all duration-300 text-xs xs:text-sm sm:text-base"
+                      className="bg-white/10 border border-white/20 rounded-lg xs:rounded-xl px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-white focus:border-lime-400 focus:outline-none transition-all duration-300 text-xs xs:text-sm sm:text-base"
                     >
                       <option value="">All Skills</option>
                       {uniqueSkills.map(skill => (
@@ -1219,7 +1219,7 @@ const FollowersFollowing = () => {
                     <select
                       value={minProjects}
                       onChange={(e) => setMinProjects(Number(e.target.value))}
-                      className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg xs:rounded-xl px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-white focus:border-lime-400 focus:outline-none transition-all duration-300 text-xs xs:text-sm sm:text-base"
+                      className="bg-white/10 border border-white/20 rounded-lg xs:rounded-xl px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-white focus:border-lime-400 focus:outline-none transition-all duration-300 text-xs xs:text-sm sm:text-base"
                     >
                       <option value={0}>Any Projects</option>
                       <option value={1}>1+ Projects</option>
@@ -1231,7 +1231,7 @@ const FollowersFollowing = () => {
                     <select
                       value={minBadges}
                       onChange={(e) => setMinBadges(Number(e.target.value))}
-                      className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg xs:rounded-xl px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-white focus:border-lime-400 focus:outline-none transition-all duration-300 text-xs xs:text-sm sm:text-base"
+                      className="bg-white/10 border border-white/20 rounded-lg xs:rounded-xl px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-white focus:border-lime-400 focus:outline-none transition-all duration-300 text-xs xs:text-sm sm:text-base"
                     >
                       <option value={0}>Any Badges</option>
                       <option value={1}>1+ Badges</option>
@@ -1243,7 +1243,7 @@ const FollowersFollowing = () => {
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
-                      className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg xs:rounded-xl px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-white focus:border-lime-400 focus:outline-none transition-all duration-300 text-xs xs:text-sm sm:text-base"
+                      className="bg-white/10 border border-white/20 rounded-lg xs:rounded-xl px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-white focus:border-lime-400 focus:outline-none transition-all duration-300 text-xs xs:text-sm sm:text-base"
                     >
                       <option value="recent">Recently Active</option>
                       <option value="badges">Most Badges</option>
@@ -1374,7 +1374,7 @@ const FollowersFollowing = () => {
                             if (totalPages > 1) {
                               return (
                                 <div className="flex justify-center items-center mt-6 xs:mt-8 sm:mt-12 px-4">
-                                  <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-6 border border-white/20 w-full max-w-lg">
+                                  <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-6 border border-white/20 w-full max-w-lg">
                                     <div className="flex items-center justify-center gap-2 xs:gap-3 sm:gap-4 mb-3 xs:mb-4">
                                       
                                       <button

@@ -15,7 +15,7 @@ export const MobileSidebarToggle = ({ leftSidebarOpen, onToggleLeftSidebar }) =>
         className={`w-11 h-11 xs:w-12 xs:h-12 rounded-full shadow-2xl border-2 transition-all duration-300 flex items-center justify-center group active:scale-95 ${
           leftSidebarOpen 
             ? 'bg-orange-500 border-orange-400 text-white' 
-            : 'bg-black/80 backdrop-blur-xl border-white/20 text-orange-400 hover:bg-orange-500 hover:text-white'
+            : 'bg-black/80 border-white/20 text-orange-400 hover:bg-orange-500 hover:text-white'
         }`}
         aria-label="Toggle quick actions"
         title="Quick Actions"
@@ -64,13 +64,13 @@ export const MobileSidebarDrawer = ({ isOpen, onClose, children, title, position
     <div className="fixed inset-0 z-[90] lg:hidden">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/50"
         onClick={onClose}
       />
       
       {/* Drawer */}
       <div 
-        className={`absolute top-0 ${positionClass} h-full w-72 xs:w-80 max-w-[85vw] bg-gradient-to-br from-gray-900/98 via-black/98 to-gray-900/98 backdrop-blur-xl ${borderClass} border-orange-500/20 shadow-2xl transition-transform duration-300 overflow-hidden ${slideClass}`}
+        className={`absolute top-0 ${positionClass} h-full w-72 xs:w-80 max-w-[85vw] bg-gradient-to-br from-gray-900/98 via-black/98 to-gray-900/98 ${borderClass} border-orange-500/20 shadow-2xl transition-transform duration-300 overflow-hidden ${slideClass}`}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-3 xs:p-4 border-b border-orange-500/10 bg-black/20">

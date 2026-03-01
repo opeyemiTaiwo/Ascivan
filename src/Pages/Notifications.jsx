@@ -258,7 +258,7 @@ const NotificationsPage = () => {
       <div className="min-h-screen overflow-x-hidden bg-gradient-to-br from-gray-900 via-black to-gray-900">
         
         {/* Header */}
-        <div className="bg-black/50 backdrop-blur-xl border-b border-white/10 sticky top-16 z-40">
+        <div className="bg-black/50 border-b border-white/10 sticky top-16 z-40">
           <div className="container mx-auto px-3 xs:px-4 sm:px-6 py-4 xs:py-5 sm:py-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
               <div className="flex items-center space-x-3 xs:space-x-4">
@@ -368,7 +368,7 @@ const NotificationsPage = () => {
                 <div
                   key={notification.id}
                   onClick={() => handleNotificationClick(notification)}
-                  className={`bg-black/20 backdrop-blur-xl rounded-xl xs:rounded-2xl border transition-all hover:bg-black/30 cursor-pointer group ${
+                  className={`bg-black/20 rounded-xl xs:rounded-2xl border transition-all hover:bg-black/30 cursor-pointer group ${
                     notification.isRead 
                       ? 'border-white/10' 
                       : 'border-lime-400/30 bg-lime-500/5'
@@ -378,7 +378,7 @@ const NotificationsPage = () => {
                     <div className="flex items-start space-x-3 xs:space-x-4">
                       
                       {/* Notification Icon */}
-                      <div className="w-10 h-10 xs:w-12 xs:h-12 bg-gradient-to-r from-lime-500 to-green-500 rounded-full flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                      <div className="w-10 h-10 xs:w-12 xs:h-12 bg-gradient-to-r from-lime-500 to-green-500 rounded-full flex items-center justify-center flex-shrink-0">
                         <span className="text-black">
                           {getNotificationIcon(notification.type)}
                         </span>

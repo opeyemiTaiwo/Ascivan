@@ -92,7 +92,7 @@ export const ClickableUserAvatar = ({
   return (
     <button
       onClick={handleClick}
-      className={`${sizeClasses[size]} rounded-full overflow-hidden bg-gradient-to-r from-lime-500 to-green-500 flex items-center justify-center cursor-pointer hover:scale-110 hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-lime-400/50 relative flex-shrink-0 ${className}`}
+      className={`${sizeClasses[size]} rounded-full overflow-hidden bg-gradient-to-r from-lime-500 to-green-500 flex items-center justify-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-lime-400/50 relative flex-shrink-0 ${className}`}
       title={`View profile of ${user.displayName || user.firstName + ' ' + user.lastName || user.email?.split('@')[0] || 'user'}`}
       aria-label={`View profile of ${user.displayName || user.firstName + ' ' + user.lastName || user.email?.split('@')[0] || 'user'}`}
       {...props}

@@ -35,11 +35,11 @@ export const RepostModal = ({ isOpen, onClose, post, onRepost, isSubmitting }) =
 
   return (
     <div 
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
       onClick={handleClose}
     >
       <div 
-        className="bg-gradient-to-br from-gray-900/95 via-black/95 to-gray-900/95 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
+        className="bg-gradient-to-br from-gray-900/95 via-black/95 to-gray-900/95 rounded-2xl border border-white/20 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -190,7 +190,7 @@ export const RepostModal = ({ isOpen, onClose, post, onRepost, isSubmitting }) =
               <button
                 onClick={handleRepost}
                 disabled={isSubmitting}
-                className="px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
+                className="px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <span className="flex items-center">

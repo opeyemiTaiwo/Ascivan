@@ -179,7 +179,7 @@ const PostHousing = () => {
             {/* Header */}
             <section className="text-center mb-10">
               <div className="inline-block mb-4 px-4 py-2 bg-orange-500/10 border border-orange-500/20 rounded-xl">
-                <p className="text-orange-400 font-semibold text-sm">🏠 List housing for international students</p>
+                <p className="text-orange-400 font-semibold text-sm">List housing for international students</p>
               </div>
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-2 sm:mb-3">
                 List a <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Space</span>
@@ -187,7 +187,7 @@ const PostHousing = () => {
               <p className="text-gray-300">Help international students find their new home</p>
             </section>
 
-            <div className="bg-white/5 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/20 p-4 sm:p-6 md:p-8 shadow-2xl">
+            <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-white/20 p-4 sm:p-6 md:p-8">
               <form onSubmit={handleSubmit} className="space-y-8">
 
                 {/* Housing Type */}
@@ -199,9 +199,9 @@ const PostHousing = () => {
                         key={type.id}
                         type="button"
                         onClick={() => setFormData(prev => ({ ...prev, housingType: type.id }))}
-                        className={`p-4 rounded-xl border-2 text-left transition-all duration-200 active:scale-95 ${
+                        className={`p-4 rounded-xl border-2 text-left ${
                           formData.housingType === type.id
-                            ? 'border-orange-400 bg-orange-500/20 shadow-lg scale-105'
+                            ? 'border-orange-400 bg-orange-500/20'
                             : 'border-white/20 bg-white/5 hover:bg-white/10'
                         }`}
                       >
@@ -290,9 +290,9 @@ const PostHousing = () => {
                   {/* Checkboxes */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
                     {[
-                      { name: 'studentFriendly', label: '✓ Student-Friendly' },
-                      { name: 'utilitiesIncluded', label: '💡 Utilities Included' },
-                      { name: 'petsAllowed', label: '🐾 Pets Allowed' },
+                      { name: 'studentFriendly', label: 'Student-Friendly' },
+                      { name: 'utilitiesIncluded', label: 'Utilities Included' },
+                      { name: 'petsAllowed', label: 'Pets Allowed' },
                     ].map(item => (
                       <label key={item.name} className="flex items-center gap-3 cursor-pointer">
                         <input type="checkbox" name={item.name} checked={formData[item.name]} onChange={handleInputChange} className={checkboxClass} />
@@ -358,8 +358,8 @@ const PostHousing = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-8 sm:px-12 py-4 w-full sm:w-auto bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 text-white font-black text-base sm:text-lg rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                    style={{ boxShadow: '0 0 40px rgba(249,115,22,0.4)' }}
+                    className="px-8 sm:px-12 py-4 w-full sm:w-auto bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 text-white font-black text-base sm:text-lg rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed "
+                    style={{}}
                   >
                     {isSubmitting ? (
                       <span className="flex items-center gap-3">

@@ -84,7 +84,7 @@ const ImageGallery = ({ images }) => {
             <img 
               src={displayImages[0].url} 
               alt={displayImages[0].filename || "Post image"}
-              className="w-full max-h-48 xs:max-h-64 sm:max-h-96 object-cover rounded-lg xs:rounded-xl border border-orange-500/20 cursor-pointer hover:opacity-90 transition-all duration-300 hover:scale-[1.01] active:scale-[0.99]"
+              className="w-full max-h-48 xs:max-h-64 sm:max-h-96 object-cover rounded-lg xs:rounded-xl border border-orange-500/20 cursor-pointer hover:opacity-90 transition-all duration-300"
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -112,7 +112,7 @@ const ImageGallery = ({ images }) => {
                 <img 
                   src={image.url} 
                   alt={image.filename || `Image ${index + 1}`}
-                  className="w-full h-24 xs:h-32 sm:h-40 md:h-48 object-cover rounded-md xs:rounded-lg border border-orange-500/20 cursor-pointer hover:opacity-90 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                  className="w-full h-24 xs:h-32 sm:h-40 md:h-48 object-cover rounded-md xs:rounded-lg border border-orange-500/20 cursor-pointer hover:opacity-90 transition-all duration-300"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -146,7 +146,7 @@ const ImageGallery = ({ images }) => {
       {/* Lightbox for Full-Size Image Viewing */}
       {selectedImage && (
         <div 
-          className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[200] flex items-center justify-center p-2 xs:p-3 sm:p-4"
+          className="fixed inset-0 bg-black/90 z-[200] flex items-center justify-center p-2 xs:p-3 sm:p-4"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();

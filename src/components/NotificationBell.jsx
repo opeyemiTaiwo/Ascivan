@@ -203,7 +203,7 @@ const NotificationBell = () => {
       >
         {/* Bell Icon - Responsive sizes */}
         <svg 
-          className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 transition-all duration-300 group-hover:scale-110 group-hover:text-lime-300" 
+          className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 transition-all duration-300 group-hover:text-lime-300" 
           fill="none" 
           viewBox="0 0 24 24" 
           stroke="currentColor"
@@ -231,10 +231,10 @@ const NotificationBell = () => {
 
       {/* 📋 NOTIFICATIONS DROPDOWN - Fully Responsive */}
       {showDropdown && (
-        <div className="fixed xs:absolute left-2 right-2 xs:left-auto xs:right-0 top-16 xs:top-full mt-0 xs:mt-2 w-auto xs:w-80 sm:w-96 md:w-[26rem] lg:w-[28rem] bg-gray-900/98 xs:bg-gray-900/95 backdrop-blur-xl border border-white/20 rounded-xl xs:rounded-2xl shadow-2xl z-[9999] max-h-[calc(100vh-5rem)] xs:max-h-[85vh] sm:max-h-96 overflow-hidden">
+        <div className="fixed xs:absolute left-2 right-2 xs:left-auto xs:right-0 top-16 xs:top-full mt-0 xs:mt-2 w-auto xs:w-80 sm:w-96 md:w-[26rem] lg:w-[28rem] bg-gray-900/98 xs:bg-gray-900/95 border border-white/20 rounded-xl xs:rounded-2xl shadow-2xl z-[9999] max-h-[calc(100vh-5rem)] xs:max-h-[85vh] sm:max-h-96 overflow-hidden">
           
           {/* Header - Responsive padding and text */}
-          <div className="flex items-center justify-between p-3 xs:p-3 sm:p-4 border-b border-white/10 sticky top-0 bg-gray-900/95 backdrop-blur-xl z-10">
+          <div className="flex items-center justify-between p-3 xs:p-3 sm:p-4 border-b border-white/10 sticky top-0 bg-gray-900/95 z-10">
             <h3 className="text-white font-bold text-sm xs:text-base flex items-center gap-1.5 xs:gap-2">
               <span className="text-base xs:text-lg">🔔</span>
               <span className="hidden xs:inline">Notifications</span>

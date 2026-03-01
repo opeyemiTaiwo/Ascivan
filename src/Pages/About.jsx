@@ -27,7 +27,7 @@ const About = () => {
 
           {/* Mission */}
           <section className="mb-12">
-            <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/20 p-6 sm:p-8">
+            <div className="bg-white/5 rounded-xl border border-white/20 p-6 sm:p-8">
               <h2 className="text-2xl font-bold text-white mb-4">Our Mission</h2>
               <p className="text-gray-300 leading-relaxed mb-4">
                 International students face fragmented services for housing, finance, and jobs, making it harder to succeed abroad. Loomiq leverages cutting-edge AI to deliver a seamless solution, revolutionizing how international students navigate life in a new country.
@@ -48,7 +48,7 @@ const About = () => {
                 { icon: '💼', title: 'Jobs', desc: 'Discover job opportunities that are visa-compliant.' },
                 { icon: '🤝', title: 'Community', desc: 'Connect with a supportive community of peers, mentors, and alumni.' },
               ].map((item, i) => (
-                <div key={i} className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/20 p-5">
+                <div key={i} className="bg-white/5 rounded-xl border border-white/20 p-5">
                   <div className="text-3xl mb-3">{item.icon}</div>
                   <h3 className="text-white font-bold text-lg mb-2">{item.title}</h3>
                   <p className="text-gray-400 text-sm">{item.desc}</p>

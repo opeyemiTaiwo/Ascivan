@@ -171,13 +171,13 @@ export const ResponsiveCard = ({
   };
 
   const hoverClasses = hoverable 
-    ? 'transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer' 
+    ? 'cursor-pointer' 
     : '';
 
   return (
     <div 
       className={`
-        backdrop-blur-md bg-white/10 border border-white/20
+        bg-white/10 border border-white/20
         ${variantClasses[variant] || variantClasses.base}
         ${hoverClasses}
         ${className}
@@ -270,7 +270,7 @@ export const MobileMenu = ({
         className={`
           fixed top-0 ${positionClasses[position]} bottom-0
           w-64 sm:w-80
-          backdrop-blur-md bg-white/10 border-l border-white/20
+          bg-white/10 border-l border-white/20
           z-50 md:hidden
           transform transition-transform duration-300
           overflow-y-auto

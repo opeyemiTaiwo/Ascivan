@@ -70,14 +70,14 @@ const Logout = () => {
       
       {/* Main Content */}
       <main className="flex-grow pb-6 xs:pb-8 sm:pb-10 flex items-center justify-center px-3 xs:px-4 sm:px-6 relative z-10">
-        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl sm:rounded-3xl shadow-2xl p-4 xs:p-5 sm:p-6 md:p-8 lg:p-10 w-full max-w-[340px] xs:max-w-sm sm:max-w-md md:max-w-lg border border-white/20 transform hover:scale-105 transition-all duration-500">
+        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl sm:rounded-3xl shadow-2xl p-4 xs:p-5 sm:p-6 md:p-8 lg:p-10 w-full max-w-[340px] xs:max-w-sm sm:max-w-md md:max-w-lg border border-white/20">
           <div className="text-center">
             
             {/* Hero Section */}
             <div className="mb-4 xs:mb-5 sm:mb-6 md:mb-8">
               <div className="flex items-center justify-center gap-1.5 xs:gap-2 mb-3 xs:mb-4 animate-pulse">
-                <div className="h-1.5 w-1.5 xs:h-2 xs:w-2 sm:h-3 sm:w-3 bg-green-400 rounded-full animate-ping shadow-lg" 
-                     style={{boxShadow: '0 0 20px rgba(34, 197, 94, 0.8)'}}></div>
+                <div className="h-1.5 w-1.5 xs:h-2 xs:w-2 sm:h-3 sm:w-3 bg-green-400 rounded-full" 
+                     ></div>
                 <span className="text-green-300 uppercase tracking-wider xs:tracking-widest text-[10px] xs:text-xs sm:text-sm font-black" 
                       style={{
                         textShadow: '0 0 20px rgba(34, 197, 94, 0.8), 2px 2px 4px rgba(0,0,0,0.9)',
@@ -86,8 +86,8 @@ const Logout = () => {
                       }}>
                  Signing Out
                 </span>
-                <div className="h-1.5 w-1.5 xs:h-2 xs:w-2 sm:h-3 sm:w-3 bg-green-400 rounded-full animate-ping shadow-lg" 
-                     style={{boxShadow: '0 0 20px rgba(34, 197, 94, 0.8)'}}></div>
+                <div className="h-1.5 w-1.5 xs:h-2 xs:w-2 sm:h-3 sm:w-3 bg-green-400 rounded-full" 
+                     ></div>
               </div>
 
               <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 xs:mb-3 px-2" 
@@ -102,7 +102,7 @@ const Logout = () => {
                           style={{
                             textShadow: 'none',
                             filter: 'drop-shadow(0 0 20px rgba(34, 197, 94, 0.5))',
-                            animation: 'glow 2s ease-in-out infinite alternate'
+                            
                           }}>
                       Soon!
                     </span>
@@ -114,7 +114,7 @@ const Logout = () => {
                           style={{
                             textShadow: 'none',
                             filter: 'drop-shadow(0 0 20px rgba(255, 69, 0, 0.5))',
-                            animation: 'glow 2s ease-in-out infinite alternate'
+                            
                           }}>
                       Out...
                     </span>
@@ -123,12 +123,12 @@ const Logout = () => {
               </h1>
 
               <div className="h-0.5 xs:h-1 w-12 xs:w-16 sm:w-20 bg-gradient-to-r from-green-400 to-orange-500 mx-auto rounded-full shadow-2xl"
-                   style={{boxShadow: '0 0 30px rgba(34, 197, 94, 0.6)'}}></div>
+                   ></div>
             </div>
 
             {/* Error Message */}
             {error && (
-              <div className="bg-gradient-to-br from-red-900/40 via-red-800/40 to-red-900/40 backdrop-blur-xl border border-red-500/30 text-red-300 px-3 xs:px-4 py-2.5 xs:py-3 rounded-lg xs:rounded-xl mb-4 xs:mb-5 sm:mb-6 shadow-2xl">
+              <div className="bg-gradient-to-br from-red-900/40 via-red-800/40 to-red-900/40 border border-red-500/30 text-red-300 px-3 xs:px-4 py-2.5 xs:py-3 rounded-lg xs:rounded-xl mb-4 xs:mb-5 sm:mb-6 shadow-2xl">
                 <div className="flex items-start xs:items-center">
                   <svg className="w-4 h-4 xs:w-5 xs:h-5 text-red-400 mr-2 xs:mr-3 flex-shrink-0 mt-0.5 xs:mt-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
@@ -149,7 +149,7 @@ const Logout = () => {
                     <div className="animate-spin h-10 w-10 xs:h-12 xs:w-12 sm:h-14 sm:w-14 border-3 xs:border-4 border-green-400/20 border-t-green-400 rounded-full shadow-lg"></div>
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 bg-green-400 rounded-full animate-pulse shadow-lg" 
-                           style={{boxShadow: '0 0 20px rgba(34, 197, 94, 0.8)'}}></div>
+                           ></div>
                     </div>
                   </div>
                 </div>
@@ -165,20 +165,20 @@ const Logout = () => {
             {/* Success State */}
             {isLoggedOut && !error && (
               <div className="mb-4 xs:mb-5 sm:mb-6">
-                <div className="bg-gradient-to-br from-green-900/40 via-green-800/40 to-green-900/40 backdrop-blur-xl border border-green-500/30 text-green-300 px-3 xs:px-4 py-3 xs:py-4 rounded-lg xs:rounded-xl mb-3 xs:mb-4 shadow-2xl">
+                <div className="bg-gradient-to-br from-green-900/40 via-green-800/40 to-green-900/40 border border-green-500/30 text-green-300 px-3 xs:px-4 py-3 xs:py-4 rounded-lg xs:rounded-xl mb-3 xs:mb-4 shadow-2xl">
                   <div className="flex items-center justify-center mb-2 xs:mb-3">
                     <div className="relative">
-                      <svg className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 text-green-400 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{filter: 'drop-shadow(0 0 10px rgba(34, 197, 94, 0.8))'}}>
+                      <svg className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 text-green-400 " fill="none" stroke="currentColor" viewBox="0 0 24 24" >
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
-                      <div className="absolute inset-0 bg-green-400/20 rounded-full animate-ping"></div>
+                      <div className="absolute inset-0 bg-green-400/20 rounded-full "></div>
                     </div>
                   </div>
                   <p className="font-bold text-base xs:text-lg sm:text-xl text-green-300 mb-1 xs:mb-2">Successfully Logged Out!</p>
                   <p className="text-xs xs:text-sm text-green-200">Thank you for using Loomiq</p>
                 </div>
                 
-                <div className="bg-gradient-to-br from-orange-900/30 via-orange-800/30 to-orange-900/30 backdrop-blur-xl border border-orange-500/20 text-orange-300 px-3 xs:px-4 py-2.5 xs:py-3 rounded-lg xs:rounded-xl">
+                <div className="bg-gradient-to-br from-orange-900/30 via-orange-800/30 to-orange-900/30 border border-orange-500/20 text-orange-300 px-3 xs:px-4 py-2.5 xs:py-3 rounded-lg xs:rounded-xl">
                   <p className="text-xs xs:text-sm font-medium">
                     Redirecting to home in{' '}
                     <span className="text-orange-400 font-bold text-base xs:text-lg animate-pulse">{countdown}</span>
@@ -197,7 +197,7 @@ const Logout = () => {
             {/* Manual Logout for Not Logged In Users */}
             {!currentUser && !isLoggedOut && (
               <div className="mb-4 xs:mb-5 sm:mb-6">
-                <div className="bg-gradient-to-br from-yellow-900/40 via-yellow-800/40 to-orange-900/40 backdrop-blur-xl border border-yellow-500/30 text-yellow-300 px-3 xs:px-4 py-2.5 xs:py-3 rounded-lg xs:rounded-xl">
+                <div className="bg-gradient-to-br from-yellow-900/40 via-yellow-800/40 to-orange-900/40 border border-yellow-500/30 text-yellow-300 px-3 xs:px-4 py-2.5 xs:py-3 rounded-lg xs:rounded-xl">
                   <div className="flex items-center justify-center mb-2">
                     <svg className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
@@ -217,7 +217,7 @@ const Logout = () => {
                 <button
                   onClick={handleManualLogout}
                   disabled={isLoggingOut}
-                  className="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 disabled:opacity-50 disabled:cursor-not-allowed text-white py-2.5 xs:py-3 sm:py-3.5 px-4 rounded-lg xs:rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg text-xs xs:text-sm sm:text-base"
+                  className="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 disabled:opacity-50 disabled:cursor-not-allowed text-white py-2.5 xs:py-3 sm:py-3.5 px-4 rounded-lg xs:rounded-xl font-bold transition-all duration-300 text-xs xs:text-sm sm:text-base"
                   style={{
                     boxShadow: '0 10px 30px rgba(239, 68, 68, 0.3)'
                   }}
@@ -241,7 +241,7 @@ const Logout = () => {
               {/* Navigation Options */}
               <button
                 onClick={() => { window.location.href = externalHomeUrl; }}
-                className="w-full bg-gradient-to-r from-green-500 to-orange-500 hover:from-green-600 hover:to-orange-600 text-white py-2.5 xs:py-3 sm:py-3.5 px-4 rounded-lg xs:rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg text-xs xs:text-sm sm:text-base"
+                className="w-full bg-gradient-to-r from-green-500 to-orange-500 hover:from-green-600 hover:to-orange-600 text-white py-2.5 xs:py-3 sm:py-3.5 px-4 rounded-lg xs:rounded-xl font-bold transition-all duration-300 text-xs xs:text-sm sm:text-base"
                 style={{
                   boxShadow: '0 10px 30px rgba(34, 197, 94, 0.3)'
                 }}
@@ -253,7 +253,7 @@ const Logout = () => {
               
               <button
                 onClick={() => navigate('/login')}
-                className="w-full bg-gradient-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-xl border border-white/20 text-white py-2.5 xs:py-3 sm:py-3.5 px-4 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-2xl text-xs xs:text-sm sm:text-base"
+                className="w-full bg-gradient-to-br from-white/10 via-white/5 to-white/10 border border-white/20 text-white py-2.5 xs:py-3 sm:py-3.5 px-4 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 hover:shadow-2xl text-xs xs:text-sm sm:text-base"
                 style={{
                   boxShadow: '0 10px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)'
                 }}
@@ -283,7 +283,7 @@ const Logout = () => {
               <img 
                 src="/Images/512X512.png" 
                 alt="Loomiq Logo" 
-                className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 transform hover:scale-110 transition-transform duration-300"
+                className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8"
               />
               <span className="text-base xs:text-lg sm:text-xl font-black" 
                     style={{

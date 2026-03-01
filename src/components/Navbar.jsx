@@ -10,9 +10,9 @@ const Navbar = () => {
 
   const navItems = [
     { path: '/community', label: 'Home' },
-    { path: '/hub', label: 'Jobs' },
+    { path: '/jobs', label: 'Jobs' },
     { path: '/housing', label: 'Housing' },
-    { path: '/banking', label: 'Banking' },
+    { path: '/finance', label: 'Finance' },
     { path: '/dashboard', label: 'Dashboard' },
   ];
 

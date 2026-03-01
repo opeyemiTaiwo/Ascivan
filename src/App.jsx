@@ -20,13 +20,13 @@ import MembersDirectory from './Pages/MembersDirectory';
 import CommunityPosts from './Pages/community/CommunityPosts';
 import SubmitPost from './Pages/community/SubmitPost';
 import SinglePost from './Pages/community/SinglePost';
-import Hub from './Pages/Hub';
-import PostHub from './Pages/PostHub';
-import MyHubPosts from './Pages/MyHubPosts';
+import Jobs from './Pages/Jobs';
+import PostJobs from './Pages/PostJobs';
+import MyJobPosts from './Pages/MyJobPosts';
 import Housing from './Pages/Housing';
 import PostHousing from './Pages/PostHousing';
-import Banking from './Pages/Banking';
-import PostBanking from './Pages/PostBanking';
+import Finance from './Pages/Finance';
+import PostFinance from './Pages/PostFinance';
 import Onboarding from './Pages/Onboarding';
 import DigitalSolutionsHome from './Pages/digital/DigitalSolutionsHome';
 import DigitalTermsOfService from './Pages/digital/DigitalTermsOfService';
@@ -125,20 +125,27 @@ function App() {
                 <Route path="/digital-solutions" element={<DigitalSolutionsHome />} />
                 <Route path="/services" element={<DigitalSolutionsHome />} />
 
-                {/* Hub / Jobs */}
-                <Route path="/hub" element={<BasicProtectedRoute><Hub /></BasicProtectedRoute>} />
-                <Route path="/hub/post" element={<BasicProtectedRoute><PostHub /></BasicProtectedRoute>} />
-                <Route path="/hub/my-posts" element={<BasicProtectedRoute><MyHubPosts /></BasicProtectedRoute>} />
+                {/* Jobs */}
+                <Route path="/jobs" element={<BasicProtectedRoute><Jobs /></BasicProtectedRoute>} />
+                <Route path="/jobs/post" element={<BasicProtectedRoute><PostJobs /></BasicProtectedRoute>} />
+                <Route path="/jobs/my-posts" element={<BasicProtectedRoute><MyJobPosts /></BasicProtectedRoute>} />
+                {/* Legacy hub routes redirect to jobs */}
+                <Route path="/hub" element={<Navigate to="/jobs" replace />} />
+                <Route path="/hub/post" element={<Navigate to="/jobs/post" replace />} />
+                <Route path="/hub/my-posts" element={<Navigate to="/jobs/my-posts" replace />} />
 
                 {/* Housing */}
                 <Route path="/housing" element={<BasicProtectedRoute><Housing /></BasicProtectedRoute>} />
                 <Route path="/housing/post" element={<BasicProtectedRoute><PostHousing /></BasicProtectedRoute>} />
 
-                {/* Banking & Financial Services */}
-                <Route path="/banking" element={<BasicProtectedRoute><Banking /></BasicProtectedRoute>} />
-                <Route path="/banking/post" element={<BasicProtectedRoute><PostBanking /></BasicProtectedRoute>} />
-                <Route path="/opportunities" element={<BasicProtectedRoute><Hub /></BasicProtectedRoute>} />
-                <Route path="/opportunities/post" element={<BasicProtectedRoute><PostHub /></BasicProtectedRoute>} />
+                {/* Finance & Financial Resources */}
+                <Route path="/finance" element={<BasicProtectedRoute><Finance /></BasicProtectedRoute>} />
+                <Route path="/finance/post" element={<BasicProtectedRoute><PostFinance /></BasicProtectedRoute>} />
+                {/* Legacy banking routes redirect to finance */}
+                <Route path="/banking" element={<Navigate to="/finance" replace />} />
+                <Route path="/banking/post" element={<Navigate to="/finance/post" replace />} />
+                <Route path="/opportunities" element={<Navigate to="/jobs" replace />} />
+                <Route path="/opportunities/post" element={<Navigate to="/jobs/post" replace />} />
 
                 {/* Community */}
                 <Route path="/community" element={<BasicProtectedRoute><CommunityPosts /></BasicProtectedRoute>} />

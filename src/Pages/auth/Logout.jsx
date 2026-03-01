@@ -75,13 +75,7 @@ const Logout = () => {
   return (
     <div 
       className="min-h-screen overflow-hidden flex flex-col relative"
-      style={{
-        backgroundImage: `url('/Images/backg.png')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed'
-      }}
+      style={{}}
     >
       {/* Animated background overlay */}
       <div 
@@ -322,7 +316,7 @@ const Logout = () => {
             <div className="flex items-center justify-center mb-2 xs:mb-3 sm:mb-4 px-4">
               <span className="text-gray-300 text-[10px] xs:text-xs sm:text-sm font-medium text-center" 
                     style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
-                Transforming Careers with AI-Powered Project Collaboration
+                Transforming the international student experience with AI
               </span>
             </div>
             <p className="text-gray-400 text-[10px] xs:text-xs sm:text-sm" 

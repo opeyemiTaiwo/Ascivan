@@ -1,4 +1,4 @@
-// src/Pages/Housing.jsx - Housing Listings for International Students
+// src/Pages/Finance.jsx - Finance & Financial Resources for International Students
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -10,30 +10,51 @@ import {
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
 
-const Housing = () => {
+const Finance = () => {
   const { currentUser, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [selectedType, setSelectedType] = useState('all');
+  const [selectedSource, setSelectedSource] = useState('all');
   const [locationFilter, setLocationFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('newest');
   const [loading, setLoading] = useState(true);
 
-  const housingTypes = [
-    { id: 'all', label: 'All' },
-    { id: 'apartment', label: 'Apartment' },
-    { id: 'room', label: 'Room / Shared' },
-    { id: 'studio', label: 'Studio' },
-    { id: 'house', label: 'House' },
-    { id: 'student-housing', label: 'Student Housing' },
+  const serviceTypes = [
+    { id: 'all', label: 'All Resources', icon: '📋' },
+    { id: 'scholarships', label: 'Scholarships', icon: '🎓' },
+    { id: 'loans', label: 'Loans', icon: '💰' },
+    { id: 'work-study', label: 'Work-Study', icon: '💼' },
+    { id: 'grants', label: 'Grants', icon: '🏆' },
+    { id: 'financial-aid', label: 'Financial Aid', icon: '🤝' },
+    { id: 'assistantships', label: 'Assistantships', icon: '📚' },
+    { id: 'fellowships', label: 'Fellowships', icon: '🏅' },
+    { id: 'emergency-funds', label: 'Emergency Funds', icon: '🆘' },
+    { id: 'tuition-waivers', label: 'Tuition Waivers', icon: '✅' },
+    { id: 'bank-account', label: 'Bank Account', icon: '🏦' },
+    { id: 'credit-card', label: 'Credit Card', icon: '💳' },
+    { id: 'insurance', label: 'Insurance', icon: '🛡️' },
+    { id: 'money-transfer', label: 'Money Transfer', icon: '🔄' },
+    { id: 'tax-services', label: 'Tax Services', icon: '📄' },
+    { id: 'investment', label: 'Investment', icon: '📈' },
+  ];
+
+  const sourceTypes = [
+    { id: 'all', label: 'All Sources' },
+    { id: 'university', label: '🏫 University' },
+    { id: 'federal', label: '🏛️ Federal' },
+    { id: 'state', label: '🗺️ State' },
+    { id: 'private', label: '🏢 Private' },
+    { id: 'nonprofit', label: '💚 Nonprofit' },
+    { id: 'employer', label: '👔 Employer' },
   ];
 
   useEffect(() => {
     if (!authLoading && !currentUser) {
-      navigate('/login', { replace: true, state: { from: '/housing' } });
+      navigate('/login', { replace: true, state: { from: '/finance' } });
     }
   }, [currentUser, authLoading, navigate]);
 
@@ -41,7 +62,7 @@ const Housing = () => {
     if (authLoading || !currentUser) return;
 
     const q = query(
-      collection(db, 'housing_posts'),
+      collection(db, 'banking_posts'),
       where('status', 'in', ['active', 'closed']),
       orderBy('createdAt', 'desc')
     );
@@ -52,14 +73,13 @@ const Housing = () => {
         ...doc.data(),
         createdAt: doc.data().createdAt?.toDate(),
         expiresAt: doc.data().expiresAt?.toDate(),
-        availableFrom: doc.data().availableFrom?.toDate(),
       })).filter(p => !p.expiresAt || new Date() < p.expiresAt);
 
       setPosts(data);
       setFilteredPosts(data);
       setLoading(false);
     }, (error) => {
-      console.error('Error fetching housing posts:', error);
+      console.error('Error fetching finance posts:', error);
       setLoading(false);
     });
 
@@ -70,15 +90,20 @@ const Housing = () => {
     let filtered = [...posts];
 
     if (selectedType !== 'all') {
-      filtered = filtered.filter(p => p.housingType === selectedType);
+      filtered = filtered.filter(p => p.serviceType === selectedType);
+    }
+
+    if (selectedSource !== 'all') {
+      filtered = filtered.filter(p => p.fundingSource === selectedSource);
     }
 
     if (locationFilter.trim()) {
       const loc = locationFilter.toLowerCase().trim();
       filtered = filtered.filter(p =>
         (p.city && p.city.toLowerCase().includes(loc)) ||
-        (p.state && p.state.toLowerCase().includes(p)) ||
-        (p.address && p.address.toLowerCase().includes(loc))
+        (p.state && p.state.toLowerCase().includes(loc)) ||
+        (p.university && p.university.toLowerCase().includes(loc)) ||
+        p.availableNationwide === true
       );
     }
 
@@ -87,7 +112,8 @@ const Housing = () => {
       filtered = filtered.filter(p =>
         (p.title && p.title.toLowerCase().includes(q)) ||
         (p.description && p.description.toLowerCase().includes(q)) ||
-        (p.city && p.city.toLowerCase().includes(q)) ||
+        (p.providerName && p.providerName.toLowerCase().includes(q)) ||
+        (p.university && p.university.toLowerCase().includes(q)) ||
         (p.tags && p.tags.some(t => t.toLowerCase().includes(q)))
       );
     }
@@ -95,39 +121,43 @@ const Housing = () => {
     filtered.sort((a, b) => {
       if (sortBy === 'newest') return (b.createdAt || 0) - (a.createdAt || 0);
       if (sortBy === 'oldest') return (a.createdAt || 0) - (b.createdAt || 0);
-      if (sortBy === 'price-low') return (a.monthlyRent || 0) - (b.monthlyRent || 0);
-      if (sortBy === 'price-high') return (b.monthlyRent || 0) - (a.monthlyRent || 0);
       return 0;
     });
 
     setFilteredPosts(filtered);
-  }, [posts, selectedType, locationFilter, searchQuery, sortBy]);
+  }, [posts, selectedType, selectedSource, locationFilter, searchQuery, sortBy]);
 
   const handlePostClick = async (post) => {
     try {
-      await updateDoc(doc(db, 'housing_posts', post.id), { viewCount: (post.viewCount || 0) + 1 });
-      if (post.contactLink || post.externalLink) {
-        window.open(post.contactLink || post.externalLink, '_blank');
-      }
+      await updateDoc(doc(db, 'banking_posts', post.id), { viewCount: (post.viewCount || 0) + 1 });
+      if (post.externalLink) window.open(post.externalLink, '_blank');
     } catch (e) { console.error(e); }
   };
 
   const handleDelete = async (postId) => {
     if (!window.confirm('Delete this listing?')) return;
     try {
-      await updateDoc(doc(db, 'housing_posts', postId), { status: 'deleted', deletedAt: serverTimestamp() });
+      await updateDoc(doc(db, 'banking_posts', postId), { status: 'deleted', deletedAt: serverTimestamp() });
       toast.success('Listing deleted');
-    } catch (e) { toast.error('Error deleting listing'); }
+    } catch (e) { toast.error('Error deleting'); }
   };
 
   const handleMarkClosed = async (postId, currentStatus) => {
     const closing = currentStatus !== 'closed';
-    if (!window.confirm(closing ? 'Mark as unavailable?' : 'Mark as available again?')) return;
     try {
-      await updateDoc(doc(db, 'housing_posts', postId), { status: closing ? 'closed' : 'active' });
-      toast.success(closing ? 'Listing marked as unavailable' : 'Listing reopened');
-    } catch (e) { toast.error('Error updating listing'); }
+      await updateDoc(doc(db, 'banking_posts', postId), { status: closing ? 'closed' : 'active' });
+      toast.success(closing ? 'Listing closed' : 'Listing reopened');
+    } catch (e) { toast.error('Error updating'); }
   };
+
+  const clearAllFilters = () => {
+    setSearchQuery('');
+    setLocationFilter('');
+    setSelectedType('all');
+    setSelectedSource('all');
+  };
+
+  const hasActiveFilters = searchQuery || locationFilter || selectedType !== 'all' || selectedSource !== 'all';
 
   const formatTimeAgo = (date) => {
     if (!date) return '';
@@ -140,13 +170,35 @@ const Housing = () => {
 
   const getTypeBadge = (type) => {
     const map = {
-      'apartment': { label: 'Apartment', cls: 'bg-blue-500/20 text-blue-300' },
-      'room': { label: 'Room / Shared', cls: 'bg-purple-500/20 text-purple-300' },
-      'studio': { label: 'Studio', cls: 'bg-teal-500/20 text-teal-300' },
-      'house': { label: 'House', cls: 'bg-green-500/20 text-green-300' },
-      'student-housing': { label: 'Student Housing', cls: 'bg-orange-500/20 text-orange-300' },
+      'scholarships': { label: '🎓 Scholarship', cls: 'bg-yellow-500/20 text-yellow-300' },
+      'loans': { label: '💰 Loan', cls: 'bg-blue-500/20 text-blue-300' },
+      'work-study': { label: '💼 Work-Study', cls: 'bg-indigo-500/20 text-indigo-300' },
+      'grants': { label: '🏆 Grant', cls: 'bg-emerald-500/20 text-emerald-300' },
+      'financial-aid': { label: '🤝 Financial Aid', cls: 'bg-orange-500/20 text-orange-300' },
+      'assistantships': { label: '📚 Assistantship', cls: 'bg-cyan-500/20 text-cyan-300' },
+      'fellowships': { label: '🏅 Fellowship', cls: 'bg-amber-500/20 text-amber-300' },
+      'emergency-funds': { label: '🆘 Emergency Fund', cls: 'bg-red-500/20 text-red-300' },
+      'tuition-waivers': { label: '✅ Tuition Waiver', cls: 'bg-lime-500/20 text-lime-300' },
+      'bank-account': { label: '🏦 Bank Account', cls: 'bg-blue-500/20 text-blue-300' },
+      'credit-card': { label: '💳 Credit Card', cls: 'bg-purple-500/20 text-purple-300' },
+      'insurance': { label: '🛡️ Insurance', cls: 'bg-green-500/20 text-green-300' },
+      'money-transfer': { label: '🔄 Money Transfer', cls: 'bg-yellow-500/20 text-yellow-300' },
+      'tax-services': { label: '📄 Tax Services', cls: 'bg-red-500/20 text-red-300' },
+      'investment': { label: '📈 Investment', cls: 'bg-teal-500/20 text-teal-300' },
     };
-    return map[type] || { label: type || 'Housing', cls: 'bg-orange-500/20 text-orange-300' };
+    return map[type] || { label: type || 'Financial Resource', cls: 'bg-orange-500/20 text-orange-300' };
+  };
+
+  const getSourceBadge = (source) => {
+    const map = {
+      'university': { label: '🏫 University', cls: 'bg-blue-600/20 text-blue-200' },
+      'federal': { label: '🏛️ Federal', cls: 'bg-slate-500/20 text-slate-300' },
+      'state': { label: '🗺️ State', cls: 'bg-violet-500/20 text-violet-300' },
+      'private': { label: '🏢 Private', cls: 'bg-pink-500/20 text-pink-300' },
+      'nonprofit': { label: '💚 Nonprofit', cls: 'bg-green-600/20 text-green-200' },
+      'employer': { label: '👔 Employer', cls: 'bg-amber-600/20 text-amber-200' },
+    };
+    return map[source] || null;
   };
 
   if (authLoading || (currentUser && loading)) {
@@ -156,7 +208,7 @@ const Housing = () => {
         <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#000' }}>
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
-            <p className="text-white">Loading Housing...</p>
+            <p className="text-white">Loading Finance Resources...</p>
           </div>
         </div>
       </>
@@ -174,23 +226,24 @@ const Housing = () => {
           {/* Hero */}
           <section className="mb-10 text-center">
             <div className="mb-4 inline-block px-4 py-2 bg-orange-500/10 border border-orange-500/20 rounded-xl">
-              <p className="text-orange-400 font-semibold text-sm">🏠 Verified, affordable housing for international students</p>
+              <p className="text-orange-400 font-semibold text-sm">💰 Financial resources for international students</p>
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-3 sm:mb-4">Housing</h1>
-            <p className="text-gray-300 text-base sm:text-lg mb-6">Apartments · Rooms · Studios · Student Housing</p>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-3 sm:mb-4">Finance</h1>
+            <p className="text-gray-300 text-base sm:text-lg mb-6">Scholarships · Loans · Work-Study · Grants · Fellowships · Banking · Tax Help</p>
             <button
-              onClick={() => navigate('/housing/post')}
-              className="px-6 py-3 min-h-[44px] bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all shadow-lg"
+              onClick={() => navigate('/finance/post')}
+              className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all shadow-lg"
             >
-              List Your Space
+              List a Resource
             </button>
           </section>
 
-          {/* Type Filter */}
-          <section className="mb-6">
+          {/* Category Filter */}
+          <section className="mb-4">
             <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/20 p-4">
+              <p className="text-xs text-gray-400 font-semibold mb-2 uppercase tracking-wider">Category</p>
               <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide justify-start sm:justify-center flex-nowrap sm:flex-wrap">
-                {housingTypes.map(type => (
+                {serviceTypes.map(type => (
                   <button
                     key={type.id}
                     onClick={() => setSelectedType(type.id)}
@@ -200,7 +253,29 @@ const Housing = () => {
                         : 'bg-white/10 text-gray-300 hover:bg-white/20'
                     }`}
                   >
-                    {type.label}
+                    {type.icon} {type.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Source / Funding Type Filter */}
+          <section className="mb-6">
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/20 p-4">
+              <p className="text-xs text-gray-400 font-semibold mb-2 uppercase tracking-wider">Source / Funding Type</p>
+              <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide justify-start sm:justify-center flex-nowrap sm:flex-wrap">
+                {sourceTypes.map(source => (
+                  <button
+                    key={source.id}
+                    onClick={() => setSelectedSource(source.id)}
+                    className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all flex-shrink-0 ${
+                      selectedSource === source.id
+                        ? 'bg-orange-500 text-white shadow-md'
+                        : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                    }`}
+                  >
+                    {source.label}
                   </button>
                 ))}
               </div>
@@ -213,7 +288,7 @@ const Housing = () => {
               <div className="flex flex-col sm:grid sm:grid-cols-3 gap-3 mb-3">
                 <input
                   type="text"
-                  placeholder="Search listings..."
+                  placeholder="Search resources..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder-gray-400 focus:border-orange-400 focus:outline-none text-sm"
@@ -221,11 +296,10 @@ const Housing = () => {
                 <div className="relative">
                   <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                   <input
                     type="text"
-                    placeholder="Filter by city or state..."
+                    placeholder="City, state, university, or 'nationwide'..."
                     value={locationFilter}
                     onChange={(e) => setLocationFilter(e.target.value)}
                     className="w-full bg-white/10 border border-white/20 rounded-lg pl-10 pr-4 py-2.5 text-white placeholder-gray-400 focus:border-orange-400 focus:outline-none text-sm"
@@ -238,16 +312,14 @@ const Housing = () => {
                 >
                   <option value="newest">Newest First</option>
                   <option value="oldest">Oldest First</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
                 </select>
               </div>
               <div className="flex justify-between items-center text-sm">
                 <span className="text-gray-300">
-                  <span className="text-orange-400 font-semibold">{filteredPosts.length}</span> listings found
+                  <span className="text-orange-400 font-semibold">{filteredPosts.length}</span> resources found
                 </span>
-                {(searchQuery || locationFilter || selectedType !== 'all') && (
-                  <button onClick={() => { setSearchQuery(''); setLocationFilter(''); setSelectedType('all'); }} className="text-orange-400 hover:text-orange-300 font-semibold min-h-[44px] flex items-center">
+                {hasActiveFilters && (
+                  <button onClick={clearAllFilters} className="text-orange-400 hover:text-orange-300 font-semibold min-h-[44px] flex items-center">
                     Clear Filters
                   </button>
                 )}
@@ -255,37 +327,40 @@ const Housing = () => {
             </div>
           </section>
 
-          {/* Listings Grid */}
+          {/* Cards */}
           <section>
             {filteredPosts.length === 0 ? (
               <div className="text-center py-16">
-                <div className="text-4xl sm:text-5xl mb-4">🏠</div>
+                <div className="text-4xl sm:text-5xl mb-4">💰</div>
                 <h3 className="text-2xl font-bold text-white mb-3">
-                  {posts.length === 0 ? 'No listings yet' : 'No listings match your search'}
+                  {posts.length === 0 ? 'No resources listed yet' : 'No resources match your search'}
                 </h3>
                 <p className="text-gray-400 mb-8">
-                  {posts.length === 0 ? 'Be the first to list a space!' : 'Try adjusting your filters.'}
+                  {posts.length === 0 ? 'Be the first to list a financial resource!' : 'Try adjusting your filters.'}
                 </p>
-                <button onClick={() => navigate('/housing/post')} className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all">
-                  List Your Space
+                <button onClick={() => navigate('/finance/post')} className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-xl transition-all">
+                  List a Resource
                 </button>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {filteredPosts.map((post) => {
-                  const typeBadge = getTypeBadge(post.housingType);
+                  const typeBadge = getTypeBadge(post.serviceType);
+                  const sourceBadge = getSourceBadge(post.fundingSource);
                   const isOwnPost = post.posterId === currentUser.uid;
                   const isClosed = post.status === 'closed';
                   return (
                     <div key={post.id} className="group">
                       <div className={`bg-white/5 backdrop-blur-sm border rounded-xl p-5 sm:p-6 hover:shadow-lg hover:shadow-orange-500/10 transition-all duration-300 h-full flex flex-col ${isClosed ? 'border-white/10 opacity-75' : 'border-white/20 hover:border-orange-500/30'}`}>
 
-                        {/* Header */}
                         <div className="flex items-start justify-between mb-3 gap-2">
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${typeBadge.cls}`}>{typeBadge.label}</span>
-                            {post.studentFriendly && <span className="bg-green-500/20 text-green-300 px-2.5 py-1 rounded-lg text-xs font-semibold">✓ Student-Friendly</span>}
-                            {isClosed && <span className="bg-white/10 text-gray-400 px-2.5 py-1 rounded-lg text-xs font-semibold">Unavailable</span>}
+                            {sourceBadge && <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${sourceBadge.cls}`}>{sourceBadge.label}</span>}
+                            {post.noSSNRequired && <span className="bg-green-500/20 text-green-300 px-2.5 py-1 rounded-lg text-xs font-semibold">No SSN Req.</span>}
+                            {post.internationalFriendly && <span className="bg-blue-500/20 text-blue-300 px-2.5 py-1 rounded-lg text-xs font-semibold">Intl. Friendly</span>}
+                            {post.availableNationwide && <span className="bg-teal-500/20 text-teal-300 px-2.5 py-1 rounded-lg text-xs font-semibold">🌎 Nationwide</span>}
+                            {isClosed && <span className="bg-white/10 text-gray-400 px-2.5 py-1 rounded-lg text-xs font-semibold">Closed</span>}
                           </div>
                           {isOwnPost && (
                             <div className="flex gap-1 flex-shrink-0">
@@ -298,46 +373,43 @@ const Housing = () => {
                         </div>
 
                         <h3 className={`text-lg font-bold mb-1 line-clamp-2 ${isClosed ? 'text-gray-500' : 'text-white'}`}>{post.title}</h3>
+                        {post.providerName && <p className="text-orange-400 text-sm font-semibold mb-1">{post.providerName}</p>}
+                        {post.university && <p className="text-blue-400 text-xs font-semibold mb-2">🏫 {post.university}</p>}
 
                         {/* Location */}
-                        {(post.city || post.state) && (
-                          <p className="flex items-center gap-1 text-orange-400 text-sm font-semibold mb-2">
-                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        {(post.city || post.availableNationwide) && (
+                          <p className="flex items-center gap-1 text-gray-400 text-xs mb-2">
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             </svg>
-                            {[post.city, post.state].filter(Boolean).join(', ')}
+                            {post.availableNationwide ? 'Nationwide' : [post.city, post.state].filter(Boolean).join(', ')}
                           </p>
                         )}
 
-                        {/* Price & Details */}
-                        <div className="flex flex-wrap gap-2 text-xs mb-3">
-                          {post.monthlyRent && (
-                            <span className="bg-green-500/20 text-green-300 px-2.5 py-1 rounded-lg font-semibold">
-                              ${post.monthlyRent.toLocaleString()}/mo
-                            </span>
-                          )}
-                          {post.bedrooms && <span className="bg-white/10 text-gray-300 px-2.5 py-1 rounded-lg">{post.bedrooms} bed</span>}
-                          {post.bathrooms && <span className="bg-white/10 text-gray-300 px-2.5 py-1 rounded-lg">{post.bathrooms} bath</span>}
-                          {post.availableFrom && (
-                            <span className="bg-blue-500/20 text-blue-300 px-2.5 py-1 rounded-lg">
-                              Avail. {post.availableFrom.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                            </span>
-                          )}
-                        </div>
-
-                        <p className={`text-sm mb-4 line-clamp-3 flex-grow ${isClosed ? 'text-gray-500' : 'text-gray-300'}`}>{post.description}</p>
-
-                        {/* Amenities */}
-                        {post.amenities && post.amenities.length > 0 && (
-                          <div className="flex flex-wrap gap-1.5 mb-4">
-                            {post.amenities.slice(0, 3).map((a, i) => (
-                              <span key={i} className="bg-white/10 text-gray-300 px-2 py-0.5 rounded text-xs">{a}</span>
-                            ))}
-                            {post.amenities.length > 3 && <span className="bg-white/10 text-gray-300 px-2 py-0.5 rounded text-xs">+{post.amenities.length - 3}</span>}
+                        {/* Amount / Fees */}
+                        {(post.fees || post.amount) && (
+                          <div className="mb-3 flex flex-wrap gap-2">
+                            {post.amount && <span className="bg-green-500/20 text-green-300 px-2.5 py-1 rounded-lg text-xs font-semibold">{post.amount}</span>}
+                            {post.fees && <span className="bg-orange-500/20 text-orange-300 px-2.5 py-1 rounded-lg text-xs font-semibold">{post.fees}</span>}
                           </div>
                         )}
 
-                        {/* Footer */}
+                        {/* Deadline */}
+                        {post.deadline && (
+                          <p className="text-yellow-400 text-xs font-semibold mb-2">⏰ Deadline: {post.deadline}</p>
+                        )}
+
+                        <p className={`text-sm mb-4 line-clamp-3 flex-grow ${isClosed ? 'text-gray-500' : 'text-gray-300'}`}>{post.description}</p>
+
+                        {post.tags && post.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 mb-4">
+                            {post.tags.slice(0, 3).map((t, i) => (
+                              <span key={i} className="bg-white/10 text-gray-300 px-2 py-0.5 rounded text-xs">{t}</span>
+                            ))}
+                            {post.tags.length > 3 && <span className="bg-white/10 text-gray-300 px-2 py-0.5 rounded text-xs">+{post.tags.length - 3}</span>}
+                          </div>
+                        )}
+
                         <div className="mt-auto pt-4 border-t border-white/10">
                           <div className="flex justify-between text-xs text-gray-400 mb-3">
                             <span className="truncate max-w-[140px] flex items-center gap-1">{post.posterName}{post.isCompanyPost && <span className="text-blue-400 text-[10px]">🏢</span>}</span>
@@ -350,7 +422,7 @@ const Housing = () => {
                               isClosed ? 'bg-gray-700 text-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white'
                             }`}
                           >
-                            {isClosed ? 'Unavailable' : 'Contact Landlord →'}
+                            {isClosed ? 'Unavailable' : 'Learn More →'}
                           </button>
                         </div>
                       </div>
@@ -367,4 +439,4 @@ const Housing = () => {
   );
 };
 
-export default Housing;
+export default Finance;

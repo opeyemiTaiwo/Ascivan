@@ -96,13 +96,7 @@ const Login = () => {
   return (
     <div 
       className="min-h-screen overflow-x-hidden flex flex-col relative"
-      style={{
-        backgroundImage: `url('/Images/backg.png')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed'
-      }}
+      style={{}}
     >
       {/* Animated background overlay */}
       <div 
@@ -248,7 +242,7 @@ const Login = () => {
                   <div className="min-w-0">
                     <p className="font-bold text-xs sm:text-sm text-green-300">Completely Free!</p>
                     <p className="text-xs mt-1 text-green-200">
-                      Sign in to access your personalized dashboard and all features at no cost.
+                      Sign in to access jobs, housing, finance, and community — all free.
                     </p>
                   </div>
                 </div>
@@ -294,7 +288,7 @@ const Login = () => {
             <div className="flex items-center justify-center mb-3 sm:mb-4 px-4">
               <span className="text-gray-300 text-xs sm:text-sm font-medium text-center" 
                     style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
-                Transforming Careers with AI-Powered Project Collaboration
+                Transforming the international student experience with AI
               </span>
             </div>
             <p className="text-gray-400 text-xs sm:text-sm" 

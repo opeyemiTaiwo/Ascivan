@@ -11,6 +11,7 @@ import {
   doc
 } from 'firebase/firestore';
 import { db } from '../../firebase/config';
+import usePosterName from '../../hooks/usePosterName';
 
 // Import utilities
 import { 
@@ -42,6 +43,7 @@ import LinkInsertModal from '../../components/community/LinkInsertModal';
 const SubmitPost = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
+  const { posterName: profilePosterName, isCompany: profileIsCompany } = usePosterName(currentUser);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -330,10 +332,11 @@ const SubmitPost = () => {
         const postData = {
           title: formData.title.trim() || '',
           content: formData.content.trim(),
-          authorName: currentUser.displayName || currentUser.email,
+          authorName: profilePosterName || currentUser.displayName || currentUser.email,
           authorId: currentUser.uid,
           authorEmail: currentUser.email,
           authorPhoto: currentUser.photoURL || null,
+          isCompanyPost: profileIsCompany,
           authorFirstName: currentUser.firstName || '',
           authorLastName: currentUser.lastName || '',
           authorInitials: currentUser.initials || '',
@@ -510,10 +513,8 @@ const SubmitPost = () => {
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="font-semibold text-white text-sm sm:text-base truncate">
-                    {currentUser.firstName && currentUser.lastName 
-                      ? `${currentUser.firstName} ${currentUser.lastName}`
-                      : currentUser.displayName || currentUser.email
-                    }
+                    {profilePosterName || currentUser.displayName || currentUser.email}
+                    {profileIsCompany && <span className="ml-1.5 text-xs bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded font-semibold">🏢 Company</span>}
                   </p>
                   {currentUser.profile?.title && (
                     <p className="text-xs sm:text-sm text-orange-400 truncate">{currentUser.profile.title}</p>

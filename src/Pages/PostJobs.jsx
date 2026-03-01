@@ -1,4 +1,4 @@
-// src/Pages/PostHub.jsx - Post a Job
+// src/Pages/PostJobs.jsx - Post a Job
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -7,8 +7,9 @@ import Navbar from '../components/Navbar';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
+import usePosterName from '../hooks/usePosterName';
 
-const PostHub = () => {
+const PostJobs = () => {
   const navigate = useNavigate();
   const { currentUser, loading: authLoading } = useAuth();
 
@@ -34,6 +35,7 @@ const PostHub = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [urlError, setUrlError] = useState('');
   const [phoneError, setPhoneError] = useState('');
+  const { posterName: profilePosterName, isCompany: profileIsCompany } = usePosterName(currentUser);
 
   const jobTypes = [
     { id: 'full-time', label: 'Full-time', description: 'Permanent, full-time position' },
@@ -53,7 +55,7 @@ const PostHub = () => {
 
   useEffect(() => {
     if (!authLoading && !currentUser) {
-      navigate('/login', { replace: true, state: { from: '/hub/post', message: 'Please sign in to post a job' } });
+      navigate('/login', { replace: true, state: { from: '/jobs/post', message: 'Please sign in to post a job' } });
     }
   }, [currentUser, authLoading, navigate]);
 
@@ -62,10 +64,11 @@ const PostHub = () => {
       setFormData(prev => ({
         ...prev,
         posterEmail: currentUser.email || '',
-        posterName: currentUser.displayName || '',
+        posterName: profilePosterName || currentUser.displayName || '',
+        companyName: profileIsCompany ? profilePosterName : prev.companyName,
       }));
     }
-  }, [currentUser, formData.posterEmail]);
+  }, [currentUser, formData.posterEmail, profilePosterName, profileIsCompany]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -160,6 +163,7 @@ const PostHub = () => {
         posterEmail: formData.posterEmail.trim(),
         posterPhone: formData.posterPhone.trim() || null,
         posterId: currentUser.uid,
+        isCompanyPost: profileIsCompany,
         tags: formData.tags.trim() ? formData.tags.trim().split(',').map(t => t.trim()) : [],
         requirements: formData.requirements.trim() || null,
         status: 'active',
@@ -175,7 +179,7 @@ const PostHub = () => {
       });
 
       toast.success('Job posted successfully!');
-      setTimeout(() => navigate('/hub'), 1500);
+      setTimeout(() => navigate('/jobs'), 1500);
 
     } catch (error) {
       console.error('Error creating job post:', error);
@@ -406,4 +410,4 @@ const PostHub = () => {
   );
 };
 
-export default PostHub;
+export default PostJobs;

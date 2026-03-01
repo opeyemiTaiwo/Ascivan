@@ -1,4 +1,4 @@
-// src/Pages/MyHubPosts.jsx - FULLY RESPONSIVE WITH UNIVERSAL NAVBAR
+// src/Pages/MyJobPosts.jsx - FULLY RESPONSIVE WITH UNIVERSAL NAVBAR
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -18,7 +18,7 @@ import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
 import { throttle } from '../utils/throttle';
 
-const MyHubPosts = () => {
+const MyJobPosts = () => {
   const navigate = useNavigate();
   const { currentUser, loading: authLoading } = useAuth();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -39,7 +39,7 @@ const MyHubPosts = () => {
     if (!authLoading && !currentUser) {
       navigate('/login', { 
         replace: true,
-        state: { from: '/hub/my-posts', message: 'Please sign in to view your posts' }
+        state: { from: '/jobs/my-posts', message: 'Please sign in to view your posts' }
       });
     }
   }, [currentUser, authLoading, navigate]);
@@ -435,4 +435,4 @@ const MyHubPosts = () => {
   );
 };
 
-export default MyHubPosts;
+export default MyJobPosts;

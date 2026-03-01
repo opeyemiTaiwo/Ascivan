@@ -265,7 +265,7 @@ const NotificationsPage = () => {
                 <Link 
                   to="/community"
                   className="text-gray-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10 active:bg-white/20"
-                  title="Back to Community"
+                  title="Back to Home"
                 >
                   <svg className="h-5 w-5 xs:h-6 xs:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -359,7 +359,7 @@ const NotificationsPage = () => {
                 to="/community"
                 className="inline-block mt-4 xs:mt-5 sm:mt-6 bg-lime-500 hover:bg-lime-600 active:bg-lime-700 text-black px-5 xs:px-6 py-2.5 xs:py-3 rounded-lg font-semibold transition-colors text-sm xs:text-base min-h-[44px]"
               >
-                Go to Community
+                Go to Home
               </Link>
             </div>
           ) : (

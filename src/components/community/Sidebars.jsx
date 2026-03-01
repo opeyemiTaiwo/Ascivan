@@ -18,12 +18,12 @@ export const UserQuickLinksSidebar = ({ currentUser, onNavigate, isMobile = fals
     {
       title: 'Jobs',
       description: 'Browse job listings',
-      path: '/hub',
+      path: '/jobs',
       gradient: 'from-orange-500 to-orange-600'
     },
     {
       title: 'Members',
-      description: 'Connect with the community',
+      description: 'Connect with the home feed',
       path: '/members-directory',
       gradient: 'from-orange-400 to-orange-500'
     }
@@ -455,7 +455,7 @@ export const CompanyInfoSidebar = ({ isMobile = false }) => {
         
         <div className="mb-3 xs:mb-4 sm:mb-6 flex-shrink-0">
           <p className="text-gray-300 text-xs sm:text-sm leading-relaxed text-center">
-            Empowering international students with housing, finance, jobs, and community support.
+            Empowering international students with housing, finance, jobs, and home support.
           </p>
         </div>
 

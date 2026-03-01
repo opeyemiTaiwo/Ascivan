@@ -137,7 +137,7 @@ const MarketTrendsSection = ({ marketTrends, careerPaths }) => {
     }
     
     const commonIndustries = [
-      'Healthcare', 'Finance', 'Banking', 'Insurance', 'Technology', 'Retail',
+      'Healthcare', 'Finance', 'Insurance', 'Technology', 'Retail',
       'Manufacturing', 'Education', 'Government', 'Consulting', 'Energy'
     ];
     
@@ -444,7 +444,7 @@ const MarketTrendsSection = ({ marketTrends, careerPaths }) => {
     }
     
     const commonIndustries = [
-      'Healthcare', 'Finance', 'Banking', 'Insurance', 'Technology', 'Retail',
+      'Healthcare', 'Finance', 'Insurance', 'Technology', 'Retail',
       'Manufacturing', 'Education', 'Government', 'Consulting', 'Energy'
     ];
     

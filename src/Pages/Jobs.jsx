@@ -1,4 +1,4 @@
-// src/Pages/Hub.jsx - Jobs Board with Location & Visa Filters
+// src/Pages/Jobs.jsx - Jobs Board with Location & Visa Filters
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +11,7 @@ import {
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
 
-const Hub = () => {
+const Jobs = () => {
   const { currentUser, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { isMobile } = useResponsive();
@@ -34,7 +34,7 @@ const Hub = () => {
 
   useEffect(() => {
     if (!authLoading && !currentUser) {
-      navigate('/login', { replace: true, state: { from: '/hub' } });
+      navigate('/login', { replace: true, state: { from: '/jobs' } });
     }
   }, [currentUser, authLoading, navigate]);
 
@@ -227,7 +227,7 @@ const Hub = () => {
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-3 sm:mb-4">Jobs</h1>
             <p className="text-gray-300 text-sm sm:text-base md:text-lg mb-5 sm:mb-6">Full-time · Freelancer · Internship</p>
             <button
-              onClick={() => navigate('/hub/post')}
+              onClick={() => navigate('/jobs/post')}
               className="px-6 py-3 min-h-[44px] bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all shadow-lg"
             >
               Post a Job
@@ -341,7 +341,7 @@ const Hub = () => {
                   ? <button onClick={clearAll} className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl transition-all mr-3">Clear Filters</button>
                   : null}
                 <button
-                  onClick={() => navigate('/hub/post')}
+                  onClick={() => navigate('/jobs/post')}
                   className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all"
                 >
                   Post a Job
@@ -445,7 +445,7 @@ const Hub = () => {
                         {/* Footer */}
                         <div className="mt-auto pt-4 border-t border-white/10">
                           <div className="flex justify-between text-xs text-gray-400 mb-3">
-                            <span className="truncate max-w-[120px]">{post.posterName}</span>
+                            <span className="truncate max-w-[120px] flex items-center gap-1">{post.posterName}{post.isCompanyPost && <span className="text-blue-400 text-[10px]">🏢</span>}</span>
                             <span className={expiringSoon && !isClosed ? 'text-red-400' : ''}>
                               {formatExpiration(post.expiresAt)}
                             </span>
@@ -480,4 +480,4 @@ const Hub = () => {
   );
 };
 
-export default Hub;
+export default Jobs;

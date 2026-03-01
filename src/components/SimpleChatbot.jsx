@@ -41,7 +41,7 @@ const SimpleChatbot = () => {
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       const timer = setTimeout(() => {
-        addBotMessage("Hi! Welcome to Loomiq. I'm your AI assistant here to help you navigate housing, finance, jobs, and community as an international student. What's your first name?");
+        addBotMessage("Hi! Welcome to Loomiq. I'm your AI assistant here to help you navigate housing, finance, jobs, and home resources as an international student. What's your first name?");
       }, 500);
       return () => clearTimeout(timer);
     }
@@ -79,14 +79,14 @@ const SimpleChatbot = () => {
       if (type.includes('business') || type.includes('build')) {
         addBotMessage("Great! Tell me about your project. What are you looking to build or transform?");
         setStep(4);
-      } else if (type.includes('career') || type.includes('tech')) {
-        // Career branch — redirect to career platform
-        addBotMessage("Great news! Our career platform offers much more than AI guidance — it's a hands-on experience. Through our ProjectX program, you'll work on real-world projects with real teams, earn industry-recognized TechTalent Badges, and build a portfolio that stands out.");
+      } else if (type.includes('career') || type.includes('tech') || type.includes('job')) {
+        // Jobs/career branch
+        addBotMessage("Great news! Loomiq helps international students find jobs, housing, financial aid, and connect with a supportive community — all in one place.");
         setTimeout(() => {
-          addBotMessage("You can also request a dedicated career coach for one-on-one personalized mentorship and guidance.");
+          addBotMessage("Check out our Jobs section for visa-compliant opportunities, or explore Finance for scholarships and grants.");
         }, 1500);
         setTimeout(() => {
-          addBotMessage("Explore everything at: /career/dashboard (or click 'Earn Your Badges' on our homepage)");
+          addBotMessage("Head to your dashboard to get started: /dashboard");
         }, 3000);
         setTimeout(() => {
           addBotMessage("Or take the free AI Career Assessment now: /career/test");

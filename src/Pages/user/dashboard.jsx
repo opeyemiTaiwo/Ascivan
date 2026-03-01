@@ -5,15 +5,11 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { usePWA } from '../../hooks/usePWA';
 import Navbar from '../../components/Navbar';
-import { 
-  collection, 
-  query, 
-  where, 
-  onSnapshot 
-} from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { GoogleAuthProvider, reauthenticateWithPopup } from 'firebase/auth';
 import { deleteUserAccount } from '../../utils/deleteUserContent';
+import { toast } from 'react-toastify';
 import { showSuccessMessage, showWarningMessage } from '../../utils/errorHandler';
 
 import PWADebugger from '../../components/PWADebugger';
@@ -147,7 +143,7 @@ const CommunityGuidelines = () => {
   const guidelines = [
     { color: 'green-400', title: 'Be Respectful', description: 'Treat all members with kindness and professionalism' },
     { color: 'orange-400', title: 'Share Knowledge', description: 'Help others learn and grow in their tech journey' },
-    { color: 'orange-400', title: 'Stay On Topic', description: 'Keep discussions relevant to tech and career development' },
+    { color: 'orange-400', title: 'Stay On Topic', description: 'Keep discussions relevant to student life, jobs, housing, and finance' },
     { color: 'green-400', title: 'Build Together', description: 'Collaborate and support each other\'s success' }
   ];
 
@@ -263,7 +259,7 @@ const DeleteAccountModal = ({ isOpen, onClose, currentUser, onDeleted }) => {
                     <svg className="w-3.5 h-3.5 text-red-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                    All your community posts and replies
+                    All your home posts and replies
                   </li>
                   <li className="flex items-center gap-2">
                     <svg className="w-3.5 h-3.5 text-red-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -375,12 +371,20 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
   const [userProfile, setUserProfile] = useState({
     name: 'Loading...',
     email: '',
-    companiesOwned: 0,
     photoURL: null
   });
   const [recentBadges, setRecentBadges] = useState([]);
   const [recentCertificates, setRecentCertificates] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // ─── PROFILE EDITING STATE ───
+  const [profileData, setProfileData] = useState(null);
+  const [profileEditing, setProfileEditing] = useState(false);
+  const [profileSaving, setProfileSaving] = useState(false);
+  const [profileForm, setProfileForm] = useState({
+    displayName: '', university: '', major: '', visaStatus: '', city: '', state: '',
+    isCompany: false, companyName: '', companyEmail: '', companyWebsite: '', companyLocation: '', companyDescription: '',
+  });
 
   useEffect(() => {
     const handleKeyPress = (e) => {
@@ -427,13 +431,13 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
     };
   }, [sidebarOpen]);
 
-  // ─── SIDEBAR ITEMS: Career Coach added after Community ───
+  // ─── SIDEBAR ITEMS: Career Coach added after Home ───
   const sidebarItems = useMemo(() => [
+    { id: 'community', label: 'Home' },
     { id: 'hub', label: 'Jobs' },
     { id: 'housing', label: 'Housing' },
-    { id: 'banking', label: 'Banking' },
-    { id: 'community', label: 'Community' },
-    { id: 'companies', label: 'Companies' },
+    { id: 'banking', label: 'Finance' },
+    { id: 'profile', label: 'Profile' },
   ], []);
 
   const badgeCategories = useMemo(() => ({
@@ -451,21 +455,21 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       {
         title: 'Browse Jobs',
         description: 'Find full-time, freelance & internship roles — filtered by location & visa status',
-        path: '/hub',
+        path: '/jobs',
         stats: 'Explore Jobs',
         gradient: 'from-orange-500 to-orange-600'
       },
       {
         title: 'Post a Job',
         description: 'List a job opportunity for international students',
-        path: '/hub/post',
+        path: '/jobs/post',
         stats: 'Post Now',
         gradient: 'from-orange-400 to-orange-500'
       },
       {
         title: 'My Job Posts',
         description: 'Manage and track your posted job listings',
-        path: '/hub/my-posts',
+        path: '/jobs/my-posts',
         stats: 'Manage',
         gradient: 'from-orange-400 to-orange-500'
       }
@@ -488,23 +492,23 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
     ],
     banking: [
       {
-        title: 'Banking Services',
-        description: 'Find bank accounts, credit cards & financial services that accept international students',
-        path: '/banking',
+        title: 'Finance Resources',
+        description: 'Scholarships, loans, work-study, grants, fellowships & financial services for international students',
+        path: '/finance',
         stats: 'Explore',
         gradient: 'from-green-500 to-green-600'
       },
       {
-        title: 'List a Service',
-        description: 'Share a banking or financial service that helps international students',
-        path: '/banking/post',
+        title: 'List a Resource',
+        description: 'Share a financial resource or service that helps international students',
+        path: '/finance/post',
         stats: 'List Now',
         gradient: 'from-orange-500 to-orange-600'
       }
     ],
     community: [
       {
-        title: 'Community Feed',
+        title: 'Home Feed',
         description: 'Share ideas, ask questions, and engage with fellow international students',
         path: '/community',
         stats: 'Join Discussion',
@@ -512,7 +516,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       },
       {
         title: 'Create Post',
-        description: 'Start a conversation and share your thoughts with the community',
+        description: 'Start a conversation and share your thoughts with the home feed',
         path: '/community/submit',
         stats: 'New Post',
         gradient: 'from-orange-500 to-orange-600'
@@ -524,75 +528,50 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         stats: 'Browse Members',
         gradient: 'from-green-600 to-green-700'
       }
-    ],
-    companies: [
-      {
-        title: 'Browse Companies',
-        description: 'Explore all companies and discover opportunities',
-        path: '/companies',
-        stats: 'Explore All',
-        gradient: 'from-green-500 to-green-600'
-      },
-      {
-        title: 'Create Company',
-        description: 'Start your own company and build your team',
-        path: '/companies/create',
-        stats: 'Start Now',
-        gradient: 'from-orange-500 to-orange-600'
-      },
-      {
-        title: 'My Companies',
-        description: 'Manage your owned companies and team members',
-        path: '/my-companies',
-        stats: `${userProfile.companiesOwned} Owned`,
-        gradient: 'from-orange-500 to-orange-600'
-      }
     ]
-  }), [userProfile.companiesOwned]);
+  }), []);
 
   useEffect(() => {
-    const unsubscribers = [];
+    if (!currentUser) {
+      setLoading(false);
+      return;
+    }
+    
+    setUserProfile(prev => ({
+      ...prev,
+      name: currentUser.displayName || currentUser.email?.split('@')[0] || 'User',
+      email: currentUser.email || '',
+      photoURL: currentUser.photoURL || '/Images/512X512.png'
+    }));
 
-    const fetchUserProfile = async () => {
+    // Fetch full profile from Firestore for editing
+    const fetchProfile = async () => {
       try {
-        if (!currentUser) {
-          setLoading(false);
-          return;
+        const snap = await getDoc(doc(db, 'users', currentUser.uid));
+        if (snap.exists()) {
+          const data = snap.data();
+          setProfileData(data);
+          const cp = data.companyProfile || {};
+          setProfileForm({
+            displayName: data.displayName || currentUser.displayName || '',
+            university: data.university || '',
+            major: data.major || '',
+            visaStatus: data.visaStatus || '',
+            city: data.city || '',
+            state: data.state || '',
+            isCompany: data.isCompany || false,
+            companyName: cp.companyName || '',
+            companyEmail: cp.companyEmail || '',
+            companyWebsite: cp.companyWebsite || '',
+            companyLocation: cp.companyLocation || '',
+            companyDescription: cp.companyDescription || '',
+          });
         }
-        
-        const userCompaniesQuery = query(
-          collection(db, 'companies'),
-          where('ownerId', '==', currentUser.uid)
-        );
-
-        unsubscribers.push(onSnapshot(userCompaniesQuery, (snapshot) => {
-          setUserProfile(prev => ({
-            ...prev,
-            companiesOwned: snapshot.docs.length
-          }));
-        }, (error) => {
-          console.error('Error fetching user companies:', error);
-        }));
-        
-        setUserProfile(prev => ({
-          ...prev,
-          name: currentUser.displayName || currentUser.email?.split('@')[0] || 'User',
-          email: currentUser.email || '',
-          photoURL: currentUser.photoURL || '/Images/512X512.png'
-        }));
-        
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching user profile:', error);
-        setLoading(false);
-      }
+      } catch (e) { console.error('Error fetching profile:', e); }
     };
-
-    fetchUserProfile();
-
-    return () => {
-      unsubscribers.forEach(unsub => unsub());
-    };
+    fetchProfile();
+    
+    setLoading(false);
   }, [currentUser]);
 
   const handleCardClick = useCallback((path) => {
@@ -627,16 +606,10 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         cards: dashboardCards.housing
       },
       banking: {
-        title: 'Banking Services',
-        description: 'Access bank accounts, insurance, money transfers and financial aid open to international students.',
+        title: 'Finance',
+        description: 'Scholarships, loans, work-study, grants, fellowships, banking & financial aid for international students.',
         gradientColors: 'from-green-300 via-green-400 to-orange-400',
         cards: dashboardCards.banking
-      },
-      companies: {
-        title: 'Company Hub',
-        description: 'Create, manage, and explore companies to build your entrepreneurial journey.',
-        gradientColors: 'from-orange-300 via-orange-400 to-orange-500',
-        cards: dashboardCards.companies
       }
     };
 
@@ -644,8 +617,8 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       return (
         <div className="space-y-3 xs:space-y-4 sm:space-y-6 md:space-y-8">
           <SectionHeader 
-            title="Community Hub"
-            description="Connect, collaborate, and grow with the Loomiq international student community."
+            title="Home Hub"
+            description="Connect, collaborate, and grow with the Loomiq international student home feed."
             gradientColors="from-green-300 via-orange-400 to-green-500"
           />
           
@@ -668,7 +641,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
               <button
                 onClick={() => handleCardClick('/community')}
                 className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 active:from-green-700 active:to-green-800 text-white font-semibold px-4 xs:px-5 sm:px-6 py-2.5 xs:py-3 rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 min-h-[48px] text-sm xs:text-base"
-                aria-label="View community feed"
+                aria-label="View home feed"
               >
                 <svg className="w-4 h-4 xs:w-5 xs:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -688,6 +661,234 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
               </button>
             </div>
           </div>
+        </div>
+      );
+    }
+
+    // ─── PROFILE SECTION ───
+    if (activeSection === 'profile') {
+      const BLOCKED_DOMAINS = ['gmail.com','googlemail.com','yahoo.com','yahoo.co.uk','yahoo.co.in','outlook.com','hotmail.com','live.com','msn.com','aol.com','icloud.com','me.com','mac.com','protonmail.com','proton.me','zoho.com','yandex.com','mail.com','gmx.com','fastmail.com','tutanota.com'];
+      const isBizEmail = (e) => e && e.includes('@') && !BLOCKED_DOMAINS.includes(e.split('@')[1]?.toLowerCase());
+
+      const handleProfileSave = async () => {
+        if (!profileForm.displayName.trim()) { toast.error('Name is required'); return; }
+        if (profileForm.isCompany) {
+          if (!profileForm.companyName.trim()) { toast.error('Company name is required'); return; }
+          if (!profileForm.companyEmail.trim()) { toast.error('Business email is required'); return; }
+          if (!isBizEmail(profileForm.companyEmail)) { toast.error('Please use a business email (not Gmail, Yahoo, Outlook, etc.)'); return; }
+        }
+        setProfileSaving(true);
+        try {
+          const updateData = {
+            displayName: profileForm.displayName.trim(),
+            university: profileForm.university.trim() || null,
+            major: profileForm.major.trim() || null,
+            visaStatus: profileForm.visaStatus || null,
+            city: profileForm.city.trim() || null,
+            state: profileForm.state.trim() || null,
+            isCompany: profileForm.isCompany,
+            profileComplete: true,
+          };
+          if (profileForm.isCompany) {
+            updateData.companyProfile = {
+              companyName: profileForm.companyName.trim(),
+              companyEmail: profileForm.companyEmail.trim(),
+              companyWebsite: profileForm.companyWebsite.trim() || null,
+              companyLocation: profileForm.companyLocation.trim() || null,
+              companyDescription: profileForm.companyDescription.trim() || null,
+              updatedAt: new Date(),
+            };
+          } else {
+            updateData.companyProfile = null;
+          }
+          await updateDoc(doc(db, 'users', currentUser.uid), updateData);
+          setUserProfile(prev => ({ ...prev, name: updateData.displayName }));
+          setProfileData(prev => ({ ...prev, ...updateData }));
+          setProfileEditing(false);
+          toast.success('Profile updated!');
+        } catch (e) {
+          console.error(e);
+          toast.error('Failed to save profile');
+        } finally {
+          setProfileSaving(false);
+        }
+      };
+
+      const visaOpts = [
+        { id: 'F-1', label: 'F-1 Student Visa' }, { id: 'OPT', label: 'OPT' }, { id: 'CPT', label: 'CPT' },
+        { id: 'H-1B', label: 'H-1B Work Visa' }, { id: 'J-1', label: 'J-1 Exchange Visitor' },
+        { id: 'PR', label: 'Permanent Resident' }, { id: 'Citizen', label: 'US Citizen' }, { id: 'Other', label: 'Other' },
+      ];
+
+      const inputCls = "w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 min-h-[44px] text-white placeholder-gray-400 focus:border-orange-400 focus:outline-none text-sm transition-all";
+      const labelCls = "block text-orange-400 font-semibold mb-2 text-sm";
+
+      return (
+        <div className="space-y-4 sm:space-y-6">
+          <SectionHeader title="Profile" description="View and update your personal and company information." gradientColors="from-orange-300 via-orange-400 to-orange-500" />
+
+          <div className="bg-white/5 backdrop-blur-sm border border-white/20 rounded-xl p-4 sm:p-6">
+            {!profileEditing ? (
+              /* ─── VIEW MODE ─── */
+              <div className="space-y-5">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-bold text-white">Personal Information</h3>
+                  <button onClick={() => setProfileEditing(true)} className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg text-sm transition-all min-h-[44px]">Edit Profile</button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {[
+                    ['Name', profileForm.displayName],
+                    ['University', profileForm.university],
+                    ['Major', profileForm.major],
+                    ['Visa Status', profileForm.visaStatus],
+                    ['City', profileForm.city],
+                    ['State', profileForm.state],
+                  ].map(([label, val]) => (
+                    <div key={label}>
+                      <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-1">{label}</p>
+                      <p className="text-white text-sm font-medium">{val || '—'}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Account Type */}
+                <div className="pt-4 border-t border-white/10">
+                  <div className="flex items-center gap-3">
+                    <span className={`px-3 py-1.5 rounded-lg text-xs font-bold ${profileForm.isCompany ? 'bg-blue-500/20 text-blue-300' : 'bg-green-500/20 text-green-300'}`}>
+                      {profileForm.isCompany ? '🏢 Company Account' : '👤 Individual Account'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Company Info (view) */}
+                {profileForm.isCompany && profileData?.companyProfile && (
+                  <div className="pt-4 border-t border-white/10 space-y-3">
+                    <h3 className="text-lg font-bold text-white">Company Details</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {[
+                        ['Company Name', profileData.companyProfile.companyName],
+                        ['Business Email', profileData.companyProfile.companyEmail],
+                        ['Website', profileData.companyProfile.companyWebsite],
+                        ['Location', profileData.companyProfile.companyLocation],
+                      ].map(([label, val]) => (
+                        <div key={label}>
+                          <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-1">{label}</p>
+                          <p className="text-white text-sm font-medium break-all">{val || '—'}</p>
+                        </div>
+                      ))}
+                    </div>
+                    {profileData.companyProfile.companyDescription && (
+                      <div>
+                        <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-1">Description</p>
+                        <p className="text-gray-300 text-sm">{profileData.companyProfile.companyDescription}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ) : (
+              /* ─── EDIT MODE ─── */
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-bold text-white">Edit Profile</h3>
+                  <button onClick={() => setProfileEditing(false)} className="text-gray-400 hover:text-white text-sm font-semibold min-h-[44px]">Cancel</button>
+                </div>
+
+                {/* Personal */}
+                <div className="space-y-4">
+                  <div>
+                    <label className={labelCls}>Name *</label>
+                    <input type="text" value={profileForm.displayName} onChange={e => setProfileForm(p => ({...p, displayName: e.target.value}))} className={inputCls} />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className={labelCls}>University</label>
+                      <input type="text" value={profileForm.university} onChange={e => setProfileForm(p => ({...p, university: e.target.value}))} className={inputCls} placeholder="e.g., Morgan State University" />
+                    </div>
+                    <div>
+                      <label className={labelCls}>Major</label>
+                      <input type="text" value={profileForm.major} onChange={e => setProfileForm(p => ({...p, major: e.target.value}))} className={inputCls} placeholder="e.g., Computer Science" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className={labelCls}>Visa Status</label>
+                    <select value={profileForm.visaStatus} onChange={e => setProfileForm(p => ({...p, visaStatus: e.target.value}))} className={inputCls}>
+                      <option value="">Select...</option>
+                      {visaOpts.map(v => <option key={v.id} value={v.id}>{v.label}</option>)}
+                    </select>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className={labelCls}>City</label>
+                      <input type="text" value={profileForm.city} onChange={e => setProfileForm(p => ({...p, city: e.target.value}))} className={inputCls} placeholder="e.g., Baltimore" />
+                    </div>
+                    <div>
+                      <label className={labelCls}>State</label>
+                      <input type="text" value={profileForm.state} onChange={e => setProfileForm(p => ({...p, state: e.target.value}))} className={inputCls} placeholder="e.g., MD" maxLength={2} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Account Type Toggle */}
+                <div className="pt-4 border-t border-white/10 space-y-4">
+                  <h3 className="text-lg font-bold text-white">Account Type</h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button type="button" onClick={() => setProfileForm(p => ({...p, isCompany: false}))}
+                      className={`p-4 rounded-xl border-2 text-center transition-all active:scale-95 ${!profileForm.isCompany ? 'border-orange-400 bg-orange-500/20 shadow-lg' : 'border-white/15 bg-white/5 hover:bg-white/10'}`}>
+                      <div className="text-2xl mb-1">👤</div>
+                      <div className={`text-sm font-bold ${!profileForm.isCompany ? 'text-white' : 'text-gray-300'}`}>Individual</div>
+                    </button>
+                    <button type="button" onClick={() => setProfileForm(p => ({...p, isCompany: true}))}
+                      className={`p-4 rounded-xl border-2 text-center transition-all active:scale-95 ${profileForm.isCompany ? 'border-orange-400 bg-orange-500/20 shadow-lg' : 'border-white/15 bg-white/5 hover:bg-white/10'}`}>
+                      <div className="text-2xl mb-1">🏢</div>
+                      <div className={`text-sm font-bold ${profileForm.isCompany ? 'text-white' : 'text-gray-300'}`}>Company</div>
+                    </button>
+                  </div>
+
+                  {profileForm.isCompany && (
+                    <div className="space-y-4 pt-2">
+                      <div>
+                        <label className={labelCls}>Company Name *</label>
+                        <input type="text" value={profileForm.companyName} onChange={e => setProfileForm(p => ({...p, companyName: e.target.value}))} className={inputCls} placeholder="e.g., TechStart Inc." />
+                      </div>
+                      <div>
+                        <label className={labelCls}>Business Email *</label>
+                        <input type="email" value={profileForm.companyEmail} onChange={e => setProfileForm(p => ({...p, companyEmail: e.target.value}))}
+                          className={`${inputCls} ${profileForm.companyEmail && !isBizEmail(profileForm.companyEmail) ? 'border-red-500/50' : ''}`}
+                          placeholder="you@company.com" />
+                        {profileForm.companyEmail && !isBizEmail(profileForm.companyEmail) && (
+                          <p className="text-red-400 text-xs mt-1.5 font-semibold">⚠ Business email required — Gmail, Yahoo, Outlook not accepted.</p>
+                        )}
+                      </div>
+                      <div>
+                        <label className={labelCls}>Website</label>
+                        <input type="url" value={profileForm.companyWebsite} onChange={e => setProfileForm(p => ({...p, companyWebsite: e.target.value}))} className={inputCls} placeholder="https://company.com" />
+                      </div>
+                      <div>
+                        <label className={labelCls}>Company Location</label>
+                        <input type="text" value={profileForm.companyLocation} onChange={e => setProfileForm(p => ({...p, companyLocation: e.target.value}))} className={inputCls} placeholder="e.g., Baltimore, MD" />
+                      </div>
+                      <div>
+                        <label className={labelCls}>Description</label>
+                        <textarea value={profileForm.companyDescription} onChange={e => setProfileForm(p => ({...p, companyDescription: e.target.value}))} className={inputCls + " resize-none"} rows="3" placeholder="What does your company do?" />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Save */}
+                <div className="flex gap-3 pt-2">
+                  <button onClick={() => setProfileEditing(false)} className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl text-sm transition-all min-h-[44px]">Cancel</button>
+                  <button onClick={handleProfileSave} disabled={profileSaving}
+                    className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl text-sm transition-all shadow-lg disabled:opacity-50 min-h-[44px]">
+                    {profileSaving ? 'Saving...' : 'Save Changes'}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+          <style jsx>{`select option { background-color: #111; color: white; }`}</style>
         </div>
       );
     }

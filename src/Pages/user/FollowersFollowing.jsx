@@ -1346,7 +1346,7 @@ const FollowersFollowing = () => {
                           : userProfile?.uid === currentUser?.uid 
                           ? (activeTab === 'followers' 
                             ? "Share great content to attract followers!"
-                            : "Discover and follow other developers in the community!"
+                            : "Discover and follow other developers in the platform!"
                           )
                           : (activeTab === 'followers'
                             ? "This user doesn't have any followers yet."

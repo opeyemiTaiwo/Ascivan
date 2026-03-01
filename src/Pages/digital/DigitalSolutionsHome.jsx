@@ -150,7 +150,7 @@ const SERVICES = [
 const FAQs = [
   {
     question: "What does Loomiq do?",
-    answer: "Loomiq builds cutting-edge technology solutions for businesses. We transform web and mobile applications into intelligent systems using AI, automation, and data-driven architecture. We also run a career platform for tech professionals — explore it from our homepage."
+    answer: "Loomiq builds cutting-edge technology solutions for businesses. We transform web and mobile applications into intelligent systems using AI, automation, and data-driven architecture. We also run an all-in-one platform for international students — explore it from our homepage."
   },
   {
     question: "How is Loomiq different from other development companies?",
@@ -178,7 +178,7 @@ const FAQs = [
   },
   {
     question: "Do you offer career guidance or tech training?",
-    answer: "Yes! Our career platform offers real-world projects, TechTalent Badges, AI-powered assessments, personalized roadmaps, and one-on-one career coaching. Head to our homepage and click 'Earn Your Badges' to get started for free."
+    answer: "Yes! Our student platform helps international students find jobs, housing, financial aid, and build a professional network. Head to our homepage to get started for free."
   },
   {
     question: "Will I be working with real people or just AI?",
@@ -320,12 +320,7 @@ const CareerHome = () => {
 
         {/* ===== HERO SECTION ===== */}
         <section id="hero-section" className="relative w-full mb-16 sm:mb-24 md:mb-32 pt-16 sm:pt-20 md:pt-28 pb-8 sm:pb-12 px-4 sm:px-6 lg:px-8"
-                 style={{
-                   backgroundImage: `url('/Images/backg.png')`,
-                   backgroundSize: 'cover',
-                   backgroundPosition: 'center',
-                   backgroundRepeat: 'no-repeat'
-                 }}>
+                 style={{}}>
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black"></div>
 
           <div className="w-full max-w-5xl mx-auto text-center relative z-10">
@@ -535,7 +530,7 @@ const CareerHome = () => {
                     <div className="text-white text-base sm:text-lg md:text-xl font-bold text-center">DEPA Lab</div>
                   </div>
                   <div className="flex flex-col items-center justify-center min-w-[160px] sm:min-w-[240px] md:min-w-[280px]">
-                    <div className="text-green-400 text-sm sm:text-base font-bold mb-1 tracking-wider">CAREER PLATFORM</div>
+                    <div className="text-green-400 text-sm sm:text-base font-bold mb-1 tracking-wider">STUDENT PLATFORM</div>
                     <div className="text-white text-base sm:text-lg md:text-xl font-bold text-center">Loomiq Careers</div>
                   </div>
                 </div>
@@ -723,7 +718,7 @@ const CareerHome = () => {
                 <span className="text-gray-500">•</span>
                 <a href="/solutions/terms" className="text-gray-300 hover:text-green-400 text-base transition-colors font-medium">Terms of Service</a>
                 <span className="text-gray-500">•</span>
-                <a href="/" className="text-gray-300 hover:text-green-400 text-base transition-colors font-medium">Career Platform</a>
+                <a href="/" className="text-gray-300 hover:text-green-400 text-base transition-colors font-medium">Student Platform</a>
               </div>
               <div className="text-center">
                 <p className="text-gray-300 text-sm sm:text-base">© {new Date().getFullYear()} Loomiq. All rights reserved.</p>

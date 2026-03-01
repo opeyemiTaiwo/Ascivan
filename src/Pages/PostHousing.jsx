@@ -7,7 +7,7 @@ import Navbar from '../components/Navbar';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
-
+import usePosterName from '../hooks/usePosterName';
 const PostHousing = () => {
   const navigate = useNavigate();
   const { currentUser, loading: authLoading } = useAuth();
@@ -39,7 +39,7 @@ const PostHousing = () => {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const { posterName: profilePosterName, isCompany: profileIsCompany } = usePosterName(currentUser);
   const housingTypes = [
     { id: 'apartment', label: 'Apartment', description: 'Entire apartment unit' },
     { id: 'room', label: 'Room / Shared', description: 'Room in shared house or apartment' },
@@ -67,11 +67,11 @@ const PostHousing = () => {
       setFormData(prev => ({
         ...prev,
         posterEmail: currentUser.email || '',
-        posterName: currentUser.displayName || '',
+        posterName: profilePosterName || currentUser.displayName || '',
         contactEmail: currentUser.email || '',
       }));
     }
-  }, [currentUser, formData.posterEmail]);
+  }, [currentUser, formData.posterEmail, profilePosterName]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -136,6 +136,7 @@ const PostHousing = () => {
         posterName: formData.posterName.trim(),
         posterEmail: formData.posterEmail.trim(),
         posterId: currentUser.uid,
+        isCompanyPost: profileIsCompany,
         status: 'active',
         viewCount: 0,
         expiresAt: calculateExpirationDate(),

@@ -42,6 +42,7 @@ import { EnhancedClickableUserName, TaggedUsers, TaggedUsersSmall } from '../../
 import MentionTextarea from '../../components/community/MentionTextarea';
 import { ReactionAvatars, ReactionsModal } from '../../components/community/ReactionComponents';
 import FollowButton from '../../components/community/FollowButton';
+import usePosterName from '../../hooks/usePosterName';
 
 /**
  * Loomiq - Single Post View
@@ -51,6 +52,7 @@ const SinglePost = () => {
   const { postId } = useParams();
   const { currentUser } = useAuth();
   const navigate = useNavigate();
+  const { posterName: profilePosterName, isCompany: profileIsCompany } = usePosterName(currentUser);
 
   // Post State
   const [post, setPost] = useState(null);
@@ -330,9 +332,10 @@ const SinglePost = () => {
 
         await addDoc(collection(db, 'posts', postId, 'replies'), {
           content: replyText.trim(),
-          authorName: currentUser.displayName || currentUser.email,
+          authorName: profilePosterName || currentUser.displayName || currentUser.email,
           authorId: currentUser.uid,
           authorPhoto: currentUser.photoURL || null,
+          isCompanyPost: profileIsCompany,
           authorFirstName: currentUser.firstName || '',
           authorLastName: currentUser.lastName || '',
           authorInitials: currentUser.initials || '',
@@ -653,7 +656,7 @@ const SinglePost = () => {
                 onClick={() => navigate('/community')}
                 className="bg-orange-500 hover:bg-orange-600 text-white px-4 xs:px-5 sm:px-6 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold transition-colors text-sm xs:text-base min-h-[44px]"
               >
-                Back to Community
+                Back to Home
               </button>
             </div>
           </div>
@@ -677,7 +680,7 @@ const SinglePost = () => {
           <svg className="w-4 h-4 xs:w-5 xs:h-5 mr-1.5 xs:mr-2 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
-          Back to Community
+          Back to Home
         </button>
 
         {/* Main Post Card */}

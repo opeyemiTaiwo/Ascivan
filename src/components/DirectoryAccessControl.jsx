@@ -176,13 +176,7 @@ const DirectoryAccessControl = () => {
     return (
       <div 
         className="min-h-screen flex items-center justify-center p-4"
-        style={{
-          backgroundImage: `url('/Images/backg.png')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundAttachment: 'fixed'
-        }}
+        style={{}}
       >
         <div 
           className="fixed inset-0 opacity-30 pointer-events-none"
@@ -207,13 +201,7 @@ const DirectoryAccessControl = () => {
   return (
     <div 
       className="min-h-screen overflow-hidden flex flex-col relative"
-      style={{
-        backgroundImage: `url('/Images/backg.png')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed'
-      }}
+      style={{}}
     >
       {/* Animated background overlay */}
       <div 

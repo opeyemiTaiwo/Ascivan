@@ -109,13 +109,7 @@ const SubmitApplication = () => {
   return (
     <div 
       className="min-h-screen overflow-hidden flex flex-col relative"
-      style={{
-        backgroundImage: `url('/Images/backg.png')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed'
-      }}
+      style={{}}
     >
       {/* Animated background overlay */}
       <div 
@@ -146,7 +140,7 @@ const SubmitApplication = () => {
                         fontFamily: '"Inter", sans-serif',
                         letterSpacing: '0.1em'
                       }}>
-                  Join Our Community
+                  Join Our Platform
                 </span>
                 <div className="h-1.5 w-1.5 xs:h-2 xs:w-2 sm:h-3 sm:w-3 md:h-4 md:w-4 bg-green-400 rounded-full animate-ping shadow-lg" 
                      style={{boxShadow: '0 0 20px rgba(34,197,94,0.7)'}}></div>
@@ -178,7 +172,7 @@ const SubmitApplication = () => {
                    textShadow: '1px 1px 3px rgba(0,0,0,0.8)',
                    fontFamily: '"Inter", sans-serif'
                  }}>
-                Apply to join our community of talented developers and tech professionals. 
+                Apply to join our platform of talented developers and tech professionals. 
                 <span className="text-green-300 font-semibold block sm:inline mt-1 sm:mt-0"> Get access to exclusive opportunities</span> and connect with industry leaders.
               </p>
               
@@ -364,7 +358,7 @@ const SubmitApplication = () => {
                   {/* Motivation */}
                   <div>
                     <label className="block text-green-300 font-semibold mb-2 xs:mb-3 text-sm xs:text-base sm:text-lg">
-                      Why do you want to join our community? *
+                      Why do you want to join our platform? *
                     </label>
                     <textarea
                       name="motivation"
@@ -373,7 +367,7 @@ const SubmitApplication = () => {
                       required
                       rows={5}
                       className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-5 md:px-6 py-2.5 xs:py-3 sm:py-3.5 md:py-4 text-sm xs:text-base text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300 resize-vertical"
-                      placeholder="Tell us why you're interested in joining our community and what you hope to achieve..."
+                      placeholder="Tell us why you're interested in joining our platform and what you hope to achieve..."
                     />
                   </div>
 
@@ -510,7 +504,7 @@ const SubmitApplication = () => {
                 <li>
                   <Link to="/community" className="text-gray-300 hover:text-green-400 transition-colors duration-300 text-xs xs:text-sm sm:text-base font-medium"
                         style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
-                    Community
+                    Home
                   </Link>
                 </li>
                 <li>
@@ -572,7 +566,7 @@ const SubmitApplication = () => {
               <div className="flex items-center">
                 <span className="text-gray-300 text-xs xs:text-sm font-medium"
                       style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
-                  Transforming Careers with AI
+                  All-in-one AI-powered solution for international students
                 </span>
               </div>
             </div>

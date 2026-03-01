@@ -9,14 +9,14 @@ if (!admin.apps.length) {
   try {
     const serviceAccount = {
       type: "service_account",
-      project_id: "loomiq-careers",
+      project_id: "careers-morgan-techfest",
       private_key: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
       client_email: process.env.FIREBASE_CLIENT_EMAIL
     };
 
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
-      projectId: "loomiq-careers"
+      projectId: "careers-morgan-techfest"
     });
 
     console.log('✅ Firebase Admin initialized for auto-subscribe');

@@ -1,4 +1,4 @@
-// src/components/community/Sidebars.jsx - Loomiq Sidebar Components - FULLY RESPONSIVE
+// src/components/community/Sidebars.jsx 
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -16,22 +16,16 @@ import { EnhancedClickableUserName } from './UserComponents';
 export const UserQuickLinksSidebar = ({ currentUser, onNavigate, isMobile = false }) => {
   const quickLinks = [
     {
-      title: 'Achievements',
-      description: 'View badges & certificates',
-      path: '/my-badges',
-      gradient: 'from-yellow-500 to-orange-600'
+      title: 'Jobs',
+      description: 'Browse job listings',
+      path: '/hub',
+      gradient: 'from-orange-500 to-orange-600'
     },
     {
-      title: 'My Career',
-      description: 'Learning resources & AI guidance',
-      path: '/career/dashboard',
-      gradient: 'from-purple-500 to-pink-600'
-    },
-    {
-      title: 'Projects',
-      description: 'Submit & join projects',
-      path: '/projects',
-      gradient: 'from-blue-500 to-indigo-600'
+      title: 'Members',
+      description: 'Connect with the community',
+      path: '/members-directory',
+      gradient: 'from-orange-400 to-orange-500'
     }
   ];
 
@@ -271,9 +265,9 @@ export const FollowSuggestionsSidebar = ({ currentUser, isMobile = false }) => {
       },
       newcomer: { 
         label: 'Newcomer', 
-        color: 'text-blue-400', 
-        bg: 'bg-blue-500/20', 
-        border: 'border-blue-500/30',
+        color: 'text-green-400', 
+        bg: 'bg-green-500/20', 
+        border: 'border-green-500/30',
       }
     };
     return statusInfo[userStatus] || statusInfo.newcomer;
@@ -312,8 +306,8 @@ export const FollowSuggestionsSidebar = ({ currentUser, isMobile = false }) => {
               <div className="text-[10px] xs:text-xs text-orange-300">Following</div>
             </div>
             <div>
-              <div className="text-base xs:text-lg font-bold text-blue-400">{userCounts.followers}</div>
-              <div className="text-[10px] xs:text-xs text-blue-300">Followers</div>
+              <div className="text-base xs:text-lg font-bold text-green-400">{userCounts.followers}</div>
+              <div className="text-[10px] xs:text-xs text-green-300">Followers</div>
             </div>
           </div>
         </div>
@@ -366,7 +360,7 @@ export const FollowSuggestionsSidebar = ({ currentUser, isMobile = false }) => {
                       </div>
                       
                       {user.followerCount > 0 && (
-                        <div className="text-[10px] xs:text-xs text-blue-400">
+                        <div className="text-[10px] xs:text-xs text-green-400">
                           {user.followerCount} followers
                         </div>
                       )}
@@ -449,7 +443,7 @@ export const CompanyInfoSidebar = ({ isMobile = false }) => {
         <div className="flex items-center justify-center mb-3 xs:mb-4 sm:mb-6 flex-shrink-0">
           <div className="text-center">
             <img 
-              src="/Images/loomiq-logo.svg" 
+              src="/Images/512X512.png" 
               alt="Loomiq Logo" 
               className="w-10 h-10 xs:w-12 xs:h-12 sm:w-16 sm:h-16 mx-auto mb-2 xs:mb-2 sm:mb-3 rounded-xl shadow-lg"
             />
@@ -461,7 +455,7 @@ export const CompanyInfoSidebar = ({ isMobile = false }) => {
         
         <div className="mb-3 xs:mb-4 sm:mb-6 flex-shrink-0">
           <p className="text-gray-300 text-xs sm:text-sm leading-relaxed text-center">
-            Building the future of tech careers through real-world projects, personalized guidance, and validated skill achievements.
+            Empowering international students with housing, finance, jobs, and community support.
           </p>
         </div>
 
@@ -485,7 +479,7 @@ export const CompanyInfoSidebar = ({ isMobile = false }) => {
 
         <div className="mt-3 xs:mt-4 sm:mt-6 pt-2.5 xs:pt-3 sm:pt-4 border-t border-orange-500/10 flex-shrink-0">
           <p className={`text-gray-400 text-center font-medium ${isMobile ? 'text-[10px] xs:text-xs' : 'text-[10px] xs:text-xs'}`}>
-            Building the future of tech careers
+            Empowering international students
           </p>
         </div>
       </div>

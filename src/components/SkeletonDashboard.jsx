@@ -5,10 +5,10 @@ const SkeletonDashboard = () => {
   return (
     <div className="bg-gray-50 min-h-screen pb-8 sm:pb-12 animate-pulse">
       {/* Header Skeleton */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-4 sm:p-6">
+      <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 sm:p-6">
         <div className="container mx-auto">
-          <div className="h-6 sm:h-8 bg-blue-400 rounded w-3/4 sm:w-2/3 mb-2"></div>
-          <div className="h-4 sm:h-6 bg-blue-400 rounded w-2/3 sm:w-1/2 opacity-70"></div>
+          <div className="h-6 sm:h-8 bg-green-400 rounded w-3/4 sm:w-2/3 mb-2"></div>
+          <div className="h-4 sm:h-6 bg-green-400 rounded w-2/3 sm:w-1/2 opacity-70"></div>
         </div>
       </div>
       
@@ -47,7 +47,7 @@ const SkeletonDashboard = () => {
         
         <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 md:p-8">
           {/* User Profile Summary Skeleton */}
-          <div className="mb-6 sm:mb-8 p-4 sm:p-6 bg-blue-50 rounded-lg">
+          <div className="mb-6 sm:mb-8 p-4 sm:p-6 bg-green-50 rounded-lg">
             <div className="h-5 sm:h-6 md:h-7 bg-gray-300 rounded w-1/2 sm:w-1/3 md:w-1/4 mb-3 sm:mb-4"></div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>

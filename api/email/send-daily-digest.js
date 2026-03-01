@@ -1,5 +1,5 @@
 // =================================================================
-// VERCEL-COMPATIBLE: api/email/send-daily-digest.js - ALWAYS SEND VERSION - PROJECTS FIXED WITH GROUP POSTS
+// VERCEL-COMPATIBLE: api/email/send-daily-digest.js
 // =================================================================
 
 const nodemailer = require('nodemailer');

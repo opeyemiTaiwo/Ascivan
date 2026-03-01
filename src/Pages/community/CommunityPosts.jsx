@@ -54,6 +54,7 @@ import {
   FollowSuggestionsSidebar,
   CompanyInfoSidebar 
 } from '../../components/community/Sidebars';
+import { throttle } from '../../utils/throttle';
 
 const CommunityPosts = () => {
   const { currentUser } = useAuth();
@@ -113,9 +114,9 @@ const CommunityPosts = () => {
 
   // Mouse tracking
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    const handleMouseMove = throttle((e) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
-    };
+    }, 50);
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
@@ -931,12 +932,12 @@ const CommunityPosts = () => {
         onClick={closeRepostModal}
       >
         <div 
-          className="bg-gradient-to-br from-gray-900/95 via-black/95 to-gray-900/95 backdrop-blur-xl rounded-xl xs:rounded-2xl border border-blue-500/20 shadow-2xl w-full max-w-md"
+          className="bg-gradient-to-br from-gray-900/95 via-black/95 to-gray-900/95 backdrop-blur-xl rounded-xl xs:rounded-2xl border border-green-500/20 shadow-2xl w-full max-w-md"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex items-center justify-between p-4 xs:p-5 sm:p-6 border-b border-blue-500/10">
+          <div className="flex items-center justify-between p-4 xs:p-5 sm:p-6 border-b border-green-500/10">
             <h3 className="text-base xs:text-lg font-bold text-white flex items-center gap-2">
-              <svg className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
               Repost to your feed?
@@ -954,7 +955,7 @@ const CommunityPosts = () => {
           <div className="p-4 xs:p-5 sm:p-6">
             <div className="bg-white/5 rounded-lg p-3 xs:p-4 border border-white/10">
               <div className="flex items-center space-x-3 mb-3">
-                <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-r from-blue-500 to-cyan-600 flex items-center justify-center text-white font-bold">
+                <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-r from-green-500 to-cyan-600 flex items-center justify-center text-white font-bold">
                   {post.authorPhoto ? (
                     <img src={post.authorPhoto} alt="" className="w-full h-full object-cover" />
                   ) : (
@@ -978,7 +979,7 @@ const CommunityPosts = () => {
               
               {post.media && post.media.length > 0 && (
                 <div className="mt-3">
-                  <div className="text-blue-400 text-xs flex items-center gap-1">
+                  <div className="text-green-400 text-xs flex items-center gap-1">
                     <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
@@ -988,8 +989,8 @@ const CommunityPosts = () => {
               )}
             </div>
 
-            <div className="mt-3 xs:mt-4 p-3 xs:p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-              <p className="text-blue-300 text-xs xs:text-sm flex items-start gap-2">
+            <div className="mt-3 xs:mt-4 p-3 xs:p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
+              <p className="text-green-300 text-xs xs:text-sm flex items-start gap-2">
                 <svg className="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -998,7 +999,7 @@ const CommunityPosts = () => {
             </div>
           </div>
 
-          <div className="p-4 xs:p-5 sm:p-6 border-t border-blue-500/10 bg-black/20">
+          <div className="p-4 xs:p-5 sm:p-6 border-t border-green-500/10 bg-black/20">
             <div className="flex gap-2 xs:gap-3">
               <button
                 onClick={closeRepostModal}
@@ -1010,7 +1011,7 @@ const CommunityPosts = () => {
               <button
                 onClick={() => handleRepost(postId)}
                 disabled={submittingRepost}
-                className="flex-1 px-3 xs:px-4 py-2 xs:py-2.5 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95 min-h-[44px] text-sm xs:text-base"
+                className="flex-1 px-3 xs:px-4 py-2 xs:py-2.5 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95 min-h-[44px] text-sm xs:text-base"
               >
                 {submittingRepost ? (
                   <span className="flex items-center justify-center gap-2">
@@ -1039,7 +1040,7 @@ const CommunityPosts = () => {
         <Navbar />
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center px-3 xs:px-4">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-2 border-blue-400 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-2 border-green-400 mx-auto mb-4"></div>
             <p className="text-gray-400 text-sm xs:text-base">Loading Loomiq Community...</p>
           </div>
         </div>
@@ -1050,11 +1051,11 @@ const CommunityPosts = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 pt-16 xs:pt-18 sm:pt-20">
+      <div className="min-h-screen overflow-x-hidden bg-gradient-to-br from-gray-900 via-black to-gray-900 pt-16 xs:pt-18 sm:pt-20">
         <div 
           className="fixed inset-0 opacity-30 pointer-events-none"
           style={{
-            background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.15), transparent 50%)`
+            background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(34, 197, 94, 0.15), transparent 50%)`
           }}
         />
 
@@ -1089,7 +1090,7 @@ const CommunityPosts = () => {
                 <div className="relative view-menu-container flex justify-center">
                   <button
                     onClick={() => setShowViewMenu(!showViewMenu)}
-                    className="flex items-center gap-2 px-4 xs:px-5 sm:px-6 py-2 xs:py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg xs:rounded-xl transition-all duration-300 min-h-[44px] text-sm xs:text-base"
+                    className="flex items-center gap-2 px-4 xs:px-5 sm:px-6 py-2 xs:py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg xs:rounded-xl transition-all duration-300 min-h-[44px] text-sm xs:text-base text-white"
                   >
                     <span className="font-medium">
                       {viewMode === 'all' && 'All Posts'}
@@ -1101,11 +1102,11 @@ const CommunityPosts = () => {
                     </svg>
                   </button>
                   {showViewMenu && (
-                    <div className="absolute top-full mt-2 w-48 xs:w-56 bg-gray-900/95 backdrop-blur-xl border border-blue-500/20 rounded-lg xs:rounded-xl shadow-2xl overflow-hidden z-50">
+                    <div className="absolute top-full mt-2 w-48 xs:w-56 bg-gray-900/95 backdrop-blur-xl border border-green-500/20 rounded-lg xs:rounded-xl shadow-2xl overflow-hidden z-50">
                       <button
                         onClick={() => changeViewMode('all')}
                         className={`w-full text-left px-3 xs:px-4 py-2.5 xs:py-3 hover:bg-white/10 transition-colors text-sm xs:text-base ${
-                          viewMode === 'all' ? 'bg-blue-500/20 text-blue-300' : 'text-white'
+                          viewMode === 'all' ? 'bg-green-500/20 text-green-300' : 'text-white'
                         }`}
                       >
                         All Posts
@@ -1113,7 +1114,7 @@ const CommunityPosts = () => {
                       <button
                         onClick={() => changeViewMode('myPosts')}
                         className={`w-full text-left px-3 xs:px-4 py-2.5 xs:py-3 hover:bg-white/10 transition-colors text-sm xs:text-base ${
-                          viewMode === 'myPosts' ? 'bg-blue-500/20 text-blue-300' : 'text-white'
+                          viewMode === 'myPosts' ? 'bg-green-500/20 text-green-300' : 'text-white'
                         }`}
                       >
                         My Posts
@@ -1121,7 +1122,7 @@ const CommunityPosts = () => {
                       <button
                         onClick={() => changeViewMode('mentions')}
                         className={`w-full text-left px-3 xs:px-4 py-2.5 xs:py-3 hover:bg-white/10 transition-colors text-sm xs:text-base ${
-                          viewMode === 'mentions' ? 'bg-blue-500/20 text-blue-300' : 'text-white'
+                          viewMode === 'mentions' ? 'bg-green-500/20 text-green-300' : 'text-white'
                         }`}
                       >
                         Mentions
@@ -1150,7 +1151,7 @@ const CommunityPosts = () => {
                     {viewMode !== 'mentions' && (
                       <Link
                         to="/community/submit"
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 min-h-[56px]"
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 min-h-[56px]"
                       >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -1163,7 +1164,7 @@ const CommunityPosts = () => {
                   posts.map((post) => (
                     <article
                       key={post.id}
-                      className="bg-gradient-to-br from-gray-900/50 via-black/50 to-gray-900/50 backdrop-blur-xl rounded-xl xs:rounded-2xl border border-blue-500/10 hover:border-blue-500/30 transition-all duration-300 shadow-2xl overflow-hidden"
+                      className="bg-gradient-to-br from-gray-900/50 via-black/50 to-gray-900/50 backdrop-blur-xl rounded-xl xs:rounded-2xl border border-green-500/10 hover:border-green-500/30 transition-all duration-300 shadow-2xl overflow-hidden"
                     >
                       <div className="p-3 xs:p-4 sm:p-6">
                         <div className="flex items-start justify-between mb-3 xs:mb-4">
@@ -1192,11 +1193,11 @@ const CommunityPosts = () => {
                                     lastName: post.authorLastName,
                                     displayName: post.authorName
                                   }}
-                                  className="font-semibold text-white hover:text-blue-300 transition-colors text-sm xs:text-base"
+                                  className="font-semibold text-white hover:text-green-300 transition-colors text-sm xs:text-base"
                                 />
                                 
                                 {post.authorTitle && (
-                                  <span className="text-blue-400 text-xs bg-blue-500/20 px-2 xs:px-2.5 py-0.5 xs:py-1 rounded-full border border-blue-500/30 hidden sm:inline">
+                                  <span className="text-green-400 text-xs bg-green-500/20 px-2 xs:px-2.5 py-0.5 xs:py-1 rounded-full border border-green-500/30 hidden sm:inline">
                                     {post.authorTitle}
                                   </span>
                                 )}
@@ -1222,7 +1223,7 @@ const CommunityPosts = () => {
                                 <>
                                   <button
                                     onClick={() => startEditingPost(post)}
-                                    className="p-1.5 xs:p-2 text-gray-400 hover:text-blue-400 hover:bg-white/10 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                                    className="p-1.5 xs:p-2 text-gray-400 hover:text-green-400 hover:bg-white/10 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                                     title="Edit post"
                                   >
                                     <svg className="h-4 w-4 xs:h-5 xs:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1274,15 +1275,73 @@ const CommunityPosts = () => {
                         )}
 
                         {post.type === 'repost' && (
-                          <div className="mb-3 xs:mb-4 p-2 xs:p-3 bg-orange-500/10 border border-orange-500/30 rounded-lg flex items-center gap-2">
-                            <svg className="w-4 h-4 xs:w-5 xs:h-5 text-orange-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                            </svg>
-                            <span className="text-orange-300 text-xs xs:text-sm">
-                              Reposted from <span className="font-semibold">{post.originalAuthorName}</span>
-                            </span>
-                          </div>
-                        )}
+  <div className="mb-3 xs:mb-4">
+    <div className="flex items-center gap-2 mb-2 text-orange-300 text-xs xs:text-sm">
+      <svg className="w-4 h-4 xs:w-5 xs:h-5 text-orange-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      </svg>
+      <span>Reposted from <span className="font-semibold">{post.originalAuthorName}</span></span>
+    </div>
+    
+    {/* Original Post Content Card */}
+    <div className="p-3 xs:p-4 bg-white/5 border border-orange-500/20 rounded-lg">
+      {/* Original Author Info */}
+      <div className="flex items-center gap-2 xs:gap-3 mb-3">
+        <div className="w-8 h-8 xs:w-10 xs:h-10 rounded-full overflow-hidden bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center text-white font-bold flex-shrink-0">
+          {post.originalAuthorPhoto ? (
+            <img src={post.originalAuthorPhoto} alt="" className="w-full h-full object-cover" />
+          ) : (
+            <span className="text-xs xs:text-sm">{(post.originalAuthorName || 'U').charAt(0).toUpperCase()}</span>
+          )}
+        </div>
+        <div>
+          <p className="font-semibold text-white text-xs xs:text-sm">{post.originalAuthorName || 'Unknown'}</p>
+          {post.originalCreatedAt && (
+  <p className="text-[10px] xs:text-xs text-gray-400">
+    {formatDate(
+      post.originalCreatedAt instanceof Date 
+        ? post.originalCreatedAt 
+        : post.originalCreatedAt?.toDate 
+          ? post.originalCreatedAt.toDate() 
+          : post.originalCreatedAt?.seconds 
+            ? new Date(post.originalCreatedAt.seconds * 1000) 
+            : new Date(post.originalCreatedAt)
+    )}
+  </p>
+)}
+        </div>
+      </div>
+
+      {/* Original Title */}
+      {post.originalTitle && (
+        <h3 className="text-sm xs:text-base font-bold text-white mb-2">{post.originalTitle}</h3>
+      )}
+
+      {/* Original Content */}
+      {post.originalContent && (
+        <TruncatedRichContent
+          content={post.originalContent}
+          postId={`repost-${post.id}`}
+          limit={CONTENT_LIMIT}
+          expandedPosts={expandedPosts}
+          onToggleExpansion={togglePostExpansion}
+        />
+      )}
+
+      {/* Original Tagged Users */}
+      {post.originalTaggedUsers && post.originalTaggedUsers.length > 0 && (
+        <TaggedUsers taggedUsers={post.originalTaggedUsers} />
+      )}
+
+      {/* Original Media */}
+      {post.originalMedia && post.originalMedia.length > 0 && (
+        <div className="mt-3">
+          <ImageGallery images={post.originalMedia} />
+        </div>
+      )}
+    </div>
+  </div>
+)}
 
                         {post.title && editingPost !== post.id && (
                           <h2 className="text-base xs:text-lg sm:text-xl font-bold text-white mb-2 xs:mb-3">
@@ -1297,19 +1356,19 @@ const CommunityPosts = () => {
                               value={editContent[post.id]?.title || ''}
                               onChange={(e) => handleEditContentChange(post.id, 'title', e.target.value)}
                               placeholder="Post title (optional)"
-                              className="w-full p-2 xs:p-3 bg-black/30 border border-blue-500/20 rounded-lg text-white placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-colors text-sm xs:text-base"
+                              className="w-full p-2 xs:p-3 bg-black/30 border border-green-500/20 rounded-lg text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-colors text-sm xs:text-base"
                             />
                             <textarea
                               value={editContent[post.id]?.content || ''}
                               onChange={(e) => handleEditContentChange(post.id, 'content', e.target.value)}
                               rows={6}
-                              className="w-full p-2 xs:p-3 bg-black/30 border border-blue-500/20 rounded-lg text-white placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-colors resize-none text-sm xs:text-base"
+                              className="w-full p-2 xs:p-3 bg-black/30 border border-green-500/20 rounded-lg text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-colors resize-none text-sm xs:text-base"
                             />
                             <div className="flex gap-2 xs:gap-3">
                               <button
                                 onClick={() => savePostEdit(post.id)}
                                 disabled={savingEdit}
-                                className="flex-1 px-3 xs:px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 text-sm xs:text-base min-h-[44px]"
+                                className="flex-1 px-3 xs:px-4 py-2 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 text-sm xs:text-base min-h-[44px]"
                               >
                                 {savingEdit ? 'Saving...' : 'Save Changes'}
                               </button>
@@ -1343,7 +1402,7 @@ const CommunityPosts = () => {
                         )}
 
                         {editingPost !== post.id && (
-                          <div className="mt-3 xs:mt-4 pt-3 xs:pt-4 border-t border-blue-500/10 flex items-center justify-between text-xs xs:text-sm">
+                          <div className="mt-3 xs:mt-4 pt-3 xs:pt-4 border-t border-green-500/10 flex items-center justify-between text-xs xs:text-sm">
                             <div className="flex items-center gap-3 xs:gap-4">
                               {reactionCounts[post.id] > 0 && (
                                 <ReactionAvatars
@@ -1359,7 +1418,7 @@ const CommunityPosts = () => {
                               {replyCounts[post.id] > 0 && (
                                 <button
                                   onClick={() => toggleReplies(post.id)}
-                                  className="hover:text-blue-400 transition-colors flex items-center gap-1"
+                                  className="hover:text-green-400 transition-colors flex items-center gap-1"
                                 >
                                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -1381,7 +1440,7 @@ const CommunityPosts = () => {
                         )}
 
                         {editingPost !== post.id && (
-                          <div className="mt-3 xs:mt-4 pt-3 xs:pt-4 border-t border-blue-500/10 flex items-center justify-between gap-2">
+                          <div className="mt-3 xs:mt-4 pt-3 xs:pt-4 border-t border-green-500/10 flex items-center justify-between gap-2">
                             <div className="flex items-center gap-1 xs:gap-2 flex-wrap">
                               <button
                                 onClick={() => handlePostReaction(post.id, isPostLikedByUser(post.id))}
@@ -1404,7 +1463,7 @@ const CommunityPosts = () => {
 
                               <button
                                 onClick={() => toggleReplies(post.id)}
-                                className="flex items-center gap-1 xs:gap-1.5 px-2 xs:px-3 py-1.5 xs:py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-gray-400 hover:text-blue-400 font-medium transition-all duration-300 text-xs xs:text-sm min-h-[44px]"
+                                className="flex items-center gap-1 xs:gap-1.5 px-2 xs:px-3 py-1.5 xs:py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-gray-400 hover:text-green-400 font-medium transition-all duration-300 text-xs xs:text-sm min-h-[44px]"
                               >
                                 <svg className="w-4 h-4 xs:w-5 xs:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -1418,7 +1477,7 @@ const CommunityPosts = () => {
                                 className={`flex items-center gap-1 xs:gap-1.5 px-2 xs:px-3 py-1.5 xs:py-2 rounded-lg font-medium transition-all duration-300 text-xs xs:text-sm min-h-[44px] ${
                                   hasUserReposted(post)
                                     ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30 cursor-not-allowed'
-                                    : 'bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-blue-400'
+                                    : 'bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-green-400'
                                 } disabled:opacity-50`}
                               >
                                 <svg className="w-4 h-4 xs:w-5 xs:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1441,13 +1500,13 @@ const CommunityPosts = () => {
                         )}
 
                         {showReplies.has(post.id) && (
-                          <div className="mt-4 xs:mt-5 sm:mt-6 pt-4 xs:pt-5 sm:pt-6 border-t border-blue-500/10">
+                          <div className="mt-4 xs:mt-5 sm:mt-6 pt-4 xs:pt-5 sm:pt-6 border-t border-green-500/10">
                             <div className="mb-4 xs:mb-5 sm:mb-6">
                               <MentionTextarea
                                 value={replyText[post.id] || ''}
                                 onChange={(text) => handleReplyChange(post.id, text)}
                                 placeholder="Write a reply... Use @ to mention someone"
-                                className="w-full p-2 xs:p-3 bg-black/30 border border-blue-500/20 rounded-lg text-white placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-colors resize-none text-sm xs:text-base"
+                                className="w-full p-2 xs:p-3 bg-black/30 border border-green-500/20 rounded-lg text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-colors resize-none text-sm xs:text-base"
                                 rows={3}
                                 onMentionSelect={(user) => handleReplyMentionSelect(post.id, user)}
                                 showLinkButton={false}
@@ -1463,7 +1522,7 @@ const CommunityPosts = () => {
                               <button
                                 onClick={() => submitReply(post.id)}
                                 disabled={!replyText[post.id]?.trim() || submittingReply[post.id]}
-                                className="mt-2 xs:mt-3 px-3 xs:px-4 py-1.5 xs:py-2 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-xs xs:text-sm min-h-[44px]"
+                                className="mt-2 xs:mt-3 px-3 xs:px-4 py-1.5 xs:py-2 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-xs xs:text-sm min-h-[44px]"
                               >
                                 {submittingReply[post.id] ? 'Posting...' : 'Post Reply'}
                               </button>
@@ -1471,7 +1530,7 @@ const CommunityPosts = () => {
 
                             {loadingReplies[post.id] ? (
                               <div className="text-center py-6 xs:py-8">
-                                <div className="animate-spin rounded-full h-6 w-6 xs:h-8 xs:w-8 border-b-2 border-blue-400 mx-auto mb-3"></div>
+                                <div className="animate-spin rounded-full h-6 w-6 xs:h-8 xs:w-8 border-b-2 border-green-400 mx-auto mb-3"></div>
                                 <p className="text-gray-400 text-xs xs:text-sm">Loading replies...</p>
                               </div>
                             ) : replies[post.id] && replies[post.id].length > 0 ? (
@@ -1505,11 +1564,11 @@ const CommunityPosts = () => {
                                                 lastName: reply.authorLastName,
                                                 displayName: reply.authorName
                                               }}
-                                              className="font-semibold text-white hover:text-blue-300 transition-colors text-xs xs:text-sm"
+                                              className="font-semibold text-white hover:text-green-300 transition-colors text-xs xs:text-sm"
                                             />
                                             
                                             {reply.authorTitle && (
-                                              <span className="text-blue-400 text-xs bg-blue-500/20 px-1.5 py-0.5 rounded-full border border-blue-500/30 hidden sm:inline">
+                                              <span className="text-green-400 text-xs bg-green-500/20 px-1.5 py-0.5 rounded-full border border-green-500/30 hidden sm:inline">
                                                 {reply.authorTitle}
                                               </span>
                                             )}
@@ -1521,7 +1580,7 @@ const CommunityPosts = () => {
                                                 <>
                                                   <button
                                                     onClick={() => startEditingReply(reply)}
-                                                    className="p-1 text-gray-400 hover:text-blue-400 hover:bg-white/10 rounded transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                                                    className="p-1 text-gray-400 hover:text-green-400 hover:bg-white/10 rounded transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                                                     title="Edit reply"
                                                   >
                                                     <svg className="h-3 w-3 xs:h-4 xs:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1556,13 +1615,13 @@ const CommunityPosts = () => {
                                               value={editReplyContent}
                                               onChange={(e) => setEditReplyContent(e.target.value)}
                                               rows={3}
-                                              className="w-full p-2 bg-black/30 border border-blue-500/20 rounded-lg text-white placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-colors resize-none text-sm"
+                                              className="w-full p-2 bg-black/30 border border-green-500/20 rounded-lg text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-colors resize-none text-sm"
                                             />
                                             <div className="flex gap-2">
                                               <button
                                                 onClick={() => saveReplyEdit(post.id, reply.id)}
                                                 disabled={savingReplyEdit}
-                                                className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 text-xs min-h-[44px]"
+                                                className="px-3 py-1.5 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 text-xs min-h-[44px]"
                                               >
                                                 {savingReplyEdit ? 'Saving...' : 'Save'}
                                               </button>
@@ -1609,7 +1668,7 @@ const CommunityPosts = () => {
                     <button
                       onClick={loadMorePosts}
                       disabled={loadingMore}
-                      className="px-6 xs:px-8 py-3 xs:py-4 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white rounded-lg xs:rounded-xl font-semibold transition-all duration-300 disabled:opacity-50 transform hover:scale-105 active:scale-95 min-h-[56px] text-sm xs:text-base"
+                      className="px-6 xs:px-8 py-3 xs:py-4 bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 text-white rounded-lg xs:rounded-xl font-semibold transition-all duration-300 disabled:opacity-50 transform hover:scale-105 active:scale-95 min-h-[56px] text-sm xs:text-base"
                     >
                       {loadingMore ? (
                         <span className="flex items-center gap-2">

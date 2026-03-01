@@ -204,25 +204,27 @@ const UserProfile = () => {
   }, [currentUser, navigate]);
 
   const badgeCategories = {
-    'mentorship': { name: 'TechMO', color: 'text-blue-400', bgColor: 'from-blue-500/20 to-blue-600/20', borderColor: 'border-blue-500/30' },
+    'mentorship': { name: 'TechMO', color: 'text-green-400', bgColor: 'from-green-500/20 to-green-600/20', borderColor: 'border-green-500/30' },
     'quality-assurance': { name: 'TechQA', color: 'text-orange-400', bgColor: 'from-orange-500/20 to-orange-600/20', borderColor: 'border-orange-500/30' },
-    'development': { name: 'TechDev', color: 'text-blue-400', bgColor: 'from-blue-500/20 to-blue-600/20', borderColor: 'border-blue-500/30' },
+    'development': { name: 'TechDev', color: 'text-green-400', bgColor: 'from-green-500/20 to-green-600/20', borderColor: 'border-green-500/30' },
     'leadership': { name: 'TechLeads', color: 'text-orange-400', bgColor: 'from-orange-500/20 to-orange-600/20', borderColor: 'border-orange-500/30' },
-    'design': { name: 'TechArchs', color: 'text-blue-400', bgColor: 'from-blue-500/20 to-blue-600/20', borderColor: 'border-blue-500/30' },
+    'design': { name: 'TechArchs', color: 'text-green-400', bgColor: 'from-green-500/20 to-green-600/20', borderColor: 'border-green-500/30' },
     'security': { name: 'TechGuard', color: 'text-orange-400', bgColor: 'from-orange-500/20 to-orange-600/20', borderColor: 'border-orange-500/30' }
   };
 
   const getBadgeLevelColor = (level) => {
     switch (level?.toLowerCase()) {
       case 'novice': return 'text-orange-300';
-      case 'beginners': return 'text-blue-300';
+      case 'beginners': return 'text-green-300';
       case 'intermediate': return 'text-orange-400';
-      case 'expert': return 'text-blue-500';
+      case 'expert': return 'text-green-500';
       default: return 'text-gray-400';
     }
   };
 
   useEffect(() => {
+    const unsubscribers = [];
+
     const fetchUserProfile = async () => {
       try {
         setLoading(true);
@@ -307,7 +309,7 @@ const UserProfile = () => {
         );
       }
 
-      const badgesUnsubscribe = onSnapshot(badgesQuery, (snapshot) => {
+      unsubscribers.push(onSnapshot(badgesQuery, (snapshot) => {
         const badges = snapshot.docs.map(doc => ({ 
           id: doc.id, 
           ...doc.data(),
@@ -331,7 +333,7 @@ const UserProfile = () => {
         }));
       }, (error) => {
         setDebugInfo(prev => [...prev, `Badge fetch error: ${error.message}`]);
-      });
+      }));
 
       let certificatesQuery;
       if (queryType === 'email') {
@@ -348,7 +350,7 @@ const UserProfile = () => {
         );
       }
 
-      const certificatesUnsubscribe = onSnapshot(certificatesQuery, (snapshot) => {
+      unsubscribers.push(onSnapshot(certificatesQuery, (snapshot) => {
         const certificates = snapshot.docs.map(doc => ({ 
           id: doc.id, 
           ...doc.data(),
@@ -363,7 +365,7 @@ const UserProfile = () => {
         }));
       }, (error) => {
         setDebugInfo(prev => [...prev, `Certificate fetch error: ${error.message}`]);
-      });
+      }));
 
       let projectMembersQuery;
       if (queryType === 'email') {
@@ -380,7 +382,7 @@ const UserProfile = () => {
         );
       }
 
-      const projectMembersUnsubscribe = onSnapshot(projectMembersQuery, async (snapshot) => {
+      unsubscribers.push(onSnapshot(projectMembersQuery, async (snapshot) => {
         const memberships = snapshot.docs.map(doc => ({ 
           id: doc.id, 
           ...doc.data(),
@@ -435,20 +437,18 @@ const UserProfile = () => {
         }));
       }, (error) => {
         setDebugInfo(prev => [...prev, `Project fetch error: ${error.message}`]);
-      });
+      }));
 
       setLoading(false);
-
-      return () => {
-        badgesUnsubscribe();
-        certificatesUnsubscribe();
-        projectMembersUnsubscribe();
-      };
     };
 
     if (userParam) {
       fetchUserProfile();
     }
+
+    return () => {
+      unsubscribers.forEach(unsub => unsub());
+    };
   }, [userParam, currentUser]);
 
   if (loading) {
@@ -457,7 +457,7 @@ const UserProfile = () => {
         <Navbar />
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center p-3 xs:p-4">
           <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-6 xs:p-7 sm:p-8 border border-white/20 text-center max-w-lg w-full">
-            <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-2 border-blue-400 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-2 border-green-400 mx-auto mb-4"></div>
             <p className="text-white text-base xs:text-lg">Loading profile...</p>
             <div className="text-xs xs:text-sm text-gray-400 mt-3 xs:mt-4">
               Searching for: <span className="font-mono text-[10px] xs:text-xs">{userParam}</span>
@@ -521,7 +521,7 @@ const UserProfile = () => {
               </button>
               <button 
                 onClick={() => navigate('/members')}
-                className="flex-1 bg-gradient-to-r from-blue-500 to-orange-500 text-white px-4 xs:px-6 py-2.5 xs:py-3 rounded-lg xs:rounded-xl font-semibold hover:from-blue-600 hover:to-orange-600 active:from-blue-700 active:to-orange-700 transition-all duration-300 text-sm xs:text-base min-h-[44px]"
+                className="flex-1 bg-gradient-to-r from-green-500 to-orange-500 text-white px-4 xs:px-6 py-2.5 xs:py-3 rounded-lg xs:rounded-xl font-semibold hover:from-green-600 hover:to-orange-600 active:from-green-700 active:to-orange-700 transition-all duration-300 text-sm xs:text-base min-h-[44px]"
               >
                 Browse Members
               </button>
@@ -535,7 +535,7 @@ const UserProfile = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
+      <div className="min-h-screen overflow-x-hidden bg-gradient-to-br from-gray-900 via-black to-gray-900">
         
         <main className="pt-16 xs:pt-18 sm:pt-20 pb-12 xs:pb-14 sm:pb-16">
           <div className="container mx-auto px-3 xs:px-4 sm:px-6 py-6 xs:py-8 max-w-6xl">
@@ -550,9 +550,9 @@ const UserProfile = () => {
                         <img 
                           src={userProfile.photoURL} 
                           alt="Profile" 
-                          className="w-20 h-20 xs:w-24 xs:h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full object-cover ring-2 xs:ring-4 ring-blue-400/50 shadow-2xl"/>
+                          className="w-20 h-20 xs:w-24 xs:h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full object-cover ring-2 xs:ring-4 ring-green-400/50 shadow-2xl"/>
                       ) : (
-                        <div className="w-20 h-20 xs:w-24 xs:h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full bg-gradient-to-br from-blue-500 to-orange-500 flex items-center justify-center ring-2 xs:ring-4 ring-blue-400/50 shadow-2xl">
+                        <div className="w-20 h-20 xs:w-24 xs:h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full bg-gradient-to-br from-green-500 to-orange-500 flex items-center justify-center ring-2 xs:ring-4 ring-green-400/50 shadow-2xl">
                           <span className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl text-white font-bold">
                             {userProfile.firstName && userProfile.lastName 
                               ? `${userProfile.firstName.charAt(0)}${userProfile.lastName.charAt(0)}`.toUpperCase()
@@ -561,7 +561,7 @@ const UserProfile = () => {
                           </span>
                         </div>
                       )}
-                      <div className="absolute -bottom-1 -right-1 xs:-bottom-2 xs:-right-2 w-6 h-6 xs:w-8 xs:h-8 bg-gradient-to-r from-blue-400 to-orange-500 rounded-full border-2 xs:border-4 border-white shadow-lg flex items-center justify-center">
+                      <div className="absolute -bottom-1 -right-1 xs:-bottom-2 xs:-right-2 w-6 h-6 xs:w-8 xs:h-8 bg-gradient-to-r from-green-400 to-orange-500 rounded-full border-2 xs:border-4 border-white shadow-lg flex items-center justify-center">
                         <div className="w-2 h-2 xs:w-3 xs:h-3 bg-white rounded-full"></div>
                       </div>
                     </div>
@@ -574,10 +574,25 @@ const UserProfile = () => {
                           }}>
                         {userProfile.name}
                       </h1>
-                      <p className="text-gray-300 text-sm xs:text-base sm:text-lg font-medium mb-2 xs:mb-3 break-all" 
-                         style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
-                        {userProfile.email || 'No email available'}
-                      </p>
+
+                      {userProfile.email && (
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(userProfile.email).then(() => {
+                              toast.success('Email copied to clipboard!', { autoClose: 2000 });
+                            }).catch(() => {
+                              prompt('Copy this email:', userProfile.email);
+                            });
+                          }}
+                          className="flex items-center gap-1.5 xs:gap-2 text-gray-400 hover:text-green-400 text-xs xs:text-sm font-medium mb-2 xs:mb-3 transition-colors duration-200 group"
+                          title="Click to copy email"
+                        >
+                          <svg className="w-3.5 h-3.5 xs:w-4 xs:h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                          </svg>
+                          <span className="group-hover:underline">Copy Email</span>
+                        </button>
+                      )}
                       {userProfile.joinedDate && (
                         <p className="text-gray-400 text-xs xs:text-sm">
                           Member since {userProfile.joinedDate.toLocaleDateString('en-US', { 
@@ -592,17 +607,17 @@ const UserProfile = () => {
                   
                   {/* Quick Stats */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 xs:gap-3 sm:gap-4">
-                    <div className="bg-blue-500/10 backdrop-blur-xl rounded-lg xs:rounded-xl p-2.5 xs:p-3 sm:p-4 border border-blue-500/20 text-center">
-                      <div className="text-lg xs:text-xl sm:text-2xl font-black text-blue-400">{userProfile.badgesEarned}</div>
-                      <div className="text-[10px] xs:text-xs text-blue-300 font-bold uppercase">Badges</div>
+                    <div className="bg-green-500/10 backdrop-blur-xl rounded-lg xs:rounded-xl p-2.5 xs:p-3 sm:p-4 border border-green-500/20 text-center">
+                      <div className="text-lg xs:text-xl sm:text-2xl font-black text-green-400">{userProfile.badgesEarned}</div>
+                      <div className="text-[10px] xs:text-xs text-green-300 font-bold uppercase">Badges</div>
                     </div>
                     <div className="bg-orange-500/10 backdrop-blur-xl rounded-lg xs:rounded-xl p-2.5 xs:p-3 sm:p-4 border border-orange-500/20 text-center">
                       <div className="text-lg xs:text-xl sm:text-2xl font-black text-orange-400">{userProfile.certificatesEarned}</div>
                       <div className="text-[10px] xs:text-xs text-orange-300 font-bold uppercase">Certificates</div>
                     </div>
-                    <div className="bg-blue-500/10 backdrop-blur-xl rounded-lg xs:rounded-xl p-2.5 xs:p-3 sm:p-4 border border-blue-500/20 text-center">
-                      <div className="text-lg xs:text-xl sm:text-2xl font-black text-blue-400">{userProfile.projectsCompleted}</div>
-                      <div className="text-[10px] xs:text-xs text-blue-300 font-bold uppercase">Completed</div>
+                    <div className="bg-green-500/10 backdrop-blur-xl rounded-lg xs:rounded-xl p-2.5 xs:p-3 sm:p-4 border border-green-500/20 text-center">
+                      <div className="text-lg xs:text-xl sm:text-2xl font-black text-green-400">{userProfile.projectsCompleted}</div>
+                      <div className="text-[10px] xs:text-xs text-green-300 font-bold uppercase">Completed</div>
                     </div>
                     <div className="bg-orange-500/10 backdrop-blur-xl rounded-lg xs:rounded-xl p-2.5 xs:p-3 sm:p-4 border border-orange-500/20 text-center">
                       <div className="text-lg xs:text-xl sm:text-2xl font-black text-orange-400">{userProfile.ongoingProjects}</div>
@@ -633,14 +648,14 @@ const UserProfile = () => {
                       }
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 xs:gap-4 text-center">
-                      <div className="bg-blue-500/10 rounded-lg xs:rounded-xl p-3 xs:p-4 border border-blue-500/20">
-                        <div className="text-xs xs:text-sm text-blue-400">Ready for projects</div>
+                      <div className="bg-green-500/10 rounded-lg xs:rounded-xl p-3 xs:p-4 border border-green-500/20">
+                        <div className="text-xs xs:text-sm text-green-400">Ready for projects</div>
                       </div>
                       <div className="bg-orange-500/10 rounded-lg xs:rounded-xl p-3 xs:p-4 border border-orange-500/20">
                         <div className="text-xs xs:text-sm text-orange-400">Eager to learn</div>
                       </div>
-                      <div className="bg-blue-500/10 rounded-lg xs:rounded-xl p-3 xs:p-4 border border-blue-500/20">
-                        <div className="text-xs xs:text-sm text-blue-400">Available to connect</div>
+                      <div className="bg-green-500/10 rounded-lg xs:rounded-xl p-3 xs:p-4 border border-green-500/20">
+                        <div className="text-xs xs:text-sm text-green-400">Available to connect</div>
                       </div>
                     </div>
                   </div>
@@ -651,7 +666,7 @@ const UserProfile = () => {
                   <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/20">
                     <h3 className="text-base xs:text-lg sm:text-xl font-bold text-white mb-4 xs:mb-5 sm:mb-6 flex items-center flex-wrap gap-2">
                       <span>Recent Badges</span>
-                      <span className="text-xs xs:text-sm bg-blue-500/20 text-blue-400 px-2 xs:px-3 py-1 rounded-full">
+                      <span className="text-xs xs:text-sm bg-green-500/20 text-green-400 px-2 xs:px-3 py-1 rounded-full">
                         {userProfile.badgesEarned} total
                       </span>
                     </h3>
@@ -699,7 +714,7 @@ const UserProfile = () => {
                     </h3>
                     <div className="space-y-3 xs:space-y-4">
                       {recentCertificates.map((certificate) => (
-                        <div key={certificate.id} className="bg-gradient-to-r from-orange-500/10 to-blue-500/10 backdrop-blur-xl rounded-lg xs:rounded-xl p-3 xs:p-4 border border-orange-500/20">
+                        <div key={certificate.id} className="bg-gradient-to-r from-orange-500/10 to-green-500/10 backdrop-blur-xl rounded-lg xs:rounded-xl p-3 xs:p-4 border border-orange-500/20">
                           <div className="flex items-center gap-3 xs:gap-4">
                             <svg className="w-8 h-8 xs:w-10 xs:h-10 flex-shrink-0 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -741,10 +756,10 @@ const UserProfile = () => {
                               )}
                               <span className={`text-[10px] xs:text-xs px-1.5 xs:px-2 py-0.5 xs:py-1 rounded-full whitespace-nowrap ${
                                 project.projectStatus === 'completed' 
-                                  ? 'bg-blue-500/20 text-blue-400' 
+                                  ? 'bg-green-500/20 text-green-400' 
                                   : project.projectStatus === 'completing'
                                   ? 'bg-orange-500/20 text-orange-400'
-                                  : 'bg-blue-500/20 text-blue-400'
+                                  : 'bg-green-500/20 text-green-400'
                               }`}>
                                 {project.projectStatus === 'completed' ? 'Completed' : 
                                  project.projectStatus === 'completing' ? 'Completing' : 'Active'}
@@ -823,7 +838,7 @@ const UserProfile = () => {
                     </div>
                     <div className="flex items-center justify-between p-2.5 xs:p-3 bg-white/5 rounded-lg xs:rounded-xl">
                       <span className="text-gray-300 text-xs xs:text-sm">Success Rate</span>
-                      <span className="text-blue-400 font-bold text-sm xs:text-base">
+                      <span className="text-green-400 font-bold text-sm xs:text-base">
                         {projectHistory.length > 0 
                           ? Math.round((userProfile.projectsCompleted / projectHistory.length) * 100)
                           : 0
@@ -838,7 +853,7 @@ const UserProfile = () => {
                     </div>
                     <div className="flex items-center justify-between p-2.5 xs:p-3 bg-white/5 rounded-lg xs:rounded-xl">
                       <span className="text-gray-300 text-xs xs:text-sm">Profile Score</span>
-                      <span className="text-blue-400 font-bold text-sm xs:text-base">
+                      <span className="text-green-400 font-bold text-sm xs:text-base">
                         {Math.min(100, (userProfile.badgesEarned * 10) + (userProfile.certificatesEarned * 15) + (userProfile.projectsCompleted * 5))}
                       </span>
                     </div>

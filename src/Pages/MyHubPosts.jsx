@@ -16,6 +16,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
+import { throttle } from '../utils/throttle';
 
 const MyHubPosts = () => {
   const navigate = useNavigate();
@@ -26,15 +27,12 @@ const MyHubPosts = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
 
+  // Filter by jobType within job posts only
   const categories = [
-    { id: 'all', label: 'All Posts' },
-    { id: 'job', label: 'Jobs' },
-    { id: 'project', label: 'Projects' },
-    { id: 'event', label: 'Events' },
-    { id: 'course', label: 'Courses' },
-    { id: 'internship', label: 'Internships' },
-    { id: 'program', label: 'Programs' },
-    { id: 'scholarship', label: 'Scholarships' }
+    { id: 'all', label: 'All Jobs' },
+    { id: 'full-time', label: 'Full-time' },
+    { id: 'freelancer', label: 'Freelancer' },
+    { id: 'internship', label: 'Internship' },
   ];
 
   useEffect(() => {
@@ -47,9 +45,9 @@ const MyHubPosts = () => {
   }, [currentUser, authLoading, navigate]);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    const handleMouseMove = throttle((e) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
-    };
+    }, 50);
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
@@ -85,7 +83,8 @@ const MyHubPosts = () => {
   }, [currentUser]);
 
   const filteredPosts = myPosts
-    .filter(post => selectedCategory === 'all' || post.category === selectedCategory)
+    .filter(post => post.category === 'job' || !post.category) // only job posts
+    .filter(post => selectedCategory === 'all' || post.jobType === selectedCategory)
     .sort((a, b) => {
       switch (sortBy) {
         case 'newest':
@@ -172,7 +171,7 @@ const MyHubPosts = () => {
     }
     
     if (post.status === 'active') {
-      return { label: 'Active', color: 'bg-blue-500', textColor: 'text-white' };
+      return { label: 'Active', color: 'bg-green-500', textColor: 'text-white' };
     }
     
     return { label: 'Unknown', color: 'bg-gray-500', textColor: 'text-white' };
@@ -187,7 +186,7 @@ const MyHubPosts = () => {
           style={{ backgroundColor: '#000000' }}
         >
           <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-6 xs:p-7 sm:p-8 border border-white/20 text-center">
-            <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-2 border-blue-400 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-2 border-green-400 mx-auto mb-4"></div>
             <p className="text-white text-base xs:text-lg">Loading...</p>
           </div>
         </div>
@@ -199,13 +198,13 @@ const MyHubPosts = () => {
     <>
       <Navbar />
       <div 
-        className="min-h-screen overflow-hidden flex flex-col relative"
+        className="min-h-screen overflow-x-hidden flex flex-col relative"
         style={{ backgroundColor: '#000000' }}
       >
         <div 
           className="fixed inset-0 opacity-30 pointer-events-none"
           style={{
-            background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.1), transparent 40%)`
+            background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(34, 197, 94, 0.1), transparent 40%)`
           }}
         />
     
@@ -224,22 +223,22 @@ const MyHubPosts = () => {
                     filter: 'drop-shadow(3px 3px 6px rgba(0,0,0,0.9))'
                   }}>
                 My{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-500 to-orange-500">
-                  Hub Posts
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-green-500 to-orange-500">
+                  My Job Posts
                 </span>
               </h1>
               <p className="text-sm xs:text-base sm:text-lg text-gray-200 mb-4 xs:mb-5 sm:mb-6 px-2">
-                Manage your posted opportunities
+                Manage your job listings
               </p>
               
               {/* Stats */}
               <div className="flex justify-center gap-4 xs:gap-5 sm:gap-6 mb-6 xs:mb-7 sm:mb-8">
                 <div className="text-center">
-                  <div className="text-2xl xs:text-3xl font-bold text-blue-400">{myPosts.length}</div>
+                  <div className="text-2xl xs:text-3xl font-bold text-green-400">{myPosts.length}</div>
                   <div className="text-gray-400 text-xs xs:text-sm">Total Posts</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl xs:text-3xl font-bold text-blue-400">
+                  <div className="text-2xl xs:text-3xl font-bold text-green-400">
                     {myPosts.filter(p => p.status === 'active').length}
                   </div>
                   <div className="text-gray-400 text-xs xs:text-sm">Active</div>
@@ -267,7 +266,7 @@ const MyHubPosts = () => {
                         onClick={() => setSelectedCategory(cat.id)}
                         className={`px-3 xs:px-4 py-2 rounded-lg font-medium transition-all text-xs xs:text-sm min-h-[44px] ${
                           selectedCategory === cat.id
-                            ? 'bg-blue-500 text-white shadow-md'
+                            ? 'bg-green-500 text-white shadow-md'
                             : 'bg-white/10 text-gray-300 hover:bg-white/20 active:bg-white/30'
                         }`}
                       >
@@ -292,7 +291,7 @@ const MyHubPosts = () => {
                         onClick={() => setSortBy(option.value)}
                         className={`px-3 xs:px-4 py-2 rounded-lg font-medium transition-all text-xs xs:text-sm min-h-[44px] ${
                           sortBy === option.value
-                            ? 'bg-blue-500 text-white shadow-md'
+                            ? 'bg-green-500 text-white shadow-md'
                             : 'bg-white/10 text-gray-300 hover:bg-white/20 active:bg-white/30'
                         }`}
                       >
@@ -308,7 +307,7 @@ const MyHubPosts = () => {
             <section>
               {loading ? (
                 <div className="text-center py-12 xs:py-14 sm:py-16">
-                  <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-2 border-blue-400 mx-auto mb-4"></div>
+                  <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-2 border-green-400 mx-auto mb-4"></div>
                   <p className="text-white text-base xs:text-lg">Loading your posts...</p>
                 </div>
               ) : filteredPosts.length === 0 ? (
@@ -316,14 +315,14 @@ const MyHubPosts = () => {
                   <h3 className="text-xl xs:text-2xl font-bold text-white mb-3 xs:mb-4">No Posts Found</h3>
                   <p className="text-gray-400 mb-6 xs:mb-7 sm:mb-8 text-sm xs:text-base px-3">
                     {selectedCategory === 'all' 
-                      ? "You haven't posted any opportunities yet"
+                      ? "You haven't posted any jobs yet"
                       : `No ${getCategoryBadge(selectedCategory)} posts found`}
                   </p>
                   <Link
                     to="/hub/post"
                     className="inline-block bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 xs:px-7 sm:px-8 py-2.5 xs:py-3 rounded-xl font-bold hover:from-orange-600 hover:to-orange-700 active:from-orange-700 active:to-orange-800 transition-all text-sm xs:text-base min-h-[44px]"
                   >
-                    Post Opportunity
+                    Post a Job
                   </Link>
                 </div>
               ) : (
@@ -334,13 +333,13 @@ const MyHubPosts = () => {
                     return (
                       <div
                         key={post.id}
-                        className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/20 hover:border-blue-400/40 transition-all"
+                        className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/20 hover:border-green-400/40 transition-all"
                       >
                         {/* Header */}
                         <div className="flex items-start justify-between mb-3 xs:mb-4 gap-2">
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-2 flex-wrap">
-                              <span className="px-2.5 xs:px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs xs:text-sm font-semibold whitespace-nowrap">
+                              <span className="px-2.5 xs:px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-xs xs:text-sm font-semibold whitespace-nowrap">
                                 {getCategoryBadge(post.category)}
                               </span>
                               <span className={`px-2.5 xs:px-3 py-1 ${statusBadge.color} ${statusBadge.textColor} rounded-full text-xs xs:text-sm font-semibold whitespace-nowrap`}>
@@ -381,7 +380,7 @@ const MyHubPosts = () => {
                             href={post.externalLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex-1 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white px-3 xs:px-4 py-2 rounded-lg font-semibold text-center transition-all text-xs xs:text-sm min-h-[44px] flex items-center justify-center"
+                            className="flex-1 bg-green-500 hover:bg-green-600 active:bg-green-700 text-white px-3 xs:px-4 py-2 rounded-lg font-semibold text-center transition-all text-xs xs:text-sm min-h-[44px] flex items-center justify-center"
                           >
                             View Link
                           </a>
@@ -423,12 +422,12 @@ const MyHubPosts = () => {
           }
           
           ::-webkit-scrollbar-thumb {
-            background: rgba(59, 130, 246, 0.5);
+            background: rgba(34, 197, 94, 0.5);
             border-radius: 4px;
           }
           
           ::-webkit-scrollbar-thumb:hover {
-            background: rgba(59, 130, 246, 0.7);
+            background: rgba(34, 197, 94, 0.7);
           }
         `}</style>
       </div>

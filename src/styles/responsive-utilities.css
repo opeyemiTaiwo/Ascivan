@@ -433,3 +433,60 @@
     max-width: 100% !important;
   }
 }
+
+/* ============================================
+   SCROLLBAR HIDE (for filter pill rows)
+   ============================================ */
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ============================================
+   GLOBAL OVERFLOW PROTECTION
+   ============================================ */
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* ============================================
+   MOBILE TOUCH IMPROVEMENTS
+   ============================================ */
+
+/* Prevent double-tap zoom on buttons */
+button, a, input, select, textarea {
+  touch-action: manipulation;
+}
+
+/* Ensure inputs don't zoom on iOS */
+@media screen and (max-width: 768px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="number"],
+  input[type="date"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* ============================================
+   SAFE AREA PADDING (notch devices)
+   ============================================ */
+
+.safe-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+.safe-top {
+  padding-top: max(0px, env(safe-area-inset-top));
+}

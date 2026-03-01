@@ -290,7 +290,7 @@ const AdminEmailTester = () => {
           <button
             onClick={testAllEmails}
             disabled={isLoading || !testEmail}
-            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 disabled:from-gray-600 disabled:to-gray-700 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 disabled:cursor-not-allowed flex items-center"
+            className="bg-gradient-to-r from-green-600 to-orange-600 hover:from-green-700 hover:to-green-700 disabled:from-gray-600 disabled:to-gray-700 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 disabled:cursor-not-allowed flex items-center"
           >
             {isLoading ? (
               <>
@@ -330,7 +330,7 @@ const AdminEmailTester = () => {
               <button
                 onClick={() => testSingleEmail(emailTest)}
                 disabled={isLoading || !testEmail}
-                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 text-white px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-300 disabled:cursor-not-allowed"
+                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-700 text-white px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-300 disabled:cursor-not-allowed"
               >
                 {isLoading ? 'Testing...' : 'Test'}
               </button>
@@ -407,10 +407,10 @@ const AdminEmailTester = () => {
           </div>
           
           <div className="text-center">
-            <div className="text-3xl font-bold text-blue-400 mb-2">
+            <div className="text-3xl font-bold text-green-400 mb-2">
               {emailTests.length}
             </div>
-            <div className="text-blue-300 font-semibold">Total Email Types</div>
+            <div className="text-green-300 font-semibold">Total Email Types</div>
           </div>
         </div>
 

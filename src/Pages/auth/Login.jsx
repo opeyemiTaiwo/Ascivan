@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getAuthErrorMessage, isSafariMobileDevice, isAndroidMobileDevice, hasPotentialStorageIssues } from '../../firebase/config';
 import Navbar from '../../components/Navbar';
+import { throttle } from '../../utils/throttle';
 
 const Login = () => {
   const { currentUser, signInWithGoogle } = useAuth();
@@ -15,9 +16,9 @@ const Login = () => {
 
   // Mouse tracking for animated background
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    const handleMouseMove = throttle((e) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
-    };
+    }, 50);
     
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
@@ -28,11 +29,11 @@ const Login = () => {
   const isAndroidMobile = isAndroidMobileDevice();
   const hasStorageIssues = hasPotentialStorageIssues();
 
-  // Redirect authenticated users to dashboard
+  // Redirect authenticated users — route guard will check onboarding
   useEffect(() => {
     if (currentUser) {
-      console.log('User authenticated, redirecting to dashboard');
-      navigate('/dashboard');
+      console.log('User authenticated, checking onboarding status...');
+      navigate('/community');
     }
   }, [currentUser, navigate]);
 
@@ -94,7 +95,7 @@ const Login = () => {
 
   return (
     <div 
-      className="min-h-screen overflow-hidden flex flex-col relative"
+      className="min-h-screen overflow-x-hidden flex flex-col relative"
       style={{
         backgroundImage: `url('/Images/backg.png')`,
         backgroundSize: 'cover',
@@ -107,7 +108,7 @@ const Login = () => {
       <div 
         className="fixed inset-0 opacity-30 pointer-events-none"
         style={{
-          background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.1), transparent 40%)`
+          background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(34, 197, 94, 0.1), transparent 40%)`
         }}
       />
       
@@ -141,10 +142,10 @@ const Login = () => {
                     textShadow: '0 0 20px rgba(255,255,255,0.3), 2px 2px 4px rgba(0,0,0,0.9)'
                   }}>
                 Welcome to{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-300 via-blue-400 to-orange-500"
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-300 via-green-400 to-orange-500"
                       style={{
                         textShadow: 'none',
-                        filter: 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.5))',
+                        filter: 'drop-shadow(0 0 20px rgba(34, 197, 94, 0.5))',
                         animation: 'glow 2s ease-in-out infinite alternate'
                       }}>
                   Loomiq
@@ -156,8 +157,8 @@ const Login = () => {
                 Access your personalized dashboard and start your journey
               </p>
 
-              <div className="h-0.5 sm:h-1 w-12 sm:w-16 md:w-20 bg-gradient-to-r from-orange-400 to-blue-500 mx-auto rounded-full shadow-2xl mt-3 sm:mt-4"
-                   style={{boxShadow: '0 0 30px rgba(59, 130, 246, 0.6)'}}></div>
+              <div className="h-0.5 sm:h-1 w-12 sm:w-16 md:w-20 bg-gradient-to-r from-orange-400 to-green-500 mx-auto rounded-full shadow-2xl mt-3 sm:mt-4"
+                   style={{boxShadow: '0 0 30px rgba(34, 197, 94, 0.6)'}}></div>
             </div>
             
             {/* Error Display */}
@@ -190,18 +191,18 @@ const Login = () => {
 
             {/* Mobile Browser Info Banner */}
             {hasStorageIssues && !error && (
-              <div className="bg-gradient-to-br from-blue-900/40 via-blue-800/40 to-blue-900/40 backdrop-blur-xl border border-blue-500/30 text-blue-300 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl mb-4 sm:mb-5 md:mb-6 shadow-2xl">
+              <div className="bg-gradient-to-br from-green-900/40 via-green-800/40 to-green-900/40 backdrop-blur-xl border border-green-500/30 text-green-300 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl mb-4 sm:mb-5 md:mb-6 shadow-2xl">
                 <div className="flex items-start">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                   </svg>
                   <div className="min-w-0">
-                    <p className="font-bold text-xs sm:text-sm text-blue-300">
+                    <p className="font-bold text-xs sm:text-sm text-green-300">
                       {isSafariMobile ? 'Safari Mobile Detected' : 
                        isAndroidMobile ? 'Android Mobile Detected' : 
                        'Mobile Browser Detected'}
                     </p>
-                    <p className="text-xs mt-1 text-blue-200">Sign-in will open in a popup. Please allow popups if prompted.</p>
+                    <p className="text-xs mt-1 text-green-200">Sign-in will open in a popup. Please allow popups if prompted.</p>
                   </div>
                 </div>
               </div>
@@ -239,14 +240,14 @@ const Login = () => {
               </button>
 
               {/* FREE ACCESS MESSAGE */}
-              <div className="bg-gradient-to-br from-blue-900/40 via-blue-800/40 to-blue-900/40 backdrop-blur-xl border border-blue-500/30 text-blue-300 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl shadow-2xl">
+              <div className="bg-gradient-to-br from-green-900/40 via-green-800/40 to-green-900/40 backdrop-blur-xl border border-green-500/30 text-green-300 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl shadow-2xl">
                 <div className="flex items-start">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400 mr-2 sm:mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 mr-2 sm:mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   <div className="min-w-0">
-                    <p className="font-bold text-xs sm:text-sm text-blue-300">Completely Free!</p>
-                    <p className="text-xs mt-1 text-blue-200">
+                    <p className="font-bold text-xs sm:text-sm text-green-300">Completely Free!</p>
+                    <p className="text-xs mt-1 text-green-200">
                       Sign in to access your personalized dashboard and all features at no cost.
                     </p>
                   </div>
@@ -278,13 +279,13 @@ const Login = () => {
           <div className="text-center">
             <div className="flex items-center justify-center space-x-2 mb-3 sm:mb-4">
               <img 
-                src="/Images/loomiq-logo.svg" 
+                src="/Images/512X512.png" 
                 alt="Loomiq Logo" 
                 className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 transform hover:scale-110 transition-transform duration-300 flex-shrink-0"
               />
               <span className="text-base sm:text-lg md:text-xl font-black" 
                     style={{
-                      textShadow: '0 0 20px rgba(59, 130, 246, 0.5), 2px 2px 4px rgba(0,0,0,0.8)',
+                      textShadow: '0 0 20px rgba(34, 197, 94, 0.5), 2px 2px 4px rgba(0,0,0,0.8)',
                       fontFamily: '"Inter", sans-serif'
                     }}>
                 Loomiq
@@ -310,12 +311,12 @@ const Login = () => {
         * { font-family: 'Inter', sans-serif; }
         
         @keyframes glow {
-          0%, 100% { filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.5)); }
-          50% { filter: drop-shadow(0 0 40px rgba(59, 130, 246, 0.8)); }
+          0%, 100% { filter: drop-shadow(0 0 20px rgba(34, 197, 94, 0.5)); }
+          50% { filter: drop-shadow(0 0 40px rgba(34, 197, 94, 0.8)); }
         }
         
         .shadow-3xl {
-          box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25), 0 0 60px rgba(59, 130, 246, 0.1);
+          box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25), 0 0 60px rgba(34, 197, 94, 0.1);
         }
         
         ::-webkit-scrollbar {
@@ -327,12 +328,12 @@ const Login = () => {
         }
         
         ::-webkit-scrollbar-thumb {
-          background: rgba(59, 130, 246, 0.5);
+          background: rgba(34, 197, 94, 0.5);
           border-radius: 4px;
         }
         
         ::-webkit-scrollbar-thumb:hover {
-          background: rgba(59, 130, 246, 0.7);
+          background: rgba(34, 197, 94, 0.7);
         }
 
         @media (max-width: 768px) {

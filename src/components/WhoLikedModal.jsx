@@ -127,7 +127,7 @@ const WhoLikedModal = ({ isOpen, onClose, postId, userIds = [], postTitle }) => 
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-red-400 to-pink-500 flex items-center justify-center text-white font-bold text-xs sm:text-sm">
+                      <div className="w-full h-full bg-gradient-to-br from-red-400 to-red-500 flex items-center justify-center text-white font-bold text-xs sm:text-sm">
                         {(user.displayName || user.email || 'U').charAt(0).toUpperCase()}
                       </div>
                     )}

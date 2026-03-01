@@ -15,13 +15,13 @@ import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration for Loomiq
 const firebaseConfig = {
-  apiKey: "AIzaSyDCN-o5xEj_DvAeVxfpNxgsNePk00jt_6Q",
-  authDomain: "loomiq-db.firebaseapp.com",
-  projectId: "loomiq-db",
-  storageBucket: "loomiq-db.firebasestorage.app",
-  messagingSenderId: "239483781107",
-  appId: "1:239483781107:web:edfa01d9be68640dc45c86",
-  measurementId: "G-KEJYZX71MD"
+  apiKey: "AIzaSyBPOoTs7x6yOGpHzG2aE32eTaJN1Ejc0bU",
+  authDomain: "loomiqinc.firebaseapp.com",
+  projectId: "loomiqinc",
+  storageBucket: "loomiqinc.firebasestorage.app",
+  messagingSenderId: "467283350104",
+  appId: "1:467283350104:web:3d82fbeee092bfef32b02d",
+  measurementId: "G-2MML1ZGSGN"
 };
 
 // Initialize Firebase

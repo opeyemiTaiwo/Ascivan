@@ -42,7 +42,7 @@ const autoSetupFirebase = async () => {
       isActive: true,
       availableForApplications: true,
       submitterId: "system",
-      submitterEmail: "system@loomiqhq.com",
+      submitterEmail: "info.loomiq@gmail.com",
       submitterName: "System",
       createdAt: timestamp,
       updatedAt: timestamp,
@@ -314,7 +314,7 @@ const autoSetupFirebase = async () => {
     console.log('📁 12/17 Setting up users...');
     const systemUser = {
       uid: "system",
-      email: "system@loomiqhq.com",
+      email: "info.loomiq@gmail.com",
       displayName: "System",
       firstName: "System",
       lastName: "User",
@@ -492,7 +492,7 @@ const autoSetupFirebase = async () => {
       approved: true,
       status: "active",
       approvedAt: timestamp,
-      approvedBy: "system@loomiqhq.com",
+      approvedBy: "info.loomiq@gmail.com",
       requestedAt: timestamp
     };
     batch.set(doc(db, 'directory_access', 'john@example.com'), sampleAccess);

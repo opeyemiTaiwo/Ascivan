@@ -81,8 +81,8 @@ const FollowersFollowing = () => {
     },
     'quality-assurance': { 
       name: 'TechQA',
-      color: 'text-blue-400', 
-      bgColor: 'from-blue-500/20 to-blue-600/20',
+      color: 'text-green-400', 
+      bgColor: 'from-green-500/20 to-green-600/20',
       skills: ['Quality Assurance', 'Testing', 'Bug Detection', 'Test Automation']
     },
     'development': { 
@@ -93,8 +93,8 @@ const FollowersFollowing = () => {
     },
     'leadership': { 
       name: 'TechLeads',
-      color: 'text-purple-400', 
-      bgColor: 'from-purple-500/20 to-purple-600/20',
+      color: 'text-orange-400', 
+      bgColor: 'from-orange-500/20 to-orange-600/20',
       skills: ['Project Management', 'Leadership', 'Strategic Planning', 'Team Coordination']
     },
     'design': { 
@@ -899,13 +899,13 @@ const FollowersFollowing = () => {
               <div className="text-sm xs:text-base sm:text-lg font-bold text-yellow-400">{member.badges}</div>
               <div className="text-[10px] xs:text-xs text-yellow-300">Badges</div>
             </div>
-            <div className="bg-blue-500/10 rounded-md xs:rounded-lg p-1.5 xs:p-2 sm:p-3 text-center border border-blue-500/20">
-              <div className="text-sm xs:text-base sm:text-lg font-bold text-blue-400">{member.totalProjects}</div>
-              <div className="text-[10px] xs:text-xs text-blue-300">Projects</div>
+            <div className="bg-green-500/10 rounded-md xs:rounded-lg p-1.5 xs:p-2 sm:p-3 text-center border border-green-500/20">
+              <div className="text-sm xs:text-base sm:text-lg font-bold text-green-400">{member.totalProjects}</div>
+              <div className="text-[10px] xs:text-xs text-green-300">Projects</div>
             </div>
-            <div className="bg-purple-500/10 rounded-md xs:rounded-lg p-1.5 xs:p-2 sm:p-3 text-center border border-purple-500/20">
-              <div className="text-sm xs:text-base sm:text-lg font-bold text-purple-400">{member.memberScore}</div>
-              <div className="text-[10px] xs:text-xs text-purple-300">Score</div>
+            <div className="bg-orange-500/10 rounded-md xs:rounded-lg p-1.5 xs:p-2 sm:p-3 text-center border border-orange-500/20">
+              <div className="text-sm xs:text-base sm:text-lg font-bold text-orange-400">{member.memberScore}</div>
+              <div className="text-[10px] xs:text-xs text-orange-300">Score</div>
             </div>
           </div>
 
@@ -928,7 +928,7 @@ const FollowersFollowing = () => {
           <div className="flex gap-1.5 xs:gap-2">
             <button
               onClick={() => handleUserClick(member)}
-              className="flex-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-2 xs:px-3 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold hover:from-blue-600 hover:to-purple-600 active:from-blue-700 active:to-purple-700 transition-all duration-300 text-[10px] xs:text-xs sm:text-sm min-h-[44px] flex items-center justify-center"
+              className="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white px-2 xs:px-3 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold hover:from-green-600 hover:to-green-700 active:from-green-700 active:to-green-800 transition-all duration-300 text-[10px] xs:text-xs sm:text-sm min-h-[44px] flex items-center justify-center"
             >
               <svg className="w-3 h-3 xs:w-4 xs:h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -1183,7 +1183,7 @@ const FollowersFollowing = () => {
                   <div className="mb-3 xs:mb-4 sm:hidden">
                     <button
                       onClick={() => setShowFilters(!showFilters)}
-                      className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white px-3 xs:px-4 py-2.5 xs:py-3 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 active:scale-95 min-h-[44px] text-xs xs:text-sm"
+                      className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-3 xs:px-4 py-2.5 xs:py-3 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 active:scale-95 min-h-[44px] text-xs xs:text-sm"
                     >
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
@@ -1254,7 +1254,7 @@ const FollowersFollowing = () => {
 
                     <button
                       onClick={clearFilters}
-                      className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold hover:from-red-600 hover:to-pink-600 active:from-red-700 active:to-pink-700 transition-all duration-300 text-xs xs:text-sm sm:text-base min-h-[44px]"
+                      className="bg-gradient-to-r from-red-500 to-red-600 text-white px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold hover:from-red-600 hover:to-red-700 active:from-red-700 active:to-red-800 transition-all duration-300 text-xs xs:text-sm sm:text-base min-h-[44px]"
                     >
                       Clear All
                     </button>
@@ -1383,7 +1383,7 @@ const FollowersFollowing = () => {
                                         className={`flex items-center px-2.5 xs:px-3 sm:px-4 py-2 xs:py-2.5 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 active:scale-95 text-xs xs:text-sm min-h-[44px] ${
                                           currentPage === 1
                                             ? 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
-                                            : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600'
+                                            : 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700'
                                         }`}
                                       >
                                         <svg className="w-3 h-3 xs:w-4 xs:h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1430,7 +1430,7 @@ const FollowersFollowing = () => {
                                         className={`flex items-center px-2.5 xs:px-3 sm:px-4 py-2 xs:py-2.5 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 active:scale-95 text-xs xs:text-sm min-h-[44px] ${
                                           currentPage === totalPages
                                             ? 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
-                                            : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600'
+                                            : 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700'
                                         }`}
                                       >
                                         <span className="hidden xs:inline">Next</span>

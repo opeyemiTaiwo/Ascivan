@@ -17,7 +17,7 @@ self.addEventListener('install', (event) => {
         // Cache just the essential files
         return cache.addAll([
           '/',
-          '/Images/loomiq-logo.svg',
+          '/Images/512X512.png',
           '/manifest.json'
         ]);
       })

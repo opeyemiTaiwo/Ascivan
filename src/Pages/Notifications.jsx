@@ -255,7 +255,7 @@ const NotificationsPage = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
+      <div className="min-h-screen overflow-x-hidden bg-gradient-to-br from-gray-900 via-black to-gray-900">
         
         {/* Header */}
         <div className="bg-black/50 backdrop-blur-xl border-b border-white/10 sticky top-16 z-40">
@@ -339,7 +339,7 @@ const NotificationsPage = () => {
           {/* Notifications List */}
           {filteredNotifications.length === 0 ? (
             <div className="text-center py-12 xs:py-14 sm:py-16">
-              <div className="text-5xl xs:text-6xl mb-4">
+              <div className="text-4xl xs:text-5xl sm:text-6xl mb-4">
                 <svg className="w-16 h-16 xs:w-20 xs:h-20 mx-auto text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
@@ -434,7 +434,7 @@ const NotificationsPage = () => {
                             )}
 
                             {notification.groupTitle && (
-                              <p className="text-blue-400 text-xs xs:text-sm flex items-center gap-1.5 mt-2">
+                              <p className="text-green-400 text-xs xs:text-sm flex items-center gap-1.5 mt-2">
                                 <svg className="w-3 h-3 xs:w-4 xs:h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>

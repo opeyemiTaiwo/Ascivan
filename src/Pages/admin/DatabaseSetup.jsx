@@ -57,7 +57,7 @@ const DatabaseSetup = () => {
           <button
             onClick={runSetup}
             disabled={isRunning}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold disabled:opacity-50"
+            className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold disabled:opacity-50"
           >
             {isRunning ? 'Running Setup...' : 'Run Database Setup'}
           </button>

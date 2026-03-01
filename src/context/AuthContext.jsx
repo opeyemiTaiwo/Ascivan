@@ -62,6 +62,7 @@ export const AuthProvider = ({ children }) => {
             
             // Additional user setup
             profileComplete: false,
+            onboardingComplete: false,
             role: 'user',
             preferences: {
               theme: 'dark',

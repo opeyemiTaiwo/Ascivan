@@ -276,7 +276,7 @@ const AdminDashboard = () => {
           rejectionReason: reason,
           rejectionDate: new Date().toISOString(),
           adminEmail: currentUser.email,
-          resubmissionUrl: `https://loomiqhq.com/groups/${completionData.groupId}`
+          resubmissionUrl: `/groups/${completionData.groupId}`
         };
         
         console.log('📧 Sending rejection email notification...');
@@ -412,7 +412,7 @@ const AdminDashboard = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="text-white text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-500 mx-auto mb-4"></div>
           <p className="text-sm sm:text-base">Checking admin access...</p>
         </div>
       </div>
@@ -437,7 +437,7 @@ const AdminDashboard = () => {
                     fontFamily: '"Inter", sans-serif'
                   }}>
                 Admin{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-blue-600 to-orange-500">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-500 via-green-600 to-orange-500">
                   Dashboard
                 </span>
               </h1>
@@ -463,29 +463,29 @@ const AdminDashboard = () => {
                 </div>
               </div>
               
-              <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-4 sm:p-6 border-2 border-blue-500/30 shadow-lg">
+              <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-4 sm:p-6 border-2 border-green-500/30 shadow-lg">
                 <div className="flex flex-col h-full">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="text-blue-500 text-xl sm:text-2xl">📁</div>
-                    <span className="text-blue-500 text-xs font-medium px-2 py-1 bg-blue-500/10 rounded-full border border-blue-500/30">Projects</span>
+                    <div className="text-green-500 text-xl sm:text-2xl">📁</div>
+                    <span className="text-green-500 text-xs font-medium px-2 py-1 bg-green-500/10 rounded-full border border-green-500/30">Projects</span>
                   </div>
                   <div className="flex-grow">
                     <p className="text-gray-400 text-xs font-medium mb-1">Total Projects</p>
-                    <p className="text-2xl sm:text-3xl font-black text-blue-500 mb-1">{allProjects.length}</p>
+                    <p className="text-2xl sm:text-3xl font-black text-green-500 mb-1">{allProjects.length}</p>
                     <p className="text-gray-500 text-xs">In system</p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-4 sm:p-6 border-2 border-blue-500/30 shadow-lg">
+              <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-4 sm:p-6 border-2 border-green-500/30 shadow-lg">
                 <div className="flex flex-col h-full">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="text-blue-500 text-xl sm:text-2xl">✅</div>
-                    <span className="text-blue-500 text-xs font-medium px-2 py-1 bg-blue-500/10 rounded-full border border-blue-500/30">Status</span>
+                    <div className="text-green-500 text-xl sm:text-2xl">✅</div>
+                    <span className="text-green-500 text-xs font-medium px-2 py-1 bg-green-500/10 rounded-full border border-green-500/30">Status</span>
                   </div>
                   <div className="flex-grow">
                     <p className="text-gray-400 text-xs font-medium mb-1">System Status</p>
-                    <p className="text-2xl sm:text-3xl font-black text-blue-500 mb-1">Active</p>
+                    <p className="text-2xl sm:text-3xl font-black text-green-500 mb-1">Active</p>
                     <p className="text-gray-500 text-xs">All systems operational</p>
                   </div>
                 </div>
@@ -514,11 +514,11 @@ const AdminDashboard = () => {
 
               {loading ? (
                 <div className="text-center py-12">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto mb-4"></div>
                   <p className="text-gray-300 text-sm sm:text-base">Loading project reviews...</p>
                 </div>
               ) : pendingCompletions.length === 0 ? (
-                <div className="text-center py-12 bg-gray-900 rounded-2xl border-2 border-blue-500/30">
+                <div className="text-center py-12 bg-gray-900 rounded-2xl border-2 border-green-500/30">
                   <div className="text-5xl sm:text-6xl mb-4">🎉</div>
                   <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">All caught up!</h3>
                   <p className="text-gray-300 text-sm sm:text-base">No project reviews pending.</p>
@@ -526,7 +526,7 @@ const AdminDashboard = () => {
               ) : (
                 <div className="space-y-8">
                   {pendingCompletions.map((completion) => (
-                    <div key={completion.id} className="bg-gray-900 rounded-2xl p-4 sm:p-6 md:p-8 border-2 border-blue-500/30 shadow-xl">
+                    <div key={completion.id} className="bg-gray-900 rounded-2xl p-4 sm:p-6 md:p-8 border-2 border-green-500/30 shadow-xl">
                       
                       {/* Project Header */}
                       <div className="mb-8">
@@ -538,12 +538,12 @@ const AdminDashboard = () => {
                         </div>
                         
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 text-sm">
-                          <div className="p-4 bg-blue-500/10 border-2 border-blue-500/30 rounded-xl">
-                            <span className="text-blue-500 font-semibold block mb-2">👤 Project Owner</span>
+                          <div className="p-4 bg-green-500/10 border-2 border-green-500/30 rounded-xl">
+                            <span className="text-green-500 font-semibold block mb-2">👤 Project Owner</span>
                             <span className="text-white font-medium">{completion.adminName || completion.adminEmail}</span>
                           </div>
-                          <div className="p-4 bg-blue-500/10 border-2 border-blue-500/30 rounded-xl">
-                            <span className="text-blue-500 font-semibold block mb-2">👥 Team Size</span>
+                          <div className="p-4 bg-green-500/10 border-2 border-green-500/30 rounded-xl">
+                            <span className="text-green-500 font-semibold block mb-2">👥 Team Size</span>
                             <span className="text-white font-medium">{completion.teamSize || 0} members</span>
                           </div>
                           <div className="p-4 bg-orange-500/10 border-2 border-orange-500/30 rounded-xl">
@@ -559,8 +559,8 @@ const AdminDashboard = () => {
 
                       {/* Repository & Project URLs */}
                       <div className="mb-8">
-                        <div className="p-6 bg-gradient-to-br from-blue-500/20 to-blue-600/20 border-2 border-blue-500/30 rounded-xl">
-                          <h5 className="text-blue-400 font-bold text-lg mb-4 flex items-center">
+                        <div className="p-6 bg-gradient-to-br from-green-500/20 to-green-600/20 border-2 border-green-500/30 rounded-xl">
+                          <h5 className="text-green-400 font-bold text-lg mb-4 flex items-center">
                             🔗 Repository & Project Information
                           </h5>
                           
@@ -611,7 +611,7 @@ const AdminDashboard = () => {
                                 <div className="space-y-4">
                                   {githubUrl && (
                                     <div>
-                                      <label className="text-blue-300 font-semibold block mb-2">
+                                      <label className="text-green-300 font-semibold block mb-2">
                                         GitHub Repository URL: <span className="text-orange-500">*Required</span>
                                       </label>
                                       <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
@@ -619,13 +619,13 @@ const AdminDashboard = () => {
                                           href={githubUrl} 
                                           target="_blank" 
                                           rel="noopener noreferrer"
-                                          className="flex-1 bg-gray-800 border-2 border-blue-500/30 rounded-lg px-4 py-3 text-blue-300 hover:text-blue-200 transition-colors break-all"
+                                          className="flex-1 bg-gray-800 border-2 border-green-500/30 rounded-lg px-4 py-3 text-green-300 hover:text-green-200 transition-colors break-all"
                                         >
                                           {githubUrl}
                                         </a>
                                         <button
                                           onClick={() => window.open(githubUrl, '_blank')}
-                                          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors whitespace-nowrap w-full sm:w-auto shadow-sm"
+                                          className="bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors whitespace-nowrap w-full sm:w-auto shadow-sm"
                                         >
                                           Open GitHub →
                                         </button>
@@ -659,7 +659,7 @@ const AdminDashboard = () => {
 
                                   {demoUrl && (
                                     <div>
-                                      <label className="text-blue-300 font-semibold block mb-2">
+                                      <label className="text-green-300 font-semibold block mb-2">
                                         Live Demo URL:
                                       </label>
                                       <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
@@ -667,13 +667,13 @@ const AdminDashboard = () => {
                                           href={demoUrl} 
                                           target="_blank" 
                                           rel="noopener noreferrer"
-                                          className="flex-1 bg-gray-800 border-2 border-blue-500/30 rounded-lg px-4 py-3 text-blue-300 hover:text-blue-200 transition-colors break-all"
+                                          className="flex-1 bg-gray-800 border-2 border-green-500/30 rounded-lg px-4 py-3 text-green-300 hover:text-green-200 transition-colors break-all"
                                         >
                                           {demoUrl}
                                         </a>
                                         <button
                                           onClick={() => window.open(demoUrl, '_blank')}
-                                          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors whitespace-nowrap w-full sm:w-auto shadow-sm"
+                                          className="bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors whitespace-nowrap w-full sm:w-auto shadow-sm"
                                         >
                                           Try Demo →
                                         </button>
@@ -710,12 +710,12 @@ const AdminDashboard = () => {
                         )}
                         
                         {completion.projectReview?.technologiesUsed && (
-                          <div className="p-6 bg-blue-500/10 border-2 border-blue-500/30 rounded-xl">
-                            <h5 className="text-blue-400 font-bold text-lg mb-4 flex items-center">
+                          <div className="p-6 bg-green-500/10 border-2 border-green-500/30 rounded-xl">
+                            <h5 className="text-green-400 font-bold text-lg mb-4 flex items-center">
                               💻 Technologies Used
                             </h5>
-                            <div className="bg-gray-900 border-2 border-blue-500/30 rounded-lg p-4">
-                              <p className="text-blue-100 leading-relaxed text-sm sm:text-base">
+                            <div className="bg-gray-900 border-2 border-green-500/30 rounded-lg p-4">
+                              <p className="text-green-100 leading-relaxed text-sm sm:text-base">
                                 {completion.projectReview.technologiesUsed}
                               </p>
                             </div>
@@ -740,7 +740,7 @@ const AdminDashboard = () => {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                         <button
                           onClick={() => approveProjectCompletion(completion.id, completion)}
-                          className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-4 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-xl flex items-center justify-center"
+                          className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-6 py-4 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-xl flex items-center justify-center"
                         >
                           ✅ Approve Project Review
                         </button>
@@ -778,7 +778,7 @@ const AdminDashboard = () => {
                 </div>
 
                 {allProjects.length === 0 ? (
-                  <div className="text-center py-12 bg-gray-900 rounded-2xl border-2 border-blue-500/30">
+                  <div className="text-center py-12 bg-gray-900 rounded-2xl border-2 border-green-500/30">
                     <div className="text-5xl sm:text-6xl mb-4">📁</div>
                     <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">No projects found</h3>
                     <p className="text-gray-300 text-sm sm:text-base">No projects exist in the system.</p>
@@ -788,7 +788,7 @@ const AdminDashboard = () => {
                     {allProjects.map((project) => {
                       const getStatusColor = (status) => {
                         switch (status) {
-                          case 'approved': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
+                          case 'approved': return 'bg-green-500/20 text-green-400 border-green-500/30';
                           case 'pending':
                           case 'pending_approval':
                           case 'submitted': return 'bg-orange-500/20 text-orange-400 border-orange-500/30';
@@ -798,7 +798,7 @@ const AdminDashboard = () => {
                       };
 
                       return (
-                        <div key={project.id} className="bg-gray-900 rounded-xl p-4 border-2 border-gray-700 hover:border-blue-500/50 transition-all duration-300">
+                        <div key={project.id} className="bg-gray-900 rounded-xl p-4 border-2 border-gray-700 hover:border-green-500/50 transition-all duration-300">
                           
                           <div className="mb-4">
                             <div className="flex items-center justify-between mb-2">
@@ -831,7 +831,7 @@ const AdminDashboard = () => {
                               </div>
                               <div className="flex justify-between">
                                 <span>Has Group:</span>
-                                <span className={project.groupId ? 'text-blue-400' : 'text-gray-400'}>
+                                <span className={project.groupId ? 'text-green-400' : 'text-gray-400'}>
                                   {project.groupId ? 'Yes' : 'No'}
                                 </span>
                               </div>

@@ -4,6 +4,11 @@
   "outputDirectory": "build",
   "installCommand": "npm install",
   "devCommand": "npm start",
+  "functions": {
+    "api/**/*.js": {
+      "maxDuration": 60
+    }
+  },
   "routes": [
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/index.html" }

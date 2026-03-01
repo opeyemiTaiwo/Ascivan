@@ -17,6 +17,7 @@ import {
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
 import FollowButton from '../components/community/FollowButton';
+import { throttle } from '../utils/throttle';
 
 const MembersDirectory = () => {
   const { currentUser, loading: authLoading } = useAuth();
@@ -192,9 +193,9 @@ const MembersDirectory = () => {
   }, []);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    const handleMouseMove = throttle((e) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
-    };
+    }, 50);
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
@@ -209,8 +210,8 @@ const MembersDirectory = () => {
     },
     'quality-assurance': { 
       name: 'TechQA', 
-      color: 'text-blue-400', 
-      bgColor: 'from-blue-500/20 to-blue-600/20',
+      color: 'text-green-400', 
+      bgColor: 'from-green-500/20 to-green-600/20',
       skills: ['Quality Assurance', 'Testing', 'Bug Detection', 'Test Automation']
     },
     'development': { 
@@ -221,8 +222,8 @@ const MembersDirectory = () => {
     },
     'leadership': { 
       name: 'TechLeads', 
-      color: 'text-purple-400', 
-      bgColor: 'from-purple-500/20 to-purple-600/20',
+      color: 'text-orange-400', 
+      bgColor: 'from-orange-500/20 to-orange-600/20',
       skills: ['Project Management', 'Leadership', 'Strategic Planning', 'Team Coordination']
     },
     'design': { 
@@ -676,9 +677,9 @@ const MembersDirectory = () => {
       },
       participant: { 
         label: 'Participant', 
-        color: 'text-blue-400', 
-        bg: 'bg-blue-500/20', 
-        border: 'border-blue-500/30',
+        color: 'text-green-400', 
+        bg: 'bg-green-500/20', 
+        border: 'border-green-500/30',
       },
       newcomer: { 
         label: 'Newcomer', 
@@ -702,11 +703,11 @@ const MembersDirectory = () => {
         <div 
           className="fixed inset-0 opacity-30 pointer-events-none"
           style={{
-            background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.1), transparent 40%)`
+            background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(34, 197, 94, 0.1), transparent 40%)`
           }}
         />
-        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-2xl p-8 border border-white/20 text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
+        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-2xl p-5 sm:p-8 border border-white/20 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-green-500 mx-auto mb-4"></div>
           <p className="text-white text-lg">
             {authLoading ? 'Checking authentication...' : 'Loading member directory...'}
           </p>
@@ -726,7 +727,7 @@ const MembersDirectory = () => {
 
   return (
     <div 
-      className="min-h-screen overflow-hidden flex flex-col relative select-none"
+      className="min-h-screen overflow-x-hidden flex flex-col relative select-none"
       style={{
         backgroundColor: '#000000',
         userSelect: 'none',
@@ -739,7 +740,7 @@ const MembersDirectory = () => {
       <div 
         className="fixed inset-0 opacity-30 pointer-events-none"
         style={{
-          background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.1), transparent 40%)`
+          background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(34, 197, 94, 0.1), transparent 40%)`
         }}
       />
       
@@ -757,7 +758,7 @@ const MembersDirectory = () => {
 
      
       {/* Main Content */}
-      <main className="flex-grow pt-24 md:pt-28 pb-16">
+      <main className="flex-grow pt-20 sm:pt-24 md:pt-28 pb-12 sm:pb-16">
         <div className="container mx-auto px-4 sm:px-6 py-8 max-w-7xl">
           
           {/* Hero Section */}
@@ -765,20 +766,20 @@ const MembersDirectory = () => {
             <div className="max-w-4xl mx-auto">
               
               <div className="flex items-center justify-center gap-4 mb-8 animate-pulse">
-                <div className="h-4 w-4 bg-blue-500 rounded-full animate-ping shadow-lg" 
+                <div className="h-4 w-4 bg-green-500 rounded-full animate-ping shadow-lg" 
                      style={{boxShadow: '0 0 20px rgba(76, 175, 80, 0.8)'}}></div>
-                <span className="text-blue-400 uppercase tracking-widest text-lg font-black" 
+                <span className="text-green-400 uppercase tracking-widest text-lg font-black" 
                       style={{
                         textShadow: '0 0 20px rgba(76, 175, 80, 0.8), 2px 2px 4px rgba(0,0,0,0.9)',
                         fontFamily: '"Inter", sans-serif'
                       }}>
                    Complete Member Directory
                 </span>
-                <div className="h-4 w-4 bg-blue-500 rounded-full animate-ping shadow-lg" 
+                <div className="h-4 w-4 bg-green-500 rounded-full animate-ping shadow-lg" 
                      style={{boxShadow: '0 0 20px rgba(76, 175, 80, 0.8)'}}></div>
               </div>
               
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-8 leading-[0.9]"
+              <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-4 sm:mb-6 md:mb-8 leading-[0.9]"
                   style={{
                     fontFamily: '"Inter", sans-serif',
                     background: 'linear-gradient(135deg, #ffffff 0%, #e8f5e8 50%, #ffffff 100%)',
@@ -788,31 +789,31 @@ const MembersDirectory = () => {
                     filter: 'drop-shadow(3px 3px 6px rgba(0,0,0,0.9))'
                   }}>
                 Hire From Our{' '}
-                <span className="block mt-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-500 to-orange-500"
-                      style={{filter: 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.5))'}}>
+                <span className="block mt-4 text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-green-500 to-orange-500"
+                      style={{filter: 'drop-shadow(0 0 20px rgba(34, 197, 94, 0.5))'}}>
                   Entire Community
                 </span>
               </h1>
 
               <p className="text-xl md:text-2xl text-gray-200 leading-relaxed font-light mb-8" 
                  style={{textShadow: '1px 1px 3px rgba(0,0,0,0.8)'}}>
-                Access our <span className="text-blue-400 font-semibold">complete member directory</span> - from 
-                <span className="text-blue-400 font-semibold"> badge-verified experts</span> to <span className="text-blue-400 font-semibold">rising newcomers</span>.
+                Access our <span className="text-green-400 font-semibold">complete member directory</span> - from 
+                <span className="text-green-400 font-semibold"> badge-verified experts</span> to <span className="text-green-400 font-semibold">rising newcomers</span>.
               </p>
 
               {/* Directory Stats */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-                <div className="bg-gradient-to-br from-blue-500/20 to-orange-500/20 backdrop-blur-sm rounded-xl p-4 border border-blue-500/30">
-                  <div className="text-2xl font-bold text-blue-400">{members.length}</div>
-                  <div className="text-sm text-blue-100">Total Members</div>
+                <div className="bg-gradient-to-br from-green-500/20 to-orange-500/20 backdrop-blur-sm rounded-xl p-4 border border-green-500/30">
+                  <div className="text-2xl font-bold text-green-400">{members.length}</div>
+                  <div className="text-sm text-green-100">Total Members</div>
                 </div>
                 <div className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 backdrop-blur-sm rounded-xl p-4 border border-yellow-500/30">
                   <div className="text-2xl font-bold text-yellow-300">{members.filter(m => m.badges > 0).length}</div>
                   <div className="text-sm text-yellow-100">Badge Holders</div>
                 </div>
-                <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-xl p-4 border border-purple-500/30">
-                  <div className="text-2xl font-bold text-purple-300">{members.filter(m => m.isActive).length}</div>
-                  <div className="text-sm text-purple-100">Recently Active</div>
+                <div className="bg-gradient-to-br from-orange-500/20 to-orange-600/20 backdrop-blur-sm rounded-xl p-4 border border-orange-500/30">
+                  <div className="text-2xl font-bold text-orange-300">{members.filter(m => m.isActive).length}</div>
+                  <div className="text-sm text-orange-100">Recently Active</div>
                 </div>
               </div>
             </div>
@@ -829,7 +830,7 @@ const MembersDirectory = () => {
                   placeholder="Search by name, email, or skills..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-6 py-4 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-all duration-300 text-lg"
+                  className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-6 py-4 text-white placeholder-gray-400 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300 text-lg"
                 />
               </div>
 
@@ -843,7 +844,7 @@ const MembersDirectory = () => {
                     className="sr-only"
                   />
                   <div className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    showOnlyBadgedUsers ? 'bg-blue-500' : 'bg-gray-600'
+                    showOnlyBadgedUsers ? 'bg-green-500' : 'bg-gray-600'
                   }`}>
                     <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
                       showOnlyBadgedUsers ? 'translate-x-6' : 'translate-x-1'
@@ -866,7 +867,7 @@ const MembersDirectory = () => {
                 <select
                   value={selectedBadgeCategory}
                   onChange={(e) => setSelectedBadgeCategory(e.target.value)}
-                  className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white focus:border-blue-500 focus:outline-none transition-all duration-300"
+                  className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white focus:border-green-500 focus:outline-none transition-all duration-300"
                 >
                   <option value="all">All Badge Types</option>
                   {Object.entries(badgeCategories).map(([key, category]) => (
@@ -877,7 +878,7 @@ const MembersDirectory = () => {
                 <select
                   value={selectedSkill}
                   onChange={(e) => setSelectedSkill(e.target.value)}
-                  className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white focus:border-blue-500 focus:outline-none transition-all duration-300"
+                  className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white focus:border-green-500 focus:outline-none transition-all duration-300"
                 >
                   <option value="">All Skills</option>
                   {uniqueSkills.map(skill => (
@@ -888,7 +889,7 @@ const MembersDirectory = () => {
                 <select
                   value={minProjects}
                   onChange={(e) => setMinProjects(Number(e.target.value))}
-                  className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white focus:border-blue-500 focus:outline-none transition-all duration-300"
+                  className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white focus:border-green-500 focus:outline-none transition-all duration-300"
                 >
                   <option value={0}>Any Projects</option>
                   <option value={1}>1+ Projects</option>
@@ -900,7 +901,7 @@ const MembersDirectory = () => {
                 <select
                   value={minBadges}
                   onChange={(e) => setMinBadges(Number(e.target.value))}
-                  className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white focus:border-blue-500 focus:outline-none transition-all duration-300"
+                  className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white focus:border-green-500 focus:outline-none transition-all duration-300"
                 >
                   <option value={0}>Any Badges</option>
                   <option value={1}>1+ Badges</option>
@@ -912,7 +913,7 @@ const MembersDirectory = () => {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white focus:border-blue-500 focus:outline-none transition-all duration-300"
+                  className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white focus:border-green-500 focus:outline-none transition-all duration-300"
                 >
                   <option value="recent">Recently Active</option>
                   <option value="badges">Most Badges</option>
@@ -923,7 +924,7 @@ const MembersDirectory = () => {
 
                 <button
                   onClick={clearFilters}
-                  className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-3 rounded-xl font-semibold hover:from-red-600 hover:to-pink-600 transition-all duration-300"
+                  className="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-3 rounded-xl font-semibold hover:from-red-600 hover:to-red-700 transition-all duration-300"
                 >
                   Clear All
                 </button>
@@ -931,7 +932,7 @@ const MembersDirectory = () => {
 
               <div className="flex justify-between items-center text-gray-300">
                 <span>
-                  <span className="text-blue-400 font-semibold">{filteredMembers.length}</span> members found
+                  <span className="text-green-400 font-semibold">{filteredMembers.length}</span> members found
                   {filteredMembers.length > 0 && (
                     <span className="ml-2 text-sm">
                       • Showing {startIndex + 1}-{Math.min(endIndex, filteredMembers.length)} of {filteredMembers.length}
@@ -971,10 +972,10 @@ const MembersDirectory = () => {
                                 <img 
                                   src={member.photoURL} 
                                   alt={`${member.name}'s profile`}
-                                  className="w-16 h-16 rounded-full object-cover ring-4 ring-blue-400/50"
+                                  className="w-16 h-16 rounded-full object-cover ring-4 ring-green-400/50"
                                 />
                               ) : (
-                                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-orange-500 flex items-center justify-center ring-4 ring-blue-400/50">
+                                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-orange-500 flex items-center justify-center ring-4 ring-green-400/50">
                                   <span className="text-xl text-black font-bold">
                                     {member.name?.charAt(0)?.toUpperCase() || '?'}
                                   </span>
@@ -988,7 +989,7 @@ const MembersDirectory = () => {
                             </div>
                             
                             <div className="flex-grow">
-                              <h3 className="text-xl font-black text-white group-hover:text-blue-400 transition-colors duration-300">
+                              <h3 className="text-xl font-black text-white group-hover:text-green-400 transition-colors duration-300">
                                 {member.name}
                               </h3>
                               
@@ -1007,9 +1008,9 @@ const MembersDirectory = () => {
                               <div className="text-2xl font-bold text-yellow-400">{member.badges}</div>
                               <div className="text-sm text-yellow-300">Badges</div>
                             </div>
-                            <div className="bg-blue-500/10 rounded-lg p-4 text-center border border-blue-500/20">
-                              <div className="text-2xl font-bold text-blue-400">{member.totalProjects}</div>
-                              <div className="text-sm text-blue-300">Projects</div>
+                            <div className="bg-green-500/10 rounded-lg p-4 text-center border border-green-500/20">
+                              <div className="text-2xl font-bold text-green-400">{member.totalProjects}</div>
+                              <div className="text-sm text-green-300">Projects</div>
                             </div>
                           </div>
 
@@ -1034,7 +1035,7 @@ const MembersDirectory = () => {
                           <div className="flex gap-2">
                             <button
                               onClick={() => openMemberModal(member)}
-                              className="flex-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-3 py-3 rounded-xl font-semibold hover:from-blue-600 hover:to-purple-600 transition-all duration-300 text-xs"
+                              className="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white px-3 py-3 rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 text-xs"
                             >
                               View Details
                             </button>
@@ -1077,7 +1078,7 @@ const MembersDirectory = () => {
                           className={`flex items-center px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
                             currentPage === 1
                               ? 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
-                              : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 transform hover:scale-105'
+                              : 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 transform hover:scale-105'
                           }`}
                         >
                           ← Previous
@@ -1104,7 +1105,7 @@ const MembersDirectory = () => {
                                 onClick={() => goToPage(pageNum)}
                                 className={`w-10 h-10 rounded-xl font-semibold transition-all duration-300 ${
                                   currentPage === pageNum
-                                    ? 'bg-gradient-to-r from-blue-500 to-orange-500 text-white'
+                                    ? 'bg-gradient-to-r from-green-500 to-orange-500 text-white'
                                     : 'bg-white/10 text-gray-300 hover:bg-white/20 hover:text-white'
                                 }`}
                               >
@@ -1132,7 +1133,7 @@ const MembersDirectory = () => {
                           className={`flex items-center px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
                             currentPage === totalPages
                               ? 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
-                              : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 transform hover:scale-105'
+                              : 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 transform hover:scale-105'
                           }`}
                         >
                           Next →
@@ -1154,7 +1155,7 @@ const MembersDirectory = () => {
       {/* Member Detail Modal */}
       {showMemberModal && selectedMember && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-black/90 via-gray-900/90 to-black/90 backdrop-blur-2xl rounded-2xl p-8 border border-white/20 shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-gradient-to-br from-black/90 via-gray-900/90 to-black/90 backdrop-blur-2xl rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 border border-white/20 shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             
             {/* Modal Header */}
             <div className="flex justify-between items-start mb-8">
@@ -1164,10 +1165,10 @@ const MembersDirectory = () => {
                     <img 
                       src={selectedMember.photoURL} 
                       alt={`${selectedMember.name}'s profile`}
-                      className="w-20 h-20 rounded-full object-cover ring-4 ring-blue-400/50"
+                      className="w-20 h-20 rounded-full object-cover ring-4 ring-green-400/50"
                     />
                   ) : (
-                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-orange-500 flex items-center justify-center ring-4 ring-blue-400/50">
+                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-orange-500 flex items-center justify-center ring-4 ring-green-400/50">
                       <span className="text-2xl text-black font-bold">
                         {selectedMember.name?.charAt(0)?.toUpperCase() || '?'}
                       </span>
@@ -1219,7 +1220,7 @@ const MembersDirectory = () => {
                 
                 {/* Quick Stats */}
                 <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                  <h3 className="text-blue-400 font-semibold mb-4 text-lg">
+                  <h3 className="text-green-400 font-semibold mb-4 text-lg">
                     {selectedMember.hasAchievements ? 'Achievement Overview' : 'Member Overview'}
                   </h3>
                   <div className="space-y-3">
@@ -1229,18 +1230,18 @@ const MembersDirectory = () => {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-300">Certificates</span>
-                      <span className="text-blue-400 font-bold">{selectedMember.certificates}</span>
+                      <span className="text-green-400 font-bold">{selectedMember.certificates}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-300">Total Projects</span>
-                      <span className="text-blue-400 font-bold">{selectedMember.totalProjects}</span>
+                      <span className="text-green-400 font-bold">{selectedMember.totalProjects}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Skills */}
                 <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                  <h3 className="text-blue-400 font-semibold mb-4 text-lg">Skills & Expertise</h3>
+                  <h3 className="text-green-400 font-semibold mb-4 text-lg">Skills & Expertise</h3>
                   {selectedMember.skills.length > 0 ? (
                     <div className="flex flex-wrap gap-2">
                       {selectedMember.skills.map((skill, idx) => (
@@ -1257,7 +1258,7 @@ const MembersDirectory = () => {
                 {/* Badge Categories - Only show if user has badges */}
                 {selectedMember.badges > 0 && (
                   <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                    <h3 className="text-blue-400 font-semibold mb-4 text-lg">Badge Distribution</h3>
+                    <h3 className="text-green-400 font-semibold mb-4 text-lg">Badge Distribution</h3>
                     <div className="space-y-3">
                       {Object.entries(selectedMember.badgesByCategory).map(([category, count]) => {
                         const categoryInfo = badgeCategories[category];
@@ -1283,7 +1284,7 @@ const MembersDirectory = () => {
                 {/* Recent Badges - Only show if user has badges */}
                 {selectedMember.detailedBadges && selectedMember.detailedBadges.length > 0 && (
                   <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                    <h3 className="text-blue-400 font-semibold mb-4 text-lg">Recent Achievements</h3>
+                    <h3 className="text-green-400 font-semibold mb-4 text-lg">Recent Achievements</h3>
                     <div className="space-y-3">
                       {selectedMember.detailedBadges.slice(0, 5).map((badge) => {
                         const categoryInfo = badgeCategories[badge.badgeCategory] || badgeCategories['development'];
@@ -1313,7 +1314,7 @@ const MembersDirectory = () => {
 
                 {/* Project History - Show for all users */}
                 <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                  <h3 className="text-blue-400 font-semibold mb-4 text-lg">
+                  <h3 className="text-green-400 font-semibold mb-4 text-lg">
                     {selectedMember.projectHistory && selectedMember.projectHistory.length > 0 
                       ? 'Project Experience' 
                       : 'Project Participation'
@@ -1342,7 +1343,7 @@ const MembersDirectory = () => {
                           <div className={`px-2 py-1 rounded text-xs ${
                             project.status === 'completed' || project.projectStatus === 'completed' 
                               ? 'bg-green-500/20 text-green-400' 
-                              : 'bg-blue-500/20 text-blue-400'
+                              : 'bg-green-500/20 text-green-400'
                           }`}>
                             {project.status === 'completed' || project.projectStatus === 'completed' ? 'Completed' : 'In Progress'}
                           </div>
@@ -1358,8 +1359,8 @@ const MembersDirectory = () => {
                 </div>
 
                 {/* Contact Section */}
-                <div className="bg-gradient-to-r from-blue-500/10 to-orange-500/10 rounded-xl p-6 border border-blue-500/20">
-                  <h3 className="text-blue-400 font-semibold mb-4 text-lg">Connect with Member</h3>
+                <div className="bg-gradient-to-r from-green-500/10 to-orange-500/10 rounded-xl p-6 border border-green-500/20">
+                  <h3 className="text-green-400 font-semibold mb-4 text-lg">Connect with Member</h3>
                   <div className="mb-4">
                     <p className="text-gray-300 mb-4">
                       Interested in working with {selectedMember.name}? Connect or copy their email to reach out:
@@ -1367,7 +1368,7 @@ const MembersDirectory = () => {
                     <div className="bg-black/20 rounded-lg p-4 border border-white/10">
                       <div className="text-center">
                         <div className="text-gray-400 text-sm mb-2">Email contact available</div>
-                        <div className="text-blue-400 font-semibold">Ready to connect!</div>
+                        <div className="text-green-400 font-semibold">Ready to connect!</div>
                       </div>
                     </div>
                   </div>
@@ -1466,12 +1467,12 @@ const MembersDirectory = () => {
         }
         
         ::-webkit-scrollbar-thumb {
-          background: rgba(59, 130, 246, 0.5);
+          background: rgba(34, 197, 94, 0.5);
           border-radius: 4px;
         }
         
         ::-webkit-scrollbar-thumb:hover {
-          background: rgba(59, 130, 246, 0.7);
+          background: rgba(34, 197, 94, 0.7);
         }
 
         select option {

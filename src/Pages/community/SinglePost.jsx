@@ -617,7 +617,7 @@ const SinglePost = () => {
   // Loading State
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen overflow-x-hidden bg-gray-50">
         <Navbar />
         <div className="container mx-auto px-3 xs:px-4 sm:px-6 py-6 xs:py-8 max-w-4xl">
           <div className="bg-white rounded-lg xs:rounded-xl sm:rounded-2xl shadow-sm p-4 xs:p-5 sm:p-6 md:p-8">

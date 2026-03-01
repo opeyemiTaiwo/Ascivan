@@ -115,7 +115,7 @@ const TestDailyDigest = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
           <h1 className="text-3xl font-bold text-white mb-8 text-center">
@@ -151,7 +151,7 @@ const TestDailyDigest = () => {
               <button 
                 onClick={testDebugMode}
                 disabled={loading}
-                className="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg transition-colors disabled:opacity-50"
+                className="bg-green-600 hover:bg-green-700 text-white p-3 rounded-lg transition-colors disabled:opacity-50"
               >
                 🐛 Test Debug Mode
               </button>
@@ -165,7 +165,7 @@ const TestDailyDigest = () => {
               <button 
                 onClick={testWithApiKey}
                 disabled={loading}
-                className="bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-lg transition-colors disabled:opacity-50"
+                className="bg-green-600 hover:bg-green-700 text-white p-3 rounded-lg transition-colors disabled:opacity-50"
               >
                 🔑 Test With API Key
               </button>

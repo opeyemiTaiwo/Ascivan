@@ -439,7 +439,7 @@ const SubmitPost = () => {
   // Loading state
   if (!currentUser) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+      <div className="min-h-screen overflow-x-hidden bg-black text-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-orange-400 mx-auto mb-4"></div>
           <p className="text-gray-400 text-sm sm:text-base">Loading...</p>
@@ -456,7 +456,7 @@ const SubmitPost = () => {
           <div className="flex items-center justify-between h-14 sm:h-16">
             <Link to="/community" className="flex items-center space-x-2 sm:space-x-3 group">
               <img 
-                src="/Images/loomiq-logo.svg" 
+                src="/Images/512X512.png" 
                 alt="Loomiq" 
                 className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg group-hover:scale-110 transition-transform duration-300"
               />

@@ -54,7 +54,6 @@ import {
   FollowSuggestionsSidebar,
   CompanyInfoSidebar 
 } from '../../components/community/Sidebars';
-import { throttle } from '../../utils/throttle';
 
 const CommunityPosts = () => {
   const { currentUser } = useAuth();
@@ -62,7 +61,6 @@ const CommunityPosts = () => {
   
   // UI State
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [expandedPosts, setExpandedPosts] = useState(new Set());
   
   // Posts State
@@ -113,14 +111,6 @@ const CommunityPosts = () => {
   const POSTS_PER_PAGE = 10;
 
   // Mouse tracking
-  useEffect(() => {
-    const handleMouseMove = throttle((e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    }, 50);
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
   // Close dropdown menus
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -1051,13 +1041,7 @@ const CommunityPosts = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen overflow-x-hidden bg-gradient-to-br from-gray-900 via-black to-gray-900 pt-16 xs:pt-18 sm:pt-20">
-        <div 
-          className="fixed inset-0 opacity-30 pointer-events-none"
-          style={{
-            background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(34, 197, 94, 0.15), transparent 50%)`
-          }}
-        />
+      <div className="min-h-screen overflow-x-hidden pt-16 xs:pt-18 sm:pt-20" style={{ backgroundColor: '#000' }}>
 
         <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 py-4 xs:py-6 sm:py-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6">

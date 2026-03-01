@@ -4,25 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getAuthErrorMessage, isSafariMobileDevice, isAndroidMobileDevice, hasPotentialStorageIssues } from '../../firebase/config';
 import Navbar from '../../components/Navbar';
-import { throttle } from '../../utils/throttle';
 
 const Login = () => {
   const { currentUser, signInWithGoogle } = useAuth();
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [authMethod, setAuthMethod] = useState('');
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const navigate = useNavigate();
-
-  // Mouse tracking for animated background
-  useEffect(() => {
-    const handleMouseMove = throttle((e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    }, 50);
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
 
   // Check if user is on mobile browser with potential storage issues
   const isSafariMobile = isSafariMobileDevice();
@@ -98,14 +86,6 @@ const Login = () => {
       className="min-h-screen overflow-x-hidden flex flex-col relative"
       style={{}}
     >
-      {/* Animated background overlay */}
-      <div 
-        className="fixed inset-0 opacity-30 pointer-events-none"
-        style={{
-          background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(34, 197, 94, 0.1), transparent 40%)`
-        }}
-      />
-      
       {/* Global Navbar */}
       <Navbar />
 

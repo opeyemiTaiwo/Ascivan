@@ -4,29 +4,17 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../../components/Navbar';
-import { throttle } from '../../utils/throttle';
 
 const Logout = () => {
   const { currentUser, logout } = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
   const [error, setError] = useState('');
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [countdown, setCountdown] = useState(3);
   const navigate = useNavigate();
 
   // External home URL
   const externalHomeUrl = '/';
-
-  // Mouse tracking for animated background
-  useEffect(() => {
-    const handleMouseMove = throttle((e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    }, 50);
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
 
   // Countdown timer effect
   useEffect(() => {
@@ -77,14 +65,6 @@ const Logout = () => {
       className="min-h-screen overflow-hidden flex flex-col relative"
       style={{}}
     >
-      {/* Animated background overlay */}
-      <div 
-        className="fixed inset-0 opacity-30 pointer-events-none"
-        style={{
-          background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(34, 197, 94, 0.1), transparent 40%)`
-        }}
-      />
-
       {/* Global Navigation */}
       <Navbar />
       

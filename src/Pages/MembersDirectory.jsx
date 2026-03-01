@@ -11,12 +11,10 @@ import {
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
 import FollowButton from '../components/community/FollowButton';
-import { throttle } from '../utils/throttle';
 
 const MembersDirectory = () => {
   const { currentUser, loading: authLoading } = useAuth();
   const navigate = useNavigate();
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   
   const [members, setMembers] = useState([]);
   const [filteredMembers, setFilteredMembers] = useState([]);
@@ -40,14 +38,6 @@ const MembersDirectory = () => {
       });
     }
   }, [currentUser, authLoading, navigate]);
-
-  useEffect(() => {
-    const handleMouseMove = throttle((e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    }, 50);
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
 
   const handleCountUpdate = (countData) => {
     if (countData.targetUserId) {
@@ -209,10 +199,6 @@ const MembersDirectory = () => {
   if (authLoading || (currentUser && loading)) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#000000' }}>
-        <div 
-          className="fixed inset-0 opacity-30 pointer-events-none"
-          style={{ background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(34, 197, 94, 0.1), transparent 40%)` }}
-        />
         <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-2xl p-5 sm:p-8 border border-white/20 text-center">
           <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-green-500 mx-auto mb-4"></div>
           <p className="text-white text-lg">
@@ -227,10 +213,6 @@ const MembersDirectory = () => {
 
   return (
     <div className="min-h-screen overflow-x-hidden flex flex-col relative" style={{ backgroundColor: '#000000' }}>
-      <div 
-        className="fixed inset-0 opacity-30 pointer-events-none"
-        style={{ background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(34, 197, 94, 0.1), transparent 40%)` }}
-      />
 
       <Navbar />
 

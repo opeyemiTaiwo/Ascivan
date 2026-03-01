@@ -5,12 +5,10 @@ import { useAuth } from '../../context/AuthContext';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import Navbar from '../../components/Navbar';
-import { throttle } from '../../utils/throttle';
 
 const SubmitApplication = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   
   // Form state
   const [formData, setFormData] = useState({
@@ -33,15 +31,6 @@ const SubmitApplication = () => {
       navigate('/login');
     }
   }, [currentUser, navigate]);
-
-  useEffect(() => {
-    const handleMouseMove = throttle((e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    }, 50);
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -111,14 +100,6 @@ const SubmitApplication = () => {
       className="min-h-screen overflow-hidden flex flex-col relative"
       style={{}}
     >
-      {/* Animated background overlay */}
-      <div 
-        className="fixed inset-0 opacity-30 pointer-events-none"
-        style={{
-          background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(34,197,94,0.12), transparent 40%)`
-        }}
-      />
-      
       {/* Global Navigation */}
       <Navbar />
       

@@ -12,7 +12,6 @@ import {
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
 import MembersDirectory from '../Pages/MembersDirectory';
-import { throttle } from '../utils/throttle';
 
 const DirectoryAccessControl = () => {
   const { currentUser } = useAuth();
@@ -20,15 +19,6 @@ const DirectoryAccessControl = () => {
   const [userAccess, setUserAccess] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMouseMove = throttle((e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    }, 50);
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
 
   // Check user access permissions
   useEffect(() => {
@@ -178,12 +168,6 @@ const DirectoryAccessControl = () => {
         className="min-h-screen flex items-center justify-center p-4"
         style={{}}
       >
-        <div 
-          className="fixed inset-0 opacity-30 pointer-events-none"
-          style={{
-            background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(76, 175, 80, 0.1), transparent 40%)`
-          }}
-        />
         <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20 text-center max-w-sm w-full">
           <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-lime-400 mx-auto mb-3 sm:mb-4"></div>
           <p className="text-white text-base sm:text-lg">Checking access permissions...</p>
@@ -203,13 +187,6 @@ const DirectoryAccessControl = () => {
       className="min-h-screen overflow-hidden flex flex-col relative"
       style={{}}
     >
-      {/* Animated background overlay */}
-      <div 
-        className="fixed inset-0 opacity-30 pointer-events-none"
-        style={{
-          background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(76, 175, 80, 0.1), transparent 40%)`
-        }}
-      />
 
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50" 

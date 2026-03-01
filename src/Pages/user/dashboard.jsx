@@ -10,7 +10,6 @@ import { db } from '../../firebase/config';
 import { GoogleAuthProvider, reauthenticateWithPopup } from 'firebase/auth';
 import { deleteUserAccount } from '../../utils/deleteUserContent';
 import { toast } from 'react-toastify';
-import { showSuccessMessage, showWarningMessage } from '../../utils/errorHandler';
 
 import PWADebugger from '../../components/PWADebugger';
 
@@ -301,7 +300,7 @@ const DeleteAccountModal = ({ isOpen, onClose, currentUser, onDeleted }) => {
 const UserDashboard = ({ currentUser, onNavigate }) => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('achievements');
+  const [activeSection, setActiveSection] = useState('community');
   
   const { isInstallable, isInstalled, installing, installApp } = usePWA();
   const [showPWADebug, setShowPWADebug] = useState(process.env.NODE_ENV === 'development');
@@ -314,8 +313,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
     email: '',
     photoURL: null
   });
-  const [recentBadges, setRecentBadges] = useState([]);
-  const [recentCertificates, setRecentCertificates] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // ─── PROFILE EDITING STATE ───
@@ -336,7 +333,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
     };
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [showPWADebug]);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -380,15 +377,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
     { id: 'banking', label: 'Finance' },
     { id: 'profile', label: 'Profile' },
   ], []);
-
-  const badgeCategories = useMemo(() => ({
-    'mentorship': { name: 'TechMO', color: 'text-yellow-400' },
-    'quality-assurance': { name: 'TechQA', color: 'text-green-400' },
-    'development': { name: 'TechDev', color: 'text-green-400' },
-    'leadership': { name: 'TechLeads', color: 'text-orange-400' },
-    'design': { name: 'TechArchs', color: 'text-orange-400' },
-    'security': { name: 'TechGuard', color: 'text-red-400' }
-  }), []);
 
   // ─── DASHBOARD CARDS ───
   const dashboardCards = useMemo(() => ({
@@ -835,7 +823,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center px-3 xs:px-4">
+        <div className="min-h-screen flex items-center justify-center px-3 xs:px-4" style={{ backgroundColor: '#000' }}>
           <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-2xl xs:rounded-3xl p-5 xs:p-6 sm:p-8 border border-white/20 shadow-2xl max-w-md w-full">
             <div className="animate-spin rounded-full h-10 w-10 xs:h-12 xs:w-12 border-b-2 border-orange-400 mx-auto mb-4"></div>
             <p className="text-white text-center font-medium text-sm xs:text-base" 
@@ -853,7 +841,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex">
+      <div className="min-h-screen flex" style={{ backgroundColor: '#000' }}>
 
         {/* Sidebar */}
         <div 
@@ -979,21 +967,21 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         {/* Main Content */}
         <div className="flex-1 lg:ml-0 min-w-0">
           <header 
-            className="h-14 xs:h-16 sm:h-18 flex items-center justify-between px-3 xs:px-4 sm:px-6 relative z-10 shadow-md"
-            style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 50%, rgba(250,250,250,0.98) 100%)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(229, 231, 235, 0.8)'}}
+            className="h-14 xs:h-16 sm:h-18 flex items-center justify-between px-3 xs:px-4 sm:px-6 relative z-10 border-b border-white/10"
+            style={{ backgroundColor: '#000' }}
           >
             <div className="flex items-center min-w-0 gap-2 xs:gap-3 sm:gap-4">
               <button
                 id="menu-button"
                 onClick={() => setSidebarOpen(true)}
-                className="lg:hidden p-2 rounded-md text-gray-600 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 transition-colors"
+                className="lg:hidden p-2 rounded-md text-gray-300 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-white/10 active:bg-white/20 transition-colors"
                 aria-label="Open sidebar menu"
               >
                 <svg className="w-5 h-5 xs:w-6 xs:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
-              <h1 className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl font-black text-gray-800 capitalize truncate" 
+              <h1 className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl font-black text-white capitalize truncate" 
                   style={{fontFamily: '"Inter", sans-serif'}}>
                 {activeSection.replace('-', ' ')}
               </h1>

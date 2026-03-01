@@ -16,12 +16,10 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
-import { throttle } from '../utils/throttle';
 
 const MyJobPosts = () => {
   const navigate = useNavigate();
   const { currentUser, loading: authLoading } = useAuth();
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [myPosts, setMyPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -43,14 +41,6 @@ const MyJobPosts = () => {
       });
     }
   }, [currentUser, authLoading, navigate]);
-
-  useEffect(() => {
-    const handleMouseMove = throttle((e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    }, 50);
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
 
   useEffect(() => {
     if (!currentUser) return;
@@ -201,12 +191,6 @@ const MyJobPosts = () => {
         className="min-h-screen overflow-x-hidden flex flex-col relative"
         style={{ backgroundColor: '#000000' }}
       >
-        <div 
-          className="fixed inset-0 opacity-30 pointer-events-none"
-          style={{
-            background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(34, 197, 94, 0.1), transparent 40%)`
-          }}
-        />
     
         <main className="flex-grow pt-16 xs:pt-18 sm:pt-20">
           <div className="container mx-auto px-3 xs:px-4 sm:px-6 py-6 xs:py-8 sm:py-12 max-w-7xl">

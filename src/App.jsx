@@ -1,4 +1,4 @@
-// src/App.jsx 
+// src/App.jsx - FULLY RESPONSIVE WITH UNIVERSAL NAVBAR
 
 import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
@@ -28,6 +28,10 @@ import PostHousing from './Pages/PostHousing';
 import Finance from './Pages/Finance';
 import PostFinance from './Pages/PostFinance';
 import Onboarding from './Pages/Onboarding';
+import About from './Pages/About';
+import Support from './Pages/Support';
+import TermsOfService from './Pages/TermsOfService';
+import PrivacyPolicy from './Pages/PrivacyPolicy';
 import DigitalSolutionsHome from './Pages/digital/DigitalSolutionsHome';
 import DigitalTermsOfService from './Pages/digital/DigitalTermsOfService';
 import DigitalPrivacyPolicy from './Pages/digital/DigitalPrivacyPolicy';
@@ -124,6 +128,12 @@ function App() {
                 <Route path="/solutions/privacy" element={<DigitalPrivacyPolicy />} />
                 <Route path="/digital-solutions" element={<DigitalSolutionsHome />} />
                 <Route path="/services" element={<DigitalSolutionsHome />} />
+
+                {/* About, Support, Terms, Privacy */}
+                <Route path="/about" element={<About />} />
+                <Route path="/support" element={<Support />} />
+                <Route path="/terms" element={<TermsOfService />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
 
                 {/* Jobs */}
                 <Route path="/jobs" element={<BasicProtectedRoute><Jobs /></BasicProtectedRoute>} />

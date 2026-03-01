@@ -6,13 +6,7 @@ import Navbar from '../components/Navbar';
 import { 
   collection, 
   query, 
-  where, 
-  onSnapshot, 
-  orderBy,
-  limit,
   getDocs,
-  doc,
-  getDoc
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
@@ -24,33 +18,20 @@ const MembersDirectory = () => {
   const navigate = useNavigate();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   
-  // State for members and filtering
   const [members, setMembers] = useState([]);
   const [filteredMembers, setFilteredMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedMember, setSelectedMember] = useState(null);
   const [showMemberModal, setShowMemberModal] = useState(false);
   
-  // Filter states
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedBadgeCategory, setSelectedBadgeCategory] = useState('all');
-  const [selectedSkill, setSelectedSkill] = useState('');
-  const [minProjects, setMinProjects] = useState(0);
-  const [minBadges, setMinBadges] = useState(0);
   const [sortBy, setSortBy] = useState('recent');
-  const [showOnlyBadgedUsers, setShowOnlyBadgedUsers] = useState(false);
   
-  // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 9;
 
-  // Mobile menu state
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // Follow state for tracking follower/following counts
   const [userCounts, setUserCounts] = useState({});
 
-  // Authentication Check - Redirect if not logged in
   useEffect(() => {
     if (!authLoading && !currentUser) {
       navigate('/login', { 
@@ -60,138 +41,6 @@ const MembersDirectory = () => {
     }
   }, [currentUser, authLoading, navigate]);
 
-  // Anti-scraping and security measures
-  useEffect(() => {
-    // Show warning for restricted actions
-    const showSecurityWarning = () => {
-      toast.error('Access to this feature is restricted for data protection');
-    };
-
-    // Disable right-click context menu
-    const handleContextMenu = (e) => {
-      e.preventDefault();
-      showSecurityWarning();
-      return false;
-    };
-
-    // Disable key combinations for developer tools and page saving
-    const handleKeyDown = (e) => {
-      // Disable F12 (Developer Tools)
-      if (e.keyCode === 123) {
-        e.preventDefault();
-        showSecurityWarning();
-        return false;
-      }
-      
-      // Disable Ctrl+Shift+I (Developer Tools)
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
-        e.preventDefault();
-        showSecurityWarning();
-        return false;
-      }
-      
-      // Disable Ctrl+Shift+J (Console)
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
-        e.preventDefault();
-        showSecurityWarning();
-        return false;
-      }
-      
-      // Disable Ctrl+U (View Source)
-      if (e.ctrlKey && e.keyCode === 85) {
-        e.preventDefault();
-        showSecurityWarning();
-        return false;
-      }
-      
-      // Disable Ctrl+S (Save Page)
-      if (e.ctrlKey && e.keyCode === 83) {
-        e.preventDefault();
-        showSecurityWarning();
-        return false;
-      }
-      
-      // Disable Ctrl+A (Select All)
-      if (e.ctrlKey && e.keyCode === 65) {
-        e.preventDefault();
-        return false;
-      }
-      
-      // Disable Ctrl+P (Print)
-      if (e.ctrlKey && e.keyCode === 80) {
-        e.preventDefault();
-        showSecurityWarning();
-        return false;
-      }
-      
-      // Disable Ctrl+Shift+C (Element Inspector)
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
-        e.preventDefault();
-        showSecurityWarning();
-        return false;
-      }
-    };
-
-    // Disable text selection
-    const handleSelectStart = (e) => {
-      e.preventDefault();
-      return false;
-    };
-
-    // Disable drag and drop
-    const handleDragStart = (e) => {
-      e.preventDefault();
-      return false;
-    };
-
-    // Detect DevTools
-    const detectDevTools = () => {
-      const threshold = 160;
-      if (window.outerHeight - window.innerHeight > threshold || 
-          window.outerWidth - window.innerWidth > threshold) {
-        showSecurityWarning();
-        // Optionally redirect or take other security measures
-        console.clear();
-      }
-    };
-
-    // Add event listeners
-    document.addEventListener('contextmenu', handleContextMenu);
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('selectstart', handleSelectStart);
-    document.addEventListener('dragstart', handleDragStart);
-    
-    // Check for DevTools periodically
-    const devToolsInterval = setInterval(detectDevTools, 500);
-
-    // Clear console periodically
-    const clearConsole = () => {
-      if (typeof console.clear === 'function') {
-        console.clear();
-      }
-    };
-    
-    const consoleInterval = setInterval(clearConsole, 3000);
-
-    // Disable certain browser features
-    window.addEventListener('beforeunload', (e) => {
-      // Clear any sensitive data from memory
-      setMembers([]);
-      setFilteredMembers([]);
-      setSelectedMember(null);
-    });
-
-    // Cleanup
-    return () => {
-      document.removeEventListener('contextmenu', handleContextMenu);
-      document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('selectstart', handleSelectStart);
-      document.removeEventListener('dragstart', handleDragStart);
-      clearInterval(consoleInterval);
-      clearInterval(devToolsInterval);
-    };
-  }, []);
-
   useEffect(() => {
     const handleMouseMove = throttle((e) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
@@ -200,51 +49,6 @@ const MembersDirectory = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Badge categories with enhanced info for filtering
-  const badgeCategories = {
-    'mentorship': { 
-      name: 'TechMO', 
-      color: 'text-yellow-400', 
-      bgColor: 'from-yellow-500/20 to-yellow-600/20',
-      skills: ['Mentorship', 'Leadership', 'Technical Coaching', 'Team Development']
-    },
-    'quality-assurance': { 
-      name: 'TechQA', 
-      color: 'text-green-400', 
-      bgColor: 'from-green-500/20 to-green-600/20',
-      skills: ['Quality Assurance', 'Testing', 'Bug Detection', 'Test Automation']
-    },
-    'development': { 
-      name: 'TechDev', 
-      color: 'text-green-400', 
-      bgColor: 'from-green-500/20 to-green-600/20',
-      skills: ['Programming', 'Software Development', 'Code Review', 'Debugging']
-    },
-    'leadership': { 
-      name: 'TechLeads', 
-      color: 'text-orange-400', 
-      bgColor: 'from-orange-500/20 to-orange-600/20',
-      skills: ['Project Management', 'Leadership', 'Strategic Planning', 'Team Coordination']
-    },
-    'design': { 
-      name: 'TechArchs', 
-      color: 'text-orange-400', 
-      bgColor: 'from-orange-500/20 to-orange-600/20',
-      skills: ['No-Code Development', 'UI/UX Design', 'Visual Design', 'Platform Architecture']
-    },
-    'security': { 
-      name: 'TechGuard', 
-      color: 'text-red-400', 
-      bgColor: 'from-red-500/20 to-red-600/20',
-      skills: ['Cybersecurity', 'Network Security', 'Cloud Administration', 'DevOps']
-    }
-  };
-
-  // Get all unique skills from badge categories
-  const allSkills = Object.values(badgeCategories).flatMap(cat => cat.skills);
-  const uniqueSkills = [...new Set(allSkills)].sort();
-
-  // Handle follow count updates
   const handleCountUpdate = (countData) => {
     if (countData.targetUserId) {
       setUserCounts(prev => ({
@@ -254,263 +58,72 @@ const MembersDirectory = () => {
     }
   };
 
-  // Fetch ALL users from Firestore, then enhance with badge data
+  // Fetch all users
   useEffect(() => {
-    if (authLoading || !currentUser) {
-      return;
-    }
+    if (authLoading || !currentUser) return;
 
     const fetchMembers = async () => {
       try {
         setLoading(true);
         
-        console.log('Fetching all users from database...');
-        
-        // Get ALL users first
         const usersQuery = query(collection(db, 'users'));
         const usersSnapshot = await getDocs(usersQuery);
-        
-        console.log(`Found ${usersSnapshot.size} total users in database`);
 
         if (usersSnapshot.size === 0) {
-          console.warn('No users found in users collection');
           setMembers([]);
           setFilteredMembers([]);
           setLoading(false);
           return;
         }
 
-        // Get all badges data for efficient lookup
-        const badgesQuery = query(collection(db, 'member_badges'));
-        const badgesSnapshot = await getDocs(badgesQuery);
-        
-        const badgesByMember = {};
-        badgesSnapshot.docs.forEach(doc => {
+        const membersData = usersSnapshot.docs.map((userDoc) => {
           try {
-            const badge = { id: doc.id, ...doc.data() };
-            const email = badge.memberEmail;
+            const userData = userDoc.data();
+            const email = userData.email;
             
-            if (email) {
-              if (!badgesByMember[email]) {
-                badgesByMember[email] = [];
-              }
-              badgesByMember[email].push({
-                ...badge,
-                awardedAt: badge.awardedAt && typeof badge.awardedAt.toDate === 'function' 
-                  ? badge.awardedAt.toDate() 
-                  : badge.awardedAt instanceof Date 
-                  ? badge.awardedAt 
-                  : new Date()
-              });
-            }
-          } catch (badgeError) {
-            console.warn('Error processing badge:', doc.id, badgeError);
+            if (!email || !email.includes('@')) return null;
+
+            return {
+              uid: userDoc.id,
+              email,
+              name: userData.displayName || email.split('@')[0],
+              displayName: userData.displayName || email.split('@')[0],
+              firstName: userData.firstName || '',
+              lastName: userData.lastName || '',
+              photoURL: userData.photoURL || null,
+              initials: userData.initials || '',
+              university: userData.university || '',
+              major: userData.major || '',
+              city: userData.city || '',
+              state: userData.state || '',
+              visaStatus: userData.visaStatus || '',
+              joinedDate: userData.createdAt && typeof userData.createdAt.toDate === 'function' 
+                ? userData.createdAt.toDate() 
+                : userData.createdAt instanceof Date 
+                ? userData.createdAt 
+                : null,
+              lastLogin: userData.lastLogin && typeof userData.lastLogin.toDate === 'function'
+                ? userData.lastLogin.toDate()
+                : userData.lastLogin instanceof Date
+                ? userData.lastLogin
+                : null,
+              lastActive: (userData.lastLogin && typeof userData.lastLogin.toDate === 'function')
+                ? userData.lastLogin.toDate().getTime()
+                : (userData.createdAt && typeof userData.createdAt.toDate === 'function')
+                ? userData.createdAt.toDate().getTime()
+                : Date.now() - (365 * 24 * 60 * 60 * 1000),
+              isActive: userData.lastLogin && typeof userData.lastLogin.toDate === 'function'
+                ? userData.lastLogin.toDate().getTime() > (Date.now() - (90 * 24 * 60 * 60 * 1000))
+                : false,
+            };
+          } catch (e) {
+            console.error(`Error processing member ${userDoc.id}:`, e);
+            return null;
           }
-        });
+        }).filter(m => m && m.email);
 
-        console.log(`Found badges for ${Object.keys(badgesByMember).length} members`);
-
-        // Process all users and enhance with badge/project data
-        const membersData = await Promise.all(
-          usersSnapshot.docs.map(async (userDoc) => {
-            try {
-              const userData = userDoc.data();
-              const email = userData.email;
-              
-              // Skip users without email
-              if (!email || !email.includes('@')) {
-                return null;
-              }
-
-              // Basic member info from users collection
-              let memberInfo = {
-                uid: userDoc.id,
-                email,
-                name: userData.displayName || email.split('@')[0],
-                displayName: userData.displayName || email.split('@')[0],
-                firstName: userData.firstName || '',
-                lastName: userData.lastName || '',
-                photoURL: userData.photoURL || null,
-                initials: userData.initials || '',
-                joinedDate: userData.createdAt && typeof userData.createdAt.toDate === 'function' 
-                  ? userData.createdAt.toDate() 
-                  : userData.createdAt instanceof Date 
-                  ? userData.createdAt 
-                  : null,
-                lastLogin: userData.lastLogin && typeof userData.lastLogin.toDate === 'function'
-                  ? userData.lastLogin.toDate()
-                  : userData.lastLogin instanceof Date
-                  ? userData.lastLogin
-                  : null,
-                emailPreferences: userData.emailPreferences || {}
-              };
-
-              // Get project memberships for this member
-              const allMembershipsQuery = query(
-                collection(db, 'group_members'),
-                where('userEmail', '==', email)
-              );
-              const allMembershipsSnapshot = await getDocs(allMembershipsQuery);
-              
-              const projectHistory = [];
-              for (const membershipDoc of allMembershipsSnapshot.docs) {
-                const membershipData = membershipDoc.data();
-                
-                try {
-                  // Get project details
-                  const groupDoc = await getDoc(doc(db, 'groups', membershipData.groupId));
-                  if (groupDoc.exists()) {
-                    const groupData = groupDoc.data();
-                    projectHistory.push({
-                      id: membershipDoc.id,
-                      ...membershipData,
-                      projectTitle: groupData.projectTitle || 'Untitled Project',
-                      projectDescription: groupData.description || '',
-                      projectStatus: groupData.status || 'active',
-                      joinedAt: membershipData.joinedAt && typeof membershipData.joinedAt.toDate === 'function' 
-                        ? membershipData.joinedAt.toDate() 
-                        : membershipData.joinedAt instanceof Date 
-                        ? membershipData.joinedAt 
-                        : new Date()
-                    });
-                  } else {
-                    projectHistory.push({
-                      id: membershipDoc.id,
-                      ...membershipData,
-                      projectTitle: 'Project',
-                      projectDescription: '',
-                      projectStatus: 'unknown',
-                      joinedAt: membershipData.joinedAt && typeof membershipData.joinedAt.toDate === 'function' 
-                        ? membershipData.joinedAt.toDate() 
-                        : membershipData.joinedAt instanceof Date 
-                        ? membershipData.joinedAt 
-                        : new Date()
-                    });
-                  }
-                } catch (projectError) {
-                  console.error(`Error fetching project ${membershipData.groupId}:`, projectError);
-                }
-              }
-
-              // Get certificates for this member
-              const certificatesQuery = query(
-                collection(db, 'certificates'),
-                where('recipientEmail', '==', email)
-              );
-              const certificatesSnapshot = await getDocs(certificatesQuery);
-              const certificates = certificatesSnapshot.docs.length;
-
-              // Process badges for this member
-              const badges = badgesByMember[email] || [];
-              const badgesByCategory = badges.reduce((acc, badge) => {
-                const category = badge.badgeCategory || 'other';
-                acc[category] = (acc[category] || 0) + 1;
-                return acc;
-              }, {});
-
-              // Calculate statistics
-              const completedProjects = projectHistory.filter(p => 
-                p.status === 'completed' || p.projectStatus === 'completed'
-              ).length;
-              
-              const adminProjects = projectHistory.filter(p => p.role === 'admin').length;
-              
-              // Calculate member score based on achievements
-              const memberScore = Math.min(100, 
-                (badges.length * 8) + 
-                (certificates * 12) + 
-                (completedProjects * 6) + 
-                (adminProjects * 15) +
-                (projectHistory.length * 2)
-              );
-
-              // Get skills from badge categories
-              const memberSkills = new Set();
-              badges.forEach(badge => {
-                const category = badgeCategories[badge.badgeCategory];
-                if (category) {
-                  category.skills.forEach(skill => memberSkills.add(skill));
-                }
-              });
-
-              // Add inferred skills for users without badges
-              if (memberSkills.size === 0) {
-                memberSkills.add('Software Development');
-                memberSkills.add('Problem Solving');
-              }
-
-              // Calculate last activity
-              const lastActive = Math.max(
-                memberInfo.lastLogin ? memberInfo.lastLogin.getTime() : 0,
-                badges.length > 0 ? Math.max(...badges.map(b => {
-                  if (b.awardedAt && typeof b.awardedAt.getTime === 'function') {
-                    return b.awardedAt.getTime();
-                  }
-                  return 0;
-                })) : 0,
-                projectHistory.length > 0 ? Math.max(...projectHistory.map(p => {
-                  if (p.joinedAt && typeof p.joinedAt.getTime === 'function') {
-                    return p.joinedAt.getTime();
-                  }
-                  return 0;
-                })) : 0,
-                memberInfo.joinedDate ? memberInfo.joinedDate.getTime() : Date.now() - (365 * 24 * 60 * 60 * 1000)
-              );
-
-              // Determine top badge category
-              const topBadgeCategory = Object.entries(badgesByCategory)
-                .sort((a, b) => b[1] - a[1])[0]?.[0] || null;
-
-              // User status categorization
-              const getUserStatus = () => {
-                if (badges.length >= 5) return 'veteran';
-                if (badges.length >= 1) return 'achiever';
-                if (projectHistory.length >= 1) return 'participant';
-                return 'newcomer';
-              };
-
-              const userStatus = getUserStatus();
-
-              return {
-                ...memberInfo,
-                badges: badges.length,
-                certificates,
-                totalProjects: projectHistory.length,
-                completedProjects,
-                adminProjects,
-                badgesByCategory,
-                memberScore,
-                skills: Array.from(memberSkills),
-                lastActive,
-                topBadgeCategory,
-                detailedBadges: badges.slice(0, 10),
-                projectHistory: projectHistory.slice(0, 10).map(p => ({
-                  ...p,
-                  joinedAt: p.joinedAt && typeof p.joinedAt.toLocaleDateString === 'function' 
-                    ? p.joinedAt 
-                    : new Date()
-                })),
-                userStatus,
-                isActive: lastActive > (Date.now() - (90 * 24 * 60 * 60 * 1000)),
-                hasAchievements: badges.length > 0 || certificates > 0 || completedProjects > 0
-              };
-            } catch (memberError) {
-              console.error(`Error processing member ${userDoc.id}:`, memberError);
-              return null;
-            }
-          })
-        );
-
-        // Filter out null results and users without valid emails
-        const validMembers = membersData.filter(member => member && member.email);
-        
-        console.log(`Successfully processed ${validMembers.length} members`);
-        console.log(`${validMembers.filter(m => m.badges > 0).length} members have badges`);
-        console.log(`${validMembers.filter(m => m.totalProjects > 0).length} members have project experience`);
-        console.log(`${validMembers.filter(m => m.userStatus === 'newcomer').length} newcomers`);
-        
-        setMembers(validMembers);
-        setFilteredMembers(validMembers);
+        setMembers(membersData);
+        setFilteredMembers(membersData);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching members:', error);
@@ -526,65 +139,22 @@ const MembersDirectory = () => {
   useEffect(() => {
     let filtered = [...members];
 
-    // Filter by badged users only
-    if (showOnlyBadgedUsers) {
-      filtered = filtered.filter(member => member.hasAchievements);
-    }
-
-    // Search filter (name, email, skills)
     if (searchQuery) {
-      const query = searchQuery.toLowerCase();
+      const q = searchQuery.toLowerCase();
       filtered = filtered.filter(member => 
-        member.name.toLowerCase().includes(query) ||
-        member.email.toLowerCase().includes(query) ||
-        member.skills.some(skill => skill.toLowerCase().includes(query))
+        member.name.toLowerCase().includes(q) ||
+        (member.university && member.university.toLowerCase().includes(q)) ||
+        (member.major && member.major.toLowerCase().includes(q)) ||
+        (member.city && member.city.toLowerCase().includes(q))
       );
     }
 
-    // Badge category filter
-    if (selectedBadgeCategory !== 'all') {
-      filtered = filtered.filter(member => 
-        member.badgesByCategory[selectedBadgeCategory] > 0
-      );
-    }
-
-    // Skill filter
-    if (selectedSkill) {
-      filtered = filtered.filter(member => 
-        member.skills.includes(selectedSkill)
-      );
-    }
-
-    // Minimum projects filter
-    if (minProjects > 0) {
-      filtered = filtered.filter(member => 
-        member.totalProjects >= minProjects
-      );
-    }
-
-    // Minimum badges filter
-    if (minBadges > 0) {
-      filtered = filtered.filter(member => 
-        member.badges >= minBadges
-      );
-    }
-
-    // Sort results
     switch (sortBy) {
-      case 'badges':
-        filtered.sort((a, b) => b.badges - a.badges);
-        break;
-      case 'projects':
-        filtered.sort((a, b) => b.totalProjects - a.totalProjects);
-        break;
       case 'recent':
         filtered.sort((a, b) => b.lastActive - a.lastActive);
         break;
       case 'name':
         filtered.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case 'score':
-        filtered.sort((a, b) => b.memberScore - a.memberScore);
         break;
       default:
         break;
@@ -592,20 +162,14 @@ const MembersDirectory = () => {
 
     setFilteredMembers(filtered);
     setCurrentPage(1);
-  }, [members, searchQuery, selectedBadgeCategory, selectedSkill, minProjects, minBadges, sortBy, showOnlyBadgedUsers]);
+  }, [members, searchQuery, sortBy]);
 
   const clearFilters = () => {
     setSearchQuery('');
-    setSelectedBadgeCategory('all');
-    setSelectedSkill('');
-    setMinProjects(0);
-    setMinBadges(0);
     setSortBy('recent');
-    setShowOnlyBadgedUsers(false);
     setCurrentPage(1);
   };
 
-  // Pagination calculations
   const totalPages = Math.ceil(filteredMembers.length / usersPerPage);
   const startIndex = (currentPage - 1) * usersPerPage;
   const endIndex = startIndex + usersPerPage;
@@ -613,20 +177,11 @@ const MembersDirectory = () => {
 
   const goToPage = (page) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 600, behavior: 'smooth' });
+    window.scrollTo({ top: 400, behavior: 'smooth' });
   };
 
-  const goToNextPage = () => {
-    if (currentPage < totalPages) {
-      goToPage(currentPage + 1);
-    }
-  };
-
-  const goToPrevPage = () => {
-    if (currentPage > 1) {
-      goToPage(currentPage - 1);
-    }
-  };
+  const goToNextPage = () => { if (currentPage < totalPages) goToPage(currentPage + 1); };
+  const goToPrevPage = () => { if (currentPage > 1) goToPage(currentPage - 1); };
 
   const openMemberModal = (member) => {
     setSelectedMember(member);
@@ -640,124 +195,45 @@ const MembersDirectory = () => {
 
   const copyEmail = async (email) => {
     try {
-      // Basic email obfuscation for security
-      const obfuscatedDisplay = email.split('@')[0] + '@...';
-      
-      // Additional security check
       if (!currentUser || !email.includes('@')) {
         toast.error('Access denied');
         return;
       }
-
       await navigator.clipboard.writeText(email);
-      toast.success(`Email copied: ${obfuscatedDisplay}`);
-      
-      // Log access for security purposes
-      console.log(`Email access: ${obfuscatedDisplay} at ${new Date().toISOString()}`);
+      toast.success('Email copied!');
     } catch (err) {
       toast.error('Failed to copy email');
-      console.error('Copy failed:', err);
     }
   };
 
-  // Get user status styling
-  const getUserStatusInfo = (userStatus) => {
-    const statusInfo = {
-      veteran: { 
-        label: 'Veteran', 
-        color: 'text-yellow-400', 
-        bg: 'bg-yellow-500/20', 
-        border: 'border-yellow-500/30',
-      },
-      achiever: { 
-        label: 'Achiever', 
-        color: 'text-green-400', 
-        bg: 'bg-green-500/20', 
-        border: 'border-green-500/30',
-      },
-      participant: { 
-        label: 'Participant', 
-        color: 'text-green-400', 
-        bg: 'bg-green-500/20', 
-        border: 'border-green-500/30',
-      },
-      newcomer: { 
-        label: 'Newcomer', 
-        color: 'text-gray-400', 
-        bg: 'bg-gray-500/20', 
-        border: 'border-gray-500/30',
-      }
-    };
-    return statusInfo[userStatus] || statusInfo.newcomer;
-  };
-
-  // Show loading screen while checking authentication or loading data
   if (authLoading || (currentUser && loading)) {
     return (
-      <div 
-        className="min-h-screen flex items-center justify-center"
-        style={{
-          backgroundColor: '#000000'
-        }}
-      >
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#000000' }}>
         <div 
           className="fixed inset-0 opacity-30 pointer-events-none"
-          style={{
-            background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(34, 197, 94, 0.1), transparent 40%)`
-          }}
+          style={{ background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(34, 197, 94, 0.1), transparent 40%)` }}
         />
         <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-2xl p-5 sm:p-8 border border-white/20 text-center">
           <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-green-500 mx-auto mb-4"></div>
           <p className="text-white text-lg">
             {authLoading ? 'Checking authentication...' : 'Loading member directory...'}
           </p>
-          {!authLoading && currentUser && (
-            <p className="text-gray-300 text-sm mt-2">
-              Welcome, {currentUser.displayName || currentUser.email}
-            </p>
-          )}
         </div>
       </div>
     );
   }
 
-  if (!currentUser) {
-    return null;
-  }
+  if (!currentUser) return null;
 
   return (
-    <div 
-      className="min-h-screen overflow-x-hidden flex flex-col relative select-none"
-      style={{
-        backgroundColor: '#000000',
-        userSelect: 'none',
-      }}
-      onDragStart={(e) => e.preventDefault()}
-      onSelectStart={(e) => e.preventDefault()}
-      onContextMenu={(e) => e.preventDefault()}
-    >
-      {/* Animated background overlay */}
+    <div className="min-h-screen overflow-x-hidden flex flex-col relative" style={{ backgroundColor: '#000000' }}>
       <div 
         className="fixed inset-0 opacity-30 pointer-events-none"
-        style={{
-          background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(34, 197, 94, 0.1), transparent 40%)`
-        }}
+        style={{ background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(34, 197, 94, 0.1), transparent 40%)` }}
       />
-      
-      {/* Security Notice */}
-      <div className="fixed top-0 left-0 right-0 bg-red-900/20 backdrop-blur-sm border-b border-red-500/20 z-40 py-1">
-        <div className="container mx-auto px-4 text-center">
-          <span className="text-red-300 text-xs">
-            This directory is protected against unauthorized data extraction • Right-click disabled
-          </span>
-        </div>
-      </div>
 
-      {/* Header */}
       <Navbar />
 
-     
-      {/* Main Content */}
       <main className="flex-grow pt-20 sm:pt-24 md:pt-28 pb-12 sm:pb-16">
         <div className="container mx-auto px-4 sm:px-6 py-8 max-w-7xl">
           
@@ -765,15 +241,12 @@ const MembersDirectory = () => {
           <section className="relative mb-16 pt-8 text-center">
             <div className="max-w-4xl mx-auto">
               
-              <div className="flex items-center justify-center gap-4 mb-8 animate-pulse">
+              <div className="flex items-center justify-center gap-4 mb-8">
                 <div className="h-4 w-4 bg-green-500 rounded-full animate-ping shadow-lg" 
                      style={{boxShadow: '0 0 20px rgba(76, 175, 80, 0.8)'}}></div>
                 <span className="text-green-400 uppercase tracking-widest text-lg font-black" 
-                      style={{
-                        textShadow: '0 0 20px rgba(76, 175, 80, 0.8), 2px 2px 4px rgba(0,0,0,0.9)',
-                        fontFamily: '"Inter", sans-serif'
-                      }}>
-                   Complete Member Directory
+                      style={{ textShadow: '0 0 20px rgba(76, 175, 80, 0.8), 2px 2px 4px rgba(0,0,0,0.9)' }}>
+                   Member Directory
                 </span>
                 <div className="h-4 w-4 bg-green-500 rounded-full animate-ping shadow-lg" 
                      style={{boxShadow: '0 0 20px rgba(76, 175, 80, 0.8)'}}></div>
@@ -781,35 +254,28 @@ const MembersDirectory = () => {
               
               <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-4 sm:mb-6 md:mb-8 leading-[0.9]"
                   style={{
-                    fontFamily: '"Inter", sans-serif',
                     background: 'linear-gradient(135deg, #ffffff 0%, #e8f5e8 50%, #ffffff 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
-                    textShadow: '0 0 40px rgba(255,255,255,0.3)',
                     filter: 'drop-shadow(3px 3px 6px rgba(0,0,0,0.9))'
                   }}>
-                Hire From Our{' '}
+                Connect With Our{' '}
                 <span className="block mt-4 text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-green-500 to-orange-500"
                       style={{filter: 'drop-shadow(0 0 20px rgba(34, 197, 94, 0.5))'}}>
-                  Entire Community
+                  Community
                 </span>
               </h1>
 
               <p className="text-xl md:text-2xl text-gray-200 leading-relaxed font-light mb-8" 
                  style={{textShadow: '1px 1px 3px rgba(0,0,0,0.8)'}}>
-                Access our <span className="text-green-400 font-semibold">complete member directory</span> - from 
-                <span className="text-green-400 font-semibold"> badge-verified experts</span> to <span className="text-green-400 font-semibold">rising newcomers</span>.
+                Discover and connect with <span className="text-green-400 font-semibold">international students</span> and <span className="text-green-400 font-semibold">alumni</span> in your field.
               </p>
 
               {/* Directory Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12 max-w-lg mx-auto">
                 <div className="bg-gradient-to-br from-green-500/20 to-orange-500/20 backdrop-blur-sm rounded-xl p-4 border border-green-500/30">
                   <div className="text-2xl font-bold text-green-400">{members.length}</div>
                   <div className="text-sm text-green-100">Total Members</div>
-                </div>
-                <div className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 backdrop-blur-sm rounded-xl p-4 border border-yellow-500/30">
-                  <div className="text-2xl font-bold text-yellow-300">{members.filter(m => m.badges > 0).length}</div>
-                  <div className="text-sm text-yellow-100">Badge Holders</div>
                 </div>
                 <div className="bg-gradient-to-br from-orange-500/20 to-orange-600/20 backdrop-blur-sm rounded-xl p-4 border border-orange-500/30">
                   <div className="text-2xl font-bold text-orange-300">{members.filter(m => m.isActive).length}</div>
@@ -821,104 +287,25 @@ const MembersDirectory = () => {
 
           {/* Search and Filters */}
           <section className="mb-12">
-            <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-2xl p-8 border border-white/20">
+            <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-2xl p-6 sm:p-8 border border-white/20">
               
-              {/* Search Bar */}
               <div className="mb-6">
                 <input
                   type="text"
-                  placeholder="Search by name, email, or skills..."
+                  placeholder="Search by name, university, major, or city..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-6 py-4 text-white placeholder-gray-400 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300 text-lg"
                 />
               </div>
 
-              {/* Show All Users Toggle */}
-              <div className="mb-6 flex flex-wrap items-center gap-4">
-                <label className="flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={showOnlyBadgedUsers}
-                    onChange={(e) => setShowOnlyBadgedUsers(e.target.checked)}
-                    className="sr-only"
-                  />
-                  <div className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    showOnlyBadgedUsers ? 'bg-green-500' : 'bg-gray-600'
-                  }`}>
-                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      showOnlyBadgedUsers ? 'translate-x-6' : 'translate-x-1'
-                    }`} />
-                  </div>
-                  <span className="ml-3 text-white">Show only members with achievements</span>
-                </label>
-                
-                <div className="text-sm text-gray-400">
-                  {showOnlyBadgedUsers 
-                    ? `Showing ${members.filter(m => m.hasAchievements).length} members with achievements`
-                    : `Showing all ${members.length} members`
-                  }
-                </div>
-              </div>
-
-              {/* Filters Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
-                
-                <select
-                  value={selectedBadgeCategory}
-                  onChange={(e) => setSelectedBadgeCategory(e.target.value)}
-                  className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white focus:border-green-500 focus:outline-none transition-all duration-300"
-                >
-                  <option value="all">All Badge Types</option>
-                  {Object.entries(badgeCategories).map(([key, category]) => (
-                    <option key={key} value={key}>{category.name}</option>
-                  ))}
-                </select>
-
-                <select
-                  value={selectedSkill}
-                  onChange={(e) => setSelectedSkill(e.target.value)}
-                  className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white focus:border-green-500 focus:outline-none transition-all duration-300"
-                >
-                  <option value="">All Skills</option>
-                  {uniqueSkills.map(skill => (
-                    <option key={skill} value={skill}>{skill}</option>
-                  ))}
-                </select>
-
-                <select
-                  value={minProjects}
-                  onChange={(e) => setMinProjects(Number(e.target.value))}
-                  className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white focus:border-green-500 focus:outline-none transition-all duration-300"
-                >
-                  <option value={0}>Any Projects</option>
-                  <option value={1}>1+ Projects</option>
-                  <option value={3}>3+ Projects</option>
-                  <option value={5}>5+ Projects</option>
-                  <option value={10}>10+ Projects</option>
-                </select>
-
-                <select
-                  value={minBadges}
-                  onChange={(e) => setMinBadges(Number(e.target.value))}
-                  className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white focus:border-green-500 focus:outline-none transition-all duration-300"
-                >
-                  <option value={0}>Any Badges</option>
-                  <option value={1}>1+ Badges</option>
-                  <option value={5}>5+ Badges</option>
-                  <option value={10}>10+ Badges</option>
-                  <option value={15}>15+ Badges</option>
-                </select>
-
+              <div className="flex flex-col sm:flex-row gap-4 mb-4">
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
                   className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 text-white focus:border-green-500 focus:outline-none transition-all duration-300"
                 >
                   <option value="recent">Recently Active</option>
-                  <option value="badges">Most Badges</option>
-                  <option value="projects">Most Projects</option>
-                  <option value="score">Highest Score</option>
                   <option value="name">Name A-Z</option>
                 </select>
 
@@ -951,119 +338,103 @@ const MembersDirectory = () => {
                 <p className="text-gray-300">
                   {members.length === 0 
                     ? "Loading member directory..."
-                    : "Try adjusting your search criteria or filters to find more members."
+                    : "Try adjusting your search to find more members."
                   }
                 </p>
               </div>
             ) : (
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-                  {currentMembers.map((member) => {
-                    const topCategory = member.topBadgeCategory ? badgeCategories[member.topBadgeCategory] : null;
-                    
-                    return (
-                      <div key={member.email} className="group">
-                        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-2xl p-6 border border-white/20 shadow-2xl transform hover:scale-105 transition-all duration-500 h-full flex flex-col">
-                          
-                          {/* Member Header */}
-                          <div className="flex items-center mb-6">
-                            <div className="relative flex-shrink-0 mr-4">
-                              {member.photoURL ? (
-                                <img 
-                                  src={member.photoURL} 
-                                  alt={`${member.name}'s profile`}
-                                  className="w-16 h-16 rounded-full object-cover ring-4 ring-green-400/50"
-                                />
-                              ) : (
-                                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-orange-500 flex items-center justify-center ring-4 ring-green-400/50">
-                                  <span className="text-xl text-black font-bold">
-                                    {member.name?.charAt(0)?.toUpperCase() || '?'}
-                                  </span>
-                                </div>
-                              )}
-                              {member.isActive && (
-                                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-400 rounded-full border-2 border-white flex items-center justify-center">
-                                  <div className="w-2 h-2 bg-white rounded-full"></div>
-                                </div>
-                              )}
-                            </div>
-                            
-                            <div className="flex-grow">
-                              <h3 className="text-xl font-black text-white group-hover:text-green-400 transition-colors duration-300">
-                                {member.name}
-                              </h3>
-                              
-                              {topCategory && (
-                                <div className="flex items-center mt-2">
-                                  <span className={`${topCategory.color} text-sm mr-1`}>{topCategory.icon}</span>
-                                  <span className="text-xs text-gray-300">{topCategory.name}</span>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Stats Grid */}
-                          <div className="grid grid-cols-2 gap-3 mb-6">
-                            <div className="bg-yellow-500/10 rounded-lg p-4 text-center border border-yellow-500/20">
-                              <div className="text-2xl font-bold text-yellow-400">{member.badges}</div>
-                              <div className="text-sm text-yellow-300">Badges</div>
-                            </div>
-                            <div className="bg-green-500/10 rounded-lg p-4 text-center border border-green-500/20">
-                              <div className="text-2xl font-bold text-green-400">{member.totalProjects}</div>
-                              <div className="text-sm text-green-300">Projects</div>
-                            </div>
-                          </div>
-
-                          {/* Skills Preview */}
-                          <div className="mb-6 flex-grow">
-                            <div className="text-gray-400 text-sm mb-2">Skills:</div>
-                            <div className="flex flex-wrap gap-2">
-                              {member.skills.slice(0, 4).map((skill, idx) => (
-                                <span key={idx} className="bg-white/10 text-gray-300 px-2 py-1 rounded-lg text-xs border border-white/20">
-                                  {skill}
+                  {currentMembers.map((member) => (
+                    <div key={member.email} className="group">
+                      <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-2xl p-6 border border-white/20 shadow-2xl transform hover:scale-105 transition-all duration-500 h-full flex flex-col">
+                        
+                        {/* Member Header */}
+                        <div className="flex items-center mb-4">
+                          <div className="relative flex-shrink-0 mr-4">
+                            {member.photoURL ? (
+                              <img 
+                                src={member.photoURL} 
+                                alt={`${member.name}'s profile`}
+                                className="w-16 h-16 rounded-full object-cover ring-4 ring-green-400/50"
+                              />
+                            ) : (
+                              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-orange-500 flex items-center justify-center ring-4 ring-green-400/50">
+                                <span className="text-xl text-black font-bold">
+                                  {member.name?.charAt(0)?.toUpperCase() || '?'}
                                 </span>
-                              ))}
-                              {member.skills.length > 4 && (
-                                <span className="bg-white/10 text-gray-300 px-2 py-1 rounded-lg text-xs border border-white/20">
-                                  +{member.skills.length - 4} more
-                                </span>
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Action Buttons */}
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => openMemberModal(member)}
-                              className="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white px-3 py-3 rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 text-xs"
-                            >
-                              View Details
-                            </button>
-                            
-                            {/* Follow Button */}
-                            {member.uid !== currentUser.uid && (
-                              <div className="flex-shrink-0">
-                                <FollowButton
-                                  targetUser={member}
-                                  currentUser={currentUser}
-                                  size="sm"
-                                  onCountUpdate={handleCountUpdate}
-                                />
                               </div>
                             )}
-                            
-                            {/* Copy Email Button */}
-                            <button
-                              onClick={() => copyEmail(member.email)}
-                              className="px-3 py-3 rounded-xl font-semibold transition-all duration-300 text-xs bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600"
-                              title="Copy email address"
-                            >
-                            </button>
+                            {member.isActive && (
+                              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-400 rounded-full border-2 border-white flex items-center justify-center">
+                                <div className="w-2 h-2 bg-white rounded-full"></div>
+                              </div>
+                            )}
+                          </div>
+                          
+                          <div className="flex-grow min-w-0">
+                            <h3 className="text-xl font-black text-white group-hover:text-green-400 transition-colors duration-300 truncate">
+                              {member.name}
+                            </h3>
+                            {member.university && (
+                              <p className="text-green-400 text-sm truncate">{member.university}</p>
+                            )}
+                            {member.major && (
+                              <p className="text-gray-400 text-xs truncate">{member.major}</p>
+                            )}
                           </div>
                         </div>
+
+                        {/* Info */}
+                        <div className="mb-4 flex-grow space-y-1">
+                          {(member.city || member.state) && (
+                            <p className="text-gray-400 text-sm flex items-center gap-1">
+                              <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                              </svg>
+                              <span className="truncate">{[member.city, member.state].filter(Boolean).join(', ')}</span>
+                            </p>
+                          )}
+                          {member.joinedDate && (
+                            <p className="text-gray-500 text-xs">
+                              Joined {member.joinedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="flex gap-2 mt-auto">
+                          <button
+                            onClick={() => openMemberModal(member)}
+                            className="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white px-3 py-3 rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 text-xs"
+                          >
+                            View Profile
+                          </button>
+                          
+                          {member.uid !== currentUser.uid && (
+                            <div className="flex-shrink-0">
+                              <FollowButton
+                                targetUser={member}
+                                currentUser={currentUser}
+                                size="sm"
+                                onCountUpdate={handleCountUpdate}
+                              />
+                            </div>
+                          )}
+                          
+                          <button
+                            onClick={() => copyEmail(member.email)}
+                            className="px-3 py-3 rounded-xl font-semibold transition-all duration-300 text-xs bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700"
+                            title="Copy email address"
+                          >
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                          </button>
+                        </div>
                       </div>
-                    );
-                  })}
+                    </div>
+                  ))}
                 </div>
 
                 {/* Pagination */}
@@ -1071,14 +442,13 @@ const MembersDirectory = () => {
                   <div className="flex justify-center items-center mt-12 space-x-4">
                     <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-2xl p-6 border border-white/20">
                       <div className="flex items-center space-x-4">
-                        
                         <button
                           onClick={goToPrevPage}
                           disabled={currentPage === 1}
                           className={`flex items-center px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
                             currentPage === 1
                               ? 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
-                              : 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 transform hover:scale-105'
+                              : 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700'
                           }`}
                         >
                           ← Previous
@@ -1087,15 +457,10 @@ const MembersDirectory = () => {
                         <div className="flex items-center space-x-2">
                           {[...Array(Math.min(totalPages, 5))].map((_, index) => {
                             let pageNum;
-                            if (totalPages <= 5) {
-                              pageNum = index + 1;
-                            } else if (currentPage <= 3) {
-                              pageNum = index + 1;
-                            } else if (currentPage >= totalPages - 2) {
-                              pageNum = totalPages - 4 + index;
-                            } else {
-                              pageNum = currentPage - 2 + index;
-                            }
+                            if (totalPages <= 5) pageNum = index + 1;
+                            else if (currentPage <= 3) pageNum = index + 1;
+                            else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + index;
+                            else pageNum = currentPage - 2 + index;
 
                             if (pageNum < 1 || pageNum > totalPages) return null;
 
@@ -1113,18 +478,6 @@ const MembersDirectory = () => {
                               </button>
                             );
                           })}
-                          
-                          {totalPages > 5 && currentPage < totalPages - 2 && (
-                            <>
-                              <span className="text-gray-400">...</span>
-                              <button
-                                onClick={() => goToPage(totalPages)}
-                                className="w-10 h-10 rounded-xl font-semibold bg-white/10 text-gray-300 hover:bg-white/20 hover:text-white transition-all duration-300"
-                              >
-                                {totalPages}
-                              </button>
-                            </>
-                          )}
                         </div>
 
                         <button
@@ -1133,7 +486,7 @@ const MembersDirectory = () => {
                           className={`flex items-center px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
                             currentPage === totalPages
                               ? 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
-                              : 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 transform hover:scale-105'
+                              : 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700'
                           }`}
                         >
                           Next →
@@ -1155,12 +508,12 @@ const MembersDirectory = () => {
       {/* Member Detail Modal */}
       {showMemberModal && selectedMember && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-black/90 via-gray-900/90 to-black/90 backdrop-blur-2xl rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 border border-white/20 shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-gradient-to-br from-black/90 via-gray-900/90 to-black/90 backdrop-blur-2xl rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 border border-white/20 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             
             {/* Modal Header */}
-            <div className="flex justify-between items-start mb-8">
+            <div className="flex justify-between items-start mb-6">
               <div className="flex items-center">
-                <div className="relative mr-6">
+                <div className="relative mr-5">
                   {selectedMember.photoURL ? (
                     <img 
                       src={selectedMember.photoURL} 
@@ -1181,7 +534,14 @@ const MembersDirectory = () => {
                   )}
                 </div>
                 <div>
-                  <h2 className="text-3xl font-black text-white mb-2">{selectedMember.name}</h2>
+                  <h2 className="text-2xl sm:text-3xl font-black text-white mb-1">{selectedMember.name}</h2>
+                  
+                  {selectedMember.university && (
+                    <p className="text-green-400 text-sm font-semibold">{selectedMember.university}</p>
+                  )}
+                  {selectedMember.major && (
+                    <p className="text-gray-400 text-sm">{selectedMember.major}</p>
+                  )}
                   
                   <div className="flex items-center mt-2">
                     <div className={`w-3 h-3 rounded-full mr-2 ${
@@ -1196,205 +556,82 @@ const MembersDirectory = () => {
                   
                   {selectedMember.joinedDate && selectedMember.joinedDate.toLocaleDateString && (
                     <p className="text-gray-400 text-sm mt-1">
-                      Member since {selectedMember.joinedDate.toLocaleDateString('en-US', { 
-                        year: 'numeric', 
-                        month: 'long' 
-                      })}
+                      Member since {selectedMember.joinedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
                     </p>
                   )}
                 </div>
               </div>
               <button
                 onClick={closeMemberModal}
-                className="text-gray-400 hover:text-white transition-colors text-2xl"
+                className="text-gray-400 hover:text-white transition-colors text-2xl ml-4"
               >
                 ×
               </button>
             </div>
 
-            {/* Content Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Member Details */}
+            <div className="space-y-6">
               
-              {/* Left Column - Stats and Skills */}
-              <div className="space-y-6">
-                
-                {/* Quick Stats */}
-                <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                  <h3 className="text-green-400 font-semibold mb-4 text-lg">
-                    {selectedMember.hasAchievements ? 'Achievement Overview' : 'Member Overview'}
-                  </h3>
-                  <div className="space-y-3">
+              {/* Info */}
+              <div className="bg-white/5 rounded-xl p-6 border border-white/10">
+                <h3 className="text-green-400 font-semibold mb-4 text-lg">About</h3>
+                <div className="space-y-3">
+                  {selectedMember.university && (
                     <div className="flex justify-between">
-                      <span className="text-gray-300">Total Badges</span>
-                      <span className="text-yellow-400 font-bold">{selectedMember.badges}</span>
+                      <span className="text-gray-400">University</span>
+                      <span className="text-white font-medium">{selectedMember.university}</span>
                     </div>
+                  )}
+                  {selectedMember.major && (
                     <div className="flex justify-between">
-                      <span className="text-gray-300">Certificates</span>
-                      <span className="text-green-400 font-bold">{selectedMember.certificates}</span>
+                      <span className="text-gray-400">Major</span>
+                      <span className="text-white font-medium">{selectedMember.major}</span>
                     </div>
+                  )}
+                  {(selectedMember.city || selectedMember.state) && (
                     <div className="flex justify-between">
-                      <span className="text-gray-300">Total Projects</span>
-                      <span className="text-green-400 font-bold">{selectedMember.totalProjects}</span>
+                      <span className="text-gray-400">Location</span>
+                      <span className="text-white font-medium">{[selectedMember.city, selectedMember.state].filter(Boolean).join(', ')}</span>
                     </div>
-                  </div>
-                </div>
-
-                {/* Skills */}
-                <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                  <h3 className="text-green-400 font-semibold mb-4 text-lg">Skills & Expertise</h3>
-                  {selectedMember.skills.length > 0 ? (
-                    <div className="flex flex-wrap gap-2">
-                      {selectedMember.skills.map((skill, idx) => (
-                        <span key={idx} className="bg-white/10 text-white px-3 py-1 rounded-lg text-sm border border-white/20">
-                          {skill}
-                        </span>
-                      ))}
+                  )}
+                  {selectedMember.visaStatus && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Visa Status</span>
+                      <span className="text-white font-medium">{selectedMember.visaStatus}</span>
                     </div>
-                  ) : (
-                    <p className="text-gray-400 text-sm">Skills to be determined through project participation</p>
+                  )}
+                  {!selectedMember.university && !selectedMember.major && !selectedMember.city && !selectedMember.visaStatus && (
+                    <p className="text-gray-500 text-sm text-center py-4">This member hasn't updated their profile details yet.</p>
                   )}
                 </div>
-
-                {/* Badge Categories - Only show if user has badges */}
-                {selectedMember.badges > 0 && (
-                  <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                    <h3 className="text-green-400 font-semibold mb-4 text-lg">Badge Distribution</h3>
-                    <div className="space-y-3">
-                      {Object.entries(selectedMember.badgesByCategory).map(([category, count]) => {
-                        const categoryInfo = badgeCategories[category];
-                        if (!categoryInfo) return null;
-                        return (
-                          <div key={category} className="flex items-center justify-between">
-                            <div className="flex items-center">
-                              <span className={`${categoryInfo.color} text-lg mr-2`}>{categoryInfo.icon}</span>
-                              <span className="text-white text-sm">{categoryInfo.name}</span>
-                            </div>
-                            <span className={`${categoryInfo.color} font-bold`}>{count}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
               </div>
 
-              {/* Right Column - Activity and Contact */}
-              <div className="lg:col-span-2 space-y-6">
-                
-                {/* Recent Badges - Only show if user has badges */}
-                {selectedMember.detailedBadges && selectedMember.detailedBadges.length > 0 && (
-                  <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                    <h3 className="text-green-400 font-semibold mb-4 text-lg">Recent Achievements</h3>
-                    <div className="space-y-3">
-                      {selectedMember.detailedBadges.slice(0, 5).map((badge) => {
-                        const categoryInfo = badgeCategories[badge.badgeCategory] || badgeCategories['development'];
-                        return (
-                          <div key={badge.id} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                            <div className="flex items-center">
-                              <span className={`${categoryInfo.color} text-xl mr-3`}>{categoryInfo.icon}</span>
-                              <div>
-                                <div className="text-white font-medium">
-                                  {categoryInfo.name} - {badge.badgeLevel}
-                                </div>
-                                <div className="text-gray-400 text-sm">{badge.projectTitle}</div>
-                              </div>
-                            </div>
-                            <div className="text-gray-400 text-sm">
-                              {badge.awardedAt && badge.awardedAt.toLocaleDateString ? 
-                                badge.awardedAt.toLocaleDateString() : 
-                                'Recently'
-                              }
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-
-                {/* Project History - Show for all users */}
-                <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                  <h3 className="text-green-400 font-semibold mb-4 text-lg">
-                    {selectedMember.projectHistory && selectedMember.projectHistory.length > 0 
-                      ? 'Project Experience' 
-                      : 'Project Participation'
-                    }
-                  </h3>
-                  {selectedMember.projectHistory && selectedMember.projectHistory.length > 0 ? (
-                    <div className="space-y-3">
-                      {selectedMember.projectHistory.slice(0, 8).map((project) => (
-                        <div key={project.id} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                          <div>
-                            <div className="text-white font-medium">
-                              {project.projectTitle}
-                            </div>
-                            <div className="flex items-center space-x-3 text-sm">
-                              {project.role === 'admin' && (
-                                <span className="text-yellow-400">Project Leader</span>
-                              )}
-                              <span className="text-gray-400">
-                                Joined {project.joinedAt && project.joinedAt.toLocaleDateString ? 
-                                  project.joinedAt.toLocaleDateString() : 
-                                  'Recently'
-                                }
-                              </span>
-                            </div>
-                          </div>
-                          <div className={`px-2 py-1 rounded text-xs ${
-                            project.status === 'completed' || project.projectStatus === 'completed' 
-                              ? 'bg-green-500/20 text-green-400' 
-                              : 'bg-green-500/20 text-green-400'
-                          }`}>
-                            {project.status === 'completed' || project.projectStatus === 'completed' ? 'Completed' : 'In Progress'}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-8">
-                      <p className="text-gray-400">Ready to start their first project!</p>
-                      <p className="text-gray-500 text-sm mt-2">This member is available for new opportunities.</p>
+              {/* Connect Section */}
+              <div className="bg-gradient-to-r from-green-500/10 to-orange-500/10 rounded-xl p-6 border border-green-500/20">
+                <h3 className="text-green-400 font-semibold mb-4 text-lg">Connect</h3>
+                <p className="text-gray-300 mb-4">
+                  Want to connect with {selectedMember.name}? Follow them or copy their email to reach out.
+                </p>
+                <div className="flex gap-4">
+                  {selectedMember.uid !== currentUser.uid && (
+                    <div className="flex-1">
+                      <FollowButton
+                        targetUser={selectedMember}
+                        currentUser={currentUser}
+                        size="md"
+                        onCountUpdate={handleCountUpdate}
+                        fullWidth={true}
+                      />
                     </div>
                   )}
-                </div>
-
-                {/* Contact Section */}
-                <div className="bg-gradient-to-r from-green-500/10 to-orange-500/10 rounded-xl p-6 border border-green-500/20">
-                  <h3 className="text-green-400 font-semibold mb-4 text-lg">Connect with Member</h3>
-                  <div className="mb-4">
-                    <p className="text-gray-300 mb-4">
-                      Interested in working with {selectedMember.name}? Connect or copy their email to reach out:
-                    </p>
-                    <div className="bg-black/20 rounded-lg p-4 border border-white/10">
-                      <div className="text-center">
-                        <div className="text-gray-400 text-sm mb-2">Email contact available</div>
-                        <div className="text-green-400 font-semibold">Ready to connect!</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex gap-4">
-                    {/* Follow Button */}
-                    {selectedMember.uid !== currentUser.uid && (
-                      <div className="flex-1">
-                        <FollowButton
-                          targetUser={selectedMember}
-                          currentUser={currentUser}
-                          size="md"
-                          onCountUpdate={handleCountUpdate}
-                          fullWidth={true}
-                        />
-                      </div>
-                    )}
-                    
-                    {/* Copy Email Button */}
-                    <button
-                      onClick={() => copyEmail(selectedMember.email)}
-                      className="flex-1 px-6 py-3 rounded-xl font-bold transition-all duration-300 bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600"
-                      title="Copy email address"
-                    >
-                      Copy Email
-                    </button>
-                  </div>
+                  
+                  <button
+                    onClick={() => copyEmail(selectedMember.email)}
+                    className="flex-1 px-6 py-3 rounded-xl font-bold transition-all duration-300 bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700"
+                    title="Copy email address"
+                  >
+                    Copy Email
+                  </button>
                 </div>
               </div>
             </div>
@@ -1404,99 +641,14 @@ const MembersDirectory = () => {
 
       {/* Custom Styles */}
       <style jsx>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
-        * { 
-          font-family: 'Inter', sans-serif;
-          user-select: none !important;
-          -webkit-user-select: none !important;
-          -moz-user-select: none !important;
-          -ms-user-select: none !important;
-          -webkit-touch-callout: none !important;
-          -webkit-user-drag: none !important;
-          -khtml-user-select: none !important;
-        }
-        
-        /* Disable text selection globally */
-        body, html, div, span, p, h1, h2, h3, h4, h5, h6, a, button {
-          -webkit-user-select: none !important;
-          -moz-user-select: none !important;
-          -ms-user-select: none !important;
-          user-select: none !important;
-          -webkit-touch-callout: none !important;
-          -webkit-tap-highlight-color: transparent !important;
-        }
-        
-        /* Disable drag and drop for images */
-        img {
-          -webkit-user-drag: none !important;
-          -khtml-user-drag: none !important;
-          -moz-user-drag: none !important;
-          -o-user-drag: none !important;
-          user-drag: none !important;
-          pointer-events: none !important;
-        }
-        
-        /* Re-enable pointer events for interactive elements */
-        button, input, select, a {
-          pointer-events: auto !important;
-        }
-        
-        /* Hide text cursor */
-        * {
-          cursor: default !important;
-        }
-        
-        button, a, input, select {
-          cursor: pointer !important;
-        }
-        
-        /* Disable print media */
-        @media print {
-          * {
-            display: none !important;
-          }
-        }
-        
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-          width: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-          background: rgba(0, 0, 0, 0.1);
-        }
-        
-        ::-webkit-scrollbar-thumb {
-          background: rgba(34, 197, 94, 0.5);
-          border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-          background: rgba(34, 197, 94, 0.7);
-        }
-
         select option {
           background-color: rgba(0, 0, 0, 0.9);
           color: white;
         }
-        
-        /* Disable outline on focus for security */
-        *:focus {
-          outline: none !important;
-        }
-        
-        /* Additional protection against scraping */
-        .member-email {
-          display: none !important;
-        }
-        
-        /* Disable browser zoom */
-        body {
-          zoom: reset;
-          -webkit-text-size-adjust: none;
-          -moz-text-size-adjust: none;
-          -ms-text-size-adjust: none;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
+        ::-webkit-scrollbar-thumb { background: rgba(34, 197, 94, 0.5); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(34, 197, 94, 0.7); }
       `}</style>
     </div>
   );

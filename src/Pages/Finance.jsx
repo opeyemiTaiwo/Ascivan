@@ -29,17 +29,8 @@ const Finance = () => {
     { id: 'loans', label: 'Loans', icon: '💰' },
     { id: 'work-study', label: 'Work-Study', icon: '💼' },
     { id: 'grants', label: 'Grants', icon: '🏆' },
-    { id: 'financial-aid', label: 'Financial Aid', icon: '🤝' },
     { id: 'assistantships', label: 'Assistantships', icon: '📚' },
     { id: 'fellowships', label: 'Fellowships', icon: '🏅' },
-    { id: 'emergency-funds', label: 'Emergency Funds', icon: '🆘' },
-    { id: 'tuition-waivers', label: 'Tuition Waivers', icon: '✅' },
-    { id: 'bank-account', label: 'Bank Account', icon: '🏦' },
-    { id: 'credit-card', label: 'Credit Card', icon: '💳' },
-    { id: 'insurance', label: 'Insurance', icon: '🛡️' },
-    { id: 'money-transfer', label: 'Money Transfer', icon: '🔄' },
-    { id: 'tax-services', label: 'Tax Services', icon: '📄' },
-    { id: 'investment', label: 'Investment', icon: '📈' },
   ];
 
   const sourceTypes = [
@@ -174,17 +165,8 @@ const Finance = () => {
       'loans': { label: '💰 Loan', cls: 'bg-blue-500/20 text-blue-300' },
       'work-study': { label: '💼 Work-Study', cls: 'bg-indigo-500/20 text-indigo-300' },
       'grants': { label: '🏆 Grant', cls: 'bg-emerald-500/20 text-emerald-300' },
-      'financial-aid': { label: '🤝 Financial Aid', cls: 'bg-orange-500/20 text-orange-300' },
       'assistantships': { label: '📚 Assistantship', cls: 'bg-cyan-500/20 text-cyan-300' },
       'fellowships': { label: '🏅 Fellowship', cls: 'bg-amber-500/20 text-amber-300' },
-      'emergency-funds': { label: '🆘 Emergency Fund', cls: 'bg-red-500/20 text-red-300' },
-      'tuition-waivers': { label: '✅ Tuition Waiver', cls: 'bg-lime-500/20 text-lime-300' },
-      'bank-account': { label: '🏦 Bank Account', cls: 'bg-blue-500/20 text-blue-300' },
-      'credit-card': { label: '💳 Credit Card', cls: 'bg-purple-500/20 text-purple-300' },
-      'insurance': { label: '🛡️ Insurance', cls: 'bg-green-500/20 text-green-300' },
-      'money-transfer': { label: '🔄 Money Transfer', cls: 'bg-yellow-500/20 text-yellow-300' },
-      'tax-services': { label: '📄 Tax Services', cls: 'bg-red-500/20 text-red-300' },
-      'investment': { label: '📈 Investment', cls: 'bg-teal-500/20 text-teal-300' },
     };
     return map[type] || { label: type || 'Financial Resource', cls: 'bg-orange-500/20 text-orange-300' };
   };

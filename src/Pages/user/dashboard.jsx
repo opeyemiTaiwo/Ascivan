@@ -34,7 +34,7 @@ const SectionHeader = ({ title, description, gradientColors }) => (
 
 const DashboardCard = ({ card, onCardClick }) => (
   <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-lg xs:rounded-xl p-3 xs:p-4 sm:p-5 md:p-6 border border-white/20 shadow-2xl">
-    <div className="flex items-center justify-between mb-3 xs:mb-4 sm:mb-6">
+    <div className="flex items-center mb-3 xs:mb-4 sm:mb-6">
       <h3 className="text-sm xs:text-base sm:text-lg md:text-xl font-black text-white flex items-center" 
           style={{textShadow: '0 0 15px rgba(255,255,255,0.3), 1px 1px 2px rgba(0,0,0,0.8)'}}>
         <span className={`w-7 h-7 xs:w-8 xs:h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-gradient-to-r ${card.gradient} rounded-md xs:rounded-lg flex items-center justify-center mr-2 xs:mr-2.5 sm:mr-3 shadow-lg`}>
@@ -44,16 +44,6 @@ const DashboardCard = ({ card, onCardClick }) => (
         </span>
         <span className="truncate">{card.title.split(' ').slice(0, 2).join(' ')}</span>
       </h3>
-      <button 
-        onClick={() => onCardClick(card.path)}
-        className="text-orange-400 text-xs xs:text-sm font-semibold min-h-[44px] px-2 xs:px-3 py-2 rounded-lg hover:bg-orange-400/10 active:bg-orange-400/20 transition-colors"
-        aria-label={`Navigate to ${card.title}`}
-      >
-        <span className="hidden xs:inline">View</span>
-        <svg className="w-4 h-4 xs:hidden inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
     </div>
     
     <div className="space-y-3 xs:space-y-4">
@@ -80,10 +70,10 @@ const DashboardCard = ({ card, onCardClick }) => (
       <div className="text-center pt-2 xs:pt-3 border-t border-white/10">
         <button
           onClick={() => onCardClick(card.path)}
-          className="text-orange-400 hover:text-orange-300 active:text-orange-200 text-xs xs:text-sm font-semibold transition-colors min-h-[44px] px-3 xs:px-4 py-2 rounded-lg hover:bg-orange-400/10 active:bg-orange-400/20"
-          aria-label={`Get started with ${card.title}`}
+          className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 active:from-orange-700 active:to-orange-800 text-white text-xs xs:text-sm font-bold transition-all min-h-[44px] px-5 xs:px-6 py-2.5 rounded-lg shadow-lg hover:shadow-orange-500/25"
+          aria-label={`${card.buttonLabel || 'Get Started'} - ${card.title}`}
         >
-          Get Started
+          {card.buttonLabel || 'Get Started'}
           <svg className="w-3 h-3 xs:w-4 xs:h-4 inline ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
@@ -121,55 +111,6 @@ const PWAInstallButton = ({ className = "", mobile = false, isInstallable, isIns
         </>
       )}
     </button>
-  );
-};
-
-const CommunityStats = () => (
-  <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 xs:gap-3 sm:gap-4 mb-4 xs:mb-5 sm:mb-6">
-    {[
-      { label: 'Discussions' },
-      { label: 'Members' },
-      { label: 'Active Now' },
-      { label: 'New Today' }
-    ].map((stat, index) => (
-      <div key={index} className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-lg xs:rounded-xl p-3 xs:p-4 border border-white/20 text-center">
-        <div className="text-[10px] xs:text-xs sm:text-sm text-gray-400">{stat.label}</div>
-      </div>
-    ))}
-  </div>
-);
-
-const CommunityGuidelines = () => {
-  const guidelines = [
-    { color: 'green-400', title: 'Be Respectful', description: 'Treat all members with kindness and professionalism' },
-    { color: 'orange-400', title: 'Share Knowledge', description: 'Help others learn and grow in their tech journey' },
-    { color: 'orange-400', title: 'Stay On Topic', description: 'Keep discussions relevant to student life, jobs, housing, and finance' },
-    { color: 'green-400', title: 'Build Together', description: 'Collaborate and support each other\'s success' }
-  ];
-
-  return (
-    <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-lg xs:rounded-xl p-4 xs:p-5 sm:p-6 md:p-8 border border-white/20 shadow-2xl mt-4 xs:mt-5 sm:mt-6">
-      <h3 className="text-base xs:text-lg sm:text-xl md:text-2xl font-bold text-white mb-3 xs:mb-4 flex items-center" 
-          style={{textShadow: '0 0 15px rgba(255,255,255,0.3), 1px 1px 2px rgba(0,0,0,0.8)'}}>
-        <svg className="w-5 h-5 xs:w-6 xs:h-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        Community Guidelines
-      </h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 xs:gap-4 text-xs xs:text-sm">
-        {guidelines.map((guideline, index) => (
-          <div key={index} className="flex items-start gap-2 xs:gap-3">
-            <svg className={`w-4 h-4 xs:w-5 xs:h-5 text-${guideline.color} flex-shrink-0 mt-0.5`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-            <div>
-              <p className="text-white font-semibold mb-0.5 xs:mb-1">{guideline.title}</p>
-              <p className="text-gray-300">{guideline.description}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
   );
 };
 
@@ -457,21 +398,24 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         description: 'Find full-time, freelance & internship roles — filtered by location & visa status',
         path: '/jobs',
         stats: 'Explore Jobs',
-        gradient: 'from-orange-500 to-orange-600'
+        gradient: 'from-orange-500 to-orange-600',
+        buttonLabel: 'Browse Jobs'
       },
       {
         title: 'Post a Job',
         description: 'List a job opportunity for international students',
         path: '/jobs/post',
         stats: 'Post Now',
-        gradient: 'from-orange-400 to-orange-500'
+        gradient: 'from-orange-400 to-orange-500',
+        buttonLabel: 'Post a Job'
       },
       {
         title: 'My Job Posts',
         description: 'Manage and track your posted job listings',
         path: '/jobs/my-posts',
         stats: 'Manage',
-        gradient: 'from-orange-400 to-orange-500'
+        gradient: 'from-orange-400 to-orange-500',
+        buttonLabel: 'Manage Posts'
       }
     ],
     housing: [
@@ -480,14 +424,16 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         description: 'Browse student-friendly apartments, rooms & studios near your campus',
         path: '/housing',
         stats: 'Browse All',
-        gradient: 'from-blue-500 to-blue-600'
+        gradient: 'from-blue-500 to-blue-600',
+        buttonLabel: 'Find Housing'
       },
       {
         title: 'List Your Space',
         description: 'Have a room or unit available? List it for international students',
         path: '/housing/post',
         stats: 'List Now',
-        gradient: 'from-orange-500 to-orange-600'
+        gradient: 'from-orange-500 to-orange-600',
+        buttonLabel: 'List Space'
       }
     ],
     banking: [
@@ -496,14 +442,16 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         description: 'Scholarships, loans, work-study, grants, fellowships & financial services for international students',
         path: '/finance',
         stats: 'Explore',
-        gradient: 'from-green-500 to-green-600'
+        gradient: 'from-green-500 to-green-600',
+        buttonLabel: 'Browse Resources'
       },
       {
         title: 'List a Resource',
         description: 'Share a financial resource or service that helps international students',
         path: '/finance/post',
         stats: 'List Now',
-        gradient: 'from-orange-500 to-orange-600'
+        gradient: 'from-orange-500 to-orange-600',
+        buttonLabel: 'List Resource'
       }
     ],
     community: [
@@ -512,21 +460,24 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         description: 'Share ideas, ask questions, and engage with fellow international students',
         path: '/community',
         stats: 'Join Discussion',
-        gradient: 'from-green-500 to-green-600'
+        gradient: 'from-green-500 to-green-600',
+        buttonLabel: 'View Feed'
       },
       {
         title: 'Create Post',
         description: 'Start a conversation and share your thoughts with the home feed',
         path: '/community/submit',
         stats: 'New Post',
-        gradient: 'from-orange-500 to-orange-600'
+        gradient: 'from-orange-500 to-orange-600',
+        buttonLabel: 'Create Post'
       },
       {
         title: 'Member Directory',
         description: 'Discover and connect with international students and alumni in your field',
         path: '/members-directory',
         stats: 'Browse Members',
-        gradient: 'from-green-600 to-green-700'
+        gradient: 'from-green-600 to-green-700',
+        buttonLabel: 'Network'
       }
     ]
   }), []);
@@ -617,12 +568,10 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       return (
         <div className="space-y-3 xs:space-y-4 sm:space-y-6 md:space-y-8">
           <SectionHeader 
-            title="Home Hub"
-            description="Connect, collaborate, and grow with the Loomiq international student home feed."
+            title="Home"
+            description="Connect, collaborate, and grow with the Loomiq international student community."
             gradientColors="from-green-300 via-orange-400 to-green-500"
           />
-          
-          <CommunityStats />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 xs:gap-4 sm:gap-5 md:gap-6">
             {dashboardCards.community?.map((card, index) => (
@@ -630,37 +579,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             ))}
           </div>
 
-          <CommunityGuidelines />
-
-          <div className="bg-gradient-to-r from-green-500/10 to-orange-500/10 rounded-lg xs:rounded-xl p-4 xs:p-5 sm:p-6 border border-green-500/30 text-center">
-            <p className="text-base xs:text-lg sm:text-xl font-bold text-white mb-3 xs:mb-4" 
-               style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
-              Ready to join the conversation?
-            </p>
-            <div className="flex flex-col sm:flex-row gap-2 xs:gap-3 justify-center">
-              <button
-                onClick={() => handleCardClick('/community')}
-                className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 active:from-green-700 active:to-green-800 text-white font-semibold px-4 xs:px-5 sm:px-6 py-2.5 xs:py-3 rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 min-h-[48px] text-sm xs:text-base"
-                aria-label="View home feed"
-              >
-                <svg className="w-4 h-4 xs:w-5 xs:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                </svg>
-                View Feed
-              </button>
-              <button
-                onClick={() => handleCardClick('/community/submit')}
-                className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 active:from-orange-700 active:to-orange-800 text-white font-semibold px-4 xs:px-5 sm:px-6 py-2.5 xs:py-3 rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 min-h-[48px] text-sm xs:text-base"
-                aria-label="Create new post"
-              >
-                <svg className="w-4 h-4 xs:w-5 xs:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                Create Post
-              </button>
-            </div>
-          </div>
         </div>
       );
     }

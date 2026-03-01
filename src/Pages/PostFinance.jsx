@@ -45,17 +45,8 @@ const PostFinance = () => {
     { id: 'loans', label: '💰 Loans', description: 'Student loans available to international students' },
     { id: 'work-study', label: '💼 Work-Study', description: 'On-campus or CPT/OPT work opportunities' },
     { id: 'grants', label: '🏆 Grants', description: 'Need-based grants or research grants' },
-    { id: 'financial-aid', label: '🤝 Financial Aid', description: 'University or institutional financial aid packages' },
     { id: 'assistantships', label: '📚 Assistantships', description: 'Graduate teaching or research assistantships' },
     { id: 'fellowships', label: '🏅 Fellowships', description: 'Research or professional fellowships' },
-    { id: 'emergency-funds', label: '🆘 Emergency Funds', description: 'Emergency financial assistance for students' },
-    { id: 'tuition-waivers', label: '✅ Tuition Waivers', description: 'Partial or full tuition waivers' },
-    { id: 'bank-account', label: '🏦 Bank Account', description: 'Checking or savings account' },
-    { id: 'credit-card', label: '💳 Credit Card', description: 'Credit building for internationals' },
-    { id: 'insurance', label: '🛡️ Insurance', description: 'Health, renters, or auto insurance' },
-    { id: 'money-transfer', label: '🔄 Money Transfer', description: 'Send money internationally' },
-    { id: 'tax-services', label: '📄 Tax Services', description: 'Tax filing and ITIN assistance' },
-    { id: 'investment', label: '📈 Investment', description: 'Investing and savings services' },
   ];
 
   const fundingSources = [

@@ -481,33 +481,38 @@ const UserProfile = () => {
   }
 
   if (!userExists) {
+    // Show a basic profile with the name derived from the parameter instead of "User Not Found"
+    const derivedName = isValidEmail(userParam) 
+      ? userParam.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+      : userParam.replace(/[._-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    
     return (
       <>
         <Navbar />
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center p-3 xs:p-4">
           <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 backdrop-blur-2xl rounded-xl xs:rounded-2xl p-6 xs:p-8 sm:p-10 md:p-12 border border-white/20 text-center max-w-md w-full">
-            <svg className="w-16 h-16 xs:w-20 xs:h-20 mx-auto mb-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-            <h2 className="text-xl xs:text-2xl font-bold text-white mb-3 xs:mb-4">User Not Found</h2>
-            <p className="text-gray-300 mb-4 xs:mb-6 text-sm xs:text-base px-2">
-              The user profile you're looking for doesn't exist in our system. They may not have created an account yet.
-            </p>
-            <div className="text-xs xs:text-sm text-gray-400 mb-2">
-              Searched for: <span className="font-mono bg-black/20 px-2 py-1 rounded text-[10px] xs:text-xs break-all">{userParam}</span>
+            <div className="w-20 h-20 xs:w-24 xs:h-24 rounded-full bg-gradient-to-br from-green-500 to-orange-500 flex items-center justify-center mx-auto mb-4 ring-4 ring-green-400/30">
+              <span className="text-2xl xs:text-3xl text-black font-bold">
+                {derivedName.charAt(0)?.toUpperCase() || '?'}
+              </span>
             </div>
-            <div className="text-[10px] xs:text-xs text-gray-500 mb-4 xs:mb-6">
-              Parameter type: {isUID(userParam) ? 'User ID' : isValidEmail(userParam) ? 'Email Address' : 'Unknown Format'}
-            </div>
+            <h2 className="text-xl xs:text-2xl font-bold text-white mb-2">{derivedName}</h2>
+            <p className="text-gray-400 text-sm mb-6">This member hasn't set up their profile yet.</p>
             
-            {process.env.NODE_ENV === 'development' && debugInfo.length > 0 && (
-              <div className="mb-4 xs:mb-6 text-[10px] xs:text-xs text-left bg-orange-500/10 p-2 xs:p-3 rounded-lg border border-orange-500/20">
-                <div className="text-orange-300 font-bold mb-2">Debug Info:</div>
-                {debugInfo.map((info, index) => (
-                  <div key={index} className="text-orange-400">{info}</div>
-                ))}
+            <div className="bg-white/5 rounded-xl p-4 border border-white/10 mb-6 text-left space-y-3">
+              <div className="flex justify-between">
+                <span className="text-gray-500 text-sm">University</span>
+                <span className="text-gray-600 text-sm">—</span>
               </div>
-            )}
+              <div className="flex justify-between">
+                <span className="text-gray-500 text-sm">Major</span>
+                <span className="text-gray-600 text-sm">—</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500 text-sm">Location</span>
+                <span className="text-gray-600 text-sm">—</span>
+              </div>
+            </div>
             
             <div className="flex flex-col sm:flex-row gap-2 xs:gap-3">
               <button 

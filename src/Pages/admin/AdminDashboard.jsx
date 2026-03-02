@@ -223,7 +223,7 @@ const AdminDashboard = () => {
         'Please provide a detailed reason for rejection:\n\n' +
         'Common reasons:\n' +
         '• GitHub repository is not public\n' +
-        '• Loomiq not added as collaborator\n' +
+        '• Loomiqe not added as collaborator\n' +
         '• Team member names not visible in project\n' +
         '• Project appears incomplete or low quality\n' +
         '• Repository URL is invalid or inaccessible\n' +
@@ -505,7 +505,7 @@ const AdminDashboard = () => {
                 </p>
                 <ul className="text-gray-300 text-sm sm:text-base space-y-1 ml-4">
                   <li>✓ GitHub repository is public and accessible</li>
-                  <li>✓ Loomiq is added as collaborator</li>
+                  <li>✓ Loomiqe is added as collaborator</li>
                   <li>✓ All team member names are visible in the project</li>
                   <li>✓ Project appears complete and functional</li>
                   <li>✓ Repository URL works and leads to the correct project</li>
@@ -757,7 +757,7 @@ const AdminDashboard = () => {
                       {/* Review Guidelines Reminder */}
                       <div className="mt-6 p-4 bg-orange-500/10 border-2 border-orange-500/30 rounded-xl">
                         <p className="text-orange-400 text-sm">
-                          <strong>⚠️ Before approving:</strong> Ensure the repository is accessible, Loomiq is added as collaborator, 
+                          <strong>⚠️ Before approving:</strong> Ensure the repository is accessible, Loomiqe is added as collaborator, 
                           team member names are visible, and the project meets completion standards.
                         </p>
                       </div>

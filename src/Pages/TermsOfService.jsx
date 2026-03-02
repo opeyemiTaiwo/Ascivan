@@ -9,11 +9,11 @@ const TermsOfService = () => {
   const sections = [
     {
       title: '1. Acceptance of Terms',
-      content: 'By accessing or using Loomiq ("the Platform"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Platform. Loomiq is designed to serve international students with housing, finance, jobs, and community resources.'
+      content: 'By accessing or using Loomiqe ("the Platform"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Platform. Loomiqe is designed to serve international students with housing, finance, jobs, and community resources.'
     },
     {
       title: '2. Eligibility',
-      content: 'You must be at least 18 years old to use Loomiq. By creating an account, you represent that you are at least 18 years of age and that you have the legal capacity to enter into these terms. The Platform is primarily intended for international students, alumni, and organizations that support them.'
+      content: 'You must be at least 18 years old to use Loomiqe. By creating an account, you represent that you are at least 18 years of age and that you have the legal capacity to enter into these terms. The Platform is primarily intended for international students, alumni, and organizations that support them.'
     },
     {
       title: '3. User Accounts',
@@ -25,35 +25,35 @@ const TermsOfService = () => {
     },
     {
       title: '5. User-Generated Content',
-      content: 'You retain ownership of content you post on Loomiq. By posting content, you grant Loomiq a non-exclusive, worldwide, royalty-free license to use, display, and distribute your content on the Platform. You are solely responsible for the content you post and must ensure it does not infringe on any third-party rights.'
+      content: 'You retain ownership of content you post on Loomiqe. By posting content, you grant Loomiqe a non-exclusive, worldwide, royalty-free license to use, display, and distribute your content on the Platform. You are solely responsible for the content you post and must ensure it does not infringe on any third-party rights.'
     },
     {
       title: '6. Job, Housing & Finance Listings',
-      content: 'Loomiq provides a platform for users to share job opportunities, housing listings, and financial resources. Loomiq does not guarantee the accuracy, legality, or quality of any listing. Users should independently verify all information before making decisions. Loomiq is not a party to any transaction between users.'
+      content: 'Loomiqe provides a platform for users to share job opportunities, housing listings, and financial resources. Loomiqe does not guarantee the accuracy, legality, or quality of any listing. Users should independently verify all information before making decisions. Loomiqe is not a party to any transaction between users.'
     },
     {
       title: '7. Privacy',
-      content: 'Your use of Loomiq is also governed by our Privacy Policy. By using the Platform, you consent to the collection and use of your information as described in the Privacy Policy.'
+      content: 'Your use of Loomiqe is also governed by our Privacy Policy. By using the Platform, you consent to the collection and use of your information as described in the Privacy Policy.'
     },
     {
       title: '8. Intellectual Property',
-      content: 'The Loomiq name, logo, design, and all related content are the intellectual property of Loomiq and its founder. You may not use, reproduce, or distribute any Loomiq branding or content without prior written permission.'
+      content: 'The Loomiqe name, logo, design, and all related content are the intellectual property of Loomiqe and its founder. You may not use, reproduce, or distribute any Loomiqe branding or content without prior written permission.'
     },
     {
       title: '9. Termination',
-      content: 'Loomiq reserves the right to suspend or terminate your account at any time, with or without notice, for conduct that we believe violates these Terms or is harmful to other users, the Platform, or third parties. You may also delete your account at any time through your Dashboard.'
+      content: 'Loomiqe reserves the right to suspend or terminate your account at any time, with or without notice, for conduct that we believe violates these Terms or is harmful to other users, the Platform, or third parties. You may also delete your account at any time through your Dashboard.'
     },
     {
       title: '10. Disclaimers',
-      content: 'Loomiq is provided "as is" without warranties of any kind, either express or implied. We do not warrant that the Platform will be uninterrupted, error-free, or secure. We are not responsible for any losses or damages arising from your use of the Platform, including but not limited to housing decisions, job applications, or financial transactions.'
+      content: 'Loomiqe is provided "as is" without warranties of any kind, either express or implied. We do not warrant that the Platform will be uninterrupted, error-free, or secure. We are not responsible for any losses or damages arising from your use of the Platform, including but not limited to housing decisions, job applications, or financial transactions.'
     },
     {
       title: '11. Limitation of Liability',
-      content: 'To the maximum extent permitted by law, Loomiq and its founder shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or in connection with your use of the Platform.'
+      content: 'To the maximum extent permitted by law, Loomiqe and its founder shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or in connection with your use of the Platform.'
     },
     {
       title: '12. Changes to Terms',
-      content: 'We may update these Terms from time to time. We will notify users of material changes by posting the updated terms on the Platform. Your continued use of Loomiq after changes are posted constitutes acceptance of the updated Terms.'
+      content: 'We may update these Terms from time to time. We will notify users of material changes by posting the updated terms on the Platform. Your continued use of Loomiqe after changes are posted constitutes acceptance of the updated Terms.'
     },
     {
       title: '13. Contact',

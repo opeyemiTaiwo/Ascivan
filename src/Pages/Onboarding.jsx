@@ -151,7 +151,7 @@ const Onboarding = () => {
       }
 
       await updateDoc(doc(db, 'users', currentUser.uid), updateData);
-      toast.success(skipped ? 'Welcome to Loomiq! You can complete your profile later.' : 'Welcome to Loomiq! 🎉');
+      toast.success(skipped ? 'Welcome to Loomiqe! You can complete your profile later.' : 'Welcome to Loomiqe! 🎉');
 
       const firstInterest = formData.interests[0];
       const redirectMap = { 'jobs': '/jobs', 'housing': '/housing', 'banking': '/finance', 'community': '/community' };
@@ -171,8 +171,8 @@ const Onboarding = () => {
   return (
     <div className="min-h-screen overflow-x-hidden flex flex-col items-center justify-center px-4 py-8 sm:py-12" style={{ backgroundColor: '#000000' }}>
       <div className="flex items-center gap-2 mb-8">
-        <img src="/Images/512X512.png" alt="Loomiq" className="w-8 h-8" onError={e => e.target.style.display='none'} />
-        <span className="text-white font-black text-xl sm:text-2xl">Loomiq</span>
+        <img src="/Images/512X512.png" alt="Loomiqe" className="w-8 h-8" onError={e => e.target.style.display='none'} />
+        <span className="text-white font-black text-xl sm:text-2xl">Loomiqe</span>
       </div>
 
       <div className="w-full max-w-lg bg-white/5 border border-white/20 rounded-2xl shadow-2xl overflow-hidden" style={{maxWidth: "min(512px, calc(100vw - 2rem))"}}>
@@ -369,7 +369,7 @@ const Onboarding = () => {
         ))}
       </div>
 
-      <p className="text-gray-600 text-xs mt-4">© {new Date().getFullYear()} Loomiq. All rights reserved.</p>
+      <p className="text-gray-600 text-xs mt-4">© {new Date().getFullYear()} Loomiqe. All rights reserved.</p>
     </div>
   );
 };

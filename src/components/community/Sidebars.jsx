@@ -442,11 +442,11 @@ export const CompanyInfoSidebar = ({ isMobile = false }) => {
           <div className="text-center">
             <img 
               src="/Images/512X512.png" 
-              alt="Loomiq Logo" 
+              alt="Loomiqe Logo" 
               className="w-10 h-10 xs:w-12 xs:h-12 sm:w-16 sm:h-16 mx-auto mb-2 xs:mb-2 sm:mb-3 rounded-xl shadow-lg"
             />
             <h3 className="text-white font-bold text-sm xs:text-base sm:text-lg">
-              Loomiq
+              Loomiqe
             </h3>
           </div>
         </div>

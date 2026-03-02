@@ -1,5 +1,5 @@
 // src/components/ResponsiveLayout.jsx
-// Responsive layout wrapper component for Loomiq
+// Responsive layout wrapper component for Loomiqe
 
 import React from 'react';
 import PropTypes from 'prop-types';

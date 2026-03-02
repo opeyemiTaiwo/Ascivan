@@ -27,7 +27,7 @@ const Support = () => {
 
   const faqs = [
     { q: 'How do I create an account?', a: 'Click the sign-in button on the top right. You can sign up using your university email through Google authentication.' },
-    { q: 'Is Loomiq free to use?', a: 'Yes! Core features including job browsing, housing search, financial resources, and community access are free for all international students.' },
+    { q: 'Is Loomiqe free to use?', a: 'Yes! Core features including job browsing, housing search, financial resources, and community access are free for all international students.' },
     { q: 'How do I post a job or housing listing?', a: 'Navigate to the Jobs or Housing section from the navbar, then click "Post a Job" or "List Your Space" to create a listing.' },
     { q: 'How do I update my profile?', a: 'Go to your Dashboard and click on the Profile tab to edit your information including university, major, and location.' },
     { q: 'How do I report inappropriate content?', a: 'Use the report button on any post or listing, or contact us through this support page.' },

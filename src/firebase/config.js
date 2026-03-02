@@ -13,7 +13,7 @@ import {
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 
-// Your web app's Firebase configuration for Loomiq
+// Your web app's Firebase configuration for Loomiqe
 const firebaseConfig = {
   apiKey: "AIzaSyAWytpAg0Lb7nw5sndNu5t1YAij_uRqqXs",
   authDomain: "loomiq-8c3e9.firebaseapp.com",

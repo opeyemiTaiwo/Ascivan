@@ -333,7 +333,7 @@ const autoSetupFirebase = async () => {
       },
       profile: {
         title: "System Account",
-        company: "Loomiq",
+        company: "Loomiqe",
         bio: "System account for automated operations"
       }
     };

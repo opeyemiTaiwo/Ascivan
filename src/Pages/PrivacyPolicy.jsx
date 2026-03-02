@@ -17,7 +17,7 @@ const PrivacyPolicy = () => {
     },
     {
       title: '3. Information Sharing',
-      content: 'Your profile information (name, university, major, location) is visible to other authenticated Loomiq members. Your email address can be copied by other members for the purpose of networking. We do not sell your personal information to third parties. We may share anonymized, aggregated data for analytical purposes.'
+      content: 'Your profile information (name, university, major, location) is visible to other authenticated Loomiqe members. Your email address can be copied by other members for the purpose of networking. We do not sell your personal information to third parties. We may share anonymized, aggregated data for analytical purposes.'
     },
     {
       title: '4. Data Storage & Security',
@@ -25,15 +25,15 @@ const PrivacyPolicy = () => {
     },
     {
       title: '5. Your Content',
-      content: 'Content you post on Loomiq (including community posts, job listings, housing listings, and financial resources) is visible to other authenticated users. You can delete your own posts at any time. If you delete your account, your content will be removed from the Platform.'
+      content: 'Content you post on Loomiqe (including community posts, job listings, housing listings, and financial resources) is visible to other authenticated users. You can delete your own posts at any time. If you delete your account, your content will be removed from the Platform.'
     },
     {
       title: '6. Cookies & Tracking',
-      content: 'Loomiq uses essential cookies for authentication and session management. We may use analytics tools to understand how the Platform is used. We do not use tracking cookies for advertising purposes.'
+      content: 'Loomiqe uses essential cookies for authentication and session management. We may use analytics tools to understand how the Platform is used. We do not use tracking cookies for advertising purposes.'
     },
     {
       title: '7. Third-Party Services',
-      content: 'Loomiq integrates with third-party services including Google Authentication and Firebase. These services have their own privacy policies that govern their use of your data. We encourage you to review those policies.'
+      content: 'Loomiqe integrates with third-party services including Google Authentication and Firebase. These services have their own privacy policies that govern their use of your data. We encourage you to review those policies.'
     },
     {
       title: '8. Your Rights',
@@ -45,11 +45,11 @@ const PrivacyPolicy = () => {
     },
     {
       title: '10. Children\'s Privacy',
-      content: 'Loomiq is not intended for users under the age of 18. We do not knowingly collect information from children under 18. If we become aware that we have collected personal information from a child under 18, we will take steps to delete such information.'
+      content: 'Loomiqe is not intended for users under the age of 18. We do not knowingly collect information from children under 18. If we become aware that we have collected personal information from a child under 18, we will take steps to delete such information.'
     },
     {
       title: '11. Changes to This Policy',
-      content: 'We may update this Privacy Policy from time to time. We will notify users of material changes by posting the updated policy on the Platform. Your continued use of Loomiq after changes are posted constitutes acceptance of the updated policy.'
+      content: 'We may update this Privacy Policy from time to time. We will notify users of material changes by posting the updated policy on the Platform. Your continued use of Loomiqe after changes are posted constitutes acceptance of the updated policy.'
     },
     {
       title: '12. Contact Us',

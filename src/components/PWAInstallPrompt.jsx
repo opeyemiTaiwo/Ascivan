@@ -48,7 +48,7 @@ const PWAInstallPrompt = () => {
           {/* Content */}
           <div className="flex-1 min-w-0">
             <h3 className="text-white font-bold text-sm sm:text-base mb-1">
-              Install Loomiq
+              Install Loomiqe
             </h3>
             <p className="text-gray-300 text-xs sm:text-sm mb-3 sm:mb-4 leading-relaxed">
               Get quick access to jobs, housing, finance, and home feed from your home screen.

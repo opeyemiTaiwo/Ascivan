@@ -50,14 +50,14 @@ const TermsOfService = () => {
       {/* ── Header ── */}
       <header style={{ position: 'sticky', top: 0, zIndex: 100, background: 'rgba(3,7,18,0.93)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto', padding: '10px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-          {/* Logo — uses the actual Loomiq logo image */}
+          {/* Logo — uses the actual Loomiqe logo image */}
           <Link to="/solutions" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
             <img
               src="/Images/512X512.png"
-              alt="Loomiq Logo"
+              alt="Loomiqe Logo"
               style={{ width: 38, height: 38, borderRadius: 9, objectFit: 'contain', display: 'block' }}
             />
-            <span style={{ color: '#fff', fontFamily: "'Georgia',serif", fontWeight: 700, fontSize: 15, letterSpacing: '-0.3px', whiteSpace: 'nowrap' }}>Loomiq</span>
+            <span style={{ color: '#fff', fontFamily: "'Georgia',serif", fontWeight: 700, fontSize: 15, letterSpacing: '-0.3px', whiteSpace: 'nowrap' }}>Loomiqe</span>
           </Link>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -129,32 +129,32 @@ const TermsOfService = () => {
           {/* Intro callout */}
           <div style={{ background: 'linear-gradient(135deg,rgba(34,197,94,0.07),rgba(99,102,241,0.07))', border: '1px solid rgba(34,197,94,0.2)', borderRadius: 14, padding: '20px 22px', marginBottom: 44 }}>
             <p style={{ color: '#d1fae5', fontFamily: 'system-ui,sans-serif', fontSize: 15, lineHeight: 1.8, margin: 0 }}>
-              Welcome to <strong style={{ color: '#22c55e' }}>Loomiq</strong>. By accessing our website, requesting a consultation, or engaging our services, you agree to be bound by these Terms of Service. Please read them carefully before proceeding.
+              Welcome to <strong style={{ color: '#22c55e' }}>Loomiqe</strong>. By accessing our website, requesting a consultation, or engaging our services, you agree to be bound by these Terms of Service. Please read them carefully before proceeding.
             </p>
           </div>
 
           {/* ─── 01 Overview ─── */}
           <TosSection id="overview" number="01" title="Overview" icon="🏢">
-            <p>Loomiq is a digital innovation organization specializing in the design, development, and transformation of web and mobile applications using intelligent and cutting-edge technologies — including Artificial Intelligence (AI), machine learning, predictive analytics, and automation systems.</p>
-            <p>These Terms govern all engagements between Loomiq and any individual, business, or organization ("Client") seeking our services.</p>
+            <p>Loomiqe is a digital innovation organization specializing in the design, development, and transformation of web and mobile applications using intelligent and cutting-edge technologies — including Artificial Intelligence (AI), machine learning, predictive analytics, and automation systems.</p>
+            <p>These Terms govern all engagements between Loomiqe and any individual, business, or organization ("Client") seeking our services.</p>
           </TosSection>
 
           {/* ─── 02 Consultation Fee ─── */}
           <TosSection id="consultation" number="02" title="Consultation Fee" icon="💳" highlight>
             <TosCallout color="#22c55e" icon="💡" title="How Our Consultation Works">
-              Before any project begins, Loomiq conducts a comprehensive discovery consultation to understand your goals, existing systems, technical requirements, and desired outcomes. This allows us to design the most effective intelligent solution for your specific needs.
+              Before any project begins, Loomiqe conducts a comprehensive discovery consultation to understand your goals, existing systems, technical requirements, and desired outcomes. This allows us to design the most effective intelligent solution for your specific needs.
             </TosCallout>
 
             <Subsection title="Consultation Fee Amount">
               <p>A non-refundable consultation fee of <strong style={{ color: '#22c55e', fontSize: 17 }}>$100 USD</strong> is required to initiate a formal consultation with our team.</p>
               <TosCallout color="#f59e0b" icon="📌" title="Fee Subject to Change">
-                Loomiq reserves the right to adjust the consultation fee at any time at its sole discretion. Any change to the fee will be reflected on our website prior to taking effect. The fee in place at the time you submit your consultation request is the fee that applies to your engagement.
+                Loomiqe reserves the right to adjust the consultation fee at any time at its sole discretion. Any change to the fee will be reflected on our website prior to taking effect. The fee in place at the time you submit your consultation request is the fee that applies to your engagement.
               </TosCallout>
             </Subsection>
 
             <Subsection title="What the Consultation Fee Covers">
               <ul>
-                <li>A dedicated discovery session with a Loomiq solutions specialist</li>
+                <li>A dedicated discovery session with a Loomiqe solutions specialist</li>
                 <li>In-depth review and analysis of your current digital infrastructure</li>
                 <li>Initial scoping of the intelligent system or application you wish to build or transform</li>
                 <li>Preliminary recommendations on technology approach, architecture, and AI integration</li>
@@ -164,7 +164,7 @@ const TermsOfService = () => {
 
             <Subsection title="Consultation Fee as Project Credit">
               <TosCallout color="#6366f1" icon="✅" title="Good News — Your Fee Counts!">
-                If you choose to move forward and engage Loomiq to build or transform your web or mobile application following the consultation, the <strong>$100 consultation fee will be applied as a credit toward your total project payment</strong>. You will not pay this amount twice — it becomes part of your project investment.
+                If you choose to move forward and engage Loomiqe to build or transform your web or mobile application following the consultation, the <strong>$100 consultation fee will be applied as a credit toward your total project payment</strong>. You will not pay this amount twice — it becomes part of your project investment.
               </TosCallout>
             </Subsection>
 
@@ -189,7 +189,7 @@ const TermsOfService = () => {
               We conduct your discovery session — reviewing your goals, business model, existing platforms, and desired intelligent capabilities.
             </ProcessStep>
             <ProcessStep step={2} color="#6366f1" title="Custom Service Proposal Delivery">
-              We deliver a comprehensive written proposal including: recommended solution and services, how Loomiq operates, estimated project timeline and key milestones, transparent pricing breakdown, and technology stack and AI approach.
+              We deliver a comprehensive written proposal including: recommended solution and services, how Loomiqe operates, estimated project timeline and key milestones, transparent pricing breakdown, and technology stack and AI approach.
             </ProcessStep>
             <ProcessStep step={3} color="#f59e0b" title="Client Review & Decision">
               The Client reviews the proposal at their own discretion. There is no obligation to proceed. However, if you do not proceed, the consultation fee remains non-refundable as outlined in Section 2.
@@ -204,7 +204,7 @@ const TermsOfService = () => {
 
           {/* ─── 04 Pricing ─── */}
           <TosSection id="pricing" number="04" title="Pricing & Project Timelines" icon="📊">
-            <p>Project pricing at Loomiq is <strong>customized and scope-dependent</strong>. There is no one-size-fits-all rate, as every intelligent system we build is tailored to the unique needs, complexity, and goals of each Client.</p>
+            <p>Project pricing at Loomiqe is <strong>customized and scope-dependent</strong>. There is no one-size-fits-all rate, as every intelligent system we build is tailored to the unique needs, complexity, and goals of each Client.</p>
             <Subsection title="Factors That Influence Pricing">
               <ul>
                 <li>Type of solution (web application, mobile application, AI integration, automation system, etc.)</li>
@@ -216,7 +216,7 @@ const TermsOfService = () => {
               </ul>
             </Subsection>
             <Subsection title="Pricing Transparency">
-              <p>Full pricing will be provided in the custom proposal delivered after your consultation. Loomiq is committed to transparency — you will receive a clear, itemized breakdown before any project commitment is made.</p>
+              <p>Full pricing will be provided in the custom proposal delivered after your consultation. Loomiqe is committed to transparency — you will receive a clear, itemized breakdown before any project commitment is made.</p>
             </Subsection>
             <Subsection title="Payment Structure">
               <p>Project payments are typically structured in milestone-based installments, which will be clearly defined in your Project Agreement. Specific payment schedules and terms will be agreed upon in writing before project commencement.</p>
@@ -232,14 +232,14 @@ const TermsOfService = () => {
               <ul style={{ marginBottom: 0 }}>
                 <li><strong>Consultation Fee ($100):</strong> Non-refundable under all circumstances</li>
                 <li><strong>Project Payments:</strong> Subject to the terms outlined in your individual Project Agreement</li>
-                <li><strong>Consultation Fee as Credit:</strong> Applied toward project cost if Client proceeds with Loomiq</li>
+                <li><strong>Consultation Fee as Credit:</strong> Applied toward project cost if Client proceeds with Loomiqe</li>
               </ul>
             </TosCallout>
             <Subsection title="Consultation Fee — Non-Refundable">
-              <p>The $100 consultation fee compensates Loomiq for the time, expertise, and resources dedicated to your discovery session and custom proposal preparation. This fee is non-refundable regardless of whether the Client proceeds with a project.</p>
+              <p>The $100 consultation fee compensates Loomiqe for the time, expertise, and resources dedicated to your discovery session and custom proposal preparation. This fee is non-refundable regardless of whether the Client proceeds with a project.</p>
             </Subsection>
             <Subsection title="Project Payment Refunds">
-              <p>Refund terms for project payments are determined on a case-by-case basis and will be explicitly stated in the signed Project Agreement. Once work has commenced on a milestone, payments associated with that milestone are generally non-refundable unless Loomiq fails to deliver the agreed-upon work.</p>
+              <p>Refund terms for project payments are determined on a case-by-case basis and will be explicitly stated in the signed Project Agreement. Once work has commenced on a milestone, payments associated with that milestone are generally non-refundable unless Loomiqe fails to deliver the agreed-upon work.</p>
             </Subsection>
             <Subsection title="Dispute Resolution">
               <p>In the event of a dispute regarding services rendered or payments made, both parties agree to attempt resolution in good faith through direct communication before pursuing any formal legal remedies.</p>
@@ -251,8 +251,8 @@ const TermsOfService = () => {
             <Subsection title="Client-Owned Deliverables">
               <p>Upon full payment of all amounts due under a Project Agreement, the Client will own all intellectual property rights to the final deliverables created specifically for that Client, including custom code, designs, and application features.</p>
             </Subsection>
-            <Subsection title="Loomiq Proprietary Assets">
-              <p>Loomiq retains ownership of all pre-existing tools, frameworks, methodologies, AI models, and proprietary systems used in delivering client projects. Use of these assets within your delivered project is licensed, not transferred.</p>
+            <Subsection title="Loomiqe Proprietary Assets">
+              <p>Loomiqe retains ownership of all pre-existing tools, frameworks, methodologies, AI models, and proprietary systems used in delivering client projects. Use of these assets within your delivered project is licensed, not transferred.</p>
             </Subsection>
             <Subsection title="Third-Party Technologies">
               <p>Projects may incorporate third-party libraries, APIs, and platforms. The Client acknowledges that use of such technologies is subject to the respective third-party terms of service and licensing agreements.</p>
@@ -261,9 +261,9 @@ const TermsOfService = () => {
 
           {/* ─── 07 Liability ─── */}
           <TosSection id="liability" number="07" title="Limitation of Liability" icon="🛡️">
-            <p>To the maximum extent permitted by applicable law, Loomiq shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from or related to the use of our services, including but not limited to loss of revenue, data, goodwill, or business opportunities.</p>
-            <p>Loomiq's total liability arising from any engagement shall not exceed the total amount paid by the Client for the specific service giving rise to the claim.</p>
-            <p>Loomiq makes no warranties — express or implied — beyond those explicitly stated in a signed Project Agreement.</p>
+            <p>To the maximum extent permitted by applicable law, Loomiqe shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from or related to the use of our services, including but not limited to loss of revenue, data, goodwill, or business opportunities.</p>
+            <p>Loomiqe's total liability arising from any engagement shall not exceed the total amount paid by the Client for the specific service giving rise to the claim.</p>
+            <p>Loomiqe makes no warranties — express or implied — beyond those explicitly stated in a signed Project Agreement.</p>
           </TosSection>
 
           {/* ─── 08 Contact ─── */}
@@ -281,7 +281,7 @@ const TermsOfService = () => {
               </Link>
             </div>
             <p style={{ marginTop: 20, color: '#9ca3af', fontFamily: 'system-ui,sans-serif', fontSize: 14 }}>
-              By engaging with Loomiq's services or paying the consultation fee, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.
+              By engaging with Loomiqe's services or paying the consultation fee, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 24 }}>
               <Link to="/solutions/privacy" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.3)', borderRadius: 10, padding: '10px 16px', textDecoration: 'none', color: '#818cf8', fontFamily: 'system-ui,sans-serif', fontSize: 14, fontWeight: 600 }}>
@@ -296,7 +296,7 @@ const TermsOfService = () => {
           {/* Footer */}
           <div style={{ marginTop: 56, paddingTop: 28, borderTop: '1px solid rgba(255,255,255,0.07)', textAlign: 'center' }}>
             <p style={{ color: '#4b5563', fontFamily: 'system-ui,sans-serif', fontSize: 13 }}>
-              © {new Date().getFullYear()} Loomiq. All rights reserved.&nbsp;·&nbsp;
+              © {new Date().getFullYear()} Loomiqe. All rights reserved.&nbsp;·&nbsp;
               <Link to="/solutions" style={{ color: '#22c55e', textDecoration: 'none' }}>Home</Link>&nbsp;·&nbsp;
               <Link to="/solutions/privacy" style={{ color: '#818cf8', textDecoration: 'none' }}>Privacy Policy</Link>
             </p>

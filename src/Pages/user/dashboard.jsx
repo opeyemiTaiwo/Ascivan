@@ -561,7 +561,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         <div className="space-y-3 xs:space-y-4 sm:space-y-6 md:space-y-8">
           <SectionHeader 
             title="Home"
-            description="Connect, collaborate, and grow with the Loomiq international student community."
+            description="Connect, collaborate, and grow with the Loomiqe international student community."
             gradientColors="from-green-300 via-orange-400 to-green-500"
           />
 
@@ -855,7 +855,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         >
           <div className="flex items-center justify-between h-14 xs:h-16 sm:h-18 px-3 xs:px-4 sm:px-6 border-b border-gray-200">
             <Link to="/" className="flex items-center" aria-label="Go to homepage">
-              <img src="/Images/512X512.png" alt="Loomiq Logo" className="w-7 h-7 xs:w-8 xs:h-8 sm:w-10 sm:h-10" />
+              <img src="/Images/512X512.png" alt="Loomiqe Logo" className="w-7 h-7 xs:w-8 xs:h-8 sm:w-10 sm:h-10" />
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getAuthErrorMessage, isSafariMobileDevice, isAndroidMobileDevice, hasPotentialStorageIssues } from '../../firebase/config';
 import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 
 const Login = () => {
   const { currentUser, signInWithGoogle } = useAuth();
@@ -103,14 +104,14 @@ const Login = () => {
                 Welcome to{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-300 via-green-400 to-orange-500"
                       style={{ textShadow: 'none', filter: 'drop-shadow(0 0 20px rgba(34, 197, 94, 0.5))' }}>
-                  Loomiq
+                  Loomiqe
                 </span>
               </h1>
 
               {/* Platform Description */}
               <p className="text-gray-300 text-xs sm:text-sm md:text-base font-medium px-2 mb-3"
                  style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
-                Loomiq leverages cutting-edge AI to deliver a seamless solution, revolutionizing how international students navigate{' '}
+                Loomiqe leverages cutting-edge AI to deliver a seamless solution, revolutionizing how international students navigate{' '}
                 <span className="text-white font-semibold">housing, finance, jobs, and community</span> abroad.
               </p>
 
@@ -221,34 +222,7 @@ const Login = () => {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.9), transparent)' }}
-              className="text-white py-6 sm:py-8 md:py-10 lg:py-12 relative z-10 mt-auto">
-        <div className="container mx-auto px-3 sm:px-4 md:px-6">
-          <div className="text-center">
-            <div className="flex items-center justify-center space-x-2 mb-3 sm:mb-4">
-              <img src="/Images/512X512.png" alt="Loomiq Logo"
-                   className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 flex-shrink-0" />
-              <span className="text-base sm:text-lg md:text-xl font-black"
-                    style={{
-                      textShadow: '0 0 20px rgba(34, 197, 94, 0.5), 2px 2px 4px rgba(0,0,0,0.8)',
-                      fontFamily: '"Inter", sans-serif'
-                    }}>
-                Loomiq
-              </span>
-            </div>
-            <div className="flex items-center justify-center mb-3 sm:mb-4 px-4">
-              <span className="text-gray-300 text-xs sm:text-sm font-medium text-center"
-                    style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
-                Transforming the international student experience with AI
-              </span>
-            </div>
-            <p className="text-gray-400 text-xs sm:text-sm" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
-              © {new Date().getFullYear()} Loomiq. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer dark={true} />
 
       {/* Custom Styles */}
       <style jsx>{`

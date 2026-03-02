@@ -14,7 +14,7 @@ const About = () => {
           {/* Hero */}
           <section className="text-center mb-16">
             <div className="mb-4 inline-block px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-xl">
-              <p className="text-green-400 font-semibold text-sm">About Loomiq</p>
+              <p className="text-green-400 font-semibold text-sm">About Loomiqe</p>
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4">
               Empowering International{' '}
@@ -30,7 +30,7 @@ const About = () => {
             <div className="bg-white/5 rounded-xl border border-white/20 p-6 sm:p-8">
               <h2 className="text-2xl font-bold text-white mb-4">Our Mission</h2>
               <p className="text-gray-300 leading-relaxed mb-4">
-                International students face fragmented services for housing, finance, and jobs, making it harder to succeed abroad. Loomiq leverages cutting-edge AI to deliver a seamless solution, revolutionizing how international students navigate life in a new country.
+                International students face fragmented services for housing, finance, and jobs, making it harder to succeed abroad. Loomiqe leverages cutting-edge AI to deliver a seamless solution, revolutionizing how international students navigate life in a new country.
               </p>
               <p className="text-gray-300 leading-relaxed">
                 We're building the platform we wish existed when we arrived — one place to find verified housing, discover visa-compliant jobs, access student-friendly financial resources, and connect with a supportive community of peers and alumni.
@@ -69,7 +69,7 @@ const About = () => {
                   <h3 className="text-white font-bold text-lg">Opeyemi Adeniran</h3>
                   <p className="text-green-400 text-sm font-semibold">Founder & CEO</p>
                   <p className="text-gray-400 text-sm mt-1">
-                    PhD student in Computer & Electrical Systems Engineering (AI focus) at Morgan State University. Building Loomiq to support the millions of skilled international students navigating life in the USA.
+                    PhD student in Computer & Electrical Systems Engineering (AI focus) at Morgan State University. Building Loomiqe to support the millions of skilled international students navigating life in the USA.
                   </p>
                 </div>
               </div>

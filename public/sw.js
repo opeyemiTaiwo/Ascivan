@@ -4,7 +4,7 @@
 
 console.log('🔧 Service Worker: Loading...');
 
-const CACHE_NAME = 'Loomiq-v1';
+const CACHE_NAME = 'Loomiqe-v1';
 
 // Install event
 self.addEventListener('install', (event) => {

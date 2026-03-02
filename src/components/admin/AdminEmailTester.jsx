@@ -102,7 +102,7 @@ const AdminEmailTester = () => {
           projectTitle: 'Test React E-commerce Application',
           teamSize: 4,
           groupId: 'test-group-123',
-          rejectionReason: 'GitHub repository is not public. Please make your repository public and ensure "Loomiq" is added as a collaborator before resubmitting.'
+          rejectionReason: 'GitHub repository is not public. Please make your repository public and ensure "Loomiqe" is added as a collaborator before resubmitting.'
         }
       }
     },

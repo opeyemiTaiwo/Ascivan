@@ -1,4 +1,4 @@
-// src/components/community/FollowButton.jsx - Loomiq Follow System - FULLY RESPONSIVE
+// src/components/community/FollowButton.jsx - Loomiqe Follow System - FULLY RESPONSIVE
 
 import React, { useState, useEffect } from 'react';
 import { 
@@ -8,7 +8,7 @@ import {
 import { showSuccessMessage, showWarningMessage } from '../../utils/errorHandler';
 
 /**
- * Follow/Unfollow Button Component for Loomiq
+ * Follow/Unfollow Button Component for Loomiqe
  * Allows users to follow/unfollow other community members
  * Fully responsive for all screen sizes
  */

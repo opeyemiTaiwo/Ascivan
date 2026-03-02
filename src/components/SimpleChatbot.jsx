@@ -41,7 +41,7 @@ const SimpleChatbot = () => {
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       const timer = setTimeout(() => {
-        addBotMessage("Hi! Welcome to Loomiq. I'm your AI assistant here to help you navigate housing, finance, jobs, and home resources as an international student. What's your first name?");
+        addBotMessage("Hi! Welcome to Loomiqe. I'm your AI assistant here to help you navigate housing, finance, jobs, and home resources as an international student. What's your first name?");
       }, 500);
       return () => clearTimeout(timer);
     }
@@ -81,7 +81,7 @@ const SimpleChatbot = () => {
         setStep(4);
       } else if (type.includes('career') || type.includes('tech') || type.includes('job')) {
         // Jobs/career branch
-        addBotMessage("Great news! Loomiq helps international students find jobs, housing, financial aid, and connect with a supportive community — all in one place.");
+        addBotMessage("Great news! Loomiqe helps international students find jobs, housing, financial aid, and connect with a supportive community — all in one place.");
         setTimeout(() => {
           addBotMessage("Check out our Jobs section for visa-compliant opportunities, or explore Finance for scholarships and grants.");
         }, 1500);
@@ -331,7 +331,7 @@ const SimpleChatbot = () => {
                     🤖
                   </div>
                   <div>
-                    <h3 className="font-bold text-base sm:text-lg md:text-xl">Loomiq Assistant</h3>
+                    <h3 className="font-bold text-base sm:text-lg md:text-xl">Loomiqe Assistant</h3>
                     <p className="text-sm text-white/80">Collecting your info — our team follows up personally</p>
                   </div>
                 </div>

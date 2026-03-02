@@ -1,4 +1,4 @@
-// src/components/community/MobileSidebar.jsx - Loomiq Mobile Navigation - FULLY RESPONSIVE
+// src/components/community/MobileSidebar.jsx - Loomiqe Mobile Navigation - FULLY RESPONSIVE
 
 import React, { useEffect } from 'react';
 

@@ -40,10 +40,10 @@ const Navbar = () => {
             <Link to="/community" className="flex-shrink-0 group flex items-center gap-2">
               <img
                 src="/Images/512X512.png"
-                alt="Loomiq"
+                alt="Loomiqe"
                 className="h-10 w-10 sm:h-12 sm:w-12"
               />
-              <span className="hidden sm:block font-bold text-gray-900 text-lg">Loomiq</span>
+              <span className="hidden sm:block font-bold text-gray-900 text-lg">Loomiqe</span>
             </Link>
 
             {/* Desktop Navigation */}

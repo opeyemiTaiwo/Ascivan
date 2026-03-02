@@ -1,4 +1,4 @@
-// src/Pages/community/SinglePost.jsx - Loomiq Single Post View
+// src/Pages/community/SinglePost.jsx - Loomiqe Single Post View
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
@@ -45,7 +45,7 @@ import FollowButton from '../../components/community/FollowButton';
 import usePosterName from '../../hooks/usePosterName';
 
 /**
- * Loomiq - Single Post View
+ * Loomiqe - Single Post View
  * Display individual post with full details and replies
  */
 const SinglePost = () => {
@@ -273,7 +273,7 @@ const SinglePost = () => {
         uid: id,
         firstName: '',
         lastName: '',
-        displayName: 'Loomiq Member',
+        displayName: 'Loomiqe Member',
         photoURL: null,
         initials: 'TM',
         profile: {}

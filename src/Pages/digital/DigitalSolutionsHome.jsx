@@ -149,11 +149,11 @@ const SERVICES = [
 
 const FAQs = [
   {
-    question: "What does Loomiq do?",
-    answer: "Loomiq builds cutting-edge technology solutions for businesses. We transform web and mobile applications into intelligent systems using AI, automation, and data-driven architecture. We also run an all-in-one platform for international students — explore it from our homepage."
+    question: "What does Loomiqe do?",
+    answer: "Loomiqe builds cutting-edge technology solutions for businesses. We transform web and mobile applications into intelligent systems using AI, automation, and data-driven architecture. We also run an all-in-one platform for international students — explore it from our homepage."
   },
   {
-    question: "How is Loomiq different from other development companies?",
+    question: "How is Loomiqe different from other development companies?",
     answer: "We don't just build websites — we design intelligent systems that automate, analyze, and evolve. Every engagement starts with strategy, and our solutions are built to scale with your business."
   },
   {
@@ -381,7 +381,7 @@ const CareerHome = () => {
             </h2>
             <p className="text-gray-300 text-base sm:text-lg md:text-xl leading-relaxed"
                style={{ fontFamily: '"Inter", sans-serif' }}>
-              Loomiq is a digital innovation organization that builds cutting-edge technology solutions for businesses and empowers the next generation of tech professionals. We combine software engineering, strategy, and emerging technologies to build scalable solutions for growth.
+              Loomiqe is a digital innovation organization that builds cutting-edge technology solutions for businesses and empowers the next generation of tech professionals. We combine software engineering, strategy, and emerging technologies to build scalable solutions for growth.
             </p>
           </div>
         </section>
@@ -531,7 +531,7 @@ const CareerHome = () => {
                   </div>
                   <div className="flex flex-col items-center justify-center min-w-[160px] sm:min-w-[240px] md:min-w-[280px]">
                     <div className="text-green-400 text-sm sm:text-base font-bold mb-1 tracking-wider">STUDENT PLATFORM</div>
-                    <div className="text-white text-base sm:text-lg md:text-xl font-bold text-center">Loomiq Careers</div>
+                    <div className="text-white text-base sm:text-lg md:text-xl font-bold text-center">Loomiqe Careers</div>
                   </div>
                 </div>
               ))}
@@ -688,7 +688,7 @@ const CareerHome = () => {
           <div className="border-t border-white/10 pt-6 sm:pt-8">
             <div className="flex flex-col space-y-5">
               <div className="text-center">
-                <p className="text-green-400 font-bold text-base sm:text-lg" style={{ fontFamily: '"Inter", sans-serif' }}>Loomiq</p>
+                <p className="text-green-400 font-bold text-base sm:text-lg" style={{ fontFamily: '"Inter", sans-serif' }}>Loomiqe</p>
                 <p className="text-gray-400 text-sm sm:text-base" style={{ fontFamily: '"Inter", sans-serif' }}>Building Intelligent Digital Systems &bull; Empowering Tech Professionals</p>
               </div>
               <div className="flex justify-center items-center gap-4 sm:gap-6">
@@ -721,7 +721,7 @@ const CareerHome = () => {
                 <a href="/" className="text-gray-300 hover:text-green-400 text-base transition-colors font-medium">Student Platform</a>
               </div>
               <div className="text-center">
-                <p className="text-gray-300 text-sm sm:text-base">© {new Date().getFullYear()} Loomiq. All rights reserved.</p>
+                <p className="text-gray-300 text-sm sm:text-base">© {new Date().getFullYear()} Loomiqe. All rights reserved.</p>
                 <p className="text-gray-500 text-sm mt-1">Your Digital Intelligence Partner</p>
               </div>
             </div>

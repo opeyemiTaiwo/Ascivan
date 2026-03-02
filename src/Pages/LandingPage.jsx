@@ -266,7 +266,7 @@ const LandingPage = () => {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 mb-8 float">
             <span className="w-2 h-2 rounded-full bg-green-400 pulse-slow" />
-            <span className="text-gray-300 text-sm font-medium">Built for international students in the US</span>
+            <span className="text-gray-300 text-sm font-medium">Built for international students</span>
           </div>
 
           {/* Headline */}

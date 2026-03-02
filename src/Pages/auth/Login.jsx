@@ -12,12 +12,10 @@ const Login = () => {
   const [authMethod, setAuthMethod] = useState('');
   const navigate = useNavigate();
 
-  // Check if user is on mobile browser with potential storage issues
   const isSafariMobile = isSafariMobileDevice();
   const isAndroidMobile = isAndroidMobileDevice();
   const hasStorageIssues = hasPotentialStorageIssues();
 
-  // Redirect authenticated users — route guard will check onboarding
   useEffect(() => {
     if (currentUser) {
       console.log('User authenticated, checking onboarding status...');
@@ -29,23 +27,19 @@ const Login = () => {
     try {
       setIsLoading(true);
       setError('');
-      
       if (hasStorageIssues) {
         setAuthMethod('popup');
         console.log("Mobile browser with potential storage issues detected - using popup authentication");
       } else {
         setAuthMethod('redirect');
       }
-      
       await signInWithGoogle();
     } catch (error) {
       console.error("Login failed", error);
-      
       const friendlyErrorMessage = getAuthErrorMessage(error);
       setError(friendlyErrorMessage);
       setIsLoading(false);
       setAuthMethod('');
-      
       console.error("Technical error details:", {
         code: error?.code,
         message: error?.message,
@@ -59,46 +53,38 @@ const Login = () => {
 
   const getLoadingMessage = () => {
     if (!isLoading) return "Sign in with Google";
-    
     switch (authMethod) {
-      case 'popup':
-        return "Opening sign-in popup...";
-      case 'redirect':
-        return "Redirecting to Google...";
-      default:
-        return "Signing in...";
+      case 'popup': return "Opening sign-in popup...";
+      case 'redirect': return "Redirecting to Google...";
+      default: return "Signing in...";
     }
   };
 
   const getHelpText = () => {
-    if (isSafariMobile) {
-      return "On Safari mobile, sign-in will open in a popup window. Please allow popups if prompted.";
-    } else if (isAndroidMobile) {
-      return "On Android devices, sign-in will open in a popup window. Please allow popups if prompted.";
-    } else if (hasStorageIssues) {
-      return "Your browser may have storage restrictions. Sign-in will use a popup window.";
-    }
+    if (isSafariMobile) return "On Safari mobile, sign-in will open in a popup window. Please allow popups if prompted.";
+    else if (isAndroidMobile) return "On Android devices, sign-in will open in a popup window. Please allow popups if prompted.";
+    else if (hasStorageIssues) return "Your browser may have storage restrictions. Sign-in will use a popup window.";
     return "Secure login powered by Google";
   };
 
   return (
-    <div 
+    <div
       className="min-h-screen overflow-x-hidden flex flex-col relative"
-      style={{}}
+      style={{ backgroundColor: '#000000' }}
     >
       {/* Global Navbar */}
       <Navbar />
 
       {/* Main Content */}
       <main className="flex-grow flex items-center justify-center px-3 sm:px-4 relative z-10 py-8">
-        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl sm:rounded-2xl md:rounded-3xl shadow-2xl p-5 sm:p-6 md:p-8 lg:p-10 w-full max-w-md border border-white/20">
+        <div className="bg-gradient-to-br from-white/5 via-gray-900/40 to-white/5 rounded-xl sm:rounded-2xl md:rounded-3xl shadow-2xl p-5 sm:p-6 md:p-8 lg:p-10 w-full max-w-md border border-white/20">
           <div className="text-center">
+
             {/* Hero Section */}
             <div className="mb-5 sm:mb-6 md:mb-8">
               <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-3 sm:mb-4 animate-pulse">
-                <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 md:h-3 md:w-3 bg-orange-400 rounded-full" 
-                     ></div>
-                <span className="text-orange-300 uppercase tracking-widest text-xs sm:text-sm font-black" 
+                <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 md:h-3 md:w-3 bg-orange-400 rounded-full"></div>
+                <span className="text-orange-300 uppercase tracking-widest text-xs sm:text-sm font-black"
                       style={{
                         textShadow: '0 0 20px rgba(251, 146, 60, 0.8), 2px 2px 4px rgba(0,0,0,0.9)',
                         fontFamily: '"Inter", sans-serif',
@@ -106,35 +92,31 @@ const Login = () => {
                       }}>
                   Secure Access
                 </span>
-                <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 md:h-3 md:w-3 bg-orange-400 rounded-full" 
-                     ></div>
+                <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 md:h-3 md:w-3 bg-orange-400 rounded-full"></div>
               </div>
 
-              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white mb-2 sm:mb-3 px-2" 
+              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white mb-2 sm:mb-3 px-2"
                   style={{
                     fontFamily: '"Inter", sans-serif',
                     textShadow: '0 0 20px rgba(255,255,255,0.3), 2px 2px 4px rgba(0,0,0,0.9)'
                   }}>
                 Welcome to{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-300 via-green-400 to-orange-500"
-                      style={{
-                        textShadow: 'none',
-                        filter: 'drop-shadow(0 0 20px rgba(34, 197, 94, 0.5))',
-                        
-                      }}>
+                      style={{ textShadow: 'none', filter: 'drop-shadow(0 0 20px rgba(34, 197, 94, 0.5))' }}>
                   Loomiq
                 </span>
               </h1>
-              
-              <p className="text-gray-300 text-xs sm:text-sm md:text-base font-medium px-2" 
-                 style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
-                Access your personalized dashboard and start your journey
+
+              {/* Platform Description */}
+              <p className="text-gray-300 text-xs sm:text-sm md:text-base font-medium px-2 mb-3"
+                 style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
+                Loomiq leverages cutting-edge AI to deliver a seamless solution, revolutionizing how international students navigate{' '}
+                <span className="text-white font-semibold">housing, finance, jobs, and community</span> abroad.
               </p>
 
-              <div className="h-0.5 sm:h-1 w-12 sm:w-16 md:w-20 bg-gradient-to-r from-orange-400 to-green-500 mx-auto rounded-full shadow-2xl mt-3 sm:mt-4"
-                   ></div>
+              <div className="h-0.5 sm:h-1 w-12 sm:w-16 md:w-20 bg-gradient-to-r from-orange-400 to-green-500 mx-auto rounded-full shadow-2xl mt-3 sm:mt-4"></div>
             </div>
-            
+
             {/* Error Display */}
             {error && (
               <div className="bg-gradient-to-br from-red-900/40 via-red-800/40 to-red-900/40 border border-red-500/30 text-red-300 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl mb-4 sm:mb-5 md:mb-6 shadow-2xl">
@@ -146,15 +128,11 @@ const Login = () => {
                     <p className="font-bold text-xs sm:text-sm text-red-300">Sign-in Failed</p>
                     <p className="text-xs sm:text-sm mt-1 text-red-200 break-words">{error}</p>
                     {error.includes('popup') && (
-                      <p className="text-xs mt-2 text-red-400">
-                        Try enabling popups in your browser settings
-                      </p>
+                      <p className="text-xs mt-2 text-red-400">Try enabling popups in your browser settings</p>
                     )}
                     {error.includes('refresh') && (
-                      <button 
-                        onClick={() => window.location.reload()} 
-                        className="text-xs mt-2 underline text-red-400 hover:text-red-300 transition-colors duration-300"
-                      >
+                      <button onClick={() => window.location.reload()}
+                              className="text-xs mt-2 underline text-red-400 hover:text-red-300 transition-colors duration-300">
                         Click here to refresh the page
                       </button>
                     )}
@@ -172,24 +150,20 @@ const Login = () => {
                   </svg>
                   <div className="min-w-0">
                     <p className="font-bold text-xs sm:text-sm text-green-300">
-                      {isSafariMobile ? 'Safari Mobile Detected' : 
-                       isAndroidMobile ? 'Android Mobile Detected' : 
-                       'Mobile Browser Detected'}
+                      {isSafariMobile ? 'Safari Mobile Detected' : isAndroidMobile ? 'Android Mobile Detected' : 'Mobile Browser Detected'}
                     </p>
                     <p className="text-xs mt-1 text-green-200">Sign-in will open in a popup. Please allow popups if prompted.</p>
                   </div>
                 </div>
               </div>
             )}
-            
+
             <div className="space-y-3 sm:space-y-4 md:space-y-6">
-              <button 
-                onClick={handleGoogleSignIn} 
+              <button
+                onClick={handleGoogleSignIn}
                 disabled={isLoading}
                 className="w-full bg-gradient-to-br from-white/10 via-white/5 to-white/10 border border-white/20 text-white py-2.5 sm:py-3 md:py-4 px-3 sm:px-4 rounded-xl shadow-2xl hover:shadow-3xl flex items-center justify-center space-x-2 sm:space-x-3 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 group"
-                style={{
-                  boxShadow: '0 10px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)'
-                }}
+                style={{ boxShadow: '0 10px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)' }}
               >
                 {isLoading ? (
                   <>
@@ -231,33 +205,31 @@ const Login = () => {
 
             {/* Additional Info */}
             <div className="mt-5 sm:mt-6 md:mt-8">
-              <p className="text-xs text-gray-400 px-2" style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
+              <p className="text-xs text-gray-400 px-2" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
                 {getHelpText()}
               </p>
               {process.env.NODE_ENV === 'development' && (
                 <div className="text-xs text-gray-500 mt-2 space-y-1 bg-black/20 rounded-lg p-2 border border-white/10">
-                  <p className="break-all">Debug: {isSafariMobile ? 'Safari Mobile' : 
-                            isAndroidMobile ? 'Android Mobile' : 
-                            hasStorageIssues ? 'Mobile with Storage Issues' : 'Desktop Browser'} | Method: {authMethod || 'None'}</p>
+                  <p className="break-all">Debug: {isSafariMobile ? 'Safari Mobile' :
+                    isAndroidMobile ? 'Android Mobile' :
+                    hasStorageIssues ? 'Mobile with Storage Issues' : 'Desktop Browser'} | Method: {authMethod || 'None'}</p>
                 </div>
               )}
             </div>
+
           </div>
         </div>
       </main>
 
       {/* Footer */}
-      <footer style={{background: 'linear-gradient(to top, rgba(0,0,0,0.9), transparent)'}} 
+      <footer style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.9), transparent)' }}
               className="text-white py-6 sm:py-8 md:py-10 lg:py-12 relative z-10 mt-auto">
         <div className="container mx-auto px-3 sm:px-4 md:px-6">
           <div className="text-center">
             <div className="flex items-center justify-center space-x-2 mb-3 sm:mb-4">
-              <img 
-                src="/Images/512X512.png" 
-                alt="Loomiq Logo" 
-                className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 flex-shrink-0"
-              />
-              <span className="text-base sm:text-lg md:text-xl font-black" 
+              <img src="/Images/512X512.png" alt="Loomiq Logo"
+                   className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 flex-shrink-0" />
+              <span className="text-base sm:text-lg md:text-xl font-black"
                     style={{
                       textShadow: '0 0 20px rgba(34, 197, 94, 0.5), 2px 2px 4px rgba(0,0,0,0.8)',
                       fontFamily: '"Inter", sans-serif'
@@ -266,13 +238,12 @@ const Login = () => {
               </span>
             </div>
             <div className="flex items-center justify-center mb-3 sm:mb-4 px-4">
-              <span className="text-gray-300 text-xs sm:text-sm font-medium text-center" 
-                    style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
+              <span className="text-gray-300 text-xs sm:text-sm font-medium text-center"
+                    style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
                 Transforming the international student experience with AI
               </span>
             </div>
-            <p className="text-gray-400 text-xs sm:text-sm" 
-               style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
+            <p className="text-gray-400 text-xs sm:text-sm" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
               © {new Date().getFullYear()} Loomiq. All rights reserved.
             </p>
           </div>
@@ -293,27 +264,13 @@ const Login = () => {
           box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25), 0 0 60px rgba(34, 197, 94, 0.1);
         }
         
-        ::-webkit-scrollbar {
-          width: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-          background: rgba(0, 0, 0, 0.1);
-        }
-        
-        ::-webkit-scrollbar-thumb {
-          background: rgba(34, 197, 94, 0.5);
-          border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-          background: rgba(34, 197, 94, 0.7);
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
+        ::-webkit-scrollbar-thumb { background: rgba(34, 197, 94, 0.5); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(34, 197, 94, 0.7); }
 
         @media (max-width: 768px) {
-          button, a, input, textarea {
-            min-height: 44px;
-          }
+          button, a, input, textarea { min-height: 44px; }
         }
 
         @media (prefers-reduced-motion: reduce) {

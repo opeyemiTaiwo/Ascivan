@@ -199,16 +199,16 @@ const LandingPage = () => {
       `}</style>
 
       {/* ── NAVBAR ── */}
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 backdrop-blur-xl"
-           style={{ background: 'rgba(0,0,0,0.8)' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-gray-200 backdrop-blur-xl"
+     style={{ background: 'rgba(255,255,255,0.95)' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-24">
           <Link to="/" className="flex items-center gap-2.5">
             <img src="/Images/512X512.png" alt="Loomiqe" className="w-24 h-24" />
             <span className="font-display font-800 text-lg text-white tracking-tight sr-only"></span>
           </Link>
           <div className="flex items-center gap-3">
-            <Link to="/about" className="hidden sm:block text-gray-400 hover:text-white text-sm font-medium transition-colors">About</Link>
-            <Link to="/support" className="hidden sm:block text-gray-400 hover:text-white text-sm font-medium transition-colors">Support</Link>
+            <Link to="/about" className="hidden sm:block text-gray-600 hover:text-black text-sm font-medium transition-colors">About</Link>
+            <Link to="/support" className="hidden sm:block text-gray-600 hover:text-black text-sm font-medium transition-colors">Support</Link>
             <button
               onClick={handleSignIn}
               disabled={isLoading}
@@ -221,7 +221,7 @@ const LandingPage = () => {
       </nav>
 
       {/* ── HERO ── */}
-      <section className="relative min-h-screen flex items-center justify-center grid-bg noise pt-16 overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center grid-bg noise pt-24 overflow-hidden">
         {/* Blobs */}
         <div className="hero-blob w-[500px] h-[500px] bg-orange-600/20 top-[-100px] left-[-150px]" />
         <div className="hero-blob w-[400px] h-[400px] bg-green-600/15 bottom-[-50px] right-[-100px]" />

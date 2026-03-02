@@ -432,7 +432,7 @@ const Messages = () => {
                         }}
                         placeholder="Type a message..."
                         maxLength={2000}
-                        className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent min-h-[44px]"
+                        className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent min-h-[44px] placeholder-gray-400"
                       />
                       <button
                         onClick={sendMessage}

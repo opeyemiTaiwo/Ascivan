@@ -1083,7 +1083,16 @@ const CommunityPosts = () => {
               )}
 
               <div className="mb-6 xs:mb-8">
-                <div className="relative view-menu-container flex justify-center">
+                <div className="relative view-menu-container flex justify-center items-center gap-3">
+                  <Link
+                    to="/community/submit"
+                    className="flex items-center gap-2 px-4 xs:px-5 py-2 xs:py-2.5 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg xs:rounded-xl font-semibold transition-all duration-300 min-h-[44px] text-sm xs:text-base"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    Create Post
+                  </Link>
                   <button
                     onClick={() => setShowViewMenu(!showViewMenu)}
                     className="flex items-center gap-2 px-4 xs:px-5 sm:px-6 py-2 xs:py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg xs:rounded-xl transition-all duration-300 min-h-[44px] text-sm xs:text-base text-white"

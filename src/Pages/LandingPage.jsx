@@ -389,8 +389,8 @@ const LandingPage = () => {
           <div className="flex items-center justify-center gap-3">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-green-500 flex items-center justify-center text-white font-bold text-sm">A</div>
             <div className="text-left">
-              <div className="text-white text-sm font-semibold">Aisha K.</div>
-              <div className="text-gray-500 text-xs">Computer Science, University of Maryland</div>
+              <div className="text-white text-sm font-semibold">Temitope A.</div>
+              <div className="text-gray-500 text-xs">Computer System Engineering, Morgan State University</div>
             </div>
           </div>
         </div>

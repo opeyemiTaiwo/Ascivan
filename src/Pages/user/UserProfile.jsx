@@ -240,7 +240,6 @@ const UserProfile = () => {
                 )}
                 {profile.isCompany && profile.companyProfile?.companyName && (
                   <div className="bg-white/5 rounded-xl p-3.5 border border-white/10 sm:col-span-2">
-                    <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Company</p>
                     <p className="text-white font-semibold text-sm">{profile.companyProfile.companyName}</p>
                     {profile.companyProfile.companyLocation && (
                       <p className="text-gray-400 text-xs mt-0.5">{profile.companyProfile.companyLocation}</p>

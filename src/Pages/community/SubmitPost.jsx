@@ -514,7 +514,7 @@ const SubmitPost = () => {
                 <div className="min-w-0 flex-1">
                   <p className="font-semibold text-white text-sm sm:text-base truncate">
                     {profilePosterName || currentUser.displayName || currentUser.email}
-                    {profileIsCompany && <span className="ml-1.5 text-xs bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded font-semibold">🏢 Company</span>}
+                    
                   </p>
                   {currentUser.profile?.title && (
                     <p className="text-xs sm:text-sm text-orange-400 truncate">{currentUser.profile.title}</p>
@@ -557,7 +557,7 @@ const SubmitPost = () => {
                   showLinkButton={true}
                 />
                 <div className="flex justify-between items-center mt-1">
-                  <p className="text-[10px] sm:text-xs text-gray-400">💡 Tip: Use @ for mentions</p>
+                  <p className="text-[10px] sm:text-xs text-gray-400">Tip: Use @ for mentions</p>
                   <p className="text-[10px] sm:text-xs text-gray-400">{formData.content.length}/5000</p>
                 </div>
               </div>
@@ -600,7 +600,7 @@ const SubmitPost = () => {
                   />
                   
                   <div className="space-y-2 sm:space-y-3">
-                    <div className="text-3xl sm:text-4xl">📷</div>
+                    
                     <div>
                       <p className="text-white font-medium mb-1 text-sm sm:text-base">
                         Drag and drop images here
@@ -692,20 +692,6 @@ const SubmitPost = () => {
                   </div>
                 )}
               </div>
-
-              {/* Guidelines - Responsive */}
-              <div className="p-3 sm:p-4 bg-orange-500/10 border border-orange-500/30 rounded-lg">
-                <h4 className="text-orange-300 font-medium mb-1.5 sm:mb-2 flex items-center text-sm sm:text-base">
-                  <span className="mr-1.5 sm:mr-2">💡</span>
-                  Community Guidelines
-                </h4>
-                <ul className="text-gray-300 text-xs sm:text-sm space-y-0.5 sm:space-y-1">
-                  <li>• Be respectful and professional</li>
-                  <li>• Share valuable insights</li>
-                  <li>• Use @mentions appropriately</li>
-                  <li>• Keep content appropriate</li>
-                </ul>
-              </div>
             </div>
 
             {/* Footer Actions - Responsive */}
@@ -714,7 +700,7 @@ const SubmitPost = () => {
                 <div className="text-gray-400 text-xs sm:text-sm">
                   {selectedFiles.length > 0 && (
                     <span className="flex items-center">
-                      <span className="text-orange-400 mr-1.5">📷</span>
+                      
                       {selectedFiles.length} image{selectedFiles.length !== 1 ? 's' : ''} attached
                     </span>
                   )}
@@ -739,7 +725,6 @@ const SubmitPost = () => {
                       </span>
                     ) : (
                       <span className="flex items-center justify-center">
-                        <span className="mr-1.5 sm:mr-2">✍️</span>
                         Publish
                       </span>
                     )}
@@ -747,32 +732,6 @@ const SubmitPost = () => {
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Tips Card - Responsive */}
-          <div className="bg-gradient-to-br from-gray-900/30 via-black/30 to-gray-900/30 rounded-xl border border-orange-500/10 p-4 sm:p-6">
-            <h3 className="text-white font-bold mb-2 sm:mb-3 flex items-center text-sm sm:text-base">
-              <span className="text-orange-400 mr-1.5 sm:mr-2">✨</span>
-              Tips for Great Posts
-            </h3>
-            <ul className="text-gray-300 text-xs sm:text-sm space-y-1.5 sm:space-y-2">
-              <li className="flex items-start">
-                <span className="text-orange-400 mr-1.5 sm:mr-2 flex-shrink-0">1.</span>
-                <span><strong>Be Clear:</strong> Use a descriptive title</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-orange-400 mr-1.5 sm:mr-2 flex-shrink-0">2.</span>
-                <span><strong>Add Context:</strong> Include relevant links</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-orange-400 mr-1.5 sm:mr-2 flex-shrink-0">3.</span>
-                <span><strong>Engage:</strong> Tag relevant members</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-orange-400 mr-1.5 sm:mr-2 flex-shrink-0">4.</span>
-                <span><strong>Visual:</strong> Add images for engagement</span>
-              </li>
-            </ul>
           </div>
         </form>
       </main>

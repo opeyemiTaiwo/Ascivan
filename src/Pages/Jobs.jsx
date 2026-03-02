@@ -444,7 +444,7 @@ const Jobs = () => {
                         {/* Footer */}
                         <div className="mt-auto pt-4 border-t border-white/10">
                           <div className="flex justify-between text-xs text-gray-400 mb-3">
-                            <span className="truncate max-w-[120px] flex items-center gap-1">{post.posterName}{post.isCompanyPost && <span className="text-blue-400 text-[10px]">🏢</span>}</span>
+                            <span className="truncate max-w-[120px] flex items-center gap-1">{post.posterName}</span>
                             <span className={expiringSoon && !isClosed ? 'text-red-400' : ''}>
                               {formatExpiration(post.expiresAt)}
                             </span>

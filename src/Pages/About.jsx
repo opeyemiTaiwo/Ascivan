@@ -43,13 +43,12 @@ const About = () => {
             <h2 className="text-2xl font-bold text-white mb-6">What We Solve</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
-                { icon: '🏠', title: 'Housing', desc: 'Secure verified, affordable housing near your campus.' },
-                { icon: '💰', title: 'Finance', desc: 'Access scholarships, grants, loans, and financial aid tailored for international students.' },
-                { icon: '💼', title: 'Jobs', desc: 'Discover job opportunities that are visa-compliant.' },
-                { icon: '🤝', title: 'Community', desc: 'Connect with a supportive community of peers, mentors, and alumni.' },
+                { title: 'Housing', desc: 'Secure verified, affordable housing near your campus.' },
+                { title: 'Finance', desc: 'Access scholarships, grants, loans, and financial aid tailored for international students.' },
+                { title: 'Jobs', desc: 'Discover job opportunities that are visa-compliant.' },
+                { title: 'Community', desc: 'Connect with a supportive community of peers, mentors, and alumni.' },
               ].map((item, i) => (
                 <div key={i} className="bg-white/5 rounded-xl border border-white/20 p-5">
-                  <div className="text-3xl mb-3">{item.icon}</div>
                   <h3 className="text-white font-bold text-lg mb-2">{item.title}</h3>
                   <p className="text-gray-400 text-sm">{item.desc}</p>
                 </div>
@@ -67,7 +66,6 @@ const About = () => {
                 </div>
                 <div>
                   <h3 className="text-white font-bold text-lg">Opeyemi Adeniran</h3>
-                  <p className="text-green-400 text-sm font-semibold">Founder & CEO</p>
                   <p className="text-gray-400 text-sm mt-1">
                     PhD student in Computer & Electrical Systems Engineering (AI focus) at Morgan State University. Building Loomiqe to support the millions of skilled international students navigating life in the USA.
                   </p>

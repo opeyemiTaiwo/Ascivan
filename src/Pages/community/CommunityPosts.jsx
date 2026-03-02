@@ -966,7 +966,7 @@ const CommunityPosts = () => {
                   )}
                 </div>
                 <div>
-                  <p className="font-semibold text-white text-sm flex items-center gap-1.5">{post.authorName || 'Unknown'}{post.isCompanyPost && <span className="text-[10px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded font-semibold">🏢</span>}</p>
+                  <p className="font-semibold text-white text-sm flex items-center gap-1.5">{post.authorName || 'Unknown'}{}</p>
                   <p className="text-xs text-gray-400">{formatDate(post.createdAt)}</p>
                 </div>
               </div>

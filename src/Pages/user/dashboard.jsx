@@ -666,7 +666,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                 <div className="pt-4 border-t border-white/10">
                   <div className="flex items-center gap-3">
                     <span className={`px-3 py-1.5 rounded-lg text-xs font-bold ${profileForm.isCompany ? 'bg-blue-500/20 text-blue-300' : 'bg-green-500/20 text-green-300'}`}>
-                      {profileForm.isCompany ? '🏢 Company Account' : '👤 Individual Account'}
+                      {profileForm.isCompany ? 'Company Account' : '👤 Individual Account'}
                     </span>
                   </div>
                 </div>
@@ -751,7 +751,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                     </button>
                     <button type="button" onClick={() => setProfileForm(p => ({...p, isCompany: true}))}
                       className={`p-4 rounded-xl border-2 text-center transition-all active:scale-95 ${profileForm.isCompany ? 'border-orange-400 bg-orange-500/20 shadow-lg' : 'border-white/15 bg-white/5 hover:bg-white/10'}`}>
-                      <div className="text-2xl mb-1">🏢</div>
+                      
                       <div className={`text-sm font-bold ${profileForm.isCompany ? 'text-white' : 'text-gray-300'}`}>Company</div>
                     </button>
                   </div>

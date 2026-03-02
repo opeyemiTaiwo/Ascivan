@@ -4,3 +4,8 @@
 
 /* Import responsive utilities */
 @import './styles/responsive-utilities.css';
+
+body {
+  background-color: #000000;
+  color: #ffffff;
+}

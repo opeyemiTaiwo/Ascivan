@@ -41,9 +41,9 @@ const Navbar = () => {
               <img
                 src="/Images/512X512.png"
                 alt="Loomiqe"
-                className="h-10 w-10 sm:h-12 sm:w-12"
+                className="h-16 w-16 sm:h-20 sm:w-20"
               />
-              <span className="hidden sm:block font-bold text-gray-900 text-lg">Loomiqe</span>
+
             </Link>
 
             {/* Desktop Navigation */}

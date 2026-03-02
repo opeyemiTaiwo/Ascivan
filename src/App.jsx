@@ -32,6 +32,7 @@ import About from './Pages/About';
 import Support from './Pages/Support';
 import TermsOfService from './Pages/TermsOfService';
 import PrivacyPolicy from './Pages/PrivacyPolicy';
+import LandingPage from './Pages/LandingPage';
 import DigitalSolutionsHome from './Pages/digital/DigitalSolutionsHome';
 import DigitalTermsOfService from './Pages/digital/DigitalTermsOfService';
 import DigitalPrivacyPolicy from './Pages/digital/DigitalPrivacyPolicy';
@@ -105,7 +106,7 @@ function App() {
           <div className="w-full min-h-screen overflow-x-hidden bg-gray-50">
             <Suspense fallback={<PageLoader />}>
               <Routes>
-                <Route path="/" element={<Navigate to="/community" replace />} />
+                <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/payment" element={<Navigate to="/dashboard" replace />} />

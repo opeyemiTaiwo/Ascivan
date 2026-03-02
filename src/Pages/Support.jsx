@@ -236,14 +236,6 @@ const Support = () => {
           </section>
 
           {/* Direct Contact */}
-          <section className="text-center">
-            <p className="text-gray-400 text-sm">
-              You can also reach us at{' '}
-              <a href="mailto:support@loomiqe.app" className="text-orange-400 hover:text-orange-300 font-semibold">
-                support@loomiqe.app
-              </a>
-            </p>
-          </section>
 
         </div>
       </div>

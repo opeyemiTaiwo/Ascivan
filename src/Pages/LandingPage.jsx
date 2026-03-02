@@ -384,7 +384,7 @@ const LandingPage = () => {
         >
           <div className="text-5xl text-orange-400/40 font-display mb-4">"</div>
           <p className="text-white text-xl sm:text-2xl font-light leading-relaxed mb-6">
-            Moving to the US for grad school was overwhelming. Loomiqe helped me find housing before I even landed, got me an OPT-eligible job within weeks, and connected me with other students going through the same thing.
+           We spent years figuring it out alone, the housing, the jobs, the paperwork. Loomiqe is everything we wished existed from day one.
           </p>
           <div className="flex items-center justify-center gap-3">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-green-500 flex items-center justify-center text-white font-bold text-sm">A</div>

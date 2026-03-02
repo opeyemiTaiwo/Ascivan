@@ -237,6 +237,7 @@ const Jobs = () => {
           {/* Job Type Pills */}
           <section className="mb-5">
             <div className="bg-white/5 rounded-xl border border-white/20 p-4">
+              <div className="relative">
               <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide justify-start sm:justify-center flex-nowrap sm:flex-wrap">
                 {jobTypes.map(type => (
                   <button
@@ -251,6 +252,8 @@ const Jobs = () => {
                     {type.label}
                   </button>
                 ))}
+              </div>
+              <div className="absolute right-0 top-0 bottom-1 w-8 bg-gradient-to-l from-white/5 to-transparent pointer-events-none sm:hidden" />
               </div>
             </div>
           </section>

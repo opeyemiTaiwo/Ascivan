@@ -232,8 +232,9 @@ const DirectoryAccessManager = () => {
 
         {/* Requests Table */}
         <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
+          <p className="md:hidden text-xs text-gray-500 px-4 pt-3 pb-1">← Scroll to see more →</p>
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full min-w-[640px]">
               <thead>
                 <tr className="bg-gray-900 border-b border-gray-700">
                   <th className="text-left p-4 font-semibold text-gray-300">User</th>

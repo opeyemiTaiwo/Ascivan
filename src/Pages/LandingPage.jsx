@@ -8,6 +8,7 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [visibleSections, setVisibleSections] = useState(new Set());
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (currentUser) navigate('/community');
@@ -201,14 +202,13 @@ const LandingPage = () => {
       {/* ── NAVBAR ── */}
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-gray-200 backdrop-blur-xl"
      style={{ background: 'rgba(255,255,255,0.95)' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-24">
-          <Link to="/" className="flex items-center gap-2.5">
-            <img src="/Images/512X512.png" alt="Loomiqe" className="w-24 h-24" />
-            <span className="font-display font-800 text-lg text-white tracking-tight sr-only"></span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16 sm:h-20 md:h-24">
+          <Link to="/" className="flex items-center gap-2.5 flex-shrink-0">
+            <img src="/Images/512X512.png" alt="Loomiqe" className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24" />
           </Link>
-          <div className="flex items-center gap-3">
-            <Link to="/about" className="hidden sm:block text-gray-600 hover:text-black text-sm font-medium transition-colors">About</Link>
-            <Link to="/support" className="hidden sm:block text-gray-600 hover:text-black text-sm font-medium transition-colors">Support</Link>
+          <div className="hidden sm:flex items-center gap-3">
+            <Link to="/about" className="text-gray-600 hover:text-black text-sm font-medium transition-colors">About</Link>
+            <Link to="/support" className="text-gray-600 hover:text-black text-sm font-medium transition-colors">Support</Link>
             <button
               onClick={handleSignIn}
               disabled={isLoading}
@@ -217,15 +217,49 @@ const LandingPage = () => {
               {isLoading ? 'Signing in…' : 'Get Started Free'}
             </button>
           </div>
+          {/* Mobile: CTA + hamburger */}
+          <div className="flex sm:hidden items-center gap-2">
+            <button
+              onClick={handleSignIn}
+              disabled={isLoading}
+              className="btn-glow bg-orange-500 hover:bg-orange-400 text-white text-xs font-bold px-3.5 py-2 rounded-lg transition-all disabled:opacity-60"
+            >
+              {isLoading ? '…' : 'Get Started'}
+            </button>
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 rounded-lg hover:bg-gray-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+              aria-label="Toggle menu"
+            >
+              <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {mobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
+        </div>
+        {/* Mobile dropdown menu */}
+        <div className={`sm:hidden border-t border-gray-200 bg-white transition-all duration-200 ease-in-out overflow-hidden ${mobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}>
+          <div className="px-4 py-4 space-y-2">
+            <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 rounded-lg text-base font-semibold text-gray-700 hover:bg-gray-50 transition-all min-h-[44px]">
+              About
+            </Link>
+            <Link to="/support" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 rounded-lg text-base font-semibold text-gray-700 hover:bg-gray-50 transition-all min-h-[44px]">
+              Support
+            </Link>
+          </div>
         </div>
       </nav>
 
       {/* ── HERO ── */}
-      <section className="relative min-h-screen flex items-center justify-center grid-bg noise pt-24 overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center grid-bg noise pt-20 sm:pt-24 overflow-hidden">
         {/* Blobs */}
-        <div className="hero-blob w-[500px] h-[500px] bg-orange-600/20 top-[-100px] left-[-150px]" />
-        <div className="hero-blob w-[400px] h-[400px] bg-green-600/15 bottom-[-50px] right-[-100px]" />
-        <div className="hero-blob w-[300px] h-[300px] bg-orange-500/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+        <div className="hero-blob w-[250px] h-[250px] sm:w-[350px] sm:h-[350px] md:w-[500px] md:h-[500px] bg-orange-600/20 top-[-100px] left-[-150px]" />
+        <div className="hero-blob w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px] bg-green-600/15 bottom-[-50px] right-[-100px]" />
+        <div className="hero-blob w-[180px] h-[180px] sm:w-[250px] sm:h-[250px] md:w-[300px] md:h-[300px] bg-orange-500/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
 
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
 
@@ -340,7 +374,7 @@ const LandingPage = () => {
 
       {/* ── HOW IT WORKS ── */}
       <section className="py-24 sm:py-32 relative overflow-hidden">
-        <div className="hero-blob w-[400px] h-[400px] bg-green-600/10 top-0 right-[-100px]" />
+        <div className="hero-blob w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px] bg-green-600/10 top-0 right-[-100px]" />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
           <div
             id="how-head"
@@ -365,7 +399,7 @@ const LandingPage = () => {
                   <div className="hidden md:block absolute top-8 left-full w-full h-px bg-gradient-to-r from-white/20 to-transparent z-0 -translate-y-1/2" style={{ width: 'calc(100% - 2rem)' }} />
                 )}
                 <div className="bg-white/5 border border-white/10 rounded-3xl p-7 h-full relative z-10">
-                  <div className="font-display text-5xl font-800 text-white/10 mb-4">{s.num}</div>
+                  <div className="font-display text-3xl sm:text-4xl md:text-5xl font-800 text-white/10 mb-4">{s.num}</div>
                   <h3 className="font-display text-lg font-700 text-white mb-2">{s.title}</h3>
                   <p className="text-gray-500 text-sm leading-relaxed">{s.desc}</p>
                 </div>
@@ -382,7 +416,7 @@ const LandingPage = () => {
           data-animate
           className={`fade-up max-w-3xl mx-auto px-4 sm:px-6 text-center ${isVisible('quote') ? 'visible' : ''}`}
         >
-          <div className="text-5xl text-orange-400/40 font-display mb-4">"</div>
+          <div className="text-3xl sm:text-4xl md:text-5xl text-orange-400/40 font-display mb-4">"</div>
           <p className="text-white text-xl sm:text-2xl font-light leading-relaxed mb-6">
            We spent years figuring it out alone, the housing, the jobs, the paperwork. Loomiqe is everything we wished existed from day one.
           </p>
@@ -398,7 +432,7 @@ const LandingPage = () => {
 
       {/* ── CTA ── */}
       <section className="py-28 sm:py-36 relative overflow-hidden">
-        <div className="hero-blob w-[600px] h-[600px] bg-orange-600/15 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+        <div className="hero-blob w-[300px] h-[300px] sm:w-[450px] sm:h-[450px] md:w-[600px] md:h-[600px] bg-orange-600/15 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
         <div
           id="cta"
           data-animate
@@ -427,7 +461,7 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <img src="/Images/512X512.png" alt="Loomiqe" className="w-24 h-24" />
+              <img src="/Images/512X512.png" alt="Loomiqe" className="w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24" />
               <span className="font-display font-800 text-white text-base"></span>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-gray-500 text-sm">

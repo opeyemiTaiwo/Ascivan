@@ -1,6 +1,6 @@
 // src/Pages/community/SinglePost.jsx - Loomiqe Single Post View
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { 
@@ -86,6 +86,19 @@ const SinglePost = () => {
   const [reactionsData, setReactionsData] = useState([]);
   const [submittingReaction, setSubmittingReaction] = useState(false);
 
+  // Ref to track reply listener for cleanup
+  const replyUnsubRef = useRef(null);
+
+  // Cleanup reply listener on unmount
+  useEffect(() => {
+    return () => {
+      if (replyUnsubRef.current) {
+        replyUnsubRef.current();
+        replyUnsubRef.current = null;
+      }
+    };
+  }, []);
+
   /**
    * Load post data
    */
@@ -129,6 +142,14 @@ const SinglePost = () => {
     };
 
     loadPost();
+
+    // Cleanup reply listener when postId changes
+    return () => {
+      if (replyUnsubRef.current) {
+        replyUnsubRef.current();
+        replyUnsubRef.current = null;
+      }
+    };
   }, [postId]);
 
   /**
@@ -136,6 +157,12 @@ const SinglePost = () => {
    */
   const loadReplies = () => {
     if (!postId) return;
+
+    // Unsubscribe previous listener if exists
+    if (replyUnsubRef.current) {
+      replyUnsubRef.current();
+      replyUnsubRef.current = null;
+    }
 
     setLoadingReplies(true);
 
@@ -159,6 +186,9 @@ const SinglePost = () => {
         console.error('Error loading replies:', error);
         setLoadingReplies(false);
       });
+
+      // Store for cleanup
+      replyUnsubRef.current = unsubscribe;
 
       return unsubscribe;
     } catch (error) {

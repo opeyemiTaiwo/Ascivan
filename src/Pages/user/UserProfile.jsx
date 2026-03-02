@@ -7,6 +7,32 @@ import Navbar from '../../components/Navbar';
 import { collection, query, where, limit, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 
+// Message button — only shows if mutual follow
+const MessageButton = ({ targetUser, currentUser, navigate }) => {
+  const [isMutual, setIsMutual] = React.useState(false);
+  React.useEffect(() => {
+    if (!currentUser || !targetUser?.uid) return;
+    getDoc(doc(db, 'users', currentUser.uid)).then(snap => {
+      if (snap.exists()) {
+        const { following = [], followers = [] } = snap.data();
+        setIsMutual(following.includes(targetUser.uid) && followers.includes(targetUser.uid));
+      }
+    }).catch(err => console.error('Error checking mutual follow:', err));
+  }, [currentUser, targetUser]);
+  if (!isMutual) return null;
+  return (
+    <button
+      onClick={() => navigate(`/messages?with=${targetUser.uid}`)}
+      className="self-start sm:self-auto flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-sm font-semibold transition-colors"
+    >
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+      </svg>
+      Message
+    </button>
+  );
+};
+
 const UserProfile = () => {
   const { userEmail } = useParams();
   const { currentUser } = useAuth();
@@ -199,6 +225,9 @@ const UserProfile = () => {
                   >
                     Edit Profile
                   </button>
+                )}
+                {!isOwnProfile && profile && (
+                  <MessageButton targetUser={profile} currentUser={currentUser} navigate={navigate} />
                 )}
               </div>
 

@@ -189,7 +189,8 @@ const Housing = () => {
           {/* Type Filter */}
           <section className="mb-6">
             <div className="bg-white/5 rounded-xl border border-white/20 p-4">
-              <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide justify-start sm:justify-center flex-nowrap sm:flex-wrap">
+              <div className="relative">
+                <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide justify-start sm:justify-center flex-nowrap sm:flex-wrap">
                 {housingTypes.map(type => (
                   <button
                     key={type.id}
@@ -203,6 +204,8 @@ const Housing = () => {
                     {type.label}
                   </button>
                 ))}
+              </div>
+              <div className="absolute right-0 top-0 bottom-1 w-8 bg-gradient-to-l from-white/5 to-transparent pointer-events-none sm:hidden" />
               </div>
             </div>
           </section>

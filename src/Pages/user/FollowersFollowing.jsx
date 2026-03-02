@@ -549,6 +549,9 @@ const FollowersFollowing = () => {
     if (activeTab === 'members') {
       loadFollowingStatus().then(() => {
         fetchMembersDirectory();
+      }).catch((err) => {
+        console.error('Error loading members:', err);
+        setLoading(false);
       });
       setLoading(false);
     } else if (decodedEmail) {

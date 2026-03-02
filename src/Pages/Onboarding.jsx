@@ -175,7 +175,7 @@ const Onboarding = () => {
         <span className="text-white font-black text-xl sm:text-2xl">Loomiqe</span>
       </div>
 
-      <div className="w-full max-w-lg bg-white/5 border border-white/20 rounded-2xl shadow-2xl overflow-hidden" style={{maxWidth: "min(512px, calc(100vw - 2rem))"}}>
+      <div className="w-full max-w-lg mx-4 bg-white/5 border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
         <div className="w-full h-1 bg-white/10">
           <div className="h-full bg-gradient-to-r from-orange-400 to-orange-600 transition-all duration-500" style={{ width: `${progress}%` }} />
         </div>

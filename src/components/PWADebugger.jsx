@@ -192,7 +192,7 @@ const PWADebugger = () => {
   }
 
   return (
-    <div className="fixed bottom-3 sm:bottom-4 right-3 sm:right-4 left-3 sm:left-auto bg-black/95 text-white p-3 sm:p-4 rounded-lg w-auto sm:max-w-lg max-h-[85vh] sm:max-h-96 overflow-auto text-xs z-50 border border-lime-400 font-mono shadow-2xl">
+    <div className="fixed bottom-3 sm:bottom-4 right-3 sm:right-4 left-3 sm:left-auto bg-black/95 text-white p-3 sm:p-4 rounded-lg w-auto sm:max-w-lg max-h-[60vh] sm:max-h-96 overflow-auto text-xs z-50 border border-lime-400 font-mono shadow-2xl">
       <div className="flex justify-between items-start sm:items-center mb-3 gap-2">
         <h3 className="text-lime-400 font-bold text-xs sm:text-sm flex-shrink-0">🔍 PWA Debug</h3>
         <div className="flex gap-1 sm:gap-2 flex-wrap justify-end">

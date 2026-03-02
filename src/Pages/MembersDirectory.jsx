@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
+import { useScrollLock } from '../hooks/useResponsive';
 
 import { 
   collection, 
@@ -22,6 +23,9 @@ const MembersDirectory = () => {
   const [loading, setLoading] = useState(true);
   const [selectedMember, setSelectedMember] = useState(null);
   const [showMemberModal, setShowMemberModal] = useState(false);
+  
+  // Lock body scroll when modal is open
+  useScrollLock(showMemberModal);
   
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('recent');

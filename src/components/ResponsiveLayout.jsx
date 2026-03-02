@@ -126,12 +126,30 @@ export const ResponsiveGrid = ({
     lg: 'gap-4 sm:gap-6 md:gap-8',
   };
 
-  const gridCols = `
-    grid-cols-${columns.sm || 1}
-    ${columns.md ? `md:grid-cols-${columns.md}` : ''}
-    ${columns.lg ? `lg:grid-cols-${columns.lg}` : ''}
-    ${columns.xl ? `xl:grid-cols-${columns.xl}` : ''}
-  `.trim();
+  // Static mappings so Tailwind JIT can detect all class names at build time
+  const baseColsMap = {
+    1: 'grid-cols-1', 2: 'grid-cols-2', 3: 'grid-cols-3',
+    4: 'grid-cols-4', 5: 'grid-cols-5', 6: 'grid-cols-6',
+  };
+  const mdColsMap = {
+    1: 'md:grid-cols-1', 2: 'md:grid-cols-2', 3: 'md:grid-cols-3',
+    4: 'md:grid-cols-4', 5: 'md:grid-cols-5', 6: 'md:grid-cols-6',
+  };
+  const lgColsMap = {
+    1: 'lg:grid-cols-1', 2: 'lg:grid-cols-2', 3: 'lg:grid-cols-3',
+    4: 'lg:grid-cols-4', 5: 'lg:grid-cols-5', 6: 'lg:grid-cols-6',
+  };
+  const xlColsMap = {
+    1: 'xl:grid-cols-1', 2: 'xl:grid-cols-2', 3: 'xl:grid-cols-3',
+    4: 'xl:grid-cols-4', 5: 'xl:grid-cols-5', 6: 'xl:grid-cols-6',
+  };
+
+  const gridCols = [
+    baseColsMap[columns.sm || 1] || 'grid-cols-1',
+    columns.md ? mdColsMap[columns.md] || '' : '',
+    columns.lg ? lgColsMap[columns.lg] || '' : '',
+    columns.xl ? xlColsMap[columns.xl] || '' : '',
+  ].filter(Boolean).join(' ');
 
   return (
     <div className={`grid ${gridCols} ${gapClasses[gap] || gapClasses.base} ${className}`}>

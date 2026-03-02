@@ -1,41 +1,46 @@
 // src/App.jsx - update
 
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { AuthProvider, useAuth } from './context/AuthContext';
+
+// Critical path - keep eager
 import Login from './Pages/auth/Login';
 import Logout from './Pages/auth/Logout';
-import UserDashboard from './Pages/user/dashboard';
-import UserProfile from './Pages/user/UserProfile';
-import FollowersFollowing from './Pages/user/FollowersFollowing';
-import DatabaseSetup from './Pages/DatabaseSetup';
-import NotificationsPage from './Pages/Notifications';
-import SubmitApplication from './Pages/applications/SubmitApplication';
-import AdminDashboard from './Pages/admin/AdminDashboard';
-import TestDailyDigest from './Pages/admin/TestDailyDigest';
-import MembersDirectory from './Pages/MembersDirectory';
-import CommunityPosts from './Pages/community/CommunityPosts';
-import SubmitPost from './Pages/community/SubmitPost';
-import SinglePost from './Pages/community/SinglePost';
-import Jobs from './Pages/Jobs';
-import PostJobs from './Pages/PostJobs';
-import MyJobPosts from './Pages/MyJobPosts';
-import Housing from './Pages/Housing';
-import PostHousing from './Pages/PostHousing';
-import Finance from './Pages/Finance';
-import PostFinance from './Pages/PostFinance';
-import Onboarding from './Pages/Onboarding';
-import About from './Pages/About';
-import Support from './Pages/Support';
-import TermsOfService from './Pages/TermsOfService';
-import PrivacyPolicy from './Pages/PrivacyPolicy';
 import LandingPage from './Pages/LandingPage';
-import DigitalSolutionsHome from './Pages/digital/DigitalSolutionsHome';
-import DigitalTermsOfService from './Pages/digital/DigitalTermsOfService';
-import DigitalPrivacyPolicy from './Pages/digital/DigitalPrivacyPolicy';
+import Onboarding from './Pages/Onboarding';
+import CommunityPosts from './Pages/community/CommunityPosts';
+
+// Lazy-load secondary pages for faster initial load
+const UserDashboard = lazy(() => import('./Pages/user/dashboard'));
+const UserProfile = lazy(() => import('./Pages/user/UserProfile'));
+const FollowersFollowing = lazy(() => import('./Pages/user/FollowersFollowing'));
+const DatabaseSetup = lazy(() => import('./Pages/DatabaseSetup'));
+const NotificationsPage = lazy(() => import('./Pages/Notifications'));
+const Messages = lazy(() => import('./Pages/Messages'));
+const SubmitApplication = lazy(() => import('./Pages/applications/SubmitApplication'));
+const AdminDashboard = lazy(() => import('./Pages/admin/AdminDashboard'));
+const TestDailyDigest = lazy(() => import('./Pages/admin/TestDailyDigest'));
+const MembersDirectory = lazy(() => import('./Pages/MembersDirectory'));
+const SubmitPost = lazy(() => import('./Pages/community/SubmitPost'));
+const SinglePost = lazy(() => import('./Pages/community/SinglePost'));
+const Jobs = lazy(() => import('./Pages/Jobs'));
+const PostJobs = lazy(() => import('./Pages/PostJobs'));
+const MyJobPosts = lazy(() => import('./Pages/MyJobPosts'));
+const Housing = lazy(() => import('./Pages/Housing'));
+const PostHousing = lazy(() => import('./Pages/PostHousing'));
+const Finance = lazy(() => import('./Pages/Finance'));
+const PostFinance = lazy(() => import('./Pages/PostFinance'));
+const About = lazy(() => import('./Pages/About'));
+const Support = lazy(() => import('./Pages/Support'));
+const TermsOfService = lazy(() => import('./Pages/TermsOfService'));
+const PrivacyPolicy = lazy(() => import('./Pages/PrivacyPolicy'));
+const DigitalSolutionsHome = lazy(() => import('./Pages/digital/DigitalSolutionsHome'));
+const DigitalTermsOfService = lazy(() => import('./Pages/digital/DigitalTermsOfService'));
+const DigitalPrivacyPolicy = lazy(() => import('./Pages/digital/DigitalPrivacyPolicy'));
 
 try {
   require('./services/googleFormService');
@@ -166,6 +171,9 @@ function App() {
 
                 {/* Notifications */}
                 <Route path="/notifications" element={<BasicProtectedRoute><NotificationsPage /></BasicProtectedRoute>} />
+
+                {/* Messages */}
+                <Route path="/messages" element={<BasicProtectedRoute><Messages /></BasicProtectedRoute>} />
 
                 {/* Apply */}
                 <Route path="/apply" element={<SubmitApplication />} />

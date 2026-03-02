@@ -11,7 +11,7 @@ const Footer = ({ dark = true }) => {
         style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.7))' }}
         className="text-white py-8 md:py-10 relative z-10 mt-auto border-t border-white/10"
       >
-        <div className="container mx-auto px-4 md:px-6">
+        <div className="container mx-auto px-4 md:px-6 max-w-7xl">
           <div className="text-center">
             {/* Logo */}
             <div className="flex items-center justify-center space-x-2 mb-4">
@@ -81,7 +81,7 @@ const Footer = ({ dark = true }) => {
   // Light variant
   return (
     <footer className="bg-gray-50 border-t border-gray-200 text-gray-600 py-6 mt-auto">
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="container mx-auto px-4 md:px-6 max-w-7xl">
         <div className="text-center">
           <div className="flex items-center justify-center space-x-2 mb-3">
             <img src="/Images/512X512.png" alt="Loomiqe Logo" className="w-6 h-6 flex-shrink-0" />

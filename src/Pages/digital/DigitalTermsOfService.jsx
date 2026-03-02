@@ -92,7 +92,7 @@ const TermsOfService = () => {
       </header>
 
       {/* ── Page layout ── */}
-      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '40px 16px 80px', display: 'flex', gap: 40, alignItems: 'flex-start' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '40px 16px 80px', display: 'flex', gap: 0, alignItems: 'flex-start' }} className="tos-page-layout">
 
         {/* Sidebar TOC — desktop only */}
         <aside className="tos-toc" style={{ position: 'sticky', top: 80, width: 200, flexShrink: 0, display: 'none' }}>
@@ -310,10 +310,15 @@ const TermsOfService = () => {
           .tos-toc { display: block !important; }
           .mobile-toc-btn { display: none !important; }
           .mobile-toc-panel { display: none !important; }
+          .tos-page-layout { gap: 40px !important; }
         }
         /* Mobile TOC button */
         @media (max-width: 899px) {
           .mobile-toc-btn { display: flex !important; align-items: center; }
+          .tos-page-layout { gap: 0 !important; }
+        }
+        @media (max-width: 640px) {
+          .tos-page-layout { padding: 24px 12px 60px !important; }
         }
 
         * { box-sizing: border-box; }
@@ -332,11 +337,6 @@ const TermsOfService = () => {
         /* Section body indent — only on wider screens */
         .tos-section-body { padding-left: 0; }
         @media (min-width: 600px) { .tos-section-body { padding-left: 54px; } }
-
-        /* Layout padding adjustments */
-        @media (max-width: 600px) {
-          /* Reduce outer page padding on very small screens */
-        }
       `}</style>
     </div>
   );

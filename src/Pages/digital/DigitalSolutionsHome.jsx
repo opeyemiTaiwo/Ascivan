@@ -513,23 +513,23 @@ const CareerHome = () => {
             <div className="flex animate-scroll">
               {[0, 1].map((set) => (
                 <div key={set} className="flex space-x-6 sm:space-x-12 px-4 sm:px-6">
-                  <div className="flex flex-col items-center justify-center min-w-[160px] sm:min-w-[240px] md:min-w-[280px]">
+                  <div className="flex flex-col items-center justify-center min-w-[120px] sm:min-w-[180px] md:min-w-[240px]">
                     <div className="text-green-400 text-sm sm:text-base font-bold mb-1 tracking-wider">BUSINESS WEBSITE</div>
                     <div className="text-white text-base sm:text-lg md:text-xl font-bold text-center">Content Phase Media</div>
                   </div>
-                  <div className="flex flex-col items-center justify-center min-w-[160px] sm:min-w-[240px] md:min-w-[280px]">
+                  <div className="flex flex-col items-center justify-center min-w-[120px] sm:min-w-[180px] md:min-w-[240px]">
                     <div className="text-green-400 text-sm sm:text-base font-bold mb-1 tracking-wider">BUSINESS WEBSITE</div>
                     <div className="text-white text-base sm:text-lg md:text-xl font-bold text-center">Filomos Global Services</div>
                   </div>
-                  <div className="flex flex-col items-center justify-center min-w-[160px] sm:min-w-[240px] md:min-w-[280px]">
+                  <div className="flex flex-col items-center justify-center min-w-[120px] sm:min-w-[180px] md:min-w-[240px]">
                     <div className="text-green-400 text-sm sm:text-base font-bold mb-1 tracking-wider">BUSINESS WEBSITE</div>
                     <div className="text-white text-base sm:text-lg md:text-xl font-bold text-center">Timeless Venture Group</div>
                   </div>
-                  <div className="flex flex-col items-center justify-center min-w-[160px] sm:min-w-[240px] md:min-w-[280px]">
+                  <div className="flex flex-col items-center justify-center min-w-[120px] sm:min-w-[180px] md:min-w-[240px]">
                     <div className="text-emerald-400 text-sm sm:text-base font-bold mb-1 tracking-wider">RESEARCH WEBSITE</div>
                     <div className="text-white text-base sm:text-lg md:text-xl font-bold text-center">DEPA Lab</div>
                   </div>
-                  <div className="flex flex-col items-center justify-center min-w-[160px] sm:min-w-[240px] md:min-w-[280px]">
+                  <div className="flex flex-col items-center justify-center min-w-[120px] sm:min-w-[180px] md:min-w-[240px]">
                     <div className="text-green-400 text-sm sm:text-base font-bold mb-1 tracking-wider">STUDENT PLATFORM</div>
                     <div className="text-white text-base sm:text-lg md:text-xl font-bold text-center">Loomiqe Careers</div>
                   </div>

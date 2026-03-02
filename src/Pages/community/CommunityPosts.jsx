@@ -1,7 +1,7 @@
 // src/Pages/community/CommunityPosts.jsx - FULLY RESPONSIVE WITH BLUE/ORANGE THEME
 // Complete transformation with Universal Navbar, SVG icons, responsive design
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { safeMentionNotification } from '../../utils/emailNotifications';
 import { useAuth } from '../../context/AuthContext';
@@ -54,7 +54,6 @@ import {
   FollowSuggestionsSidebar,
   CompanyInfoSidebar 
 } from '../../components/community/Sidebars';
-import Footer from '../../components/Footer';
 
 const CommunityPosts = () => {
   const { currentUser } = useAuth();
@@ -110,6 +109,19 @@ const CommunityPosts = () => {
 
   const CONTENT_LIMIT = 300;
   const POSTS_PER_PAGE = 10;
+
+  // Track reply listeners for cleanup
+  const replyUnsubsRef = useRef({});
+
+  // Cleanup all reply listeners on unmount
+  useEffect(() => {
+    return () => {
+      Object.values(replyUnsubsRef.current).forEach(unsub => {
+        if (typeof unsub === 'function') unsub();
+      });
+      replyUnsubsRef.current = {};
+    };
+  }, []);
 
   // Mouse tracking
   // Close dropdown menus
@@ -457,6 +469,12 @@ const CommunityPosts = () => {
   };
 
   const loadReplies = async (postId) => {
+    // Unsubscribe any existing listener for this post before creating a new one
+    if (replyUnsubsRef.current[postId]) {
+      replyUnsubsRef.current[postId]();
+      delete replyUnsubsRef.current[postId];
+    }
+
     setLoadingReplies(prev => ({ ...prev, [postId]: true }));
     
     try {
@@ -484,6 +502,9 @@ const CommunityPosts = () => {
         setLoadingReplies(prev => ({ ...prev, [postId]: false }));
       });
 
+      // Store the unsubscriber for cleanup
+      replyUnsubsRef.current[postId] = unsubscribe;
+
       return unsubscribe;
     } catch (error) {
       console.error('Error setting up replies listener:', error);
@@ -497,6 +518,11 @@ const CommunityPosts = () => {
       const newSet = new Set(prev);
       if (newSet.has(postId)) {
         newSet.delete(postId);
+        // Unsubscribe the reply listener when collapsing
+        if (replyUnsubsRef.current[postId]) {
+          replyUnsubsRef.current[postId]();
+          delete replyUnsubsRef.current[postId];
+        }
       } else {
         newSet.add(postId);
         if (!replies[postId]) {
@@ -1057,16 +1083,16 @@ const CommunityPosts = () => {
       <div className="min-h-screen overflow-x-hidden pt-16 xs:pt-18 sm:pt-20" style={{ backgroundColor: '#000' }}>
 
         <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 py-4 xs:py-6 sm:py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-8 lg:grid-cols-12 gap-4 lg:gap-6">
             
-            <aside className="hidden lg:block lg:col-span-3">
+            <aside className="hidden md:block md:col-span-2 lg:col-span-3">
               <UserQuickLinksSidebar 
                 currentUser={currentUser}
                 onNavigate={handleNavigation}
               />
             </aside>
 
-            <main className="lg:col-span-6">
+            <main className="md:col-span-6 lg:col-span-6">
               {indexError && (
                 <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
                   <div className="flex items-start space-x-3">
@@ -1690,7 +1716,7 @@ const CommunityPosts = () => {
               </div>
             </main>
 
-            <aside className="hidden lg:block lg:col-span-3">
+            <aside className="hidden md:block md:col-span-2 lg:col-span-3">
               <div className="space-y-6">
                 <FollowSuggestionsSidebar currentUser={currentUser} />
                 <CompanyInfoSidebar />
@@ -1729,7 +1755,6 @@ const CommunityPosts = () => {
           reactionCount={showReactionsModal ? reactionCounts[showReactionsModal] : 0}
         />
       </div>
-      <Footer dark={false} />
     </>
   );
 };

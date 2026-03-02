@@ -96,7 +96,7 @@ const PrivacyPolicy = () => {
       </header>
 
       {/* ── Page layout ── */}
-      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '40px 16px 80px', display: 'flex', gap: 40, alignItems: 'flex-start' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '40px 16px 80px', display: 'flex', gap: 0, alignItems: 'flex-start' }} className="pp-page-layout">
 
         {/* Sidebar TOC — desktop only */}
         <aside className="pp-toc" style={{ position: 'sticky', top: 80, width: 200, flexShrink: 0, display: 'none' }}>
@@ -356,10 +356,15 @@ const PrivacyPolicy = () => {
           .pp-toc { display: block !important; }
           .mobile-toc-btn { display: none !important; }
           .mobile-toc-panel { display: none !important; }
+          .pp-page-layout { gap: 40px !important; }
         }
         /* Mobile TOC button */
         @media (max-width: 899px) {
           .mobile-toc-btn { display: flex !important; align-items: center; }
+          .pp-page-layout { gap: 0 !important; }
+        }
+        @media (max-width: 640px) {
+          .pp-page-layout { padding: 24px 12px 60px !important; }
         }
         * { box-sizing: border-box; }
         p  { color: #d1d5db; font-family: system-ui,sans-serif; font-size: 15px; line-height: 1.85; margin-bottom: 14px; }

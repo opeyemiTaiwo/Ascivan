@@ -248,7 +248,7 @@ const LandingPage = () => {
           <p className="text-gray-400 text-lg sm:text-xl max-w-2xl mx-auto mb-10 font-light leading-relaxed">
             Loomiqe is the all-in-one platform giving international students access to{' '}
             <span className="text-white font-medium">visa-compliant jobs, student housing, financial tools,</span> and a{' '}
-            <span className="text-white font-medium">global community</span> — completely free.
+            <span className="text-white font-medium">global community</span>.
           </p>
 
           {/* CTAs */}
@@ -258,7 +258,7 @@ const LandingPage = () => {
               disabled={isLoading}
               className="btn-glow w-full sm:w-auto glow-orange bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-400 hover:to-amber-400 text-white font-bold text-base px-8 py-4 rounded-2xl transition-all disabled:opacity-60"
             >
-              {isLoading ? 'Signing in…' : '🚀 Join Free with Google'}
+              {isLoading ? 'Signing in…' : 'Join Free with Google'}
             </button>
             <Link
               to="/about"
@@ -293,7 +293,7 @@ const LandingPage = () => {
         <div className="flex marquee-inner whitespace-nowrap">
           {[...Array(2)].map((_, gi) => (
             <div key={gi} className="flex items-center gap-8 px-8">
-              {['Jobs', 'Housing', 'Finance', 'Community', 'OPT Friendly', 'CPT Friendly', 'H1-B Resources', 'No SSN Required', 'Free Forever'].map((t, i) => (
+              {['Jobs', 'Housing', 'Finance', 'Community', 'OPT Friendly', 'CPT Friendly', 'H1-B Resources', 'No SSN Required'].map((t, i) => (
                 <React.Fragment key={i}>
                   <span className="text-gray-500 text-sm font-medium uppercase tracking-widest">{t}</span>
                   <span className="text-orange-500/60">✦</span>
@@ -416,7 +416,7 @@ const LandingPage = () => {
             disabled={isLoading}
             className="btn-glow glow-orange bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-400 hover:to-amber-400 text-white font-bold text-lg px-10 py-5 rounded-2xl transition-all disabled:opacity-60 w-full sm:w-auto"
           >
-            {isLoading ? 'Signing in…' : '🎓 Join Loomiqe — It\'s Free'}
+            {isLoading ? 'Signing in…' : 'Join Loomiqe'}
           </button>
           <p className="mt-4 text-gray-600 text-sm">Sign in with your Google account. Takes 10 seconds.</p>
         </div>

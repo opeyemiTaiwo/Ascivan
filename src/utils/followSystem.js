@@ -4,6 +4,7 @@
 import { 
   doc, 
   getDoc, 
+  setDoc,
   updateDoc, 
   arrayUnion, 
   arrayRemove, 
@@ -12,7 +13,6 @@ import {
   addDoc, 
   collection, 
   serverTimestamp,
-  // 🔥 ADD THESE MISSING IMPORTS:
   query,
   where,
   getDocs
@@ -100,9 +100,21 @@ export const followUser = async (currentUser, targetUserId, targetUserData = nul
       getDoc(targetUserRef)
     ]);
     
+    // Auto-create current user doc if missing (new Google sign-in users)
     if (!currentUserDoc.exists()) {
-      console.error('❌ Current user document does not exist');
-      throw new Error('Your user profile was not found. Please try logging in again.');
+      console.warn('⚠️ Current user doc missing — creating it now');
+      await setDoc(currentUserRef, {
+        uid: currentUser.uid,
+        email: currentUser.email || '',
+        displayName: currentUser.displayName || currentUser.email?.split('@')[0] || 'Member',
+        photoURL: currentUser.photoURL || null,
+        following: [],
+        followers: [],
+        followingCount: 0,
+        followerCount: 0,
+        createdAt: serverTimestamp(),
+        lastLogin: serverTimestamp(),
+      }, { merge: true });
     }
     
     if (!targetUserDoc.exists()) {
@@ -111,7 +123,7 @@ export const followUser = async (currentUser, targetUserId, targetUserData = nul
     }
 
     // Check if already following
-    const currentUserData = currentUserDoc.data();
+    const currentUserData = currentUserDoc.exists() ? currentUserDoc.data() : {};
     const currentFollowing = currentUserData.following || [];
     
     if (currentFollowing.includes(targetUserId)) {

@@ -308,32 +308,34 @@ const NotificationsPage = () => {
         <div className="container mx-auto px-3 xs:px-4 sm:px-6 py-6 xs:py-7 sm:py-8 max-w-4xl">
           
           {/* Filter Tabs */}
-          <div className="flex flex-wrap gap-2 mb-6 xs:mb-7 sm:mb-8 bg-black/30 p-2 rounded-lg">
-            {[
-              { key: 'all', label: 'All', count: notifications.length },
-              { key: 'unread', label: 'Unread', count: notifications.filter(n => !n.isRead).length },
-              { key: 'mentions', label: 'Mentions', count: notifications.filter(n => n.type?.includes('mention')).length },
-              { key: 'replies', label: 'Replies', count: notifications.filter(n => n.type?.includes('reply')).length }
-            ].map(tab => (
-              <button
-                key={tab.key}
-                onClick={() => setFilter(tab.key)}
-                className={`flex-1 min-w-0 px-3 xs:px-4 py-2 rounded-md text-xs xs:text-sm font-medium transition-all min-h-[44px] ${
-                  filter === tab.key
-                    ? 'bg-lime-500 text-black'
-                    : 'text-gray-400 hover:text-white hover:bg-white/10 active:bg-white/20'
-                }`}
-              >
-                <span className="truncate block">{tab.label}</span>
-                {tab.count > 0 && (
-                  <span className={`ml-1.5 xs:ml-2 px-1.5 xs:px-2 py-0.5 xs:py-1 rounded-full text-[10px] xs:text-xs ${
-                    filter === tab.key ? 'bg-black/20' : 'bg-white/20'
-                  }`}>
-                    {tab.count}
-                  </span>
-                )}
-              </button>
-            ))}
+          <div className="mb-6 xs:mb-7 sm:mb-8">
+            <div className="flex bg-black/30 p-1 rounded-xl overflow-x-auto scrollbar-hide">
+              {[
+                { key: 'all', label: 'All', count: notifications.length },
+                { key: 'unread', label: 'Unread', count: notifications.filter(n => !n.isRead).length },
+                { key: 'mentions', label: 'Mentions', count: notifications.filter(n => n.type?.includes('mention')).length },
+                { key: 'replies', label: 'Replies', count: notifications.filter(n => n.type?.includes('reply')).length }
+              ].map(tab => (
+                <button
+                  key={tab.key}
+                  onClick={() => setFilter(tab.key)}
+                  className={`flex-1 flex items-center justify-center gap-1.5 whitespace-nowrap px-3 py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all min-h-[40px] ${
+                    filter === tab.key
+                      ? 'bg-lime-500 text-black shadow-md'
+                      : 'text-gray-400 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  {tab.label}
+                  {tab.count > 0 && (
+                    <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
+                      filter === tab.key ? 'bg-black/20 text-black' : 'bg-white/20 text-gray-300'
+                    }`}>
+                      {tab.count}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Notifications List */}

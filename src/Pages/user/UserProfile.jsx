@@ -7,19 +7,19 @@ import Navbar from '../../components/Navbar';
 import { collection, query, where, limit, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 
-// Message button — only shows if mutual follow
+// Message button — shows if you follow the user
 const MessageButton = ({ targetUser, currentUser, navigate }) => {
-  const [isMutual, setIsMutual] = React.useState(false);
+  const [isFollowing, setIsFollowing] = React.useState(false);
   React.useEffect(() => {
     if (!currentUser || !targetUser?.uid) return;
     getDoc(doc(db, 'users', currentUser.uid)).then(snap => {
       if (snap.exists()) {
-        const { following = [], followers = [] } = snap.data();
-        setIsMutual(following.includes(targetUser.uid) && followers.includes(targetUser.uid));
+        const { following = [] } = snap.data();
+        setIsFollowing(following.includes(targetUser.uid));
       }
-    }).catch(err => console.error('Error checking mutual follow:', err));
+    }).catch(err => console.error('Error checking follow status:', err));
   }, [currentUser, targetUser]);
-  if (!isMutual) return null;
+  if (!isFollowing) return null;
   return (
     <button
       onClick={() => navigate(`/messages?with=${targetUser.uid}`)}

@@ -1,4 +1,4 @@
-// src/Pages/Messages.jsx - Mutual-follow messaging system (fully responsive)
+// src/Pages/Messages.jsx - Follow-based messaging system (fully responsive)
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -59,7 +59,7 @@ const Messages = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const [mutualFollows, setMutualFollows] = useState([]);
+  const [followedUsers, setFollowedUsers] = useState([]);
   const [conversations, setConversations] = useState([]);
   const [activeConvId, setActiveConvId]   = useState(null);
   const [activeUser, setActiveUser]       = useState(null);
@@ -78,24 +78,23 @@ const Messages = () => {
     if (!currentUser) navigate('/login');
   }, [currentUser, navigate]);
 
-  // Load mutual follows
+  // Load users you follow (anyone you follow can be messaged)
   useEffect(() => {
     if (!currentUser) return;
     (async () => {
       try {
         const snap = await getDoc(doc(db, 'users', currentUser.uid));
         if (!snap.exists()) return;
-        const { following = [], followers = [] } = snap.data();
-        const mutualIds = following.filter(id => followers.includes(id));
+        const { following = [] } = snap.data();
         const profiles = await Promise.all(
-          mutualIds.map(async (uid) => {
+          following.map(async (uid) => {
             const s = await getDoc(doc(db, 'users', uid));
             return s.exists() ? { uid, ...s.data() } : null;
           })
         );
-        setMutualFollows(profiles.filter(Boolean));
+        setFollowedUsers(profiles.filter(Boolean));
       } catch (e) {
-        console.error('Error loading mutuals:', e);
+        console.error('Error loading followed users:', e);
       } finally {
         setLoading(false);
       }
@@ -168,9 +167,9 @@ const Messages = () => {
   const openConversation = async (targetUid) => {
     const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
     if (userDoc.exists()) {
-      const { following = [], followers = [] } = userDoc.data();
-      if (!following.includes(targetUid) || !followers.includes(targetUid)) {
-        alert('You can only message users who follow you back.');
+      const { following = [] } = userDoc.data();
+      if (!following.includes(targetUid)) {
+        alert('You need to follow this user before you can message them.');
         return;
       }
     }
@@ -282,13 +281,13 @@ const Messages = () => {
                   <p className="text-xs font-bold text-orange-700 uppercase tracking-wide mb-2">
                     New Conversation
                   </p>
-                  {mutualFollows.length === 0 ? (
+                  {followedUsers.length === 0 ? (
                     <p className="text-xs text-gray-500 leading-relaxed">
-                      Follow someone and have them follow you back to start messaging.
+                      Follow someone to start messaging them.
                     </p>
                   ) : (
                     <div className="space-y-0.5 max-h-48 overflow-y-auto">
-                      {mutualFollows.map(user => (
+                      {followedUsers.map(user => (
                         <button
                           key={user.uid}
                           onClick={() => openConversation(user.uid)}
@@ -378,7 +377,7 @@ const Messages = () => {
                     <Avatar user={activeUser} />
                     <div className="flex-1 min-w-0">
                       <p className="font-bold text-gray-900 text-sm sm:text-base truncate">{getDisplayName(activeUser)}</p>
-                      <p className="text-xs text-green-500 font-medium">Mutual follower</p>
+                      <p className="text-xs text-green-500 font-medium">Following</p>
                     </div>
                     <button
                       onClick={() => navigate(`/profile/${activeUser.email || activeUser.uid}`)}
@@ -464,7 +463,7 @@ const Messages = () => {
                   <p className="text-sm text-gray-500 max-w-xs">
                     Select a conversation or click <span className="font-bold text-orange-500">+</span> to start a new one.
                   </p>
-                  {mutualFollows.length > 0 && (
+                  {followedUsers.length > 0 && (
                     <button
                       onClick={() => setShowNewChat(true)}
                       className="mt-5 px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl text-sm transition-colors"

@@ -208,7 +208,7 @@ const MyJobPosts = () => {
                   }}>
                 My{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-green-500 to-orange-500">
-                  My Job Posts
+                  Job Posts
                 </span>
               </h1>
               <p className="text-sm xs:text-base sm:text-lg text-gray-200 mb-4 xs:mb-5 sm:mb-6 px-2">
@@ -240,10 +240,10 @@ const MyJobPosts = () => {
             <section className="mb-6 xs:mb-7 sm:mb-8">
               <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/20">
                 
-                {/* Category Filter */}
-                <div className="mb-4 xs:mb-5 sm:mb-6">
+                {/* Category Filter — centered */}
+                <div className="mb-4 xs:mb-5 sm:mb-6 text-center">
                   <h3 className="text-white font-semibold mb-2 xs:mb-3 text-sm xs:text-base">Filter by Category</h3>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap justify-center gap-2">
                     {categories.map(cat => (
                       <button
                         key={cat.id}
@@ -260,28 +260,21 @@ const MyJobPosts = () => {
                   </div>
                 </div>
 
-                {/* Sort Options */}
-                <div>
+                {/* Sort — centered dropdown */}
+                <div className="text-center">
                   <h3 className="text-white font-semibold mb-2 xs:mb-3 text-sm xs:text-base">Sort By</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {[
-                      { value: 'newest', label: 'Newest' },
-                      { value: 'oldest', label: 'Oldest' },
-                      { value: 'views', label: 'Most Views' },
-                      { value: 'clicks', label: 'Most Clicks' }
-                    ].map(option => (
-                      <button
-                        key={option.value}
-                        onClick={() => setSortBy(option.value)}
-                        className={`px-3 xs:px-4 py-2 rounded-lg font-medium transition-all text-xs xs:text-sm min-h-[44px] ${
-                          sortBy === option.value
-                            ? 'bg-green-500 text-white shadow-md'
-                            : 'bg-white/10 text-gray-300 hover:bg-white/20 active:bg-white/30'
-                        }`}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
+                  <div className="flex justify-center">
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="bg-white/10 text-white border border-white/20 rounded-lg px-4 py-2.5 text-sm font-medium min-h-[44px] min-w-[180px] cursor-pointer hover:bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent appearance-none"
+                      style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', backgroundSize: '16px', paddingRight: '36px' }}
+                    >
+                      <option value="newest" className="bg-gray-900 text-white">Newest</option>
+                      <option value="oldest" className="bg-gray-900 text-white">Oldest</option>
+                      <option value="views" className="bg-gray-900 text-white">Most Views</option>
+                      <option value="clicks" className="bg-gray-900 text-white">Most Clicks</option>
+                    </select>
                   </div>
                 </div>
               </div>

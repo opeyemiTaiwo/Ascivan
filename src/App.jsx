@@ -1,4 +1,4 @@
-// src/App.jsx
+// src/App.jsx - update
 
 import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';

@@ -3,8 +3,8 @@ import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
-const GOOGLE_FORM_BASE =
-  'https://docs.google.com/forms/d/e/1FAIpQLSeauqCwIMFBBxpnoaLtqIqNZUtu4V-0Uw-bXYYZ2yd9SK0RFA/viewform';
+const GOOGLE_FORM_ACTION =
+  'https://docs.google.com/forms/d/e/1FAIpQLSeauqCwIMFBBxpnoaLtqIqNZUtu4V-0Uw-bXYYZ2yd9SK0RFA/formResponse';
 
 const ENTRIES = {
   firstName: 'entry.1736029807',
@@ -35,23 +35,33 @@ const Support = () => {
     message:   '',
   });
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
 
   const handleChange = (field) => (e) =>
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.firstName.trim() || !form.email.trim() || !form.message.trim()) return;
+    setSending(true);
 
-    // Build pre-filled Google Form URL and open in new tab
-    const url = new URL(GOOGLE_FORM_BASE);
-    url.searchParams.set(ENTRIES.firstName, form.firstName);
-    url.searchParams.set(ENTRIES.lastName,  form.lastName);
-    url.searchParams.set(ENTRIES.email,     form.email);
-    url.searchParams.set(ENTRIES.phone,     form.phone);
-    url.searchParams.set(ENTRIES.message,   form.message);
-    window.open(url.toString(), '_blank');
+    const body = new URLSearchParams();
+    body.append(ENTRIES.firstName, form.firstName);
+    body.append(ENTRIES.lastName,  form.lastName);
+    body.append(ENTRIES.email,     form.email);
+    body.append(ENTRIES.phone,     form.phone);
+    body.append(ENTRIES.message,   form.message);
 
+    try {
+      await fetch(GOOGLE_FORM_ACTION, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
+      });
+    } catch (_) {}
+
+    setSending(false);
     setSubmitted(true);
   };
 
@@ -109,7 +119,7 @@ const Support = () => {
             <div className="bg-white/5 rounded-xl border border-white/20 p-6 sm:p-8">
               <h2 className="text-2xl font-bold text-white mb-2">Send Us a Message</h2>
               <p className="text-gray-400 text-sm mb-6">
-                Fill in your details below — clicking Send will open your pre-filled Google Form in a new tab to submit.
+                Your message goes directly to our support team.
               </p>
 
               {submitted ? (
@@ -119,15 +129,16 @@ const Support = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                  <h3 className="text-white text-xl font-bold mb-2">Form Opened!</h3>
-                  <p className="text-gray-400 text-sm mb-2">
-                    Your details have been pre-filled in the Google Form tab. Just click <strong className="text-white">Submit</strong> there to send your message.
-                  </p>
-                  <p className="text-gray-500 text-xs mb-6">
-                    Didn't see the tab open? Check your browser's popup settings.
+                  <h3 className="text-white text-xl font-bold mb-2">Message Sent!</h3>
+                  <p className="text-gray-400 text-sm mb-6">
+                    Thank you for reaching out. We'll get back to you at{' '}
+                    <span className="text-orange-400">{form.email}</span> as soon as possible.
                   </p>
                   <button
-                    onClick={() => { setSubmitted(false); setForm(prev => ({ ...prev, phone: '', message: '' })); }}
+                    onClick={() => {
+                      setSubmitted(false);
+                      setForm(prev => ({ ...prev, phone: '', message: '' }));
+                    }}
                     className="px-6 py-2.5 border border-white/20 text-white rounded-lg hover:bg-white/10 transition-all text-sm"
                   >
                     Send Another Message
@@ -204,15 +215,21 @@ const Support = () => {
                     />
                   </div>
 
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                    <button
-                      type="submit"
-                      className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all text-sm"
-                    >
-                      Send Message →
-                    </button>
-                    <p className="text-gray-500 text-xs">Opens your pre-filled Google Form in a new tab</p>
-                  </div>
+                  <button
+                    type="submit"
+                    disabled={sending}
+                    className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all disabled:opacity-50 text-sm"
+                  >
+                    {sending ? (
+                      <span className="flex items-center gap-2">
+                        <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" className="opacity-25" />
+                          <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" className="opacity-75" />
+                        </svg>
+                        Sending…
+                      </span>
+                    ) : 'Send Message'}
+                  </button>
                 </form>
               )}
             </div>

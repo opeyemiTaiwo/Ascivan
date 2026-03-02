@@ -117,7 +117,7 @@ const PWAInstallButton = ({ className = "", mobile = false, isInstallable, isIns
 // DELETE ACCOUNT CONFIRMATION MODAL
 // ─────────────────────────────────────────────
 const DeleteAccountModal = ({ isOpen, onClose, currentUser, onDeleted }) => {
-  const [step, setStep] = useState(1); // 1=confirm, 2=deleting, 3=done
+  const [step, setStep] = useState(1);
   const [confirmText, setConfirmText] = useState('');
   const [deleting, setDeleting] = useState(false);
   const [deletionProgress, setDeletionProgress] = useState('');
@@ -135,28 +135,19 @@ const DeleteAccountModal = ({ isOpen, onClose, currentUser, onDeleted }) => {
 
   const handleDelete = async () => {
     if (confirmText !== 'DELETE') return;
-    
     setDeleting(true);
     setStep(2);
     setError('');
-
     try {
       setDeletionProgress('Deleting your posts and replies...');
-      
       const summary = await deleteUserAccount(currentUser);
-      
       if (summary.authDeleted) {
         setDeletionProgress('Account fully deleted!');
       } else {
         setDeletionProgress('All content deleted! Signing you out...');
       }
-      
       setStep(3);
-      
-      setTimeout(() => {
-        onDeleted();
-      }, 2000);
-
+      setTimeout(() => { onDeleted(); }, 2000);
     } catch (err) {
       console.error('Account deletion error:', err);
       setError(err.message || 'Failed to delete account. Please try again.');
@@ -173,7 +164,6 @@ const DeleteAccountModal = ({ isOpen, onClose, currentUser, onDeleted }) => {
         className="bg-gradient-to-br from-gray-900 via-black to-gray-900 rounded-xl xs:rounded-2xl border border-red-500/30 shadow-2xl w-full max-w-md overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
         <div className="p-4 xs:p-5 sm:p-6 border-b border-red-500/20 bg-red-500/5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 xs:w-12 xs:h-12 bg-red-500/20 rounded-full flex items-center justify-center flex-shrink-0">
@@ -188,52 +178,33 @@ const DeleteAccountModal = ({ isOpen, onClose, currentUser, onDeleted }) => {
           </div>
         </div>
 
-        {/* Body */}
         <div className="p-4 xs:p-5 sm:p-6">
           {step === 1 && (
             <div className="space-y-4">
               <div className="p-3 xs:p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
                 <p className="text-red-300 text-xs xs:text-sm font-medium mb-2">This will permanently delete:</p>
                 <ul className="text-gray-300 text-xs xs:text-sm space-y-1.5">
-                  <li className="flex items-center gap-2">
-                    <svg className="w-3.5 h-3.5 text-red-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    All your home posts and replies
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <svg className="w-3.5 h-3.5 text-red-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    Your badges and certificates
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <svg className="w-3.5 h-3.5 text-red-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    Your project memberships and applications
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <svg className="w-3.5 h-3.5 text-red-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    Your follow connections and notifications
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <svg className="w-3.5 h-3.5 text-red-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    Your account and profile data
-                  </li>
+                  {[
+                    'All your home posts and replies',
+                    'Your badges and certificates',
+                    'Your project memberships and applications',
+                    'Your follow connections and notifications',
+                    'Your account and profile data',
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-2">
+                      <svg className="w-3.5 h-3.5 text-red-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                      {item}
+                    </li>
+                  ))}
                 </ul>
               </div>
-
               {error && (
                 <div className="p-3 bg-red-500/20 border border-red-500/40 rounded-lg">
                   <p className="text-red-300 text-xs xs:text-sm">{error}</p>
                 </div>
               )}
-
               <div>
                 <label className="block text-gray-300 text-xs xs:text-sm mb-2">
                   Type <span className="font-bold text-red-400">DELETE</span> to confirm:
@@ -249,7 +220,6 @@ const DeleteAccountModal = ({ isOpen, onClose, currentUser, onDeleted }) => {
               </div>
             </div>
           )}
-
           {step === 2 && (
             <div className="text-center py-6 xs:py-8">
               <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 border-b-2 border-red-400 mx-auto mb-4"></div>
@@ -258,7 +228,6 @@ const DeleteAccountModal = ({ isOpen, onClose, currentUser, onDeleted }) => {
               <p className="text-gray-500 text-xs mt-3">Please do not close this window</p>
             </div>
           )}
-
           {step === 3 && (
             <div className="text-center py-6 xs:py-8">
               <div className="w-14 h-14 xs:w-16 xs:h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -272,7 +241,6 @@ const DeleteAccountModal = ({ isOpen, onClose, currentUser, onDeleted }) => {
           )}
         </div>
 
-        {/* Footer */}
         {step === 1 && (
           <div className="p-4 xs:p-5 sm:p-6 border-t border-red-500/10 bg-black/20">
             <div className="flex gap-2 xs:gap-3">
@@ -308,8 +276,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
   
   const { isInstallable, isInstalled, installing, installApp } = usePWA();
   const [showPWADebug, setShowPWADebug] = useState(process.env.NODE_ENV === 'development');
-
-  // DELETE ACCOUNT STATE
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   
   const [userProfile, setUserProfile] = useState({
@@ -319,7 +285,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
   });
   const [loading, setLoading] = useState(true);
 
-  // ─── PROFILE EDITING STATE ───
   const [profileData, setProfileData] = useState(null);
   const [profileEditing, setProfileEditing] = useState(false);
   const [profileSaving, setProfileSaving] = useState(false);
@@ -349,23 +314,15 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         }
       }
     };
-
     const handleEscape = (event) => {
-      if (event.key === 'Escape' && sidebarOpen) {
-        setSidebarOpen(false);
-      }
+      if (event.key === 'Escape' && sidebarOpen) setSidebarOpen(false);
     };
-
     const handleResize = () => {
-      if (window.innerWidth >= 1024 && sidebarOpen) {
-        setSidebarOpen(false);
-      }
+      if (window.innerWidth >= 1024 && sidebarOpen) setSidebarOpen(false);
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', handleEscape);
     window.addEventListener('resize', handleResize);
-    
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleEscape);
@@ -373,7 +330,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
     };
   }, [sidebarOpen]);
 
-  // ─── SIDEBAR ITEMS: Career Coach added after Home ───
   const sidebarItems = useMemo(() => [
     { id: 'community', label: 'Home' },
     { id: 'hub', label: 'Jobs' },
@@ -382,7 +338,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
     { id: 'profile', label: 'Profile' },
   ], []);
 
-  // ─── DASHBOARD CARDS ───
   const dashboardCards = useMemo(() => ({
     hub: [
       {
@@ -479,15 +434,12 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       setLoading(false);
       return;
     }
-    
     setUserProfile(prev => ({
       ...prev,
       name: currentUser.displayName || currentUser.email?.split('@')[0] || 'User',
       email: currentUser.email || '',
       photoURL: currentUser.photoURL || '/Images/512X512.png'
     }));
-
-    // Fetch full profile from Firestore for editing
     const fetchProfile = async () => {
       try {
         const snap = await getDoc(doc(db, 'users', currentUser.uid));
@@ -513,16 +465,12 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       } catch (e) { console.error('Error fetching profile:', e); }
     };
     fetchProfile();
-    
     setLoading(false);
   }, [currentUser]);
 
   const handleCardClick = useCallback((path) => {
-    if (onNavigate) {
-      onNavigate(path);
-    } else {
-      navigate(path);
-    }
+    if (onNavigate) onNavigate(path);
+    else navigate(path);
   }, [navigate, onNavigate]);
 
   const handleSidebarItemClick = useCallback((item) => {
@@ -564,18 +512,15 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             description="Connect, collaborate, and grow with the Loomiqe international student community."
             gradientColors="from-green-300 via-orange-400 to-green-500"
           />
-
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 xs:gap-4 sm:gap-5 md:gap-6">
             {dashboardCards.community?.map((card, index) => (
               <DashboardCard key={index} card={card} onCardClick={handleCardClick} />
             ))}
           </div>
-
         </div>
       );
     }
 
-    // ─── PROFILE SECTION ───
     if (activeSection === 'profile') {
       const BLOCKED_DOMAINS = ['gmail.com','googlemail.com','yahoo.com','yahoo.co.uk','yahoo.co.in','outlook.com','hotmail.com','live.com','msn.com','aol.com','icloud.com','me.com','mac.com','protonmail.com','proton.me','zoho.com','yandex.com','mail.com','gmx.com','fastmail.com','tutanota.com'];
       const isBizEmail = (e) => e && e.includes('@') && !BLOCKED_DOMAINS.includes(e.split('@')[1]?.toLowerCase());
@@ -636,16 +581,13 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       return (
         <div className="space-y-4 sm:space-y-6">
           <SectionHeader title="Profile" description="View and update your personal and company information." gradientColors="from-orange-300 via-orange-400 to-orange-500" />
-
           <div className="bg-white/5 border border-white/20 rounded-xl p-4 sm:p-6">
             {!profileEditing ? (
-              /* ─── VIEW MODE ─── */
               <div className="space-y-5">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-bold text-white">Personal Information</h3>
                   <button onClick={() => setProfileEditing(true)} className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg text-sm transition-all min-h-[44px]">Edit Profile</button>
                 </div>
-
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {[
                     ['Name', profileForm.displayName],
@@ -661,17 +603,11 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                     </div>
                   ))}
                 </div>
-
-                {/* Account Type */}
                 <div className="pt-4 border-t border-white/10">
-                  <div className="flex items-center gap-3">
-                    <span className={`px-3 py-1.5 rounded-lg text-xs font-bold ${profileForm.isCompany ? 'bg-blue-500/20 text-blue-300' : 'bg-green-500/20 text-green-300'}`}>
-                      {profileForm.isCompany ? 'Company Account' : '👤 Individual Account'}
-                    </span>
-                  </div>
+                  <span className={`px-3 py-1.5 rounded-lg text-xs font-bold ${profileForm.isCompany ? 'bg-blue-500/20 text-blue-300' : 'bg-green-500/20 text-green-300'}`}>
+                    {profileForm.isCompany ? 'Company Account' : '👤 Individual Account'}
+                  </span>
                 </div>
-
-                {/* Company Info (view) */}
                 {profileForm.isCompany && profileData?.companyProfile && (
                   <div className="pt-4 border-t border-white/10 space-y-3">
                     <h3 className="text-lg font-bold text-white">Company Details</h3>
@@ -698,14 +634,11 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                 )}
               </div>
             ) : (
-              /* ─── EDIT MODE ─── */
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-bold text-white">Edit Profile</h3>
                   <button onClick={() => setProfileEditing(false)} className="text-gray-400 hover:text-white text-sm font-semibold min-h-[44px]">Cancel</button>
                 </div>
-
-                {/* Personal */}
                 <div className="space-y-4">
                   <div>
                     <label className={labelCls}>Name *</label>
@@ -739,8 +672,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                     </div>
                   </div>
                 </div>
-
-                {/* Account Type Toggle */}
                 <div className="pt-4 border-t border-white/10 space-y-4">
                   <h3 className="text-lg font-bold text-white">Account Type</h3>
                   <div className="grid grid-cols-2 gap-3">
@@ -751,11 +682,9 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                     </button>
                     <button type="button" onClick={() => setProfileForm(p => ({...p, isCompany: true}))}
                       className={`p-4 rounded-xl border-2 text-center transition-all active:scale-95 ${profileForm.isCompany ? 'border-orange-400 bg-orange-500/20 shadow-lg' : 'border-white/15 bg-white/5 hover:bg-white/10'}`}>
-                      
                       <div className={`text-sm font-bold ${profileForm.isCompany ? 'text-white' : 'text-gray-300'}`}>Company</div>
                     </button>
                   </div>
-
                   {profileForm.isCompany && (
                     <div className="space-y-4 pt-2">
                       <div>
@@ -786,8 +715,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                     </div>
                   )}
                 </div>
-
-                {/* Save */}
                 <div className="flex gap-3 pt-2">
                   <button onClick={() => setProfileEditing(false)} className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl text-sm transition-all min-h-[44px]">Cancel</button>
                   <button onClick={handleProfileSave} disabled={profileSaving}
@@ -813,7 +740,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           description={section.description}
           gradientColors={section.gradientColors}
         />
-
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 xs:gap-4 sm:gap-5 md:gap-6">
           {section.cards?.map((card, index) => (
             <DashboardCard key={index} card={card} onCardClick={handleCardClick} />
@@ -830,12 +756,10 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         <div className="min-h-screen flex items-center justify-center px-3 xs:px-4" style={{ backgroundColor: '#000' }}>
           <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl xs:rounded-3xl p-5 xs:p-6 sm:p-8 border border-white/20 shadow-2xl max-w-md w-full">
             <div className="animate-spin rounded-full h-10 w-10 xs:h-12 xs:w-12 border-b-2 border-orange-400 mx-auto mb-4"></div>
-            <p className="text-white text-center font-medium text-sm xs:text-base" 
-               style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
+            <p className="text-white text-center font-medium text-sm xs:text-base" style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
               {!currentUser ? 'Please log in to view dashboard...' : 'Loading your dashboard...'}
             </p>
           </div>
-          
           {showPWADebug && <PWADebugger />}
         </div>
       </>
@@ -847,19 +771,17 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       <Navbar />
       <div className="min-h-screen flex" style={{ backgroundColor: '#000' }}>
 
-        {/* Sidebar */}
+        {/* ── SIDEBAR ── */}
         <div 
           id="sidebar"
-          className={`fixed inset-y-0 left-0 z-50 w-64 xs:w-72 sm:w-80 lg:w-72 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static lg:inset-0 transition-transform duration-300 ease-in-out shadow-2xl`}
+          className={`fixed inset-y-0 left-0 z-50 w-64 xs:w-72 sm:w-80 lg:w-72 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static lg:inset-0 transition-transform duration-300 ease-in-out shadow-2xl flex flex-col`}
           style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 50%, rgba(250,250,250,0.98) 100%)', backdropFilter: 'blur(20px)'}}
         >
-          <div className="flex items-center justify-between h-14 xs:h-16 sm:h-18 px-3 xs:px-4 sm:px-6 border-b border-gray-200">
-            <Link to="/" className="flex items-center" aria-label="Go to homepage">
-              <img src="/Images/512X512.png" alt="Loomiqe Logo" className="w-7 h-7 xs:w-8 xs:h-8 sm:w-10 sm:h-10" />
-            </Link>
+          {/* ── SIDEBAR HEADER: close button only on mobile, nothing on desktop ── */}
+          <div className="flex items-center justify-end h-14 xs:h-16 px-3 xs:px-4 border-b border-gray-200 lg:hidden">
             <button
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden p-2 rounded-md text-gray-600 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 transition-colors"
+              className="p-2 rounded-md text-gray-500 hover:text-gray-800 hover:bg-gray-100 active:bg-gray-200 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
               aria-label="Close sidebar"
             >
               <svg className="w-5 h-5 xs:w-6 xs:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -868,6 +790,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             </button>
           </div>
 
+          {/* ── USER PROFILE ── */}
           <div className="p-3 xs:p-4 sm:p-6 border-b border-gray-200 bg-gray-50/50">
             <div className="flex items-center gap-2 xs:gap-3">
               <img 
@@ -879,15 +802,14 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                 {userProfile.email ? (
                   <Link 
                     to={`/profile/${encodeURIComponent(userProfile.email)}`}
-                    className="font-medium text-gray-800 text-xs xs:text-sm sm:text-base truncate hover:text-orange-500 transition-colors duration-300 cursor-pointer block" 
+                    className="font-medium text-gray-800 text-xs xs:text-sm sm:text-base truncate hover:text-orange-500 transition-colors duration-300 cursor-pointer block"
                     style={{fontFamily: '"Inter", sans-serif'}}
                     title="View your profile"
                   >
                     {userProfile.name}
                   </Link>
                 ) : (
-                  <div className="font-medium text-gray-800 text-xs xs:text-sm sm:text-base truncate" 
-                       style={{fontFamily: '"Inter", sans-serif'}}>
+                  <div className="font-medium text-gray-800 text-xs xs:text-sm sm:text-base truncate" style={{fontFamily: '"Inter", sans-serif'}}>
                     {userProfile.name}
                   </div>
                 )}
@@ -900,6 +822,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             </div>
           </div>
 
+          {/* ── NAV ITEMS ── */}
           <nav className="p-2 xs:p-3 sm:p-4 space-y-1 xs:space-y-2 overflow-y-auto flex-1">
             {sidebarItems.map((item) => (
               <button
@@ -919,6 +842,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             ))}
           </nav>
 
+          {/* ── BOTTOM ACTIONS ── */}
           <div className="p-2 xs:p-3 sm:p-4 mt-auto border-t border-gray-200 space-y-1 xs:space-y-2">
             <a
               href="/support"
@@ -926,7 +850,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
               rel="noopener noreferrer"
               className="w-full flex items-center px-2 xs:px-3 sm:px-4 py-2.5 xs:py-3 sm:py-4 text-left rounded-lg xs:rounded-xl min-h-[52px] transition-all duration-200 text-gray-700 hover:bg-gray-100 active:bg-gray-200 hover:text-gray-900"
               style={{fontFamily: '"Inter", sans-serif'}}
-              aria-label="Get support"
             >
               <svg className="w-4 h-4 xs:w-5 xs:h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -934,7 +857,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
               <span className="font-medium text-xs xs:text-sm sm:text-base">Support</span>
             </a>
 
-            {/* DELETE ACCOUNT BUTTON */}
             <button
               onClick={() => setShowDeleteModal(true)}
               className="w-full flex items-center px-2 xs:px-3 sm:px-4 py-2.5 xs:py-3 sm:py-4 text-left rounded-lg xs:rounded-xl min-h-[52px] transition-all duration-200 text-red-500 hover:bg-red-50 active:bg-red-100 hover:text-red-700"
@@ -952,23 +874,21 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                 onClick={() => setShowPWADebug(!showPWADebug)}
                 className="w-full bg-gray-600 text-white px-2 py-2 rounded-lg text-xs font-medium min-h-[40px] shadow-lg hover:bg-gray-700 active:bg-gray-800 transition-colors"
                 title="Toggle PWA Debug (Ctrl+Shift+D)"
-                aria-label="Toggle PWA Debug panel"
               >
                 Debug Panel
               </button>
             )}
-            
+
             <button 
               onClick={() => navigate('/logout')} 
               className="w-full bg-gray-200 text-gray-800 px-2 py-2 rounded-lg text-xs font-medium min-h-[40px] shadow-sm border border-gray-300 hover:bg-gray-300 active:bg-gray-400 transition-colors"
-              aria-label="Logout"
             >
               Logout
             </button>
           </div>
         </div>
 
-        {/* Main Content */}
+        {/* ── MAIN CONTENT ── */}
         <div className="flex-1 lg:ml-0 min-w-0">
           <header 
             className="h-14 xs:h-16 sm:h-18 flex items-center justify-between px-3 xs:px-4 sm:px-6 relative z-10 border-b border-white/10"
@@ -990,7 +910,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                 {activeSection.replace('-', ' ')}
               </h1>
             </div>
-            
             <div className="flex items-center gap-2 xs:gap-3">
               <PWAInstallButton 
                 isInstallable={isInstallable}
@@ -1006,6 +925,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           </main>
         </div>
 
+        {/* Overlay */}
         {sidebarOpen && (
           <div 
             className="fixed inset-0 bg-black bg-opacity-60 z-40 lg:hidden transition-opacity duration-300"
@@ -1016,7 +936,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
 
         {showPWADebug && <PWADebugger />}
 
-        {/* DELETE ACCOUNT MODAL */}
         <DeleteAccountModal
           isOpen={showDeleteModal}
           onClose={() => setShowDeleteModal(false)}
@@ -1026,16 +945,12 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
 
         <style jsx>{`
           @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
-          
           * { font-family: 'Inter', sans-serif; }
-          
           ::-webkit-scrollbar { width: 8px; }
           ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
           ::-webkit-scrollbar-thumb { background: rgba(249, 115, 22, 0.5); border-radius: 4px; }
           ::-webkit-scrollbar-thumb:hover { background: rgba(249, 115, 22, 0.7); }
-          
           body { overflow-x: hidden; }
-
           @media (min-width: 375px) {
             .xs\\:inline { display: inline; }
             .xs\\:hidden { display: none; }
@@ -1049,13 +964,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
 const Dashboard = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
-
-  return (
-    <UserDashboard 
-      currentUser={currentUser} 
-      onNavigate={navigate} 
-    />
-  );
+  return <UserDashboard currentUser={currentUser} onNavigate={navigate} />;
 };
 
 export default Dashboard;

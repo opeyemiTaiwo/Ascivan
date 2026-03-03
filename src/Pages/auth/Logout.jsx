@@ -13,10 +13,8 @@ const Logout = () => {
   const [countdown, setCountdown] = useState(3);
   const navigate = useNavigate();
 
-  // External home URL
   const externalHomeUrl = '/';
 
-  // Countdown timer effect
   useEffect(() => {
     if (isLoggedOut && !error && countdown > 0) {
       const timer = setTimeout(() => {
@@ -28,7 +26,6 @@ const Logout = () => {
     }
   }, [isLoggedOut, error, countdown]);
 
-  // Auto logout when component mounts if user is logged in
   useEffect(() => {
     if (currentUser && !isLoggedOut) {
       handleLogout();
@@ -41,12 +38,9 @@ const Logout = () => {
     try {
       setIsLoggingOut(true);
       setError('');
-      
       await logout();
-      
       setIsLoggingOut(false);
       setIsLoggedOut(true);
-      
     } catch (error) {
       console.error('Logout failed:', error);
       setError('Failed to log out. Please try again.');
@@ -61,36 +55,31 @@ const Logout = () => {
   };
 
   return (
-    <div 
-      className="min-h-screen overflow-hidden flex flex-col relative"
-      style={{}}
-    >
-      {/* Global Navigation */}
+    <div className="min-h-screen overflow-hidden flex flex-col relative">
+
       <Navbar />
-      
+
       {/* Main Content */}
       <main className="flex-grow pb-6 xs:pb-8 sm:pb-10 flex items-center justify-center px-3 xs:px-4 sm:px-6 relative z-10">
         <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl sm:rounded-3xl shadow-2xl p-4 xs:p-5 sm:p-6 md:p-8 lg:p-10 w-full max-w-[340px] xs:max-w-sm sm:max-w-md md:max-w-lg border border-white/20">
           <div className="text-center">
-            
+
             {/* Hero Section */}
             <div className="mb-4 xs:mb-5 sm:mb-6 md:mb-8">
               <div className="flex items-center justify-center gap-1.5 xs:gap-2 mb-3 xs:mb-4 animate-pulse">
-                <div className="h-1.5 w-1.5 xs:h-2 xs:w-2 sm:h-3 sm:w-3 bg-green-400 rounded-full" 
-                     ></div>
-                <span className="text-green-300 uppercase tracking-wider xs:tracking-widest text-[10px] xs:text-xs sm:text-sm font-black" 
+                <div className="h-1.5 w-1.5 xs:h-2 xs:w-2 sm:h-3 sm:w-3 bg-green-400 rounded-full"></div>
+                <span className="text-green-300 uppercase tracking-wider xs:tracking-widest text-[10px] xs:text-xs sm:text-sm font-black"
                       style={{
                         textShadow: '0 0 20px rgba(34, 197, 94, 0.8), 2px 2px 4px rgba(0,0,0,0.9)',
                         fontFamily: '"Inter", sans-serif',
                         letterSpacing: '0.1em'
                       }}>
-                 Signing Out
+                  Signing Out
                 </span>
-                <div className="h-1.5 w-1.5 xs:h-2 xs:w-2 sm:h-3 sm:w-3 bg-green-400 rounded-full" 
-                     ></div>
+                <div className="h-1.5 w-1.5 xs:h-2 xs:w-2 sm:h-3 sm:w-3 bg-green-400 rounded-full"></div>
               </div>
 
-              <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 xs:mb-3 px-2" 
+              <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 xs:mb-3 px-2"
                   style={{
                     fontFamily: '"Inter", sans-serif',
                     textShadow: '0 0 20px rgba(255,255,255,0.3), 2px 2px 4px rgba(0,0,0,0.9)'
@@ -99,11 +88,7 @@ const Logout = () => {
                   <>
                     See You{' '}
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-300 via-orange-400 to-green-500"
-                          style={{
-                            textShadow: 'none',
-                            filter: 'drop-shadow(0 0 20px rgba(34, 197, 94, 0.5))',
-                            
-                          }}>
+                          style={{ textShadow: 'none', filter: 'drop-shadow(0 0 20px rgba(34, 197, 94, 0.5))' }}>
                       Soon!
                     </span>
                   </>
@@ -111,19 +96,14 @@ const Logout = () => {
                   <>
                     Signing{' '}
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-300 via-orange-400 to-orange-500"
-                          style={{
-                            textShadow: 'none',
-                            filter: 'drop-shadow(0 0 20px rgba(255, 69, 0, 0.5))',
-                            
-                          }}>
+                          style={{ textShadow: 'none', filter: 'drop-shadow(0 0 20px rgba(255, 69, 0, 0.5))' }}>
                       Out...
                     </span>
                   </>
                 )}
               </h1>
 
-              <div className="h-0.5 xs:h-1 w-12 xs:w-16 sm:w-20 bg-gradient-to-r from-green-400 to-orange-500 mx-auto rounded-full shadow-2xl"
-                   ></div>
+              <div className="h-0.5 xs:h-1 w-12 xs:w-16 sm:w-20 bg-gradient-to-r from-green-400 to-orange-500 mx-auto rounded-full shadow-2xl"></div>
             </div>
 
             {/* Error Message */}
@@ -148,8 +128,7 @@ const Logout = () => {
                   <div className="relative">
                     <div className="animate-spin h-10 w-10 xs:h-12 xs:w-12 sm:h-14 sm:w-14 border-3 xs:border-4 border-green-400/20 border-t-green-400 rounded-full shadow-lg"></div>
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 bg-green-400 rounded-full animate-pulse shadow-lg" 
-                           ></div>
+                      <div className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 bg-green-400 rounded-full animate-pulse shadow-lg"></div>
                     </div>
                   </div>
                 </div>
@@ -168,16 +147,16 @@ const Logout = () => {
                 <div className="bg-gradient-to-br from-green-900/40 via-green-800/40 to-green-900/40 border border-green-500/30 text-green-300 px-3 xs:px-4 py-3 xs:py-4 rounded-lg xs:rounded-xl mb-3 xs:mb-4 shadow-2xl">
                   <div className="flex items-center justify-center mb-2 xs:mb-3">
                     <div className="relative">
-                      <svg className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 text-green-400 " fill="none" stroke="currentColor" viewBox="0 0 24 24" >
+                      <svg className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
-                      <div className="absolute inset-0 bg-green-400/20 rounded-full "></div>
+                      <div className="absolute inset-0 bg-green-400/20 rounded-full"></div>
                     </div>
                   </div>
                   <p className="font-bold text-base xs:text-lg sm:text-xl text-green-300 mb-1 xs:mb-2">Successfully Logged Out!</p>
                   <p className="text-xs xs:text-sm text-green-200">Thank you for using Loomiqe</p>
                 </div>
-                
+
                 <div className="bg-gradient-to-br from-orange-900/30 via-orange-800/30 to-orange-900/30 border border-orange-500/20 text-orange-300 px-3 xs:px-4 py-2.5 xs:py-3 rounded-lg xs:rounded-xl">
                   <p className="text-xs xs:text-sm font-medium">
                     Redirecting to home in{' '}
@@ -185,8 +164,8 @@ const Logout = () => {
                     {' '}second{countdown !== 1 ? 's' : ''}...
                   </p>
                   <div className="mt-1.5 xs:mt-2 bg-orange-500/20 rounded-full h-1.5 xs:h-2 overflow-hidden">
-                    <div 
-                      className="bg-gradient-to-r from-orange-500 to-green-500 h-full rounded-full transition-all duration-1000 ease-linear" 
+                    <div
+                      className="bg-gradient-to-r from-orange-500 to-green-500 h-full rounded-full transition-all duration-1000 ease-linear"
                       style={{width: `${((3 - countdown) / 3) * 100}%`}}
                     ></div>
                   </div>
@@ -194,7 +173,7 @@ const Logout = () => {
               </div>
             )}
 
-            {/* Manual Logout for Not Logged In Users */}
+            {/* Not Logged In */}
             {!currentUser && !isLoggedOut && (
               <div className="mb-4 xs:mb-5 sm:mb-6">
                 <div className="bg-gradient-to-br from-yellow-900/40 via-yellow-800/40 to-orange-900/40 border border-yellow-500/30 text-yellow-300 px-3 xs:px-4 py-2.5 xs:py-3 rounded-lg xs:rounded-xl">
@@ -211,16 +190,11 @@ const Logout = () => {
 
             {/* Action Buttons */}
             <div className="space-y-2 xs:space-y-3 sm:space-y-4">
-              
-              {/* Logout Button (for error state) */}
               {error && (
                 <button
                   onClick={handleManualLogout}
                   disabled={isLoggingOut}
-                  className="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 disabled:opacity-50 disabled:cursor-not-allowed text-white py-2.5 xs:py-3 sm:py-3.5 px-4 rounded-lg xs:rounded-xl font-bold transition-all duration-300 text-xs xs:text-sm sm:text-base"
-                  style={{
-                    boxShadow: '0 10px 30px rgba(239, 68, 68, 0.3)'
-                  }}
+                  className="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 disabled:opacity-50 disabled:cursor-not-allowed text-white py-2.5 xs:py-3 sm:py-3.5 px-4 rounded-lg xs:rounded-xl font-bold transition-all duration-300 text-xs xs:text-sm sm:text-base min-h-[44px]"
                 >
                   {isLoggingOut ? (
                     <span className="flex items-center justify-center space-x-2">
@@ -231,40 +205,29 @@ const Logout = () => {
                       <span>Logging out...</span>
                     </span>
                   ) : (
-                    <span className="flex items-center justify-center space-x-2">
-                      <span>Try Again</span>
-                    </span>
+                    <span>Try Again</span>
                   )}
                 </button>
               )}
 
-              {/* Navigation Options */}
               <button
                 onClick={() => { window.location.href = externalHomeUrl; }}
-                className="w-full bg-gradient-to-r from-green-500 to-orange-500 hover:from-green-600 hover:to-orange-600 text-white py-2.5 xs:py-3 sm:py-3.5 px-4 rounded-lg xs:rounded-xl font-bold transition-all duration-300 text-xs xs:text-sm sm:text-base"
-                style={{
-                  boxShadow: '0 10px 30px rgba(34, 197, 94, 0.3)'
-                }}
+                className="w-full bg-gradient-to-r from-green-500 to-orange-500 hover:from-green-600 hover:to-orange-600 text-white py-2.5 xs:py-3 sm:py-3.5 px-4 rounded-lg xs:rounded-xl font-bold transition-all duration-300 text-xs xs:text-sm sm:text-base min-h-[44px]"
+                style={{ boxShadow: '0 10px 30px rgba(34, 197, 94, 0.3)' }}
               >
-                <span className="flex items-center justify-center space-x-2">
-                  <span>Go to Home</span>
-                </span>
+                Go to Home
               </button>
-              
+
               <button
                 onClick={() => navigate('/login')}
-                className="w-full bg-gradient-to-br from-white/10 via-white/5 to-white/10 border border-white/20 text-white py-2.5 xs:py-3 sm:py-3.5 px-4 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 hover:shadow-2xl text-xs xs:text-sm sm:text-base"
-                style={{
-                  boxShadow: '0 10px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)'
-                }}
+                className="w-full bg-gradient-to-br from-white/10 via-white/5 to-white/10 border border-white/20 text-white py-2.5 xs:py-3 sm:py-3.5 px-4 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 hover:shadow-2xl text-xs xs:text-sm sm:text-base min-h-[44px]"
+                style={{ boxShadow: '0 10px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)' }}
               >
-                <span className="flex items-center justify-center space-x-2">
-                  <span>Sign In Again</span>
-                </span>
+                Sign In Again
               </button>
             </div>
 
-            {/* Additional Info */}
+            {/* Footer note */}
             <div className="mt-4 xs:mt-5 sm:mt-6 pt-3 xs:pt-4 border-t border-white/20">
               <p className="text-[10px] xs:text-xs text-gray-400" style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
                 Your session has been securely terminated
@@ -274,90 +237,55 @@ const Logout = () => {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer style={{background: 'linear-gradient(to top, rgba(0,0,0,0.9), transparent)'}} 
-              className="text-white py-6 xs:py-8 sm:py-10 md:py-12 relative z-10">
+      {/* ── FOOTER: white background, logo image only (no text) ── */}
+      <footer
+        style={{ background: '#ffffff' }}
+        className="py-6 xs:py-8 sm:py-10 relative z-10 border-t border-gray-200"
+      >
         <div className="container mx-auto px-3 xs:px-4 sm:px-6">
           <div className="text-center">
-            <div className="flex items-center justify-center space-x-1.5 xs:space-x-2 mb-3 xs:mb-4">
-              <img 
-                src="/Images/512X512.png" 
-                alt="Loomiqe Logo" 
-                className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8"
+
+            {/* Logo only — text removed */}
+            <div className="flex items-center justify-center mb-3 xs:mb-4">
+              <img
+                src="/Images/512X512.png"
+                alt="Loomiqe Logo"
+                className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14"
               />
-              <span className="text-base xs:text-lg sm:text-xl font-black" 
-                    style={{
-                      textShadow: '0 0 20px rgba(34, 197, 94, 0.5), 2px 2px 4px rgba(0,0,0,0.8)',
-                      fontFamily: '"Inter", sans-serif'
-                    }}>
-                Loomiqe
-              </span>
             </div>
-            <div className="flex items-center justify-center mb-2 xs:mb-3 sm:mb-4 px-4">
-              <span className="text-gray-300 text-[10px] xs:text-xs sm:text-sm font-medium text-center" 
-                    style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
-                Transforming the international student experience with AI
-              </span>
-            </div>
-            <p className="text-gray-400 text-[10px] xs:text-xs sm:text-sm" 
-               style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
+
+            <p className="text-gray-500 text-[10px] xs:text-xs sm:text-sm font-medium mb-2">
+              Transforming the international student experience with AI
+            </p>
+
+            <p className="text-gray-400 text-[10px] xs:text-xs sm:text-sm">
               © {new Date().getFullYear()} Loomiqe. All rights reserved.
             </p>
           </div>
         </div>
       </footer>
 
-      {/* Custom Styles */}
       <style jsx>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
         * { font-family: 'Inter', sans-serif; }
-        
+
         @keyframes glow {
           0%, 100% { filter: drop-shadow(0 0 20px rgba(34, 197, 94, 0.5)); }
           50% { filter: drop-shadow(0 0 40px rgba(34, 197, 94, 0.8)); }
         }
-        
-        .shadow-3xl {
-          box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25), 0 0 60px rgba(34, 197, 94, 0.1);
-        }
-        
-        /* Custom scrollbar for webkit browsers */
-        ::-webkit-scrollbar {
-          width: 6px;
-        }
-        
-        @media (min-width: 640px) {
-          ::-webkit-scrollbar {
-            width: 8px;
-          }
-        }
-        
-        ::-webkit-scrollbar-track {
-          background: rgba(0, 0, 0, 0.1);
-        }
-        
-        ::-webkit-scrollbar-thumb {
-          background: rgba(34, 197, 94, 0.5);
-          border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-          background: rgba(34, 197, 94, 0.7);
-        }
 
-        /* Enhanced touch targets for mobile */
+        ::-webkit-scrollbar { width: 6px; }
+        @media (min-width: 640px) { ::-webkit-scrollbar { width: 8px; } }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
+        ::-webkit-scrollbar-thumb { background: rgba(34, 197, 94, 0.5); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(34, 197, 94, 0.7); }
+
         @media (max-width: 768px) {
-          button, a, input, textarea {
-            min-height: 44px;
-          }
+          button, a, input, textarea { min-height: 44px; }
         }
 
-        /* Prevent horizontal scroll on mobile */
-        body {
-          overflow-x: hidden;
-        }
+        body { overflow-x: hidden; }
 
-        /* Reduced motion for accessibility */
         @media (prefers-reduced-motion: reduce) {
           * {
             animation-duration: 0.01ms !important;
@@ -366,36 +294,18 @@ const Logout = () => {
           }
         }
 
-        /* Extra small screens - custom breakpoint */
         @media (max-width: 374px) {
-          h1 {
-            font-size: 1.25rem !important;
-          }
+          h1 { font-size: 1.25rem !important; }
         }
 
-        /* Landscape mobile devices */
         @media (max-height: 600px) and (orientation: landscape) {
-          header {
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
-          }
-          
-          main {
-            padding-top: 4rem;
-            padding-bottom: 2rem;
-          }
-          
-          footer {
-            padding-top: 1.5rem;
-            padding-bottom: 1.5rem;
-          }
+          header { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+          main { padding-top: 4rem; padding-bottom: 2rem; }
+          footer { padding-top: 1.5rem; padding-bottom: 1.5rem; }
         }
 
-        /* Large desktop optimization */
         @media (min-width: 1536px) {
-          .container {
-            max-width: 1400px;
-          }
+          .container { max-width: 1400px; }
         }
       `}</style>
     </div>

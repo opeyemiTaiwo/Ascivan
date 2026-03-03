@@ -201,7 +201,7 @@ const LandingPage = () => {
 
       {/* ── NAVBAR ── */}
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-gray-200 backdrop-blur-xl"
-     style={{ background: 'rgba(255,255,255,0.95)' }}>
+           style={{ background: 'rgba(255,255,255,0.95)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16 sm:h-20 md:h-24">
           <Link to="/" className="flex items-center gap-2.5 flex-shrink-0">
             <img src="/Images/512X512.png" alt="Loomiqe" className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24" />
@@ -241,7 +241,7 @@ const LandingPage = () => {
             </button>
           </div>
         </div>
-        {/* Mobile dropdown menu */}
+        {/* Mobile dropdown */}
         <div className={`sm:hidden border-t border-gray-200 bg-white transition-all duration-200 ease-in-out overflow-hidden ${mobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}>
           <div className="px-4 py-4 space-y-2">
             <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 rounded-lg text-base font-semibold text-gray-700 hover:bg-gray-50 transition-all min-h-[44px]">
@@ -256,20 +256,16 @@ const LandingPage = () => {
 
       {/* ── HERO ── */}
       <section className="relative min-h-screen flex items-center justify-center grid-bg noise pt-20 sm:pt-24 overflow-hidden">
-        {/* Blobs */}
         <div className="hero-blob w-[250px] h-[250px] sm:w-[350px] sm:h-[350px] md:w-[500px] md:h-[500px] bg-orange-600/20 top-[-100px] left-[-150px]" />
         <div className="hero-blob w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px] bg-green-600/15 bottom-[-50px] right-[-100px]" />
         <div className="hero-blob w-[180px] h-[180px] sm:w-[250px] sm:h-[250px] md:w-[300px] md:h-[300px] bg-orange-500/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
 
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
-
-          {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 mb-8 float">
             <span className="w-2 h-2 rounded-full bg-green-400 pulse-slow" />
             <span className="text-gray-300 text-sm font-medium">Built for international students</span>
           </div>
 
-          {/* Headline */}
           <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-800 leading-[0.95] tracking-tight mb-6">
             <span className="block text-white">Your Life Abroad,</span>
             <span className="block mt-2">
@@ -285,7 +281,6 @@ const LandingPage = () => {
             <span className="text-white font-medium">global community</span>.
           </p>
 
-          {/* CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={handleSignIn}
@@ -304,7 +299,6 @@ const LandingPage = () => {
 
           <p className="mt-5 text-gray-600 text-sm">No credit card. No SSN. Just your Google account.</p>
 
-          {/* Stats strip */}
           <div className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
             {stats.map((s, i) => (
               <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-4">
@@ -315,7 +309,6 @@ const LandingPage = () => {
           </div>
         </div>
 
-        {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
           <span className="text-gray-500 text-xs uppercase tracking-widest">Scroll</span>
           <div className="w-px h-10 bg-gradient-to-b from-gray-500 to-transparent" />
@@ -409,7 +402,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* ── TESTIMONIAL / QUOTE ── */}
+      {/* ── TESTIMONIAL ── */}
       <section className="py-20 border-y border-white/10 bg-white/[0.02]">
         <div
           id="quote"
@@ -418,7 +411,7 @@ const LandingPage = () => {
         >
           <div className="text-3xl sm:text-4xl md:text-5xl text-orange-400/40 font-display mb-4">"</div>
           <p className="text-white text-xl sm:text-2xl font-light leading-relaxed mb-6">
-           We spent years figuring it out alone, the housing, the jobs, the paperwork. Loomiqe is everything we wished existed from day one.
+            We spent years figuring it out alone, the housing, the jobs, the paperwork. Loomiqe is everything we wished existed from day one.
           </p>
           <div className="flex items-center justify-center gap-3">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-green-500 flex items-center justify-center text-white font-bold text-sm">A</div>
@@ -456,21 +449,30 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer className="border-t border-white/10 py-10">
+      {/* ── FOOTER: white background, logo image only ── */}
+      <footer className="border-t border-gray-200 bg-white py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <img src="/Images/512X512.png" alt="Loomiqe" className="w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24" />
-              <span className="font-display font-800 text-white text-base"></span>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+
+            {/* Logo only — no text */}
+            <div className="flex items-center">
+              <img
+                src="/Images/512X512.png"
+                alt="Loomiqe"
+                className="w-12 h-12 sm:w-14 sm:h-14"
+              />
             </div>
+
+            {/* Nav links */}
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-gray-500 text-sm">
-              <Link to="/about" className="hover:text-white transition-colors">About</Link>
-              <Link to="/terms" className="hover:text-white transition-colors">Terms</Link>
-              <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
-              <Link to="/support" className="hover:text-white transition-colors">Support</Link>
+              <Link to="/about" className="hover:text-orange-500 transition-colors font-medium">About</Link>
+              <Link to="/terms" className="hover:text-orange-500 transition-colors font-medium">Terms</Link>
+              <Link to="/privacy" className="hover:text-orange-500 transition-colors font-medium">Privacy</Link>
+              <Link to="/support" className="hover:text-orange-500 transition-colors font-medium">Support</Link>
             </div>
-            <p className="text-gray-600 text-xs">© {new Date().getFullYear()} Loomiqe. All rights reserved.</p>
+
+            {/* Copyright */}
+            <p className="text-gray-400 text-xs">© {new Date().getFullYear()} Loomiqe. All rights reserved.</p>
           </div>
         </div>
       </footer>

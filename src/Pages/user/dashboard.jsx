@@ -523,7 +523,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
     // Section metadata for headers
     const sectionMeta = {
       community: { title: 'Home', description: 'Connect, collaborate, and grow with the Loomiqe community.', gradientColors: 'from-green-300 via-orange-400 to-green-500' },
-      hub: { title: 'Jobs', description: accountType === 'company' ? 'Post and manage job listings for international students.' : 'Browse full-time, freelance & internship roles — filtered by location and visa compliance.', gradientColors: 'from-orange-300 via-orange-400 to-orange-500' },
+      hub: { title: 'Jobs', description: accountType === 'company' ? 'Post and manage job listings for international students.' : 'Browse full-time, freelance & internship roles, filtered by location and visa compliance.', gradientColors: 'from-orange-300 via-orange-400 to-orange-500' },
       housing: { title: 'Housing', description: accountType === 'company' ? 'List housing spaces for international students.' : 'Find affordable, student-friendly housing near your university.', gradientColors: 'from-blue-300 via-blue-400 to-orange-400' },
       banking: { title: 'Finance', description: 'Scholarships, loans, work-study, grants, fellowships & financial aid for international students.', gradientColors: 'from-green-300 via-green-400 to-orange-400' },
       directory: { title: 'Member Directory', description: 'Discover and connect with international students and alumni.', gradientColors: 'from-green-300 via-green-400 to-green-500' },
@@ -751,9 +751,11 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           gradientColors={meta.gradientColors}
         />
         {cards && cards.length > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 xs:gap-4 sm:gap-5 md:gap-6">
+          <div className="flex flex-wrap justify-center gap-3 xs:gap-4 sm:gap-5 md:gap-6">
             {cards.map((card, index) => (
-              <DashboardCard key={index} card={card} onCardClick={handleCardClick} />
+              <div key={index} className="w-full sm:w-[calc(50%-0.75rem)] xl:w-[calc(33.333%-1rem)]">
+                <DashboardCard card={card} onCardClick={handleCardClick} />
+              </div>
             ))}
           </div>
         )}
@@ -919,7 +921,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
               </button>
               <h1 className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl font-black text-white capitalize truncate" 
                   style={{fontFamily: '"Inter", sans-serif'}}>
-                {activeSection.replace('-', ' ')}
+                {sidebarItems.find(i => i.id === activeSection)?.label || activeSection.replace('-', ' ')}
               </h1>
             </div>
             <div className="flex items-center gap-2 xs:gap-3">

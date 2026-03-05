@@ -10,6 +10,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 // Critical path - keep eager
 import Login from './Pages/auth/Login';
 import Logout from './Pages/auth/Logout';
+import AccountTypeSelection from './Pages/auth/AccountTypeSelection';
 import LandingPage from './Pages/LandingPage';
 import Onboarding from './Pages/Onboarding';
 import CommunityPosts from './Pages/community/CommunityPosts';
@@ -87,7 +88,10 @@ const BasicProtectedRoute = ({ children, skipOnboardingCheck = false }) => {
 
     if (!loading && currentUser && !skipOnboardingCheck) {
       getUserData(currentUser.uid).then(userData => {
-        if (userData && !userData.onboardingComplete) {
+        if (userData && !userData.accountType) {
+          // No account type chosen yet
+          navigate('/account-type', { replace: true });
+        } else if (userData && !userData.onboardingComplete) {
           navigate('/onboarding', { replace: true });
         } else {
           setCheckingOnboarding(false);
@@ -114,6 +118,11 @@ function App() {
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/logout" element={<Logout />} />
+                <Route path="/account-type" element={
+                  <BasicProtectedRoute skipOnboardingCheck={true}>
+                    <AccountTypeSelection />
+                  </BasicProtectedRoute>
+                } />
                 <Route path="/payment" element={<Navigate to="/dashboard" replace />} />
 
                 {/* Onboarding — protected but skips the onboarding check itself */}

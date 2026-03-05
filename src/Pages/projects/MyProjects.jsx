@@ -1,4 +1,4 @@
-// src/Pages/projects/MyProjects.jsx - View projects you applied to or created
+// src/Pages/projects/MyProjects.jsx 
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';

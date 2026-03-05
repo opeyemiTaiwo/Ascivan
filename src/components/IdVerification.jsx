@@ -28,14 +28,50 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
 
   const [previewUrl, setPreviewUrl] = useState(null);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [compressedBase64, setCompressedBase64] = useState(null);
 
-  const handleFileUpload = (e) => {
+  // Compress image using Canvas API — targets ~300KB max
+  const compressImage = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          // Resize: max 1200px on longest side (plenty for ID verification)
+          const maxDim = 1200;
+          let width = img.width;
+          let height = img.height;
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          // Compress as JPEG at 0.6 quality (~200-400KB)
+          const base64 = canvas.toDataURL('image/jpeg', 0.6);
+          resolve(base64);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
     if (!validTypes.includes(file.type)) {
-      alert('Please upload a JPG, PNG, WebP, or PDF file');
+      alert('Please upload a JPG, PNG, or WebP image');
       return;
     }
     if (file.size > 10 * 1024 * 1024) {
@@ -43,14 +79,15 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
       return;
     }
 
-    // Create preview for reference only — image is NOT stored
-    if (file.type.startsWith('image/')) {
-      const reader = new FileReader();
-      reader.onload = (ev) => { setPreviewUrl(ev.target.result); setImageLoaded(true); };
-      reader.readAsDataURL(file);
-    } else {
-      setPreviewUrl(null);
+    try {
+      // Compress and store as base64
+      const base64 = await compressImage(file);
+      setPreviewUrl(base64);
+      setCompressedBase64(base64);
       setImageLoaded(true);
+    } catch (err) {
+      console.error('Error compressing image:', err);
+      alert('Error processing image. Please try another file.');
     }
   };
 
@@ -65,13 +102,12 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
 
   const handleSubmit = () => {
     if (!idForm.idType) { alert('Please select an ID type'); return; }
-    if (!imageLoaded) { alert('Please upload a photo of your ID document'); return; }
+    if (!imageLoaded || !compressedBase64) { alert('Please upload a photo of your ID document'); return; }
     if (!idForm.fullName.trim()) { alert('Please enter the full name on the ID'); return; }
     if (!idForm.idNumber.trim()) { alert('Please enter the ID number'); return; }
     if (!idForm.expiryDate) { alert('Please enter the expiry date'); return; }
     if (isExpired()) { alert('This ID has expired. Please use a valid, non-expired document.'); return; }
 
-    // Only save text info, never the image
     onSave({
       idType: idForm.idType,
       fullName: idForm.fullName.trim(),
@@ -81,6 +117,7 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
       issuingCountry: idForm.issuingCountry.trim() || null,
       issuingAuthority: idForm.issuingAuthority.trim() || null,
       isPublic: idForm.isPublic,
+      idImage: compressedBase64, // compressed image stored as base64
       verified: true,
       verifiedAt: new Date().toISOString(),
     });
@@ -106,8 +143,8 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
       {/* Upload for reference */}
       <div>
         <label className={lCls}>Upload ID Document *</label>
-        <p className="text-gray-500 text-xs mb-2">Upload a clear photo of your ID. The image is used for verification only and will not be stored.</p>
-        <input type="file" accept="image/jpeg,image/png,image/webp,application/pdf" onChange={handleFileUpload}
+        <p className="text-gray-500 text-xs mb-2">Upload a clear photo of your ID. The image will be compressed and securely stored.</p>
+        <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleFileUpload}
           className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-500/20 file:text-orange-300 hover:file:bg-orange-500/30 file:cursor-pointer file:transition-all" />
         {previewUrl && (
           <div className="mt-3 relative">
@@ -116,7 +153,7 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
               className="absolute top-2 right-2 w-6 h-6 bg-black/60 rounded-full flex items-center justify-center text-white text-xs hover:bg-black/80 transition-colors">
               X
             </button>
-            <p className="text-gray-500 text-[10px] mt-1">This image is used for verification and will not be saved to our servers</p>
+            <p className="text-gray-500 text-[10px] mt-1">This image will be compressed and securely stored in our database</p>
           </div>
         )}
       </div>

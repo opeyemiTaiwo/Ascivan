@@ -65,6 +65,7 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
 
   const handleSubmit = () => {
     if (!idForm.idType) { alert('Please select an ID type'); return; }
+    if (!imageLoaded) { alert('Please upload a photo of your ID document'); return; }
     if (!idForm.fullName.trim()) { alert('Please enter the full name on the ID'); return; }
     if (!idForm.idNumber.trim()) { alert('Please enter the ID number'); return; }
     if (!idForm.expiryDate) { alert('Please enter the expiry date'); return; }
@@ -104,8 +105,8 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
 
       {/* Upload for reference */}
       <div>
-        <label className={lCls}>Upload ID for Reference (optional)</label>
-        <p className="text-gray-500 text-xs mb-2">Upload a photo of your ID to help you fill in the details below. The image will not be stored.</p>
+        <label className={lCls}>Upload ID Document *</label>
+        <p className="text-gray-500 text-xs mb-2">Upload a clear photo of your ID. The image is used for verification only and will not be stored.</p>
         <input type="file" accept="image/jpeg,image/png,image/webp,application/pdf" onChange={handleFileUpload}
           className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-500/20 file:text-orange-300 hover:file:bg-orange-500/30 file:cursor-pointer file:transition-all" />
         {previewUrl && (
@@ -115,7 +116,7 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
               className="absolute top-2 right-2 w-6 h-6 bg-black/60 rounded-full flex items-center justify-center text-white text-xs hover:bg-black/80 transition-colors">
               X
             </button>
-            <p className="text-gray-500 text-[10px] mt-1">This image is for your reference only and will not be saved</p>
+            <p className="text-gray-500 text-[10px] mt-1">This image is used for verification and will not be saved to our servers</p>
           </div>
         )}
       </div>
@@ -178,7 +179,7 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
 };
 
 // Display component for showing saved ID info (used in profile view)
-export const IdVerificationDisplay = ({ idData, onToggleVisibility }) => {
+export const IdVerificationDisplay = ({ idData, onToggleVisibility, onEdit }) => {
   if (!idData || !idData.verified) return null;
 
   const idTypeLabels = { national_id: 'National ID', drivers_licence: "Driver's Licence", passport: 'Passport' };
@@ -187,7 +188,14 @@ export const IdVerificationDisplay = ({ idData, onToggleVisibility }) => {
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-bold text-white">ID Verification</h3>
-        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-green-500/20 text-green-300 border border-green-500/30">Verified</span>
+        <div className="flex items-center gap-2">
+          {onEdit && (
+            <button type="button" onClick={onEdit} className="px-3 py-1 bg-white/10 hover:bg-white/20 text-orange-400 font-semibold rounded-lg text-xs transition-all min-h-[32px]">
+              Edit
+            </button>
+          )}
+          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-green-500/20 text-green-300 border border-green-500/30">Verified</span>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

@@ -45,6 +45,9 @@ const DigitalPrivacyPolicy = lazy(() => import('./Pages/digital/DigitalPrivacyPo
 const ProjectsListing = lazy(() => import('./Pages/projects/ProjectsListing'));
 const ProjectSubmission = lazy(() => import('./Pages/projects/ProjectSubmission'));
 const ProjectDetail = lazy(() => import('./Pages/projects/ProjectDetail'));
+const ProjectOwnerDashboard = lazy(() => import('./Pages/projects/ProjectOwnerDashboard'));
+const ProjectCompletion = lazy(() => import('./Pages/projects/ProjectCompletion'));
+const MyProjects = lazy(() => import('./Pages/projects/MyProjects'));
 
 try {
   require('./services/googleFormService');
@@ -169,6 +172,9 @@ function App() {
                 {/* Projects */}
                 <Route path="/projects" element={<BasicProtectedRoute><ProjectsListing /></BasicProtectedRoute>} />
                 <Route path="/projects/submit" element={<BasicProtectedRoute><ProjectSubmission /></BasicProtectedRoute>} />
+                <Route path="/projects/owner-dashboard" element={<BasicProtectedRoute><ProjectOwnerDashboard /></BasicProtectedRoute>} />
+                <Route path="/projects/my-projects" element={<BasicProtectedRoute><MyProjects /></BasicProtectedRoute>} />
+                <Route path="/projects/:projectId/complete" element={<BasicProtectedRoute><ProjectCompletion /></BasicProtectedRoute>} />
                 <Route path="/projects/:projectId" element={<BasicProtectedRoute><ProjectDetail /></BasicProtectedRoute>} />
 
                 {/* Finance & Financial Resources */}

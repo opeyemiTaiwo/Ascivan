@@ -42,6 +42,9 @@ const PrivacyPolicy = lazy(() => import('./Pages/PrivacyPolicy'));
 const DigitalSolutionsHome = lazy(() => import('./Pages/digital/DigitalSolutionsHome'));
 const DigitalTermsOfService = lazy(() => import('./Pages/digital/DigitalTermsOfService'));
 const DigitalPrivacyPolicy = lazy(() => import('./Pages/digital/DigitalPrivacyPolicy'));
+const ProjectsListing = lazy(() => import('./Pages/projects/ProjectsListing'));
+const ProjectSubmission = lazy(() => import('./Pages/projects/ProjectSubmission'));
+const ProjectDetail = lazy(() => import('./Pages/projects/ProjectDetail'));
 
 try {
   require('./services/googleFormService');
@@ -162,6 +165,11 @@ function App() {
                 {/* Housing */}
                 <Route path="/housing" element={<BasicProtectedRoute><Housing /></BasicProtectedRoute>} />
                 <Route path="/housing/post" element={<BasicProtectedRoute><PostHousing /></BasicProtectedRoute>} />
+
+                {/* Projects */}
+                <Route path="/projects" element={<BasicProtectedRoute><ProjectsListing /></BasicProtectedRoute>} />
+                <Route path="/projects/submit" element={<BasicProtectedRoute><ProjectSubmission /></BasicProtectedRoute>} />
+                <Route path="/projects/:projectId" element={<BasicProtectedRoute><ProjectDetail /></BasicProtectedRoute>} />
 
                 {/* Finance & Financial Resources */}
                 <Route path="/finance" element={<BasicProtectedRoute><Finance /></BasicProtectedRoute>} />

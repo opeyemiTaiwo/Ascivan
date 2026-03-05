@@ -310,6 +310,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       return [
         { id: 'community', label: 'Home' },
         { id: 'hub', label: 'Jobs' },
+        { id: 'projects', label: 'Projects' },
         { id: 'housing', label: 'Housing' },
         { id: 'profile', label: 'Profile' },
       ];
@@ -318,6 +319,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
     return [
       { id: 'community', label: 'Home' },
       { id: 'hub', label: 'Jobs' },
+      { id: 'projects', label: 'Projects' },
       { id: 'housing', label: 'Housing' },
       { id: 'banking', label: 'Finance' },
       { id: 'profile', label: 'Profile' },
@@ -348,7 +350,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             title: 'Connect',
             description: 'Discover and connect with international students and alumni',
             path: '/members-directory',
-            stats: 'Browse Members',
+            stats: 'Find people in your field',
             gradient: 'from-green-600 to-green-700',
             buttonLabel: 'Network'
           }
@@ -381,6 +383,32 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             buttonLabel: 'Post Listing'
           }
         ],
+        projects: [
+          {
+            title: 'Browse Projects',
+            description: 'Explore active projects looking for team members',
+            path: '/projects',
+            stats: 'Explore',
+            gradient: 'from-purple-500 to-purple-600',
+            buttonLabel: 'Browse Projects'
+          },
+          {
+            title: 'Post Project',
+            description: 'Create a new project and build your team',
+            path: '/projects/submit',
+            stats: 'Create',
+            gradient: 'from-orange-500 to-orange-600',
+            buttonLabel: 'Post Project'
+          },
+          {
+            title: 'My Projects',
+            description: 'Manage projects you have created or joined',
+            path: '/projects/my-projects',
+            stats: 'Manage',
+            gradient: 'from-purple-400 to-purple-500',
+            buttonLabel: 'My Projects'
+          }
+        ],
       };
     }
     // Individual
@@ -406,7 +434,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           title: 'Connect',
           description: 'Discover and connect with international students and alumni in your field',
           path: '/members-directory',
-          stats: 'Browse Members',
+          stats: 'Find people in your field',
           gradient: 'from-green-600 to-green-700',
           buttonLabel: 'Network'
         }
@@ -455,6 +483,32 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           stats: 'Explore',
           gradient: 'from-green-500 to-green-600',
           buttonLabel: 'Browse Resources'
+        }
+      ],
+      projects: [
+        {
+          title: 'Browse Projects',
+          description: 'Explore active projects looking for team members',
+          path: '/projects',
+          stats: 'Explore',
+          gradient: 'from-purple-500 to-purple-600',
+          buttonLabel: 'Browse Projects'
+        },
+        {
+          title: 'Post Project',
+          description: 'Create a new project and build your team',
+          path: '/projects/submit',
+          stats: 'Create',
+          gradient: 'from-orange-500 to-orange-600',
+          buttonLabel: 'Post Project'
+        },
+        {
+          title: 'My Projects',
+          description: 'Track projects you have applied to or created',
+          path: '/projects/my-projects',
+          stats: 'Manage',
+          gradient: 'from-purple-400 to-purple-500',
+          buttonLabel: 'My Projects'
         }
       ],
     };
@@ -524,6 +578,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
     const sectionMeta = {
       community: { title: 'Home', description: 'Connect, collaborate, and grow with the Loomiqe community.', gradientColors: 'from-green-300 via-orange-400 to-green-500' },
       hub: { title: 'Jobs', description: accountType === 'company' ? 'Post and manage job listings for international students.' : 'Browse full-time, freelance & internship roles, filtered by location and visa compliance.', gradientColors: 'from-orange-300 via-orange-400 to-orange-500' },
+      projects: { title: 'Projects', description: 'Build real projects, grow your skills, and earn badges.', gradientColors: 'from-purple-300 via-purple-400 to-orange-400' },
       housing: { title: 'Housing', description: accountType === 'company' ? 'List housing spaces for international students.' : 'Find affordable, student-friendly housing near your university.', gradientColors: 'from-blue-300 via-blue-400 to-orange-400' },
       banking: { title: 'Finance', description: 'Scholarships, loans, work-study, grants, fellowships & financial aid for international students.', gradientColors: 'from-green-300 via-green-400 to-orange-400' },
       directory: { title: 'Member Directory', description: 'Discover and connect with international students and alumni.', gradientColors: 'from-green-300 via-green-400 to-green-500' },
@@ -613,7 +668,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                 </div>
                 <div className="pt-4 border-t border-white/10">
                   <span className={`px-3 py-1.5 rounded-lg text-xs font-bold ${profileForm.isCompany ? 'bg-blue-500/20 text-blue-300' : 'bg-green-500/20 text-green-300'}`}>
-                    {profileForm.isCompany ? 'Company Account' : '👤 Individual Account'}
+                    {profileForm.isCompany ? 'Company Account' : 'Individual Account'}
                   </span>
                 </div>
                 {profileForm.isCompany && profileData?.companyProfile && (
@@ -685,7 +740,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                   <div className="grid grid-cols-2 gap-3">
                     <button type="button" onClick={() => setProfileForm(p => ({...p, isCompany: false}))}
                       className={`p-4 rounded-xl border-2 text-center transition-all active:scale-95 ${!profileForm.isCompany ? 'border-orange-400 bg-orange-500/20 shadow-lg' : 'border-white/15 bg-white/5 hover:bg-white/10'}`}>
-                      <div className="text-2xl mb-1">👤</div>
+                      <svg className="w-6 h-6 mx-auto mb-1 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                       <div className={`text-sm font-bold ${!profileForm.isCompany ? 'text-white' : 'text-gray-300'}`}>Individual</div>
                     </button>
                     <button type="button" onClick={() => setProfileForm(p => ({...p, isCompany: true}))}
@@ -705,7 +760,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                           className={`${inputCls} ${profileForm.companyEmail && !isBizEmail(profileForm.companyEmail) ? 'border-red-500/50' : ''}`}
                           placeholder="you@company.com" />
                         {profileForm.companyEmail && !isBizEmail(profileForm.companyEmail) && (
-                          <p className="text-red-400 text-xs mt-1.5 font-semibold">⚠ Business email required — Gmail, Yahoo, Outlook not accepted.</p>
+                          <p className="text-red-400 text-xs mt-1.5 font-semibold">Business email required — Gmail, Yahoo, Outlook not accepted.</p>
                         )}
                       </div>
                       <div>

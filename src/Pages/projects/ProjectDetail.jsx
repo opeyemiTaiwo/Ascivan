@@ -222,38 +222,27 @@ const ProjectDetail = () => {
                         <p className="text-white font-semibold text-sm">{role.role}</p>
                         <p className="text-gray-400 text-xs mt-0.5">Skills: {role.skills}</p>
                       </div>
-                      <span className="text-orange-400 text-xs font-bold flex-shrink-0">{role.count} {role.count === 1 ? 'person' : 'people'}</span>
+                      <div className="flex items-center gap-3 flex-shrink-0">
+                        {isPaid && role.paymentPerPerson > 0 && (
+                          <span className="text-orange-300 text-xs font-bold">${role.paymentPerPerson.toLocaleString()} / person</span>
+                        )}
+                        <span className="text-gray-400 text-xs font-bold">{role.count} {role.count === 1 ? 'person' : 'people'}</span>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* Pricing Details */}
+            {/* Payment Summary */}
             {isPaid && (
               <div className="bg-white/5 border border-white/20 rounded-2xl p-5 sm:p-8 mb-6">
-                <h2 className="text-lg font-bold text-white mb-4">Payment Details</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl p-4 text-center">
-                    <p className="text-gray-400 text-xs uppercase tracking-wider font-semibold">Total Budget</p>
-                    <p className="text-orange-300 text-xl font-black mt-1">${project.totalBudget?.toLocaleString()}</p>
-                  </div>
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
-                    <p className="text-gray-400 text-xs uppercase tracking-wider font-semibold">Before Start</p>
-                    <p className="text-white text-lg font-bold mt-1">${(project.paymentBeforeStart || 0).toLocaleString()}</p>
-                    <p className="text-gray-500 text-[10px]">per person</p>
-                  </div>
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
-                    <p className="text-gray-400 text-xs uppercase tracking-wider font-semibold">At Completion</p>
-                    <p className="text-white text-lg font-bold mt-1">${(project.paymentAtEnd || 0).toLocaleString()}</p>
-                    <p className="text-gray-500 text-[10px]">per person</p>
-                  </div>
+                <h2 className="text-lg font-bold text-white mb-4">Payment Summary</h2>
+                <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl p-4 text-center">
+                  <p className="text-gray-400 text-xs uppercase tracking-wider font-semibold">Total Project Budget</p>
+                  <p className="text-orange-300 text-xl font-black mt-1">${project.totalBudget?.toLocaleString()}</p>
+                  <p className="text-gray-500 text-xs mt-1">Payment is distributed per role upon project completion</p>
                 </div>
-                {project.perPersonPayment > 0 && (
-                  <div className="mt-3 text-center">
-                    <p className="text-gray-400 text-sm">Each team member earns <span className="text-orange-300 font-bold">${project.perPersonPayment?.toLocaleString()}</span> total</p>
-                  </div>
-                )}
               </div>
             )}
 

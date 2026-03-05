@@ -339,24 +339,19 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
   const sidebarItems = useMemo(() => {
     if (accountType === 'company') {
       return [
-        { id: 'community', label: 'Home Feed' },
-        { id: 'create-post', label: 'Create Post' },
-        { id: 'directory', label: 'Member Directory' },
-        { id: 'post-job', label: 'Post Job' },
-        { id: 'my-jobs', label: 'My Jobs' },
-        { id: 'post-listing', label: 'Post Listing' },
+        { id: 'community', label: 'Home' },
+        { id: 'hub', label: 'Jobs' },
+        { id: 'housing', label: 'Housing' },
+        { id: 'directory', label: 'Directory' },
         { id: 'profile', label: 'Profile' },
       ];
     }
     // Individual
     return [
-      { id: 'community', label: 'Home Feed' },
-      { id: 'create-post', label: 'Create Post' },
-      { id: 'hub', label: 'Browse Jobs' },
-      { id: 'my-jobs', label: 'My Jobs' },
-      { id: 'housing', label: 'Find Housing' },
-      { id: 'list-room', label: 'List Your Room' },
-      { id: 'banking', label: 'Finance Resources' },
+      { id: 'community', label: 'Home' },
+      { id: 'hub', label: 'Jobs' },
+      { id: 'housing', label: 'Housing' },
+      { id: 'banking', label: 'Finance' },
       { id: 'profile', label: 'Profile' },
     ];
   }, [accountType]);
@@ -372,9 +367,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             stats: 'Join Discussion',
             gradient: 'from-green-500 to-green-600',
             buttonLabel: 'View Feed'
-          }
-        ],
-        'create-post': [
+          },
           {
             title: 'Create Post',
             description: 'Start a conversation and share updates with the community',
@@ -382,6 +375,34 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             stats: 'New Post',
             gradient: 'from-orange-500 to-orange-600',
             buttonLabel: 'Create Post'
+          }
+        ],
+        hub: [
+          {
+            title: 'Post Job',
+            description: 'List a job opportunity for international students',
+            path: '/jobs/post',
+            stats: 'Post Now',
+            gradient: 'from-orange-500 to-orange-600',
+            buttonLabel: 'Post Job'
+          },
+          {
+            title: 'My Jobs',
+            description: 'Manage and track job listings you have posted',
+            path: '/jobs/my-posts',
+            stats: 'Manage',
+            gradient: 'from-orange-400 to-orange-500',
+            buttonLabel: 'View Posts'
+          }
+        ],
+        housing: [
+          {
+            title: 'Post Listing',
+            description: 'List a housing space or room for international students',
+            path: '/housing/post',
+            stats: 'List Now',
+            gradient: 'from-blue-500 to-blue-600',
+            buttonLabel: 'Post Listing'
           }
         ],
         directory: [
@@ -392,36 +413,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             stats: 'Browse Members',
             gradient: 'from-green-600 to-green-700',
             buttonLabel: 'Network'
-          }
-        ],
-        'post-job': [
-          {
-            title: 'Post Job',
-            description: 'List a job opportunity for international students',
-            path: '/jobs/post',
-            stats: 'Post Now',
-            gradient: 'from-orange-500 to-orange-600',
-            buttonLabel: 'Post Job'
-          }
-        ],
-        'my-jobs': [
-          {
-            title: 'My Jobs',
-            description: 'Manage and track job listings you have posted',
-            path: '/jobs/my-posts',
-            stats: 'Manage',
-            gradient: 'from-orange-400 to-orange-500',
-            buttonLabel: 'View Posts'
-          }
-        ],
-        'post-listing': [
-          {
-            title: 'Post Listing',
-            description: 'List a housing space or room for international students',
-            path: '/housing/post',
-            stats: 'List Now',
-            gradient: 'from-blue-500 to-blue-600',
-            buttonLabel: 'Post Listing'
           }
         ],
       };
@@ -436,9 +427,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           stats: 'Join Discussion',
           gradient: 'from-green-500 to-green-600',
           buttonLabel: 'View Feed'
-        }
-      ],
-      'create-post': [
+        },
         {
           title: 'Create Post',
           description: 'Start a conversation and share your thoughts with the home feed',
@@ -456,9 +445,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           stats: 'Explore Jobs',
           gradient: 'from-orange-500 to-orange-600',
           buttonLabel: 'Browse Jobs'
-        }
-      ],
-      'my-jobs': [
+        },
         {
           title: 'My Jobs',
           description: 'Track and manage jobs you have applied to',
@@ -476,9 +463,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           stats: 'Browse All',
           gradient: 'from-blue-500 to-blue-600',
           buttonLabel: 'Find Housing'
-        }
-      ],
-      'list-room': [
+        },
         {
           title: 'List Your Room',
           description: 'Have a room or unit available? List it for international students',
@@ -563,16 +548,11 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
   const renderContent = () => {
     // Section metadata for headers
     const sectionMeta = {
-      community: { title: 'Home Feed', description: 'Connect, collaborate, and grow with the Loomiqe community.', gradientColors: 'from-green-300 via-orange-400 to-green-500' },
-      'create-post': { title: 'Create Post', description: 'Share your thoughts with the community.', gradientColors: 'from-orange-300 via-orange-400 to-orange-500' },
-      hub: { title: 'Browse Jobs', description: 'Find full-time, freelance & internship roles — filtered by location and visa compliance.', gradientColors: 'from-orange-300 via-orange-400 to-orange-500' },
-      'my-jobs': { title: 'My Jobs', description: accountType === 'company' ? 'Manage and track job listings you have posted.' : 'Track jobs you have applied to.', gradientColors: 'from-orange-300 via-orange-400 to-orange-500' },
-      housing: { title: 'Find Housing', description: 'Find affordable, student-friendly housing near your university.', gradientColors: 'from-blue-300 via-blue-400 to-orange-400' },
-      'list-room': { title: 'List Your Room', description: 'Have a room or unit available? List it for international students.', gradientColors: 'from-blue-300 via-orange-400 to-orange-500' },
-      banking: { title: 'Finance Resources', description: 'Scholarships, loans, work-study, grants, fellowships & financial aid.', gradientColors: 'from-green-300 via-green-400 to-orange-400' },
+      community: { title: 'Home', description: 'Connect, collaborate, and grow with the Loomiqe community.', gradientColors: 'from-green-300 via-orange-400 to-green-500' },
+      hub: { title: 'Jobs', description: accountType === 'company' ? 'Post and manage job listings for international students.' : 'Browse full-time, freelance & internship roles — filtered by location and visa compliance.', gradientColors: 'from-orange-300 via-orange-400 to-orange-500' },
+      housing: { title: 'Housing', description: accountType === 'company' ? 'List housing spaces for international students.' : 'Find affordable, student-friendly housing near your university.', gradientColors: 'from-blue-300 via-blue-400 to-orange-400' },
+      banking: { title: 'Finance', description: 'Scholarships, loans, work-study, grants, fellowships & financial aid for international students.', gradientColors: 'from-green-300 via-green-400 to-orange-400' },
       directory: { title: 'Member Directory', description: 'Discover and connect with international students and alumni.', gradientColors: 'from-green-300 via-green-400 to-green-500' },
-      'post-job': { title: 'Post Job', description: 'List a job opportunity for international students.', gradientColors: 'from-orange-300 via-orange-400 to-orange-500' },
-      'post-listing': { title: 'Post Listing', description: 'List a housing space for international students.', gradientColors: 'from-blue-300 via-blue-400 to-orange-400' },
     };
 
     if (activeSection === 'profile') {

@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
+import IdVerification from '../components/IdVerification';
 
 const BLOCKED_EMAIL_DOMAINS = [
   'gmail.com', 'googlemail.com', 'yahoo.com', 'yahoo.co.uk', 'yahoo.co.in',
@@ -37,11 +38,14 @@ const Onboarding = () => {
     city: '',
     state: '',
     interests: [],
+    studentType: '', // 'international' | 'domestic'
+    portfolioUrl: '',
     companyName: '',
     companyWebsite: '',
     companyEmail: '',
     companyLocation: '',
     companyDescription: '',
+    idVerification: null, // will hold ID data if submitted
   });
 
   const visaOptions = [
@@ -70,7 +74,7 @@ const Onboarding = () => {
   ];
 
   const isCompany = accountType === 'company';
-  const TOTAL_STEPS = 4;
+  const TOTAL_STEPS = isCompany ? 5 : 6; // Last step is optional ID verification
 
   useEffect(() => {
     if (currentUser) {
@@ -128,14 +132,26 @@ const Onboarding = () => {
       }
       if (step === 4 && formData.interests.length === 0) { toast.error('Please select at least one interest'); return; }
     } else {
-      if (step === 1 && !formData.displayName.trim()) { toast.error('Please enter your name'); return; }
-      if (step === 3 && !formData.visaStatus) { toast.error('Please select your visa status'); return; }
-      if (step === 4 && formData.interests.length === 0) { toast.error('Please select at least one interest'); return; }
+      // Individual: step 1=studentType, 2=name/uni/major/portfolio, 3=location, 4=visa(intl only), 5=interests
+      if (step === 1 && !formData.studentType) { toast.error('Please select your student type'); return; }
+      if (step === 2 && !formData.displayName.trim()) { toast.error('Please enter your name'); return; }
+      if (step === 4 && formData.studentType === 'international' && !formData.visaStatus) { toast.error('Please select your visa status'); return; }
+      if (step === 5 && formData.interests.length === 0) { toast.error('Please select at least one interest'); return; }
+      // Domestic students skip visa step (step 4) — jump from 3 to 5
+      if (step === 3 && formData.studentType === 'domestic') {
+        setStep(5); return;
+      }
     }
     setStep(s => s + 1);
   };
 
-  const handleBack = () => setStep(s => s - 1);
+  const handleBack = () => {
+    // Domestic students skip step 4 (visa), go from 5 back to 3
+    if (!isCompany && step === 5 && formData.studentType === 'domestic') {
+      setStep(3); return;
+    }
+    setStep(s => s - 1);
+  };
   const handleSkip = async () => { await saveOnboarding(true); };
 
   const handleComplete = async () => {
@@ -176,6 +192,12 @@ const Onboarding = () => {
         updateData.university = formData.university.trim() || null;
         updateData.major = formData.major.trim() || null;
         updateData.visaStatus = formData.visaStatus || null;
+        updateData.studentType = formData.studentType || 'international';
+        updateData.portfolioUrl = formData.portfolioUrl.trim() || null;
+      }
+      // Save ID verification if provided
+      if (formData.idVerification) {
+        updateData.idVerification = formData.idVerification;
       }
       await updateDoc(doc(db, 'users', currentUser.uid), updateData);
       toast.success(skipped ? 'Welcome to Loomiqe! You can complete your profile later.' : 'Welcome to Loomiqe!');
@@ -206,8 +228,35 @@ const Onboarding = () => {
         return (
           <div className="space-y-5">
             <div>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1">Are you an international or domestic student?</h2>
+              <p className="text-gray-400 text-sm">This helps us personalize your dashboard experience.</p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button type="button" onClick={() => setFormData(p => ({ ...p, studentType: 'international' }))}
+                className={`p-5 rounded-xl border-2 text-left transition-all duration-200 active:scale-95 ${
+                  formData.studentType === 'international' ? 'border-orange-400 bg-orange-500/20 shadow-lg' : 'border-white/15 bg-white/5 hover:bg-white/10 hover:border-white/30'
+                }`}>
+                <div className={`text-base font-bold mb-1 ${formData.studentType === 'international' ? 'text-white' : 'text-gray-200'}`}>International Student</div>
+                <div className="text-gray-400 text-xs">Studying abroad, away from my home country</div>
+                {formData.studentType === 'international' && <div className="mt-2 text-orange-400 text-xs font-semibold">Selected</div>}
+              </button>
+              <button type="button" onClick={() => setFormData(p => ({ ...p, studentType: 'domestic' }))}
+                className={`p-5 rounded-xl border-2 text-left transition-all duration-200 active:scale-95 ${
+                  formData.studentType === 'domestic' ? 'border-orange-400 bg-orange-500/20 shadow-lg' : 'border-white/15 bg-white/5 hover:bg-white/10 hover:border-white/30'
+                }`}>
+                <div className={`text-base font-bold mb-1 ${formData.studentType === 'domestic' ? 'text-white' : 'text-gray-200'}`}>Domestic Student</div>
+                <div className="text-gray-400 text-xs">Studying in my home country</div>
+                {formData.studentType === 'domestic' && <div className="mt-2 text-orange-400 text-xs font-semibold">Selected</div>}
+              </button>
+            </div>
+          </div>
+        );
+      case 2:
+        return (
+          <div className="space-y-5">
+            <div>
               <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1">Welcome!</h2>
-              <p className="text-gray-400 text-sm">Let's set up your individual profile. This takes less than a minute.</p>
+              <p className="text-gray-400 text-sm">Let's set up your profile. This takes less than a minute.</p>
             </div>
             <div>
               <label className={labelClass}>Your Name *</label>
@@ -221,14 +270,18 @@ const Onboarding = () => {
               <label className={labelClass}>Field of Study / Major</label>
               <input type="text" value={formData.major} onChange={e => setFormData(p => ({ ...p, major: e.target.value }))} className={inputClass} placeholder="e.g., Computer Science" />
             </div>
+            <div>
+              <label className={labelClass}>Portfolio URL</label>
+              <input type="url" value={formData.portfolioUrl} onChange={e => setFormData(p => ({ ...p, portfolioUrl: e.target.value }))} className={inputClass} placeholder="https://your-portfolio.com" />
+            </div>
           </div>
         );
-      case 2:
+      case 3:
         return (
           <div className="space-y-5">
             <div>
               <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1">Where are you based?</h2>
-              <p className="text-gray-400 text-sm">We'll use this to show you relevant local jobs and housing.</p>
+              <p className="text-gray-400 text-sm">We'll use this to show you relevant local opportunities.</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="col-span-2 sm:col-span-1">
@@ -236,16 +289,14 @@ const Onboarding = () => {
                 <input type="text" value={formData.city} onChange={e => setFormData(p => ({ ...p, city: e.target.value }))} className={inputClass} placeholder="e.g., Baltimore" autoFocus />
               </div>
               <div className="col-span-2 sm:col-span-1">
-                <label className={labelClass}>State</label>
-                <input type="text" value={formData.state} onChange={e => setFormData(p => ({ ...p, state: e.target.value }))} className={inputClass} placeholder="e.g., MD" maxLength={2} />
+                <label className={labelClass}>State / Region</label>
+                <input type="text" value={formData.state} onChange={e => setFormData(p => ({ ...p, state: e.target.value }))} className={inputClass} placeholder="e.g., MD" />
               </div>
-            </div>
-            <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-gray-400">
-              <span className="text-orange-400 font-semibold">Why we ask:</span> Your location pre-fills job and housing filters automatically so you only see relevant results near you.
             </div>
           </div>
         );
-      case 3:
+      case 4:
+        // Visa step — only for international students
         return (
           <div className="space-y-5">
             <div>
@@ -265,7 +316,7 @@ const Onboarding = () => {
             </div>
           </div>
         );
-      case 4:
+      case 5:
         return (
           <div className="space-y-5">
             <div>
@@ -282,18 +333,37 @@ const Onboarding = () => {
                     }`}>
                     <div className={`text-base font-bold mb-1 ${sel ? 'text-white' : 'text-gray-200'}`}>{option.label}</div>
                     <div className="text-gray-400 text-xs">{option.desc}</div>
-                    {sel && <div className="mt-2 text-orange-400 text-xs font-semibold">✓ Selected</div>}
+                    {sel && <div className="mt-2 text-orange-400 text-xs font-semibold">Selected</div>}
                   </button>
                 );
               })}
             </div>
           </div>
         );
+      case 6:
+        return (
+          <div className="space-y-5">
+            <div>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1">ID Verification (Optional)</h2>
+              <p className="text-gray-400 text-sm">Upload a valid government-issued ID. You can skip this and do it later from your profile.</p>
+            </div>
+            {formData.idVerification ? (
+              <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 text-center">
+                <p className="text-green-300 font-semibold text-sm">ID information saved</p>
+                <p className="text-gray-400 text-xs mt-1">You can update this from your profile settings</p>
+              </div>
+            ) : (
+              <IdVerification
+                onSave={(data) => setFormData(p => ({ ...p, idVerification: data }))}
+                inputClass={inputClass}
+                labelClass={labelClass}
+              />
+            )}
+          </div>
+        );
       default: return null;
     }
   };
-
-  const renderCompanyStep = () => {
     switch (step) {
       case 1:
         return (
@@ -325,7 +395,7 @@ const Onboarding = () => {
                 className={`${inputClass} ${formData.companyEmail && !isBusinessEmail(formData.companyEmail) ? 'border-red-500/50 focus:border-red-400' : ''}`}
                 placeholder="you@company.com" />
               {formData.companyEmail && !isBusinessEmail(formData.companyEmail) && (
-                <p className="text-red-400 text-xs mt-1.5 font-semibold">⚠ Please use a business email — Gmail, Yahoo, Outlook, etc. are not accepted.</p>
+                <p className="text-red-400 text-xs mt-1.5 font-semibold">Please use a business email — Gmail, Yahoo, Outlook, etc. are not accepted.</p>
               )}
               <p className="text-gray-500 text-xs mt-1">Must be a company domain (not Gmail, Yahoo, Outlook, etc.)</p>
             </div>
@@ -379,18 +449,37 @@ const Onboarding = () => {
                     }`}>
                     <div className={`text-base font-bold mb-1 ${sel ? 'text-white' : 'text-gray-200'}`}>{option.label}</div>
                     <div className="text-gray-400 text-xs">{option.desc}</div>
-                    {sel && <div className="mt-2 text-orange-400 text-xs font-semibold">✓ Selected</div>}
+                    {sel && <div className="mt-2 text-orange-400 text-xs font-semibold">Selected</div>}
                   </button>
                 );
               })}
             </div>
           </div>
         );
+      case 5:
+        return (
+          <div className="space-y-5">
+            <div>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1">ID Verification (Optional)</h2>
+              <p className="text-gray-400 text-sm">Upload a valid government-issued ID. You can skip this and do it later from your profile.</p>
+            </div>
+            {formData.idVerification ? (
+              <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 text-center">
+                <p className="text-green-300 font-semibold text-sm">ID information saved</p>
+                <p className="text-gray-400 text-xs mt-1">You can update this from your profile settings</p>
+              </div>
+            ) : (
+              <IdVerification
+                onSave={(data) => setFormData(p => ({ ...p, idVerification: data }))}
+                inputClass={inputClass}
+                labelClass={labelClass}
+              />
+            )}
+          </div>
+        );
       default: return null;
     }
   };
-
-  return (
     <div className="min-h-screen overflow-x-hidden flex flex-col items-center justify-center px-4 py-8 sm:py-12" style={{ backgroundColor: '#000000' }}>
       <div className="flex items-center gap-2 mb-8">
         <img src="/Images/512X512.png" alt="Loomiqe" className="w-8 h-8" onError={e => e.target.style.display='none'} />

@@ -9,6 +9,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { GoogleAuthProvider, reauthenticateWithPopup } from 'firebase/auth';
 import { deleteUserAccount } from '../../utils/deleteUserContent';
+import IdVerification, { IdVerificationDisplay } from '../../components/IdVerification';
 import { toast } from 'react-toastify';
 
 import PWADebugger from '../../components/PWADebugger';
@@ -259,12 +260,13 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
   });
   const [loading, setLoading] = useState(true);
   const [accountType, setAccountType] = useState('individual'); // 'individual' | 'company'
+  const [studentType, setStudentType] = useState('international'); // 'international' | 'domestic'
 
   const [profileData, setProfileData] = useState(null);
   const [profileEditing, setProfileEditing] = useState(false);
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileForm, setProfileForm] = useState({
-    displayName: '', university: '', major: '', visaStatus: '', city: '', state: '',
+    displayName: '', university: '', major: '', visaStatus: '', city: '', state: '', portfolioUrl: '',
     isCompany: false, companyName: '', companyEmail: '', companyWebsite: '', companyLocation: '', companyDescription: '',
   });
 
@@ -315,7 +317,16 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         { id: 'profile', label: 'Profile' },
       ];
     }
-    // Individual
+    // Domestic individual — limited tabs
+    if (studentType === 'domestic') {
+      return [
+        { id: 'community', label: 'Home' },
+        { id: 'projects', label: 'Projects' },
+        { id: 'banking', label: 'Finance' },
+        { id: 'profile', label: 'Profile' },
+      ];
+    }
+    // International individual — full tabs
     return [
       { id: 'community', label: 'Home' },
       { id: 'hub', label: 'Jobs' },
@@ -324,7 +335,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       { id: 'banking', label: 'Finance' },
       { id: 'profile', label: 'Profile' },
     ];
-  }, [accountType]);
+  }, [accountType, studentType]);
 
   const dashboardCards = useMemo(() => {
     if (accountType === 'company') {
@@ -537,6 +548,9 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           } else if (data.isCompany) {
             setAccountType('company');
           }
+          if (data.studentType) {
+            setStudentType(data.studentType);
+          }
           const cp = data.companyProfile || {};
           setProfileForm({
             displayName: data.displayName || currentUser.displayName || '',
@@ -545,6 +559,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             visaStatus: data.visaStatus || '',
             city: data.city || '',
             state: data.state || '',
+            portfolioUrl: data.portfolioUrl || '',
             isCompany: data.isCompany || false,
             companyName: cp.companyName || '',
             companyEmail: cp.companyEmail || '',
@@ -604,6 +619,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             visaStatus: profileForm.visaStatus || null,
             city: profileForm.city.trim() || null,
             state: profileForm.state.trim() || null,
+            portfolioUrl: profileForm.portfolioUrl.trim() || null,
             isCompany: profileForm.isCompany,
             profileComplete: true,
           };
@@ -659,10 +675,15 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                     ['Visa Status', profileForm.visaStatus],
                     ['City', profileForm.city],
                     ['State', profileForm.state],
+                    ['Portfolio', profileForm.portfolioUrl],
                   ].map(([label, val]) => (
                     <div key={label}>
                       <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-1">{label}</p>
-                      <p className="text-white text-sm font-medium">{val || '—'}</p>
+                      {label === 'Portfolio' && val ? (
+                        <a href={val} target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:text-orange-300 text-sm font-medium underline break-all">{val}</a>
+                      ) : (
+                        <p className="text-white text-sm font-medium">{val || '—'}</p>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -695,6 +716,37 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                     )}
                   </div>
                 )}
+
+                {/* ID Verification Section */}
+                <div className="pt-4 border-t border-white/10">
+                  {profileData?.idVerification?.verified ? (
+                    <IdVerificationDisplay 
+                      idData={profileData.idVerification}
+                      onToggleVisibility={async () => {
+                        try {
+                          const newVisibility = !profileData.idVerification.isPublic;
+                          await setDoc(doc(db, 'users', currentUser.uid), { idVerification: { ...profileData.idVerification, isPublic: newVisibility } }, { merge: true });
+                          setProfileData(prev => ({ ...prev, idVerification: { ...prev.idVerification, isPublic: newVisibility } }));
+                          toast.success(newVisibility ? 'ID is now public' : 'ID is now private');
+                        } catch (e) { toast.error('Failed to update visibility'); }
+                      }}
+                    />
+                  ) : (
+                    <div>
+                      <h3 className="text-lg font-bold text-white mb-3">ID Verification</h3>
+                      <p className="text-gray-400 text-sm mb-4">Verify your identity with a government-issued ID</p>
+                      <IdVerification
+                        onSave={async (data) => {
+                          try {
+                            await setDoc(doc(db, 'users', currentUser.uid), { idVerification: data }, { merge: true });
+                            setProfileData(prev => ({ ...prev, idVerification: data }));
+                            toast.success('ID verified successfully');
+                          } catch (e) { toast.error('Failed to save ID info'); }
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             ) : (
               <div className="space-y-6">
@@ -733,6 +785,10 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                       <label className={labelCls}>State</label>
                       <input type="text" value={profileForm.state} onChange={e => setProfileForm(p => ({...p, state: e.target.value}))} className={inputCls} placeholder="e.g., MD" maxLength={2} />
                     </div>
+                  </div>
+                  <div>
+                    <label className={labelCls}>Portfolio URL</label>
+                    <input type="url" value={profileForm.portfolioUrl} onChange={e => setProfileForm(p => ({...p, portfolioUrl: e.target.value}))} className={inputCls} placeholder="https://your-portfolio.com" />
                   </div>
                 </div>
                 <div className="pt-4 border-t border-white/10 space-y-4">
@@ -942,18 +998,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
               </svg>
               <span className="font-medium text-xs xs:text-sm sm:text-base">Support</span>
             </a>
-
-            <button
-              onClick={() => setShowDeleteModal(true)}
-              className="w-full flex items-center px-2 xs:px-3 sm:px-4 py-2.5 xs:py-3 sm:py-4 text-left rounded-lg xs:rounded-xl min-h-[52px] transition-all duration-200 text-red-500 hover:bg-red-50 active:bg-red-100 hover:text-red-700"
-              style={{fontFamily: '"Inter", sans-serif'}}
-              aria-label="Delete account"
-            >
-              <svg className="w-4 h-4 xs:w-5 xs:h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-              <span className="font-medium text-xs xs:text-sm sm:text-base">Delete Account</span>
-            </button>
 
             {process.env.NODE_ENV === 'development' && (
               <button

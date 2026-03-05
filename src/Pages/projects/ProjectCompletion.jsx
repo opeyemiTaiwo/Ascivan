@@ -153,9 +153,25 @@ const ProjectCompletion = () => {
             awardedByName: currentUser.displayName || currentUser.email,
             awardedAt: serverTimestamp(),
           });
+
+          // Update the member's user profile with badge count
+          try {
+            const userQ = query(collection(db, 'users'), where('email', '==', ev.memberEmail));
+            const userSnap = await getDocs(userQ);
+            if (!userSnap.empty) {
+              const userDoc = userSnap.docs[0];
+              const badgeFieldKey = `badgeCounts.${ev.badgeCategory}`;
+              await updateDoc(doc(db, 'users', userDoc.id), {
+                totalBadges: increment(1),
+                [badgeFieldKey]: increment(1),
+              });
+            }
+          } catch (badgeUpdateErr) {
+            console.error('Error updating user badge count:', badgeUpdateErr);
+          }
         }
 
-        // Update payment tracking for paid projects — per-role payment
+        // Update payment tracking for paid projects -- per-role payment
         if (isPaid && ev.contribution !== 'poor') {
           const memberRole = (project.teamRoles || []).find(r => r.role === ev.memberRole);
           const perPersonPayment = memberRole?.paymentPerPerson || 0;

@@ -36,27 +36,51 @@ const TermsOfService = () => {
       content: 'Your use of Loomiqe is also governed by our Privacy Policy. By using the Platform, you consent to the collection and use of your information as described in the Privacy Policy.'
     },
     {
-      title: '8. Intellectual Property',
+      title: '7. Projects and Collaboration',
+      content: 'Loomiqe provides a platform for users to create, join, and manage collaborative projects. Projects can be free or paid. Both types contribute to a member\'s Tech Badge progress upon completion. Loomiqe does not manage, guarantee, or enforce any project deliverables, timelines, or outcomes. Project owners are solely responsible for managing their teams and project completion.'
+    },
+    {
+      title: '8. Project Payments and Transactions',
+      content: 'Loomiqe does not collect, process, or hold any payment information related to paid projects. All financial transactions for paid projects are conducted directly between the project owner and team members. Payment methods are determined by mutual agreement between the parties involved. Each party is responsible for keeping receipts and records of all transactions. Loomiqe is not liable for any payment disputes, non-payment, or financial losses arising from project transactions. Users may report payment disputes through our Support page for review, but any additional charges or legal actions are the responsibility of the parties involved.'
+    },
+    {
+      title: '9. Tech Badges',
+      content: 'Tech Badges are earned by completing collaborative projects on Loomiqe. Badge assignment is at the sole discretion of the project owner upon project completion. Loomiqe does not guarantee badge assignment for any project. Badges are non-transferable and represent participation and contribution in specific project categories.'
+    },
+    {
+      title: '10. Platform Access for Different User Types',
+      content: 'Loomiqe is primarily designed for international students studying abroad. Professionals seeking to enter a new field, young professionals, and domestic students are also welcome to join. Domestic students (those studying in their home country) have access to the Home community and Projects sections. Features such as Jobs, Housing, and certain Finance resources are tailored for international students and may not be available to all user types.'
+    },
+    {
+      title: '11. Listing Verification Disclaimer',
+      content: 'All jobs, projects, housing listings, and financial resources posted on Loomiqe are user-generated and are not independently verified by Loomiqe. Users should exercise their own judgment and conduct due diligence before committing to any opportunity. While all user information is securely stored and can be used to investigate reports of fraud or misconduct, Loomiqe does not guarantee the accuracy, legitimacy, or quality of any listing.'
+    },
+    {
+      title: '12. Privacy',
+      content: 'Your use of Loomiqe is also governed by our Privacy Policy. By using the Platform, you consent to the collection and use of your information as described in the Privacy Policy.'
+    },
+    {
+      title: '13. Intellectual Property',
       content: 'The Loomiqe name, logo, design, and all related content are the intellectual property of Loomiqe and its founder. You may not use, reproduce, or distribute any Loomiqe branding or content without prior written permission.'
     },
     {
-      title: '9. Termination',
+      title: '14. Termination',
       content: 'Loomiqe reserves the right to suspend or terminate your account at any time, with or without notice, for conduct that we believe violates these Terms or is harmful to other users, the Platform, or third parties. You may also delete your account at any time through your Dashboard.'
     },
     {
-      title: '10. Disclaimers',
-      content: 'Loomiqe is provided "as is" without warranties of any kind, either express or implied. We do not warrant that the Platform will be uninterrupted, error-free, or secure. We are not responsible for any losses or damages arising from your use of the Platform, including but not limited to housing decisions, job applications, or financial transactions.'
+      title: '15. Disclaimers',
+      content: 'Loomiqe is provided "as is" without warranties of any kind, either express or implied. We do not warrant that the Platform will be uninterrupted, error-free, or secure. We are not responsible for any losses or damages arising from your use of the Platform, including but not limited to housing decisions, job applications, project participation, or financial transactions.'
     },
     {
-      title: '11. Limitation of Liability',
-      content: 'To the maximum extent permitted by law, Loomiqe and its founder shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or in connection with your use of the Platform.'
+      title: '16. Limitation of Liability',
+      content: 'To the maximum extent permitted by law, Loomiqe and its founder shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or in connection with your use of the Platform, including but not limited to project payment disputes, listing inaccuracies, or user misconduct.'
     },
     {
-      title: '12. Changes to Terms',
+      title: '17. Changes to Terms',
       content: 'We may update these Terms from time to time. We will notify users of material changes by posting the updated terms on the Platform. Your continued use of Loomiqe after changes are posted constitutes acceptance of the updated Terms.'
     },
     {
-      title: '13. Contact',
+      title: '18. Contact',
       content: 'If you have questions about these Terms of Service, please contact us at support@loomiq.app or through our Support page.'
     }
   ];

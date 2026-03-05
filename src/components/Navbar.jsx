@@ -49,6 +49,7 @@ const Navbar = () => {
   const navItems = [
     { path: '/community', label: 'Home' },
     { path: '/jobs', label: 'Jobs' },
+    { path: '/projects', label: 'Projects' },
     { path: '/housing', label: 'Housing' },
     { path: '/finance', label: 'Finance' },
     { path: '/dashboard', label: 'Dashboard' },

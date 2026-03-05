@@ -1,4 +1,4 @@
-// src/Pages/user/dashboard.jsx 
+// src/Pages/user/dashboard.jsx - FULLY RESPONSIVE WITH UNIVERSAL NAVBAR
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
@@ -719,9 +719,10 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
 
                 {/* ID Verification Section */}
                 <div className="pt-4 border-t border-white/10">
-                  {profileData?.idVerification?.verified ? (
+                  {profileData?.idVerification?.verified && !profileData._idEditing ? (
                     <IdVerificationDisplay 
                       idData={profileData.idVerification}
+                      onEdit={() => setProfileData(prev => ({ ...prev, _idEditing: true }))}
                       onToggleVisibility={async () => {
                         try {
                           const newVisibility = !profileData.idVerification.isPublic;
@@ -733,13 +734,19 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                     />
                   ) : (
                     <div>
-                      <h3 className="text-lg font-bold text-white mb-3">ID Verification</h3>
-                      <p className="text-gray-400 text-sm mb-4">Verify your identity with a government-issued ID</p>
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="text-lg font-bold text-white">ID Verification</h3>
+                        {profileData?._idEditing && (
+                          <button onClick={() => setProfileData(prev => ({ ...prev, _idEditing: false }))} className="text-gray-400 hover:text-white text-xs font-semibold">Cancel</button>
+                        )}
+                      </div>
+                      <p className="text-gray-400 text-sm mb-4">Upload and verify your identity with a government-issued ID</p>
                       <IdVerification
+                        initialData={profileData?.idVerification}
                         onSave={async (data) => {
                           try {
                             await setDoc(doc(db, 'users', currentUser.uid), { idVerification: data }, { merge: true });
-                            setProfileData(prev => ({ ...prev, idVerification: data }));
+                            setProfileData(prev => ({ ...prev, idVerification: data, _idEditing: false }));
                             toast.success('ID verified successfully');
                           } catch (e) { toast.error('Failed to save ID info'); }
                         }}
@@ -1035,10 +1042,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
-              <h1 className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl font-black text-white capitalize truncate" 
-                  style={{fontFamily: '"Inter", sans-serif'}}>
-                {sidebarItems.find(i => i.id === activeSection)?.label || activeSection.replace('-', ' ')}
-              </h1>
             </div>
             <div className="flex items-center gap-2 xs:gap-3">
               <PWAInstallButton 

@@ -364,6 +364,8 @@ const Onboarding = () => {
       default: return null;
     }
   };
+
+  const renderCompanyStep = () => {
     switch (step) {
       case 1:
         return (
@@ -480,6 +482,8 @@ const Onboarding = () => {
       default: return null;
     }
   };
+
+  return (
     <div className="min-h-screen overflow-x-hidden flex flex-col items-center justify-center px-4 py-8 sm:py-12" style={{ backgroundColor: '#000000' }}>
       <div className="flex items-center gap-2 mb-8">
         <img src="/Images/512X512.png" alt="Loomiqe" className="w-8 h-8" onError={e => e.target.style.display='none'} />

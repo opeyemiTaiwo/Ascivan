@@ -135,7 +135,6 @@ const ProjectCompletion = () => {
     setSubmitting(true);
     try {
       const isPaid = project.pricingType === 'paid';
-      const perPersonPayment = project.perPersonPayment || 0;
 
       // Award badges for members who earned them
       for (const ev of evaluations) {
@@ -156,33 +155,43 @@ const ProjectCompletion = () => {
           });
         }
 
-        // Update payment tracking for paid projects
-        if (isPaid && perPersonPayment > 0 && ev.contribution !== 'poor') {
-          // Update member earnings
-          const userQ = query(collection(db, 'users'), where('email', '==', ev.memberEmail));
-          const userSnap = await getDocs(userQ);
-          if (!userSnap.empty) {
-            const userDoc = userSnap.docs[0];
-            await updateDoc(doc(db, 'users', userDoc.id), {
-              totalEarnings: increment(perPersonPayment),
-              completedPaidProjects: increment(1),
-            });
+        // Update payment tracking for paid projects — per-role payment
+        if (isPaid && ev.contribution !== 'poor') {
+          const memberRole = (project.teamRoles || []).find(r => r.role === ev.memberRole);
+          const perPersonPayment = memberRole?.paymentPerPerson || 0;
+          if (perPersonPayment > 0) {
+            const userQ = query(collection(db, 'users'), where('email', '==', ev.memberEmail));
+            const userSnap = await getDocs(userQ);
+            if (!userSnap.empty) {
+              const userDoc = userSnap.docs[0];
+              await updateDoc(doc(db, 'users', userDoc.id), {
+                totalEarnings: increment(perPersonPayment),
+                completedPaidProjects: increment(1),
+              });
+            }
           }
         }
       }
 
       // Update project owner's disbursement tracking for paid projects
-      if (isPaid && project.totalBudget > 0) {
-        const earnedMembers = evaluations.filter(e => e.contribution !== 'poor').length;
-        const totalDisbursed = earnedMembers * perPersonPayment;
-        const ownerQ = query(collection(db, 'users'), where('email', '==', currentUser.email));
-        const ownerSnap = await getDocs(ownerQ);
-        if (!ownerSnap.empty) {
-          const ownerDoc = ownerSnap.docs[0];
-          await updateDoc(doc(db, 'users', ownerDoc.id), {
-            totalDisbursed: increment(totalDisbursed),
-            completedPostedProjects: increment(1),
-          });
+      if (isPaid) {
+        let totalDisbursed = 0;
+        for (const ev of evaluations) {
+          if (ev.contribution !== 'poor') {
+            const memberRole = (project.teamRoles || []).find(r => r.role === ev.memberRole);
+            totalDisbursed += memberRole?.paymentPerPerson || 0;
+          }
+        }
+        if (totalDisbursed > 0) {
+          const ownerQ = query(collection(db, 'users'), where('email', '==', currentUser.email));
+          const ownerSnap = await getDocs(ownerQ);
+          if (!ownerSnap.empty) {
+            const ownerDoc = ownerSnap.docs[0];
+            await updateDoc(doc(db, 'users', ownerDoc.id), {
+              totalDisbursed: increment(totalDisbursed),
+              completedPostedProjects: increment(1),
+            });
+          }
         }
       }
 

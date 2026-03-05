@@ -33,18 +33,6 @@ const SectionHeader = ({ title, description, gradientColors }) => (
 
 const DashboardCard = ({ card, onCardClick }) => (
   <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-lg xs:rounded-xl p-3 xs:p-4 sm:p-5 md:p-6 border border-white/20 shadow-2xl">
-    <div className="flex items-center mb-3 xs:mb-4 sm:mb-6">
-      <h3 className="text-sm xs:text-base sm:text-lg md:text-xl font-black text-white flex items-center" 
-          style={{textShadow: '0 0 15px rgba(255,255,255,0.3), 1px 1px 2px rgba(0,0,0,0.8)'}}>
-        <span className={`w-7 h-7 xs:w-8 xs:h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-gradient-to-r ${card.gradient} rounded-md xs:rounded-lg flex items-center justify-center mr-2 xs:mr-2.5 sm:mr-3 shadow-lg`}>
-          <svg className="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-          </svg>
-        </span>
-        <span className="truncate">{card.title.split(' ').slice(0, 2).join(' ')}</span>
-      </h3>
-    </div>
-    
     <div className="space-y-3 xs:space-y-4">
       <p className="text-gray-200 text-xs xs:text-sm leading-relaxed">
         {card.description}
@@ -64,7 +52,7 @@ const DashboardCard = ({ card, onCardClick }) => (
               </svg>
             </div>
             <div className="min-w-0">
-              <p className="font-semibold text-white text-xs xs:text-sm sm:text-base truncate">{card.title}</p>
+              <p className="font-semibold text-white text-xs xs:text-sm sm:text-base truncate">{card.buttonLabel || card.title}</p>
               <p className="text-gray-400 text-[10px] xs:text-xs sm:text-sm truncate">{card.stats}</p>
             </div>
           </div>

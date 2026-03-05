@@ -22,8 +22,8 @@ export const UserQuickLinksSidebar = ({ currentUser, onNavigate, isMobile = fals
       gradient: 'from-orange-500 to-orange-600'
     },
     {
-      title: 'Members',
-      description: 'Connect with the home feed',
+      title: 'Connect',
+      description: 'Find people near you',
       path: '/members-directory',
       gradient: 'from-orange-400 to-orange-500'
     }

@@ -57,6 +57,142 @@ const DashboardCard = ({ card, onCardClick }) => (
   </div>
 );
 
+const badgeData = [
+  {
+    id: 'techmo',
+    title: 'TechMO',
+    subtitle: 'Awarded to Tech Mentors',
+    image: '/Images/TechMO.png',
+    description: 'Awarded to Tech Mentors after the successful completion of each collaborative project. This badge recognizes mentors who guide and support team members effectively in technical growth and project collaboration.',
+    skills: 'Mentorship, Leadership, Technical Coaching, Team Development, Knowledge Transfer',
+    levels: ['Novice', 'Beginners', 'Intermediate', 'Expert'],
+  },
+  {
+    id: 'techqa',
+    title: 'TechQA',
+    subtitle: 'Awarded to Quality Testers',
+    image: '/Images/TechQA.png',
+    description: 'Awarded to Quality Testers who successfully complete collaboration on a project. This badge recognizes QA professionals who contribute effectively to ensuring software quality.',
+    skills: 'Quality Assurance, Testing, Bug Detection, Test Automation, Software Validation',
+    levels: ['Novice', 'Beginners', 'Intermediate', 'Expert'],
+  },
+  {
+    id: 'techdev',
+    title: 'TechDev',
+    subtitle: 'Awarded to Coding Developers',
+    image: '/Images/TechDev.png',
+    description: 'Awarded to Coding Developers who successfully complete collaboration on a project. This badge recognizes developers who contribute effectively to software development.',
+    skills: 'Programming, Software Development, Code Review, Debugging, Technical Architecture',
+    levels: ['Novice', 'Beginners', 'Intermediate', 'Expert'],
+  },
+  {
+    id: 'techleads',
+    title: 'TechLeads',
+    subtitle: 'Awarded to Project Leaders',
+    image: '/Images/TechLeads.png',
+    description: 'Awarded to Project Leaders and non-technical professionals who successfully complete collaboration on a project. This badge recognizes those who lead, manage, or coordinate projects and tasks.',
+    skills: 'Project Management, Leadership, Strategic Planning, Team Coordination, Business Analysis',
+    levels: ['Novice', 'Beginners', 'Intermediate', 'Expert'],
+  },
+  {
+    id: 'techarchs',
+    title: 'TechArchs',
+    subtitle: 'Awarded to Designers and No-Code Developers',
+    image: '/Images/TechArchs.png',
+    description: 'Awarded to No-Code Developers and Designers who successfully complete collaboration on a project. This badge recognizes professionals who contribute using no-code platforms and design tools.',
+    skills: 'No-Code Development, UI/UX Design, Visual Design, Platform Architecture, Creative Solutions',
+    levels: ['Novice', 'Beginners', 'Intermediate', 'Expert'],
+  },
+  {
+    id: 'techguard',
+    title: 'TechGuard',
+    subtitle: 'Awarded to Security Professionals',
+    image: '/Images/TechGuard.png',
+    description: 'Awarded to Network and Cybersecurity professionals, including Cloud Administrators and DevOps Engineers, who successfully complete collaboration on a project.',
+    skills: 'Cybersecurity, Network Security, Cloud Administration, DevOps, Infrastructure Security',
+    levels: ['Novice', 'Beginners', 'Intermediate', 'Expert'],
+  },
+];
+
+const BadgeInfoSection = () => {
+  const [expanded, setExpanded] = useState(false);
+  const [selectedBadge, setSelectedBadge] = useState(null);
+
+  return (
+    <div className="mt-4">
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full text-center py-3 text-orange-400 hover:text-orange-300 text-sm font-semibold transition-colors"
+      >
+        {expanded ? 'Hide Badge Info' : 'Learn about Tech Badges'}
+        <svg className={`w-4 h-4 inline ml-1 transition-transform ${expanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {expanded && (
+        <div className="mt-3 space-y-4">
+          <div className="bg-white/5 border border-white/20 rounded-2xl p-4 sm:p-6">
+            <h3 className="text-white font-bold text-base sm:text-lg mb-2">Tech Badges</h3>
+            <p className="text-gray-400 text-xs sm:text-sm mb-4">
+              Earn badges by completing collaborative projects. Each badge has 4 levels based on the number of projects you complete in that category: Novice (1), Beginners (2-5), Intermediate (6-10), and Expert (11+).
+            </p>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {badgeData.map(badge => (
+                <button
+                  key={badge.id}
+                  onClick={() => setSelectedBadge(selectedBadge?.id === badge.id ? null : badge)}
+                  className={`p-3 rounded-xl border text-center transition-all active:scale-[0.97] ${
+                    selectedBadge?.id === badge.id
+                      ? 'border-orange-400 bg-orange-500/10'
+                      : 'border-white/10 bg-white/5 hover:bg-white/10'
+                  }`}
+                >
+                  <img
+                    src={badge.image}
+                    alt={badge.title}
+                    className="w-12 h-12 sm:w-14 sm:h-14 mx-auto rounded-lg object-contain mb-2"
+                    onError={e => { e.target.style.display = 'none'; }}
+                  />
+                  <p className="text-white font-bold text-xs sm:text-sm">{badge.title}</p>
+                  <p className="text-gray-500 text-[10px] mt-0.5">{badge.subtitle}</p>
+                </button>
+              ))}
+            </div>
+
+            {/* Selected badge detail */}
+            {selectedBadge && (
+              <div className="mt-4 bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
+                <div className="flex items-center gap-3">
+                  <img src={selectedBadge.image} alt={selectedBadge.title} className="w-14 h-14 rounded-lg object-contain" onError={e => { e.target.style.display = 'none'; }} />
+                  <div>
+                    <p className="text-white font-bold text-sm sm:text-base">{selectedBadge.title} Badges</p>
+                    <p className="text-orange-400 text-xs">{selectedBadge.subtitle}</p>
+                  </div>
+                </div>
+                <p className="text-gray-300 text-xs sm:text-sm leading-relaxed">{selectedBadge.description}</p>
+                <div>
+                  <p className="text-gray-500 text-[10px] uppercase tracking-wider font-semibold mb-1">Skills Recognized</p>
+                  <p className="text-gray-300 text-xs">{selectedBadge.skills}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 text-[10px] uppercase tracking-wider font-semibold mb-1">Badge Levels</p>
+                  <div className="flex gap-2">
+                    {selectedBadge.levels.map(level => (
+                      <span key={level} className="px-2 py-0.5 bg-white/10 rounded-md text-gray-300 text-[10px] font-medium">{level}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const PWAInstallButton = ({ className = "", mobile = false, isInstallable, isInstalled, installing, installApp }) => {
   if (isInstalled || !isInstallable) return null;
 
@@ -946,6 +1082,11 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
               </div>
             ))}
           </div>
+        )}
+
+        {/* Tech Badges Info - shown only on Projects tab */}
+        {activeSection === 'projects' && (
+          <BadgeInfoSection />
         )}
       </div>
     );

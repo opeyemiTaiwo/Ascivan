@@ -36,23 +36,39 @@ const PrivacyPolicy = () => {
       content: 'Loomiqe integrates with third-party services including Google Authentication and Firebase. These services have their own privacy policies that govern their use of your data. We encourage you to review those policies.'
     },
     {
-      title: '8. Your Rights',
-      content: 'You have the right to: access, update, or delete your personal information through your Dashboard; delete your account entirely; request a copy of your data; opt out of non-essential communications. To exercise any of these rights, visit your Dashboard or contact our Support team.'
+      title: '8. ID Verification Data',
+      content: 'If you choose to verify your identity, we collect and store the information you provide from your government-issued ID, including your full name, ID number, date of birth, expiry date, issuing country, and a compressed image of the document. This data is securely stored in our database. You can control the visibility of your ID information (public or private) through your profile settings. Regardless of your visibility preference, this data is always accessible to Loomiqe administrators for verification and fraud prevention purposes.'
     },
     {
-      title: '9. Data Retention',
-      content: 'We retain your personal information for as long as your account is active. If you delete your account, we will delete your personal data within a reasonable timeframe. We may retain anonymized data for analytical purposes.'
+      title: '9. Project and Collaboration Data',
+      content: 'When you create or join projects on Loomiqe, we collect and store project details, team roles, applications, and completion records. If a project is paid, we store the agreed payment amounts but do not collect, process, or store any actual payment information or financial credentials. All financial transactions for projects occur directly between users outside the Platform.'
     },
     {
-      title: '10. Children\'s Privacy',
+      title: '10. Tech Badges and Achievement Data',
+      content: 'We collect and store information about Tech Badges earned through project completion, including the badge category, level, awarding project, contribution rating, and the date awarded. This information is displayed on your profile and is visible to other authenticated members. Badge data cannot be edited or deleted by users.'
+    },
+    {
+      title: '11. Fraud Prevention and Misconduct',
+      content: 'All user information stored on Loomiqe, including profile data, ID verification records, project participation history, and activity logs, may be used to investigate and address reports of fraud, misconduct, non-payment disputes, or violations of our Terms of Service. We may share relevant user information with law enforcement if required by law or in response to valid legal processes.'
+    },
+    {
+      title: '12. Your Rights',
+      content: 'You have the right to: access, update, or delete your personal information through your Dashboard; delete your account entirely; request a copy of your data; opt out of non-essential communications; control the visibility of your ID verification data. To exercise any of these rights, visit your Dashboard or contact our Support team.'
+    },
+    {
+      title: '13. Data Retention',
+      content: 'We retain your personal information for as long as your account is active. If you delete your account, we will delete your personal data within a reasonable timeframe. We may retain anonymized data for analytical purposes and may retain ID verification and project records for fraud prevention as required by applicable law.'
+    },
+    {
+      title: '14. Children\'s Privacy',
       content: 'Loomiqe is not intended for users under the age of 18. We do not knowingly collect information from children under 18. If we become aware that we have collected personal information from a child under 18, we will take steps to delete such information.'
     },
     {
-      title: '11. Changes to This Policy',
+      title: '15. Changes to This Policy',
       content: 'We may update this Privacy Policy from time to time. We will notify users of material changes by posting the updated policy on the Platform. Your continued use of Loomiqe after changes are posted constitutes acceptance of the updated policy.'
     },
     {
-      title: '12. Contact Us',
+      title: '16. Contact Us',
       content: 'If you have questions about this Privacy Policy or your personal data, please contact us at support@loomiq.app or through our Support page.'
     }
   ];

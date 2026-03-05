@@ -19,8 +19,8 @@ const Login = () => {
 
   useEffect(() => {
     if (currentUser) {
-      console.log('User authenticated, checking onboarding status...');
-      navigate('/community');
+      console.log('User authenticated, redirecting to account type selection...');
+      navigate('/account-type');
     }
   }, [currentUser, navigate]);
 

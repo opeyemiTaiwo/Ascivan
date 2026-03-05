@@ -70,19 +70,6 @@ const DashboardCard = ({ card, onCardClick }) => (
           </div>
         </div>
       </div>
-      
-      <div className="text-center pt-2 xs:pt-3 border-t border-white/10">
-        <button
-          onClick={() => onCardClick(card.path)}
-          className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 active:from-orange-700 active:to-orange-800 text-white text-xs xs:text-sm font-bold transition-all min-h-[44px] px-5 xs:px-6 py-2.5 rounded-lg shadow-lg hover:shadow-orange-500/25"
-          aria-label={`${card.buttonLabel || 'Get Started'} - ${card.title}`}
-        >
-          {card.buttonLabel || 'Get Started'}
-          <svg className="w-3 h-3 xs:w-4 xs:h-4 inline ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-      </div>
     </div>
   </div>
 );
@@ -342,7 +329,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         { id: 'community', label: 'Home' },
         { id: 'hub', label: 'Jobs' },
         { id: 'housing', label: 'Housing' },
-        { id: 'directory', label: 'Directory' },
         { id: 'profile', label: 'Profile' },
       ];
     }
@@ -375,6 +361,14 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             stats: 'New Post',
             gradient: 'from-orange-500 to-orange-600',
             buttonLabel: 'Create Post'
+          },
+          {
+            title: 'Connect',
+            description: 'Discover and connect with international students and alumni',
+            path: '/members-directory',
+            stats: 'Browse Members',
+            gradient: 'from-green-600 to-green-700',
+            buttonLabel: 'Network'
           }
         ],
         hub: [
@@ -405,16 +399,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             buttonLabel: 'Post Listing'
           }
         ],
-        directory: [
-          {
-            title: 'Member Directory',
-            description: 'Discover and connect with international students and alumni',
-            path: '/members-directory',
-            stats: 'Browse Members',
-            gradient: 'from-green-600 to-green-700',
-            buttonLabel: 'Network'
-          }
-        ],
       };
     }
     // Individual
@@ -435,6 +419,14 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           stats: 'New Post',
           gradient: 'from-orange-500 to-orange-600',
           buttonLabel: 'Create Post'
+        },
+        {
+          title: 'Connect',
+          description: 'Discover and connect with international students and alumni in your field',
+          path: '/members-directory',
+          stats: 'Browse Members',
+          gradient: 'from-green-600 to-green-700',
+          buttonLabel: 'Network'
         }
       ],
       hub: [

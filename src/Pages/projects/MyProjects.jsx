@@ -24,6 +24,15 @@ const MyProjects = () => {
   const [badges, setBadges] = useState([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState('applied'); // 'applied' | 'posted' | 'badges'
+  const [projectFilter, setProjectFilter] = useState('ongoing'); // 'ongoing' | 'completed'
+
+  // Filter applications based on toggle — completed means the project application has status indicating completion
+  const filteredApplications = applications.filter(app => {
+    if (projectFilter === 'completed') {
+      return app.status === 'completed' || app.completionStatus;
+    }
+    return app.status !== 'completed' && !app.completionStatus;
+  });
 
   useEffect(() => {
     if (!currentUser) { setLoading(false); return; }
@@ -106,30 +115,48 @@ const MyProjects = () => {
 
             {/* Applied Tab */}
             {tab === 'applied' && (
-              applications.length === 0 ? (
-                <div className="text-center py-20">
-                  <p className="text-gray-400 text-lg font-semibold mb-2">No applications yet</p>
-                  <p className="text-gray-500 text-sm mb-6">Browse projects and apply to get started</p>
-                  <Link to="/projects" className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-xl text-sm">Browse Projects</Link>
+              <>
+                <div className="flex gap-2 mb-4">
+                  <button onClick={() => setProjectFilter('ongoing')}
+                    className={`px-4 py-2 min-h-[36px] rounded-lg text-xs font-semibold transition-all ${projectFilter === 'ongoing' ? 'bg-orange-500 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}>
+                    Ongoing
+                  </button>
+                  <button onClick={() => setProjectFilter('completed')}
+                    className={`px-4 py-2 min-h-[36px] rounded-lg text-xs font-semibold transition-all ${projectFilter === 'completed' ? 'bg-green-500 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}>
+                    Completed
+                  </button>
                 </div>
-              ) : (
-                <div className="space-y-3">
-                  {applications.map(app => (
-                    <Link key={app.id} to={`/projects/${app.projectId}`}
-                      className="block bg-white/5 border border-white/20 rounded-xl p-4 hover:bg-white/10 transition-all">
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                        <div>
-                          <p className="text-white font-semibold text-sm">{app.projectTitle}</p>
-                          <p className="text-gray-500 text-xs mt-0.5">Applied as: {app.role}</p>
+                {filteredApplications.length === 0 ? (
+                  <div className="text-center py-20">
+                    <p className="text-gray-400 text-lg font-semibold mb-2">
+                      {projectFilter === 'completed' ? 'Completed projects are displayed here' : 'Ongoing projects are displayed here'}
+                    </p>
+                    <p className="text-gray-500 text-sm mb-6">
+                      {applications.length === 0 ? 'Browse projects and apply to get started' : `No ${projectFilter} projects found`}
+                    </p>
+                    {applications.length === 0 && (
+                      <Link to="/projects" className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-xl text-sm">Browse Projects</Link>
+                    )}
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {filteredApplications.map(app => (
+                      <Link key={app.id} to={`/projects/${app.projectId}`}
+                        className="block bg-white/5 border border-white/20 rounded-xl p-4 hover:bg-white/10 transition-all">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                          <div>
+                            <p className="text-white font-semibold text-sm">{app.projectTitle}</p>
+                            <p className="text-gray-500 text-xs mt-0.5">Applied as: {app.role}</p>
+                          </div>
+                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${statusColors[app.status] || 'bg-white/10 text-gray-300 border-white/20'}`}>
+                            {app.status?.charAt(0).toUpperCase() + app.status?.slice(1)}
+                          </span>
                         </div>
-                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${statusColors[app.status] || 'bg-white/10 text-gray-300 border-white/20'}`}>
-                          {app.status?.charAt(0).toUpperCase() + app.status?.slice(1)}
-                        </span>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              )
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
 
             {/* Posted Tab */}

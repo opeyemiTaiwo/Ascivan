@@ -5,7 +5,7 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { usePWA } from '../../hooks/usePWA';
 import Navbar from '../../components/Navbar';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { GoogleAuthProvider, reauthenticateWithPopup } from 'firebase/auth';
 import { deleteUserAccount } from '../../utils/deleteUserContent';
@@ -263,6 +263,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
   const [studentType, setStudentType] = useState('international'); // 'international' | 'domestic'
 
   const [profileData, setProfileData] = useState(null);
+  const [userBadges, setUserBadges] = useState([]);
   const [profileEditing, setProfileEditing] = useState(false);
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileForm, setProfileForm] = useState({
@@ -572,6 +573,15 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
     };
     fetchProfile();
     setLoading(false);
+
+    // Listen for user's badges
+    if (currentUser?.email) {
+      const badgeQ = query(collection(db, 'member_badges'), where('memberEmail', '==', currentUser.email));
+      const unsubBadges = onSnapshot(badgeQ, (snap) => {
+        setUserBadges(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      });
+      return unsubBadges;
+    }
   }, [currentUser]);
 
   const handleCardClick = useCallback((path) => {
@@ -751,6 +761,49 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                           } catch (e) { toast.error('Failed to save ID info'); }
                         }}
                       />
+                    </div>
+                  )}
+                </div>
+
+                {/* Badges Section */}
+                <div className="pt-4 border-t border-white/10">
+                  <h3 className="text-lg font-bold text-white mb-3">Badges Earned</h3>
+                  {userBadges.length === 0 ? (
+                    <p className="text-gray-500 text-sm">No badges earned yet. Complete projects to earn tech badges.</p>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        <span className="px-3 py-1 bg-orange-500/20 text-orange-300 rounded-full text-xs font-bold border border-orange-500/30">
+                          {userBadges.length} badge{userBadges.length !== 1 ? 's' : ''} earned
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {userBadges.map(badge => {
+                          const badgeImages = {
+                            'mentorship': '/Images/TechMO.png',
+                            'quality-assurance': '/Images/TechQA.png',
+                            'development': '/Images/TechDev.png',
+                            'leadership': '/Images/TechLeads.png',
+                            'design': '/Images/TechArchs.png',
+                            'security': '/Images/TechGuard.png',
+                          };
+                          return (
+                            <div key={badge.id} className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center gap-3">
+                              <img 
+                                src={badgeImages[badge.badgeCategory] || '/Images/TechDev.png'} 
+                                alt={badge.badgeName} 
+                                className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg object-contain flex-shrink-0"
+                                onError={e => { e.target.style.display = 'none'; }}
+                              />
+                              <div className="min-w-0">
+                                <p className="text-white font-semibold text-xs sm:text-sm truncate">{badge.badgeName}</p>
+                                <p className="text-gray-400 text-[10px] sm:text-xs">Level: {badge.badgeLevel}</p>
+                                <p className="text-gray-500 text-[10px] truncate">{badge.projectTitle}</p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   )}
                 </div>

@@ -50,7 +50,12 @@ const DashboardCard = ({ card, onCardClick }) => (
         {card.description}
       </p>
       
-      <div className="bg-white/5 rounded-lg p-3 xs:p-4 border border-white/10">
+      <div className="bg-white/5 rounded-lg p-3 xs:p-4 border border-white/10 cursor-pointer hover:bg-white/10 hover:border-white/20 transition-all duration-200 active:scale-[0.98]"
+           onClick={() => onCardClick(card.path)}
+           role="button"
+           tabIndex={0}
+           onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onCardClick(card.path); } }}
+           aria-label={`${card.title} - ${card.stats}`}>
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 xs:gap-3 min-w-0">
             <div className={`w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 bg-gradient-to-r ${card.gradient} rounded-lg xs:rounded-xl flex items-center justify-center text-white flex-shrink-0`}>
@@ -284,6 +289,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
     photoURL: null
   });
   const [loading, setLoading] = useState(true);
+  const [accountType, setAccountType] = useState('individual'); // 'individual' | 'company'
 
   const [profileData, setProfileData] = useState(null);
   const [profileEditing, setProfileEditing] = useState(false);
@@ -330,104 +336,170 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
     };
   }, [sidebarOpen]);
 
-  const sidebarItems = useMemo(() => [
-    { id: 'community', label: 'Home' },
-    { id: 'hub', label: 'Jobs' },
-    { id: 'housing', label: 'Housing' },
-    { id: 'banking', label: 'Finance' },
-    { id: 'profile', label: 'Profile' },
-  ], []);
+  const sidebarItems = useMemo(() => {
+    if (accountType === 'company') {
+      return [
+        { id: 'community', label: 'Home Feed' },
+        { id: 'create-post', label: 'Create Post' },
+        { id: 'directory', label: 'Member Directory' },
+        { id: 'post-job', label: 'Post Job' },
+        { id: 'my-jobs', label: 'My Jobs' },
+        { id: 'post-listing', label: 'Post Listing' },
+        { id: 'profile', label: 'Profile' },
+      ];
+    }
+    // Individual
+    return [
+      { id: 'community', label: 'Home Feed' },
+      { id: 'create-post', label: 'Create Post' },
+      { id: 'hub', label: 'Browse Jobs' },
+      { id: 'my-jobs', label: 'My Jobs' },
+      { id: 'housing', label: 'Find Housing' },
+      { id: 'list-room', label: 'List Your Room' },
+      { id: 'banking', label: 'Finance Resources' },
+      { id: 'profile', label: 'Profile' },
+    ];
+  }, [accountType]);
 
-  const dashboardCards = useMemo(() => ({
-    hub: [
-      {
-        title: 'Browse Jobs',
-        description: 'Find full-time, freelance & internship roles — filtered by location & visa status',
-        path: '/jobs',
-        stats: 'Explore Jobs',
-        gradient: 'from-orange-500 to-orange-600',
-        buttonLabel: 'Browse Jobs'
-      },
-      {
-        title: 'Post a Job',
-        description: 'List a job opportunity for international students',
-        path: '/jobs/post',
-        stats: 'Post Now',
-        gradient: 'from-orange-400 to-orange-500',
-        buttonLabel: 'Post a Job'
-      },
-      {
-        title: 'My Job Posts',
-        description: 'Manage and track your posted job listings',
-        path: '/jobs/my-posts',
-        stats: 'Manage',
-        gradient: 'from-orange-400 to-orange-500',
-        buttonLabel: 'Manage Posts'
-      }
-    ],
-    housing: [
-      {
-        title: 'Find Housing',
-        description: 'Browse student-friendly apartments, rooms & studios near your campus',
-        path: '/housing',
-        stats: 'Browse All',
-        gradient: 'from-blue-500 to-blue-600',
-        buttonLabel: 'Find Housing'
-      },
-      {
-        title: 'List Your Space',
-        description: 'Have a room or unit available? List it for international students',
-        path: '/housing/post',
-        stats: 'List Now',
-        gradient: 'from-orange-500 to-orange-600',
-        buttonLabel: 'List Space'
-      }
-    ],
-    banking: [
-      {
-        title: 'Finance Resources',
-        description: 'Scholarships, loans, work-study, grants, fellowships & financial services for international students',
-        path: '/finance',
-        stats: 'Explore',
-        gradient: 'from-green-500 to-green-600',
-        buttonLabel: 'Browse Resources'
-      },
-      {
-        title: 'List a Resource',
-        description: 'Share a financial resource or service that helps international students',
-        path: '/finance/post',
-        stats: 'List Now',
-        gradient: 'from-orange-500 to-orange-600',
-        buttonLabel: 'List Resource'
-      }
-    ],
-    community: [
-      {
-        title: 'Home Feed',
-        description: 'Share ideas, ask questions, and engage with fellow international students',
-        path: '/community',
-        stats: 'Join Discussion',
-        gradient: 'from-green-500 to-green-600',
-        buttonLabel: 'View Feed'
-      },
-      {
-        title: 'Create Post',
-        description: 'Start a conversation and share your thoughts with the home feed',
-        path: '/community/submit',
-        stats: 'New Post',
-        gradient: 'from-orange-500 to-orange-600',
-        buttonLabel: 'Create Post'
-      },
-      {
-        title: 'Member Directory',
-        description: 'Discover and connect with international students and alumni in your field',
-        path: '/members-directory',
-        stats: 'Browse Members',
-        gradient: 'from-green-600 to-green-700',
-        buttonLabel: 'Network'
-      }
-    ]
-  }), []);
+  const dashboardCards = useMemo(() => {
+    if (accountType === 'company') {
+      return {
+        community: [
+          {
+            title: 'Home Feed',
+            description: 'Share ideas, ask questions, and engage with the community',
+            path: '/community',
+            stats: 'Join Discussion',
+            gradient: 'from-green-500 to-green-600',
+            buttonLabel: 'View Feed'
+          }
+        ],
+        'create-post': [
+          {
+            title: 'Create Post',
+            description: 'Start a conversation and share updates with the community',
+            path: '/community/submit',
+            stats: 'New Post',
+            gradient: 'from-orange-500 to-orange-600',
+            buttonLabel: 'Create Post'
+          }
+        ],
+        directory: [
+          {
+            title: 'Member Directory',
+            description: 'Discover and connect with international students and alumni',
+            path: '/members-directory',
+            stats: 'Browse Members',
+            gradient: 'from-green-600 to-green-700',
+            buttonLabel: 'Network'
+          }
+        ],
+        'post-job': [
+          {
+            title: 'Post Job',
+            description: 'List a job opportunity for international students',
+            path: '/jobs/post',
+            stats: 'Post Now',
+            gradient: 'from-orange-500 to-orange-600',
+            buttonLabel: 'Post Job'
+          }
+        ],
+        'my-jobs': [
+          {
+            title: 'My Jobs',
+            description: 'Manage and track job listings you have posted',
+            path: '/jobs/my-posts',
+            stats: 'Manage',
+            gradient: 'from-orange-400 to-orange-500',
+            buttonLabel: 'View Posts'
+          }
+        ],
+        'post-listing': [
+          {
+            title: 'Post Listing',
+            description: 'List a housing space or room for international students',
+            path: '/housing/post',
+            stats: 'List Now',
+            gradient: 'from-blue-500 to-blue-600',
+            buttonLabel: 'Post Listing'
+          }
+        ],
+      };
+    }
+    // Individual
+    return {
+      community: [
+        {
+          title: 'Home Feed',
+          description: 'Share ideas, ask questions, and engage with fellow international students',
+          path: '/community',
+          stats: 'Join Discussion',
+          gradient: 'from-green-500 to-green-600',
+          buttonLabel: 'View Feed'
+        }
+      ],
+      'create-post': [
+        {
+          title: 'Create Post',
+          description: 'Start a conversation and share your thoughts with the home feed',
+          path: '/community/submit',
+          stats: 'New Post',
+          gradient: 'from-orange-500 to-orange-600',
+          buttonLabel: 'Create Post'
+        }
+      ],
+      hub: [
+        {
+          title: 'Browse Jobs',
+          description: 'Find full-time, freelance & internship roles — filtered by location & visa status',
+          path: '/jobs',
+          stats: 'Explore Jobs',
+          gradient: 'from-orange-500 to-orange-600',
+          buttonLabel: 'Browse Jobs'
+        }
+      ],
+      'my-jobs': [
+        {
+          title: 'My Jobs',
+          description: 'Track and manage jobs you have applied to',
+          path: '/jobs/my-posts',
+          stats: 'Applications',
+          gradient: 'from-orange-400 to-orange-500',
+          buttonLabel: 'View Jobs'
+        }
+      ],
+      housing: [
+        {
+          title: 'Find Housing',
+          description: 'Browse student-friendly apartments, rooms & studios near your campus',
+          path: '/housing',
+          stats: 'Browse All',
+          gradient: 'from-blue-500 to-blue-600',
+          buttonLabel: 'Find Housing'
+        }
+      ],
+      'list-room': [
+        {
+          title: 'List Your Room',
+          description: 'Have a room or unit available? List it for international students',
+          path: '/housing/post',
+          stats: 'List Now',
+          gradient: 'from-orange-500 to-orange-600',
+          buttonLabel: 'List Room'
+        }
+      ],
+      banking: [
+        {
+          title: 'Finance Resources',
+          description: 'Scholarships, loans, work-study, grants, fellowships & financial services',
+          path: '/finance',
+          stats: 'Explore',
+          gradient: 'from-green-500 to-green-600',
+          buttonLabel: 'Browse Resources'
+        }
+      ],
+    };
+  }, [accountType]);
 
   useEffect(() => {
     if (!currentUser) {
@@ -446,6 +518,12 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         if (snap.exists()) {
           const data = snap.data();
           setProfileData(data);
+          // Set account type from Firestore
+          if (data.accountType) {
+            setAccountType(data.accountType);
+          } else if (data.isCompany) {
+            setAccountType('company');
+          }
           const cp = data.companyProfile || {};
           setProfileForm({
             displayName: data.displayName || currentUser.displayName || '',
@@ -483,43 +561,19 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
   }, [navigate]);
 
   const renderContent = () => {
-    const sections = {
-      hub: {
-        title: 'Jobs',
-        description: 'Browse full-time, freelance & internship roles — filtered by location and visa compliance.',
-        gradientColors: 'from-orange-300 via-orange-400 to-orange-500',
-        cards: dashboardCards.hub
-      },
-      housing: {
-        title: 'Housing',
-        description: 'Find affordable, student-friendly housing near your university — filtered by city.',
-        gradientColors: 'from-blue-300 via-blue-400 to-orange-400',
-        cards: dashboardCards.housing
-      },
-      banking: {
-        title: 'Finance',
-        description: 'Scholarships, loans, work-study, grants, fellowships, banking & financial aid for international students.',
-        gradientColors: 'from-green-300 via-green-400 to-orange-400',
-        cards: dashboardCards.banking
-      }
+    // Section metadata for headers
+    const sectionMeta = {
+      community: { title: 'Home Feed', description: 'Connect, collaborate, and grow with the Loomiqe community.', gradientColors: 'from-green-300 via-orange-400 to-green-500' },
+      'create-post': { title: 'Create Post', description: 'Share your thoughts with the community.', gradientColors: 'from-orange-300 via-orange-400 to-orange-500' },
+      hub: { title: 'Browse Jobs', description: 'Find full-time, freelance & internship roles — filtered by location and visa compliance.', gradientColors: 'from-orange-300 via-orange-400 to-orange-500' },
+      'my-jobs': { title: 'My Jobs', description: accountType === 'company' ? 'Manage and track job listings you have posted.' : 'Track jobs you have applied to.', gradientColors: 'from-orange-300 via-orange-400 to-orange-500' },
+      housing: { title: 'Find Housing', description: 'Find affordable, student-friendly housing near your university.', gradientColors: 'from-blue-300 via-blue-400 to-orange-400' },
+      'list-room': { title: 'List Your Room', description: 'Have a room or unit available? List it for international students.', gradientColors: 'from-blue-300 via-orange-400 to-orange-500' },
+      banking: { title: 'Finance Resources', description: 'Scholarships, loans, work-study, grants, fellowships & financial aid.', gradientColors: 'from-green-300 via-green-400 to-orange-400' },
+      directory: { title: 'Member Directory', description: 'Discover and connect with international students and alumni.', gradientColors: 'from-green-300 via-green-400 to-green-500' },
+      'post-job': { title: 'Post Job', description: 'List a job opportunity for international students.', gradientColors: 'from-orange-300 via-orange-400 to-orange-500' },
+      'post-listing': { title: 'Post Listing', description: 'List a housing space for international students.', gradientColors: 'from-blue-300 via-blue-400 to-orange-400' },
     };
-
-    if (activeSection === 'community') {
-      return (
-        <div className="space-y-3 xs:space-y-4 sm:space-y-6 md:space-y-8">
-          <SectionHeader 
-            title="Home"
-            description="Connect, collaborate, and grow with the Loomiqe international student community."
-            gradientColors="from-green-300 via-orange-400 to-green-500"
-          />
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 xs:gap-4 sm:gap-5 md:gap-6">
-            {dashboardCards.community?.map((card, index) => (
-              <DashboardCard key={index} card={card} onCardClick={handleCardClick} />
-            ))}
-          </div>
-        </div>
-      );
-    }
 
     if (activeSection === 'profile') {
       const BLOCKED_DOMAINS = ['gmail.com','googlemail.com','yahoo.com','yahoo.co.uk','yahoo.co.in','outlook.com','hotmail.com','live.com','msn.com','aol.com','icloud.com','me.com','mac.com','protonmail.com','proton.me','zoho.com','yandex.com','mail.com','gmx.com','fastmail.com','tutanota.com'];
@@ -730,21 +784,25 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       );
     }
 
-    const section = sections[activeSection];
-    if (!section) return null;
+    // Generic section renderer for all sections
+    const meta = sectionMeta[activeSection];
+    const cards = dashboardCards[activeSection];
+    if (!meta) return null;
 
     return (
       <div className="space-y-3 xs:space-y-4 sm:space-y-6 md:space-y-8">
         <SectionHeader 
-          title={section.title}
-          description={section.description}
-          gradientColors={section.gradientColors}
+          title={meta.title}
+          description={meta.description}
+          gradientColors={meta.gradientColors}
         />
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 xs:gap-4 sm:gap-5 md:gap-6">
-          {section.cards?.map((card, index) => (
-            <DashboardCard key={index} card={card} onCardClick={handleCardClick} />
-          ))}
-        </div>
+        {cards && cards.length > 0 && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 xs:gap-4 sm:gap-5 md:gap-6">
+            {cards.map((card, index) => (
+              <DashboardCard key={index} card={card} onCardClick={handleCardClick} />
+            ))}
+          </div>
+        )}
       </div>
     );
   };

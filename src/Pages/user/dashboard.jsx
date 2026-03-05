@@ -805,6 +805,23 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           description={meta.description}
           gradientColors={meta.gradientColors}
         />
+
+        {/* Earnings / Spending Summary - shown on Home tab */}
+        {activeSection === 'community' && profileData && (
+          <div className="flex flex-wrap justify-center gap-3 xs:gap-4">
+            <div className="w-full sm:w-[calc(50%-0.75rem)] bg-gradient-to-br from-green-500/10 to-green-600/5 border border-green-500/20 rounded-xl p-4">
+              <p className="text-gray-400 text-[10px] uppercase tracking-wider font-semibold">Money Earned</p>
+              <p className="text-green-400 text-xl sm:text-2xl font-black mt-1">${(profileData.totalEarnings || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+              <p className="text-gray-500 text-[10px] mt-0.5">{profileData.completedPaidProjects || 0} paid project{(profileData.completedPaidProjects || 0) !== 1 ? 's' : ''} completed</p>
+            </div>
+            <div className="w-full sm:w-[calc(50%-0.75rem)] bg-gradient-to-br from-orange-500/10 to-orange-600/5 border border-orange-500/20 rounded-xl p-4">
+              <p className="text-gray-400 text-[10px] uppercase tracking-wider font-semibold">Money Disbursed</p>
+              <p className="text-orange-400 text-xl sm:text-2xl font-black mt-1">${(profileData.totalDisbursed || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+              <p className="text-gray-500 text-[10px] mt-0.5">{profileData.completedPostedProjects || 0} project{(profileData.completedPostedProjects || 0) !== 1 ? 's' : ''} posted and completed</p>
+            </div>
+          </div>
+        )}
+
         {cards && cards.length > 0 && (
           <div className="flex flex-wrap justify-center gap-3 xs:gap-4 sm:gap-5 md:gap-6">
             {cards.map((card, index) => (

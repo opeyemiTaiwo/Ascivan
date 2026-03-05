@@ -33,28 +33,22 @@ const SectionHeader = ({ title, description, gradientColors }) => (
 
 const DashboardCard = ({ card, onCardClick }) => (
   <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-lg xs:rounded-xl p-3 xs:p-4 sm:p-5 md:p-6 border border-white/20 shadow-2xl">
-    <div className="space-y-3 xs:space-y-4">
-      <p className="text-gray-200 text-xs xs:text-sm leading-relaxed">
-        {card.description}
-      </p>
-      
-      <div className="bg-white/5 rounded-lg p-3 xs:p-4 border border-white/10 cursor-pointer hover:bg-white/10 hover:border-white/20 transition-all duration-200 active:scale-[0.98]"
-           onClick={() => onCardClick(card.path)}
-           role="button"
-           tabIndex={0}
-           onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onCardClick(card.path); } }}
-           aria-label={`${card.title} - ${card.stats}`}>
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 xs:gap-3 min-w-0">
-            <div className={`w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 bg-gradient-to-r ${card.gradient} rounded-lg xs:rounded-xl flex items-center justify-center text-white flex-shrink-0`}>
-              <svg className="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <div className="min-w-0">
-              <p className="font-semibold text-white text-xs xs:text-sm sm:text-base truncate">{card.buttonLabel || card.title}</p>
-              <p className="text-gray-400 text-[10px] xs:text-xs sm:text-sm truncate">{card.stats}</p>
-            </div>
+    <div className="bg-white/5 rounded-lg p-3 xs:p-4 border border-white/10 cursor-pointer hover:bg-white/10 hover:border-white/20 transition-all duration-200 active:scale-[0.98]"
+         onClick={() => onCardClick(card.path)}
+         role="button"
+         tabIndex={0}
+         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onCardClick(card.path); } }}
+         aria-label={`${card.title} - ${card.stats}`}>
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2 xs:gap-3 min-w-0">
+          <div className={`w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 bg-gradient-to-r ${card.gradient} rounded-lg xs:rounded-xl flex items-center justify-center text-white flex-shrink-0`}>
+            <svg className="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <div className="min-w-0">
+            <p className="font-semibold text-white text-xs xs:text-sm sm:text-base truncate">{card.buttonLabel || card.title}</p>
+            <p className="text-gray-400 text-[10px] xs:text-xs sm:text-sm truncate">{card.stats}</p>
           </div>
         </div>
       </div>

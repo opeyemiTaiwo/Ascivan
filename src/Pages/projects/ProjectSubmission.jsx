@@ -73,14 +73,11 @@ const ProjectSubmission = () => {
     companyName: '',
     // Pricing
     pricingType: 'free', // 'free' | 'paid'
-    totalBudget: '',
-    paymentBeforeStart: '',
-    paymentAtEnd: '',
   });
 
-  // Team roles — dynamic list
+  // Team roles — dynamic list, payment per role when paid
   const [teamRoles, setTeamRoles] = useState([
-    { role: '', skills: '', count: 1 }
+    { role: '', skills: '', count: 1, paymentPerPerson: '' }
   ]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -117,7 +114,7 @@ const ProjectSubmission = () => {
 
   const addRole = () => {
     if (teamRoles.length < 10) {
-      setTeamRoles(prev => [...prev, { role: '', skills: '', count: 1 }]);
+      setTeamRoles(prev => [...prev, { role: '', skills: '', count: 1, paymentPerPerson: '' }]);
     }
   };
 
@@ -128,6 +125,9 @@ const ProjectSubmission = () => {
   };
 
   const totalTeamSize = teamRoles.reduce((sum, r) => sum + (parseInt(r.count) || 0), 0);
+  const totalBudget = formData.pricingType === 'paid' 
+    ? teamRoles.reduce((sum, r) => sum + ((parseFloat(r.paymentPerPerson) || 0) * (parseInt(r.count) || 0)), 0) 
+    : 0;
 
   const validateForm = () => {
     const errors = [];
@@ -155,12 +155,10 @@ const ProjectSubmission = () => {
     }
 
     if (formData.pricingType === 'paid') {
-      if (!formData.totalBudget || parseFloat(formData.totalBudget) <= 0) errors.push('Total budget is required for paid projects');
-      const before = parseFloat(formData.paymentBeforeStart) || 0;
-      const after = parseFloat(formData.paymentAtEnd) || 0;
-      const total = parseFloat(formData.totalBudget) || 0;
-      if (total > 0 && Math.abs((before + after) - total) > 0.01) {
-        errors.push('Payment before start + payment at end must equal total budget');
+      for (const r of validRoles) {
+        if (!r.paymentPerPerson || parseFloat(r.paymentPerPerson) <= 0) {
+          errors.push(`Payment amount required for "${r.role}" role`);
+        }
       }
     }
 
@@ -190,13 +188,13 @@ const ProjectSubmission = () => {
         role: r.role.trim(),
         skills: r.skills.trim(),
         count: parseInt(r.count) || 1,
+        paymentPerPerson: isPaid ? (parseFloat(r.paymentPerPerson) || 0) : 0,
       }));
 
       const isPaid = formData.pricingType === 'paid';
-      const totalBudget = isPaid ? parseFloat(formData.totalBudget) || 0 : 0;
-      const paymentBeforeStart = isPaid ? parseFloat(formData.paymentBeforeStart) || 0 : 0;
-      const paymentAtEnd = isPaid ? parseFloat(formData.paymentAtEnd) || 0 : 0;
-      const perPersonPayment = totalTeamSize > 0 && totalBudget > 0 ? totalBudget / totalTeamSize : 0;
+      const computedTotalBudget = isPaid 
+        ? validRoles.reduce((sum, r) => sum + (r.paymentPerPerson * r.count), 0) 
+        : 0;
 
       const submissionData = {
         projectTitle: formData.projectTitle.trim(),
@@ -212,10 +210,7 @@ const ProjectSubmission = () => {
         companyName: formData.companyName.trim() || null,
         // Pricing
         pricingType: formData.pricingType,
-        totalBudget,
-        paymentBeforeStart,
-        paymentAtEnd,
-        perPersonPayment: Math.round(perPersonPayment * 100) / 100,
+        totalBudget: computedTotalBudget,
         // Team
         teamRoles: validRoles,
         maxTeamSize: totalTeamSize,
@@ -340,48 +335,6 @@ const ProjectSubmission = () => {
                 </div>
               </div>
 
-              {/* ── TEAM ROLES ── */}
-              <div className="bg-white/5 border border-white/20 rounded-2xl p-4 sm:p-6 space-y-5">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-bold text-white">Team Roles</h2>
-                  <span className="text-gray-400 text-xs">Total team: {totalTeamSize} {totalTeamSize === 1 ? 'person' : 'people'}</span>
-                </div>
-
-                {teamRoles.map((role, index) => (
-                  <div key={index} className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-white text-sm font-semibold">Role {index + 1}</span>
-                      {teamRoles.length > 1 && (
-                        <button type="button" onClick={() => removeRole(index)} className="text-red-400 hover:text-red-300 text-xs font-semibold transition-colors">Remove</button>
-                      )}
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      <div className="sm:col-span-1">
-                        <label className="block text-gray-400 text-xs mb-1">Role Title *</label>
-                        <select value={role.role} onChange={e => handleRoleChange(index, 'role', e.target.value)} className={selectClass}>
-                          <option value="">Select role</option>
-                          {roleTemplates.map(r => <option key={r} value={r}>{r}</option>)}
-                        </select>
-                      </div>
-                      <div className="sm:col-span-1">
-                        <label className="block text-gray-400 text-xs mb-1">People Needed *</label>
-                        <input type="number" min="1" max="20" value={role.count} onChange={e => handleRoleChange(index, 'count', e.target.value)} className={inputClass} />
-                      </div>
-                      <div className="sm:col-span-1">
-                        <label className="block text-gray-400 text-xs mb-1">Skills Required *</label>
-                        <input type="text" value={role.skills} onChange={e => handleRoleChange(index, 'skills', e.target.value)} className={inputClass} placeholder="e.g., React, Node.js" />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-
-                {teamRoles.length < 10 && (
-                  <button type="button" onClick={addRole} className="w-full py-2.5 border border-dashed border-white/20 rounded-xl text-orange-400 text-sm font-semibold hover:bg-white/5 transition-all min-h-[44px]">
-                    + Add Another Role
-                  </button>
-                )}
-              </div>
-
               {/* ── PRICING ── */}
               <div className="bg-white/5 border border-white/20 rounded-2xl p-4 sm:p-6 space-y-5">
                 <h2 className="text-lg font-bold text-white">Project Pricing</h2>
@@ -399,37 +352,65 @@ const ProjectSubmission = () => {
                   </button>
                 </div>
 
-                {formData.pricingType === 'paid' && (
-                  <div className="space-y-4 pt-2">
-                    <div>
-                      <label className={labelClass}>Total Project Budget (USD) *</label>
-                      <input type="number" name="totalBudget" value={formData.totalBudget} onChange={handleInputChange} className={inputClass} placeholder="e.g., 5000" min="1" step="0.01" />
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className={labelClass}>Payment Before Start (USD)</label>
-                        <input type="number" name="paymentBeforeStart" value={formData.paymentBeforeStart} onChange={handleInputChange} className={inputClass} placeholder="0.00" min="0" step="0.01" />
-                        <p className="text-gray-500 text-xs mt-1">Upfront payment per person</p>
-                      </div>
-                      <div>
-                        <label className={labelClass}>Payment At Completion (USD)</label>
-                        <input type="number" name="paymentAtEnd" value={formData.paymentAtEnd} onChange={handleInputChange} className={inputClass} placeholder="0.00" min="0" step="0.01" />
-                        <p className="text-gray-500 text-xs mt-1">Final payment per person</p>
-                      </div>
-                    </div>
-                    {totalTeamSize > 0 && formData.totalBudget && (
-                      <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl p-3">
-                        <p className="text-orange-300 text-sm font-semibold">
-                          ${(parseFloat(formData.totalBudget) / totalTeamSize).toFixed(2)} per person ({totalTeamSize} team members)
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                )}
-
                 {formData.pricingType === 'free' && (
                   <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-3">
                     <p className="text-green-300 text-sm">This is a free project. Team members will contribute on a volunteer or learning basis.</p>
+                  </div>
+                )}
+              </div>
+
+              {/* ── TEAM ROLES ── */}
+              <div className="bg-white/5 border border-white/20 rounded-2xl p-4 sm:p-6 space-y-5">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-bold text-white">Team Roles</h2>
+                  <span className="text-gray-400 text-xs">Total team: {totalTeamSize} {totalTeamSize === 1 ? 'person' : 'people'}</span>
+                </div>
+
+                {teamRoles.map((role, index) => (
+                  <div key={index} className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-white text-sm font-semibold">Role {index + 1}</span>
+                      {teamRoles.length > 1 && (
+                        <button type="button" onClick={() => removeRole(index)} className="text-red-400 hover:text-red-300 text-xs font-semibold transition-colors">Remove</button>
+                      )}
+                    </div>
+                    <div className={`grid grid-cols-1 gap-3 ${formData.pricingType === 'paid' ? 'sm:grid-cols-4' : 'sm:grid-cols-3'}`}>
+                      <div>
+                        <label className="block text-gray-400 text-xs mb-1">Role Title *</label>
+                        <select value={role.role} onChange={e => handleRoleChange(index, 'role', e.target.value)} className={selectClass}>
+                          <option value="">Select role</option>
+                          {roleTemplates.map(r => <option key={r} value={r}>{r}</option>)}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-gray-400 text-xs mb-1">People Needed *</label>
+                        <input type="number" min="1" max="20" value={role.count} onChange={e => handleRoleChange(index, 'count', e.target.value)} className={inputClass} />
+                      </div>
+                      <div>
+                        <label className="block text-gray-400 text-xs mb-1">Skills Required *</label>
+                        <input type="text" value={role.skills} onChange={e => handleRoleChange(index, 'skills', e.target.value)} className={inputClass} placeholder="e.g., React, Node.js" />
+                      </div>
+                      {formData.pricingType === 'paid' && (
+                        <div>
+                          <label className="block text-gray-400 text-xs mb-1">Payment / Person (USD) *</label>
+                          <input type="number" min="0" step="0.01" value={role.paymentPerPerson} onChange={e => handleRoleChange(index, 'paymentPerPerson', e.target.value)} className={inputClass} placeholder="0.00" />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+
+                {teamRoles.length < 10 && (
+                  <button type="button" onClick={addRole} className="w-full py-2.5 border border-dashed border-white/20 rounded-xl text-orange-400 text-sm font-semibold hover:bg-white/5 transition-all min-h-[44px]">
+                    + Add Another Role
+                  </button>
+                )}
+
+                {formData.pricingType === 'paid' && totalBudget > 0 && (
+                  <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl p-3">
+                    <p className="text-orange-300 text-sm font-semibold">
+                      Total project budget: ${totalBudget.toLocaleString(undefined, { minimumFractionDigits: 2 })} ({totalTeamSize} team members)
+                    </p>
                   </div>
                 )}
               </div>

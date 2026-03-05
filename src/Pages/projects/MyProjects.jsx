@@ -1,4 +1,4 @@
-// src/Pages/projects/MyProjects.jsx 
+// src/Pages/projects/MyProjects.jsx - View projects you applied to or created
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
@@ -92,13 +92,16 @@ const MyProjects = () => {
         <main className="pb-16 sm:pb-20">
           <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-5xl">
 
-            <div className="mb-8">
-              <h1 className="text-2xl sm:text-3xl font-black text-white">My <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-orange-500">Projects</span></h1>
-              <p className="text-gray-400 text-sm mt-1">Track your applications, posted projects, and earned badges</p>
+            {/* Centered Header */}
+            <div className="text-center mb-8">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-2" style={{ fontFamily: '"Inter", sans-serif' }}>
+                My <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-orange-500">Projects</span>
+              </h1>
+              <p className="text-gray-400 text-sm sm:text-base">Track your applications, posted projects, and earned badges</p>
             </div>
 
             {/* Tabs */}
-            <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+            <div className="flex justify-center gap-2 mb-6 overflow-x-auto pb-2">
               {[
                 { id: 'applied', label: `Applied (${applications.length})` },
                 { id: 'posted', label: `Posted (${postedProjects.length})` },
@@ -116,7 +119,7 @@ const MyProjects = () => {
             {/* Applied Tab */}
             {tab === 'applied' && (
               <>
-                <div className="flex gap-2 mb-4">
+                <div className="flex justify-center gap-2 mb-4">
                   <button onClick={() => setProjectFilter('ongoing')}
                     className={`px-4 py-2 min-h-[36px] rounded-lg text-xs font-semibold transition-all ${projectFilter === 'ongoing' ? 'bg-orange-500 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}>
                     Ongoing

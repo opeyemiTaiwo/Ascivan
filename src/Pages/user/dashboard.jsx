@@ -7,6 +7,8 @@ import { usePWA } from '../../hooks/usePWA';
 import Navbar from '../../components/Navbar';
 import { doc, getDoc, setDoc, collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/config';
+import { storage } from '../../firebase/config';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { GoogleAuthProvider, reauthenticateWithPopup } from 'firebase/auth';
 import { deleteUserAccount } from '../../utils/deleteUserContent';
 import { toast } from 'react-toastify';
@@ -678,6 +680,10 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         if (snap.exists()) {
           const data = snap.data();
           setProfileData(data);
+          // Use custom uploaded photo if available, otherwise Google photo
+          if (data.customPhotoURL || data.photoURL) {
+            setUserProfile(prev => ({ ...prev, photoURL: data.customPhotoURL || data.photoURL || prev.photoURL }));
+          }
           // Set account type from Firestore
           if (data.accountType) {
             setAccountType(data.accountType);
@@ -919,6 +925,45 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                   <button onClick={() => setProfileEditing(false)} className="text-gray-400 hover:text-white text-sm font-semibold min-h-[44px]">Cancel</button>
                 </div>
                 <div className="space-y-4">
+                  {/* Profile Photo Upload */}
+                  <div>
+                    <label className={labelCls}>Profile Photo</label>
+                    <div className="flex items-center gap-4">
+                      <img
+                        src={userProfile.photoURL || '/Images/512X512.png'}
+                        alt="Profile"
+                        className="w-16 h-16 rounded-full object-cover ring-2 ring-orange-400/50 flex-shrink-0"
+                      />
+                      <div className="flex-1">
+                        <input
+                          type="file"
+                          accept="image/jpeg,image/png,image/webp"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+                            if (!validTypes.includes(file.type)) { toast.error('Please upload a JPG, PNG, or WebP image'); return; }
+                            if (file.size > 5 * 1024 * 1024) { toast.error('Photo must be under 5MB'); return; }
+                            try {
+                              toast.info('Uploading photo...');
+                              const storageRef = ref(storage, `profile-photos/${currentUser.uid}`);
+                              await uploadBytes(storageRef, file);
+                              const downloadURL = await getDownloadURL(storageRef);
+                              await setDoc(doc(db, 'users', currentUser.uid), { customPhotoURL: downloadURL }, { merge: true });
+                              setUserProfile(prev => ({ ...prev, photoURL: downloadURL }));
+                              toast.success('Profile photo updated!');
+                            } catch (err) {
+                              console.error('Photo upload error:', err);
+                              toast.error('Failed to upload photo. Please try again.');
+                            }
+                          }}
+                          className="w-full text-sm text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-500/20 file:text-orange-300 hover:file:bg-orange-500/30 file:cursor-pointer file:transition-all"
+                        />
+                        <p className="text-gray-600 text-[10px] mt-1">JPG, PNG, or WebP. Max 5MB.</p>
+                      </div>
+                    </div>
+                  </div>
+
                   <div>
                     <label className={labelCls}>Name *</label>
                     <input type="text" value={profileForm.displayName} onChange={e => setProfileForm(p => ({...p, displayName: e.target.value}))} className={inputCls} />

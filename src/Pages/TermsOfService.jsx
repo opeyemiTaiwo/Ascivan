@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 
 const TermsOfService = () => {
   const navigate = useNavigate();
-  const lastUpdated = 'March 1, 2026';
+  const lastUpdated = 'March 5, 2026';
 
   const sections = [
     {
@@ -32,10 +32,6 @@ const TermsOfService = () => {
       content: 'Loomiqe provides a platform for users to share job opportunities, housing listings, and financial resources. Loomiqe does not guarantee the accuracy, legality, or quality of any listing. Users should independently verify all information before making decisions. Loomiqe is not a party to any transaction between users.'
     },
     {
-      title: '7. Privacy',
-      content: 'Your use of Loomiqe is also governed by our Privacy Policy. By using the Platform, you consent to the collection and use of your information as described in the Privacy Policy.'
-    },
-    {
       title: '7. Projects and Collaboration',
       content: 'Loomiqe provides a platform for users to create, join, and manage collaborative projects. Projects can be free or paid. Both types contribute to a member\'s Tech Badge progress upon completion. Loomiqe does not manage, guarantee, or enforce any project deliverables, timelines, or outcomes. Project owners are solely responsible for managing their teams and project completion.'
     },
@@ -52,35 +48,39 @@ const TermsOfService = () => {
       content: 'Loomiqe is primarily designed for international students studying abroad. Professionals seeking to enter a new field, young professionals, and domestic students are also welcome to join. Domestic students (those studying in their home country) have access to the Home community and Projects sections. Features such as Jobs, Housing, and certain Finance resources are tailored for international students and may not be available to all user types.'
     },
     {
-      title: '11. Listing Verification Disclaimer',
-      content: 'All jobs, projects, housing listings, and financial resources posted on Loomiqe are user-generated and are not independently verified by Loomiqe. Users should exercise their own judgment and conduct due diligence before committing to any opportunity. While all user information is securely stored and can be used to investigate reports of fraud or misconduct, Loomiqe does not guarantee the accuracy, legitimacy, or quality of any listing.'
+      title: '11. Listing and User Verification Disclaimer',
+      content: 'All jobs, projects, housing listings, and financial resources posted on Loomiqe are user-generated and are not independently verified by Loomiqe. Loomiqe does not verify the identity, credentials, background, or legitimacy of any user on the platform. Users should exercise their own judgment, conduct their own due diligence, and independently verify the details of any listing, user, or opportunity before engaging. While all user information is securely stored and can be used to investigate reports of fraud or misconduct, Loomiqe does not guarantee the accuracy, legitimacy, safety, or quality of any listing or user profile. By using the Platform, you acknowledge and accept this risk.'
     },
     {
-      title: '12. Privacy',
+      title: '12. Verified Badge',
+      content: 'Loomiqe offers a paid Verified Badge that users may purchase to display on their profile. The Verified Badge indicates that the user has completed their profile (including name, university, and LinkedIn URL) and has made a payment through our payment processor. The Verified Badge does NOT represent independent identity verification, background checks, or endorsement by Loomiqe. It does not guarantee the trustworthiness, legitimacy, or reliability of the badge holder. Users should always conduct their own due diligence before engaging with any member on the platform, regardless of whether they hold a Verified Badge. Loomiqe reserves the right to revoke a Verified Badge at any time if the user violates these Terms of Service or engages in fraudulent or harmful behavior. Verified Badge purchases are non-refundable.'
+    },
+    {
+      title: '13. Privacy',
       content: 'Your use of Loomiqe is also governed by our Privacy Policy. By using the Platform, you consent to the collection and use of your information as described in the Privacy Policy.'
     },
     {
-      title: '13. Intellectual Property',
+      title: '14. Intellectual Property',
       content: 'The Loomiqe name, logo, design, and all related content are the intellectual property of Loomiqe and its founder. You may not use, reproduce, or distribute any Loomiqe branding or content without prior written permission.'
     },
     {
-      title: '14. Termination',
+      title: '15. Termination',
       content: 'Loomiqe reserves the right to suspend or terminate your account at any time, with or without notice, for conduct that we believe violates these Terms or is harmful to other users, the Platform, or third parties. You may also delete your account at any time through your Dashboard.'
     },
     {
-      title: '15. Disclaimers',
+      title: '16. Disclaimers',
       content: 'Loomiqe is provided "as is" without warranties of any kind, either express or implied. We do not warrant that the Platform will be uninterrupted, error-free, or secure. We are not responsible for any losses or damages arising from your use of the Platform, including but not limited to housing decisions, job applications, project participation, or financial transactions.'
     },
     {
-      title: '16. Limitation of Liability',
+      title: '17. Limitation of Liability',
       content: 'To the maximum extent permitted by law, Loomiqe and its founder shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or in connection with your use of the Platform, including but not limited to project payment disputes, listing inaccuracies, or user misconduct.'
     },
     {
-      title: '17. Changes to Terms',
+      title: '18. Changes to Terms',
       content: 'We may update these Terms from time to time. We will notify users of material changes by posting the updated terms on the Platform. Your continued use of Loomiqe after changes are posted constitutes acceptance of the updated Terms.'
     },
     {
-      title: '18. Contact',
+      title: '19. Contact',
       content: 'If you have questions about these Terms of Service, please contact us at support@loomiq.app or through our Support page.'
     }
   ];

@@ -38,6 +38,7 @@ const MyHousingPosts = lazy(() => import('./Pages/MyHousingPosts'));
 const Finance = lazy(() => import('./Pages/Finance'));
 const PostFinance = lazy(() => import('./Pages/PostFinance'));
 const MyFinancePosts = lazy(() => import('./Pages/MyFinancePosts'));
+const MyFinanceApplications = lazy(() => import('./Pages/MyFinanceApplications'));
 const About = lazy(() => import('./Pages/About'));
 const Support = lazy(() => import('./Pages/Support'));
 const TermsOfService = lazy(() => import('./Pages/TermsOfService'));
@@ -186,6 +187,7 @@ function App() {
                 <Route path="/finance" element={<BasicProtectedRoute><Finance /></BasicProtectedRoute>} />
                 <Route path="/finance/post" element={<BasicProtectedRoute><PostFinance /></BasicProtectedRoute>} />
                 <Route path="/finance/my-posts" element={<BasicProtectedRoute><MyFinancePosts /></BasicProtectedRoute>} />
+                <Route path="/finance/my-applications" element={<BasicProtectedRoute><MyFinanceApplications /></BasicProtectedRoute>} />
                 {/* Legacy banking routes redirect to finance */}
                 <Route path="/banking" element={<Navigate to="/finance" replace />} />
                 <Route path="/banking/post" element={<Navigate to="/finance/post" replace />} />

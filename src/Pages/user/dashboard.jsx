@@ -1,4 +1,4 @@
-// src/Pages/user/dashboard.jsx
+// src/Pages/user/dashboard.jsx - FULLY RESPONSIVE WITH UNIVERSAL NAVBAR
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
@@ -514,12 +514,20 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             buttonLabel: 'Post Job'
           },
           {
-            title: 'My Jobs',
+            title: 'My Job Posts',
             description: 'Manage and track job listings you have posted',
             path: '/jobs/my-posts',
             stats: 'Manage',
             gradient: 'from-orange-400 to-orange-500',
-            buttonLabel: 'View Posts'
+            buttonLabel: 'My Posts'
+          },
+          {
+            title: 'Applicants',
+            description: 'View and manage applications received for your job listings',
+            path: '/jobs/my-applications',
+            stats: 'Review',
+            gradient: 'from-green-500 to-green-600',
+            buttonLabel: 'View Applicants'
           }
         ],
         housing: [
@@ -530,6 +538,14 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             stats: 'List Now',
             gradient: 'from-blue-500 to-blue-600',
             buttonLabel: 'Post Listing'
+          },
+          {
+            title: 'My Housing Posts',
+            description: 'Manage and track housing listings you have posted',
+            path: '/housing/my-posts',
+            stats: 'Manage',
+            gradient: 'from-blue-400 to-blue-500',
+            buttonLabel: 'My Listings'
           }
         ],
         projects: [
@@ -598,12 +614,20 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           buttonLabel: 'Browse Jobs'
         },
         {
-          title: 'My Jobs',
+          title: 'My Applications',
           description: 'Track and manage jobs you have applied to',
+          path: '/jobs/my-applications',
+          stats: 'Track Status',
+          gradient: 'from-green-500 to-green-600',
+          buttonLabel: 'My Applications'
+        },
+        {
+          title: 'My Job Posts',
+          description: 'Manage job listings you have posted',
           path: '/jobs/my-posts',
-          stats: 'Applications',
+          stats: 'Manage',
           gradient: 'from-orange-400 to-orange-500',
-          buttonLabel: 'View Jobs'
+          buttonLabel: 'My Posts'
         }
       ],
       housing: [
@@ -622,6 +646,14 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           stats: 'List Now',
           gradient: 'from-orange-500 to-orange-600',
           buttonLabel: 'List Room'
+        },
+        {
+          title: 'My Housing Posts',
+          description: 'Manage and track housing listings you have posted',
+          path: '/housing/my-posts',
+          stats: 'Manage',
+          gradient: 'from-blue-400 to-blue-500',
+          buttonLabel: 'My Listings'
         }
       ],
       banking: [

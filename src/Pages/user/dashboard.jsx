@@ -9,7 +9,6 @@ import { doc, getDoc, setDoc, collection, query, where, onSnapshot } from 'fireb
 import { db } from '../../firebase/config';
 import { GoogleAuthProvider, reauthenticateWithPopup } from 'firebase/auth';
 import { deleteUserAccount } from '../../utils/deleteUserContent';
-import IdVerification, { IdVerificationDisplay } from '../../components/IdVerification';
 import { toast } from 'react-toastify';
 
 import PWADebugger from '../../components/PWADebugger';
@@ -403,7 +402,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
   const [profileEditing, setProfileEditing] = useState(false);
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileForm, setProfileForm] = useState({
-    displayName: '', university: '', major: '', visaStatus: '', city: '', state: '', portfolioUrl: '',
+    displayName: '', university: '', major: '', visaStatus: '', city: '', state: '', portfolioUrl: '', linkedinUrl: '',
     isCompany: false, companyName: '', companyEmail: '', companyWebsite: '', companyLocation: '', companyDescription: '',
   });
 
@@ -697,6 +696,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             city: data.city || '',
             state: data.state || '',
             portfolioUrl: data.portfolioUrl || '',
+            linkedinUrl: data.linkedinUrl || '',
             isCompany: data.isCompany || false,
             companyName: cp.companyName || '',
             companyEmail: cp.companyEmail || '',
@@ -751,6 +751,10 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
 
       const handleProfileSave = async () => {
         if (!profileForm.displayName.trim()) { toast.error('Name is required'); return; }
+        if (!profileForm.linkedinUrl.trim()) { toast.error('LinkedIn profile URL is required'); return; }
+        if (!/^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]+\/?$/i.test(profileForm.linkedinUrl.trim())) {
+          toast.error('Please enter a valid LinkedIn profile URL (e.g., https://linkedin.com/in/yourname)'); return;
+        }
         if (profileForm.isCompany) {
           if (!profileForm.companyName.trim()) { toast.error('Company name is required'); return; }
           if (!profileForm.companyEmail.trim()) { toast.error('Business email is required'); return; }
@@ -766,6 +770,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             city: profileForm.city.trim() || null,
             state: profileForm.state.trim() || null,
             portfolioUrl: profileForm.portfolioUrl.trim() || null,
+            linkedinUrl: profileForm.linkedinUrl.trim(),
             isCompany: profileForm.isCompany,
             profileComplete: true,
           };
@@ -821,11 +826,12 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                     ['Visa Status', profileForm.visaStatus],
                     ['City', profileForm.city],
                     ['State', profileForm.state],
+                    ['LinkedIn', profileForm.linkedinUrl],
                     ['Portfolio', profileForm.portfolioUrl],
                   ].map(([label, val]) => (
                     <div key={label}>
                       <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-1">{label}</p>
-                      {label === 'Portfolio' && val ? (
+                      {(label === 'Portfolio' || label === 'LinkedIn') && val ? (
                         <a href={val} target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:text-orange-300 text-sm font-medium underline break-all">{val}</a>
                       ) : (
                         <p className="text-white text-sm font-medium">{val || '—'}</p>
@@ -862,45 +868,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                     )}
                   </div>
                 )}
-
-                {/* ID Verification Section */}
-                <div className="pt-4 border-t border-white/10">
-                  {profileData?.idVerification?.verified && !profileData._idEditing ? (
-                    <IdVerificationDisplay 
-                      idData={profileData.idVerification}
-                      onEdit={() => setProfileData(prev => ({ ...prev, _idEditing: true }))}
-                      onToggleVisibility={async () => {
-                        try {
-                          const newVisibility = !profileData.idVerification.isPublic;
-                          await setDoc(doc(db, 'users', currentUser.uid), { idVerification: { ...profileData.idVerification, isPublic: newVisibility } }, { merge: true });
-                          setProfileData(prev => ({ ...prev, idVerification: { ...prev.idVerification, isPublic: newVisibility } }));
-                          toast.success(newVisibility ? 'ID is now public' : 'ID is now private');
-                        } catch (e) { toast.error('Failed to update visibility'); }
-                      }}
-                    />
-                  ) : (
-                    <div>
-                      <div className="flex items-center justify-between mb-3">
-                        <h3 className="text-lg font-bold text-white">ID Verification</h3>
-                        {profileData?._idEditing && (
-                          <button onClick={() => setProfileData(prev => ({ ...prev, _idEditing: false }))} className="text-gray-400 hover:text-white text-xs font-semibold">Cancel</button>
-                        )}
-                      </div>
-                      <p className="text-gray-400 text-sm mb-4">Upload and verify your identity with a government-issued ID</p>
-                      <IdVerification
-                        initialData={profileData?.idVerification}
-                        profileData={{ displayName: profileForm.displayName || profileData?.displayName }}
-                        onSave={async (data) => {
-                          try {
-                            await setDoc(doc(db, 'users', currentUser.uid), { idVerification: data }, { merge: true });
-                            setProfileData(prev => ({ ...prev, idVerification: data, _idEditing: false }));
-                            toast.success(data.verificationStatus === 'pending_review' ? 'ID saved — pending admin review (partial name match)' : 'ID verified successfully');
-                          } catch (e) { toast.error('Failed to save ID info'); }
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
 
                 {/* Badges Section */}
                 <div className="pt-4 border-t border-white/10">
@@ -982,6 +949,13 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                       <label className={labelCls}>State</label>
                       <input type="text" value={profileForm.state} onChange={e => setProfileForm(p => ({...p, state: e.target.value}))} className={inputCls} placeholder="e.g., MD" maxLength={2} />
                     </div>
+                  </div>
+                  <div>
+                    <label className={labelCls}>LinkedIn Profile URL *</label>
+                    <input type="url" value={profileForm.linkedinUrl} onChange={e => setProfileForm(p => ({...p, linkedinUrl: e.target.value}))} className={inputCls} placeholder="https://linkedin.com/in/yourname" />
+                    {profileForm.linkedinUrl.trim() && !/^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]+\/?$/i.test(profileForm.linkedinUrl.trim()) && (
+                      <p className="text-red-400 text-xs mt-1 font-semibold">Please use the format: https://linkedin.com/in/yourname</p>
+                    )}
                   </div>
                   <div>
                     <label className={labelCls}>Portfolio URL</label>

@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
-import IdVerification from '../components/IdVerification';
+// IdVerification import removed — feature no longer needed
 
 const BLOCKED_EMAIL_DOMAINS = [
   'gmail.com', 'googlemail.com', 'yahoo.com', 'yahoo.co.uk', 'yahoo.co.in',
@@ -40,22 +40,27 @@ const Onboarding = () => {
     interests: [],
     studentType: '', // 'international' | 'domestic'
     portfolioUrl: '',
+    linkedinUrl: '',
     companyName: '',
     companyWebsite: '',
     companyEmail: '',
     companyLocation: '',
     companyDescription: '',
-    idVerification: null, // will hold ID data if submitted
   });
 
   const visaOptions = [
-    { id: 'F-1', label: 'F-1 Student Visa' },
-    { id: 'OPT', label: 'OPT (Optional Practical Training)' },
-    { id: 'CPT', label: 'CPT (Curricular Practical Training)' },
-    { id: 'H-1B', label: 'H-1B Work Visa' },
-    { id: 'J-1', label: 'J-1 Exchange Visitor' },
-    { id: 'PR', label: 'Permanent Resident (Green Card)' },
-    { id: 'Citizen', label: 'US Citizen' },
+    { id: 'F-1', label: 'F-1 Student Visa (USA)' },
+    { id: 'OPT', label: 'OPT (Optional Practical Training, USA)' },
+    { id: 'CPT', label: 'CPT (Curricular Practical Training, USA)' },
+    { id: 'H-1B', label: 'H-1B Work Visa (USA)' },
+    { id: 'J-1', label: 'J-1 Exchange Visitor (USA)' },
+    { id: 'Tier4', label: 'Tier 4 / Student Visa (UK)' },
+    { id: 'StudyPermitCA', label: 'Study Permit (Canada)' },
+    { id: 'StudentVisaAU', label: 'Student Visa Subclass 500 (Australia)' },
+    { id: 'StudentVisaEU', label: 'Student Visa / Residence Permit (EU / Schengen)' },
+    { id: 'WorkPermit', label: 'Work Permit / Work Visa' },
+    { id: 'PR', label: 'Permanent Resident / Green Card' },
+    { id: 'Citizen', label: 'Citizen (studying in home country)' },
     { id: 'Other', label: 'Other / Prefer not to say' },
   ];
 
@@ -74,7 +79,7 @@ const Onboarding = () => {
   ];
 
   const isCompany = accountType === 'company';
-  const TOTAL_STEPS = isCompany ? 5 : 6; // Last step is optional ID verification
+  const TOTAL_STEPS = isCompany ? 4 : 5; // ID verification removed
 
   useEffect(() => {
     if (currentUser) {
@@ -132,9 +137,12 @@ const Onboarding = () => {
       }
       if (step === 4 && formData.interests.length === 0) { toast.error('Please select at least one interest'); return; }
     } else {
-      // Individual: step 1=studentType, 2=name/uni/major/portfolio, 3=location, 4=visa(intl only), 5=interests
+      // Individual: step 1=studentType, 2=name/uni/major/portfolio/linkedin, 3=location, 4=visa(intl only), 5=interests
       if (step === 1 && !formData.studentType) { toast.error('Please select your student type'); return; }
-      if (step === 2 && !formData.displayName.trim()) { toast.error('Please enter your name'); return; }
+      if (step === 2) {
+        if (!formData.displayName.trim()) { toast.error('Please enter your name'); return; }
+        if (!formData.linkedinUrl.trim()) { toast.error('Please enter your LinkedIn URL'); return; }
+      }
       if (step === 4 && formData.studentType === 'international' && !formData.visaStatus) { toast.error('Please select your visa status'); return; }
       if (step === 5 && formData.interests.length === 0) { toast.error('Please select at least one interest'); return; }
       // Domestic students skip visa step (step 4) — jump from 3 to 5
@@ -196,10 +204,7 @@ const Onboarding = () => {
         updateData.visaStatus = formData.visaStatus || null;
         updateData.studentType = formData.studentType || 'international';
         updateData.portfolioUrl = formData.portfolioUrl.trim() || null;
-      }
-      // Save ID verification if provided
-      if (formData.idVerification) {
-        updateData.idVerification = formData.idVerification;
+        updateData.linkedinUrl = formData.linkedinUrl.trim() || null;
       }
       await updateDoc(doc(db, 'users', currentUser.uid), updateData);
       toast.success(skipped ? 'Welcome to Loomiqe! You can complete your profile later.' : 'Welcome to Loomiqe!');
@@ -276,6 +281,10 @@ const Onboarding = () => {
               <label className={labelClass}>Portfolio URL</label>
               <input type="url" value={formData.portfolioUrl} onChange={e => setFormData(p => ({ ...p, portfolioUrl: e.target.value }))} className={inputClass} placeholder="https://your-portfolio.com" />
             </div>
+            <div>
+              <label className={labelClass}>LinkedIn URL *</label>
+              <input type="url" value={formData.linkedinUrl} onChange={e => setFormData(p => ({ ...p, linkedinUrl: e.target.value }))} className={inputClass} placeholder="https://linkedin.com/in/your-profile" />
+            </div>
           </div>
         );
       case 3:
@@ -340,27 +349,6 @@ const Onboarding = () => {
                 );
               })}
             </div>
-          </div>
-        );
-      case 6:
-        return (
-          <div className="space-y-5">
-            <div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1">ID Verification (Optional)</h2>
-              <p className="text-gray-400 text-sm">Upload a valid government-issued ID. You can skip this and do it later from your profile.</p>
-            </div>
-            {formData.idVerification ? (
-              <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 text-center">
-                <p className="text-green-300 font-semibold text-sm">ID information saved</p>
-                <p className="text-gray-400 text-xs mt-1">You can update this from your profile settings</p>
-              </div>
-            ) : (
-              <IdVerification
-                onSave={(data) => setFormData(p => ({ ...p, idVerification: data }))}
-                inputClass={inputClass}
-                labelClass={labelClass}
-              />
-            )}
           </div>
         );
       default: return null;
@@ -458,27 +446,6 @@ const Onboarding = () => {
                 );
               })}
             </div>
-          </div>
-        );
-      case 5:
-        return (
-          <div className="space-y-5">
-            <div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1">ID Verification (Optional)</h2>
-              <p className="text-gray-400 text-sm">Upload a valid government-issued ID. You can skip this and do it later from your profile.</p>
-            </div>
-            {formData.idVerification ? (
-              <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 text-center">
-                <p className="text-green-300 font-semibold text-sm">ID information saved</p>
-                <p className="text-gray-400 text-xs mt-1">You can update this from your profile settings</p>
-              </div>
-            ) : (
-              <IdVerification
-                onSave={(data) => setFormData(p => ({ ...p, idVerification: data }))}
-                inputClass={inputClass}
-                labelClass={labelClass}
-              />
-            )}
           </div>
         );
       default: return null;

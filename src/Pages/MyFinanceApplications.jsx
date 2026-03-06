@@ -7,8 +7,7 @@ import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
 import {
   collection, query, where, onSnapshot, orderBy,
-  doc, deleteDoc, updateDoc, addDoc, serverTimestamp,
-  getDoc
+  doc, deleteDoc, updateDoc, addDoc, serverTimestamp
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
@@ -182,7 +181,7 @@ const MyFinanceApplications = () => {
           </div>
 
           {/* ── Stat cards ── */}
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-8">
+          <div className="grid grid-cols-3 xs:grid-cols-3 sm:grid-cols-5 gap-3 mb-8">
             {[
               { label: 'Total',        value: statCounts.total,        color: 'text-white'       },
               { label: 'Applied',      value: statCounts.applied,      color: 'text-orange-400'  },
@@ -190,17 +189,17 @@ const MyFinanceApplications = () => {
               { label: 'Awarded',      value: statCounts.awarded,      color: 'text-green-400'   },
               { label: 'Not Selected', value: statCounts.not_selected, color: 'text-red-400'     },
             ].map((s, i) => (
-              <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
-                <p className={`text-2xl font-black ${s.color}`}>{s.value}</p>
-                <p className="text-gray-500 text-xs mt-0.5">{s.label}</p>
+              <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-3 sm:p-4 text-center">
+                <p className={`text-xl sm:text-2xl font-black ${s.color}`}>{s.value}</p>
+                <p className="text-gray-500 text-[10px] xs:text-xs mt-0.5 leading-tight">{s.label}</p>
               </div>
             ))}
           </div>
 
           {/* ── Filter + Add button ── */}
           <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-8 space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-              <div className="flex-1 space-y-3">
+            <div className="flex flex-col gap-4">
+              <div className="space-y-3">
                 <div>
                   <p className="text-white font-semibold text-sm mb-2">Filter by Status</p>
                   <div className="flex flex-wrap gap-2">
@@ -213,7 +212,7 @@ const MyFinanceApplications = () => {
                       { id: 'not_selected', label: 'Not Selected' },
                     ].map(f => (
                       <button key={f.id} onClick={() => setFilterStatus(f.id)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all min-h-[36px] ${
                           filterStatus === f.id
                             ? 'bg-green-500 text-white'
                             : 'bg-white/10 text-gray-300 hover:bg-white/20'
@@ -236,7 +235,7 @@ const MyFinanceApplications = () => {
                       { id: 'fellowships',    label: 'Fellowships'    },
                     ].map(f => (
                       <button key={f.id} onClick={() => setFilterCategory(f.id)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all min-h-[36px] ${
                           filterCategory === f.id
                             ? 'bg-orange-500 text-white'
                             : 'bg-white/10 text-gray-300 hover:bg-white/20'
@@ -250,7 +249,7 @@ const MyFinanceApplications = () => {
 
               <button
                 onClick={() => setShowAddModal(true)}
-                className="flex-shrink-0 flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold rounded-xl text-sm transition-all shadow-lg min-h-[44px]"
+                className="w-full sm:w-auto sm:self-start flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold rounded-xl text-sm transition-all shadow-lg min-h-[44px]"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -304,11 +303,11 @@ const MyFinanceApplications = () => {
 
                 return (
                   <div key={entry.id}
-                    className="bg-white/5 border border-white/10 rounded-xl p-5 hover:bg-white/[0.07] transition-all">
+                    className="bg-white/5 border border-white/10 rounded-xl p-4 sm:p-5 hover:bg-white/[0.07] transition-all">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap items-center gap-2 mb-1">
-                          <h3 className="text-white font-bold text-base">{entry.title}</h3>
+                          <h3 className="text-white font-bold text-sm sm:text-base">{entry.title}</h3>
                           <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold flex-shrink-0 ${status.bg} ${status.text} border ${status.border}`}>
                             {status.label}
                           </span>
@@ -321,7 +320,7 @@ const MyFinanceApplications = () => {
                         )}
 
                         {entry.notes && (
-                          <p className="text-gray-400 text-sm leading-relaxed mt-1 line-clamp-2">{entry.notes}</p>
+                          <p className="text-gray-400 text-xs sm:text-sm leading-relaxed mt-1 line-clamp-2">{entry.notes}</p>
                         )}
 
                         <div className="flex flex-wrap items-center gap-3 mt-2 text-gray-500 text-xs">
@@ -339,15 +338,15 @@ const MyFinanceApplications = () => {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2 flex-shrink-0">
+                      <div className="flex items-center gap-2 flex-shrink-0 mt-1 sm:mt-0">
                         <button
                           onClick={() => { setEditEntry(entry); setEditStatus(entry.status); setEditNotes(entry.notes || ''); }}
-                          className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-gray-300 rounded-lg text-xs font-semibold transition-all min-h-[32px]">
+                          className="flex-1 sm:flex-none px-4 py-2 bg-white/10 hover:bg-white/20 text-gray-300 rounded-lg text-xs font-semibold transition-all min-h-[40px]">
                           Update
                         </button>
                         <button
                           onClick={() => handleDelete(entry.id)}
-                          className="px-3 py-1.5 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-lg text-xs font-semibold transition-all min-h-[32px]">
+                          className="flex-1 sm:flex-none px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-lg text-xs font-semibold transition-all min-h-[40px]">
                           Remove
                         </button>
                       </div>
@@ -369,15 +368,15 @@ const MyFinanceApplications = () => {
 
       {/* ── Add Entry Modal ── */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4"
+        <div className="fixed inset-0 bg-black/70 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4"
              onClick={() => setShowAddModal(false)}>
-          <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 border border-white/20 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden"
+          <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 border border-white/20 rounded-t-2xl sm:rounded-2xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col max-h-[92dvh] sm:max-h-[90vh]"
                onClick={e => e.stopPropagation()}>
-            <div className="p-5 border-b border-white/10">
-              <h3 className="text-white font-bold text-lg">Track a Finance Opportunity</h3>
+            <div className="p-4 sm:p-5 border-b border-white/10 flex-shrink-0">
+              <h3 className="text-white font-bold text-base sm:text-lg">Track a Finance Opportunity</h3>
               <p className="text-gray-400 text-xs mt-0.5">Add a scholarship, grant, or other opportunity you have applied to</p>
             </div>
-            <div className="p-5 space-y-4">
+            <div className="p-4 sm:p-5 space-y-4 overflow-y-auto flex-1">
               <div>
                 <label className={labelCls}>Title *</label>
                 <input type="text" value={addForm.title}
@@ -423,7 +422,7 @@ const MyFinanceApplications = () => {
                   placeholder="Deadline, requirements, amount, etc." />
               </div>
             </div>
-            <div className="p-5 border-t border-white/10 flex gap-3">
+            <div className="p-4 sm:p-5 border-t border-white/10 flex gap-3 flex-shrink-0">
               <button onClick={() => setShowAddModal(false)}
                 className="flex-1 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl text-sm transition-all min-h-[44px]">
                 Cancel
@@ -439,15 +438,15 @@ const MyFinanceApplications = () => {
 
       {/* ── Edit Status Modal ── */}
       {editEntry && (
-        <div className="fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4"
+        <div className="fixed inset-0 bg-black/70 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4"
              onClick={() => setEditEntry(null)}>
-          <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 border border-white/20 rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden"
+          <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 border border-white/20 rounded-t-2xl sm:rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden flex flex-col max-h-[80dvh] sm:max-h-[90vh]"
                onClick={e => e.stopPropagation()}>
-            <div className="p-5 border-b border-white/10">
+            <div className="p-4 sm:p-5 border-b border-white/10 flex-shrink-0">
               <h3 className="text-white font-bold text-base">Update Status</h3>
               <p className="text-gray-400 text-xs mt-0.5 truncate">{editEntry.title}</p>
             </div>
-            <div className="p-5 space-y-4">
+            <div className="p-4 sm:p-5 space-y-4 overflow-y-auto flex-1">
               <div>
                 <label className={labelCls}>Status</label>
                 <select value={editStatus} onChange={e => setEditStatus(e.target.value)} className={inputCls}>
@@ -465,7 +464,7 @@ const MyFinanceApplications = () => {
                   placeholder="Any updates, deadlines, amounts..." />
               </div>
             </div>
-            <div className="p-5 border-t border-white/10 flex gap-3">
+            <div className="p-4 sm:p-5 border-t border-white/10 flex gap-3 flex-shrink-0">
               <button onClick={() => setEditEntry(null)}
                 className="flex-1 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl text-sm transition-all min-h-[44px]">
                 Cancel

@@ -31,8 +31,10 @@ const SinglePost = lazy(() => import('./Pages/community/SinglePost'));
 const Jobs = lazy(() => import('./Pages/Jobs'));
 const PostJobs = lazy(() => import('./Pages/PostJobs'));
 const MyJobPosts = lazy(() => import('./Pages/MyJobPosts'));
+const MyApplications = lazy(() => import('./Pages/MyApplications'));
 const Housing = lazy(() => import('./Pages/Housing'));
 const PostHousing = lazy(() => import('./Pages/PostHousing'));
+const MyHousingPosts = lazy(() => import('./Pages/MyHousingPosts'));
 const Finance = lazy(() => import('./Pages/Finance'));
 const PostFinance = lazy(() => import('./Pages/PostFinance'));
 const About = lazy(() => import('./Pages/About'));
@@ -160,6 +162,7 @@ function App() {
                 <Route path="/jobs" element={<BasicProtectedRoute><Jobs /></BasicProtectedRoute>} />
                 <Route path="/jobs/post" element={<BasicProtectedRoute><PostJobs /></BasicProtectedRoute>} />
                 <Route path="/jobs/my-posts" element={<BasicProtectedRoute><MyJobPosts /></BasicProtectedRoute>} />
+                <Route path="/jobs/my-applications" element={<BasicProtectedRoute><MyApplications /></BasicProtectedRoute>} />
                 {/* Legacy hub routes redirect to jobs */}
                 <Route path="/hub" element={<Navigate to="/jobs" replace />} />
                 <Route path="/hub/post" element={<Navigate to="/jobs/post" replace />} />
@@ -168,6 +171,7 @@ function App() {
                 {/* Housing */}
                 <Route path="/housing" element={<BasicProtectedRoute><Housing /></BasicProtectedRoute>} />
                 <Route path="/housing/post" element={<BasicProtectedRoute><PostHousing /></BasicProtectedRoute>} />
+                <Route path="/housing/my-posts" element={<BasicProtectedRoute><MyHousingPosts /></BasicProtectedRoute>} />
 
                 {/* Projects */}
                 <Route path="/projects" element={<BasicProtectedRoute><ProjectsListing /></BasicProtectedRoute>} />

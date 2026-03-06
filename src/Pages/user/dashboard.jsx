@@ -684,14 +684,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           stats: 'Explore',
           gradient: 'from-green-500 to-green-600',
           buttonLabel: 'Browse Resources'
-        },
-        {
-          title: 'Finance Applied To',
-          description: 'Track scholarships, grants, and financial opportunities you have applied to',
-          path: '/finance/my-applications',
-          stats: 'Track Status',
-          gradient: 'from-blue-500 to-blue-600',
-          buttonLabel: 'My Applications'
         }
       ],
       projects: [

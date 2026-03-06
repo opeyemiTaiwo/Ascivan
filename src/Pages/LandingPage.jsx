@@ -267,10 +267,10 @@ const LandingPage = () => {
           </div>
 
           <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-800 leading-[0.95] tracking-tight mb-6">
-            <span className="block text-white">Navigate Campus,</span>
+            <span className="block text-white">Your World.</span>
             <span className="block mt-2">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-green-400">
-                Conquer the World.
+                Your Terms.
               </span>
             </span>
           </h1>
@@ -449,12 +449,10 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* ── FOOTER: white background, logo image only ── */}
+      {/* ── FOOTER ── */}
       <footer className="border-t border-gray-200 bg-white py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-
-            {/* Logo only — no text */}
             <div className="flex items-center">
               <img
                 src="/Images/512X512.png"
@@ -462,16 +460,12 @@ const LandingPage = () => {
                 className="w-12 h-12 sm:w-14 sm:h-14"
               />
             </div>
-
-            {/* Nav links */}
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-gray-500 text-sm">
               <Link to="/about" className="hover:text-orange-500 transition-colors font-medium">About</Link>
               <Link to="/terms" className="hover:text-orange-500 transition-colors font-medium">Terms</Link>
               <Link to="/privacy" className="hover:text-orange-500 transition-colors font-medium">Privacy</Link>
               <Link to="/support" className="hover:text-orange-500 transition-colors font-medium">Support</Link>
             </div>
-
-            {/* Copyright */}
             <p className="text-gray-400 text-xs">© {new Date().getFullYear()} Loomiqe. All rights reserved.</p>
           </div>
         </div>

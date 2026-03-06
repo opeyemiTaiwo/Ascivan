@@ -53,7 +53,7 @@ const LandingPage = () => {
         <div className="mt-4 pt-4 border-t border-orange-500/20">
           <p className="text-orange-300 text-xs font-semibold uppercase tracking-widest mb-2">Projects</p>
           <p className="text-gray-400 text-sm leading-relaxed">
-            Browse job listings filtered by your visa type and work authorization. No more sifting through roles you can't legally take.
+            Whether you're just starting out or looking to break into tech, our free and paid project tracks give you real experience that employers notice. Early-career students and career switchers are especially welcome.
           </p>
         </div>
       ),
@@ -68,7 +68,7 @@ const LandingPage = () => {
         </svg>
       ),
       title: 'Student-Friendly Housing',
-      desc: 'Find verified, affordable housing near your campus. No local credit history? No problem — listings built for international students.',
+      desc: 'Find verified, affordable housing near your campus. No local credit history? No problem. Every listing is built with international students in mind.',
       color: 'from-green-500 to-emerald-400',
       bg: 'bg-green-500/10',
       border: 'border-green-500/20',
@@ -80,7 +80,7 @@ const LandingPage = () => {
         </svg>
       ),
       title: 'Finance Made Easy',
-      desc: 'Explore scholarships, loans, work-study programs, grants, assistantships, and fellowships — all in one place. Find the funding that fits your situation and keeps your education on track.',
+      desc: 'Explore scholarships, loans, work-study programs, grants, assistantships, and fellowships, all in one place. Find the funding that fits your situation and keeps your education on track.',
       color: 'from-blue-500 to-cyan-400',
       bg: 'bg-blue-500/10',
       border: 'border-blue-500/20',
@@ -269,9 +269,15 @@ const LandingPage = () => {
         <div className="hero-blob w-[180px] h-[180px] sm:w-[250px] sm:h-[250px] md:w-[300px] md:h-[300px] bg-orange-500/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
 
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
-          <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 mb-8 float">
-            <span className="w-2 h-2 rounded-full bg-green-400 pulse-slow" />
-            <span className="text-gray-300 text-sm font-medium">Built for international students</span>
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+            <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 float">
+              <span className="w-2 h-2 rounded-full bg-green-400 pulse-slow" />
+              <span className="text-gray-300 text-sm font-medium">Built for international students</span>
+            </div>
+            <div className="inline-flex items-center gap-2 bg-orange-500/10 border border-orange-500/20 rounded-full px-4 py-2">
+              <span className="w-2 h-2 rounded-full bg-orange-400 pulse-slow" />
+              <span className="text-orange-300 text-sm font-medium">Early careers and tech switchers welcome</span>
+            </div>
           </div>
 
           <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-800 leading-[0.95] tracking-tight mb-6">

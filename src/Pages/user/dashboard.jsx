@@ -1,7 +1,7 @@
 // src/Pages/user/dashboard.jsx - FULLY RESPONSIVE WITH UNIVERSAL NAVBAR
 
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { usePWA } from '../../hooks/usePWA';
 import Navbar from '../../components/Navbar';
@@ -9,7 +9,6 @@ import { doc, getDoc, setDoc, collection, query, where, onSnapshot } from 'fireb
 import { db } from '../../firebase/config';
 import { storage } from '../../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { GoogleAuthProvider, reauthenticateWithPopup } from 'firebase/auth';
 import { deleteUserAccount } from '../../utils/deleteUserContent';
 import { toast } from 'react-toastify';
 
@@ -379,7 +378,6 @@ const DeleteAccountModal = ({ isOpen, onClose, currentUser, onDeleted }) => {
 
 const UserDashboard = ({ currentUser, onNavigate }) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(() => {
     const params = new URLSearchParams(window.location.search);
@@ -554,23 +552,15 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         ],
         banking: [
           {
-            title: 'Finance Resources',
-            description: 'Browse scholarships, grants, and financial resources',
-            path: '/finance',
-            stats: 'Explore',
-            gradient: 'from-green-500 to-green-600',
-            buttonLabel: 'Browse Resources'
-          },
-          {
             title: 'Post Resource',
-            description: 'Share a financial resource, scholarship, or grant opportunity',
+            description: 'Share a financial resource, scholarship, or grant opportunity with the community',
             path: '/finance/post',
-            stats: 'Post Now',
+            stats: 'Share',
             gradient: 'from-orange-500 to-orange-600',
             buttonLabel: 'Post Resource'
           },
           {
-            title: 'My Finance Posts',
+            title: 'My Posts',
             description: 'Manage financial resource listings you have posted',
             path: '/finance/my-posts',
             stats: 'Manage',
@@ -637,7 +627,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       hub: [
         {
           title: 'Browse Jobs',
-          description: 'Find full-time, freelance & internship roles — filtered by location & visa status',
+          description: 'Find full-time, freelance & internship roles, filtered by location & visa status',
           path: '/jobs',
           stats: 'Explore Jobs',
           gradient: 'from-orange-500 to-orange-600',
@@ -696,20 +686,12 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           buttonLabel: 'Browse Resources'
         },
         {
-          title: 'Post Resource',
-          description: 'Share a scholarship, grant, or financial resource with the community',
-          path: '/finance/post',
-          stats: 'Share',
-          gradient: 'from-orange-500 to-orange-600',
-          buttonLabel: 'Post Resource'
-        },
-        {
-          title: 'My Finance Posts',
-          description: 'Manage finance resources you have posted',
-          path: '/finance/my-posts',
-          stats: 'Manage',
-          gradient: 'from-green-400 to-green-500',
-          buttonLabel: 'My Posts'
+          title: 'Finance Applied To',
+          description: 'Track scholarships, grants, and financial opportunities you have applied to',
+          path: '/finance/my-applications',
+          stats: 'Track Status',
+          gradient: 'from-blue-500 to-blue-600',
+          buttonLabel: 'My Applications'
         }
       ],
       projects: [
@@ -918,7 +900,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                       {(label === 'Portfolio' || label === 'LinkedIn') && val ? (
                         <a href={val} target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:text-orange-300 text-sm font-medium underline break-all">{val}</a>
                       ) : (
-                        <p className="text-white text-sm font-medium">{val || '—'}</p>
+                        <p className="text-white text-sm font-medium">{val || 'N/A'}</p>
                       )}
                     </div>
                   ))}
@@ -940,7 +922,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                       ].map(([label, val]) => (
                         <div key={label}>
                           <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-1">{label}</p>
-                          <p className="text-white text-sm font-medium break-all">{val || '—'}</p>
+                          <p className="text-white text-sm font-medium break-all">{val || 'N/A'}</p>
                         </div>
                       ))}
                     </div>
@@ -1110,7 +1092,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                           className={`${inputCls} ${profileForm.companyEmail && !isBizEmail(profileForm.companyEmail) ? 'border-red-500/50' : ''}`}
                           placeholder="you@company.com" />
                         {profileForm.companyEmail && !isBizEmail(profileForm.companyEmail) && (
-                          <p className="text-red-400 text-xs mt-1.5 font-semibold">Business email required — Gmail, Yahoo, Outlook not accepted.</p>
+                          <p className="text-red-400 text-xs mt-1.5 font-semibold">Business email required. Gmail, Yahoo, Outlook not accepted.</p>
                         )}
                       </div>
                       <div>
@@ -1175,7 +1157,16 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         {cards && cards.length > 0 && (
           <div className="flex flex-wrap justify-center gap-3 xs:gap-4 sm:gap-5 md:gap-6">
             {cards.map((card, index) => (
-              <div key={index} className="w-full sm:w-[calc(50%-0.75rem)] xl:w-[calc(33.333%-1rem)]">
+              <div
+                key={index}
+                className={`w-full ${
+                  cards.length === 1
+                    ? 'sm:w-[calc(50%-0.75rem)]'
+                    : cards.length === 2
+                    ? 'sm:w-[calc(50%-0.75rem)] lg:w-[calc(50%-1rem)]'
+                    : 'sm:w-[calc(50%-0.75rem)] xl:w-[calc(33.333%-1rem)]'
+                }`}
+              >
                 <DashboardCard card={card} onCardClick={handleCardClick} />
               </div>
             ))}
@@ -1216,7 +1207,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         <div 
           id="sidebar"
           className={`fixed inset-y-0 left-0 z-50 w-64 xs:w-72 sm:w-80 lg:w-72 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static lg:inset-0 transition-transform duration-300 ease-in-out shadow-2xl flex flex-col`}
-          style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 50%, rgba(250,250,250,0.98) 100%)', backdropFilter: 'blur(20px)'}}
+          style={{background: 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.97) 50%, rgba(250,250,250,0.98) 100%)'}}
         >
           {/* ── SIDEBAR HEADER: close button only on mobile, nothing on desktop ── */}
           <div className="flex items-center justify-end h-14 xs:h-16 px-3 xs:px-4 border-b border-gray-200 lg:hidden">

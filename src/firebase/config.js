@@ -12,6 +12,7 @@ import {
 } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration for Loomiqe
 const firebaseConfig = {
@@ -29,6 +30,7 @@ const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app);
 export const analytics = getAnalytics(app);
 
 // Configure auth persistence to handle Safari storage issues

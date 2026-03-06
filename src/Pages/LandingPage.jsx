@@ -49,6 +49,14 @@ const LandingPage = () => {
       ),
       title: 'Visa-Compliant Jobs',
       desc: 'Browse job listings filtered by your visa type and work authorization. No more sifting through roles you can\'t legally take.',
+      extra: (
+        <div className="mt-4 pt-4 border-t border-orange-500/20">
+          <p className="text-orange-300 text-xs font-semibold uppercase tracking-widest mb-2">Projects</p>
+          <p className="text-gray-400 text-sm leading-relaxed">
+            Browse job listings filtered by your visa type and work authorization. No more sifting through roles you can't legally take.
+          </p>
+        </div>
+      ),
       color: 'from-orange-500 to-amber-400',
       bg: 'bg-orange-500/10',
       border: 'border-orange-500/20',
@@ -72,7 +80,7 @@ const LandingPage = () => {
         </svg>
       ),
       title: 'Finance Made Easy',
-      desc: 'Access banking, credit cards, and financial tools designed for students new to a country. Build your financial foundation from day one.',
+      desc: 'Explore scholarships, loans, work-study programs, grants, assistantships, and fellowships — all in one place. Find the funding that fits your situation and keeps your education on track.',
       color: 'from-blue-500 to-cyan-400',
       bg: 'bg-blue-500/10',
       border: 'border-blue-500/20',
@@ -320,7 +328,7 @@ const LandingPage = () => {
         <div className="flex marquee-inner whitespace-nowrap">
           {[...Array(2)].map((_, gi) => (
             <div key={gi} className="flex items-center gap-8 px-8">
-              {['Jobs', 'Housing', 'Finance', 'Community', 'Visa Guidance', 'Campus Life', 'Career Tools', 'Global Network'].map((t, i) => (
+              {['Jobs', 'Housing', 'Finance', 'Community', 'Projects', 'Career Tools', 'Global Network'].map((t, i) => (
                 <React.Fragment key={i}>
                   <span className="text-gray-500 text-sm font-medium uppercase tracking-widest">{t}</span>
                   <span className="text-orange-500/60">✦</span>
@@ -360,6 +368,7 @@ const LandingPage = () => {
               </div>
               <h3 className="font-display text-xl font-700 text-white mb-2">{f.title}</h3>
               <p className="text-gray-400 text-sm leading-relaxed">{f.desc}</p>
+              {f.extra && f.extra}
             </div>
           ))}
         </div>
@@ -436,7 +445,7 @@ const LandingPage = () => {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-green-400">here.</span>
           </h2>
           <p className="text-gray-400 text-lg mb-10 leading-relaxed">
-            Join thousands of international students who've made Loomiqe their go-to platform for building a life on campus and beyond.
+            Join thousands of international students who've made Loomiqe their go-to platform for building a life abroad and beyond.
           </p>
           <button
             onClick={handleSignIn}

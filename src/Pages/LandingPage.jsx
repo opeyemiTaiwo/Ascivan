@@ -157,10 +157,13 @@ const LandingPage = () => {
           border-radius: 50%;
           filter: blur(120px);
           pointer-events: none;
+          will-change: auto;
+          contain: strict;
         }
 
         .card-hover {
           transition: transform 0.3s ease, border-color 0.3s ease;
+          will-change: transform;
         }
         .card-hover:hover {
           transform: translateY(-6px);
@@ -175,35 +178,35 @@ const LandingPage = () => {
           position: absolute;
           top: 50%;
           left: 50%;
-          width: 0;
-          height: 0;
-          background: rgba(255,255,255,0.15);
-          border-radius: 50%;
-          transform: translate(-50%, -50%);
-          transition: width 0.5s ease, height 0.5s ease;
-        }
-        .btn-glow:hover::before {
           width: 300px;
           height: 300px;
+          background: rgba(255,255,255,0.15);
+          border-radius: 50%;
+          transform: translate(-50%, -50%) scale(0);
+          transition: transform 0.5s ease;
+          will-change: transform;
+        }
+        .btn-glow:hover::before {
+          transform: translate(-50%, -50%) scale(1);
         }
 
         @keyframes float {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-12px); }
         }
-        .float { animation: float 4s ease-in-out infinite; }
+        .float { animation: float 4s ease-in-out infinite; will-change: transform; }
 
         @keyframes pulse-slow {
           0%, 100% { opacity: 0.5; }
           50% { opacity: 1; }
         }
-        .pulse-slow { animation: pulse-slow 3s ease-in-out infinite; }
+        .pulse-slow { animation: pulse-slow 3s ease-in-out infinite; will-change: opacity; }
 
         @keyframes marquee {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
-        .marquee-inner { animation: marquee 20s linear infinite; }
+        .marquee-inner { animation: marquee 20s linear infinite; will-change: transform; }
         .marquee-inner:hover { animation-play-state: paused; }
       `}</style>
 

@@ -889,11 +889,12 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                       <p className="text-gray-400 text-sm mb-4">Upload and verify your identity with a government-issued ID</p>
                       <IdVerification
                         initialData={profileData?.idVerification}
+                        profileData={{ displayName: profileForm.displayName || profileData?.displayName }}
                         onSave={async (data) => {
                           try {
                             await setDoc(doc(db, 'users', currentUser.uid), { idVerification: data }, { merge: true });
                             setProfileData(prev => ({ ...prev, idVerification: data, _idEditing: false }));
-                            toast.success('ID verified successfully');
+                            toast.success(data.verificationStatus === 'pending_review' ? 'ID saved — pending admin review (partial name match)' : 'ID verified successfully');
                           } catch (e) { toast.error('Failed to save ID info'); }
                         }}
                       />

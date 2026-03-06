@@ -48,7 +48,7 @@ const LandingPage = () => {
         </svg>
       ),
       title: 'Visa-Compliant Jobs',
-      desc: 'Browse job listings filtered by your visa type — OPT, CPT, H1-B, and more. No more sifting through roles you can\'t legally take.',
+      desc: 'Browse job listings filtered by your visa type and work authorization. No more sifting through roles you can\'t legally take.',
       color: 'from-orange-500 to-amber-400',
       bg: 'bg-orange-500/10',
       border: 'border-orange-500/20',
@@ -60,7 +60,7 @@ const LandingPage = () => {
         </svg>
       ),
       title: 'Student-Friendly Housing',
-      desc: 'Find verified, affordable housing near your campus. No credit history? No SSN? No problem — listings built for international students.',
+      desc: 'Find verified, affordable housing near your campus. No local credit history? No problem — listings built for international students.',
       color: 'from-green-500 to-emerald-400',
       bg: 'bg-green-500/10',
       border: 'border-green-500/20',
@@ -71,8 +71,8 @@ const LandingPage = () => {
           <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
         </svg>
       ),
-      title: 'Finance Without SSN',
-      desc: 'Access banking, credit cards, and financial tools designed for those new to the US system. Build your financial foundation from day one.',
+      title: 'Finance Made Easy',
+      desc: 'Access banking, credit cards, and financial tools designed for students new to a country. Build your financial foundation from day one.',
       color: 'from-blue-500 to-cyan-400',
       bg: 'bg-blue-500/10',
       border: 'border-blue-500/20',
@@ -267,10 +267,10 @@ const LandingPage = () => {
           </div>
 
           <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-800 leading-[0.95] tracking-tight mb-6">
-            <span className="block text-white">Your Life Abroad,</span>
+            <span className="block text-white">Navigate Campus,</span>
             <span className="block mt-2">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-green-400">
-                Simplified.
+                Conquer the World.
               </span>
             </span>
           </h1>
@@ -297,7 +297,7 @@ const LandingPage = () => {
             </Link>
           </div>
 
-          <p className="mt-5 text-gray-600 text-sm">No credit card. No SSN. Just your Google account.</p>
+          <p className="mt-5 text-gray-600 text-sm">No credit card required. Just your Google account.</p>
 
           <div className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
             {stats.map((s, i) => (
@@ -320,7 +320,7 @@ const LandingPage = () => {
         <div className="flex marquee-inner whitespace-nowrap">
           {[...Array(2)].map((_, gi) => (
             <div key={gi} className="flex items-center gap-8 px-8">
-              {['Jobs', 'Housing', 'Finance', 'Community', 'OPT Friendly', 'CPT Friendly', 'H1-B Resources', 'No SSN Required'].map((t, i) => (
+              {['Jobs', 'Housing', 'Finance', 'Community', 'Visa Guidance', 'Campus Life', 'Career Tools', 'Global Network'].map((t, i) => (
                 <React.Fragment key={i}>
                   <span className="text-gray-500 text-sm font-medium uppercase tracking-widest">{t}</span>
                   <span className="text-orange-500/60">✦</span>
@@ -343,7 +343,7 @@ const LandingPage = () => {
             One platform. Every need.
           </h2>
           <p className="text-gray-500 max-w-xl mx-auto">
-            We built Loomiqe because navigating a new country is hard enough. Your tools shouldn't make it harder.
+            We built Loomiqe because navigating life as an international student is hard enough. Your tools shouldn't make it harder.
           </p>
         </div>
 
@@ -436,7 +436,7 @@ const LandingPage = () => {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-green-400">here.</span>
           </h2>
           <p className="text-gray-400 text-lg mb-10 leading-relaxed">
-            Join thousands of international students who've made Loomiqe their first stop after landing in the US.
+            Join thousands of international students who've made Loomiqe their go-to platform for building a life on campus and beyond.
           </p>
           <button
             onClick={handleSignIn}

@@ -1,4 +1,5 @@
 // src/Pages/MyApplications.jsx - Track job applications submitted by the user
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';

@@ -1,4 +1,4 @@
-// src/Pages/user/dashboard.jsx - FULLY RESPONSIVE WITH UNIVERSAL NAVBAR
+// src/Pages/user/dashboard.jsx
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';

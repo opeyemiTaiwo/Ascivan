@@ -108,7 +108,7 @@ const MyProjects = () => {
             <p className="text-gray-400 text-sm sm:text-base">Manage your applications, posted projects, and earned badges</p>
 
             {/* Stats - directly under header like finance */}
-            <div className="flex justify-center gap-6 mt-6">
+            <div className="flex flex-wrap justify-center gap-4 xs:gap-6 mt-6">
               {[
                 { label: 'Applied', value: statCounts.applied, color: 'text-orange-400' },
                 { label: 'Approved', value: statCounts.approved, color: 'text-green-400' },
@@ -117,8 +117,8 @@ const MyProjects = () => {
                 { label: 'Badges', value: statCounts.badges, color: 'text-yellow-400' },
               ].map((s, i) => (
                 <div key={i} className="text-center">
-                  <p className={`text-2xl font-black ${s.color}`}>{s.value}</p>
-                  <p className="text-gray-500 text-xs">{s.label}</p>
+                  <p className={`text-xl xs:text-2xl font-black ${s.color}`}>{s.value}</p>
+                  <p className="text-gray-500 text-[10px] xs:text-xs">{s.label}</p>
                 </div>
               ))}
             </div>
@@ -136,7 +136,7 @@ const MyProjects = () => {
                     { id: 'badges', label: `Badges (${badges.length})` },
                   ].map(t => (
                     <button key={t.id} onClick={() => setTab(t.id)}
-                      className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                      className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all min-h-[40px] ${
                         tab === t.id ? 'bg-orange-500 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'
                       }`}>
                       {t.label}
@@ -162,11 +162,11 @@ const MyProjects = () => {
                 <p className="text-white font-semibold text-sm mb-2">Filter by Status</p>
                 <div className="flex flex-wrap gap-2">
                   <button onClick={() => setProjectFilter('ongoing')}
-                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${projectFilter === 'ongoing' ? 'bg-orange-500 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}>
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all min-h-[40px] ${projectFilter === 'ongoing' ? 'bg-orange-500 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}>
                     Ongoing
                   </button>
                   <button onClick={() => setProjectFilter('completed')}
-                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${projectFilter === 'completed' ? 'bg-green-500 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}>
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all min-h-[40px] ${projectFilter === 'completed' ? 'bg-green-500 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}>
                     Completed
                   </button>
                 </div>

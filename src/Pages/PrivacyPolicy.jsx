@@ -4,12 +4,12 @@ import Navbar from '../components/Navbar';
 
 const PrivacyPolicy = () => {
   const navigate = useNavigate();
-  const lastUpdated = 'March 1, 2026';
+  const lastUpdated = 'March 5, 2026';
 
   const sections = [
     {
       title: '1. Information We Collect',
-      content: 'We collect information you provide directly when you create an account, including your name, email address, university, major, location, and visa status. We also collect information about your activity on the Platform, including posts, listings, and interactions with other members. We use Google Authentication for sign-in, which provides us with your Google profile information.'
+      content: 'We collect information you provide directly when you create an account, including your name, email address, university, major, location, visa status, LinkedIn profile URL, and portfolio URL. We also collect information about your activity on the Platform, including posts, listings, and interactions with other members. We use Google Authentication for sign-in, which provides us with your Google profile information.'
     },
     {
       title: '2. How We Use Your Information',
@@ -36,8 +36,8 @@ const PrivacyPolicy = () => {
       content: 'Loomiqe integrates with third-party services including Google Authentication and Firebase. These services have their own privacy policies that govern their use of your data. We encourage you to review those policies.'
     },
     {
-      title: '8. ID Verification Data',
-      content: 'If you choose to verify your identity, we collect and store the information you provide from your government-issued ID, including your full name, ID number, date of birth, expiry date, issuing country, and a compressed image of the document. This data is securely stored in our database. You can control the visibility of your ID information (public or private) through your profile settings. Regardless of your visibility preference, this data is always accessible to Loomiqe administrators for verification and fraud prevention purposes.'
+      title: '8. Verified Badge and Payment Data',
+      content: 'Loomiqe offers a paid Verified Badge feature. When you purchase a Verified Badge, your payment is processed by our third-party payment processor (Stripe). Loomiqe does not store your full credit card number, CVV, or bank account details. We store your badge purchase status, purchase date, and a transaction reference ID for record-keeping. Payment data such as your card details are handled entirely by Stripe in accordance with their privacy policy and PCI-DSS compliance standards. The Verified Badge is displayed on your profile and is visible to other authenticated members. The Verified Badge does not represent independent identity verification by Loomiqe.'
     },
     {
       title: '9. Project and Collaboration Data',
@@ -49,15 +49,15 @@ const PrivacyPolicy = () => {
     },
     {
       title: '11. Fraud Prevention and Misconduct',
-      content: 'All user information stored on Loomiqe, including profile data, ID verification records, project participation history, and activity logs, may be used to investigate and address reports of fraud, misconduct, non-payment disputes, or violations of our Terms of Service. We may share relevant user information with law enforcement if required by law or in response to valid legal processes.'
+      content: 'All user information stored on Loomiqe, including profile data, Verified Badge status, project participation history, and activity logs, may be used to investigate and address reports of fraud, misconduct, non-payment disputes, or violations of our Terms of Service. We may share relevant user information with law enforcement if required by law or in response to valid legal processes.'
     },
     {
       title: '12. Your Rights',
-      content: 'You have the right to: access, update, or delete your personal information through your Dashboard; delete your account entirely; request a copy of your data; opt out of non-essential communications; control the visibility of your ID verification data. To exercise any of these rights, visit your Dashboard or contact our Support team.'
+      content: 'You have the right to: access, update, or delete your personal information through your Dashboard; delete your account entirely; request a copy of your data; opt out of non-essential communications. To exercise any of these rights, visit your Dashboard or contact our Support team.'
     },
     {
       title: '13. Data Retention',
-      content: 'We retain your personal information for as long as your account is active. If you delete your account, we will delete your personal data within a reasonable timeframe. We may retain anonymized data for analytical purposes and may retain ID verification and project records for fraud prevention as required by applicable law.'
+      content: 'We retain your personal information for as long as your account is active. If you delete your account, we will delete your personal data within a reasonable timeframe. We may retain anonymized data for analytical purposes and may retain project records and transaction references for fraud prevention as required by applicable law.'
     },
     {
       title: '14. Children\'s Privacy',

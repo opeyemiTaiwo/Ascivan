@@ -452,6 +452,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         { id: 'hub', label: 'Jobs' },
         { id: 'projects', label: 'Projects' },
         { id: 'housing', label: 'Housing' },
+        { id: 'banking', label: 'Finance' },
         { id: 'profile', label: 'Profile' },
       ];
     }
@@ -546,6 +547,32 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             stats: 'Manage',
             gradient: 'from-blue-400 to-blue-500',
             buttonLabel: 'My Listings'
+          }
+        ],
+        banking: [
+          {
+            title: 'Finance Resources',
+            description: 'Browse scholarships, grants, and financial resources',
+            path: '/finance',
+            stats: 'Explore',
+            gradient: 'from-green-500 to-green-600',
+            buttonLabel: 'Browse Resources'
+          },
+          {
+            title: 'Post Resource',
+            description: 'Share a financial resource, scholarship, or grant opportunity',
+            path: '/finance/post',
+            stats: 'Post Now',
+            gradient: 'from-orange-500 to-orange-600',
+            buttonLabel: 'Post Resource'
+          },
+          {
+            title: 'My Finance Posts',
+            description: 'Manage financial resource listings you have posted',
+            path: '/finance/my-posts',
+            stats: 'Manage',
+            gradient: 'from-green-400 to-green-500',
+            buttonLabel: 'My Posts'
           }
         ],
         projects: [
@@ -664,6 +691,22 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           stats: 'Explore',
           gradient: 'from-green-500 to-green-600',
           buttonLabel: 'Browse Resources'
+        },
+        {
+          title: 'Post Resource',
+          description: 'Share a scholarship, grant, or financial resource with the community',
+          path: '/finance/post',
+          stats: 'Share',
+          gradient: 'from-orange-500 to-orange-600',
+          buttonLabel: 'Post Resource'
+        },
+        {
+          title: 'My Finance Posts',
+          description: 'Manage finance resources you have posted',
+          path: '/finance/my-posts',
+          stats: 'Manage',
+          gradient: 'from-green-400 to-green-500',
+          buttonLabel: 'My Posts'
         }
       ],
       projects: [

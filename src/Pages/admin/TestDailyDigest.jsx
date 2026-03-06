@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 const TestDailyDigest = () => {
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
-  const [apiKey, setApiKey] = useState('favored-daily-2025');
+  const [apiKey, setApiKey] = useState('');
 
   const baseUrl = window.location.origin;
 

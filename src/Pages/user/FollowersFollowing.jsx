@@ -214,7 +214,7 @@ const FollowersFollowing = () => {
     setLoadingPage(true);
     
     try {
-      const usersQuery = query(collection(db, 'users'));
+      const usersQuery = query(collection(db, 'users'), limit(500));
       const usersSnapshot = await getDocs(usersQuery);
 
       if (usersSnapshot.size === 0) {
@@ -224,7 +224,7 @@ const FollowersFollowing = () => {
         return;
       }
 
-      const badgesQuery = query(collection(db, 'member_badges'));
+      const badgesQuery = query(collection(db, 'member_badges'), limit(2000));
       const badgesSnapshot = await getDocs(badgesQuery);
       
       const badgesByMember = {};
@@ -779,7 +779,7 @@ const FollowersFollowing = () => {
             {user.photoURL ? (
               <img 
                 src={user.photoURL} 
-                alt="Profile" 
+                alt="Profile" loading="lazy" 
                 className="w-full h-full object-cover"
               />
             ) : (
@@ -858,7 +858,7 @@ const FollowersFollowing = () => {
                 {member.photoURL ? (
                   <img 
                     src={member.photoURL} 
-                    alt={`${member.name}'s profile`}
+                    alt={`${member.name}'s profile`} loading="lazy"
                     className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full object-cover ring-2 xs:ring-3 sm:ring-4 ring-lime-400/50"
                   />
                 ) : (
@@ -1039,7 +1039,7 @@ const FollowersFollowing = () => {
                         {userProfile?.photoURL ? (
                           <img 
                             src={userProfile.photoURL} 
-                            alt="Profile" 
+                            alt="Profile" loading="lazy" 
                             className="w-full h-full object-cover"
                           />
                         ) : (

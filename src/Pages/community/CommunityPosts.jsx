@@ -191,17 +191,20 @@ const CommunityPosts = () => {
   const loadReplyCounts = async (posts) => {
     const counts = {};
     
-    for (const post of posts) {
-      try {
-        await safeFirestoreOperation(async () => {
-          const repliesQuery = query(collection(db, 'posts', post.id, 'replies'));
-          const snapshot = await getDocs(repliesQuery);
-          counts[post.id] = snapshot.size;
-        }, `loading reply count for post ${post.id}`);
-      } catch (error) {
-        counts[post.id] = 0;
-      }
-    }
+    // Fetch reply counts in parallel instead of sequentially
+    await Promise.all(
+      posts.map(async (post) => {
+        try {
+          await safeFirestoreOperation(async () => {
+            const repliesQuery = query(collection(db, 'posts', post.id, 'replies'));
+            const snapshot = await getDocs(repliesQuery);
+            counts[post.id] = snapshot.size;
+          }, `loading reply count for post ${post.id}`);
+        } catch (error) {
+          counts[post.id] = 0;
+        }
+      })
+    );
     
     setReplyCounts(prev => ({ ...prev, ...counts }));
   };
@@ -986,7 +989,7 @@ const CommunityPosts = () => {
               <div className="flex items-center space-x-3 mb-3">
                 <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-r from-green-500 to-cyan-600 flex items-center justify-center text-white font-bold">
                   {post.authorPhoto ? (
-                    <img src={post.authorPhoto} alt="" className="w-full h-full object-cover" />
+                    <img src={post.authorPhoto} alt="" loading="lazy" className="w-full h-full object-cover" />
                   ) : (
                     <span>{(post.authorName || 'U').charAt(0).toUpperCase()}</span>
                   )}
@@ -1321,7 +1324,7 @@ const CommunityPosts = () => {
       <div className="flex items-center gap-2 xs:gap-3 mb-3">
         <div className="w-8 h-8 xs:w-10 xs:h-10 rounded-full overflow-hidden bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center text-white font-bold flex-shrink-0">
           {post.originalAuthorPhoto ? (
-            <img src={post.originalAuthorPhoto} alt="" className="w-full h-full object-cover" />
+            <img src={post.originalAuthorPhoto} alt="" loading="lazy" className="w-full h-full object-cover" />
           ) : (
             <span className="text-xs xs:text-sm">{(post.originalAuthorName || 'U').charAt(0).toUpperCase()}</span>
           )}

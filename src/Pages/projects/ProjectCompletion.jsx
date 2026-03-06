@@ -7,6 +7,7 @@ import Navbar from '../../components/Navbar';
 import { doc, getDoc, updateDoc, addDoc, collection, query, where, getDocs, serverTimestamp, increment } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
+import { notifyBadgeAwarded } from '../../utils/emailNotifications';
 
 const badgeCategories = {
   'mentorship': { id: 'techmo', name: 'TechMO (Mentor)', color: 'from-orange-500 to-orange-600' },
@@ -168,6 +169,17 @@ const ProjectCompletion = () => {
             }
           } catch (badgeUpdateErr) {
             console.error('Error updating user badge count:', badgeUpdateErr);
+          }
+
+          // Send badge awarded email to member
+          try {
+            await notifyBadgeAwarded(
+              { badgeCategory: ev.badgeCategory, badgeLevel: ev.badgeLevel, contribution: ev.contribution, skillsDisplayed: ev.skills ? ev.skills.split(',').map(s => s.trim()) : [], adminNotes: ev.notes || '' },
+              { projectTitle: project.projectTitle, projectId },
+              { memberEmail: ev.memberEmail, memberName: ev.memberName, memberRole: ev.memberRole }
+            );
+          } catch (emailErr) {
+            console.error('Badge email failed (non-blocking):', emailErr);
           }
         }
 

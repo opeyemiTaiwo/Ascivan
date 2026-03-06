@@ -71,7 +71,8 @@ const PostHousing = () => {
         contactEmail: currentUser.email || '',
       }));
     }
-  }, [currentUser, formData.posterEmail, profilePosterName]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser, profilePosterName]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;

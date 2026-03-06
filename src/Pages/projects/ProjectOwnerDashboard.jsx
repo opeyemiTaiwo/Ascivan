@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { collection, query, where, onSnapshot, doc, updateDoc, addDoc, getDocs, deleteDoc, increment, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
+import { notifyApplicationApproved, notifyApplicationRejected } from '../../utils/emailNotifications';
 
 const industryTracks = [
   { value: 'healthcare', label: 'Healthcare / Medical' },
@@ -72,6 +73,19 @@ const ProjectOwnerDashboard = () => {
       });
       await updateDoc(doc(db, 'projects', project.id), { applicationCount: increment(0) });
       toast.success(`${app.applicantName} approved!`);
+
+      // Send approval email to applicant
+      try {
+        await notifyApplicationApproved({
+          applicantEmail: app.applicantEmail,
+          applicantName: app.applicantName,
+          projectTitle: project.projectTitle,
+          roleAppliedFor: app.role,
+          projectOwner: project.contactName || currentUser.displayName,
+        });
+      } catch (emailErr) {
+        console.error('Approval email failed (non-blocking):', emailErr);
+      }
     } catch (e) { toast.error('Error approving: ' + e.message); }
   };
 
@@ -81,6 +95,17 @@ const ProjectOwnerDashboard = () => {
         status: 'rejected', rejectedAt: serverTimestamp(), rejectedBy: currentUser.email,
       });
       toast.success(`Application rejected`);
+
+      // Send rejection email to applicant
+      try {
+        await notifyApplicationRejected(
+          { applicantEmail: app.applicantEmail, applicantName: app.applicantName },
+          { projectTitle: app.projectTitle },
+          ''
+        );
+      } catch (emailErr) {
+        console.error('Rejection email failed (non-blocking):', emailErr);
+      }
     } catch (e) { toast.error('Error rejecting: ' + e.message); }
   };
 

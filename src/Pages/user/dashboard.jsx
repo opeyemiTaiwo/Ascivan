@@ -1,6 +1,6 @@
 // src/Pages/user/dashboard.jsx - FULLY RESPONSIVE WITH UNIVERSAL NAVBAR
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { usePWA } from '../../hooks/usePWA';
@@ -419,9 +419,12 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, []);
 
+  const sidebarOpenRef = useRef(sidebarOpen);
+  useEffect(() => { sidebarOpenRef.current = sidebarOpen; }, [sidebarOpen]);
+
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (sidebarOpen && window.innerWidth < 1024) {
+      if (sidebarOpenRef.current && window.innerWidth < 1024) {
         const sidebar = document.getElementById('sidebar');
         const menuButton = document.getElementById('menu-button');
         if (sidebar && !sidebar.contains(event.target) && !menuButton?.contains(event.target)) {
@@ -430,10 +433,10 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       }
     };
     const handleEscape = (event) => {
-      if (event.key === 'Escape' && sidebarOpen) setSidebarOpen(false);
+      if (event.key === 'Escape' && sidebarOpenRef.current) setSidebarOpen(false);
     };
     const handleResize = () => {
-      if (window.innerWidth >= 1024 && sidebarOpen) setSidebarOpen(false);
+      if (window.innerWidth >= 1024 && sidebarOpenRef.current) setSidebarOpen(false);
     };
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', handleEscape);
@@ -443,7 +446,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       document.removeEventListener('keydown', handleEscape);
       window.removeEventListener('resize', handleResize);
     };
-  }, [sidebarOpen]);
+  }, []);
 
   const sidebarItems = useMemo(() => {
     if (accountType === 'company') {

@@ -89,6 +89,42 @@ export const notifyAdminsProjectSubmitted = async (projectData) => {
 };
 
 /**
+ * Send badge awarded notification to member
+ * @param {object} badgeData - Badge data (category, level, contribution, etc.)
+ * @param {object} projectData - Project data (title, id, etc.)
+ * @param {object} memberData - Member data (email, name, role, etc.)
+ */
+export const notifyBadgeAwarded = async (badgeData, projectData, memberData) => {
+  return await sendEmailNotification('send-badge-awarded', {
+    badgeData,
+    projectData,
+    memberData
+  });
+};
+
+/**
+ * Send application rejected notification
+ * @param {object} applicationData - Application data including applicantEmail
+ * @param {object} projectData - Project data
+ * @param {string} rejectionReason - Reason for rejection
+ */
+export const notifyApplicationRejected = async (applicationData, projectData, rejectionReason = '') => {
+  return await sendEmailNotification('send-application-rejected', {
+    applicationData,
+    projectData,
+    rejectionReason
+  });
+};
+
+/**
+ * Send new application notification to project owner
+ * @param {object} data - { projectOwnerEmail, projectOwnerName, applicantName, applicantEmail, projectTitle, role, skills, message }
+ */
+export const notifyNewApplicationToOwner = async (data) => {
+  return await sendEmailNotification('send-new-application-to-owner', data);
+};
+
+/**
  * Safely send email notification with error handling
  * @param {Function} notificationFunction - The notification function to call
  * @param {object} data - Data to pass to the notification function

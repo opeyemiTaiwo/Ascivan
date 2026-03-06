@@ -152,7 +152,9 @@ const Onboarding = () => {
     }
     setStep(s => s - 1);
   };
-  const handleSkip = async () => { await saveOnboarding(true); };
+  const handleSkip = async () => {
+    try { await saveOnboarding(true); } catch (err) { console.error('Error skipping onboarding:', err); toast.error('Something went wrong. Please try again.'); }
+  };
 
   const handleComplete = async () => {
     if (isCompany) {
@@ -160,7 +162,7 @@ const Onboarding = () => {
       if (!formData.companyEmail.trim()) { toast.error('Please enter your business email'); return; }
       if (!isBusinessEmail(formData.companyEmail)) { toast.error('Please use a business email (not Gmail, Yahoo, Outlook, etc.)'); return; }
     }
-    await saveOnboarding(false);
+    try { await saveOnboarding(false); } catch (err) { console.error('Error completing onboarding:', err); toast.error('Something went wrong. Please try again.'); }
   };
 
   const saveOnboarding = async (skipped = false) => {

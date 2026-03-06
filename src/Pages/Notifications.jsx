@@ -204,8 +204,12 @@ const NotificationsPage = () => {
   };
 
   const handleNotificationClick = async (notification) => {
-    if (!notification.isRead) {
-      await markAsRead(notification.id);
+    try {
+      if (!notification.isRead) {
+        await markAsRead(notification.id);
+      }
+    } catch (err) {
+      console.error('Error marking notification as read:', err);
     }
 
     switch (notification.type) {

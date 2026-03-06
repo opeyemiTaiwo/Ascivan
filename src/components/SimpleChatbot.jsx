@@ -19,6 +19,7 @@ const SimpleChatbot = () => {
   });
   const messagesEndRef = useRef(null);
   const chatSectionRef = useRef(null);
+  const timersRef = useRef([]);
 
   // Listen for custom event to open chat
   useEffect(() => {
@@ -28,6 +29,20 @@ const SimpleChatbot = () => {
     window.addEventListener('openChatbot', handleOpenChat);
     return () => window.removeEventListener('openChatbot', handleOpenChat);
   }, []);
+
+  // Cleanup all pending timers on unmount or chat close
+  useEffect(() => {
+    return () => {
+      timersRef.current.forEach(clearTimeout);
+      timersRef.current = [];
+    };
+  }, []);
+
+  const safeTimeout = (fn, delay) => {
+    const id = setTimeout(fn, delay);
+    timersRef.current.push(id);
+    return id;
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -82,16 +97,16 @@ const SimpleChatbot = () => {
       } else if (type.includes('career') || type.includes('tech') || type.includes('job')) {
         // Jobs/career branch
         addBotMessage("Great news! Loomiqe helps international students find jobs, housing, financial aid, and connect with a supportive community — all in one place.");
-        setTimeout(() => {
+        safeTimeout(() => {
           addBotMessage("Check out our Jobs section for visa-compliant opportunities, or explore Finance for scholarships and grants.");
         }, 1500);
-        setTimeout(() => {
+        safeTimeout(() => {
           addBotMessage("Head to your dashboard to get started: /dashboard");
         }, 3000);
-        setTimeout(() => {
+        safeTimeout(() => {
           addBotMessage("Or take the free AI Career Assessment now: /career/test");
         }, 4500);
-        setTimeout(() => {
+        safeTimeout(() => {
           addBotMessage("If you have any business-related inquiries, feel free to start a new chat anytime. Best of luck on your tech journey! 🚀");
         }, 6000);
         setStep(99);
@@ -173,19 +188,19 @@ const SimpleChatbot = () => {
         
         addBotMessage("Thank you! Your information has been submitted successfully.");
         
-        setTimeout(() => {
+        safeTimeout(() => {
           addBotMessage("A real member of our team will personally review your inquiry and reach out to you via email within the next 24 hours to discuss your project and next steps.");
         }, 1500);
         
-        setTimeout(() => {
+        safeTimeout(() => {
           addBotMessage("Please ensure that the email address and contact information you provided are correct so we can reach you promptly.");
         }, 3000);
 
-        setTimeout(() => {
+        safeTimeout(() => {
           addBotMessage("As a thank you, here's a FREE copy of our 'AI Business Growth Toolkit: Strategic Prompts for Business Owners'. Download it here: https://selar.com/q3tk00n000");
         }, 5000);
 
-        setTimeout(() => {
+        safeTimeout(() => {
           addBotMessage("We're excited to help transform your business! Talk soon. 🚀");
         }, 6500);
         
@@ -233,7 +248,7 @@ const SimpleChatbot = () => {
       form.submit();
 
       // FIX: Clean up DOM elements reliably
-      setTimeout(() => {
+      safeTimeout(() => {
         try { if (form && form.parentNode) document.body.removeChild(form); } catch (_) {}
         try { if (iframe && iframe.parentNode) document.body.removeChild(iframe); } catch (_) {}
       }, 2000);

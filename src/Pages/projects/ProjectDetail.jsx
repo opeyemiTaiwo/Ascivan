@@ -7,6 +7,7 @@ import Navbar from '../../components/Navbar';
 import { doc, getDoc, collection, query, where, getDocs, addDoc, serverTimestamp, updateDoc, increment } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
+import { notifyNewApplicationToOwner } from '../../utils/emailNotifications';
 
 const industryTracks = [
   { value: 'healthcare', label: 'Healthcare / Medical' },
@@ -105,6 +106,22 @@ const ProjectDetail = () => {
       setHasApplied(true);
       setShowApplyForm(false);
       toast.success('Application submitted!');
+
+      // Notify project owner about new application
+      try {
+        await notifyNewApplicationToOwner({
+          projectOwnerEmail: project.submitterEmail || project.contactEmail,
+          projectOwnerName: project.contactName || project.submitterName,
+          applicantName: currentUser.displayName || currentUser.email,
+          applicantEmail: currentUser.email,
+          projectTitle: project.projectTitle,
+          role: applyForm.role,
+          skills: applyForm.skills.trim(),
+          message: applyForm.message.trim() || '',
+        });
+      } catch (emailErr) {
+        console.error('Email notification failed (non-blocking):', emailErr);
+      }
     } catch (err) {
       console.error('Error applying:', err);
       toast.error('Failed to submit application');

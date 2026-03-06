@@ -68,7 +68,8 @@ const PostJobs = () => {
         companyName: profileIsCompany ? profilePosterName : prev.companyName,
       }));
     }
-  }, [currentUser, formData.posterEmail, profilePosterName, profileIsCompany]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser, profilePosterName, profileIsCompany]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;

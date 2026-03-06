@@ -97,7 +97,8 @@ const ProjectSubmission = () => {
         companyName: profileIsCompany ? profilePosterName : prev.companyName,
       }));
     }
-  }, [currentUser, formData.contactEmail, profilePosterName, profileIsCompany]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser, profilePosterName, profileIsCompany]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -229,6 +230,7 @@ const ProjectSubmission = () => {
       };
 
       await addDoc(collection(db, 'projects'), submissionData);
+
       toast.success('Project posted successfully!');
       setTimeout(() => navigate('/projects'), 1500);
 

@@ -16,6 +16,7 @@ import {
   getDoc,
   serverTimestamp,
   setDoc,
+  limitToLast,
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
@@ -102,6 +103,7 @@ const Messages = () => {
   }, [currentUser]);
 
   // Listen to conversations
+  const userCacheRef = useRef({});
   useEffect(() => {
     if (!currentUser) return;
     const q = query(
@@ -110,24 +112,30 @@ const Messages = () => {
       orderBy('lastMessageAt', 'desc')
     );
     const unsub = onSnapshot(q, async (snap) => {
-      const convs = await Promise.all(
-        snap.docs.map(async (d) => {
-          const data = d.data();
-          const otherId = data.participants.find(p => p !== currentUser.uid);
-          const otherSnap = await getDoc(doc(db, 'users', otherId));
-          const otherUser = otherSnap.exists()
-            ? { uid: otherId, ...otherSnap.data() }
-            : { uid: otherId, displayName: 'Unknown' };
-          return { id: d.id, ...data, otherUser };
-        })
-      );
-      setConversations(convs);
-      const counts = {};
-      convs.forEach(c => {
-        const n = c.unreadBy?.[currentUser.uid] || 0;
-        if (n > 0) counts[c.id] = n;
-      });
-      setUnreadCounts(counts);
+      try {
+        const convs = await Promise.all(
+          snap.docs.map(async (d) => {
+            const data = d.data();
+            const otherId = data.participants.find(p => p !== currentUser.uid);
+            if (!userCacheRef.current[otherId]) {
+              const otherSnap = await getDoc(doc(db, 'users', otherId));
+              userCacheRef.current[otherId] = otherSnap.exists()
+                ? { uid: otherId, ...otherSnap.data() }
+                : { uid: otherId, displayName: 'Unknown' };
+            }
+            return { id: d.id, ...data, otherUser: userCacheRef.current[otherId] };
+          })
+        );
+        setConversations(convs);
+        const counts = {};
+        convs.forEach(c => {
+          const n = c.unreadBy?.[currentUser.uid] || 0;
+          if (n > 0) counts[c.id] = n;
+        });
+        setUnreadCounts(counts);
+      } catch (err) {
+        console.error('Error loading conversations:', err);
+      }
     });
     return () => unsub();
   }, [currentUser]);
@@ -143,7 +151,8 @@ const Messages = () => {
     if (!activeConvId) return;
     const q = query(
       collection(db, 'conversations', activeConvId, 'messages'),
-      orderBy('createdAt', 'asc')
+      orderBy('createdAt', 'asc'),
+      limitToLast(200)
     );
     const unsub = onSnapshot(q, (snap) => {
       setMessages(snap.docs.map(d => ({ id: d.id, ...d.data() })));
@@ -165,33 +174,38 @@ const Messages = () => {
   };
 
   const openConversation = async (targetUid) => {
-    const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
-    if (userDoc.exists()) {
-      const { following = [] } = userDoc.data();
-      if (!following.includes(targetUid)) {
-        alert('You need to follow this user before you can message them.');
-        return;
+    try {
+      const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+      if (userDoc.exists()) {
+        const { following = [] } = userDoc.data();
+        if (!following.includes(targetUid)) {
+          alert('You need to follow this user before you can message them.');
+          return;
+        }
       }
+      const convId  = getConversationId(currentUser.uid, targetUid);
+      const convRef = doc(db, 'conversations', convId);
+      const convSnap = await getDoc(convRef);
+      if (!convSnap.exists()) {
+        await setDoc(convRef, {
+          participants:  [currentUser.uid, targetUid],
+          lastMessage:   '',
+          lastMessageAt: serverTimestamp(),
+          createdAt:     serverTimestamp(),
+          unreadBy:      { [currentUser.uid]: 0, [targetUid]: 0 },
+        });
+      }
+      const otherSnap = await getDoc(doc(db, 'users', targetUid));
+      const otherUser = otherSnap.exists() ? { uid: targetUid, ...otherSnap.data() } : { uid: targetUid };
+      setActiveConvId(convId);
+      setActiveUser(otherUser);
+      setShowNewChat(false);
+      setMobileView('chat');
+      setTimeout(() => inputRef.current?.focus(), 100);
+    } catch (err) {
+      console.error('Error opening conversation:', err);
+      alert('Unable to open conversation. Please try again.');
     }
-    const convId  = getConversationId(currentUser.uid, targetUid);
-    const convRef = doc(db, 'conversations', convId);
-    const convSnap = await getDoc(convRef);
-    if (!convSnap.exists()) {
-      await setDoc(convRef, {
-        participants:  [currentUser.uid, targetUid],
-        lastMessage:   '',
-        lastMessageAt: serverTimestamp(),
-        createdAt:     serverTimestamp(),
-        unreadBy:      { [currentUser.uid]: 0, [targetUid]: 0 },
-      });
-    }
-    const otherSnap = await getDoc(doc(db, 'users', targetUid));
-    const otherUser = otherSnap.exists() ? { uid: targetUid, ...otherSnap.data() } : { uid: targetUid };
-    setActiveConvId(convId);
-    setActiveUser(otherUser);
-    setShowNewChat(false);
-    setMobileView('chat');
-    setTimeout(() => inputRef.current?.focus(), 100);
   };
 
   const sendMessage = async () => {

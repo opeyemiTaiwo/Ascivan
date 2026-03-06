@@ -67,7 +67,8 @@ const PostBanking = () => {
         contactEmail: currentUser.email || '',
       }));
     }
-  }, [currentUser, formData.posterEmail]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;

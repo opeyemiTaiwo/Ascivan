@@ -101,68 +101,76 @@ const MyProjects = () => {
         <div className="container mx-auto px-4 sm:px-6 max-w-5xl py-20 sm:py-28">
 
           {/* Header */}
-          <div className="text-center mb-6">
+          <div className="text-center mb-10">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-2" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
               My <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-orange-500">Projects</span>
             </h1>
             <p className="text-gray-400 text-sm sm:text-base">Manage your applications, posted projects, and earned badges</p>
-          </div>
 
-          {/* Stats */}
-          <div className="flex justify-center gap-6 mb-8">
-            {[
-              { label: 'Applied', value: statCounts.applied, color: 'text-orange-400' },
-              { label: 'Approved', value: statCounts.approved, color: 'text-green-400' },
-              { label: 'Posted', value: statCounts.posted, color: 'text-purple-400' },
-              { label: 'Completed', value: statCounts.completed, color: 'text-blue-400' },
-              { label: 'Badges', value: statCounts.badges, color: 'text-yellow-400' },
-            ].map((s, i) => (
-              <div key={i} className="text-center">
-                <p className={`text-2xl font-black ${s.color}`}>{s.value}</p>
-                <p className="text-gray-500 text-xs">{s.label}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Filter Section */}
-          <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-8">
-            <p className="text-white font-semibold text-sm mb-3 text-center">Filter by Category</p>
-            <div className="flex justify-center gap-2 mb-4">
+            {/* Stats - directly under header like finance */}
+            <div className="flex justify-center gap-6 mt-6">
               {[
-                { id: 'applied', label: `Applied (${applications.length})` },
-                { id: 'posted', label: `Posted (${postedProjects.length})` },
-                { id: 'badges', label: `Badges (${badges.length})` },
-              ].map(t => (
-                <button key={t.id} onClick={() => setTab(t.id)}
-                  className={`px-4 py-2 min-h-[40px] rounded-xl text-sm font-semibold transition-all whitespace-nowrap ${
-                    tab === t.id ? 'bg-orange-500 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'
-                  }`}>
-                  {t.label}
-                </button>
+                { label: 'Applied', value: statCounts.applied, color: 'text-orange-400' },
+                { label: 'Approved', value: statCounts.approved, color: 'text-green-400' },
+                { label: 'Posted', value: statCounts.posted, color: 'text-purple-400' },
+                { label: 'Completed', value: statCounts.completed, color: 'text-blue-400' },
+                { label: 'Badges', value: statCounts.badges, color: 'text-yellow-400' },
+              ].map((s, i) => (
+                <div key={i} className="text-center">
+                  <p className={`text-2xl font-black ${s.color}`}>{s.value}</p>
+                  <p className="text-gray-500 text-xs">{s.label}</p>
+                </div>
               ))}
             </div>
+          </div>
 
-            {tab !== 'badges' && (
-              <>
-                <p className="text-white font-semibold text-sm mb-3 text-center">Sort By</p>
-                <div className="flex justify-center gap-2 mb-3">
-                  <button onClick={() => setProjectFilter('ongoing')}
-                    className={`px-4 py-2 min-h-[36px] rounded-lg text-xs font-semibold transition-all ${projectFilter === 'ongoing' ? 'bg-orange-500 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}>
-                    Ongoing
-                  </button>
-                  <button onClick={() => setProjectFilter('completed')}
-                    className={`px-4 py-2 min-h-[36px] rounded-lg text-xs font-semibold transition-all ${projectFilter === 'completed' ? 'bg-green-500 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}>
-                    Completed
-                  </button>
+          {/* Filters and Sort - horizontal layout like finance */}
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <p className="text-white font-semibold text-sm mb-2">Filter by Category</p>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { id: 'applied', label: `Applied (${applications.length})` },
+                    { id: 'posted', label: `Posted (${postedProjects.length})` },
+                    { id: 'badges', label: `Badges (${badges.length})` },
+                  ].map(t => (
+                    <button key={t.id} onClick={() => setTab(t.id)}
+                      className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                        tab === t.id ? 'bg-orange-500 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                      }`}>
+                      {t.label}
+                    </button>
+                  ))}
                 </div>
-                <div className="flex justify-center">
+              </div>
+              {tab !== 'badges' && (
+                <div>
+                  <p className="text-white font-semibold text-sm mb-2">Sort By</p>
                   <select value={sortBy} onChange={e => setSortBy(e.target.value)}
                     className="bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm focus:border-orange-400 focus:outline-none">
                     <option value="newest">Newest</option>
                     <option value="oldest">Oldest</option>
                   </select>
                 </div>
-              </>
+              )}
+            </div>
+
+            {/* Status sub-filter row */}
+            {tab !== 'badges' && (
+              <div className="mt-4 pt-4 border-t border-white/10">
+                <p className="text-white font-semibold text-sm mb-2">Filter by Status</p>
+                <div className="flex flex-wrap gap-2">
+                  <button onClick={() => setProjectFilter('ongoing')}
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${projectFilter === 'ongoing' ? 'bg-orange-500 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}>
+                    Ongoing
+                  </button>
+                  <button onClick={() => setProjectFilter('completed')}
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${projectFilter === 'completed' ? 'bg-green-500 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'}`}>
+                    Completed
+                  </button>
+                </div>
+              </div>
             )}
           </div>
 
@@ -183,7 +191,7 @@ const MyProjects = () => {
                 )}
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {(sortBy === 'oldest' ? [...filteredApplications].reverse() : filteredApplications).map(app => (
                   <Link key={app.id} to={`/projects/${app.projectId}`}
                     className="block bg-white/5 border border-white/10 rounded-xl p-5 hover:bg-white/[0.07] transition-all">
@@ -191,11 +199,11 @@ const MyProjects = () => {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="text-white font-bold text-base truncate">{app.projectTitle}</h3>
-                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border flex-shrink-0 ${statusColors[app.status] || 'bg-white/10 text-gray-300 border-white/20'}`}>
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border flex-shrink-0 ${statusColors[app.status] || 'bg-white/10 text-gray-300 border-white/20'}`}>
                             {app.status?.charAt(0).toUpperCase() + app.status?.slice(1)}
                           </span>
                         </div>
-                        <div className="flex flex-wrap items-center gap-3 mt-1 text-gray-500 text-xs">
+                        <div className="flex flex-wrap items-center gap-3 mt-2 text-gray-500 text-xs">
                           <span>Role: {app.role}</span>
                           {app.createdAt?.toDate && (
                             <span>Applied {new Date(app.createdAt.toDate()).toLocaleDateString()}</span>
@@ -226,7 +234,7 @@ const MyProjects = () => {
                 )}
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {(sortBy === 'oldest' ? [...filteredPosted].reverse() : filteredPosted).map(project => (
                   <Link key={project.id} to={`/projects/${project.id}`}
                     className="block bg-white/5 border border-white/10 rounded-xl p-5 hover:bg-white/[0.07] transition-all">
@@ -234,12 +242,14 @@ const MyProjects = () => {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="text-white font-bold text-base truncate">{project.projectTitle}</h3>
-                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border flex-shrink-0 ${project.status === 'completed' ? statusColors.completed : statusColors.active}`}>
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border flex-shrink-0 ${project.status === 'completed' ? statusColors.completed : statusColors.active}`}>
                             {project.status === 'completed' ? 'Completed' : 'Active'}
                           </span>
                         </div>
-                        <div className="flex flex-wrap items-center gap-3 mt-1 text-gray-500 text-xs">
-                          {project.timeline && <span>{formatTimeline(project.timeline)}</span>}
+                        {project.timeline && (
+                          <p className="text-purple-400 text-xs font-semibold mb-1">{formatTimeline(project.timeline)}</p>
+                        )}
+                        <div className="flex flex-wrap items-center gap-3 mt-2 text-gray-500 text-xs">
                           <span className={`font-bold ${project.pricingType === 'paid' ? 'text-orange-300' : 'text-green-300'}`}>
                             {project.pricingType === 'paid' ? `$${project.totalBudget?.toLocaleString()}` : 'Free'}
                           </span>
@@ -266,7 +276,7 @@ const MyProjects = () => {
                 </Link>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {badges.map(badge => (
                   <div key={badge.id} className="bg-white/5 border border-white/10 rounded-xl p-5 hover:bg-white/[0.07] transition-all">
                     <div className="flex items-center gap-4">
@@ -278,11 +288,11 @@ const MyProjects = () => {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="text-white font-bold text-base truncate">{badge.badgeName}</h3>
-                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 flex-shrink-0">
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 flex-shrink-0">
                             {badge.badgeLevel}
                           </span>
                         </div>
-                        <div className="flex flex-wrap items-center gap-3 mt-1 text-gray-500 text-xs">
+                        <div className="flex flex-wrap items-center gap-3 mt-2 text-gray-500 text-xs">
                           <span>{badge.projectTitle}</span>
                           {badge.awardedAt?.toDate && (
                             <span>Awarded {new Date(badge.awardedAt.toDate()).toLocaleDateString()}</span>

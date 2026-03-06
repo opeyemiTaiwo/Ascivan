@@ -1,7 +1,8 @@
 // src/components/IdVerification.jsx - Reusable ID Verification Form
 // Used in both Onboarding and Dashboard Profile
+// Includes Tier 1 cross-verification against user profile data (no API needed)
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 
 const idTypes = [
   { value: 'national_id', label: 'National ID' },
@@ -9,7 +10,149 @@ const idTypes = [
   { value: 'passport', label: 'Passport' },
 ];
 
-const IdVerification = ({ initialData, onSave, saving = false, inputClass, labelClass }) => {
+// ─── Name matching utility ───────────────────────────────────────────
+// Normalises and compares the ID name against the profile display name.
+// Returns { match, confidence, details }
+const compareNames = (idName, profileName) => {
+  if (!idName || !profileName) return { match: false, confidence: 'none', details: 'Missing name data' };
+
+  const normalize = (n) =>
+    n.toLowerCase().replace(/[^a-z\s]/g, '').replace(/\s+/g, ' ').trim();
+
+  const idNorm = normalize(idName);
+  const profNorm = normalize(profileName);
+
+  if (!idNorm || !profNorm) return { match: false, confidence: 'none', details: 'Missing name data' };
+
+  // Exact match after normalisation
+  if (idNorm === profNorm) return { match: true, confidence: 'high', details: 'Names match exactly' };
+
+  const idParts = idNorm.split(' ').filter(Boolean);
+  const profParts = profNorm.split(' ').filter(Boolean);
+
+  // Check if one name fully contains all tokens of the other
+  // (covers "John Smith" vs "John Michael Smith" or reversed order like "Smith John")
+  const idInProf = idParts.every((t) => profParts.includes(t));
+  const profInId = profParts.every((t) => idParts.includes(t));
+  if (idInProf || profInId) return { match: true, confidence: 'high', details: 'Names match (all key parts found)' };
+
+  // Check if first + last tokens overlap (handles middle-name differences)
+  const shareFirst = idParts[0] === profParts[0];
+  const shareLast = idParts[idParts.length - 1] === profParts[profParts.length - 1];
+  if (shareFirst && shareLast && idParts.length >= 2 && profParts.length >= 2) {
+    return { match: true, confidence: 'partial', details: 'First and last names match (middle name differs)' };
+  }
+
+  // Check if at least 2 tokens overlap (covers reordering)
+  const overlap = idParts.filter((t) => profParts.includes(t));
+  if (overlap.length >= 2) return { match: true, confidence: 'partial', details: `${overlap.length} name parts match (possible reorder)` };
+
+  // Single token match — too weak to count
+  if (overlap.length === 1) {
+    return { match: false, confidence: 'none', details: `Only "${overlap[0]}" matches between your ID and profile name` };
+  }
+
+  return { match: false, confidence: 'none', details: 'The name on your ID does not match your profile name' };
+};
+
+// ─── Mismatch banner component ───────────────────────────────────────
+const MismatchBanner = ({ mismatches, onDismiss, dismissed }) => {
+  if (!mismatches || mismatches.length === 0) return null;
+
+  const hasBlocker = mismatches.some((m) => m.severity === 'error');
+  const warningsOnly = !hasBlocker;
+
+  // If only warnings and user dismissed them, hide
+  if (warningsOnly && dismissed) return null;
+
+  return (
+    <div className={`rounded-xl border p-4 ${hasBlocker ? 'bg-red-500/10 border-red-500/30' : 'bg-yellow-500/10 border-yellow-500/30'}`}>
+      <div className="flex items-start gap-3">
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${hasBlocker ? 'bg-red-500/20' : 'bg-yellow-500/20'}`}>
+          <svg className={`w-5 h-5 ${hasBlocker ? 'text-red-400' : 'text-yellow-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+          </svg>
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className={`font-semibold text-sm ${hasBlocker ? 'text-red-300' : 'text-yellow-300'}`}>
+            {hasBlocker ? 'Profile Mismatch Detected' : 'Please Review'}
+          </p>
+          <div className="mt-2 space-y-1.5">
+            {mismatches.map((m, i) => (
+              <div key={i} className="flex items-start gap-2">
+                <span className={`mt-1 w-1.5 h-1.5 rounded-full flex-shrink-0 ${m.severity === 'error' ? 'bg-red-400' : 'bg-yellow-400'}`} />
+                <p className="text-gray-300 text-xs leading-relaxed">{m.message}</p>
+              </div>
+            ))}
+          </div>
+          {hasBlocker && (
+            <p className="text-gray-500 text-[11px] mt-3">
+              Please update either your profile name or the name on this form so they match before submitting.
+            </p>
+          )}
+          {warningsOnly && onDismiss && (
+            <button type="button" onClick={onDismiss}
+              className="mt-3 text-yellow-400 text-xs font-semibold hover:text-yellow-300 transition-colors underline underline-offset-2">
+              I've double-checked, continue anyway
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─── Match indicator (inline, next to the name field) ────────────────
+const NameMatchIndicator = ({ idName, profileName }) => {
+  if (!idName?.trim() || !profileName) return null;
+
+  const result = compareNames(idName, profileName);
+
+  if (result.confidence === 'high' && result.match) {
+    return (
+      <div className="flex items-center gap-1.5 mt-1.5">
+        <svg className="w-3.5 h-3.5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+        </svg>
+        <span className="text-green-400 text-xs font-medium">Matches your profile name</span>
+      </div>
+    );
+  }
+
+  if (result.confidence === 'partial' && result.match) {
+    return (
+      <div className="flex items-center gap-1.5 mt-1.5">
+        <svg className="w-3.5 h-3.5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m0 3.75h.008v.008H12v-.008zM21.75 12a9.75 9.75 0 11-19.5 0 9.75 9.75 0 0119.5 0z" />
+        </svg>
+        <span className="text-yellow-400 text-xs font-medium">Partial match: {result.details}</span>
+      </div>
+    );
+  }
+
+  if (!result.match) {
+    return (
+      <div className="flex items-center gap-1.5 mt-1.5">
+        <svg className="w-3.5 h-3.5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        <span className="text-red-400 text-xs font-medium">Does not match profile name "{profileName}"</span>
+      </div>
+    );
+  }
+
+  return null;
+};
+
+
+// ═════════════════════════════════════════════════════════════════════
+// MAIN COMPONENT
+// ═════════════════════════════════════════════════════════════════════
+// NEW prop: profileData — the user's dashboard profile object
+//   Expected shape: { displayName, university, city, state, ... }
+//   When provided, the component cross-verifies the ID name against it.
+
+const IdVerification = ({ initialData, onSave, saving = false, inputClass, labelClass, profileData }) => {
   const defaultInput = "w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 min-h-[44px] text-white placeholder-gray-400 focus:border-orange-400 focus:outline-none text-sm transition-all";
   const defaultLabel = "block text-orange-400 font-semibold mb-2 text-sm";
   const iCls = inputClass || defaultInput;
@@ -29,6 +172,44 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
   const [previewUrl, setPreviewUrl] = useState(null);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [compressedBase64, setCompressedBase64] = useState(null);
+  const [warningDismissed, setWarningDismissed] = useState(false);
+
+  // ── Cross-verification logic (runs on every relevant change) ──────
+  const mismatches = useMemo(() => {
+    if (!profileData) return []; // no profile to compare — skip verification
+    const issues = [];
+
+    // 1. Name check — compare ID name against profile displayName
+    if (idForm.fullName.trim() && profileData.displayName) {
+      const result = compareNames(idForm.fullName, profileData.displayName);
+      if (!result.match) {
+        issues.push({
+          field: 'fullName',
+          severity: 'error', // blocking — names MUST match
+          message: `The name on your ID "${idForm.fullName.trim()}" does not match your profile name "${profileData.displayName}". ${result.details}.`,
+        });
+      } else if (result.confidence === 'partial') {
+        issues.push({
+          field: 'fullName',
+          severity: 'warning', // non-blocking but flagged for review
+          message: `${result.details}. Profile: "${profileData.displayName}" — ID: "${idForm.fullName.trim()}". Please confirm this is correct.`,
+        });
+      }
+    }
+
+    // 2. Expired document check
+    if (idForm.expiryDate && new Date(idForm.expiryDate) < new Date()) {
+      issues.push({
+        field: 'expiryDate',
+        severity: 'error',
+        message: 'This ID has expired. Please use a valid, non-expired document.',
+      });
+    }
+
+    return issues;
+  }, [idForm.fullName, idForm.expiryDate, profileData]);
+
+  const hasBlockingMismatch = mismatches.some((m) => m.severity === 'error');
 
   // Compress image using Canvas API — targets ~300KB max
   const compressImage = (file) => {
@@ -38,7 +219,6 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
         const img = new Image();
         img.onload = () => {
           const canvas = document.createElement('canvas');
-          // Resize: max 1200px on longest side (plenty for ID verification)
           const maxDim = 1200;
           let width = img.width;
           let height = img.height;
@@ -55,7 +235,6 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
           canvas.height = height;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
-          // Compress as JPEG at 0.6 quality (~200-400KB)
           const base64 = canvas.toDataURL('image/jpeg', 0.6);
           resolve(base64);
         };
@@ -80,7 +259,6 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
     }
 
     try {
-      // Compress and store as base64
       const base64 = await compressImage(file);
       setPreviewUrl(base64);
       setCompressedBase64(base64);
@@ -93,6 +271,8 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
 
   const handleChange = (field, value) => {
     setIdForm(prev => ({ ...prev, [field]: value }));
+    // Reset warning dismissal when name changes so banner reappears
+    if (field === 'fullName') setWarningDismissed(false);
   };
 
   const isExpired = () => {
@@ -101,12 +281,30 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
   };
 
   const handleSubmit = () => {
+    // Standard field validations
     if (!idForm.idType) { alert('Please select an ID type'); return; }
     if (!imageLoaded || !compressedBase64) { alert('Please upload a photo of your ID document'); return; }
     if (!idForm.fullName.trim()) { alert('Please enter the full name on the ID'); return; }
     if (!idForm.idNumber.trim()) { alert('Please enter the ID number'); return; }
     if (!idForm.expiryDate) { alert('Please enter the expiry date'); return; }
     if (isExpired()) { alert('This ID has expired. Please use a valid, non-expired document.'); return; }
+
+    // Cross-verification gate — block if name mismatch is severe
+    if (hasBlockingMismatch) {
+      alert('Your ID details do not match your profile. Please correct the name on your ID or update your profile name before verifying.');
+      return;
+    }
+
+    // Determine verification status based on match quality
+    const nameResult = profileData?.displayName
+      ? compareNames(idForm.fullName, profileData.displayName)
+      : { match: true, confidence: 'high' };
+
+    const verificationStatus = nameResult.match && nameResult.confidence === 'high'
+      ? 'verified'
+      : nameResult.match && nameResult.confidence === 'partial'
+        ? 'pending_review'  // partial match — admin can review
+        : 'verified';       // no profile data to compare — default verified
 
     onSave({
       idType: idForm.idType,
@@ -117,14 +315,39 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
       issuingCountry: idForm.issuingCountry.trim() || null,
       issuingAuthority: idForm.issuingAuthority.trim() || null,
       isPublic: idForm.isPublic,
-      idImage: compressedBase64, // compressed image stored as base64
+      idImage: compressedBase64,
       verified: true,
+      verificationStatus,   // 'verified' | 'pending_review'
+      profileNameAtVerification: profileData?.displayName || null, // snapshot for audit
       verifiedAt: new Date().toISOString(),
     });
   };
 
   return (
     <div className="space-y-5">
+
+      {/* ── Cross-verification banner ── */}
+      {mismatches.length > 0 && (
+        <MismatchBanner
+          mismatches={mismatches}
+          dismissed={warningDismissed}
+          onDismiss={() => setWarningDismissed(true)}
+        />
+      )}
+
+      {/* ── Profile context hint ── */}
+      {profileData?.displayName && (
+        <div className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-400 to-green-500 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
+            {profileData.displayName.charAt(0).toUpperCase()}
+          </div>
+          <div className="min-w-0">
+            <p className="text-white text-sm font-semibold truncate">{profileData.displayName}</p>
+            <p className="text-gray-500 text-[11px]">Your ID details will be verified against this profile</p>
+          </div>
+        </div>
+      )}
+
       {/* ID Type */}
       <div>
         <label className={lCls}>ID Type *</label>
@@ -149,7 +372,7 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
         {previewUrl && (
           <div className="mt-3 relative">
             <img src={previewUrl} alt="ID Preview" className="max-h-48 rounded-xl border border-white/20 object-contain" />
-            <button type="button" onClick={() => { setPreviewUrl(null); setImageLoaded(false); }}
+            <button type="button" onClick={() => { setPreviewUrl(null); setImageLoaded(false); setCompressedBase64(null); }}
               className="absolute top-2 right-2 w-6 h-6 bg-black/60 rounded-full flex items-center justify-center text-white text-xs hover:bg-black/80 transition-colors">
               X
             </button>
@@ -162,7 +385,21 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="sm:col-span-2">
           <label className={lCls}>Full Name (as on ID) *</label>
-          <input type="text" value={idForm.fullName} onChange={e => handleChange('fullName', e.target.value)} className={iCls} placeholder="Full legal name" />
+          <input
+            type="text"
+            value={idForm.fullName}
+            onChange={e => handleChange('fullName', e.target.value)}
+            className={`${iCls} ${
+              profileData?.displayName && idForm.fullName.trim()
+                ? compareNames(idForm.fullName, profileData.displayName).match
+                  ? 'border-green-500/40 focus:border-green-400'
+                  : 'border-red-500/40 focus:border-red-400'
+                : ''
+            }`}
+            placeholder="Full legal name"
+          />
+          {/* Inline match indicator below the name field */}
+          <NameMatchIndicator idName={idForm.fullName} profileName={profileData?.displayName} />
         </div>
         <div>
           <label className={lCls}>ID Number *</label>
@@ -181,11 +418,11 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
         </div>
         <div>
           <label className={lCls}>Issuing Country</label>
-          <input type="text" value={idForm.issuingCountry} onChange={e => handleChange('issuingCountry', e.target.value)} className={iCls} placeholder="e.g., United States" />
+          <input type="text" value={idForm.issuingCountry} onChange={e => handleChange('issuingCountry', e.target.value)} className={iCls} placeholder="e.g., Nigeria" />
         </div>
         <div className="sm:col-span-2">
           <label className={lCls}>Issuing Authority</label>
-          <input type="text" value={idForm.issuingAuthority} onChange={e => handleChange('issuingAuthority', e.target.value)} className={iCls} placeholder="e.g., Department of Motor Vehicles" />
+          <input type="text" value={idForm.issuingAuthority} onChange={e => handleChange('issuingAuthority', e.target.value)} className={iCls} placeholder="e.g., Immigration Service" />
         </div>
       </div>
 
@@ -206,20 +443,32 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
         <p className="text-gray-600 text-[10px] mt-2">Regardless of this setting, your ID information is always securely saved in our database.</p>
       </div>
 
-      {/* Save */}
-      <button type="button" onClick={handleSubmit} disabled={saving}
-        className="w-full py-3 min-h-[44px] bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl text-sm transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
-        {saving ? 'Saving...' : 'Save ID Information'}
+      {/* Save — disabled when blocking mismatches exist */}
+      <button type="button" onClick={handleSubmit} disabled={saving || hasBlockingMismatch}
+        className={`w-full py-3 min-h-[44px] font-bold rounded-xl text-sm transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${
+          hasBlockingMismatch
+            ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
+            : 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white'
+        }`}>
+        {saving ? 'Saving...' : hasBlockingMismatch ? 'Fix Mismatches to Continue' : 'Save ID Information'}
       </button>
     </div>
   );
 };
 
-// Display component for showing saved ID info (used in profile view)
+// ═════════════════════════════════════════════════════════════════════
+// DISPLAY COMPONENT (for showing saved ID info in profile view)
+// ═════════════════════════════════════════════════════════════════════
 export const IdVerificationDisplay = ({ idData, onToggleVisibility, onEdit }) => {
   if (!idData || !idData.verified) return null;
 
   const idTypeLabels = { national_id: 'National ID', drivers_licence: "Driver's Licence", passport: 'Passport' };
+
+  const statusConfig = {
+    verified: { label: 'Verified', bg: 'bg-green-500/20', text: 'text-green-300', border: 'border-green-500/30' },
+    pending_review: { label: 'Pending Review', bg: 'bg-yellow-500/20', text: 'text-yellow-300', border: 'border-yellow-500/30' },
+  };
+  const status = statusConfig[idData.verificationStatus] || statusConfig.verified;
 
   return (
     <div className="space-y-3">
@@ -231,9 +480,18 @@ export const IdVerificationDisplay = ({ idData, onToggleVisibility, onEdit }) =>
               Edit
             </button>
           )}
-          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-green-500/20 text-green-300 border border-green-500/30">Verified</span>
+          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${status.bg} ${status.text} border ${status.border}`}>
+            {status.label}
+          </span>
         </div>
       </div>
+
+      {/* Pending review notice */}
+      {idData.verificationStatus === 'pending_review' && (
+        <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg px-3 py-2">
+          <p className="text-yellow-300 text-xs">Your ID name partially matched your profile. An admin will review and confirm your verification shortly.</p>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {[

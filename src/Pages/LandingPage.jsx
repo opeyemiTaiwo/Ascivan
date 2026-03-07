@@ -281,9 +281,10 @@ const LandingPage = () => {
           </h1>
 
           <p className="text-gray-400 text-lg sm:text-xl max-w-2xl mx-auto mb-10 font-light leading-relaxed">
-            Loomiqe is the all-in-one platform giving international students access to{' '}
-            <span className="text-white font-medium">visa-compliant jobs, student housing, financial tools,</span> and a{' '}
-            <span className="text-white font-medium">global community</span>.
+            Loomiq leverages{' '}
+            <span className="text-white font-medium">cutting-edge AI</span> to deliver a seamless, personalised experience —
+            revolutionizing how international students navigate{' '}
+            <span className="text-white font-medium">housing, finance, jobs, and community</span> abroad.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -348,7 +349,7 @@ const LandingPage = () => {
             One platform. Every need.
           </h2>
           <p className="text-gray-500 max-w-xl mx-auto">
-            We built Loomiqe because navigating life as an international student is hard enough. Your tools shouldn't make it harder.
+            Loomi's AI doesn't just aggregate resources — it learns your situation and surfaces what's actually relevant to you, from visa-compatible roles to housing that fits your budget and timeline.
           </p>
         </div>
 

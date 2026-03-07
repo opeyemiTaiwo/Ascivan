@@ -49,14 +49,6 @@ const LandingPage = () => {
       ),
       title: 'Visa-Compliant Jobs',
       desc: 'Browse job listings filtered by your visa type and work authorization. No more sifting through roles you can\'t legally take.',
-      extra: (
-        <div className="mt-4 pt-4 border-t border-orange-500/20">
-          <p className="text-orange-300 text-xs font-semibold uppercase tracking-widest mb-2">Projects</p>
-          <p className="text-gray-400 text-sm leading-relaxed">
-            Whether you're just starting out or looking to break into tech, our free and paid project tracks give you real experience that employers notice. Early-career students and career switchers are especially welcome.
-          </p>
-        </div>
-      ),
       color: 'from-orange-500 to-amber-400',
       bg: 'bg-orange-500/10',
       border: 'border-orange-500/20',
@@ -276,10 +268,6 @@ const LandingPage = () => {
             <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 float">
               <span className="w-2 h-2 rounded-full bg-green-400 pulse-slow" />
               <span className="text-gray-300 text-sm font-medium">Built for international students</span>
-            </div>
-            <div className="inline-flex items-center gap-2 bg-orange-500/10 border border-orange-500/20 rounded-full px-4 py-2">
-              <span className="w-2 h-2 rounded-full bg-orange-400 pulse-slow" />
-              <span className="text-orange-300 text-sm font-medium">Early careers and tech switchers welcome</span>
             </div>
           </div>
 

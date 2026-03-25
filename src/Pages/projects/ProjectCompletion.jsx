@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../../components/Navbar';
-import { doc, getDoc, updateDoc, addDoc, collection, query, where, getDocs, serverTimestamp, increment } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, addDoc, collection, query, where, getDocs, serverTimestamp, increment, arrayUnion } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
 import { notifyBadgeAwarded } from '../../utils/emailNotifications';
@@ -18,14 +18,14 @@ const badgeCategories = {
   'security': { id: 'techguard', name: 'TechGuard (Security)', color: 'from-red-500 to-red-600' },
 };
 
-const badgeLevels = ['novice', 'beginners', 'intermediate', 'expert'];
+const badgeLevels = ['Novice', 'Associate', 'Advanced', 'Expert'];
 const contributionLevels = ['poor', 'fair', 'good', 'excellent'];
 
 const determineBadgeLevel = (projectCount) => {
-  if (projectCount <= 1) return 'novice';
-  if (projectCount <= 5) return 'beginners';
-  if (projectCount <= 10) return 'intermediate';
-  return 'expert';
+  if (projectCount <= 1) return 'Novice';
+  if (projectCount <= 5) return 'Associate';
+  if (projectCount <= 10) return 'Advanced';
+  return 'Expert';
 };
 
 const fetchBadgeCount = async (email, category) => {
@@ -155,16 +155,25 @@ const ProjectCompletion = () => {
             awardedAt: serverTimestamp(),
           });
 
-          // Update the member's user profile with badge count
+          // Update the member's user profile with badge count AND badges array
           try {
             const userQ = query(collection(db, 'users'), where('email', '==', ev.memberEmail));
             const userSnap = await getDocs(userQ);
             if (!userSnap.empty) {
               const userDoc = userSnap.docs[0];
               const badgeFieldKey = `badgeCounts.${ev.badgeCategory}`;
+              const badgeEntry = {
+                id: badgeCategories[ev.badgeCategory]?.id || ev.badgeCategory,
+                title: badgeCategories[ev.badgeCategory]?.name || ev.badgeCategory,
+                level: ev.badgeLevel,
+                category: ev.badgeCategory,
+                projectId: projectId,
+                awardedAt: new Date().toISOString(),
+              };
               await updateDoc(doc(db, 'users', userDoc.id), {
                 totalBadges: increment(1),
                 [badgeFieldKey]: increment(1),
+                badges: arrayUnion(badgeEntry),
               });
             }
           } catch (badgeUpdateErr) {
@@ -241,6 +250,59 @@ const ProjectCompletion = () => {
           badgesAwarded: evaluations.filter(e => e.awardBadge && e.contribution !== 'poor').length,
         },
       });
+
+      // Award owner a TechLeads badge + certificate automatically
+      try {
+        const ownerBadgeCount = await fetchBadgeCount(currentUser.email, 'leadership');
+        const ownerBadgeLevel = determineBadgeLevel(ownerBadgeCount);
+
+        // Save to member_badges collection
+        await addDoc(collection(db, 'member_badges'), {
+          memberEmail: currentUser.email,
+          memberName: currentUser.displayName || currentUser.email,
+          badgeCategory: 'leadership',
+          badgeLevel: ownerBadgeLevel,
+          badgeName: 'TechLeads (Leader)',
+          projectId: projectId,
+          projectTitle: project.projectTitle || project.title,
+          contribution: 'excellent',
+          notes: 'Project owner — completed project successfully',
+          awardedBy: 'system',
+          awardedByName: 'Loomiqe System',
+          awardedAt: serverTimestamp(),
+          isOwnerBadge: true,
+        });
+
+        // Update owner's user profile with badge
+        const ownerQ = query(collection(db, 'users'), where('email', '==', currentUser.email));
+        const ownerSnap = await getDocs(ownerQ);
+        if (!ownerSnap.empty) {
+          const ownerDoc = ownerSnap.docs[0];
+          await updateDoc(doc(db, 'users', ownerDoc.id), {
+            totalBadges: increment(1),
+            'badgeCounts.leadership': increment(1),
+            badges: arrayUnion({
+              id: 'techleads',
+              title: 'TechLeads (Leader)',
+              level: ownerBadgeLevel,
+              category: 'leadership',
+              projectId: projectId,
+              awardedAt: new Date().toISOString(),
+            }),
+            // Certificate for owner
+            certificates: arrayUnion({
+              projectId: projectId,
+              projectTitle: project.projectTitle || project.title,
+              role: 'Project Owner',
+              teamSize: members.length,
+              completedAt: new Date().toISOString(),
+              badgesAwarded: evaluations.filter(e => e.awardBadge && e.contribution !== 'poor').length,
+            }),
+          });
+        }
+      } catch (ownerBadgeErr) {
+        console.error('Error awarding owner badge/certificate:', ownerBadgeErr);
+      }
 
       // Update removed/poor performers
       for (const ev of evaluations) {

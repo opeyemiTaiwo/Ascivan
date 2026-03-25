@@ -49,6 +49,7 @@ const ProjectDetail = () => {
   const [loading, setLoading] = useState(true);
   const [hasApplied, setHasApplied] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
+  const [isMember, setIsMember] = useState(false);
 
   // Application form state
   const [showApplyForm, setShowApplyForm] = useState(false);
@@ -64,6 +65,8 @@ const ProjectDetail = () => {
           setProject(data);
           if (currentUser) {
             setIsOwner(data.submitterId === currentUser.uid || data.submitterEmail === currentUser.email);
+            const membersList = data.members || [];
+            setIsMember(membersList.includes(currentUser.uid) || data.submitterId === currentUser.uid || data.submitterEmail === currentUser.email);
             // Check if already applied
             const appQuery = query(
               collection(db, 'project_applications'),
@@ -318,9 +321,33 @@ const ProjectDetail = () => {
 
             {/* Owner notice */}
             {isOwner && (
-              <div className="bg-blue-600/10 border border-blue-600/20 rounded-2xl p-5 text-center">
-                <p className="text-blue-500 font-semibold text-sm">You are the owner of this project</p>
-                <p className="text-gray-400 text-xs mt-1">Manage applications from your dashboard</p>
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
+                <p className="text-blue-700 font-semibold text-sm mb-1">You are the owner of this project</p>
+                <p className="text-gray-500 text-xs mb-3">Manage applications from your dashboard</p>
+                <div className="flex gap-2">
+                  <button onClick={() => navigate(`/projects/${projectId}/workspace`)} className="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition-all">
+                    Open Workspace
+                  </button>
+                  <button onClick={() => navigate('/projects/owner-dashboard')} className="bg-white border border-gray-300 text-gray-700 font-medium text-sm px-4 py-2 rounded-lg hover:bg-gray-50 transition-all">
+                    Manage Applications
+                  </button>
+                  {project.status === 'active' && (
+                    <button onClick={() => navigate(`/projects/${projectId}/complete`)} className="bg-white border border-gray-300 text-gray-700 font-medium text-sm px-4 py-2 rounded-lg hover:bg-gray-50 transition-all">
+                      Complete Project
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Member workspace access */}
+            {isMember && !isOwner && (
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
+                <p className="text-blue-700 font-semibold text-sm mb-1">You are a member of this project</p>
+                <p className="text-gray-500 text-xs mb-3">Access the workspace to collaborate with your team.</p>
+                <button onClick={() => navigate(`/projects/${projectId}/workspace`)} className="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition-all">
+                  Open Workspace
+                </button>
               </div>
             )}
 
@@ -328,7 +355,7 @@ const ProjectDetail = () => {
             {!currentUser && (
               <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 text-center">
                 <p className="text-gray-600 text-sm mb-3">Sign in to apply for this project</p>
-                <Link to="/login" className="inline-flex px-6 py-2.5 min-h-[44px] bg-gradient-to-r from-blue-500 to-blue-600 text-gray-900 font-bold rounded-xl text-sm transition-all shadow-lg items-center">
+                <Link to="/login" className="inline-flex px-6 py-2.5 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-sm transition-all items-center">
                   Sign In
                 </Link>
               </div>

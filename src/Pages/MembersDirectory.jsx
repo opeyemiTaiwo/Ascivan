@@ -313,8 +313,8 @@ const MembersDirectory = () => {
 
                 {/* Pagination */}
                 {totalPages > 1 && (
-                  <div className="flex justify-center items-center mt-8">
-                    <div className="flex items-center gap-2">
+                  <div className="mt-8">
+                    <div className="flex justify-center items-center gap-2">
                         <button
                           onClick={goToPrevPage}
                           disabled={currentPage === 1}
@@ -364,12 +364,8 @@ const MembersDirectory = () => {
                         >
                           Next
                         </button>
-                      </div>
-
-                      <div className="text-center mt-4 text-gray-600 text-sm">
-                        Page {currentPage} of {totalPages} • {filteredMembers.length} total members
-                      </div>
                     </div>
+                    <p className="text-center mt-3 text-gray-500 text-xs">Page {currentPage} of {totalPages}</p>
                   </div>
                 )}
               </>

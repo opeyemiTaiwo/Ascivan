@@ -2,107 +2,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Footer = ({ dark = true }) => {
-  const year = new Date().getFullYear();
-
-  if (dark) {
-    return (
-      <footer
-        style={{ background: '#ffffff' }}
-        className="py-8 md:py-10 relative z-10 mt-auto border-t border-gray-200"
-      >
-        <div className="container mx-auto px-4 md:px-6 max-w-7xl">
-          <div className="text-center">
-
-            {/* Logo only — no text beside it */}
-            <div className="flex items-center justify-center mb-4">
-              <img
-                src="/Images/512X512.png"
-                alt="Loomiqe Logo"
-                className="w-12 h-12 md:w-14 md:h-14 flex-shrink-0"
-              />
-            </div>
-
-            {/* Tagline */}
-            <p className="text-gray-500 text-xs sm:text-sm font-medium mb-5">
-              Transforming the international student experience with AI
-            </p>
-
-            {/* Nav Links */}
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-5">
-              <Link
-                to="/about"
-                className="text-gray-500 hover:text-orange-500 text-xs sm:text-sm font-medium transition-colors duration-200"
-              >
-                About
-              </Link>
-              <span className="text-gray-300 text-xs hidden sm:inline">|</span>
-              <Link
-                to="/terms"
-                className="text-gray-500 hover:text-orange-500 text-xs sm:text-sm font-medium transition-colors duration-200"
-              >
-                Terms of Service
-              </Link>
-              <span className="text-gray-300 text-xs hidden sm:inline">|</span>
-              <Link
-                to="/privacy"
-                className="text-gray-500 hover:text-orange-500 text-xs sm:text-sm font-medium transition-colors duration-200"
-              >
-                Privacy Policy
-              </Link>
-              <span className="text-gray-300 text-xs hidden sm:inline">|</span>
-              <Link
-                to="/support"
-                className="text-gray-500 hover:text-orange-500 text-xs sm:text-sm font-medium transition-colors duration-200"
-              >
-                Support
-              </Link>
-            </div>
-
-            {/* Copyright */}
-            <p className="text-gray-400 text-xs">
-              © {year} Loomiqe. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
-    );
-  }
-
-  // Light variant
+const Footer = ({ dark = false }) => {
   return (
-    <footer className="bg-white border-t border-gray-200 text-gray-600 py-6 mt-auto">
-      <div className="container mx-auto px-4 md:px-6 max-w-7xl">
-        <div className="text-center">
-
-          {/* Logo only */}
-          <div className="flex items-center justify-center mb-3">
-            <img
-              src="/Images/512X512.png"
-              alt="Loomiqe Logo"
-              className="w-10 h-10 flex-shrink-0"
-            />
+    <footer className={`border-t ${dark ? 'border-gray-800 bg-gray-950' : 'border-gray-200 bg-white'} py-8`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="flex items-center">
+            <img src="/Images/512X512.png" alt="Loomiqe" className="w-10 h-10 sm:w-12 sm:h-12" />
           </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 mb-3">
-            <Link to="/about" className="text-gray-500 hover:text-orange-500 text-xs font-medium transition-colors duration-200">
-              About
-            </Link>
-            <span className="text-gray-300 text-xs hidden sm:inline">|</span>
-            <Link to="/terms" className="text-gray-500 hover:text-orange-500 text-xs font-medium transition-colors duration-200">
-              Terms of Service
-            </Link>
-            <span className="text-gray-300 text-xs hidden sm:inline">|</span>
-            <Link to="/privacy" className="text-gray-500 hover:text-orange-500 text-xs font-medium transition-colors duration-200">
-              Privacy Policy
-            </Link>
-            <span className="text-gray-300 text-xs hidden sm:inline">|</span>
-            <Link to="/support" className="text-gray-500 hover:text-orange-500 text-xs font-medium transition-colors duration-200">
-              Support
-            </Link>
+          <div className={`flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm ${dark ? 'text-gray-500' : 'text-gray-500'}`}>
+            <Link to="/about" className={`${dark ? 'hover:text-white' : 'hover:text-blue-600'} transition-colors font-medium`}>About</Link>
+            <Link to="/terms" className={`${dark ? 'hover:text-white' : 'hover:text-blue-600'} transition-colors font-medium`}>Terms</Link>
+            <Link to="/privacy" className={`${dark ? 'hover:text-white' : 'hover:text-blue-600'} transition-colors font-medium`}>Privacy</Link>
+            <Link to="/support" className={`${dark ? 'hover:text-white' : 'hover:text-blue-600'} transition-colors font-medium`}>Support</Link>
           </div>
-
-          <p className="text-gray-400 text-xs">© {year} Loomiqe. All rights reserved.</p>
+          <p className={`text-xs ${dark ? 'text-gray-600' : 'text-gray-400'}`}>{new Date().getFullYear()} Loomiqe. All rights reserved.</p>
         </div>
       </div>
     </footer>

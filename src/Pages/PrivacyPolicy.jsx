@@ -9,7 +9,7 @@ const PrivacyPolicy = () => {
   const sections = [
     {
       title: '1. Information We Collect',
-      content: 'We collect information you provide directly when you create an account, including your name, email address, university, major, location, visa status, LinkedIn profile URL, and portfolio URL. We also collect information about your activity on the Platform, including posts, listings, and interactions with other members. We use Google Authentication for sign-in, which provides us with your Google profile information.'
+      content: 'We collect information you provide directly when you create an account, including your name, email address, specialization, experience level, location, LinkedIn profile URL, GitHub URL, and portfolio URL. We also collect information about your activity on the Platform, including posts, listings, and interactions with other members. We use Google Authentication for sign-in, which provides us with your Google profile information.'
     },
     {
       title: '2. How We Use Your Information',

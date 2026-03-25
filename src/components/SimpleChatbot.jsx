@@ -56,7 +56,7 @@ const SimpleChatbot = () => {
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       const timer = setTimeout(() => {
-        addBotMessage("Hi! Welcome to Loomiqe. I'm your AI assistant here to help you navigate housing, finance, jobs, and home resources as an international student. What's your first name?");
+        addBotMessage("Hi! Welcome to Loomiqe. I'm your AI assistant here to help you navigate projects, career tools, badges, and community resources as a tech professional. What's your first name?");
       }, 500);
       return () => clearTimeout(timer);
     }
@@ -96,9 +96,9 @@ const SimpleChatbot = () => {
         setStep(4);
       } else if (type.includes('career') || type.includes('tech') || type.includes('job')) {
         // Jobs/career branch
-        addBotMessage("Great news! Loomiqe helps international students find jobs, housing, financial aid, and connect with a supportive community — all in one place.");
+        addBotMessage("Great news! Loomiqe helps tech professionals find projects, jobs, career tools, and connect with a supportive community — all in one place.");
         safeTimeout(() => {
-          addBotMessage("Check out our Jobs section for visa-compliant opportunities, or explore Finance for scholarships and grants.");
+          addBotMessage("Check out our Projects section to find collaborative work, or explore Jobs for career opportunities.");
         }, 1500);
         safeTimeout(() => {
           addBotMessage("Head to your dashboard to get started: /dashboard");

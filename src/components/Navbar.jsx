@@ -12,7 +12,6 @@ const Navbar = () => {
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
 
-  // Listen for unread messages
   useEffect(() => {
     if (!currentUser) return;
     const q = query(
@@ -30,7 +29,6 @@ const Navbar = () => {
     return () => unsub();
   }, [currentUser]);
 
-  // Listen for unread notifications (follows, mentions, reposts)
   useEffect(() => {
     if (!currentUser) return;
     const q = query(
@@ -59,13 +57,13 @@ const Navbar = () => {
 
   const getNavButtonClass = (path) => `px-2.5 lg:px-3 xl:px-4 py-2 rounded-lg text-xs lg:text-sm xl:text-base font-semibold transition-all duration-300 border ${
     isActive(path)
-      ? 'bg-orange-500 text-white border-orange-500'
+      ? 'bg-blue-600 text-white border-blue-600'
       : 'text-gray-700 bg-transparent border-gray-200 hover:bg-gray-50'
   }`;
 
   const getMobileNavButtonClass = (path) => `block w-full text-left px-4 py-3 rounded-lg text-base font-semibold transition-all min-h-[44px] border ${
     isActive(path)
-      ? 'bg-orange-500 text-white border-orange-500'
+      ? 'bg-blue-600 text-white border-blue-600'
       : 'text-gray-700 bg-transparent border-gray-200 hover:bg-gray-50'
   }`;
 
@@ -75,17 +73,10 @@ const Navbar = () => {
         <div className="container mx-auto px-3 xs:px-4 sm:px-6 max-w-7xl">
           <div className="flex items-center justify-between h-16 sm:h-20">
 
-            {/* Logo */}
             <Link to="/community" className="flex-shrink-0 group flex items-center gap-2">
-              <img
-                src="/Images/512X512.png"
-                alt="Loomiqe"
-                className="h-16 w-16 sm:h-20 sm:w-20"
-              />
-
+              <img src="/Images/512X512.png" alt="Loomiqe" className="h-14 w-14 sm:h-16 sm:w-16" />
             </Link>
 
-            {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-1 xl:space-x-2">
               {navItems.map((item) => (
                 <Link key={item.path} to={item.path} className={getNavButtonClass(item.path)}>
@@ -94,7 +85,6 @@ const Navbar = () => {
               ))}
             </div>
 
-            {/* User Profile - Desktop */}
             {currentUser && (
               <div className="hidden lg:flex items-center gap-3 xl:gap-4">
                 <Link to="/messages" className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors">
@@ -119,9 +109,9 @@ const Navbar = () => {
                 </Link>
                 <Link to={`/profile/${currentUser.email}`} className="flex items-center gap-2 lg:gap-3 p-1.5 lg:p-2 rounded-lg hover:bg-gray-100 transition-colors">
                   {currentUser.photoURL ? (
-                    <img src={currentUser.photoURL} alt="Profile" className="w-8 h-8 lg:w-10 lg:h-10 rounded-full object-cover border-2 border-orange-500" />
+                    <img src={currentUser.photoURL} alt="Profile" className="w-8 h-8 lg:w-10 lg:h-10 rounded-full object-cover border-2 border-blue-600" />
                   ) : (
-                    <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold">
+                    <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">
                       {currentUser.displayName?.[0] || currentUser.email?.[0] || 'U'}
                     </div>
                   )}
@@ -132,7 +122,6 @@ const Navbar = () => {
               </div>
             )}
 
-            {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
@@ -148,7 +137,6 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Menu - animated */}
         <div className={`lg:hidden border-t border-gray-200 bg-white transition-all duration-200 ease-in-out overflow-hidden ${mobileMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0 pointer-events-none"}`}>
             <div className="container mx-auto px-3 xs:px-4 sm:px-6 max-w-7xl py-4 space-y-2">
               {navItems.map((item) => (
@@ -183,9 +171,9 @@ const Navbar = () => {
                   </Link>
                   <Link to={`/profile/${currentUser.email}`} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition-all min-h-[44px]">
                     {currentUser.photoURL ? (
-                      <img src={currentUser.photoURL} alt="Profile" className="w-10 h-10 rounded-full object-cover border-2 border-orange-500" />
+                      <img src={currentUser.photoURL} alt="Profile" className="w-10 h-10 rounded-full object-cover border-2 border-blue-600" />
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold">
+                      <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">
                         {currentUser.displayName?.[0] || currentUser.email?.[0] || 'U'}
                       </div>
                     )}
@@ -200,7 +188,6 @@ const Navbar = () => {
           </div>
       </nav>
 
-      {/* Spacer — must match navbar height: h-16 on mobile, h-20 on sm+ */}
       <div className="h-16 sm:h-20" />
     </>
   );

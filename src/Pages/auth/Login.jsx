@@ -1,4 +1,4 @@
-// src/Pages/auth/Login.jsx - Using Global Navbar
+// src/Pages/auth/Login.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -19,7 +19,6 @@ const Login = () => {
 
   useEffect(() => {
     if (currentUser) {
-      console.log('User authenticated, redirecting to account type selection...');
       navigate('/account-type');
     }
   }, [currentUser, navigate]);
@@ -30,25 +29,15 @@ const Login = () => {
       setError('');
       if (hasStorageIssues) {
         setAuthMethod('popup');
-        console.log("Mobile browser with potential storage issues detected - using popup authentication");
       } else {
         setAuthMethod('redirect');
       }
       await signInWithGoogle();
     } catch (error) {
-      console.error("Login failed", error);
       const friendlyErrorMessage = getAuthErrorMessage(error);
       setError(friendlyErrorMessage);
       setIsLoading(false);
       setAuthMethod('');
-      console.error("Technical error details:", {
-        code: error?.code,
-        message: error?.message,
-        isSafariMobile,
-        isAndroidMobile,
-        hasStorageIssues,
-        userAgent: navigator.userAgent
-      });
     }
   };
 
@@ -69,71 +58,41 @@ const Login = () => {
   };
 
   return (
-    <div
-      className="min-h-screen overflow-x-hidden flex flex-col relative"
-      style={{ backgroundColor: '#000000' }}
-    >
-      {/* Global Navbar */}
+    <div className="min-h-screen overflow-x-hidden flex flex-col relative bg-white">
       <Navbar />
 
-      {/* Main Content */}
       <main className="flex-grow flex items-center justify-center px-3 sm:px-4 relative z-10 py-8">
-        <div className="bg-gradient-to-br from-white/5 via-gray-900/40 to-white/5 rounded-xl sm:rounded-2xl md:rounded-3xl shadow-2xl p-5 sm:p-6 md:p-8 lg:p-10 w-full max-w-md border border-white/20">
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 sm:p-8 lg:p-10 w-full max-w-md">
           <div className="text-center">
 
-            {/* Hero Section */}
-            <div className="mb-5 sm:mb-6 md:mb-8">
-              <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-3 sm:mb-4 animate-pulse">
-                <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 md:h-3 md:w-3 bg-orange-400 rounded-full"></div>
-                <span className="text-orange-300 uppercase tracking-widest text-xs sm:text-sm font-black"
-                      style={{
-                        textShadow: '0 0 20px rgba(251, 146, 60, 0.8), 2px 2px 4px rgba(0,0,0,0.9)',
-                        fontFamily: '"Inter", sans-serif',
-                        letterSpacing: '0.1em'
-                      }}>
-                  Secure Access
-                </span>
-                <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 md:h-3 md:w-3 bg-orange-400 rounded-full"></div>
-              </div>
-
-              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white mb-2 sm:mb-3 px-2"
-                  style={{
-                    fontFamily: '"Inter", sans-serif',
-                    textShadow: '0 0 20px rgba(255,255,255,0.3), 2px 2px 4px rgba(0,0,0,0.9)'
-                  }}>
+            {/* Header */}
+            <div className="mb-6 sm:mb-8">
+              <p className="text-blue-600 uppercase tracking-widest text-xs font-semibold mb-3">Secure Access</p>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">
                 Welcome to{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-300 via-green-400 to-orange-500"
-                      style={{ textShadow: 'none', filter: 'drop-shadow(0 0 20px rgba(34, 197, 94, 0.5))' }}>
-                  Loomiqe
-                </span>
+                <span className="text-blue-600">Loomiqe</span>
               </h1>
-
-              {/* Platform Description */}
-              <p className="text-gray-300 text-xs sm:text-sm md:text-base font-medium px-2 mb-3"
-                 style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
-                Loomiqe leverages cutting-edge AI to deliver a seamless solution, revolutionizing how international students navigate{' '}
-                <span className="text-white font-semibold">housing, finance, jobs, and community</span> abroad.
+              <p className="text-gray-500 text-sm sm:text-base font-normal px-2 mb-3">
+                Loomiqe connects tech professionals with real-world projects, verified skill badges, and a career-accelerating community.
               </p>
-
-              <div className="h-0.5 sm:h-1 w-12 sm:w-16 md:w-20 bg-gradient-to-r from-orange-400 to-green-500 mx-auto rounded-full shadow-2xl mt-3 sm:mt-4"></div>
+              <div className="h-0.5 w-16 bg-blue-600 mx-auto rounded-full mt-4"></div>
             </div>
 
-            {/* Error Display */}
+            {/* Error */}
             {error && (
-              <div className="bg-gradient-to-br from-red-900/40 via-red-800/40 to-red-900/40 border border-red-500/30 text-red-300 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl mb-4 sm:mb-5 md:mb-6 shadow-2xl">
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-5">
                 <div className="flex items-start">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-red-400 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-5 h-5 text-red-500 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                   </svg>
                   <div className="min-w-0">
-                    <p className="font-bold text-xs sm:text-sm text-red-300">Sign-in Failed</p>
-                    <p className="text-xs sm:text-sm mt-1 text-red-200 break-words">{error}</p>
+                    <p className="font-bold text-sm text-red-700">Sign-in Failed</p>
+                    <p className="text-sm mt-1 text-red-600 break-words">{error}</p>
                     {error.includes('popup') && (
-                      <p className="text-xs mt-2 text-red-400">Try enabling popups in your browser settings</p>
+                      <p className="text-xs mt-2 text-red-500">Try enabling popups in your browser settings</p>
                     )}
                     {error.includes('refresh') && (
-                      <button onClick={() => window.location.reload()}
-                              className="text-xs mt-2 underline text-red-400 hover:text-red-300 transition-colors duration-300">
+                      <button onClick={() => window.location.reload()} className="text-xs mt-2 underline text-red-500 hover:text-red-700 transition-colors">
                         Click here to refresh the page
                       </button>
                     )}
@@ -142,33 +101,32 @@ const Login = () => {
               </div>
             )}
 
-            {/* Mobile Browser Info Banner */}
+            {/* Mobile info */}
             {hasStorageIssues && !error && (
-              <div className="bg-gradient-to-br from-green-900/40 via-green-800/40 to-green-900/40 border border-green-500/30 text-green-300 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl mb-4 sm:mb-5 md:mb-6 shadow-2xl">
+              <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-xl mb-5">
                 <div className="flex items-start">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-5 h-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                   </svg>
                   <div className="min-w-0">
-                    <p className="font-bold text-xs sm:text-sm text-green-300">
+                    <p className="font-bold text-sm text-blue-700">
                       {isSafariMobile ? 'Safari Mobile Detected' : isAndroidMobile ? 'Android Mobile Detected' : 'Mobile Browser Detected'}
                     </p>
-                    <p className="text-xs mt-1 text-green-200">Sign-in will open in a popup. Please allow popups if prompted.</p>
+                    <p className="text-xs mt-1 text-blue-600">Sign-in will open in a popup. Please allow popups if prompted.</p>
                   </div>
                 </div>
               </div>
             )}
 
-            <div className="space-y-3 sm:space-y-4 md:space-y-6">
+            <div className="space-y-4">
               <button
                 onClick={handleGoogleSignIn}
                 disabled={isLoading}
-                className="w-full bg-gradient-to-br from-white/10 via-white/5 to-white/10 border border-white/20 text-white py-2.5 sm:py-3 md:py-4 px-3 sm:px-4 rounded-xl shadow-2xl hover:shadow-3xl flex items-center justify-center space-x-2 sm:space-x-3 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 group"
-                style={{ boxShadow: '0 10px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)' }}
+                className="w-full bg-white border border-gray-300 hover:border-gray-400 hover:bg-gray-50 text-gray-800 py-3 sm:py-4 px-4 rounded-xl shadow-sm flex items-center justify-center space-x-3 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 {isLoading ? (
                   <>
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 sm:h-5 sm:w-5 text-orange-400" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24">
                       <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" className="opacity-25"></circle>
                       <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" className="opacity-75"></path>
                     </svg>
@@ -182,78 +140,39 @@ const Login = () => {
                       <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
                       <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                     </svg>
-                    <span className="font-bold text-sm sm:text-base md:text-lg">Sign in with Google</span>
-                    <span className="text-orange-400 group-hover:translate-x-1 transition-transform duration-300 hidden xs:inline">→</span>
+                    <span className="font-bold text-sm sm:text-base">Sign in with Google</span>
                   </>
                 )}
               </button>
 
-              {/* FREE ACCESS MESSAGE */}
-              <div className="bg-gradient-to-br from-green-900/40 via-green-800/40 to-green-900/40 border border-green-500/30 text-green-300 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl shadow-2xl">
+              <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-xl">
                 <div className="flex items-start">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 mr-2 sm:mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-5 h-5 text-blue-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   <div className="min-w-0">
-                    <p className="font-bold text-xs sm:text-sm text-green-300">Completely Free!</p>
-                    <p className="text-xs mt-1 text-green-200">
-                      Sign in to access jobs, housing, finance, and community — all free.
+                    <p className="font-bold text-sm text-blue-700">Free to Get Started</p>
+                    <p className="text-xs mt-1 text-blue-600">
+                      Sign in to access projects, badges, career tools, and community.
                     </p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Additional Info */}
-            <div className="mt-5 sm:mt-6 md:mt-8">
-              <p className="text-xs text-gray-400 px-2" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
-                {getHelpText()}
-              </p>
-              {process.env.NODE_ENV === 'development' && (
-                <div className="text-xs text-gray-500 mt-2 space-y-1 bg-black/20 rounded-lg p-2 border border-white/10">
-                  <p className="break-all">Debug: {isSafariMobile ? 'Safari Mobile' :
-                    isAndroidMobile ? 'Android Mobile' :
-                    hasStorageIssues ? 'Mobile with Storage Issues' : 'Desktop Browser'} | Method: {authMethod || 'None'}</p>
-                </div>
-              )}
+            <div className="mt-6">
+              <p className="text-xs text-gray-400 px-2">{getHelpText()}</p>
             </div>
-
           </div>
         </div>
       </main>
 
-      <Footer dark={true} />
+      <Footer />
 
-      {/* Custom Styles */}
-      <style jsx>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
-        * { font-family: 'Inter', sans-serif; }
-        
-        @keyframes glow {
-          0%, 100% { filter: drop-shadow(0 0 20px rgba(34, 197, 94, 0.5)); }
-          50% { filter: drop-shadow(0 0 40px rgba(34, 197, 94, 0.8)); }
-        }
-        
-        .shadow-3xl {
-          box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25), 0 0 60px rgba(34, 197, 94, 0.1);
-        }
-        
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
-        ::-webkit-scrollbar-thumb { background: rgba(34, 197, 94, 0.5); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(34, 197, 94, 0.7); }
-
-        @media (max-width: 768px) {
-          button, a, input, textarea { min-height: 44px; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          * {
-            animation-duration: 0.01ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: 0.01ms !important;
-          }
-        }
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap');
+        * { font-family: 'DM Sans', sans-serif; }
+        @media (max-width: 768px) { button, a, input, textarea { min-height: 44px; } }
       `}</style>
     </div>
   );

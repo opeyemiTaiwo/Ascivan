@@ -1,4 +1,4 @@
-// src/Pages/Onboarding.jsx - Account-type-aware onboarding after Google login
+// src/Pages/Onboarding.jsx - Account-type-aware onboarding for tech professionals
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -6,7 +6,6 @@ import { useAuth } from '../context/AuthContext';
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
-// IdVerification import removed — feature no longer needed
 
 const BLOCKED_EMAIL_DOMAINS = [
   'gmail.com', 'googlemail.com', 'yahoo.com', 'yahoo.co.uk', 'yahoo.co.in',
@@ -32,15 +31,16 @@ const Onboarding = () => {
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     displayName: '',
-    university: '',
-    major: '',
-    visaStatus: '',
+    experienceLevel: '', // 'beginner' | 'intermediate' | 'advanced' | 'expert'
+    primarySkillTrack: '', // TechMO, TechQA, TechDev, TechLeads, TechArchs, TechGuard
+    specialization: '',
+    yearsOfExperience: '',
     city: '',
     state: '',
     interests: [],
-    studentType: '', // 'international' | 'domestic'
     portfolioUrl: '',
     linkedinUrl: '',
+    githubUrl: '',
     companyName: '',
     companyWebsite: '',
     companyEmail: '',
@@ -48,38 +48,38 @@ const Onboarding = () => {
     companyDescription: '',
   });
 
-  const visaOptions = [
-    { id: 'F-1', label: 'F-1 Student Visa (USA)' },
-    { id: 'OPT', label: 'OPT (Optional Practical Training, USA)' },
-    { id: 'CPT', label: 'CPT (Curricular Practical Training, USA)' },
-    { id: 'H-1B', label: 'H-1B Work Visa (USA)' },
-    { id: 'J-1', label: 'J-1 Exchange Visitor (USA)' },
-    { id: 'Tier4', label: 'Tier 4 / Student Visa (UK)' },
-    { id: 'StudyPermitCA', label: 'Study Permit (Canada)' },
-    { id: 'StudentVisaAU', label: 'Student Visa Subclass 500 (Australia)' },
-    { id: 'StudentVisaEU', label: 'Student Visa / Residence Permit (EU / Schengen)' },
-    { id: 'WorkPermit', label: 'Work Permit / Work Visa' },
-    { id: 'PR', label: 'Permanent Resident / Green Card' },
-    { id: 'Citizen', label: 'Citizen (studying in home country)' },
-    { id: 'Other', label: 'Other / Prefer not to say' },
+  const experienceLevels = [
+    { id: 'beginner', label: 'Beginner', desc: 'Just getting started in tech, learning fundamentals' },
+    { id: 'intermediate', label: 'Intermediate', desc: '1-3 years of experience, building skills' },
+    { id: 'advanced', label: 'Advanced', desc: '3-7 years of experience, strong contributor' },
+    { id: 'expert', label: 'Expert', desc: '7+ years of experience, leading and mentoring' },
+  ];
+
+  const skillTracks = [
+    { id: 'TechDev', label: 'Development', desc: 'Frontend, backend, mobile, full-stack' },
+    { id: 'TechQA', label: 'Quality Assurance', desc: 'Testing, code reviews, quality control' },
+    { id: 'TechMO', label: 'Project Management', desc: 'Timelines, deliverables, stakeholders' },
+    { id: 'TechArchs', label: 'Architecture', desc: 'System design, scalability, infrastructure' },
+    { id: 'TechLeads', label: 'Leadership', desc: 'Team management, mentoring, decisions' },
+    { id: 'TechGuard', label: 'Cybersecurity', desc: 'Security, compliance, resilience' },
   ];
 
   const individualInterests = [
-    { id: 'jobs', label: 'Jobs', desc: 'Full-time, freelance & internships' },
-    { id: 'housing', label: 'Housing', desc: 'Apartments, rooms & studios' },
-    { id: 'banking', label: 'Finance', desc: 'Scholarships, loans, aid & banking' },
-    { id: 'community', label: 'Community', desc: 'Connect with other students' },
+    { id: 'projects', label: 'Projects', desc: 'Join real-world collaborative projects' },
+    { id: 'jobs', label: 'Jobs', desc: 'Full-time, freelance, and contract roles' },
+    { id: 'community', label: 'Community', desc: 'Connect with tech professionals' },
+    { id: 'badges', label: 'Badges', desc: 'Earn verified TechTalent credentials' },
   ];
 
   const companyInterests = [
-    { id: 'jobs', label: 'Post Jobs', desc: 'Post opportunities for students' },
-    { id: 'housing', label: 'Post Listings', desc: 'List housing for students' },
-    { id: 'community', label: 'Community', desc: 'Engage with student community' },
-    { id: 'directory', label: 'Directory', desc: 'Connect with student talent' },
+    { id: 'jobs', label: 'Post Jobs', desc: 'Post opportunities for tech talent' },
+    { id: 'projects', label: 'Post Projects', desc: 'Find collaborators for projects' },
+    { id: 'community', label: 'Community', desc: 'Engage with the tech community' },
+    { id: 'directory', label: 'Talent Board', desc: 'Discover and recruit verified talent' },
   ];
 
   const isCompany = accountType === 'company';
-  const TOTAL_STEPS = isCompany ? 4 : 5; // ID verification removed
+  const TOTAL_STEPS = isCompany ? 4 : 4;
 
   useEffect(() => {
     if (currentUser) {
@@ -137,29 +137,21 @@ const Onboarding = () => {
       }
       if (step === 4 && formData.interests.length === 0) { toast.error('Please select at least one interest'); return; }
     } else {
-      // Individual: step 1=studentType, 2=name/uni/major/portfolio/linkedin, 3=location, 4=visa(intl only), 5=interests
-      if (step === 1 && !formData.studentType) { toast.error('Please select your student type'); return; }
+      // Individual: step 1=experience level, 2=name/profile/links, 3=location, 4=interests
+      if (step === 1 && !formData.experienceLevel) { toast.error('Please select your experience level'); return; }
       if (step === 2) {
         if (!formData.displayName.trim()) { toast.error('Please enter your name'); return; }
         if (!formData.linkedinUrl.trim()) { toast.error('Please enter your LinkedIn URL'); return; }
       }
-      if (step === 4 && formData.studentType === 'international' && !formData.visaStatus) { toast.error('Please select your visa status'); return; }
-      if (step === 5 && formData.interests.length === 0) { toast.error('Please select at least one interest'); return; }
-      // Domestic students skip visa step (step 4) — jump from 3 to 5
-      if (step === 3 && formData.studentType === 'domestic') {
-        setStep(5); return;
-      }
+      if (step === 4 && formData.interests.length === 0) { toast.error('Please select at least one interest'); return; }
     }
     setStep(s => s + 1);
   };
 
   const handleBack = () => {
-    // Domestic students skip step 4 (visa), go from 5 back to 3
-    if (!isCompany && step === 5 && formData.studentType === 'domestic') {
-      setStep(3); return;
-    }
     setStep(s => s - 1);
   };
+
   const handleSkip = async () => {
     try { await saveOnboarding(true); } catch (err) { console.error('Error skipping onboarding:', err); toast.error('Something went wrong. Please try again.'); }
   };
@@ -199,12 +191,13 @@ const Onboarding = () => {
           createdAt: new Date(),
         };
       } else {
-        updateData.university = formData.university.trim() || null;
-        updateData.major = formData.major.trim() || null;
-        updateData.visaStatus = formData.visaStatus || null;
-        updateData.studentType = formData.studentType || 'international';
+        updateData.experienceLevel = formData.experienceLevel || null;
+        updateData.primarySkillTrack = formData.primarySkillTrack || null;
+        updateData.specialization = formData.specialization.trim() || null;
+        updateData.yearsOfExperience = formData.yearsOfExperience || null;
         updateData.portfolioUrl = formData.portfolioUrl.trim() || null;
         updateData.linkedinUrl = formData.linkedinUrl.trim() || null;
+        updateData.githubUrl = formData.githubUrl.trim() || null;
       }
       await updateDoc(doc(db, 'users', currentUser.uid), updateData);
       toast.success(skipped ? 'Welcome to Loomiqe! You can complete your profile later.' : 'Welcome to Loomiqe!');
@@ -219,15 +212,15 @@ const Onboarding = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#000' }}>
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-400"></div>
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
   }
 
   const progress = (step / TOTAL_STEPS) * 100;
-  const inputClass = "w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 min-h-[44px] text-white placeholder-gray-400 focus:border-orange-400 focus:outline-none text-sm transition-all";
-  const labelClass = "block text-orange-400 font-semibold mb-2 text-sm";
+  const inputClass = "w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 min-h-[44px] text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none text-sm transition-all";
+  const labelClass = "block text-blue-600 font-semibold mb-2 text-sm";
 
   const renderIndividualStep = () => {
     switch (step) {
@@ -235,26 +228,19 @@ const Onboarding = () => {
         return (
           <div className="space-y-5">
             <div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1">Are you an international or domestic student?</h2>
-              <p className="text-gray-400 text-sm">This helps us personalize your dashboard experience.</p>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 mb-1">What is your experience level?</h2>
+              <p className="text-gray-500 text-sm">This helps us match you with the right projects and resources.</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <button type="button" onClick={() => setFormData(p => ({ ...p, studentType: 'international' }))}
-                className={`p-5 rounded-xl border-2 text-left transition-all duration-200 active:scale-95 ${
-                  formData.studentType === 'international' ? 'border-orange-400 bg-orange-500/20 shadow-lg' : 'border-white/15 bg-white/5 hover:bg-white/10 hover:border-white/30'
-                }`}>
-                <div className={`text-base font-bold mb-1 ${formData.studentType === 'international' ? 'text-white' : 'text-gray-200'}`}>International Student</div>
-                <div className="text-gray-400 text-xs">Studying abroad, away from my home country</div>
-                {formData.studentType === 'international' && <div className="mt-2 text-orange-400 text-xs font-semibold">Selected</div>}
-              </button>
-              <button type="button" onClick={() => setFormData(p => ({ ...p, studentType: 'domestic' }))}
-                className={`p-5 rounded-xl border-2 text-left transition-all duration-200 active:scale-95 ${
-                  formData.studentType === 'domestic' ? 'border-orange-400 bg-orange-500/20 shadow-lg' : 'border-white/15 bg-white/5 hover:bg-white/10 hover:border-white/30'
-                }`}>
-                <div className={`text-base font-bold mb-1 ${formData.studentType === 'domestic' ? 'text-white' : 'text-gray-200'}`}>Domestic Student</div>
-                <div className="text-gray-400 text-xs">Studying in my home country</div>
-                {formData.studentType === 'domestic' && <div className="mt-2 text-orange-400 text-xs font-semibold">Selected</div>}
-              </button>
+              {experienceLevels.map(option => (
+                <button key={option.id} type="button" onClick={() => setFormData(p => ({ ...p, experienceLevel: option.id }))}
+                  className={`p-5 rounded-xl border-2 text-left transition-all duration-200 active:scale-[0.97] ${
+                    formData.experienceLevel === option.id ? 'border-blue-500 bg-blue-50 shadow-sm' : 'border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300'
+                  }`}>
+                  <div className={`text-base font-bold mb-1 ${formData.experienceLevel === option.id ? 'text-gray-900' : 'text-gray-700'}`}>{option.label}</div>
+                  <div className="text-gray-500 text-xs">{option.desc}</div>
+                </button>
+              ))}
             </div>
           </div>
         );
@@ -262,28 +248,35 @@ const Onboarding = () => {
         return (
           <div className="space-y-5">
             <div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1">Welcome!</h2>
-              <p className="text-gray-400 text-sm">Let's set up your profile. This takes less than a minute.</p>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 mb-1">Your Profile</h2>
+              <p className="text-gray-500 text-sm">This takes less than a minute.</p>
             </div>
             <div>
               <label className={labelClass}>Your Name *</label>
               <input type="text" value={formData.displayName} onChange={e => setFormData(p => ({ ...p, displayName: e.target.value }))} className={inputClass} placeholder="Enter your full name" autoFocus />
             </div>
             <div>
-              <label className={labelClass}>University / Institution</label>
-              <input type="text" value={formData.university} onChange={e => setFormData(p => ({ ...p, university: e.target.value }))} className={inputClass} placeholder="e.g., Morgan State University" />
+              <label className={labelClass}>Primary Skill Track</label>
+              <select value={formData.primarySkillTrack} onChange={e => setFormData(p => ({ ...p, primarySkillTrack: e.target.value }))} className={inputClass}>
+                <option value="">Select a track (optional)</option>
+                {skillTracks.map(t => <option key={t.id} value={t.id}>{t.label} — {t.desc}</option>)}
+              </select>
             </div>
             <div>
-              <label className={labelClass}>Field of Study / Major</label>
-              <input type="text" value={formData.major} onChange={e => setFormData(p => ({ ...p, major: e.target.value }))} className={inputClass} placeholder="e.g., Computer Science" />
-            </div>
-            <div>
-              <label className={labelClass}>Portfolio URL</label>
-              <input type="url" value={formData.portfolioUrl} onChange={e => setFormData(p => ({ ...p, portfolioUrl: e.target.value }))} className={inputClass} placeholder="https://your-portfolio.com" />
+              <label className={labelClass}>Specialization</label>
+              <input type="text" value={formData.specialization} onChange={e => setFormData(p => ({ ...p, specialization: e.target.value }))} className={inputClass} placeholder="e.g., React, Python, AWS, DevOps" />
             </div>
             <div>
               <label className={labelClass}>LinkedIn URL *</label>
               <input type="url" value={formData.linkedinUrl} onChange={e => setFormData(p => ({ ...p, linkedinUrl: e.target.value }))} className={inputClass} placeholder="https://linkedin.com/in/your-profile" />
+            </div>
+            <div>
+              <label className={labelClass}>GitHub URL</label>
+              <input type="url" value={formData.githubUrl} onChange={e => setFormData(p => ({ ...p, githubUrl: e.target.value }))} className={inputClass} placeholder="https://github.com/your-username" />
+            </div>
+            <div>
+              <label className={labelClass}>Portfolio URL</label>
+              <input type="url" value={formData.portfolioUrl} onChange={e => setFormData(p => ({ ...p, portfolioUrl: e.target.value }))} className={inputClass} placeholder="https://your-portfolio.com" />
             </div>
           </div>
         );
@@ -291,8 +284,8 @@ const Onboarding = () => {
         return (
           <div className="space-y-5">
             <div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1">Where are you based?</h2>
-              <p className="text-gray-400 text-sm">We'll use this to show you relevant local opportunities.</p>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 mb-1">Where are you based?</h2>
+              <p className="text-gray-500 text-sm">Helps us show you relevant local opportunities.</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="col-span-2 sm:col-span-1">
@@ -307,44 +300,22 @@ const Onboarding = () => {
           </div>
         );
       case 4:
-        // Visa step — only for international students
         return (
           <div className="space-y-5">
             <div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1">Visa Status</h2>
-              <p className="text-gray-400 text-sm">Helps us show only jobs and services that apply to you.</p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {visaOptions.map(option => (
-                <button key={option.id} type="button" onClick={() => setFormData(p => ({ ...p, visaStatus: option.id }))}
-                  className={`p-3 rounded-xl border-2 text-left text-sm font-semibold transition-all duration-200 active:scale-95 ${
-                    formData.visaStatus === option.id ? 'border-orange-400 bg-orange-500/20 text-white shadow-lg' : 'border-white/15 bg-white/5 text-gray-300 hover:bg-white/10 hover:border-white/30'
-                  }`}>{option.label}</button>
-              ))}
-            </div>
-            <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-gray-400">
-              <span className="text-orange-400 font-semibold">Privacy:</span> Your visa status is only used to personalize your experience. It's never shared publicly.
-            </div>
-          </div>
-        );
-      case 5:
-        return (
-          <div className="space-y-5">
-            <div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1">What are you looking for?</h2>
-              <p className="text-gray-400 text-sm">Select all that apply. You can always explore everything.</p>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 mb-1">What are you looking for?</h2>
+              <p className="text-gray-500 text-sm">Select all that apply. You can always explore everything.</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {individualInterests.map(option => {
                 const sel = formData.interests.includes(option.id);
                 return (
                   <button key={option.id} type="button" onClick={() => toggleInterest(option.id)}
-                    className={`p-4 rounded-xl border-2 text-left transition-all duration-200 active:scale-95 ${
-                      sel ? 'border-orange-400 bg-orange-500/20 shadow-lg scale-105' : 'border-white/15 bg-white/5 hover:bg-white/10 hover:border-white/30'
+                    className={`p-4 rounded-xl border-2 text-left transition-all duration-200 active:scale-[0.97] ${
+                      sel ? 'border-blue-500 bg-blue-50 shadow-sm' : 'border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300'
                     }`}>
-                    <div className={`text-base font-bold mb-1 ${sel ? 'text-white' : 'text-gray-200'}`}>{option.label}</div>
-                    <div className="text-gray-400 text-xs">{option.desc}</div>
-                    {sel && <div className="mt-2 text-orange-400 text-xs font-semibold">Selected</div>}
+                    <div className={`text-base font-bold mb-1 ${sel ? 'text-gray-900' : 'text-gray-700'}`}>{option.label}</div>
+                    <div className="text-gray-500 text-xs">{option.desc}</div>
                   </button>
                 );
               })}
@@ -361,8 +332,8 @@ const Onboarding = () => {
         return (
           <div className="space-y-5">
             <div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1">Welcome!</h2>
-              <p className="text-gray-400 text-sm">Let's set up your company profile. This takes less than a minute.</p>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 mb-1">Welcome!</h2>
+              <p className="text-gray-500 text-sm">Let's set up your company profile. This takes less than a minute.</p>
             </div>
             <div>
               <label className={labelClass}>Your Name *</label>
@@ -374,8 +345,8 @@ const Onboarding = () => {
         return (
           <div className="space-y-5">
             <div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1">Company Details</h2>
-              <p className="text-gray-400 text-sm">Tell us about your organization.</p>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 mb-1">Company Details</h2>
+              <p className="text-gray-500 text-sm">Tell us about your organization.</p>
             </div>
             <div>
               <label className={labelClass}>Company Name *</label>
@@ -384,12 +355,12 @@ const Onboarding = () => {
             <div>
               <label className={labelClass}>Business Email *</label>
               <input type="email" value={formData.companyEmail} onChange={e => setFormData(p => ({ ...p, companyEmail: e.target.value }))}
-                className={`${inputClass} ${formData.companyEmail && !isBusinessEmail(formData.companyEmail) ? 'border-red-500/50 focus:border-red-400' : ''}`}
+                className={`${inputClass} ${formData.companyEmail && !isBusinessEmail(formData.companyEmail) ? 'border-red-400 focus:border-red-500' : ''}`}
                 placeholder="you@company.com" />
               {formData.companyEmail && !isBusinessEmail(formData.companyEmail) && (
-                <p className="text-red-400 text-xs mt-1.5 font-semibold">Please use a business email — Gmail, Yahoo, Outlook, etc. are not accepted.</p>
+                <p className="text-red-500 text-xs mt-1.5 font-semibold">Please use a business email -- Gmail, Yahoo, Outlook, etc. are not accepted.</p>
               )}
-              <p className="text-gray-500 text-xs mt-1">Must be a company domain (not Gmail, Yahoo, Outlook, etc.)</p>
+              <p className="text-gray-400 text-xs mt-1">Must be a company domain (not Gmail, Yahoo, Outlook, etc.)</p>
             </div>
             <div>
               <label className={labelClass}>Company Website</label>
@@ -405,8 +376,8 @@ const Onboarding = () => {
         return (
           <div className="space-y-5">
             <div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1">Where is your company based?</h2>
-              <p className="text-gray-400 text-sm">Helps students find opportunities near them.</p>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 mb-1">Where is your company based?</h2>
+              <p className="text-gray-500 text-sm">Helps professionals find opportunities near them.</p>
             </div>
             <div>
               <label className={labelClass}>Company Location</label>
@@ -428,20 +399,19 @@ const Onboarding = () => {
         return (
           <div className="space-y-5">
             <div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1">What will you use Loomiqe for?</h2>
-              <p className="text-gray-400 text-sm">Select all that apply.</p>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 mb-1">What will you use Loomiqe for?</h2>
+              <p className="text-gray-500 text-sm">Select all that apply.</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {companyInterests.map(option => {
                 const sel = formData.interests.includes(option.id);
                 return (
                   <button key={option.id} type="button" onClick={() => toggleInterest(option.id)}
-                    className={`p-4 rounded-xl border-2 text-left transition-all duration-200 active:scale-95 ${
-                      sel ? 'border-orange-400 bg-orange-500/20 shadow-lg scale-105' : 'border-white/15 bg-white/5 hover:bg-white/10 hover:border-white/30'
+                    className={`p-4 rounded-xl border-2 text-left transition-all duration-200 active:scale-[0.97] ${
+                      sel ? 'border-blue-500 bg-blue-50 shadow-sm' : 'border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300'
                     }`}>
-                    <div className={`text-base font-bold mb-1 ${sel ? 'text-white' : 'text-gray-200'}`}>{option.label}</div>
-                    <div className="text-gray-400 text-xs">{option.desc}</div>
-                    {sel && <div className="mt-2 text-orange-400 text-xs font-semibold">Selected</div>}
+                    <div className={`text-base font-bold mb-1 ${sel ? 'text-gray-900' : 'text-gray-700'}`}>{option.label}</div>
+                    <div className="text-gray-500 text-xs">{option.desc}</div>
                   </button>
                 );
               })}
@@ -453,32 +423,32 @@ const Onboarding = () => {
   };
 
   return (
-    <div className="min-h-screen overflow-x-hidden flex flex-col items-center justify-center px-4 py-8 sm:py-12" style={{ backgroundColor: '#000000' }}>
+    <div className="min-h-screen overflow-x-hidden flex flex-col items-center justify-center px-4 py-8 sm:py-12 bg-white">
       <div className="flex items-center gap-2 mb-8">
         <img src="/Images/512X512.png" alt="Loomiqe" className="w-8 h-8" onError={e => e.target.style.display='none'} />
-        <span className="text-white font-black text-xl sm:text-2xl">Loomiqe</span>
+        <span className="text-gray-900 font-extrabold text-xl sm:text-2xl">Loomiqe</span>
       </div>
 
       <div className="mb-4">
         <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border ${
           isCompany
-            ? 'bg-orange-500/20 text-orange-300 border-orange-500/30'
-            : 'bg-green-500/20 text-green-300 border-green-500/30'
+            ? 'bg-blue-50 text-blue-600 border-blue-200'
+            : 'bg-blue-50 text-blue-600 border-blue-200'
         }`}>
           {isCompany ? 'Company Account' : 'Individual Account'}
         </span>
       </div>
 
-      <div className="w-full max-w-lg mx-4 bg-white/5 border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
-        <div className="w-full h-1 bg-white/10">
-          <div className="h-full bg-gradient-to-r from-orange-400 to-orange-600 transition-all duration-500" style={{ width: `${progress}%` }} />
+      <div className="w-full max-w-lg mx-4 bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
+        <div className="w-full h-1 bg-gray-100">
+          <div className="h-full bg-blue-600 transition-all duration-500" style={{ width: `${progress}%` }} />
         </div>
 
         <div className="p-4 sm:p-6 md:p-8">
           <div className="flex items-center justify-between mb-4 sm:mb-6">
             <span className="text-gray-400 text-xs font-semibold uppercase tracking-widest">Step {step} of {TOTAL_STEPS}</span>
             {step < TOTAL_STEPS && (
-              <button onClick={handleSkip} className="text-gray-400 hover:text-gray-200 text-xs font-semibold transition-colors">Complete Later →</button>
+              <button onClick={handleSkip} className="text-gray-400 hover:text-gray-600 text-xs font-semibold transition-colors">Complete Later</button>
             )}
           </div>
 
@@ -486,14 +456,14 @@ const Onboarding = () => {
 
           <div className={`flex mt-8 gap-3 ${step > 1 ? 'justify-between' : 'justify-end'}`}>
             {step > 1 && (
-              <button onClick={handleBack} className="px-5 py-2.5 min-h-[44px] bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl text-sm transition-all">← Back</button>
+              <button onClick={handleBack} className="px-5 py-2.5 min-h-[44px] bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl text-sm transition-all">Back</button>
             )}
             {step < TOTAL_STEPS ? (
-              <button onClick={handleNext} className="px-8 py-2.5 min-h-[44px] bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl text-sm transition-all shadow-lg hover:shadow-orange-500/30">Next →</button>
+              <button onClick={handleNext} className="px-8 py-2.5 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-sm transition-all">Next</button>
             ) : (
               <button onClick={handleComplete} disabled={saving}
-                className="px-8 py-2.5 min-h-[44px] bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black rounded-xl text-sm transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
-                {saving ? (<span className="flex items-center gap-2"><span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>Setting up...</span>) : "Let's Go!"}
+                className="px-8 py-2.5 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                {saving ? (<span className="flex items-center gap-2"><span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>Setting up...</span>) : "Get Started"}
               </button>
             )}
           </div>
@@ -502,11 +472,11 @@ const Onboarding = () => {
 
       <div className="flex gap-2 mt-6">
         {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
-          <div key={i} className={`rounded-full transition-all duration-300 ${i + 1 === step ? 'w-6 h-2 bg-orange-500' : i + 1 < step ? 'w-2 h-2 bg-orange-400/60' : 'w-2 h-2 bg-white/20'}`} />
+          <div key={i} className={`rounded-full transition-all duration-300 ${i + 1 === step ? 'w-6 h-2 bg-blue-600' : i + 1 < step ? 'w-2 h-2 bg-blue-400' : 'w-2 h-2 bg-gray-200'}`} />
         ))}
       </div>
 
-      <p className="text-gray-600 text-xs mt-4">© {new Date().getFullYear()} Loomiqe. All rights reserved.</p>
+      <p className="text-gray-400 text-xs mt-4">{new Date().getFullYear()} Loomiqe. All rights reserved.</p>
     </div>
   );
 };

@@ -70,14 +70,14 @@ const PageLoader = () => (
   <div className="fixed inset-0 bg-white z-50 flex items-center justify-center">
     <div className="text-center px-4">
       <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6">
-        <div className="w-full h-full rounded-xl shadow-2xl bg-orange-100 flex items-center justify-center border-2 border-orange-500">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-full h-full rounded-xl shadow-2xl bg-blue-50 flex items-center justify-center border-2 border-blue-600">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
         </div>
       </div>
       <div className="flex items-center justify-center space-x-2 mb-4 sm:mb-6">
-        <div className="w-2 h-2 sm:w-3 sm:h-3 bg-orange-500 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
-        <div className="w-2 h-2 sm:w-3 sm:h-3 bg-orange-500 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
-        <div className="w-2 h-2 sm:w-3 sm:h-3 bg-orange-500 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
+        <div className="w-2 h-2 sm:w-3 sm:h-3 bg-blue-600 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
+        <div className="w-2 h-2 sm:w-3 sm:h-3 bg-blue-600 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
+        <div className="w-2 h-2 sm:w-3 sm:h-3 bg-blue-600 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
       </div>
       <p className="text-gray-900 font-bold text-lg sm:text-xl mb-2">Loading...</p>
       <p className="text-gray-600 text-xs sm:text-sm">Just a moment</p>
@@ -232,7 +232,7 @@ function App() {
                       <h1 className="text-2xl font-bold text-gray-900 mb-3">Page Not Found</h1>
                       <p className="text-gray-600 mb-8">The page you're looking for doesn't exist.</p>
                       <div className="space-y-3">
-                        <button onClick={() => window.location.href = '/community'} className="w-full py-3 px-6 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition-all">Go Home</button>
+                        <button onClick={() => window.location.href = '/community'} className="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all">Go Home</button>
                         <button onClick={() => window.history.back()} className="w-full py-3 px-6 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl border border-gray-300 transition-all">Go Back</button>
                       </div>
                     </div>

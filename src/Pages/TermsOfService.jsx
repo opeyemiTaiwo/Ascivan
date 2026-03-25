@@ -9,11 +9,11 @@ const TermsOfService = () => {
   const sections = [
     {
       title: '1. Acceptance of Terms',
-      content: 'By accessing or using Loomiqe ("the Platform"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Platform. Loomiqe is designed to serve international students with housing, finance, jobs, and community resources.'
+      content: 'By accessing or using Loomiqe ("the Platform"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Platform. Loomiqe is designed to serve tech professionals with projects, career tools, jobs, and community resources.'
     },
     {
       title: '2. Eligibility',
-      content: 'You must be at least 18 years old to use Loomiqe. By creating an account, you represent that you are at least 18 years of age and that you have the legal capacity to enter into these terms. The Platform is primarily intended for international students, alumni, and organizations that support them.'
+      content: 'You must be at least 18 years old to use Loomiqe. By creating an account, you represent that you are at least 18 years of age and that you have the legal capacity to enter into these terms. The Platform is intended for tech professionals at all experience levels and organizations that support or hire them.'
     },
     {
       title: '3. User Accounts',
@@ -45,7 +45,7 @@ const TermsOfService = () => {
     },
     {
       title: '10. Platform Access for Different User Types',
-      content: 'Loomiqe is primarily designed for international students studying abroad. Professionals seeking to enter a new field, young professionals, and domestic students are also welcome to join. Domestic students (those studying in their home country) have access to the Home community and Projects sections. Features such as Jobs, Housing, and certain Finance resources are tailored for international students and may not be available to all user types.'
+      content: 'Loomiqe is designed for tech professionals at every stage of their career, from beginners to experts. Companies and organizations that hire, train, or support tech talent are also welcome. All users have access to the full platform including projects, jobs, community, and career tools.'
     },
     {
       title: '11. Listing and User Verification Disclaimer',

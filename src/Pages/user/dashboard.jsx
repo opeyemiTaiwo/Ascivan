@@ -395,14 +395,14 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
   });
   const [loading, setLoading] = useState(true);
   const [accountType, setAccountType] = useState('individual'); // 'individual' | 'company'
-  const [studentType, setStudentType] = useState('international'); // 'international' | 'domestic'
+  const [experienceLevel, setExperienceLevel] = useState('beginner'); // 'beginner' | 'intermediate' | 'advanced' | 'expert'
 
   const [profileData, setProfileData] = useState(null);
   const [userBadges, setUserBadges] = useState([]);
   const [profileEditing, setProfileEditing] = useState(false);
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileForm, setProfileForm] = useState({
-    displayName: '', university: '', major: '', visaStatus: '', city: '', state: '', portfolioUrl: '', linkedinUrl: '',
+    displayName: '', specialization: '', experienceLevel: '', primarySkillTrack: '', city: '', state: '', portfolioUrl: '', linkedinUrl: '', githubUrl: '',
     isCompany: false, companyName: '', companyEmail: '', companyWebsite: '', companyLocation: '', companyDescription: '',
   });
 
@@ -458,7 +458,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       ];
     }
     // Domestic individual — limited tabs
-    if (studentType === 'domestic') {
+    if (experienceLevel === 'beginner') {
       return [
         { id: 'community', label: 'Home' },
         { id: 'projects', label: 'Projects' },
@@ -475,7 +475,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       { id: 'banking', label: 'Finance' },
       { id: 'profile', label: 'Profile' },
     ];
-  }, [accountType, studentType]);
+  }, [accountType, experienceLevel]);
 
   const dashboardCards = useMemo(() => {
     if (accountType === 'company') {
@@ -499,7 +499,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           },
           {
             title: 'Connect',
-            description: 'Discover and connect with international students and alumni',
+            description: 'Discover and connect with tech professionals and collaborators',
             path: '/members-directory',
             stats: 'Find people in your field',
             gradient: 'from-green-600 to-green-700',
@@ -509,7 +509,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         hub: [
           {
             title: 'Post Job',
-            description: 'List a job opportunity for international students',
+            description: 'List a job opportunity for tech professionals',
             path: '/jobs/post',
             stats: 'Post Now',
             gradient: 'from-orange-500 to-orange-600',
@@ -535,7 +535,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         housing: [
           {
             title: 'Post Listing',
-            description: 'List a housing space or room for international students',
+            description: 'List a housing space or room for tech professionals',
             path: '/housing/post',
             stats: 'List Now',
             gradient: 'from-blue-500 to-blue-600',
@@ -601,7 +601,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       community: [
         {
           title: 'Home Feed',
-          description: 'Share ideas, ask questions, and engage with fellow international students',
+          description: 'Share ideas, ask questions, and engage with fellow tech professionals',
           path: '/community',
           stats: 'Join Discussion',
           gradient: 'from-green-500 to-green-600',
@@ -617,7 +617,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         },
         {
           title: 'Connect',
-          description: 'Discover and connect with international students and alumni in your field',
+          description: 'Discover and connect with tech professionals and collaborators in your field',
           path: '/members-directory',
           stats: 'Find people in your field',
           gradient: 'from-green-600 to-green-700',
@@ -627,7 +627,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       hub: [
         {
           title: 'Browse Jobs',
-          description: 'Find full-time, freelance & internship roles, filtered by location & visa status',
+          description: 'Find full-time, freelance & internship roles, filtered by location & skill level',
           path: '/jobs',
           stats: 'Explore Jobs',
           gradient: 'from-orange-500 to-orange-600',
@@ -653,7 +653,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       housing: [
         {
           title: 'Find Housing',
-          description: 'Browse student-friendly apartments, rooms & studios near your campus',
+          description: 'Browse professional apartments, rooms & studios near you',
           path: '/housing',
           stats: 'Browse All',
           gradient: 'from-blue-500 to-blue-600',
@@ -661,7 +661,7 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         },
         {
           title: 'List Your Room',
-          description: 'Have a room or unit available? List it for international students',
+          description: 'Have a room or unit available? List it for tech professionals',
           path: '/housing/post',
           stats: 'List Now',
           gradient: 'from-orange-500 to-orange-600',
@@ -742,15 +742,15 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           } else if (data.isCompany) {
             setAccountType('company');
           }
-          if (data.studentType) {
-            setStudentType(data.studentType);
+          if (data.experienceLevel) {
+            setStudentType(data.experienceLevel);
           }
           const cp = data.companyProfile || {};
           setProfileForm({
             displayName: data.displayName || currentUser.displayName || '',
-            university: data.university || '',
-            major: data.major || '',
-            visaStatus: data.visaStatus || '',
+            specialization: data.specialization || '',
+            experienceLevel: data.experienceLevel || '',
+            primarySkillTrack: data.primarySkillTrack || '',
             city: data.city || '',
             state: data.state || '',
             portfolioUrl: data.portfolioUrl || '',
@@ -796,11 +796,11 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
     // Section metadata for headers
     const sectionMeta = {
       community: { title: 'Home', description: 'Connect, collaborate, and grow with the Loomiqe community.', gradientColors: 'from-green-300 via-orange-400 to-green-500' },
-      hub: { title: 'Jobs', description: accountType === 'company' ? 'Post and manage job listings for international students.' : 'Browse full-time, freelance & internship roles, filtered by location and visa compliance.', gradientColors: 'from-orange-300 via-orange-400 to-orange-500' },
+      hub: { title: 'Jobs', description: accountType === 'company' ? 'Post and manage job listings for tech professionals.' : 'Browse full-time, freelance & internship roles, filtered by location and relevance.', gradientColors: 'from-orange-300 via-orange-400 to-orange-500' },
       projects: { title: 'Projects', description: 'Build real projects, grow your skills, and earn badges.', gradientColors: 'from-purple-300 via-purple-400 to-orange-400' },
-      housing: { title: 'Housing', description: accountType === 'company' ? 'List housing spaces for international students.' : 'Find affordable, student-friendly housing near your university.', gradientColors: 'from-blue-300 via-blue-400 to-orange-400' },
-      banking: { title: 'Finance', description: 'Scholarships, loans, work-study, grants, fellowships & financial aid for international students.', gradientColors: 'from-green-300 via-green-400 to-orange-400' },
-      directory: { title: 'Member Directory', description: 'Discover and connect with international students and alumni.', gradientColors: 'from-green-300 via-green-400 to-green-500' },
+      housing: { title: 'Housing', description: accountType === 'company' ? 'List housing spaces for tech professionals.' : 'Find affordable, professional housing near you.', gradientColors: 'from-blue-300 via-blue-400 to-orange-400' },
+      banking: { title: 'Finance', description: 'Financial resources, grants, and funding opportunities for tech professionals.', gradientColors: 'from-green-300 via-green-400 to-orange-400' },
+      directory: { title: 'Member Directory', description: 'Discover and connect with tech professionals and collaborators.', gradientColors: 'from-green-300 via-green-400 to-green-500' },
     };
 
     if (activeSection === 'profile') {
@@ -822,9 +822,9 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         try {
           const updateData = {
             displayName: profileForm.displayName.trim(),
-            university: profileForm.university.trim() || null,
-            major: profileForm.major.trim() || null,
-            visaStatus: profileForm.visaStatus || null,
+            specialization: profileForm.specialization.trim() || null,
+            experienceLevel: profileForm.experienceLevel.trim() || null,
+            primarySkillTrack: profileForm.primarySkillTrack || null,
             city: profileForm.city.trim() || null,
             state: profileForm.state.trim() || null,
             portfolioUrl: profileForm.portfolioUrl.trim() || null,
@@ -857,14 +857,13 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         }
       };
 
-      const visaOpts = [
-        { id: 'F-1', label: 'F-1 Student Visa' }, { id: 'OPT', label: 'OPT' }, { id: 'CPT', label: 'CPT' },
-        { id: 'H-1B', label: 'H-1B Work Visa' }, { id: 'J-1', label: 'J-1 Exchange Visitor' },
-        { id: 'PR', label: 'Permanent Resident' }, { id: 'Citizen', label: 'US Citizen' }, { id: 'Other', label: 'Other' },
+      const skillTrackOpts = [
+        { id: 'TechDev', label: 'Development' }, { id: 'TechQA', label: 'Quality Assurance' }, { id: 'TechMO', label: 'Project Management' },
+        { id: 'TechArchs', label: 'Architecture' }, { id: 'TechLeads', label: 'Leadership' }, { id: 'TechGuard', label: 'Cybersecurity' },
       ];
 
-      const inputCls = "w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 min-h-[44px] text-white placeholder-gray-400 focus:border-orange-400 focus:outline-none text-sm transition-all";
-      const labelCls = "block text-orange-400 font-semibold mb-2 text-sm";
+      const inputCls = "w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 min-h-[44px] text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none text-sm transition-all";
+      const labelCls = "block text-blue-600 font-semibold mb-2 text-sm";
 
       return (
         <div className="space-y-4 sm:space-y-6">
@@ -879,9 +878,9 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {[
                     ['Name', profileForm.displayName],
-                    ['University', profileForm.university],
-                    ['Major', profileForm.major],
-                    ['Visa Status', profileForm.visaStatus],
+                    ['Specialization', profileForm.specialization],
+                    ['Experience Level', profileForm.experienceLevel],
+                    ['Skill Track', profileForm.primarySkillTrack],
                     ['City', profileForm.city],
                     ['State', profileForm.state],
                     ['LinkedIn', profileForm.linkedinUrl],
@@ -1023,16 +1022,16 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className={labelCls}>University</label>
-                      <input type="text" value={profileForm.university} onChange={e => setProfileForm(p => ({...p, university: e.target.value}))} className={inputCls} placeholder="e.g., Morgan State University" />
+                      <input type="text" value={profileForm.specialization} onChange={e => setProfileForm(p => ({...p, specialization: e.target.value}))} className={inputCls} placeholder="e.g., Morgan State University" />
                     </div>
                     <div>
                       <label className={labelCls}>Major</label>
-                      <input type="text" value={profileForm.major} onChange={e => setProfileForm(p => ({...p, major: e.target.value}))} className={inputCls} placeholder="e.g., Computer Science" />
+                      <input type="text" value={profileForm.experienceLevel} onChange={e => setProfileForm(p => ({...p, experienceLevel: e.target.value}))} className={inputCls} placeholder="e.g., Computer Science" />
                     </div>
                   </div>
                   <div>
                     <label className={labelCls}>Visa Status</label>
-                    <select value={profileForm.visaStatus} onChange={e => setProfileForm(p => ({...p, visaStatus: e.target.value}))} className={inputCls}>
+                    <select value={profileForm.primarySkillTrack} onChange={e => setProfileForm(p => ({...p, primarySkillTrack: e.target.value}))} className={inputCls}>
                       <option value="">Select...</option>
                       {visaOpts.map(v => <option key={v.id} value={v.id}>{v.label}</option>)}
                     </select>

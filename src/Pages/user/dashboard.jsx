@@ -452,30 +452,16 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
         { id: 'community', label: 'Home' },
         { id: 'hub', label: 'Jobs' },
         { id: 'projects', label: 'Projects' },
-        { id: 'housing', label: 'Housing' },
-        { id: 'banking', label: 'Finance' },
         { id: 'profile', label: 'Profile' },
       ];
     }
-    // Domestic individual — limited tabs
-    if (experienceLevel === 'beginner') {
-      return [
-        { id: 'community', label: 'Home' },
-        { id: 'projects', label: 'Projects' },
-        { id: 'banking', label: 'Finance' },
-        { id: 'profile', label: 'Profile' },
-      ];
-    }
-    // International individual — full tabs
     return [
       { id: 'community', label: 'Home' },
       { id: 'hub', label: 'Jobs' },
       { id: 'projects', label: 'Projects' },
-      { id: 'housing', label: 'Housing' },
-      { id: 'banking', label: 'Finance' },
       { id: 'profile', label: 'Profile' },
     ];
-  }, [accountType, experienceLevel]);
+  }, [accountType]);
 
   const dashboardCards = useMemo(() => {
     if (accountType === 'company') {
@@ -530,42 +516,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             stats: 'Review',
             gradient: 'from-green-500 to-green-600',
             buttonLabel: 'View Applicants'
-          }
-        ],
-        housing: [
-          {
-            title: 'Post Listing',
-            description: 'List a housing space or room for tech professionals',
-            path: '/housing/post',
-            stats: 'List Now',
-            gradient: 'from-blue-500 to-blue-600',
-            buttonLabel: 'Post Listing'
-          },
-          {
-            title: 'My Housing Posts',
-            description: 'Manage and track housing listings you have posted',
-            path: '/housing/my-posts',
-            stats: 'Manage',
-            gradient: 'from-blue-400 to-blue-500',
-            buttonLabel: 'My Listings'
-          }
-        ],
-        banking: [
-          {
-            title: 'Post Resource',
-            description: 'Share a financial resource, scholarship, or grant opportunity with the community',
-            path: '/finance/post',
-            stats: 'Share',
-            gradient: 'from-orange-500 to-orange-600',
-            buttonLabel: 'Post Resource'
-          },
-          {
-            title: 'My Posts',
-            description: 'Manage financial resource listings you have posted',
-            path: '/finance/my-posts',
-            stats: 'Manage',
-            gradient: 'from-green-400 to-green-500',
-            buttonLabel: 'My Posts'
           }
         ],
         projects: [
@@ -648,42 +598,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           stats: 'Manage',
           gradient: 'from-orange-400 to-orange-500',
           buttonLabel: 'My Posts'
-        }
-      ],
-      housing: [
-        {
-          title: 'Find Housing',
-          description: 'Browse professional apartments, rooms & studios near you',
-          path: '/housing',
-          stats: 'Browse All',
-          gradient: 'from-blue-500 to-blue-600',
-          buttonLabel: 'Find Housing'
-        },
-        {
-          title: 'List Your Room',
-          description: 'Have a room or unit available? List it for tech professionals',
-          path: '/housing/post',
-          stats: 'List Now',
-          gradient: 'from-orange-500 to-orange-600',
-          buttonLabel: 'List Room'
-        },
-        {
-          title: 'My Housing Posts',
-          description: 'Manage and track housing listings you have posted',
-          path: '/housing/my-posts',
-          stats: 'Manage',
-          gradient: 'from-blue-400 to-blue-500',
-          buttonLabel: 'My Listings'
-        }
-      ],
-      banking: [
-        {
-          title: 'Finance Resources',
-          description: 'Scholarships, loans, work-study, grants, fellowships & financial services',
-          path: '/finance',
-          stats: 'Explore',
-          gradient: 'from-green-500 to-green-600',
-          buttonLabel: 'Browse Resources'
         }
       ],
       projects: [
@@ -798,8 +712,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
       community: { title: 'Home', description: 'Connect, collaborate, and grow with the Loomiqe community.', gradientColors: 'from-green-300 via-orange-400 to-green-500' },
       hub: { title: 'Jobs', description: accountType === 'company' ? 'Post and manage job listings for tech professionals.' : 'Browse full-time, freelance & internship roles, filtered by location and relevance.', gradientColors: 'from-orange-300 via-orange-400 to-orange-500' },
       projects: { title: 'Projects', description: 'Build real projects, grow your skills, and earn badges.', gradientColors: 'from-purple-300 via-purple-400 to-orange-400' },
-      housing: { title: 'Housing', description: accountType === 'company' ? 'List housing spaces for tech professionals.' : 'Find affordable, professional housing near you.', gradientColors: 'from-blue-300 via-blue-400 to-orange-400' },
-      banking: { title: 'Finance', description: 'Financial resources, grants, and funding opportunities for tech professionals.', gradientColors: 'from-green-300 via-green-400 to-orange-400' },
       directory: { title: 'Member Directory', description: 'Discover and connect with tech professionals and collaborators.', gradientColors: 'from-green-300 via-green-400 to-green-500' },
     };
 

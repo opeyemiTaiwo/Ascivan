@@ -1,257 +1,114 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 
-const GOOGLE_FORM_ACTION =
-  'https://docs.google.com/forms/d/e/1FAIpQLSeauqCwIMFBBxpnoaLtqIqNZUtu4V-0Uw-bXYYZ2yd9SK0RFA/formResponse';
-
-const ENTRIES = {
-  firstName: 'entry.1736029807',
-  lastName:  'entry.1461328379',
-  email:     'entry.1232544873',
-  phone:     'entry.1937366356',
-  message:   'entry.179653384',
-};
+const GOOGLE_FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSeauqCwIMFBBxpnoaLtqIqNZUtu4V-0Uw-bXYYZ2yd9SK0RFA/formResponse';
+const ENTRIES = { firstName: 'entry.1736029807', lastName: 'entry.1461328379', email: 'entry.1232544873', phone: 'entry.1937366356', message: 'entry.179653384' };
 
 const Support = () => {
   const { currentUser } = useAuth();
+  const getFirstName = () => currentUser?.displayName?.split(' ')[0] || '';
+  const getLastName = () => { const p = (currentUser?.displayName || '').split(' '); return p.slice(1).join(' ') || ''; };
 
-  const getFirstName = () => {
-    if (!currentUser?.displayName) return '';
-    return currentUser.displayName.split(' ')[0] || '';
-  };
-  const getLastName = () => {
-    if (!currentUser?.displayName) return '';
-    const parts = currentUser.displayName.split(' ');
-    return parts.slice(1).join(' ') || '';
-  };
-
-  const [form, setForm] = useState({
-    firstName: getFirstName(),
-    lastName:  getLastName(),
-    email:     currentUser?.email || '',
-    phone:     '',
-    message:   '',
-  });
+  const [form, setForm] = useState({ firstName: getFirstName(), lastName: getLastName(), email: currentUser?.email || '', phone: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
+  const [openFaq, setOpenFaq] = useState(null);
 
-  const handleChange = (field) => (e) =>
-    setForm((prev) => ({ ...prev, [field]: e.target.value }));
+  const handleChange = (field) => (e) => setForm(p => ({ ...p, [field]: e.target.value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.firstName.trim() || !form.email.trim() || !form.message.trim()) return;
     setSending(true);
-
     const body = new URLSearchParams();
-    body.append(ENTRIES.firstName, form.firstName);
-    body.append(ENTRIES.lastName,  form.lastName);
-    body.append(ENTRIES.email,     form.email);
-    body.append(ENTRIES.phone,     form.phone);
-    body.append(ENTRIES.message,   form.message);
-
-    try {
-      await fetch(GOOGLE_FORM_ACTION, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: body.toString(),
-      });
-    } catch (_) {}
-
+    Object.entries(ENTRIES).forEach(([k, v]) => body.append(v, form[k]));
+    try { await fetch(GOOGLE_FORM_ACTION, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() }); } catch (_) {}
     setSending(false);
     setSubmitted(true);
   };
 
   const faqs = [
-    { q: 'How do I create an account?', a: 'Click the sign-in button on the top right. You can sign up using your university email through Google authentication.' },
-    { q: 'Is Loomiqe free to use?', a: 'Yes! Core features including project access, job browsing, career tools, and community access are free for all tech professionals. We also offer premium features for enhanced visibility and matching.' },
-    { q: 'How do I post a job or housing listing?', a: 'Navigate to the Jobs or Housing section from the navbar, then click "Post a Job" or "List Your Space" to create a listing.' },
-    { q: 'How do I update my profile?', a: 'Go to your Dashboard and click on the Profile tab to edit your information including university, major, location, and portfolio URL.' },
-    { q: 'How do I report inappropriate content?', a: 'Use the report button on any post or listing, or contact us through this support page.' },
-    { q: 'Is my personal data safe?', a: 'Yes. All user information is securely saved and protected. Your data can be used to investigate any person who engages in fraud or misconduct on the platform. Payment for the Verified Badge is processed securely by Stripe, and we never store your full card details. Read our Privacy Policy for full details.' },
-    { q: 'Who is Loomiqe for?', a: 'Loomiqe is for tech professionals at every level, from beginners learning their first language to experts leading teams. Companies and organizations that hire or support tech talent can also join.' },
-    { q: 'Can anyone join Loomiqe?', a: 'Yes. Loomiqe is open to all tech professionals regardless of location or background. Every user has access to projects, community, jobs, and career tools.' },
-    { q: 'Are projects free or paid?', a: 'Projects can be either free or paid. Both types contribute to your tech badges when completed. If you are new, we recommend starting with free projects to develop your skills and build your profile before taking on paid ones.' },
-    { q: 'How does payment work for paid projects?', a: 'Loomiqe does not collect or process any payment information. All financial transactions for paid projects are directly between the project members and the project owner. Payment method can be any means agreed upon by both parties. Each party must keep receipts of their transactions.' },
-    { q: 'What if a project owner refuses to pay?', a: 'If a project owner refuses to honor agreed payment after project completion, you can report the case through this support page. Provide details of the project, the agreement, and any transaction receipts. Our team will review and get back to you. Note that any additional charges or disputes beyond our review are between you and the project owner.' },
-    { q: 'Are job, housing, and project listings verified by Loomiqe?', a: 'No. All jobs, projects, and housing listings are posted by users and are not independently verified by Loomiqe. Similarly, Loomiqe does not verify the identity or credentials of any user, including those with a Verified Badge. We recommend you do your own due diligence, check profiles and LinkedIn URLs, and verify all details before committing to any opportunity. All user information is securely stored and can be used to investigate misconduct.' },
-    { q: 'What are Tech Badges?', a: 'Tech Badges are earned by completing collaborative projects on Loomiqe. There are 6 badge types (TechDev, TechQA, TechMO, TechLeads, TechArchs, TechGuard) with 4 levels each (Novice, Beginners, Intermediate, Expert). Your badge level is determined by the number of projects you complete in each category.' },
-    { q: 'How do I earn Tech Badges?', a: 'Join a project, contribute as a team member, and when the project owner completes the project, they evaluate each member and assign badges based on your role and contribution. Both free and paid projects count toward your badges.' },
-    { q: 'Can I verify my identity on Loomiqe?', a: 'Loomiqe does not independently verify user identities. However, you can purchase a Verified Badge from your Dashboard. The badge shows other members that you have completed your profile and made a payment, which adds a layer of accountability. Please note that the Verified Badge does not guarantee the trustworthiness or legitimacy of any user. Always do your own due diligence before engaging with anyone on the platform.' },
-    { q: 'What does the Verified Badge mean?', a: 'The Verified Badge means the user has completed their profile (including name, university, and LinkedIn URL) and has made a payment through our secure payment processor. It does NOT mean Loomiqe has verified their identity, background, or credentials. Always check profiles and details carefully before engaging with anyone on the platform.' },
-    { q: 'Is the Verified Badge refundable?', a: 'No. Verified Badge purchases are non-refundable. Loomiqe reserves the right to revoke a Verified Badge if the user violates our Terms of Service.' },
+    { q: 'What is Loomiqe?', a: 'Loomiqe is a platform where tech professionals at all levels — from beginners to experts — collaborate on real-world projects, earn TechTalent Badges, and build their professional profile. Think of it as a project-based learning and career acceleration platform.' },
+    { q: 'Is Loomiqe free to use?', a: 'Yes! Core features including projects, community, messaging, and badges are free for all members. We offer a Premium membership ($100/year) that unlocks the Talent Board and advanced visibility features.' },
+    { q: 'How do projects work?', a: 'Project owners post projects (free or paid) with team roles. Members apply to join. Once accepted, teams collaborate through the project workspace. When the project is completed, badges are automatically awarded based on each member\'s role.' },
+    { q: 'How are badges earned?', a: 'Badges are earned automatically when a project is completed. Your badge type is based on your role: developers earn TechDev, QA testers earn TechQA, project managers earn TechMO, leaders earn TechLeads, designers earn TechArchs, and security specialists earn TechGuard. Badge levels progress from Novice to Associate to Advanced to Expert based on how many projects you\'ve completed in that track.' },
+    { q: 'How does payment work for paid projects?', a: 'Loomiqe does not process payments. All financial transactions happen directly between the project owner and team members. However, when a project owner marks a paid project for completion, every paid member must confirm they\'ve been paid before badges can be awarded. If a member hasn\'t been paid, they can dispute — which notifies both the project owner and Loomiqe admins.' },
+    { q: 'What if I\'m not paid for a paid project?', a: 'Click "Dispute" on the payment confirmation card in the project page. This flags the dispute to the project owner and Loomiqe admins. The project cannot be completed until the dispute is resolved. You can also report through this support page with details and any receipts.' },
+    { q: 'What are the 6 TechTalent Badges?', a: 'TechMO (Project Management), TechQA (Quality Assurance), TechDev (Development), TechLeads (Leadership), TechArchs (Architecture/Design), and TechGuard (Cybersecurity). Each has 4 levels: Novice, Associate, Advanced, and Expert.' },
+    { q: 'Do project owners earn badges too?', a: 'Yes! Project owners automatically receive a TechLeads (Leadership) badge when they complete a project, plus a certificate documenting the project, team size, and badges awarded.' },
+    { q: 'Can I control who sees my email?', a: 'Yes. Go to Settings and toggle Email Visibility on or off. When set to private, your email is hidden from other members. They can still message you through the platform.' },
+    { q: 'What is the Talent Board?', a: 'The Talent Board is a premium feature where companies and recruiters can search for tech professionals by skill track, experience level, and badges earned. Only Premium members are listed on the Talent Board.' },
+    { q: 'How do I report inappropriate content or users?', a: 'Use this support form below to report any issues. Include the username, content description, and any screenshots. Our team will review and take action.' },
+    { q: 'Is my data safe?', a: 'Yes. All data is stored securely using Firebase (Google Cloud) infrastructure with encrypted connections. We never store payment card details. See our Privacy Policy for full details.' },
   ];
 
+  const inputClass = "w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all";
+
   return (
-    <>
-      
-      <div className="min-h-screen overflow-x-hidden" style={{ backgroundColor: '#ffffff' }}>
-        <div className="container mx-auto px-4 sm:px-6 max-w-4xl py-20 sm:py-28">
+    <div className="max-w-3xl mx-auto">
+      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Support</h1>
+      <p className="text-gray-500 text-sm mb-8">Find answers or contact us.</p>
 
-          {/* Hero */}
-          <section className="text-center mb-16">
-            <div className="mb-4 inline-block px-4 py-2 bg-blue-600/10 border border-blue-600/20 rounded-xl">
-              <p className="text-blue-600 font-semibold text-sm">Support Center</p>
-            </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-4">
-              How Can We{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-500">Help?</span>
-            </h1>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              We're here to support you. Browse FAQs or send us a message.
-            </p>
-          </section>
-
-          {/* FAQs */}
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
-            <div className="space-y-3">
-              {faqs.map((faq, i) => (
-                <details key={i} className="group bg-gray-50 rounded-xl border border-gray-200 overflow-hidden">
-                  <summary className="cursor-pointer px-5 py-4 text-gray-900 font-semibold text-sm sm:text-base flex items-center justify-between list-none">
-                    {faq.q}
-                    <svg className="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform flex-shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </summary>
-                  <div className="px-5 pb-4">
-                    <p className="text-gray-400 text-sm">{faq.a}</p>
-                  </div>
-                </details>
-              ))}
-            </div>
-          </section>
-
-          {/* Contact Form */}
-          <section className="mb-12">
-            <div className="bg-gray-50 rounded-xl border border-gray-200 p-6 sm:p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Send Us a Message</h2>
-              <p className="text-gray-400 text-sm mb-6">
-                Your message goes directly to our support team.
-              </p>
-
-              {submitted ? (
-                <div className="text-center py-12">
-                  <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <h3 className="text-gray-900 text-xl font-bold mb-2">Message Sent!</h3>
-                  <p className="text-gray-400 text-sm mb-6">
-                    Thank you for reaching out. We'll get back to you at{' '}
-                    <span className="text-blue-600">{form.email}</span> as soon as possible.
-                  </p>
-                  <button
-                    onClick={() => {
-                      setSubmitted(false);
-                      setForm(prev => ({ ...prev, phone: '', message: '' }));
-                    }}
-                    className="px-6 py-2.5 border border-gray-200 text-gray-900 rounded-lg hover:bg-gray-100 transition-all text-sm"
-                  >
-                    Send Another Message
-                  </button>
+      {/* FAQ */}
+      <div className="mb-10">
+        <h2 className="text-lg font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+        <div className="space-y-2">
+          {faqs.map((faq, i) => (
+            <div key={i} className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+              <button onClick={() => setOpenFaq(openFaq === i ? null : i)} className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors">
+                <span className="text-gray-900 text-sm font-medium pr-4">{faq.q}</span>
+                <svg className={`w-4 h-4 text-gray-400 flex-shrink-0 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {openFaq === i && (
+                <div className="px-4 pb-4">
+                  <p className="text-gray-600 text-sm leading-relaxed">{faq.a}</p>
                 </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-gray-400 text-sm mb-1">
-                        First Name <span className="text-blue-600">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={form.firstName}
-                        onChange={handleChange('firstName')}
-                        required
-                        className="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none text-sm"
-                        placeholder="First name"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gray-400 text-sm mb-1">
-                        Last Name <span className="text-blue-600">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={form.lastName}
-                        onChange={handleChange('lastName')}
-                        required
-                        className="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none text-sm"
-                        placeholder="Last name"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-gray-400 text-sm mb-1">
-                        Email Address <span className="text-blue-600">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        value={form.email}
-                        onChange={handleChange('email')}
-                        required
-                        className="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none text-sm"
-                        placeholder="your@email.com"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-gray-400 text-sm mb-1">Contact Number</label>
-                      <input
-                        type="tel"
-                        value={form.phone}
-                        onChange={handleChange('phone')}
-                        className="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none text-sm"
-                        placeholder="+1 (xxx) xxx-xxxx"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-gray-400 text-sm mb-1">
-                      Describe Your Issue or Question <span className="text-blue-600">*</span>
-                    </label>
-                    <textarea
-                      value={form.message}
-                      onChange={handleChange('message')}
-                      rows={5}
-                      required
-                      className="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none text-sm resize-none"
-                      placeholder="Describe your issue or question in detail..."
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={sending}
-                    className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all disabled:opacity-50 text-sm"
-                  >
-                    {sending ? (
-                      <span className="flex items-center gap-2">
-                        <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-                          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" className="opacity-25" />
-                          <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" className="opacity-75" />
-                        </svg>
-                        Sending…
-                      </span>
-                    ) : 'Send Message'}
-                  </button>
-                </form>
               )}
             </div>
-          </section>
-
-          {/* Direct Contact */}
-
+          ))}
         </div>
       </div>
-      <Footer dark={true} />
-    </>
+
+      {/* Contact Form */}
+      <div className="bg-white border border-gray-200 rounded-xl p-6">
+        <h2 className="text-lg font-bold text-gray-900 mb-4">Contact Us</h2>
+        {submitted ? (
+          <div className="text-center py-8">
+            <svg className="w-12 h-12 text-blue-600 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p className="text-gray-900 font-semibold mb-1">Message sent!</p>
+            <p className="text-gray-500 text-sm">We'll get back to you as soon as possible.</p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-gray-700 text-xs font-medium mb-1">First Name *</label>
+                <input type="text" value={form.firstName} onChange={handleChange('firstName')} className={inputClass} required />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-xs font-medium mb-1">Last Name</label>
+                <input type="text" value={form.lastName} onChange={handleChange('lastName')} className={inputClass} />
+              </div>
+            </div>
+            <div>
+              <label className="block text-gray-700 text-xs font-medium mb-1">Email *</label>
+              <input type="email" value={form.email} onChange={handleChange('email')} className={inputClass} required />
+            </div>
+            <div>
+              <label className="block text-gray-700 text-xs font-medium mb-1">Message *</label>
+              <textarea value={form.message} onChange={handleChange('message')} rows={4} className={inputClass + " resize-none"} placeholder="Describe your issue or question..." required />
+            </div>
+            <button type="submit" disabled={sending} className="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-6 py-2.5 rounded-lg transition-all disabled:opacity-50">
+              {sending ? 'Sending...' : 'Send Message'}
+            </button>
+          </form>
+        )}
+      </div>
+    </div>
   );
 };
 

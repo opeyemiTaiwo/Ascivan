@@ -8,6 +8,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
 import usePosterName from '../../hooks/usePosterName';
+import { checkPaidProjectLimit } from '../../utils/paidProjectLimits';
 
 const industryTracks = [
   { value: 'healthcare', label: 'Healthcare / Medical' },
@@ -81,12 +82,20 @@ const ProjectSubmission = () => {
   ]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [paidLimit, setPaidLimit] = useState({ allowed: true, remaining: 3, used: 0, limit: 3, plan: 'Free' });
 
   useEffect(() => {
     if (!authLoading && !currentUser) {
       navigate('/login', { replace: true, state: { from: '/projects/submit', message: 'Please sign in to post a project' } });
     }
   }, [currentUser, authLoading, navigate]);
+
+  // Check paid project limit
+  useEffect(() => {
+    if (currentUser) {
+      checkPaidProjectLimit(currentUser).then(setPaidLimit);
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     if (currentUser && !formData.contactEmail) {
@@ -184,6 +193,13 @@ const ProjectSubmission = () => {
       return;
     }
 
+    // Check paid project limit for basic members
+    if (formData.pricingType === 'paid' && !paidLimit.allowed) {
+      toast.error(`Basic members can only complete ${paidLimit.limit} paid projects per year. Upgrade to Premium for unlimited.`);
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       const validRoles = teamRoles.filter(r => r.role.trim()).map(r => ({
         role: r.role.trim(),
@@ -229,7 +245,19 @@ const ProjectSubmission = () => {
         updatedAt: serverTimestamp(),
       };
 
-      await addDoc(collection(db, 'projects'), submissionData);
+      const docRef = await addDoc(collection(db, 'projects'), submissionData);
+
+      // Log project creation
+      try {
+        const { logActivity } = await import('../../utils/activityLog');
+        await logActivity(docRef.id, {
+          type: 'project_created',
+          actor: currentUser.email,
+          actorName: currentUser.displayName || currentUser.email,
+          description: `Project "${formData.projectTitle}" created (${formData.pricingType})`,
+          metadata: { pricingType: formData.pricingType, teamSize: teamRoles.reduce((s, r) => s + (parseInt(r.count) || 1), 0) },
+        });
+      } catch (e) { console.log('Activity log skipped:', e.message); }
 
       toast.success('Project posted successfully!');
       setTimeout(() => navigate('/projects'), 1500);
@@ -355,8 +383,24 @@ const ProjectSubmission = () => {
                 </div>
 
                 {formData.pricingType === 'free' && (
-                  <div className="bg-blue-600/10 border border-gray-200 rounded-xl p-3">
-                    <p className="text-blue-500 text-sm">This is a free project. Team members will contribute on a volunteer or learning basis.</p>
+                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-3">
+                    <p className="text-blue-700 text-sm">This is a free project. Team members will contribute on a volunteer or learning basis.</p>
+                  </div>
+                )}
+
+                {formData.pricingType === 'paid' && !paidLimit.allowed && paidLimit.plan !== 'Premium' && (
+                  <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                    <p className="text-red-700 text-sm font-semibold mb-1">Paid project limit reached</p>
+                    <p className="text-gray-600 text-xs mb-3">Basic members can complete up to {paidLimit.limit} paid projects per year. You've used {paidLimit.used} of {paidLimit.limit}.</p>
+                    <button type="button" onClick={() => navigate('/settings?tab=membership')} className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium px-4 py-2 rounded-lg transition-all">
+                      Upgrade to Premium
+                    </button>
+                  </div>
+                )}
+
+                {formData.pricingType === 'paid' && paidLimit.allowed && paidLimit.plan !== 'Premium' && (
+                  <div className="bg-orange-50 border border-orange-200 rounded-xl p-3">
+                    <p className="text-orange-700 text-sm">Paid project — {paidLimit.remaining} of {paidLimit.limit} paid projects remaining this year.</p>
                   </div>
                 )}
               </div>

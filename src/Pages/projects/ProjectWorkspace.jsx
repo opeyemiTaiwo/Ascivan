@@ -3,9 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
+import { logActivity } from '../../utils/activityLog';
 
 const ProjectWorkspace = () => {
   const { projectId } = useParams();
@@ -57,6 +58,13 @@ const ProjectWorkspace = () => {
       });
       toast.success('Workspace updated');
       setShowSetupModal(false);
+
+      logActivity(projectId, {
+        type: 'workspace_updated',
+        actor: currentUser?.email,
+        actorName: currentUser?.displayName || currentUser?.email,
+        description: 'Workspace settings updated',
+      });
     } catch (e) {
       toast.error('Failed to save workspace');
     }

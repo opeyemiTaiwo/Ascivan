@@ -208,33 +208,68 @@ const Settings = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div className={`bg-white border-2 rounded-xl p-6 ${profileData?.membershipPlan !== 'Premium' ? 'border-blue-500' : 'border-gray-200'}`}>
               <h3 className="text-blue-600 font-bold text-lg mb-1">Basic Membership</h3>
-              <p className="text-gray-900 font-bold text-2xl mb-4">$0<span className="text-gray-400 text-sm font-normal">/month</span></p>
+              <p className="text-gray-900 font-bold text-2xl mb-4">Free</p>
               <ul className="space-y-2.5 text-sm text-gray-600 mb-6">
-                <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">*</span> No billing</li>
-                <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">*</span> Earn TechTalent Badges</li>
-                <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">*</span> Post unlimited projects</li>
-                <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">*</span> Private messaging on paid projects</li>
-                <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">*</span> Community access</li>
+                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> Unlimited free projects</li>
+                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> Up to 3 completed paid projects per year</li>
+                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> Earn TechTalent Badges (all 6 tracks)</li>
+                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> Community posts and messaging</li>
+                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> Project workspace access</li>
+                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> Certificates on project completion</li>
               </ul>
               {profileData?.membershipPlan !== 'Premium' && (
                 <p className="text-blue-600 font-semibold text-sm">Current Plan</p>
               )}
             </div>
             <div className={`bg-white border-2 rounded-xl p-6 ${profileData?.membershipPlan === 'Premium' ? 'border-blue-500' : 'border-gray-200'}`}>
-              <h3 className="text-blue-600 font-bold text-lg mb-1">Premium Membership</h3>
-              <p className="text-gray-900 font-bold text-2xl mb-4">$100<span className="text-gray-400 text-sm font-normal">/month</span></p>
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="text-blue-600 font-bold text-lg">Premium Membership</h3>
+                <span className="text-[10px] font-bold bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">RECOMMENDED</span>
+              </div>
+              <p className="text-gray-900 font-bold text-2xl mb-4">$100<span className="text-gray-400 text-sm font-normal">/year</span></p>
               <ul className="space-y-2.5 text-sm text-gray-600 mb-6">
-                <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">*</span> All basic benefits</li>
-                <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">*</span> Hire talent for your projects</li>
-                <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">*</span> Premium badge on projects</li>
-                <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">*</span> Smart Match application system</li>
-                <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">*</span> Project and profile recommendations</li>
+                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> Everything in Basic</li>
+                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-orange-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> <strong>Unlimited paid projects</strong> (post & apply)</li>
+                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-orange-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> <strong>Talent Board visibility</strong> — get discovered by recruiters</li>
+                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-orange-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> Priority support</li>
+                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-orange-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> Premium badge on your profile</li>
               </ul>
               <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm py-2.5 rounded-lg transition-all">
-                {profileData?.membershipPlan === 'Premium' ? 'Current Plan' : 'Get Started'}
+                {profileData?.membershipPlan === 'Premium' ? 'Current Plan' : 'Upgrade to Premium'}
               </button>
             </div>
-            <p className="sm:col-span-2 text-gray-400 text-xs">All paid projects accepted by collaborators come with a 10% platform charge for both memberships.</p>
+            <div className="sm:col-span-2 bg-gray-50 border border-gray-200 rounded-xl p-4">
+              <p className="text-gray-900 text-sm font-semibold mb-2">Plan Comparison</p>
+              <div className="grid grid-cols-3 gap-2 text-xs">
+                <div className="text-gray-500 font-medium">Feature</div>
+                <div className="text-gray-500 font-medium text-center">Basic</div>
+                <div className="text-gray-500 font-medium text-center">Premium</div>
+                
+                <div className="text-gray-700">Free projects</div>
+                <div className="text-center text-gray-900">Unlimited</div>
+                <div className="text-center text-gray-900">Unlimited</div>
+                
+                <div className="text-gray-700">Paid projects (per year)</div>
+                <div className="text-center text-gray-900">3</div>
+                <div className="text-center text-blue-600 font-semibold">Unlimited</div>
+                
+                <div className="text-gray-700">TechTalent Badges</div>
+                <div className="text-center text-gray-900">All 6 tracks</div>
+                <div className="text-center text-gray-900">All 6 tracks</div>
+                
+                <div className="text-gray-700">Talent Board</div>
+                <div className="text-center text-gray-400">—</div>
+                <div className="text-center text-blue-600 font-semibold">Yes</div>
+                
+                <div className="text-gray-700">Messaging</div>
+                <div className="text-center text-gray-900">Yes</div>
+                <div className="text-center text-gray-900">Yes</div>
+                
+                <div className="text-gray-700">Priority support</div>
+                <div className="text-center text-gray-400">—</div>
+                <div className="text-center text-blue-600 font-semibold">Yes</div>
+              </div>
+            </div>
           </div>
         )}
 

@@ -8,6 +8,7 @@ import { doc, getDoc, updateDoc, addDoc, collection, query, where, getDocs, serv
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
 import { notifyBadgeAwarded } from '../../utils/emailNotifications';
+import { logActivity } from '../../utils/activityLog';
 
 const badgeCategories = {
   'mentorship': { id: 'techmo', name: 'TechMO (Mentor)', color: 'from-blue-500 to-blue-600' },
@@ -46,7 +47,8 @@ const ProjectCompletion = () => {
   const [evaluations, setEvaluations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [step, setStep] = useState(1); // 1=review, 2=evaluate, 3=done
+  const [step, setStep] = useState(1); // 1=review, 2=evaluate, 3=awaiting_payment, 4=done
+  const [paymentConfirmations, setPaymentConfirmations] = useState({});
 
   useEffect(() => {
     fetchData();
@@ -65,7 +67,11 @@ const ProjectCompletion = () => {
         navigate('/projects'); return;
       }
 
-      if (data.status === 'completed') { setStep(3); }
+      if (data.status === 'completed') { setStep(4); }
+      else if (data.status === 'awaiting_payment_confirmation') {
+        setStep(3);
+        setPaymentConfirmations(data.paymentConfirmations || {});
+      }
       setProject(data);
 
       // Fetch approved members
@@ -127,6 +133,75 @@ const ProjectCompletion = () => {
     });
   };
 
+  // For paid projects: request payment confirmation from members first
+  const handleRequestPaymentConfirmation = async () => {
+    if (members.length > 0) {
+      const hasEvals = evaluations.every(e => e.contribution);
+      if (!hasEvals) { toast.error('Please rate contribution for all members'); return; }
+    }
+
+    setSubmitting(true);
+    try {
+      // Initialize payment confirmation tracking
+      const confirmations = {};
+      const paidMembers = evaluations.filter(e => e.contribution !== 'poor');
+      paidMembers.forEach(ev => {
+        confirmations[ev.memberEmail] = { status: 'pending', name: ev.memberName, role: ev.memberRole };
+      });
+
+      // Save evaluations and set project to awaiting payment confirmation
+      await updateDoc(doc(db, 'projects', projectId), {
+        status: 'awaiting_payment_confirmation',
+        paymentConfirmations: confirmations,
+        pendingEvaluations: evaluations.map(e => ({
+          memberId: e.memberId, memberEmail: e.memberEmail, memberName: e.memberName, 
+          memberRole: e.memberRole, badgeCategory: e.badgeCategory, badgeLevel: e.badgeLevel,
+          contribution: e.contribution, awardBadge: e.awardBadge, notes: e.notes,
+        })),
+      });
+
+      // Notify each paid member to confirm payment
+      for (const ev of paidMembers) {
+        try {
+          const userQ = query(collection(db, 'users'), where('email', '==', ev.memberEmail));
+          const userSnap = await getDocs(userQ);
+          if (!userSnap.empty) {
+            await addDoc(collection(db, 'notifications'), {
+              userId: userSnap.docs[0].id,
+              type: 'payment_confirmation',
+              message: `Please confirm you've been paid for "${project.projectTitle || project.title}"`,
+              projectId: projectId,
+              projectTitle: project.projectTitle || project.title,
+              isRead: false,
+              createdAt: serverTimestamp(),
+            });
+          }
+        } catch (notifErr) {
+          console.error('Notification error:', notifErr);
+        }
+      }
+
+      setPaymentConfirmations(confirmations);
+      setStep(3);
+      toast.success('Payment confirmation requests sent to all members!');
+
+      // Log activity
+      await logActivity(projectId, {
+        type: 'payment_requested',
+        actor: currentUser.email,
+        actorName: currentUser.displayName || currentUser.email,
+        description: `Payment confirmation requested from ${paidMembers.length} member(s)`,
+        metadata: { memberCount: paidMembers.length, members: paidMembers.map(e => e.memberEmail) },
+      });
+    } catch (err) {
+      console.error('Error:', err);
+      toast.error('Error requesting payment confirmations');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Finalize completion (called after all payments confirmed, or for free projects)
   const handleComplete = async () => {
     if (members.length > 0) {
       const hasEvals = evaluations.every(e => e.contribution);
@@ -314,14 +389,68 @@ const ProjectCompletion = () => {
         }
       }
 
-      setStep(3);
+      // Notify all members that the project is completed
+      for (const ev of evaluations) {
+        try {
+          const userQ = query(collection(db, 'users'), where('email', '==', ev.memberEmail));
+          const userSnap = await getDocs(userQ);
+          if (!userSnap.empty) {
+            const badgeAwarded = ev.awardBadge && ev.contribution !== 'poor';
+            await addDoc(collection(db, 'notifications'), {
+              userId: userSnap.docs[0].id,
+              type: 'project_completed',
+              message: badgeAwarded
+                ? `🎉 "${project.projectTitle || project.title}" is complete! You earned a ${badgeCategories[ev.badgeCategory]?.name || ev.badgeCategory} badge (${ev.badgeLevel}).`
+                : `"${project.projectTitle || project.title}" has been completed.`,
+              projectId: projectId,
+              projectTitle: project.projectTitle || project.title,
+              mentionedByName: currentUser.displayName || currentUser.email,
+              mentionedByPhoto: currentUser.photoURL || null,
+              isRead: false,
+              createdAt: serverTimestamp(),
+            });
+          }
+        } catch (notifErr) { console.error('Member completion notification error:', notifErr); }
+      }
+
+      setStep(4);
       toast.success('Project completed successfully!');
+
+      // Log completion
+      await logActivity(projectId, {
+        type: 'project_completed',
+        actor: currentUser.email,
+        actorName: currentUser.displayName || currentUser.email,
+        description: `Project completed. ${evaluations.filter(e => e.awardBadge && e.contribution !== 'poor').length} badges awarded to ${members.length} members.`,
+        metadata: {
+          teamSize: members.length,
+          badgesAwarded: evaluations.filter(e => e.awardBadge && e.contribution !== 'poor').length,
+          isPaid: project.pricingType === 'paid',
+        },
+      });
     } catch (err) {
       console.error('Error completing project:', err);
       toast.error('Error completing project: ' + err.message);
     } finally {
       setSubmitting(false);
     }
+  };
+
+  // Check if all payments are confirmed
+  const allPaymentsConfirmed = Object.values(paymentConfirmations).every(p => p.status === 'confirmed');
+  const confirmedCount = Object.values(paymentConfirmations).filter(p => p.status === 'confirmed').length;
+  const totalPaidMembers = Object.keys(paymentConfirmations).length;
+
+  // Refresh payment confirmations
+  const refreshConfirmations = async () => {
+    try {
+      const snap = await getDoc(doc(db, 'projects', projectId));
+      if (snap.exists()) {
+        const data = snap.data();
+        setPaymentConfirmations(data.paymentConfirmations || {});
+        if (data.status === 'completed') setStep(4);
+      }
+    } catch (e) { console.error(e); }
   };
 
   const inputClass = "w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 min-h-[44px] text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none text-sm transition-all";
@@ -364,8 +493,65 @@ const ProjectCompletion = () => {
               <p className="text-gray-400 text-sm">{project.projectTitle}</p>
             </div>
 
-            {/* Step 3: Done */}
+            {/* Step 3: Awaiting Payment Confirmation (paid projects only) */}
             {step === 3 && (
+              <div className="space-y-6">
+                <div className="bg-orange-50 border border-orange-200 rounded-xl p-6 text-center">
+                  <svg className="w-12 h-12 text-orange-500 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <h2 className="text-lg font-bold text-gray-900 mb-1">Awaiting Payment Confirmations</h2>
+                  <p className="text-gray-600 text-sm mb-4">Members must confirm they've been paid before the project can be completed.</p>
+                  <p className="text-blue-600 font-semibold text-sm">{confirmedCount} of {totalPaidMembers} confirmed</p>
+                </div>
+
+                {/* Member confirmation status */}
+                <div className="bg-white border border-gray-200 rounded-xl p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-base font-bold text-gray-900">Payment Status</h3>
+                    <button onClick={refreshConfirmations} className="text-blue-600 text-sm font-medium hover:underline">Refresh</button>
+                  </div>
+                  <div className="space-y-3">
+                    {Object.entries(paymentConfirmations).map(([email, data]) => (
+                      <div key={email} className={`flex items-center justify-between p-3 rounded-lg border ${data.status === 'confirmed' ? 'border-blue-200 bg-blue-50' : data.status === 'disputed' ? 'border-red-200 bg-red-50' : 'border-gray-200 bg-gray-50'}`}>
+                        <div>
+                          <p className="text-gray-900 text-sm font-medium">{data.name}</p>
+                          <p className="text-gray-500 text-xs">{data.role}</p>
+                        </div>
+                        <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
+                          data.status === 'confirmed' ? 'bg-blue-100 text-blue-700' :
+                          data.status === 'disputed' ? 'bg-red-100 text-red-700' :
+                          'bg-gray-200 text-gray-600'
+                        }`}>
+                          {data.status === 'confirmed' ? 'Paid' : data.status === 'disputed' ? 'Disputed' : 'Pending'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Complete button — only when all confirmed */}
+                {allPaymentsConfirmed && totalPaidMembers > 0 && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 text-center">
+                    <p className="text-blue-700 font-semibold text-sm mb-3">All members confirmed payment. You can now complete the project.</p>
+                    <button
+                      onClick={handleComplete}
+                      disabled={submitting}
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-6 py-2.5 rounded-lg transition-all disabled:opacity-50"
+                    >
+                      {submitting ? 'Completing...' : 'Finalize & Award Badges'}
+                    </button>
+                  </div>
+                )}
+
+                {!allPaymentsConfirmed && (
+                  <p className="text-gray-400 text-xs text-center">Waiting for all members to confirm payment. Badges will be awarded once all confirmations are received.</p>
+                )}
+              </div>
+            )}
+
+            {/* Step 4: Done */}
+            {step === 4 && (
               <div className="bg-blue-600/10 border border-gray-200 rounded-2xl p-8 text-center">
                 <svg className="w-16 h-16 text-blue-600 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -512,10 +698,17 @@ const ProjectCompletion = () => {
                       <button onClick={() => setStep(1)} className="px-5 py-2.5 min-h-[44px] bg-gray-100 hover:bg-gray-100 text-gray-900 font-semibold rounded-xl text-sm transition-all">
                         Back
                       </button>
-                      <button onClick={handleComplete} disabled={submitting}
-                        className="flex-1 py-3.5 min-h-[48px] bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl text-sm transition-all shadow-lg disabled:opacity-50">
-                        {submitting ? 'Completing Project...' : 'Complete Project and Award Badges'}
-                      </button>
+                      {project.pricingType === 'paid' ? (
+                        <button onClick={handleRequestPaymentConfirmation} disabled={submitting}
+                          className="flex-1 py-3.5 min-h-[48px] bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl text-sm transition-all shadow-lg disabled:opacity-50">
+                          {submitting ? 'Sending Requests...' : 'Request Payment Confirmations'}
+                        </button>
+                      ) : (
+                        <button onClick={handleComplete} disabled={submitting}
+                          className="flex-1 py-3.5 min-h-[48px] bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl text-sm transition-all shadow-lg disabled:opacity-50">
+                          {submitting ? 'Completing Project...' : 'Complete Project & Award Badges'}
+                        </button>
+                      )}
                     </div>
                   </>
                 )}

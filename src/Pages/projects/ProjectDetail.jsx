@@ -4,10 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../../components/Navbar';
-import { doc, getDoc, collection, query, where, getDocs, addDoc, serverTimestamp, updateDoc, increment } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, getDocs, addDoc, serverTimestamp, updateDoc, increment, arrayUnion } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
 import { notifyNewApplicationToOwner } from '../../utils/emailNotifications';
+import { logActivity } from '../../utils/activityLog';
 
 const industryTracks = [
   { value: 'healthcare', label: 'Healthcare / Medical' },
@@ -34,6 +35,141 @@ const industryTracks = [
 ];
 
 const getIndustryLabel = (val) => industryTracks.find(t => t.value === val)?.label || val;
+
+// Payment confirmation card for members
+const PaymentConfirmationCard = ({ project, projectId, currentUser }) => {
+  const [status, setStatus] = useState('pending');
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    const confirmations = project.paymentConfirmations || {};
+    const myStatus = confirmations[currentUser.email]?.status;
+    if (myStatus) setStatus(myStatus);
+  }, [project, currentUser]);
+
+  const handleConfirm = async (newStatus) => {
+    setSubmitting(true);
+    try {
+      const updates = {
+        [`paymentConfirmations.${currentUser.email}.status`]: newStatus,
+        [`paymentConfirmations.${currentUser.email}.confirmedAt`]: new Date().toISOString(),
+      };
+
+      // Save dispute history entry on the project
+      if (newStatus === 'disputed' || newStatus === 'confirmed') {
+        const historyEntry = {
+          memberEmail: currentUser.email,
+          memberName: currentUser.displayName || currentUser.email,
+          action: newStatus,
+          timestamp: new Date().toISOString(),
+        };
+        await updateDoc(doc(db, 'projects', projectId), {
+          ...updates,
+          disputeHistory: arrayUnion(historyEntry),
+        });
+      } else {
+        await updateDoc(doc(db, 'projects', projectId), updates);
+      }
+
+      // Notify the project owner
+      if (project.submitterId || project.submitterEmail) {
+        try {
+          let ownerUid = project.submitterId;
+          if (!ownerUid && project.submitterEmail) {
+            const ownerQ = query(collection(db, 'users'), where('email', '==', project.submitterEmail));
+            const ownerSnap = await getDocs(ownerQ);
+            if (!ownerSnap.empty) ownerUid = ownerSnap.docs[0].id;
+          }
+          if (ownerUid) {
+            await addDoc(collection(db, 'notifications'), {
+              userId: ownerUid,
+              type: newStatus === 'confirmed' ? 'payment_confirmed' : 'payment_disputed',
+              message: newStatus === 'confirmed'
+                ? `${currentUser.displayName || currentUser.email} confirmed payment for "${project.projectTitle || project.title}"`
+                : `⚠️ ${currentUser.displayName || currentUser.email} disputed payment for "${project.projectTitle || project.title}"`,
+              projectId: projectId,
+              projectTitle: project.projectTitle || project.title,
+              mentionedByName: currentUser.displayName || currentUser.email,
+              mentionedByPhoto: currentUser.photoURL || null,
+              isRead: false,
+              createdAt: serverTimestamp(),
+            });
+          }
+        } catch (e) { console.error('Owner notification error:', e); }
+      }
+
+      // If disputed, also notify all admins
+      if (newStatus === 'disputed') {
+        try {
+          const adminQ = query(collection(db, 'users'), where('role', '==', 'admin'));
+          const adminSnap = await getDocs(adminQ);
+          for (const adminDoc of adminSnap.docs) {
+            await addDoc(collection(db, 'notifications'), {
+              userId: adminDoc.id,
+              type: 'payment_disputed',
+              message: `🚨 Payment Dispute: ${currentUser.displayName || currentUser.email} disputed payment for "${project.projectTitle || project.title}"`,
+              projectId: projectId,
+              projectTitle: project.projectTitle || project.title,
+              mentionedByName: currentUser.displayName || currentUser.email,
+              mentionedByPhoto: currentUser.photoURL || null,
+              isRead: false,
+              createdAt: serverTimestamp(),
+            });
+          }
+        } catch (e) { console.error('Admin notification error:', e); }
+      }
+
+      setStatus(newStatus);
+      toast.success(newStatus === 'confirmed' ? 'Payment confirmed!' : 'Dispute submitted. Admin has been notified.');
+
+      // Log activity
+      logActivity(projectId, {
+        type: newStatus === 'confirmed' ? 'payment_confirmed' : 'payment_disputed',
+        actor: currentUser.email,
+        actorName: currentUser.displayName || currentUser.email,
+        description: newStatus === 'confirmed'
+          ? `${currentUser.displayName || currentUser.email} confirmed payment`
+          : `${currentUser.displayName || currentUser.email} disputed payment`,
+      });
+    } catch (e) {
+      toast.error('Error updating status');
+    }
+    setSubmitting(false);
+  };
+
+  if (status === 'confirmed') {
+    return (
+      <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
+        <p className="text-blue-700 font-semibold text-sm">Payment confirmed</p>
+        <p className="text-gray-500 text-xs mt-1">You've confirmed payment for this project. Badges will be awarded once all members confirm.</p>
+      </div>
+    );
+  }
+
+  if (status === 'disputed') {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-xl p-5">
+        <p className="text-red-700 font-semibold text-sm">Payment disputed</p>
+        <p className="text-gray-500 text-xs mt-1">Your dispute has been flagged for admin review.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-orange-50 border border-orange-200 rounded-xl p-5">
+      <p className="text-orange-700 font-semibold text-sm mb-1">Payment Confirmation Required</p>
+      <p className="text-gray-600 text-xs mb-4">The project owner has marked this project for completion. Please confirm you've been paid before badges are awarded.</p>
+      <div className="flex gap-2">
+        <button onClick={() => handleConfirm('confirmed')} disabled={submitting} className="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition-all disabled:opacity-50">
+          {submitting ? 'Submitting...' : 'Confirm Payment Received'}
+        </button>
+        <button onClick={() => handleConfirm('disputed')} disabled={submitting} className="bg-white border border-red-300 text-red-600 font-medium text-sm px-4 py-2 rounded-lg hover:bg-red-50 transition-all disabled:opacity-50">
+          Dispute
+        </button>
+      </div>
+    </div>
+  );
+};
 const formatTimeline = (t) => ({
   '1-week': '1 Week', '2-weeks': '2 Weeks', '1-month': '1 Month',
   '2-3-months': '2-3 Months', '3-6-months': '3-6 Months',
@@ -55,6 +191,15 @@ const ProjectDetail = () => {
   const [showApplyForm, setShowApplyForm] = useState(false);
   const [applyForm, setApplyForm] = useState({ role: '', skills: '', message: '' });
   const [submittingApp, setSubmittingApp] = useState(false);
+  const [paidLimit, setPaidLimit] = useState({ allowed: true, remaining: 3, used: 0, limit: 3, plan: 'Free' });
+
+  useEffect(() => {
+    if (currentUser) {
+      import('../../utils/paidProjectLimits').then(({ checkPaidProjectLimit }) => {
+        checkPaidProjectLimit(currentUser).then(setPaidLimit);
+      });
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -269,7 +414,16 @@ const ProjectDetail = () => {
             {/* Apply Section */}
             {!isOwner && currentUser && (
               <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-8">
-                {hasApplied ? (
+                {/* Paid project limit check */}
+                {project.pricingType === 'paid' && !paidLimit.allowed && paidLimit.plan !== 'Premium' ? (
+                  <div className="text-center py-4">
+                    <p className="text-red-600 font-semibold text-sm mb-1">Paid project limit reached</p>
+                    <p className="text-gray-500 text-xs mb-3">Basic members can complete up to {paidLimit.limit} paid projects per year. You've used {paidLimit.used} of {paidLimit.limit}.</p>
+                    <button onClick={() => navigate('/settings?tab=membership')} className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg transition-all">
+                      Upgrade to Premium
+                    </button>
+                  </div>
+                ) : hasApplied ? (
                   <div className="text-center py-4">
                     <p className="text-blue-600 font-bold text-sm">You have already applied to this project</p>
                     <p className="text-gray-500 text-xs mt-1">The project owner will review your application</p>
@@ -341,7 +495,7 @@ const ProjectDetail = () => {
             )}
 
             {/* Member workspace access */}
-            {isMember && !isOwner && (
+            {isMember && !isOwner && project.status !== 'awaiting_payment_confirmation' && (
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
                 <p className="text-blue-700 font-semibold text-sm mb-1">You are a member of this project</p>
                 <p className="text-gray-500 text-xs mb-3">Access the workspace to collaborate with your team.</p>
@@ -349,6 +503,11 @@ const ProjectDetail = () => {
                   Open Workspace
                 </button>
               </div>
+            )}
+
+            {/* Payment Confirmation for members */}
+            {isMember && !isOwner && project.status === 'awaiting_payment_confirmation' && (
+              <PaymentConfirmationCard project={project} projectId={projectId} currentUser={currentUser} />
             )}
 
             {/* Not logged in */}

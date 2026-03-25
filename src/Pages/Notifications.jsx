@@ -49,7 +49,8 @@ const NotificationsPage = () => {
 
   const handleClick = (n) => {
     if (!n.isRead) markAsRead(n.id);
-    if (n.postId) navigate(`/community/post/${n.postId}`);
+    if (n.projectId && paymentTypes.includes(n.type)) navigate(`/projects/${n.projectId}`);
+    else if (n.postId) navigate(`/community/post/${n.postId}`);
     else if (n.mentionedByEmail) navigate(`/profile/${n.mentionedByEmail}`);
     else navigate('/community');
   };
@@ -64,15 +65,19 @@ const NotificationsPage = () => {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
+  const paymentTypes = ['payment_confirmation', 'payment_confirmed', 'payment_disputed', 'dispute_resolved', 'project_completed'];
+
   const filtered = filter === 'all' ? notifications
     : filter === 'unread' ? notifications.filter(n => !n.isRead)
     : filter === 'mentions' ? notifications.filter(n => n.type?.includes('mention'))
     : filter === 'myposts' ? notifications.filter(n => n.type?.includes('like') || n.type?.includes('repost') || n.type?.includes('comment'))
+    : filter === 'payments' ? notifications.filter(n => paymentTypes.includes(n.type))
     : notifications;
 
   const tabs = [
     { key: 'all', label: 'All', count: notifications.length },
     { key: 'unread', label: 'Unread', count: notifications.filter(n => !n.isRead).length },
+    { key: 'payments', label: 'Payments', count: notifications.filter(n => paymentTypes.includes(n.type)).length },
     { key: 'myposts', label: 'My Posts', count: notifications.filter(n => n.type?.includes('like') || n.type?.includes('repost') || n.type?.includes('comment')).length },
     { key: 'mentions', label: 'Mentions', count: notifications.filter(n => n.type?.includes('mention')).length },
   ];

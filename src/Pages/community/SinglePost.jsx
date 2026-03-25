@@ -651,7 +651,7 @@ const SinglePost = () => {
   if (loading) {
     return (
       <div className="min-h-screen overflow-x-hidden bg-gray-50">
-        <Navbar />
+        
         <div className="container mx-auto px-3 xs:px-4 sm:px-6 py-6 xs:py-8 max-w-4xl">
           <div className="bg-white rounded-lg xs:rounded-xl sm:rounded-2xl shadow-sm p-4 xs:p-5 sm:p-6 md:p-8">
             <div className="animate-pulse space-y-4 xs:space-y-5 sm:space-y-6">
@@ -671,7 +671,7 @@ const SinglePost = () => {
   if (notFound) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Navbar />
+        
         <div className="container mx-auto px-3 xs:px-4 sm:px-6 py-6 xs:py-8 max-w-4xl">
           <div className="bg-white rounded-lg xs:rounded-xl sm:rounded-2xl shadow-sm p-6 xs:p-8 sm:p-10 md:p-12 text-center">
             <div className="max-w-md mx-auto">
@@ -699,7 +699,7 @@ const SinglePost = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
+      
 
       <div className="container mx-auto px-3 xs:px-4 sm:px-6 py-4 xs:py-6 sm:py-8 max-w-4xl">
         {/* Back Button */}

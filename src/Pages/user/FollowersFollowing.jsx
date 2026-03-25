@@ -1008,7 +1008,7 @@ const FollowersFollowing = () => {
   if (loading) {
     return (
       <>
-        <Navbar />
+        
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center px-3 xs:px-4">
           <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-6 xs:p-7 sm:p-8 border border-white/20 text-center max-w-sm w-full">
             <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-2 border-lime-400 mx-auto mb-4"></div>
@@ -1021,10 +1021,10 @@ const FollowersFollowing = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
 
-        <main className="pt-16 xs:pt-18 sm:pt-20 pb-12 xs:pb-14 sm:pb-16">
+        <main className=" pb-12 xs:pb-14 sm:pb-16">
           <div className="container mx-auto px-3 xs:px-4 sm:px-6 py-4 xs:py-6 sm:py-8 max-w-7xl">
             
             {userProfile && activeTab !== 'members' && (

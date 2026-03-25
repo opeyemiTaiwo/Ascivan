@@ -192,9 +192,9 @@ const MembersDirectory = () => {
   return (
     <div className="min-h-screen overflow-x-hidden flex flex-col relative" style={{ backgroundColor: '#000000' }}>
 
-      <Navbar />
+      
 
-      <main className="flex-grow pt-20 sm:pt-24 md:pt-28 pb-12 sm:pb-16">
+      <main className="flex-grow  pb-12 sm:pb-16">
         <div className="container mx-auto px-4 sm:px-6 py-8 max-w-7xl">
           
           {/* Hero Section */}

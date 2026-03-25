@@ -244,7 +244,7 @@ const Messages = () => {
   if (loading) {
     return (
       <>
-        <Navbar />
+        
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
           <div className="w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full animate-spin" />
         </div>
@@ -254,7 +254,7 @@ const Messages = () => {
 
   return (
     <>
-      <Navbar />
+      
 
       {/* Fill remaining viewport; works with both 64px and 80px navbar heights */}
       <div className="bg-gray-50 flex flex-col" style={{ height: 'calc(100svh - 4rem)' }}>

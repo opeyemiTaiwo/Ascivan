@@ -83,7 +83,7 @@ const MyProjects = () => {
 
   if (loading) {
     return (
-      <><Navbar />
+      <>
         <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#000' }}>
           <div className="text-center">
             <div className="w-8 h-8 border-2 border-purple-400 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
@@ -96,7 +96,7 @@ const MyProjects = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div className="min-h-screen overflow-x-hidden" style={{ backgroundColor: '#000' }}>
         <div className="container mx-auto px-4 sm:px-6 max-w-5xl py-20 sm:py-28">
 

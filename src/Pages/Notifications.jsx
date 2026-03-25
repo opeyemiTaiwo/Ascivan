@@ -245,7 +245,7 @@ const NotificationsPage = () => {
   if (loading) {
     return (
       <>
-        <Navbar />
+        
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-2 border-lime-400 mx-auto mb-4"></div>
@@ -258,7 +258,7 @@ const NotificationsPage = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div className="min-h-screen overflow-x-hidden bg-gradient-to-br from-gray-900 via-black to-gray-900">
         
         {/* Header */}

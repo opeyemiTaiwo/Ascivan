@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { AuthProvider, useAuth } from './context/AuthContext';
+import AppShell from './components/AppShell';
 
 // Critical path - keep eager
 import Login from './Pages/auth/Login';
@@ -15,56 +16,34 @@ import LandingPage from './Pages/LandingPage';
 import Onboarding from './Pages/Onboarding';
 import CommunityPosts from './Pages/community/CommunityPosts';
 
-// Lazy-load secondary pages for faster initial load
+// Lazy-load secondary pages
 const UserDashboard = lazy(() => import('./Pages/user/dashboard'));
 const UserProfile = lazy(() => import('./Pages/user/UserProfile'));
 const FollowersFollowing = lazy(() => import('./Pages/user/FollowersFollowing'));
-const DatabaseSetup = lazy(() => import('./Pages/DatabaseSetup'));
 const NotificationsPage = lazy(() => import('./Pages/Notifications'));
 const Messages = lazy(() => import('./Pages/Messages'));
-const SubmitApplication = lazy(() => import('./Pages/applications/SubmitApplication'));
-const AdminDashboard = lazy(() => import('./Pages/admin/AdminDashboard'));
-const TestDailyDigest = lazy(() => import('./Pages/admin/TestDailyDigest'));
 const MembersDirectory = lazy(() => import('./Pages/MembersDirectory'));
 const SubmitPost = lazy(() => import('./Pages/community/SubmitPost'));
 const SinglePost = lazy(() => import('./Pages/community/SinglePost'));
-const Jobs = lazy(() => import('./Pages/Jobs'));
-const PostJobs = lazy(() => import('./Pages/PostJobs'));
-const MyJobPosts = lazy(() => import('./Pages/MyJobPosts'));
-const MyApplications = lazy(() => import('./Pages/MyApplications'));
-const Housing = lazy(() => import('./Pages/Housing'));
-const PostHousing = lazy(() => import('./Pages/PostHousing'));
-const MyHousingPosts = lazy(() => import('./Pages/MyHousingPosts'));
-const Finance = lazy(() => import('./Pages/Finance'));
-const PostFinance = lazy(() => import('./Pages/PostFinance'));
-const MyFinancePosts = lazy(() => import('./Pages/MyFinancePosts'));
-const MyFinanceApplications = lazy(() => import('./Pages/MyFinanceApplications'));
 const About = lazy(() => import('./Pages/About'));
 const Support = lazy(() => import('./Pages/Support'));
 const TermsOfService = lazy(() => import('./Pages/TermsOfService'));
 const PrivacyPolicy = lazy(() => import('./Pages/PrivacyPolicy'));
-const DigitalSolutionsHome = lazy(() => import('./Pages/digital/DigitalSolutionsHome'));
-const DigitalTermsOfService = lazy(() => import('./Pages/digital/DigitalTermsOfService'));
-const DigitalPrivacyPolicy = lazy(() => import('./Pages/digital/DigitalPrivacyPolicy'));
 const ProjectsListing = lazy(() => import('./Pages/projects/ProjectsListing'));
 const ProjectSubmission = lazy(() => import('./Pages/projects/ProjectSubmission'));
 const ProjectDetail = lazy(() => import('./Pages/projects/ProjectDetail'));
 const ProjectOwnerDashboard = lazy(() => import('./Pages/projects/ProjectOwnerDashboard'));
 const ProjectCompletion = lazy(() => import('./Pages/projects/ProjectCompletion'));
 const MyProjects = lazy(() => import('./Pages/projects/MyProjects'));
+const ProjectWorkspace = lazy(() => import('./Pages/projects/ProjectWorkspace'));
+const TalentBoard = lazy(() => import('./Pages/TalentBoard'));
+const ProjectVault = lazy(() => import('./Pages/ProjectVault'));
+const Settings = lazy(() => import('./Pages/Settings'));
 
-try {
-  require('./services/googleFormService');
-} catch (e) {
-  console.log('Google Form Service not found');
-}
+try { require('./services/googleFormService'); } catch (e) {}
 
 let ErrorBoundary;
-try {
-  ErrorBoundary = require('./components/ErrorBoundary').default;
-} catch (e) {
-  ErrorBoundary = ({ children }) => children;
-}
+try { ErrorBoundary = require('./components/ErrorBoundary').default; } catch (e) { ErrorBoundary = ({ children }) => children; }
 
 const PageLoader = () => (
   <div className="fixed inset-0 bg-white z-50 flex items-center justify-center">
@@ -91,25 +70,14 @@ const BasicProtectedRoute = ({ children, skipOnboardingCheck = false }) => {
   const [checkingOnboarding, setCheckingOnboarding] = useState(true);
 
   useEffect(() => {
-    if (!loading && !currentUser) {
-      navigate('/login');
-      return;
-    }
-
+    if (!loading && !currentUser) { navigate('/login'); return; }
     if (!loading && currentUser && !skipOnboardingCheck) {
       getUserData(currentUser.uid).then(userData => {
-        if (userData && !userData.accountType) {
-          // No account type chosen yet
-          navigate('/account-type', { replace: true });
-        } else if (userData && !userData.onboardingComplete) {
-          navigate('/onboarding', { replace: true });
-        } else {
-          setCheckingOnboarding(false);
-        }
+        if (userData && !userData.accountType) { navigate('/account-type', { replace: true }); }
+        else if (userData && !userData.onboardingComplete) { navigate('/onboarding', { replace: true }); }
+        else { setCheckingOnboarding(false); }
       }).catch(() => setCheckingOnboarding(false));
-    } else if (!loading) {
-      setCheckingOnboarding(false);
-    }
+    } else if (!loading) { setCheckingOnboarding(false); }
   }, [loading, currentUser, navigate, skipOnboardingCheck, getUserData]);
 
   if (loading || checkingOnboarding) return <PageLoader />;
@@ -117,110 +85,73 @@ const BasicProtectedRoute = ({ children, skipOnboardingCheck = false }) => {
   return children;
 };
 
+// Wrap a page in AppShell (sidebar layout) + auth protection
+const SidebarRoute = ({ children }) => (
+  <BasicProtectedRoute>
+    <AppShell>{children}</AppShell>
+  </BasicProtectedRoute>
+);
+
 function App() {
   return (
     <ErrorBoundary>
       <AuthProvider>
         <Router>
-          <div className="w-full min-h-screen overflow-x-hidden bg-gray-50">
+          <div className="w-full min-h-screen overflow-x-hidden">
             <Suspense fallback={<PageLoader />}>
               <Routes>
+                {/* Public — no sidebar */}
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/logout" element={<Logout />} />
-                <Route path="/account-type" element={
-                  <BasicProtectedRoute skipOnboardingCheck={true}>
-                    <AccountTypeSelection />
-                  </BasicProtectedRoute>
-                } />
-                <Route path="/payment" element={<Navigate to="/dashboard" replace />} />
-
-                {/* Onboarding — protected but skips the onboarding check itself */}
-                <Route path="/onboarding" element={
-                  <BasicProtectedRoute skipOnboardingCheck={true}>
-                    <Onboarding />
-                  </BasicProtectedRoute>
-                } />
-
-                {/* Members Directory */}
-                <Route path="/members" element={<MembersDirectory />} />
-                <Route path="/directory" element={<MembersDirectory />} />
-                <Route path="/members-directory" element={<MembersDirectory />} />
-
-                {/* Digital Solutions */}
-                <Route path="/solutions" element={<DigitalSolutionsHome />} />
-                <Route path="/solutions/terms" element={<DigitalTermsOfService />} />
-                <Route path="/solutions/privacy" element={<DigitalPrivacyPolicy />} />
-                <Route path="/digital-solutions" element={<DigitalSolutionsHome />} />
-                <Route path="/services" element={<DigitalSolutionsHome />} />
-
-                {/* About, Support, Terms, Privacy */}
                 <Route path="/about" element={<About />} />
-                <Route path="/support" element={<Support />} />
                 <Route path="/terms" element={<TermsOfService />} />
                 <Route path="/privacy" element={<PrivacyPolicy />} />
 
-                {/* Jobs */}
-                <Route path="/jobs" element={<BasicProtectedRoute><Jobs /></BasicProtectedRoute>} />
-                <Route path="/jobs/post" element={<BasicProtectedRoute><PostJobs /></BasicProtectedRoute>} />
-                <Route path="/jobs/my-posts" element={<BasicProtectedRoute><MyJobPosts /></BasicProtectedRoute>} />
-                <Route path="/jobs/my-applications" element={<BasicProtectedRoute><MyApplications /></BasicProtectedRoute>} />
-                {/* Legacy hub routes redirect to jobs */}
-                <Route path="/hub" element={<Navigate to="/jobs" replace />} />
-                <Route path="/hub/post" element={<Navigate to="/jobs/post" replace />} />
-                <Route path="/hub/my-posts" element={<Navigate to="/jobs/my-posts" replace />} />
+                {/* Auth flow — no sidebar */}
+                <Route path="/account-type" element={<BasicProtectedRoute skipOnboardingCheck={true}><AccountTypeSelection /></BasicProtectedRoute>} />
+                <Route path="/onboarding" element={<BasicProtectedRoute skipOnboardingCheck={true}><Onboarding /></BasicProtectedRoute>} />
 
-                {/* Housing */}
-                <Route path="/housing" element={<BasicProtectedRoute><Housing /></BasicProtectedRoute>} />
-                <Route path="/housing/post" element={<BasicProtectedRoute><PostHousing /></BasicProtectedRoute>} />
-                <Route path="/housing/my-posts" element={<BasicProtectedRoute><MyHousingPosts /></BasicProtectedRoute>} />
+                {/* App pages — all wrapped in sidebar layout */}
+                <Route path="/dashboard" element={<SidebarRoute><UserDashboard /></SidebarRoute>} />
 
-                {/* Projects */}
-                <Route path="/projects" element={<BasicProtectedRoute><ProjectsListing /></BasicProtectedRoute>} />
-                <Route path="/projects/submit" element={<BasicProtectedRoute><ProjectSubmission /></BasicProtectedRoute>} />
-                <Route path="/projects/owner-dashboard" element={<BasicProtectedRoute><ProjectOwnerDashboard /></BasicProtectedRoute>} />
-                <Route path="/projects/my-projects" element={<BasicProtectedRoute><MyProjects /></BasicProtectedRoute>} />
-                <Route path="/projects/:projectId/complete" element={<BasicProtectedRoute><ProjectCompletion /></BasicProtectedRoute>} />
-                <Route path="/projects/:projectId" element={<BasicProtectedRoute><ProjectDetail /></BasicProtectedRoute>} />
+                <Route path="/community" element={<SidebarRoute><CommunityPosts /></SidebarRoute>} />
+                <Route path="/community/submit" element={<SidebarRoute><SubmitPost /></SidebarRoute>} />
+                <Route path="/community/post/:postId" element={<SidebarRoute><SinglePost /></SidebarRoute>} />
+                <Route path="/post/:postId" element={<SidebarRoute><SinglePost /></SidebarRoute>} />
 
-                {/* Finance & Financial Resources */}
-                <Route path="/finance" element={<BasicProtectedRoute><Finance /></BasicProtectedRoute>} />
-                <Route path="/finance/post" element={<BasicProtectedRoute><PostFinance /></BasicProtectedRoute>} />
-                <Route path="/finance/my-posts" element={<BasicProtectedRoute><MyFinancePosts /></BasicProtectedRoute>} />
-                <Route path="/finance/my-applications" element={<BasicProtectedRoute><MyFinanceApplications /></BasicProtectedRoute>} />
-                {/* Legacy banking routes redirect to finance */}
-                <Route path="/banking" element={<Navigate to="/finance" replace />} />
-                <Route path="/banking/post" element={<Navigate to="/finance/post" replace />} />
-                <Route path="/opportunities" element={<Navigate to="/jobs" replace />} />
-                <Route path="/opportunities/post" element={<Navigate to="/jobs/post" replace />} />
+                <Route path="/projects" element={<SidebarRoute><ProjectsListing /></SidebarRoute>} />
+                <Route path="/projects/submit" element={<SidebarRoute><ProjectSubmission /></SidebarRoute>} />
+                <Route path="/projects/owner-dashboard" element={<SidebarRoute><ProjectOwnerDashboard /></SidebarRoute>} />
+                <Route path="/projects/my-projects" element={<SidebarRoute><MyProjects /></SidebarRoute>} />
+                <Route path="/projects/:projectId/complete" element={<SidebarRoute><ProjectCompletion /></SidebarRoute>} />
+                <Route path="/projects/:projectId/workspace" element={<SidebarRoute><ProjectWorkspace /></SidebarRoute>} />
+                <Route path="/projects/:projectId" element={<SidebarRoute><ProjectDetail /></SidebarRoute>} />
 
-                {/* Community */}
-                <Route path="/community" element={<BasicProtectedRoute><CommunityPosts /></BasicProtectedRoute>} />
-                <Route path="/community/submit" element={<BasicProtectedRoute><SubmitPost /></BasicProtectedRoute>} />
-                <Route path="/community/post/:postId" element={<BasicProtectedRoute><SinglePost /></BasicProtectedRoute>} />
-                <Route path="/post/:postId" element={<BasicProtectedRoute><SinglePost /></BasicProtectedRoute>} />
+                <Route path="/talent-board" element={<SidebarRoute><TalentBoard /></SidebarRoute>} />
+                <Route path="/project-vault" element={<SidebarRoute><ProjectVault /></SidebarRoute>} />
+                <Route path="/settings" element={<SidebarRoute><Settings /></SidebarRoute>} />
 
-                {/* Notifications */}
-                <Route path="/notifications" element={<BasicProtectedRoute><NotificationsPage /></BasicProtectedRoute>} />
+                <Route path="/messages" element={<SidebarRoute><Messages /></SidebarRoute>} />
+                <Route path="/notifications" element={<SidebarRoute><NotificationsPage /></SidebarRoute>} />
+                <Route path="/support" element={<SidebarRoute><Support /></SidebarRoute>} />
 
-                {/* Messages */}
-                <Route path="/messages" element={<BasicProtectedRoute><Messages /></BasicProtectedRoute>} />
+                <Route path="/members" element={<SidebarRoute><MembersDirectory /></SidebarRoute>} />
+                <Route path="/directory" element={<SidebarRoute><MembersDirectory /></SidebarRoute>} />
+                <Route path="/members-directory" element={<SidebarRoute><MembersDirectory /></SidebarRoute>} />
 
-                {/* Apply */}
-                <Route path="/apply" element={<SubmitApplication />} />
+                <Route path="/profile/:userEmail" element={<SidebarRoute><UserProfile /></SidebarRoute>} />
+                <Route path="/profile/:userEmail/followers" element={<SidebarRoute><FollowersFollowing /></SidebarRoute>} />
+                <Route path="/profile/:userEmail/following" element={<SidebarRoute><FollowersFollowing /></SidebarRoute>} />
 
-                {/* Dashboard & Profile */}
-                <Route path="/dashboard" element={<BasicProtectedRoute><UserDashboard /></BasicProtectedRoute>} />
-                <Route path="/user/dashboard" element={<BasicProtectedRoute><UserDashboard /></BasicProtectedRoute>} />
-                <Route path="/profile/:userEmail" element={<BasicProtectedRoute><UserProfile /></BasicProtectedRoute>} />
-                <Route path="/profile/:userId" element={<BasicProtectedRoute><UserProfile /></BasicProtectedRoute>} />
-                <Route path="/profile/:userEmail/followers" element={<BasicProtectedRoute><FollowersFollowing /></BasicProtectedRoute>} />
-                <Route path="/profile/:userEmail/following" element={<BasicProtectedRoute><FollowersFollowing /></BasicProtectedRoute>} />
-
-                {/* Admin */}
-                <Route path="/database-setup" element={<DatabaseSetup />} />
-                <Route path="/admin/dashboard" element={<BasicProtectedRoute><AdminDashboard /></BasicProtectedRoute>} />
-                <Route path="/admin/test-daily-digest" element={<BasicProtectedRoute><TestDailyDigest /></BasicProtectedRoute>} />
+                {/* Legacy redirects */}
+                <Route path="/user/dashboard" element={<Navigate to="/dashboard" replace />} />
+                <Route path="/payment" element={<Navigate to="/dashboard" replace />} />
+                <Route path="/jobs" element={<Navigate to="/projects" replace />} />
+                <Route path="/housing" element={<Navigate to="/dashboard" replace />} />
+                <Route path="/finance" element={<Navigate to="/dashboard" replace />} />
+                <Route path="/banking" element={<Navigate to="/dashboard" replace />} />
+                <Route path="/hub" element={<Navigate to="/projects" replace />} />
 
                 {/* 404 */}
                 <Route path="*" element={
@@ -230,9 +161,9 @@ function App() {
                         <span className="text-4xl font-bold text-white">404</span>
                       </div>
                       <h1 className="text-2xl font-bold text-gray-900 mb-3">Page Not Found</h1>
-                      <p className="text-gray-600 mb-8">The page you're looking for doesn't exist.</p>
+                      <p className="text-gray-600 mb-8">The page you are looking for does not exist.</p>
                       <div className="space-y-3">
-                        <button onClick={() => window.location.href = '/community'} className="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all">Go Home</button>
+                        <button onClick={() => window.location.href = '/dashboard'} className="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all">Go to Dashboard</button>
                         <button onClick={() => window.history.back()} className="w-full py-3 px-6 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl border border-gray-300 transition-all">Go Back</button>
                       </div>
                     </div>
@@ -253,7 +184,7 @@ function App() {
             draggable
             pauseOnHover
             theme="light"
-            className="mt-20 sm:mt-4"
+            className="mt-4"
             toastClassName="text-sm sm:text-base"
             toastStyle={{
               backgroundColor: 'white',

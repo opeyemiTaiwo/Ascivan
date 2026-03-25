@@ -4,12 +4,17 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase/config';
+import { useInAppShell } from './AppShell';
 
 const Navbar = () => {
+  const inAppShell = useInAppShell();
   const { currentUser } = useAuth();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState(0);
+
+  // When inside AppShell (sidebar layout), don't render the top navbar
+  if (inAppShell) return null;
   const [unreadNotifications, setUnreadNotifications] = useState(0);
 
   useEffect(() => {

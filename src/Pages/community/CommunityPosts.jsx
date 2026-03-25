@@ -1069,7 +1069,7 @@ const CommunityPosts = () => {
   if (loading && posts.length === 0) {
     return (
       <>
-        <Navbar />
+        
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center px-3 xs:px-4">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-2 border-green-400 mx-auto mb-4"></div>
@@ -1082,8 +1082,8 @@ const CommunityPosts = () => {
 
   return (
     <>
-      <Navbar />
-      <div className="min-h-screen overflow-x-hidden pt-16 xs:pt-18 sm:pt-20" style={{ backgroundColor: '#000' }}>
+      
+      <div className="min-h-screen overflow-x-hidden " style={{ backgroundColor: '#000' }}>
 
         <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 py-4 xs:py-6 sm:py-8">
           <div className="grid grid-cols-1 md:grid-cols-8 lg:grid-cols-12 gap-4 lg:gap-6">

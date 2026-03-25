@@ -266,7 +266,7 @@ const ProjectCompletion = () => {
 
   if (loading) {
     return (
-      <><Navbar />
+      <>
         <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#000' }}>
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-400"></div>
         </div>
@@ -276,7 +276,7 @@ const ProjectCompletion = () => {
 
   if (!project) {
     return (
-      <><Navbar />
+      <>
         <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#000' }}>
           <p className="text-white">Project not found</p>
         </div>
@@ -286,8 +286,8 @@ const ProjectCompletion = () => {
 
   return (
     <>
-      <Navbar />
-      <div className="min-h-screen overflow-x-hidden pt-20 sm:pt-24" style={{ backgroundColor: '#000' }}>
+      
+      <div className="min-h-screen overflow-x-hidden " style={{ backgroundColor: '#000' }}>
         <main className="pb-16 sm:pb-20">
           <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-4xl">
 

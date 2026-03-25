@@ -87,7 +87,7 @@ const Support = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div className="min-h-screen overflow-x-hidden" style={{ backgroundColor: '#000' }}>
         <div className="container mx-auto px-4 sm:px-6 max-w-4xl py-20 sm:py-28">
 

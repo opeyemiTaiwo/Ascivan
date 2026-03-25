@@ -144,7 +144,7 @@ const UserProfile = () => {
   if (loading) {
     return (
       <>
-        <Navbar />
+        
         <div className="min-h-screen bg-black flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-400 mx-auto mb-4"></div>
@@ -158,7 +158,7 @@ const UserProfile = () => {
   if (notFound || !profile) {
     return (
       <>
-        <Navbar />
+        
         <div className="min-h-screen bg-black flex items-center justify-center p-4">
           <div className="bg-white/5 rounded-2xl p-10 border border-white/20 text-center max-w-md w-full">
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center mx-auto mb-4">
@@ -192,8 +192,8 @@ const UserProfile = () => {
 
   return (
     <>
-      <Navbar />
-      <div className="min-h-screen bg-black pt-20 sm:pt-24 pb-12">
+      
+      <div className="min-h-screen bg-black  pb-12">
         <div className="container mx-auto px-4 sm:px-6 max-w-3xl py-8">
 
           {/* Profile Card */}

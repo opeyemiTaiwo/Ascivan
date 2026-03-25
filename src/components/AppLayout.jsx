@@ -36,7 +36,6 @@ const AppLayout = ({ children }) => {
   }, [location.pathname]);
 
   const navItems = [
-    { path: '/dashboard', label: 'Dashboard' },
     { path: '/community', label: 'Home' },
     { path: '/dashboard', label: 'Dashboard' },
     { path: '/projects', label: 'Projects' },

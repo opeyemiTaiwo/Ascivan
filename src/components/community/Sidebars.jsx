@@ -16,14 +16,14 @@ import { EnhancedClickableUserName } from './UserComponents';
 export const UserQuickLinksSidebar = ({ currentUser, onNavigate, isMobile = false }) => {
   const quickLinks = [
     {
-      title: 'Jobs',
-      description: 'Browse job listings',
-      path: '/jobs',
+      title: 'Projects',
+      description: 'Browse active projects',
+      path: '/projects',
       gradient: 'from-blue-500 to-blue-600'
     },
     {
       title: 'Connect',
-      description: 'Find people near you',
+      description: 'Find tech professionals',
       path: '/members-directory',
       gradient: 'from-blue-400 to-blue-500'
     }
@@ -453,7 +453,7 @@ export const CompanyInfoSidebar = ({ isMobile = false }) => {
         
         <div className="mb-3 xs:mb-4 sm:mb-6 flex-shrink-0">
           <p className="text-gray-600 text-xs sm:text-sm leading-relaxed text-center">
-            Empowering international students with housing, finance, jobs, and home support.
+            Accelerating tech careers through projects, badges, and community.
           </p>
         </div>
 
@@ -477,7 +477,7 @@ export const CompanyInfoSidebar = ({ isMobile = false }) => {
 
         <div className="mt-3 xs:mt-4 sm:mt-6 pt-2.5 xs:pt-3 sm:pt-4 border-t border-blue-600/10 flex-shrink-0">
           <p className={`text-gray-400 text-center font-medium ${isMobile ? 'text-[10px] xs:text-xs' : 'text-[10px] xs:text-xs'}`}>
-            Empowering international students
+            Accelerating tech careers
           </p>
         </div>
       </div>

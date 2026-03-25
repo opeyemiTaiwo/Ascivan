@@ -191,105 +191,61 @@ const MembersDirectory = () => {
   if (!currentUser) return null;
 
   return (
-    <div className="min-h-screen overflow-x-hidden flex flex-col relative" style={{ backgroundColor: '#ffffff' }}>
+    <div className="min-h-screen overflow-x-hidden flex flex-col relative bg-white">
 
-      
-
-      <main className="flex-grow  pb-12 sm:pb-16">
-        <div className="container mx-auto px-4 sm:px-6 py-8 max-w-7xl">
+      <main className="flex-grow pb-12 sm:pb-16">
+        <div className="container mx-auto px-4 sm:px-6 py-6 max-w-6xl">
           
-          {/* Hero Section */}
-          <section className="relative mb-16 pt-8 text-center">
-            <div className="max-w-4xl mx-auto">
-              
-              <div className="flex items-center justify-center gap-4 mb-8">
-                <div className="h-4 w-4 bg-blue-600 rounded-full" 
-                     ></div>
-                <span className="text-blue-600 uppercase tracking-widest text-lg font-black" 
-                      style={{ textShadow: '0 0 20px rgba(76, 175, 80, 0.8), 2px 2px 4px rgba(0,0,0,0.9)' }}>
-                   Member Directory
-                </span>
-                <div className="h-4 w-4 bg-blue-600 rounded-full" 
-                     ></div>
-              </div>
-              
-              <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-4 sm:mb-6 md:mb-8 leading-[0.9]"
-                  style={{
-                    background: 'linear-gradient(135deg, #ffffff 0%, #e8f5e8 50%, #ffffff 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    filter: 'drop-shadow(3px 3px 6px rgba(0,0,0,0.9))'
-                  }}>
-                Connect With Our{' '}
-                <span className="block mt-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-500 to-blue-500"
-                      style={{filter: 'drop-shadow(0 0 20px rgba(34, 197, 94, 0.5))'}}>
-                  Community
-                </span>
-              </h1>
+          {/* Header */}
+          <div className="mb-6">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">Members</h1>
+            <p className="text-gray-500 text-sm">Discover and connect with tech professionals in the community.</p>
+          </div>
 
-              <p className="text-xl md:text-2xl text-gray-200 leading-relaxed font-light mb-8" 
-                 style={{textShadow: '1px 1px 3px rgba(0,0,0,0.8)'}}>
-                Discover and connect with <span className="text-blue-600 font-semibold">international students</span> and <span className="text-blue-600 font-semibold">alumni</span> in your field.
-              </p>
-
-              {/* Directory Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12 max-w-lg mx-auto">
-                <div className="bg-gradient-to-br from-blue-500/20 to-blue-500/20 rounded-xl p-4 border border-blue-600/30">
-                  <div className="text-2xl font-bold text-blue-600">{members.length}</div>
-                  <div className="text-sm text-green-100">Total Members</div>
-                </div>
-                <div className="bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-xl p-4 border border-blue-600/30">
-                  <div className="text-2xl font-bold text-blue-500">{members.filter(m => m.isActive).length}</div>
-                  <div className="text-sm text-orange-100">Recently Active</div>
-                </div>
-              </div>
+          {/* Stats */}
+          <div className="grid grid-cols-2 gap-4 mb-6 max-w-sm">
+            <div className="bg-white border border-gray-200 rounded-xl p-4">
+              <div className="text-2xl font-bold text-gray-900">{members.length}</div>
+              <div className="text-gray-500 text-xs mt-0.5">Total Members</div>
             </div>
-          </section>
+            <div className="bg-white border border-gray-200 rounded-xl p-4">
+              <div className="text-2xl font-bold text-gray-900">{members.filter(m => m.isActive).length}</div>
+              <div className="text-gray-500 text-xs mt-0.5">Recently Active</div>
+            </div>
+          </div>
 
           {/* Search and Filters */}
-          <section className="mb-12">
-            <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl p-6 sm:p-8 border border-gray-200">
-              
-              <div className="mb-6">
-                <input
-                  type="text"
-                  placeholder="Search by name, university, major, or city..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-gray-100 border border-gray-200 rounded-xl px-6 py-4 text-gray-900 placeholder-gray-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-all duration-300 text-lg"
-                />
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4 mb-4">
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:border-blue-600 focus:outline-none transition-all duration-300"
-                >
-                  <option value="recent">Recently Active</option>
-                  <option value="name">Name A-Z</option>
-                </select>
-
-                <button
-                  onClick={clearFilters}
-                  className="bg-gradient-to-r from-red-500 to-red-600 text-gray-900 px-4 py-3 rounded-xl font-semibold hover:from-red-600 hover:to-red-700 transition-all duration-300"
-                >
-                  Clear All
-                </button>
-              </div>
-
-              <div className="flex justify-between items-center text-gray-600">
-                <span>
-                  <span className="text-blue-600 font-semibold">{filteredMembers.length}</span> members found
-                  {filteredMembers.length > 0 && (
-                    <span className="ml-2 text-sm">
-                      • Showing {startIndex + 1}-{Math.min(endIndex, filteredMembers.length)} of {filteredMembers.length}
-                    </span>
-                  )}
-                </span>
-              </div>
+          <div className="mb-6">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <input
+                type="text"
+                placeholder="Search by name, skill, or city..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="flex-1 bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none"
+              />
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-700 focus:border-blue-500 focus:outline-none"
+              >
+                <option value="recent">Recently Active</option>
+                <option value="name">Name A-Z</option>
+              </select>
+              <button
+                onClick={clearFilters}
+                className="px-4 py-2.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all"
+              >
+                Clear
+              </button>
             </div>
-          </section>
+            <p className="text-gray-500 text-xs mt-2">
+              <span className="text-blue-600 font-medium">{filteredMembers.length}</span> members found
+              {filteredMembers.length > 0 && (
+                <span> -- Showing {startIndex + 1}-{Math.min(endIndex, filteredMembers.length)} of {filteredMembers.length}</span>
+              )}
+            </p>
+          </div>
 
           {/* Members Grid */}
           <section>
@@ -305,75 +261,42 @@ const MembersDirectory = () => {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                   {currentMembers.map((member) => (
-                    <div key={member.email} className="group">
-                      <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl p-6 border border-gray-200 shadow-2xl h-full flex flex-col">
+                    <div key={member.email} className="bg-white border border-gray-200 rounded-xl p-4 text-center hover:border-blue-300 hover:shadow-sm transition-all cursor-pointer" onClick={() => openMemberModal(member)}>
                         
-                        {/* Member Header */}
-                        <div className="flex items-center mb-4">
-                          <div className="relative flex-shrink-0 mr-4">
-                            {member.photoURL ? (
-                              <img 
-                                src={member.photoURL} 
-                                alt={`${member.name}'s profile`}
-                                className="w-16 h-16 rounded-full object-cover ring-4 ring-blue-400/50"
-                              />
-                            ) : (
-                              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-500 flex items-center justify-center ring-4 ring-blue-400/50">
-                                <span className="text-xl text-black font-bold">
-                                  {member.name?.charAt(0)?.toUpperCase() || '?'}
-                                </span>
-                              </div>
-                            )}
-                            {member.isActive && (
-                              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center">
-                                <div className="w-2 h-2 bg-white rounded-full"></div>
-                              </div>
-                            )}
-                          </div>
-                          
-                          <div className="flex-grow min-w-0">
-                            <h3 className="text-xl font-black text-gray-900 group-hover:text-blue-600 transition-colors duration-300 truncate">
-                              {member.name}
-                            </h3>
-                            {member.university && (
-                              <p className="text-blue-600 text-sm truncate">{member.university}</p>
-                            )}
-                            {member.major && (
-                              <p className="text-gray-400 text-xs truncate">{member.major}</p>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Info */}
-                        <div className="mb-4 flex-grow space-y-1">
-                          {(member.city || member.state) && (
-                            <p className="text-gray-400 text-sm flex items-center gap-1">
-                              <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                              </svg>
-                              <span className="truncate">{[member.city, member.state].filter(Boolean).join(', ')}</span>
-                            </p>
+                        {/* Avatar */}
+                        <div className="relative inline-block mb-3">
+                          {member.photoURL ? (
+                            <img src={member.photoURL} alt={member.name} className="w-16 h-16 rounded-full object-cover border-2 border-gray-100 mx-auto" />
+                          ) : (
+                            <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-lg mx-auto">
+                              {member.name?.charAt(0)?.toUpperCase() || '?'}
+                            </div>
                           )}
-                          {member.joinedDate && (
-                            <p className="text-gray-500 text-xs">
-                              Joined {member.joinedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
-                            </p>
+                          {member.isActive && (
+                            <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
                           )}
                         </div>
-
-                        {/* Action Buttons */}
-                        <div className="flex gap-2 mt-auto">
+                        
+                        {/* Name and info */}
+                        <p className="text-gray-900 text-sm font-semibold truncate">{member.name}</p>
+                        <p className="text-gray-500 text-xs mt-0.5 truncate">{member.specialization || member.primarySkillTrack || 'Tech Professional'}</p>
+                        {(member.city || member.state) && (
+                          <p className="text-gray-400 text-xs mt-0.5 truncate">{[member.city, member.state].filter(Boolean).join(', ')}</p>
+                        )}
+                        
+                        {/* Actions */}
+                        <div className="flex items-center justify-center gap-2 mt-3">
                           <button
-                            onClick={() => navigate(`/profile/${member.uid}`)}
-                            className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-gray-900 px-3 py-3 rounded-xl font-semibold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 text-xs"
+                            onClick={(e) => { e.stopPropagation(); navigate(`/profile/${encodeURIComponent(member.email)}`); }}
+                            className="flex-1 px-3 py-2 rounded-lg text-xs font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all"
                           >
                             View Profile
                           </button>
                           
                           {member.uid !== currentUser.uid && (
-                            <div className="flex-shrink-0">
+                            <div className="flex-shrink-0" onClick={(e) => e.stopPropagation()}>
                               <FollowButton
                                 targetUser={member}
                                 currentUser={currentUser}
@@ -382,42 +305,29 @@ const MembersDirectory = () => {
                               />
                             </div>
                           )}
-                          
-                          {member.uid !== currentUser.uid && (
-                            <button
-                              onClick={(e) => { e.stopPropagation(); navigate(`/messages?to=${member.uid}`); }}
-                              className="px-3 py-3 rounded-xl font-semibold transition-all duration-300 text-xs bg-blue-600 text-white hover:bg-blue-700"
-                              title="Send message"
-                            >
-                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                              </svg>
-                            </button>
-                          )}
                         </div>
-                      </div>
+
                     </div>
                   ))}
                 </div>
 
                 {/* Pagination */}
                 {totalPages > 1 && (
-                  <div className="flex justify-center items-center mt-12 space-x-4">
-                    <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl p-6 border border-gray-200">
-                      <div className="flex items-center space-x-4">
+                  <div className="flex justify-center items-center mt-8">
+                    <div className="flex items-center gap-2">
                         <button
                           onClick={goToPrevPage}
                           disabled={currentPage === 1}
-                          className={`flex items-center px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
+                          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                             currentPage === 1
-                              ? 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
-                              : 'bg-gradient-to-r from-blue-500 to-blue-600 text-gray-900 hover:from-blue-600 hover:to-blue-700'
+                              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                              : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
                           }`}
                         >
-                          ← Previous
+                          Previous
                         </button>
 
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center gap-1">
                           {[...Array(Math.min(totalPages, 5))].map((_, index) => {
                             let pageNum;
                             if (totalPages <= 5) pageNum = index + 1;
@@ -431,10 +341,10 @@ const MembersDirectory = () => {
                               <button
                                 key={pageNum}
                                 onClick={() => goToPage(pageNum)}
-                                className={`w-10 h-10 rounded-xl font-semibold transition-all duration-300 ${
+                                className={`w-9 h-9 rounded-lg text-sm font-medium transition-all ${
                                   currentPage === pageNum
-                                    ? 'bg-gradient-to-r from-blue-500 to-blue-500 text-gray-900'
-                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                                    ? 'bg-blue-600 text-white'
+                                    : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
                                 }`}
                               >
                                 {pageNum}
@@ -446,13 +356,13 @@ const MembersDirectory = () => {
                         <button
                           onClick={goToNextPage}
                           disabled={currentPage === totalPages}
-                          className={`flex items-center px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
+                          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                             currentPage === totalPages
-                              ? 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
-                              : 'bg-gradient-to-r from-blue-500 to-blue-600 text-gray-900 hover:from-blue-600 hover:to-blue-700'
+                              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                              : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
                           }`}
                         >
-                          Next →
+                          Next
                         </button>
                       </div>
 
@@ -470,8 +380,8 @@ const MembersDirectory = () => {
 
       {/* Member Detail Modal */}
       {showMemberModal && selectedMember && (
-        <div className="fixed inset-0 bg-white/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-black/90 via-gray-900/90 to-black/90 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 border border-gray-200 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-200 shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             
             {/* Modal Header */}
             <div className="flex justify-between items-start mb-6">
@@ -573,7 +483,7 @@ const MembersDirectory = () => {
               <div className="bg-blue-50 rounded-xl p-6 border border-gray-200">
                 <h3 className="text-blue-600 font-semibold mb-4 text-lg">Connect</h3>
                 <p className="text-gray-600 mb-4">
-                  Want to connect with {selectedMember.name}? Follow them or send a message.
+                  Want to connect with {selectedMember.name}? Follow them or view their full profile.
                 </p>
                 <div className="flex gap-3">
                   {selectedMember.uid !== currentUser.uid && (
@@ -588,17 +498,12 @@ const MembersDirectory = () => {
                     </div>
                   )}
                   
-                  {selectedMember.uid !== currentUser.uid && (
-                    <button
-                      onClick={() => { closeMemberModal(); navigate(`/messages?to=${selectedMember.uid}`); }}
-                      className="flex-1 px-6 py-3 rounded-xl font-bold transition-all duration-300 bg-blue-600 text-white hover:bg-blue-700 flex items-center justify-center gap-2"
-                    >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                      </svg>
-                      Message
-                    </button>
-                  )}
+                  <button
+                    onClick={() => { closeMemberModal(); navigate(`/profile/${encodeURIComponent(selectedMember.email)}`); }}
+                    className="flex-1 px-6 py-3 rounded-xl font-bold transition-all duration-300 bg-blue-600 text-white hover:bg-blue-700"
+                  >
+                    View Profile
+                  </button>
                 </div>
 
                 {/* Email - only shown if member has it set to public */}
@@ -627,13 +532,9 @@ const MembersDirectory = () => {
       {/* Custom Styles */}
       <style jsx>{`
         select option {
-          background-color: rgba(0, 0, 0, 0.9);
-          color: white;
+          background-color: white;
+          color: #111827;
         }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
-        ::-webkit-scrollbar-thumb { background: rgba(34, 197, 94, 0.5); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(34, 197, 94, 0.7); }
       `}</style>
     </div>
   );

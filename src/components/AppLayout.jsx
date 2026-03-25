@@ -134,13 +134,19 @@ const AppLayout = ({ children }) => {
       <div className="flex-1 min-w-0 flex flex-col">
         {/* Top bar — sticky, responsive */}
         <header className="sticky top-0 z-30 h-16 sm:h-[72px] flex items-center justify-between px-2 sm:px-4 border-b border-gray-200 bg-white lg:px-6">
-          {!hideSidebar && (
-          <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 rounded-lg hover:bg-gray-100 min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0">
-            <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          )}
+          <div className="flex items-center gap-2">
+            {!hideSidebar && (
+            <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 rounded-lg hover:bg-gray-100 min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0">
+              <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            )}
+            <a href="/community" className="hidden lg:flex items-center gap-1">
+              <span className="text-gray-900 text-base font-bold tracking-tight">Loomiqe</span>
+              <span className="w-2 h-2 rounded-full bg-orange-500"></span>
+            </a>
+          </div>
           <div className="flex-1" />
           <div className="flex items-center gap-3 sm:gap-5 md:gap-7 pr-6 sm:pr-12 lg:pr-16">
             {/* Account */}

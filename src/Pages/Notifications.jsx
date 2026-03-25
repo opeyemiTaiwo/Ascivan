@@ -67,7 +67,6 @@ const NotificationsPage = () => {
   const filtered = filter === 'all' ? notifications
     : filter === 'unread' ? notifications.filter(n => !n.isRead)
     : filter === 'mentions' ? notifications.filter(n => n.type?.includes('mention'))
-    : filter === 'replies' ? notifications.filter(n => n.type?.includes('reply'))
     : filter === 'myposts' ? notifications.filter(n => n.type?.includes('like') || n.type?.includes('repost') || n.type?.includes('comment'))
     : notifications;
 
@@ -76,7 +75,6 @@ const NotificationsPage = () => {
     { key: 'unread', label: 'Unread', count: notifications.filter(n => !n.isRead).length },
     { key: 'myposts', label: 'My Posts', count: notifications.filter(n => n.type?.includes('like') || n.type?.includes('repost') || n.type?.includes('comment')).length },
     { key: 'mentions', label: 'Mentions', count: notifications.filter(n => n.type?.includes('mention')).length },
-    { key: 'replies', label: 'Replies', count: notifications.filter(n => n.type?.includes('reply')).length },
   ];
 
   if (loading) {
@@ -112,12 +110,12 @@ const NotificationsPage = () => {
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex gap-1 mb-6 border-b border-gray-200">
+      <div className="flex gap-1 mb-6 border-b border-gray-200 overflow-x-auto">
         {tabs.map(tab => (
           <button
             key={tab.key}
             onClick={() => setFilter(tab.key)}
-            className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 transition-all ${
+            className={`flex items-center gap-1 px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-medium border-b-2 transition-all whitespace-nowrap flex-shrink-0 ${
               filter === tab.key ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >

@@ -987,7 +987,7 @@ const CommunityPosts = () => {
           <div className="p-4 xs:p-5 sm:p-6">
             <div className="bg-gray-50 rounded-lg p-3 xs:p-4 border border-gray-200">
               <div className="flex items-center space-x-3 mb-3">
-                <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-r from-blue-500 to-cyan-600 flex items-center justify-center text-gray-900 font-bold">
+                <div className="w-10 h-10 rounded-full overflow-hidden bg-blue-600 flex items-center justify-center text-white font-bold">
                   {post.authorPhoto ? (
                     <img src={post.authorPhoto} alt="" loading="lazy" className="w-full h-full object-cover" />
                   ) : (
@@ -1112,17 +1112,28 @@ const CommunityPosts = () => {
                 </div>
               )}
 
-              <div className="mb-6 xs:mb-8">
-                <div className="relative view-menu-container flex justify-center items-center gap-3">
-                  <Link
-                    to="/community/submit"
-                    className="flex items-center gap-2 px-4 xs:px-5 py-2 xs:py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg xs:rounded-xl font-semibold transition-all duration-300 min-h-[44px] text-sm xs:text-base"
-                  >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                    </svg>
-                    Create Post
-                  </Link>
+              <div className="mb-4 xs:mb-6">
+                {/* Start a post - LinkedIn style */}
+                <div className="bg-white border border-gray-200 rounded-xl p-3 sm:p-4 mb-4">
+                  <div className="flex items-center gap-3">
+                    {currentUser?.photoURL ? (
+                      <img src={currentUser.photoURL} alt="" className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                        {currentUser?.displayName?.[0] || 'U'}
+                      </div>
+                    )}
+                    <Link
+                      to="/community/submit"
+                      className="flex-1 px-4 py-2.5 bg-gray-50 border border-gray-300 rounded-full text-gray-500 text-sm hover:bg-gray-100 transition-colors text-left"
+                    >
+                      Start a post
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Filter */}
+                <div className="relative view-menu-container flex justify-end">
                   <button
                     onClick={() => setShowViewMenu(!showViewMenu)}
                     className="flex items-center gap-2 px-4 xs:px-5 sm:px-6 py-2 xs:py-2.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg xs:rounded-xl transition-all duration-300 min-h-[44px] text-sm xs:text-base text-gray-900"
@@ -1186,7 +1197,7 @@ const CommunityPosts = () => {
                     {viewMode !== 'mentions' && (
                       <Link
                         to="/community/submit"
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 min-h-[56px]"
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all min-h-[48px]"
                       >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -1199,7 +1210,7 @@ const CommunityPosts = () => {
                   posts.map((post) => (
                     <article
                       key={post.id}
-                      className="bg-white rounded-xl xs:rounded-2xl border border-gray-200 hover:border-gray-200 transition-all duration-300 shadow-2xl overflow-hidden"
+                      className="bg-white rounded-xl border border-gray-200 hover:border-gray-300 transition-all overflow-hidden"
                     >
                       <div className="p-3 xs:p-4 sm:p-6">
                         <div className="flex items-start justify-between mb-3 xs:mb-4">

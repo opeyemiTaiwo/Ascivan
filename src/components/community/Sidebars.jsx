@@ -15,24 +15,9 @@ import { EnhancedClickableUserName } from './UserComponents';
  */
 export const UserQuickLinksSidebar = ({ currentUser, onNavigate, isMobile = false }) => {
   const quickLinks = [
-    {
-      title: 'Dashboard',
-      description: 'View your overview',
-      path: '/dashboard',
-      gradient: 'from-blue-600 to-blue-700'
-    },
-    {
-      title: 'Projects',
-      description: 'Browse active projects',
-      path: '/projects',
-      gradient: 'from-blue-500 to-blue-600'
-    },
-    {
-      title: 'Follow',
-      description: 'Discover tech professionals',
-      path: '/members-directory',
-      gradient: 'from-blue-400 to-blue-500'
-    }
+    { title: 'Dashboard', path: '/dashboard' },
+    { title: 'Projects', path: '/projects' },
+    { title: 'Network', path: '/members-directory' },
   ];
 
   const handleLinkClick = (path) => {
@@ -47,57 +32,50 @@ export const UserQuickLinksSidebar = ({ currentUser, onNavigate, isMobile = fals
 
   const containerClass = isMobile 
     ? "p-3 xs:p-4 h-full" 
-    : "sticky top-[5.5rem] lg:top-[5.5rem] xl:top-24 h-fit max-h-[calc(100vh-6.5rem)] lg:max-h-[calc(100vh-6.5rem)] xl:max-h-[calc(100vh-7rem)] overflow-hidden";
-
-  const contentClass = isMobile
-    ? "h-full flex flex-col"
-    : "bg-gray-100 rounded-xl xs:rounded-2xl border border-blue-600/10 p-3 xs:p-4 sm:p-6 shadow-2xl sidebar-content h-full flex flex-col";
+    : "sticky top-[5.5rem] lg:top-[5.5rem] xl:top-24 h-fit max-h-[calc(100vh-6.5rem)] overflow-hidden";
 
   return (
     <div className={containerClass}>
-      <div className={contentClass}>
-        {!isMobile && (
-          <div className="flex items-center justify-between mb-3 xs:mb-4 flex-shrink-0">
-            <h3 className="text-gray-900 font-bold text-base xs:text-lg flex items-center gap-1.5 xs:gap-2">
-              <svg className="w-4 h-4 xs:w-5 xs:h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-              Quick Actions
-            </h3>
-          </div>
-        )}
-        
-        <div className={`space-y-2 xs:space-y-3 ${isMobile ? 'flex-1' : 'flex-1'}`}>
+      {/* Profile Card */}
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden mb-3">
+        {/* Banner */}
+        <div className="h-14 bg-gradient-to-r from-blue-50 to-blue-100" />
+        {/* Avatar + Name */}
+        <div className="px-4 pb-4 -mt-6">
+          <button onClick={() => handleLinkClick(`/profile/${currentUser.email}`)} className="block mb-2">
+            {currentUser.photoURL ? (
+              <img src={currentUser.photoURL} alt="" className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm" />
+            ) : (
+              <div className="w-14 h-14 rounded-full bg-blue-600 flex items-center justify-center text-white text-lg font-bold border-2 border-white shadow-sm">
+                {currentUser.displayName?.[0] || 'U'}
+              </div>
+            )}
+          </button>
+          <button onClick={() => handleLinkClick(`/profile/${currentUser.email}`)} className="text-left">
+            <p className="text-gray-900 font-semibold text-sm hover:underline">{currentUser.displayName || 'User'}</p>
+          </button>
+          <p className="text-gray-500 text-xs mt-0.5 truncate">{currentUser.email}</p>
+        </div>
+        {/* Divider */}
+        <div className="border-t border-gray-100 px-4 py-3">
+          <button onClick={() => handleLinkClick(`/profile/${currentUser.email}`)} className="text-blue-600 text-xs font-medium hover:underline">
+            View profile
+          </button>
+        </div>
+      </div>
+
+      {/* Quick Links */}
+      <div className="bg-white rounded-xl border border-gray-200 p-3">
+        <div className="space-y-1">
           {quickLinks.map((link, index) => (
             <button
               key={index}
               onClick={() => handleLinkClick(link.path)}
-              className={`flex items-center gap-2 xs:gap-3 p-2.5 xs:p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 active:bg-gray-200 cursor-pointer w-full text-left group sidebar-item ${
-                isMobile ? 'py-3 xs:py-4' : ''
-              }`}
+              className="flex items-center w-full px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors text-left"
             >
-              <div className={`w-8 h-8 xs:w-10 xs:h-10 bg-gradient-to-r ${link.gradient} rounded-lg flex items-center justify-center text-gray-900 flex-shrink-0`}>
-                <svg className="w-4 h-4 xs:w-5 xs:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className={`font-semibold text-gray-900 group-hover:text-orange-300 transition-colors truncate ${isMobile ? 'text-sm xs:text-base' : 'text-xs xs:text-sm'}`}>
-                  {link.title}
-                </p>
-                <p className={`text-gray-400 truncate ${isMobile ? 'text-xs xs:text-sm' : 'text-[10px] xs:text-xs'}`}>
-                  {link.description}
-                </p>
-              </div>
+              {link.title}
             </button>
           ))}
-        </div>
-
-        {/* Footer */}
-        <div className="mt-3 xs:mt-4 pt-3 xs:pt-4 border-t border-blue-600/10 flex-shrink-0">
-          <p className={`text-gray-400 text-center ${isMobile ? 'text-xs xs:text-sm' : 'text-[10px] xs:text-xs'}`}>
-            Quick access to all your tools
-          </p>
         </div>
       </div>
     </div>

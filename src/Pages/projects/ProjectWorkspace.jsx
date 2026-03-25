@@ -215,18 +215,10 @@ const ProjectWorkspace = () => {
   const getReplies = (parentId) => posts.filter(p => p.parentId === parentId);
   const emojis = ['👍', '❤️', '🎉', '🔥', '👀'];
 
-  const getReactorNames = (reactorUids) => {
-    if (!reactorUids || reactorUids.length === 0) return [];
-    return reactorUids.map(uid => {
-      if (uid === currentUser?.uid) return 'You';
-      const member = teamMembers.find(m => m.applicantUid === uid || m.applicantEmail === uid);
-      return member?.applicantName || member?.displayName || 'Someone';
-    });
-  };
-
-  // Build uid → name/email map from team members + posts
+  // Build uid → name map from team members + posts
   const uidNameMap = {};
-  teamMembers.forEach(m => { if (m.applicantEmail) uidNameMap[m.applicantEmail] = m.displayName || m.applicantName; });
+  if (currentUser) uidNameMap[currentUser.uid] = 'You';
+  teamMembers.forEach(m => { if (m.applicantUid) uidNameMap[m.applicantUid] = m.displayName || m.applicantName; if (m.applicantEmail) uidNameMap[m.applicantEmail] = m.displayName || m.applicantName; });
   posts.forEach(p => { if (p.authorId) uidNameMap[p.authorId] = p.authorName; });
 
   const getReactorNames = (reactorUids) => {
@@ -313,7 +305,7 @@ const ProjectWorkspace = () => {
                             </button>
                             {showReactors === key && count > 0 && (
                               <div className="absolute bottom-full left-0 mb-1 bg-gray-900 text-white text-[10px] rounded-lg px-2 py-1.5 whitespace-nowrap z-10 shadow-lg">
-                                {getReactorNames(reactors).join(', ')}
+                                {getReactorNames(reactors)}
                               </div>
                             )}
                           </div>

@@ -73,7 +73,7 @@ const AppLayout = ({ children }) => {
       {!hideSidebar && (
       <aside className={`fixed inset-y-0 left-0 z-50 w-60 bg-gray-950 flex flex-col transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static lg:inset-0`}>
         {/* Logo */}
-        <div className="flex items-center gap-2 px-5 h-16 border-b border-white/10">
+        <div className="flex items-center gap-2 px-5 h-16 sm:h-[72px] border-b border-white/10">
           <img src="/Images/512X512.png" alt="Loomiqe" className="w-8 h-8" />
           <span className="text-white font-bold text-base">Loomiqe</span>
           <button onClick={() => setSidebarOpen(false)} className="lg:hidden ml-auto p-1 text-gray-400 hover:text-white">

@@ -67,11 +67,14 @@ const NotificationsPage = () => {
   const filtered = filter === 'all' ? notifications
     : filter === 'unread' ? notifications.filter(n => !n.isRead)
     : filter === 'mentions' ? notifications.filter(n => n.type?.includes('mention'))
-    : notifications.filter(n => n.type?.includes('reply'));
+    : filter === 'replies' ? notifications.filter(n => n.type?.includes('reply'))
+    : filter === 'myposts' ? notifications.filter(n => n.type?.includes('like') || n.type?.includes('repost') || n.type?.includes('comment'))
+    : notifications;
 
   const tabs = [
     { key: 'all', label: 'All', count: notifications.length },
     { key: 'unread', label: 'Unread', count: notifications.filter(n => !n.isRead).length },
+    { key: 'myposts', label: 'My Posts', count: notifications.filter(n => n.type?.includes('like') || n.type?.includes('repost') || n.type?.includes('comment')).length },
     { key: 'mentions', label: 'Mentions', count: notifications.filter(n => n.type?.includes('mention')).length },
     { key: 'replies', label: 'Replies', count: notifications.filter(n => n.type?.includes('reply')).length },
   ];

@@ -14,6 +14,7 @@ import {
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
 import FollowButton from '../components/community/FollowButton';
+import { PremiumBadge } from '../components/PremiumBadge';
 
 const MembersDirectory = () => {
   const { currentUser, loading: authLoading } = useAuth();
@@ -76,6 +77,7 @@ const MembersDirectory = () => {
             city: userData.city || '',
             state: userData.state || '',
             emailPublic: userData.emailPublic || false,
+            membershipPlan: userData.membershipPlan || 'Free',
             joinedDate: userData.createdAt?.toDate?.() || null,
             lastActive: userData.lastLogin?.toDate?.()?.getTime() || userData.createdAt?.toDate?.()?.getTime() || 0,
             isActive: userData.lastLogin?.toDate?.()
@@ -291,7 +293,10 @@ const MembersDirectory = () => {
                         </div>
                         
                         {/* Name and info */}
-                        <p className="text-gray-900 text-sm font-semibold truncate">{member.name}</p>
+                        <p className="text-gray-900 text-sm font-semibold truncate flex items-center gap-1">
+                          {member.name}
+                          {member.membershipPlan === 'Premium' && <PremiumBadge size="xs" />}
+                        </p>
                         <p className="text-gray-500 text-xs mt-0.5 truncate">{member.specialization || member.primarySkillTrack || 'Tech Professional'}</p>
                         {(member.city || member.state) && (
                           <p className="text-gray-400 text-xs mt-0.5 truncate">{[member.city, member.state].filter(Boolean).join(', ')}</p>

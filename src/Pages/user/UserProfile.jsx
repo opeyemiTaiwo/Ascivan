@@ -7,6 +7,7 @@ import Navbar from '../../components/Navbar';
 import { collection, query, where, limit, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import FollowButton from '../../components/community/FollowButton';
+import { PremiumBadge } from '../../components/PremiumBadge';
 
 const badgeData = [
   { id: 'techmo', title: 'TechMO', image: '/Images/TechMO.png', label: 'Project Management' },
@@ -208,7 +209,10 @@ const UserProfile = () => {
             </div>
 
             {/* Name */}
-            <h1 className="text-2xl font-bold text-gray-900 mb-0.5">{displayName}</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-0.5 flex items-center gap-2">
+              {displayName}
+              {profile.membershipPlan === 'Premium' && <PremiumBadge size="md" />}
+            </h1>
             {profile.specialization && (
               <p className="text-gray-600 text-sm">{profile.specialization}</p>
             )}

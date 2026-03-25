@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase/config';
+import { PremiumBadge } from '../components/PremiumBadge';
 
 const GOOGLE_FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSeauqCwIMFBBxpnoaLtqIqNZUtu4V-0Uw-bXYYZ2yd9SK0RFA/formResponse';
 const ENTRIES = { firstName: 'entry.1736029807', lastName: 'entry.1461328379', email: 'entry.1232544873', phone: 'entry.1937366356', message: 'entry.179653384' };
@@ -13,6 +16,15 @@ const Support = () => {
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
+  const [isPremium, setIsPremium] = useState(false);
+
+  useEffect(() => {
+    if (currentUser) {
+      getDoc(doc(db, 'users', currentUser.uid)).then(snap => {
+        if (snap.exists()) setIsPremium(snap.data().membershipPlan === 'Premium');
+      }).catch(() => {});
+    }
+  }, [currentUser]);
 
   const handleChange = (field) => (e) => setForm(p => ({ ...p, [field]: e.target.value }));
 
@@ -29,7 +41,7 @@ const Support = () => {
 
   const faqs = [
     { q: 'What is Loomiqe?', a: 'Loomiqe is a platform where tech professionals at all levels — from beginners to experts — collaborate on real-world projects, earn TechTalent Badges, and build their professional profile. Think of it as a project-based learning and career acceleration platform.' },
-    { q: 'Is Loomiqe free to use?', a: 'Yes! Core features including projects, community, messaging, and badges are free for all members. We offer a Premium membership ($100/year) that unlocks the Talent Board and advanced visibility features.' },
+    { q: 'Is Loomiqe free to use?', a: 'Yes! Core features including projects, community, messaging, and badges are free for all members. We offer a Premium membership ($200/year or $20/month) that unlocks the Talent Board and advanced visibility features.' },
     { q: 'How do projects work?', a: 'Project owners post projects (free or paid) with team roles. Members apply to join. Once accepted, teams collaborate through the project workspace. When the project is completed, badges are automatically awarded based on each member\'s role.' },
     { q: 'How are badges earned?', a: 'Badges are earned automatically when a project is completed. Your badge type is based on your role: developers earn TechDev, QA testers earn TechQA, project managers earn TechMO, leaders earn TechLeads, designers earn TechArchs, and security specialists earn TechGuard. Badge levels progress from Novice to Associate to Advanced to Expert based on how many projects you\'ve completed in that track.' },
     { q: 'How does payment work for paid projects?', a: 'Loomiqe does not process payments. All financial transactions happen directly between the project owner and team members. However, when a project owner marks a paid project for completion, every paid member must confirm they\'ve been paid before badges can be awarded. If a member hasn\'t been paid, they can dispute — which notifies both the project owner and Loomiqe admins.' },
@@ -48,6 +60,17 @@ const Support = () => {
     <div className="max-w-3xl mx-auto">
       <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Support</h1>
       <p className="text-gray-500 text-sm mb-8">Find answers or contact us.</p>
+
+      {/* Premium Support */}
+      {isPremium && (
+        <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-8 flex items-center gap-3">
+          <PremiumBadge size="md" />
+          <div>
+            <p className="text-gray-900 text-sm font-semibold">Premium Support</p>
+            <p className="text-gray-600 text-xs">As a Premium member, reach us directly at <a href="mailto:premium@loomiqe.com" className="text-blue-600 font-medium hover:underline">premium@loomiqe.com</a></p>
+          </div>
+        </div>
+      )}
 
       {/* FAQ */}
       <div className="mb-10">

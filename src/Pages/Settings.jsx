@@ -226,7 +226,8 @@ const Settings = () => {
                 <h3 className="text-blue-600 font-bold text-lg">Premium Membership</h3>
                 <span className="text-[10px] font-bold bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">RECOMMENDED</span>
               </div>
-              <p className="text-gray-900 font-bold text-2xl mb-4">$100<span className="text-gray-400 text-sm font-normal">/year</span></p>
+              <p className="text-gray-900 font-bold text-2xl mb-1">$200<span className="text-gray-400 text-sm font-normal">/year</span></p>
+              <p className="text-gray-500 text-sm mb-4">or $20/month</p>
               <ul className="space-y-2.5 text-sm text-gray-600 mb-6">
                 <li className="flex items-start gap-2"><svg className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> Everything in Basic</li>
                 <li className="flex items-start gap-2"><svg className="w-4 h-4 text-orange-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> <strong>Unlimited paid projects</strong> (post & apply)</li>

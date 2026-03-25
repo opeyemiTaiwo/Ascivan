@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 
 import { doc, getDoc, collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
 import { db } from '../../firebase/config';
+import { PremiumBadge } from '../../components/PremiumBadge';
 
 const badgeData = [
   { id: 'techmo', title: 'TechMO', image: '/Images/TechMO.png', label: 'Project Management' },
@@ -276,14 +277,32 @@ const DashboardOverview = () => {
             {/* Plan */}
             <div className="bg-white border border-gray-200 rounded-xl p-6">
               <h3 className="text-lg font-bold text-gray-900 mb-2">Current Plan</h3>
-              <p className="text-blue-600 font-semibold text-lg mb-1">{membershipPlan} Plan</p>
-              <p className="text-gray-400 text-xs mb-3">{membershipPlan === 'Free' ? 'Access to projects, community, and badges.' : 'Full access including hiring, smart match, and premium badges.'}</p>
+              <div className="flex items-center gap-2 mb-1">
+                <p className="text-blue-600 font-semibold text-lg">{membershipPlan} Plan</p>
+                {membershipPlan === 'Premium' && <PremiumBadge size="md" />}
+              </div>
+              <p className="text-gray-400 text-xs mb-3">{membershipPlan === 'Free' ? 'Access to projects, community, and badges. 3 paid projects/year.' : 'Unlimited paid projects, Talent Board visibility, priority support.'}</p>
               {membershipPlan === 'Free' && (
                 <button onClick={() => navigate('/settings?tab=membership')} className="text-blue-600 text-sm font-medium hover:underline">
                   Upgrade to Premium
                 </button>
               )}
+              {membershipPlan === 'Premium' && (
+                <p className="text-gray-500 text-xs mt-2">Priority support: <a href="mailto:premium@loomiqe.com" className="text-blue-600 hover:underline">premium@loomiqe.com</a></p>
+              )}
             </div>
+
+            {/* Talent Board — Premium only */}
+            {membershipPlan === 'Premium' && (
+              <div className="bg-orange-50 border border-orange-200 rounded-xl p-6">
+                <h3 className="text-base font-bold text-gray-900 mb-1 flex items-center gap-2">
+                  Talent Board
+                  <PremiumBadge size="sm" />
+                </h3>
+                <p className="text-gray-600 text-xs mb-3">You're visible to recruiters and companies on the Talent Board.</p>
+                <Link to="/talent-board" className="text-blue-600 text-sm font-medium hover:underline">View Talent Board</Link>
+              </div>
+            )}
 
             {/* Quick Links */}
             <div className="bg-white border border-gray-200 rounded-xl p-6">

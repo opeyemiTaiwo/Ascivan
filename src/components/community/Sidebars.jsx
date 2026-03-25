@@ -38,8 +38,13 @@ export const UserQuickLinksSidebar = ({ currentUser, onNavigate, isMobile = fals
     <div className={containerClass}>
       {/* Profile Card */}
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden mb-3">
-        {/* Banner */}
-        <div className="h-14 bg-gradient-to-r from-blue-50 to-blue-100" />
+        {/* Banner with logo */}
+        <div className="h-14 bg-gradient-to-r from-blue-50 to-blue-100 relative">
+          <div className="absolute top-2 left-3 flex items-center gap-1">
+            <span className="text-gray-900 text-xs font-bold tracking-tight">Loomiqe</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
+          </div>
+        </div>
         {/* Avatar + Name */}
         <div className="px-4 pb-4 -mt-6">
           <button onClick={() => handleLinkClick(`/profile/${currentUser.email}`)} className="block mb-2">

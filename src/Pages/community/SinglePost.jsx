@@ -886,7 +886,7 @@ const SinglePost = () => {
                 )}
 
                 {/* Engagement Section */}
-                <div className="flex flex-wrap items-center gap-3 xs:gap-4 sm:gap-6 pt-4 xs:pt-5 sm:pt-6 border-t border-gray-100">
+                <div className="flex flex-wrap items-center gap-3 xs:gap-4 sm:gap-6 pt-4 xs:pt-5 sm:pt-6 border-t border-gray-200">
                   {/* Like Button */}
                   <button
                     onClick={() => handlePostReaction(isPostLikedByUser())}
@@ -1025,7 +1025,7 @@ const SinglePost = () => {
             ) : (
               <div className="space-y-4 xs:space-y-5 sm:space-y-6">
                 {replies.map((reply) => (
-                  <div key={reply.id} className="border-b border-gray-100 last:border-0 pb-4 xs:pb-5 sm:pb-6 last:pb-0">
+                  <div key={reply.id} className="border-b border-gray-200 last:border-0 pb-4 xs:pb-5 sm:pb-6 last:pb-0">
                     <div className="flex items-start space-x-2 xs:space-x-3">
                       <ClickableUserAvatar
                         user={{

@@ -454,7 +454,7 @@ const SubmitPost = () => {
   return (
     <div className="min-h-screen bg-white text-gray-900">
       {/* Header - Responsive */}
-      <header className="sticky top-0 z-50 bg-white/80 border-b border-blue-600/20">
+      <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-3 sm:px-4 lg:px-8">
           <div className="flex items-center justify-between h-14 sm:h-16">
             <Link to="/community" className="flex items-center space-x-2 sm:space-x-3 group">
@@ -490,7 +490,7 @@ const SubmitPost = () => {
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           
           {/* Post Form Card */}
-          <div className="bg-gradient-to-br from-gray-900/50 via-black/50 to-gray-900/50 rounded-xl sm:rounded-2xl border border-blue-600/10 shadow-2xl overflow-hidden">
+          <div className="bg-white rounded-xl sm:rounded-2xl border border-blue-600/10 shadow-2xl overflow-hidden">
             <div className="p-4 sm:p-6 lg:p-8">
               
               {/* Author Info - Responsive */}
@@ -534,7 +534,7 @@ const SubmitPost = () => {
                   onChange={(e) => handleChange('title', e.target.value)}
                   placeholder="Give your post a title..."
                   maxLength={200}
-                  className="w-full p-2.5 sm:p-3 bg-white/30 border border-blue-600/20 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-colors text-sm sm:text-base"
+                  className="w-full p-2.5 sm:p-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-colors text-sm sm:text-base"
                 />
                 <div className="flex justify-between items-center mt-1">
                   <p className="text-[10px] sm:text-xs text-gray-400">Make your post stand out</p>
@@ -551,7 +551,7 @@ const SubmitPost = () => {
                   value={formData.content}
                   onChange={(value) => handleChange('content', value)}
                   placeholder="What's on your mind? Share your thoughts... Use @ to mention someone"
-                  className="w-full p-2.5 sm:p-3 bg-white/30 border border-blue-600/20 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-colors resize-none text-sm sm:text-base"
+                  className="w-full p-2.5 sm:p-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-colors resize-none text-sm sm:text-base"
                   rows={8}
                   onMentionSelect={handleMentionSelect}
                   showLinkButton={true}
@@ -587,7 +587,7 @@ const SubmitPost = () => {
                   className={`relative border-2 border-dashed rounded-lg p-4 sm:p-6 lg:p-8 text-center transition-all duration-300 ${
                     dragActive 
                       ? 'border-blue-500 bg-blue-600/10' 
-                      : 'border-blue-600/20 bg-gray-100 hover:border-blue-600/40 hover:bg-white/30'
+                      : 'border-gray-200 bg-gray-100 hover:border-blue-600/40 hover:bg-gray-50'
                   }`}
                 >
                   <input
@@ -645,7 +645,7 @@ const SubmitPost = () => {
                         <img 
                           src={previewUrls[index]} 
                           alt={`Preview ${index + 1}`}
-                          className="w-full h-32 sm:h-40 object-cover rounded-lg border border-blue-600/20"
+                          className="w-full h-32 sm:h-40 object-cover rounded-lg border border-gray-200"
                         />
                         
                         {/* Remove Button - Responsive */}
@@ -668,7 +668,7 @@ const SubmitPost = () => {
 
                         {/* Upload Progress */}
                         {uploading && uploadProgress[index] !== undefined && (
-                          <div className="absolute inset-0 bg-white/80 flex items-center justify-center rounded-lg">
+                          <div className="absolute inset-0 bg-white flex items-center justify-center rounded-lg">
                             {uploadProgress[index] === -1 ? (
                               <div className="text-red-400 text-center">
                                 <div className="text-xl sm:text-2xl mb-1">❌</div>

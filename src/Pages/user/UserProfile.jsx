@@ -64,7 +64,7 @@ const UserProfile = () => {
         }
 
         if (!userData) {
-          const allQ = query(collection(db, 'users'), limit(200));
+          const allQ = query(collection(db, 'users'), limit(50));
           const allSnap = await getDocs(allQ);
           const match = allSnap.docs.find(d => {
             const data = d.data();

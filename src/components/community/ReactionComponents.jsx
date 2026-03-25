@@ -115,7 +115,7 @@ export const ReactionAvatars = ({ postId, userIds = [], reactionCount, onClick }
               </div>
               
               {/* Tooltip */}
-              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 xs:mb-1.5 sm:mb-2 px-1.5 xs:px-2 py-0.5 xs:py-1 bg-white/80 text-gray-900 text-[10px] xs:text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 max-w-24 xs:max-w-32 sm:max-w-none pointer-events-none">
+              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 xs:mb-1.5 sm:mb-2 px-1.5 xs:px-2 py-0.5 xs:py-1 bg-white text-gray-900 text-[10px] xs:text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 max-w-24 xs:max-w-32 sm:max-w-none pointer-events-none">
                 <div className="truncate">
                   {user.firstName && user.lastName 
                     ? `${user.firstName} ${user.lastName}`
@@ -175,7 +175,7 @@ export const ReactionsModal = ({ isOpen, onClose, postId, reactions, reactionCou
       onClick={onClose}
     >
       <div 
-        className="bg-gradient-to-br from-gray-900/95 via-black/95 to-gray-900/95 rounded-xl xs:rounded-2xl border border-blue-600/20 shadow-2xl w-full max-w-[calc(100vw-1.5rem)] xs:max-w-sm sm:max-w-md max-h-[90vh] sm:max-h-[32rem] overflow-hidden"
+        className="bg-white rounded-xl xs:rounded-2xl border border-gray-200 shadow-2xl w-full max-w-[calc(100vw-1.5rem)] xs:max-w-sm sm:max-w-md max-h-[90vh] sm:max-h-[32rem] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -193,7 +193,7 @@ export const ReactionsModal = ({ isOpen, onClose, postId, reactions, reactionCou
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-900 active:text-gray-600 transition-colors p-1 xs:p-2 rounded-lg hover:bg-gray-100 active:bg-gray-100 flex items-center justify-center group"
+            className="text-gray-400 hover:text-gray-900 active:text-gray-600 transition-colors p-1 xs:p-2 rounded-lg hover:bg-gray-100 active:bg-gray-200 flex items-center justify-center group"
             aria-label="Close modal"
             title="Close"
           >
@@ -220,7 +220,7 @@ export const ReactionsModal = ({ isOpen, onClose, postId, reactions, reactionCou
               {reactionUsers.map((user, index) => (
                 <div 
                   key={user.uid || index} 
-                  className="flex items-center gap-2 xs:gap-2.5 sm:gap-3 p-2 xs:p-2.5 sm:p-3 rounded-lg hover:bg-gray-50 active:bg-gray-100 transition-colors"
+                  className="flex items-center gap-2 xs:gap-2.5 sm:gap-3 p-2 xs:p-2.5 sm:p-3 rounded-lg hover:bg-gray-50 active:bg-gray-200 transition-colors"
                 >
                   <div className="w-8 h-8 xs:w-9 xs:h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0">
                     {user.photoURL ? (

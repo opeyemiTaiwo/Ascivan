@@ -69,7 +69,7 @@ const WhoLikedModal = ({ isOpen, onClose, postId, userIds = [], postTitle }) => 
 
   return (
     <div className="fixed inset-0 bg-gray-500 z-50 flex items-center justify-center p-2 sm:p-4">
-      <div className="bg-gradient-to-br from-gray-900/95 via-black/95 to-gray-900/95 rounded-xl sm:rounded-2xl border border-gray-200 shadow-2xl w-full max-w-[95vw] sm:max-w-md max-h-[90vh] sm:max-h-[80vh] md:max-h-[70vh] overflow-hidden flex flex-col">
+      <div className="bg-white rounded-xl sm:rounded-2xl border border-gray-200 shadow-2xl w-full max-w-[95vw] sm:max-w-md max-h-[90vh] sm:max-h-[80vh] md:max-h-[70vh] overflow-hidden flex flex-col">
         
         {/* Modal Header */}
         <div className="p-4 sm:p-5 md:p-6 border-b border-gray-200 flex-shrink-0">

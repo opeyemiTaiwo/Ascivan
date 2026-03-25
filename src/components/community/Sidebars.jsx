@@ -66,7 +66,7 @@ export const UserQuickLinksSidebar = ({ currentUser, onNavigate, isMobile = fals
             <button
               key={index}
               onClick={() => handleLinkClick(link.path)}
-              className={`flex items-center gap-2 xs:gap-3 p-2.5 xs:p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 active:bg-white/15 cursor-pointer w-full text-left group sidebar-item ${
+              className={`flex items-center gap-2 xs:gap-3 p-2.5 xs:p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 active:bg-gray-200 cursor-pointer w-full text-left group sidebar-item ${
                 isMobile ? 'py-3 xs:py-4' : ''
               }`}
             >
@@ -259,13 +259,13 @@ export const FollowSuggestionsSidebar = ({ currentUser, isMobile = false }) => {
         label: 'Achiever', 
         color: 'text-blue-600', 
         bg: 'bg-blue-600/20', 
-        border: 'border-blue-600/30',
+        border: 'border-gray-200',
       },
       newcomer: { 
         label: 'Newcomer', 
         color: 'text-blue-600', 
         bg: 'bg-blue-600/20', 
-        border: 'border-blue-600/30',
+        border: 'border-gray-200',
       }
     };
     return statusInfo[userStatus] || statusInfo.newcomer;
@@ -297,7 +297,7 @@ export const FollowSuggestionsSidebar = ({ currentUser, isMobile = false }) => {
           </div>
         </div>
         
-        <div className="mb-3 xs:mb-4 p-2.5 xs:p-3 bg-gradient-to-r from-blue-500/10 to-blue-600/10 rounded-lg border border-blue-600/20 flex-shrink-0">
+        <div className="mb-3 xs:mb-4 p-2.5 xs:p-3 bg-gradient-to-r from-blue-500/10 to-blue-600/10 rounded-lg border border-gray-200 flex-shrink-0">
           <div className="grid grid-cols-2 gap-2 xs:gap-3 text-center">
             <div>
               <div className="text-base xs:text-lg font-bold text-blue-600">{userCounts.following}</div>
@@ -332,7 +332,7 @@ export const FollowSuggestionsSidebar = ({ currentUser, isMobile = false }) => {
               return (
                 <div
                   key={user.uid}
-                  className="flex items-center gap-2 xs:gap-3 p-2.5 xs:p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 active:bg-white/15 transition-all duration-300 group"
+                  className="flex items-center gap-2 xs:gap-3 p-2.5 xs:p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 active:bg-gray-200 transition-all duration-300 group"
                 >
                   <ClickableUserAvatar 
                     user={user}
@@ -462,7 +462,7 @@ export const CompanyInfoSidebar = ({ isMobile = false }) => {
             <button
               key={index}
               onClick={() => handleLinkClick(link)}
-              className={`flex flex-col items-center justify-center p-2.5 xs:p-3 sm:p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 active:bg-white/15 cursor-pointer text-center group sidebar-item ${
+              className={`flex flex-col items-center justify-center p-2.5 xs:p-3 sm:p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 active:bg-gray-200 cursor-pointer text-center group sidebar-item ${
                 isMobile ? 'min-h-[56px] xs:min-h-[60px]' : 'min-h-[48px] xs:min-h-[50px]'
               }`}
             >

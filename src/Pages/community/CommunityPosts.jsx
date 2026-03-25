@@ -964,10 +964,10 @@ const CommunityPosts = () => {
         onClick={closeRepostModal}
       >
         <div 
-          className="bg-gradient-to-br from-gray-900/95 via-black/95 to-gray-900/95 rounded-xl xs:rounded-2xl border border-gray-200 shadow-2xl w-full max-w-md"
+          className="bg-white rounded-xl xs:rounded-2xl border border-gray-200 shadow-2xl w-full max-w-md"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex items-center justify-between p-4 xs:p-5 sm:p-6 border-b border-gray-100">
+          <div className="flex items-center justify-between p-4 xs:p-5 sm:p-6 border-b border-gray-200">
             <h3 className="text-base xs:text-lg font-bold text-gray-900 flex items-center gap-2">
               <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -1021,7 +1021,7 @@ const CommunityPosts = () => {
               )}
             </div>
 
-            <div className="mt-3 xs:mt-4 p-3 xs:p-4 bg-blue-600/10 border border-blue-600/30 rounded-lg">
+            <div className="mt-3 xs:mt-4 p-3 xs:p-4 bg-blue-600/10 border border-gray-200 rounded-lg">
               <p className="text-green-300 text-xs xs:text-sm flex items-start gap-2">
                 <svg className="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -1031,7 +1031,7 @@ const CommunityPosts = () => {
             </div>
           </div>
 
-          <div className="p-4 xs:p-5 sm:p-6 border-t border-gray-100 bg-gray-100">
+          <div className="p-4 xs:p-5 sm:p-6 border-t border-gray-200 bg-gray-100">
             <div className="flex gap-2 xs:gap-3">
               <button
                 onClick={closeRepostModal}
@@ -1070,7 +1070,7 @@ const CommunityPosts = () => {
     return (
       <>
         
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center px-3 xs:px-4">
+        <div className="min-h-screen bg-white flex items-center justify-center px-3 xs:px-4">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
             <p className="text-gray-400 text-sm xs:text-base">Loading Loomiqe Community...</p>
@@ -1137,7 +1137,7 @@ const CommunityPosts = () => {
                     </svg>
                   </button>
                   {showViewMenu && (
-                    <div className="absolute top-full mt-2 w-48 xs:w-56 bg-gray-900/95 border border-gray-200 rounded-lg xs:rounded-xl shadow-2xl overflow-hidden z-50">
+                    <div className="absolute top-full mt-2 w-48 xs:w-56 bg-white border border-gray-200 rounded-lg xs:rounded-xl shadow-2xl overflow-hidden z-50">
                       <button
                         onClick={() => changeViewMode('all')}
                         className={`w-full text-left px-3 xs:px-4 py-2.5 xs:py-3 hover:bg-gray-100 transition-colors text-sm xs:text-base ${
@@ -1199,7 +1199,7 @@ const CommunityPosts = () => {
                   posts.map((post) => (
                     <article
                       key={post.id}
-                      className="bg-gradient-to-br from-gray-900/50 via-black/50 to-gray-900/50 rounded-xl xs:rounded-2xl border border-gray-100 hover:border-blue-600/30 transition-all duration-300 shadow-2xl overflow-hidden"
+                      className="bg-white rounded-xl xs:rounded-2xl border border-gray-200 hover:border-gray-200 transition-all duration-300 shadow-2xl overflow-hidden"
                     >
                       <div className="p-3 xs:p-4 sm:p-6">
                         <div className="flex items-start justify-between mb-3 xs:mb-4">
@@ -1232,7 +1232,7 @@ const CommunityPosts = () => {
                                 />
                                 
                                 {post.authorTitle && (
-                                  <span className="text-blue-600 text-xs bg-blue-600/20 px-2 xs:px-2.5 py-0.5 xs:py-1 rounded-full border border-blue-600/30 hidden sm:inline">
+                                  <span className="text-blue-600 text-xs bg-blue-600/20 px-2 xs:px-2.5 py-0.5 xs:py-1 rounded-full border border-gray-200 hidden sm:inline">
                                     {post.authorTitle}
                                   </span>
                                 )}
@@ -1319,7 +1319,7 @@ const CommunityPosts = () => {
     </div>
     
     {/* Original Post Content Card */}
-    <div className="p-3 xs:p-4 bg-gray-50 border border-blue-600/20 rounded-lg">
+    <div className="p-3 xs:p-4 bg-gray-50 border border-gray-200 rounded-lg">
       {/* Original Author Info */}
       <div className="flex items-center gap-2 xs:gap-3 mb-3">
         <div className="w-8 h-8 xs:w-10 xs:h-10 rounded-full overflow-hidden bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center text-gray-900 font-bold flex-shrink-0">
@@ -1391,13 +1391,13 @@ const CommunityPosts = () => {
                               value={editContent[post.id]?.title || ''}
                               onChange={(e) => handleEditContentChange(post.id, 'title', e.target.value)}
                               placeholder="Post title (optional)"
-                              className="w-full p-2 xs:p-3 bg-white/30 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-colors text-sm xs:text-base"
+                              className="w-full p-2 xs:p-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-colors text-sm xs:text-base"
                             />
                             <textarea
                               value={editContent[post.id]?.content || ''}
                               onChange={(e) => handleEditContentChange(post.id, 'content', e.target.value)}
                               rows={6}
-                              className="w-full p-2 xs:p-3 bg-white/30 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-colors resize-none text-sm xs:text-base"
+                              className="w-full p-2 xs:p-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-colors resize-none text-sm xs:text-base"
                             />
                             <div className="flex gap-2 xs:gap-3">
                               <button
@@ -1437,7 +1437,7 @@ const CommunityPosts = () => {
                         )}
 
                         {editingPost !== post.id && (
-                          <div className="mt-3 xs:mt-4 pt-3 xs:pt-4 border-t border-gray-100 flex items-center justify-between text-xs xs:text-sm">
+                          <div className="mt-3 xs:mt-4 pt-3 xs:pt-4 border-t border-gray-200 flex items-center justify-between text-xs xs:text-sm">
                             <div className="flex items-center gap-3 xs:gap-4">
                               {reactionCounts[post.id] > 0 && (
                                 <ReactionAvatars
@@ -1475,7 +1475,7 @@ const CommunityPosts = () => {
                         )}
 
                         {editingPost !== post.id && (
-                          <div className="mt-3 xs:mt-4 pt-3 xs:pt-4 border-t border-gray-100 flex items-center justify-between gap-2">
+                          <div className="mt-3 xs:mt-4 pt-3 xs:pt-4 border-t border-gray-200 flex items-center justify-between gap-2">
                             <div className="flex items-center gap-1 xs:gap-2 flex-wrap">
                               <button
                                 onClick={() => handlePostReaction(post.id, isPostLikedByUser(post.id))}
@@ -1511,7 +1511,7 @@ const CommunityPosts = () => {
                                 disabled={hasUserReposted(post)}
                                 className={`flex items-center gap-1 xs:gap-1.5 px-2 xs:px-3 py-1.5 xs:py-2 rounded-lg font-medium transition-all duration-300 text-xs xs:text-sm min-h-[44px] ${
                                   hasUserReposted(post)
-                                    ? 'bg-blue-600/20 text-blue-600 border border-blue-600/30 cursor-not-allowed'
+                                    ? 'bg-blue-600/20 text-blue-600 border border-gray-200 cursor-not-allowed'
                                     : 'bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-400 hover:text-blue-600'
                                 } disabled:opacity-50`}
                               >
@@ -1535,13 +1535,13 @@ const CommunityPosts = () => {
                         )}
 
                         {showReplies.has(post.id) && (
-                          <div className="mt-4 xs:mt-5 sm:mt-6 pt-4 xs:pt-5 sm:pt-6 border-t border-gray-100">
+                          <div className="mt-4 xs:mt-5 sm:mt-6 pt-4 xs:pt-5 sm:pt-6 border-t border-gray-200">
                             <div className="mb-4 xs:mb-5 sm:mb-6">
                               <MentionTextarea
                                 value={replyText[post.id] || ''}
                                 onChange={(text) => handleReplyChange(post.id, text)}
                                 placeholder="Write a reply... Use @ to mention someone"
-                                className="w-full p-2 xs:p-3 bg-white/30 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-colors resize-none text-sm xs:text-base"
+                                className="w-full p-2 xs:p-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-colors resize-none text-sm xs:text-base"
                                 rows={3}
                                 onMentionSelect={(user) => handleReplyMentionSelect(post.id, user)}
                                 showLinkButton={false}
@@ -1603,7 +1603,7 @@ const CommunityPosts = () => {
                                             />
                                             
                                             {reply.authorTitle && (
-                                              <span className="text-blue-600 text-xs bg-blue-600/20 px-1.5 py-0.5 rounded-full border border-blue-600/30 hidden sm:inline">
+                                              <span className="text-blue-600 text-xs bg-blue-600/20 px-1.5 py-0.5 rounded-full border border-gray-200 hidden sm:inline">
                                                 {reply.authorTitle}
                                               </span>
                                             )}
@@ -1650,7 +1650,7 @@ const CommunityPosts = () => {
                                               value={editReplyContent}
                                               onChange={(e) => setEditReplyContent(e.target.value)}
                                               rows={3}
-                                              className="w-full p-2 bg-white/30 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-colors resize-none text-sm"
+                                              className="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-colors resize-none text-sm"
                                             />
                                             <div className="flex gap-2">
                                               <button
@@ -1673,7 +1673,7 @@ const CommunityPosts = () => {
                                           <>
                                             <RichTextContent 
                                               content={reply.content}
-                                              className="text-gray-200 leading-relaxed whitespace-pre-wrap text-xs xs:text-sm"
+                                              className="text-gray-700 leading-relaxed whitespace-pre-wrap text-xs xs:text-sm"
                                             />
                                             
                                             {reply.taggedUsers && reply.taggedUsers.length > 0 && (

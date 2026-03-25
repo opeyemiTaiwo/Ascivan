@@ -140,10 +140,10 @@ const Messages = () => {
     return () => unsub();
   }, [currentUser]);
 
-  // URL param ?with=uid
+  // URL param ?with=uid or ?to=uid — auto-open conversation
   useEffect(() => {
-    const withUser = searchParams.get('with');
-    if (withUser && !loading) openConversation(withUser);
+    const targetUid = searchParams.get('with') || searchParams.get('to');
+    if (targetUid && !loading) openConversation(targetUid);
   }, [searchParams, loading]);
 
   // Listen to messages in active conv
@@ -174,15 +174,8 @@ const Messages = () => {
   };
 
   const openConversation = async (targetUid) => {
+    if (!currentUser || targetUid === currentUser.uid) return;
     try {
-      const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
-      if (userDoc.exists()) {
-        const { following = [] } = userDoc.data();
-        if (!following.includes(targetUid)) {
-          alert('You need to follow this user before you can message them.');
-          return;
-        }
-      }
       const convId  = getConversationId(currentUser.uid, targetUid);
       const convRef = doc(db, 'conversations', convId);
       const convSnap = await getDoc(convRef);
@@ -204,7 +197,6 @@ const Messages = () => {
       setTimeout(() => inputRef.current?.focus(), 100);
     } catch (err) {
       console.error('Error opening conversation:', err);
-      alert('Unable to open conversation. Please try again.');
     }
   };
 

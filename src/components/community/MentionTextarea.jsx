@@ -224,7 +224,7 @@ const MentionTextarea = ({
       {/* Mention Suggestions Dropdown */}
       {showSuggestions && suggestions.length > 0 && (
         <div 
-          className="absolute z-50 w-full max-w-[calc(100vw-2rem)] xs:max-w-xs bg-gray-900/95 border border-blue-600/20 rounded-lg shadow-2xl max-h-48 xs:max-h-56 overflow-y-auto"
+          className="absolute z-50 w-full max-w-[calc(100vw-2rem)] xs:max-w-xs bg-white border border-gray-200 rounded-lg shadow-2xl max-h-48 xs:max-h-56 overflow-y-auto"
           style={{
             top: '100%',
             left: 0,
@@ -235,7 +235,7 @@ const MentionTextarea = ({
             <button
               key={user.uid}
               onClick={() => selectSuggestion(user, index)}
-              className={`flex items-center gap-2 xs:gap-3 w-full px-3 xs:px-4 py-2 xs:py-3 text-left hover:bg-gray-100 active:bg-gray-100 transition-colors ${
+              className={`flex items-center gap-2 xs:gap-3 w-full px-3 xs:px-4 py-2 xs:py-3 text-left hover:bg-gray-100 active:bg-gray-200 transition-colors ${
                 index === selectedSuggestionIndex ? 'bg-blue-600/20 text-orange-300' : 'text-gray-900'
               }`}
             >

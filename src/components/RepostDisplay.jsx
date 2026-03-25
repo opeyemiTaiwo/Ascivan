@@ -39,7 +39,7 @@ export const RepostModal = ({ isOpen, onClose, post, onRepost, isSubmitting }) =
       onClick={handleClose}
     >
       <div 
-        className="bg-gradient-to-br from-gray-900/95 via-black/95 to-gray-900/95 rounded-xl sm:rounded-2xl border border-gray-200 shadow-2xl w-full max-w-[95vw] sm:max-w-2xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden flex flex-col"
+        className="bg-white rounded-xl sm:rounded-2xl border border-gray-200 shadow-2xl w-full max-w-[95vw] sm:max-w-2xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -70,7 +70,7 @@ export const RepostModal = ({ isOpen, onClose, post, onRepost, isSubmitting }) =
               onChange={setRepostComment}
               onMentionSelect={handleMentionSelect}
               placeholder="What do you think about this post? Use @ to mention someone..."
-              className="w-full p-3 sm:p-4 bg-white/30 border border-gray-200 rounded-xl text-sm sm:text-base text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-lime-400/20 resize-none min-h-[80px] sm:min-h-[100px] transition-colors"
+              className="w-full p-3 sm:p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm sm:text-base text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-lime-400/20 resize-none min-h-[80px] sm:min-h-[100px] transition-colors"
               rows="4"
             />
             

@@ -108,7 +108,7 @@ const LinkInsertModal = ({ isOpen, onClose, onInsert }) => {
       onClick={handleClose}
     >
       <div 
-        className="bg-gradient-to-br from-gray-900/95 via-black/95 to-gray-900/95 rounded-xl xs:rounded-2xl border border-blue-600/20 shadow-2xl w-full max-w-[calc(100vw-1.5rem)] xs:max-w-md"
+        className="bg-white rounded-xl xs:rounded-2xl border border-gray-200 shadow-2xl w-full max-w-[calc(100vw-1.5rem)] xs:max-w-md"
         onClick={(e) => e.stopPropagation()}
         onKeyDown={handleKeyDown}
       >
@@ -122,7 +122,7 @@ const LinkInsertModal = ({ isOpen, onClose, onInsert }) => {
           </h3>
           <button
             onClick={handleClose}
-            className="text-gray-400 hover:text-gray-900 transition-colors p-1 xs:p-2 rounded-lg hover:bg-gray-100 active:bg-gray-100"
+            className="text-gray-400 hover:text-gray-900 transition-colors p-1 xs:p-2 rounded-lg hover:bg-gray-100 active:bg-gray-200"
             aria-label="Close modal"
             title="Close (Esc)"
           >
@@ -144,10 +144,10 @@ const LinkInsertModal = ({ isOpen, onClose, onInsert }) => {
               value={linkData.url}
               onChange={(e) => handleUrlChange(e.target.value)}
               placeholder="https://example.com or example.com"
-              className={`w-full p-2.5 xs:p-3 bg-white/30 border rounded-lg text-sm xs:text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-colors ${
+              className={`w-full p-2.5 xs:p-3 bg-gray-50 border rounded-lg text-sm xs:text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-colors ${
                 urlError 
                   ? 'border-red-400 focus:border-red-400 focus:ring-red-400/20' 
-                  : 'border-blue-600/20 focus:border-blue-500 focus:ring-orange-400/20'
+                  : 'border-gray-200 focus:border-blue-500 focus:ring-orange-400/20'
               }`}
               autoFocus
             />
@@ -177,7 +177,7 @@ const LinkInsertModal = ({ isOpen, onClose, onInsert }) => {
               value={linkData.text}
               onChange={(e) => setLinkData(prev => ({ ...prev, text: e.target.value }))}
               placeholder="Link text (optional - will use domain if empty)"
-              className="w-full p-2.5 xs:p-3 bg-white/30 border border-blue-600/20 rounded-lg text-sm xs:text-base text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-orange-400/20 transition-colors"
+              className="w-full p-2.5 xs:p-3 bg-gray-50 border border-gray-200 rounded-lg text-sm xs:text-base text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-orange-400/20 transition-colors"
             />
             <p className="text-gray-400 text-[10px] xs:text-xs mt-1">
               Leave empty to auto-generate from URL
@@ -186,7 +186,7 @@ const LinkInsertModal = ({ isOpen, onClose, onInsert }) => {
 
           {/* Preview */}
           {linkData.url && (
-            <div className="p-2.5 xs:p-3 bg-blue-600/10 border border-blue-600/30 rounded-lg">
+            <div className="p-2.5 xs:p-3 bg-blue-600/10 border border-gray-200 rounded-lg">
               <p className="text-orange-300 text-xs xs:text-sm font-medium mb-1">Preview:</p>
               <div className="text-blue-600 hover:text-orange-300 underline cursor-pointer text-xs xs:text-sm break-all">
                 {linkData.text || linkData.url}
@@ -201,7 +201,7 @@ const LinkInsertModal = ({ isOpen, onClose, onInsert }) => {
             <button
               onClick={handleClose}
               disabled={validating}
-              className="flex-1 px-3 xs:px-4 py-2 xs:py-2.5 text-sm xs:text-base text-gray-600 hover:text-gray-900 hover:bg-gray-100 active:bg-gray-100 rounded-lg transition-colors font-medium disabled:opacity-50"
+              className="flex-1 px-3 xs:px-4 py-2 xs:py-2.5 text-sm xs:text-base text-gray-600 hover:text-gray-900 hover:bg-gray-100 active:bg-gray-200 rounded-lg transition-colors font-medium disabled:opacity-50"
             >
               Cancel
             </button>

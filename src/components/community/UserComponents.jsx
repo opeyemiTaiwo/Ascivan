@@ -73,7 +73,7 @@ export const TaggedUsers = ({ taggedUsers = [], onRemoveTag }) => {
   if (!taggedUsers.length) return null;
   
   return (
-    <div className={`${onRemoveTag ? 'mt-3 xs:mt-4 p-3 xs:p-4 bg-blue-600/10 border border-blue-600/30 rounded-lg xs:rounded-xl' : 'flex flex-wrap items-center gap-1 xs:gap-1.5 sm:gap-2 mt-2 xs:mt-2.5 sm:mt-3 text-xs sm:text-sm'}`}>
+    <div className={`${onRemoveTag ? 'mt-3 xs:mt-4 p-3 xs:p-4 bg-blue-600/10 border border-gray-200 rounded-lg xs:rounded-xl' : 'flex flex-wrap items-center gap-1 xs:gap-1.5 sm:gap-2 mt-2 xs:mt-2.5 sm:mt-3 text-xs sm:text-sm'}`}>
       {onRemoveTag && (
         <div className="flex items-center justify-between mb-2 xs:mb-3">
           <h4 className="text-orange-300 font-medium text-xs xs:text-sm flex items-center gap-1 xs:gap-2">
@@ -155,7 +155,7 @@ export const TaggedUsersSmall = ({ taggedUsers = [], onRemoveTag }) => {
   if (!taggedUsers.length) return null;
   
   return (
-    <div className="mt-2 xs:mt-3 p-2 xs:p-2.5 sm:p-3 bg-blue-600/10 border border-blue-600/30 rounded-lg">
+    <div className="mt-2 xs:mt-3 p-2 xs:p-2.5 sm:p-3 bg-blue-600/10 border border-gray-200 rounded-lg">
       <div className="flex items-center justify-between mb-1 xs:mb-1.5 sm:mb-2">
         <h4 className="text-orange-300 font-medium text-[10px] xs:text-xs sm:text-sm flex items-center gap-1">
           <svg className="w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-3.5 sm:h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

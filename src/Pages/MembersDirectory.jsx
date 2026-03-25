@@ -8,7 +8,8 @@ import {
   collection, 
   query, 
   getDocs,
-  onSnapshot,
+  orderBy,
+  limit,
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
@@ -91,17 +92,27 @@ const MembersDirectory = () => {
     };
 
     setLoading(true);
-    const unsubscribe = onSnapshot(
-      collection(db, 'users'),
-      processSnapshot,
-      (error) => {
-        console.error('Members snapshot error:', error);
-        toast.error('Failed to load member directory. Check Firestore rules.');
-        setLoading(false);
+    // Use getDocs with limit instead of onSnapshot on entire users collection
+    const fetchMembers = async () => {
+      try {
+        const q = query(collection(db, 'users'), orderBy('lastLogin', 'desc'), limit(100));
+        const snapshot = await getDocs(q);
+        processSnapshot(snapshot);
+      } catch (error) {
+        console.error('Members fetch error:', error);
+        // Fallback without orderBy if index missing
+        try {
+          const fallbackQ = query(collection(db, 'users'), limit(100));
+          const snapshot = await getDocs(fallbackQ);
+          processSnapshot(snapshot);
+        } catch (e2) {
+          console.error('Members fallback error:', e2);
+          toast.error('Failed to load member directory.');
+          setLoading(false);
+        }
       }
-    );
-
-    return () => unsubscribe();
+    };
+    fetchMembers();
   }, [currentUser, authLoading]);
 
   // Apply filters

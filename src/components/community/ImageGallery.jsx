@@ -84,7 +84,7 @@ const ImageGallery = ({ images }) => {
             <img 
               src={displayImages[0].url} 
               alt={displayImages[0].filename || "Post image"}
-              className="w-full max-h-48 xs:max-h-64 sm:max-h-96 object-cover rounded-lg xs:rounded-xl border border-blue-600/20 cursor-pointer hover:opacity-90 transition-all duration-300"
+              className="w-full max-h-48 xs:max-h-64 sm:max-h-96 object-cover rounded-lg xs:rounded-xl border border-gray-200 cursor-pointer hover:opacity-90 transition-all duration-300"
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -112,7 +112,7 @@ const ImageGallery = ({ images }) => {
                 <img 
                   src={image.url} 
                   alt={image.filename || `Image ${index + 1}`}
-                  className="w-full h-24 xs:h-32 sm:h-40 md:h-48 object-cover rounded-md xs:rounded-lg border border-blue-600/20 cursor-pointer hover:opacity-90 transition-all duration-300"
+                  className="w-full h-24 xs:h-32 sm:h-40 md:h-48 object-cover rounded-md xs:rounded-lg border border-gray-200 cursor-pointer hover:opacity-90 transition-all duration-300"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -185,7 +185,7 @@ const ImageGallery = ({ images }) => {
                 console.log('Close button clicked');
                 closeLightbox();
               }}
-              className="absolute top-2 right-2 xs:top-3 xs:right-3 sm:top-4 sm:right-4 bg-gray-500 hover:bg-white/70 active:bg-white/80 text-gray-900 rounded-full w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 flex items-center justify-center text-lg xs:text-xl sm:text-2xl font-bold transition-colors z-10"
+              className="absolute top-2 right-2 xs:top-3 xs:right-3 sm:top-4 sm:right-4 bg-gray-500 hover:bg-white/70 active:bg-white text-gray-900 rounded-full w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 flex items-center justify-center text-lg xs:text-xl sm:text-2xl font-bold transition-colors z-10"
               aria-label="Close lightbox"
               title="Close (Esc)"
               style={{ 
@@ -206,7 +206,7 @@ const ImageGallery = ({ images }) => {
                     console.log('Previous button clicked');
                     navigateImage('prev');
                   }}
-                  className="absolute left-2 xs:left-3 sm:left-4 top-1/2 transform -translate-y-1/2 bg-gray-500 hover:bg-white/70 active:bg-white/80 text-gray-900 rounded-full w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 flex items-center justify-center text-lg xs:text-xl sm:text-2xl font-bold transition-colors"
+                  className="absolute left-2 xs:left-3 sm:left-4 top-1/2 transform -translate-y-1/2 bg-gray-500 hover:bg-white/70 active:bg-white text-gray-900 rounded-full w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 flex items-center justify-center text-lg xs:text-xl sm:text-2xl font-bold transition-colors"
                   aria-label="Previous image"
                   title="Previous image (Left Arrow)"
                   style={{ 
@@ -224,7 +224,7 @@ const ImageGallery = ({ images }) => {
                     console.log('Next button clicked');
                     navigateImage('next');
                   }}
-                  className="absolute right-2 xs:right-3 sm:right-4 top-1/2 transform -translate-y-1/2 bg-gray-500 hover:bg-white/70 active:bg-white/80 text-gray-900 rounded-full w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 flex items-center justify-center text-lg xs:text-xl sm:text-2xl font-bold transition-colors"
+                  className="absolute right-2 xs:right-3 sm:right-4 top-1/2 transform -translate-y-1/2 bg-gray-500 hover:bg-white/70 active:bg-white text-gray-900 rounded-full w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 flex items-center justify-center text-lg xs:text-xl sm:text-2xl font-bold transition-colors"
                   aria-label="Next image"
                   title="Next image (Right Arrow)"
                   style={{ 

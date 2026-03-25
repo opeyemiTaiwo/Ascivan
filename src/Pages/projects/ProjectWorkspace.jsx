@@ -1,12 +1,22 @@
-// src/Pages/projects/ProjectWorkspace.jsx — Per-project workspace with tabs
-import React, { useState, useEffect } from 'react';
+// src/Pages/projects/ProjectWorkspace.jsx — Workspace with Forum + Resources
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-
-import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, deleteDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
 import { logActivity } from '../../utils/activityLog';
+
+const formatTime = (ts) => {
+  if (!ts) return '';
+  const date = ts.toDate ? ts.toDate() : new Date(ts);
+  const now = new Date();
+  const diff = now - date;
+  if (diff < 60000) return 'just now';
+  if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+  if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+};
 
 const ProjectWorkspace = () => {
   const { projectId } = useParams();
@@ -14,14 +24,22 @@ const ProjectWorkspace = () => {
   const navigate = useNavigate();
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('data');
-  const [showSetupModal, setShowSetupModal] = useState(false);
-  const [workspaceData, setWorkspaceData] = useState({
-    meetingSchedule: '',
-    communicationTools: '',
-    resourceLinks: [],
-  });
-  const [newLink, setNewLink] = useState({ title: '', url: '' });
+  const [activeTab, setActiveTab] = useState('forum');
+
+  // Forum state
+  const [posts, setPosts] = useState([]);
+  const [newPost, setNewPost] = useState('');
+  const [newPostLink, setNewPostLink] = useState('');
+  const [posting, setPosting] = useState(false);
+  const [replyTo, setReplyTo] = useState(null);
+  const [replyText, setReplyText] = useState('');
+  const [editingPost, setEditingPost] = useState(null);
+  const [editText, setEditText] = useState('');
+  const messagesEndRef = useRef(null);
+
+  // Resource state
+  const [resources, setResources] = useState({ submissionUrl: '', meetingUrl: '', detailsUrl: '', notes: '' });
+  const [savingResources, setSavingResources] = useState(false);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -30,257 +48,341 @@ const ProjectWorkspace = () => {
         if (snap.exists()) {
           const data = { id: snap.id, ...snap.data() };
           setProject(data);
-          if (data.workspace) {
-            setWorkspaceData({
-              meetingSchedule: data.workspace.meetingSchedule || '',
-              communicationTools: data.workspace.communicationTools || '',
-              resourceLinks: data.workspace.resourceLinks || [],
+          if (data.resources) {
+            setResources({
+              submissionUrl: data.resources.submissionUrl || '',
+              meetingUrl: data.resources.meetingUrl || '',
+              detailsUrl: data.resources.detailsUrl || '',
+              notes: data.resources.notes || '',
             });
           }
         }
-      } catch (e) {
-        console.error('Error fetching project:', e);
-      }
+      } catch (e) { console.error('Error fetching project:', e); }
       setLoading(false);
     };
     fetchProject();
   }, [projectId]);
 
-  const handleSaveWorkspace = async () => {
+  // Listen to forum posts
+  useEffect(() => {
+    if (!projectId) return;
+    const q = query(collection(db, 'projects', projectId, 'forum'), orderBy('createdAt', 'asc'));
+    const unsub = onSnapshot(q, (snap) => {
+      setPosts(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    });
+    return () => unsub();
+  }, [projectId]);
+
+  useEffect(() => {
+    if (activeTab === 'forum') messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [posts, activeTab]);
+
+  const isOwner = project?.submitterId === currentUser?.uid || project?.submitterEmail === currentUser?.email;
+
+  // Forum handlers
+  const handlePost = async () => {
+    if (!newPost.trim() && !newPostLink.trim()) return;
+    setPosting(true);
     try {
-      await updateDoc(doc(db, 'projects', projectId), {
-        workspace: {
-          meetingSchedule: workspaceData.meetingSchedule,
-          communicationTools: workspaceData.communicationTools,
-          resourceLinks: workspaceData.resourceLinks,
-          updatedAt: new Date(),
-        }
+      await addDoc(collection(db, 'projects', projectId, 'forum'), {
+        text: newPost.trim(),
+        link: newPostLink.trim() || null,
+        authorId: currentUser.uid,
+        authorName: currentUser.displayName || currentUser.email,
+        authorPhoto: currentUser.photoURL || null,
+        createdAt: serverTimestamp(),
+        editedAt: null,
+        reactions: {},
+        parentId: null,
       });
-      toast.success('Workspace updated');
-      setShowSetupModal(false);
-
-      logActivity(projectId, {
-        type: 'workspace_updated',
-        actor: currentUser?.email,
-        actorName: currentUser?.displayName || currentUser?.email,
-        description: 'Workspace settings updated',
-      });
-    } catch (e) {
-      toast.error('Failed to save workspace');
-    }
+      setNewPost('');
+      setNewPostLink('');
+    } catch (e) { toast.error('Failed to post'); }
+    setPosting(false);
   };
 
-  const addResourceLink = () => {
-    if (!newLink.title.trim() || !newLink.url.trim()) return;
-    setWorkspaceData(prev => ({
-      ...prev,
-      resourceLinks: [...prev.resourceLinks, { ...newLink, addedAt: new Date() }]
-    }));
-    setNewLink({ title: '', url: '' });
+  const handleReply = async (parentId) => {
+    if (!replyText.trim()) return;
+    try {
+      await addDoc(collection(db, 'projects', projectId, 'forum'), {
+        text: replyText.trim(),
+        link: null,
+        authorId: currentUser.uid,
+        authorName: currentUser.displayName || currentUser.email,
+        authorPhoto: currentUser.photoURL || null,
+        createdAt: serverTimestamp(),
+        editedAt: null,
+        reactions: {},
+        parentId,
+      });
+      setReplyTo(null);
+      setReplyText('');
+    } catch (e) { toast.error('Failed to reply'); }
   };
 
-  const removeResourceLink = (index) => {
-    setWorkspaceData(prev => ({
-      ...prev,
-      resourceLinks: prev.resourceLinks.filter((_, i) => i !== index)
-    }));
+  const handleEdit = async (postId) => {
+    if (!editText.trim()) return;
+    try {
+      await updateDoc(doc(db, 'projects', projectId, 'forum', postId), {
+        text: editText.trim(),
+        editedAt: serverTimestamp(),
+      });
+      setEditingPost(null);
+      setEditText('');
+    } catch (e) { toast.error('Failed to edit'); }
+  };
+
+  const handleDelete = async (postId) => {
+    if (!window.confirm('Delete this post?')) return;
+    try { await deleteDoc(doc(db, 'projects', projectId, 'forum', postId)); } catch (e) { toast.error('Failed to delete'); }
+  };
+
+  const handleReact = async (postId, emoji) => {
+    try {
+      const postRef = doc(db, 'projects', projectId, 'forum', postId);
+      const post = posts.find(p => p.id === postId);
+      const reactions = post?.reactions || {};
+      const key = `reactions.${emoji}`;
+      const current = reactions[emoji] || [];
+      const updated = current.includes(currentUser.uid) ? current.filter(u => u !== currentUser.uid) : [...current, currentUser.uid];
+      await updateDoc(postRef, { [key]: updated });
+    } catch (e) { console.error(e); }
+  };
+
+  // Resource handlers
+  const handleSaveResources = async () => {
+    setSavingResources(true);
+    try {
+      await updateDoc(doc(db, 'projects', projectId), { resources });
+      toast.success('Resources updated');
+      logActivity(projectId, { type: 'workspace_updated', actor: currentUser?.email, actorName: currentUser?.displayName || currentUser?.email, description: 'Resources updated' });
+    } catch (e) { toast.error('Failed to save'); }
+    setSavingResources(false);
   };
 
   const tabs = [
-    { id: 'data', label: 'Data' },
-    { id: 'resources', label: 'Resource Links' },
-    { id: 'collaborators', label: 'Collaborators' },
+    { id: 'forum', label: 'Discussion' },
+    { id: 'resources', label: 'Resources' },
   ];
 
-  if (loading) {
-    return (
-      
-        <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
-        </div>
-      
-    );
-  }
+  const topPosts = posts.filter(p => !p.parentId);
+  const getReplies = (parentId) => posts.filter(p => p.parentId === parentId);
+  const emojis = ['👍', '❤️', '🎉', '🔥', '👀'];
 
-  if (!project) {
-    return (
-      
-        <div className="text-center py-20">
-          <p className="text-gray-900 font-semibold text-lg mb-2">Project not found</p>
-          <button onClick={() => navigate('/projects')} className="text-blue-600 text-sm font-medium hover:underline">Back to Projects</button>
-        </div>
-      
-    );
-  }
+  const inputCls = "w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none";
 
-  const isOwner = project.createdBy === currentUser?.uid;
+  if (loading) return <div className="flex items-center justify-center py-20"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div></div>;
+  if (!project) return <div className="text-center py-20"><p className="text-gray-900 font-semibold">Project not found</p></div>;
 
   return (
-    
-      <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center gap-2 mb-1">
-          <button onClick={() => navigate(`/projects/${projectId}`)} className="text-gray-400 hover:text-gray-600 text-sm">Back</button>
-        </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">Workspace</h1>
-        <p className="text-gray-500 text-base mb-6">{project.title || 'Untitled Project'}</p>
+    <div className="max-w-4xl mx-auto">
+      <button onClick={() => navigate(`/projects/${projectId}`)} className="text-gray-500 hover:text-gray-900 text-sm mb-4 flex items-center gap-1">
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+        Back to Project
+      </button>
+      <h1 className="text-2xl font-bold text-gray-900 mb-1">Workspace</h1>
+      <p className="text-gray-500 text-sm mb-5">{project.projectTitle || project.title}</p>
 
-        {/* Setup CTA */}
-        {isOwner && !workspaceData.meetingSchedule && !workspaceData.communicationTools && (
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-6">
-            <h3 className="text-gray-900 font-semibold text-base mb-2">Complete your workspace details</h3>
-            <p className="text-gray-500 text-sm mb-3">Set up meeting schedule, communication tools, and resource links for your team.</p>
-            <button onClick={() => setShowSetupModal(true)} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-5 py-2.5 rounded-lg transition-all">
-              Set Up Workspace
-            </button>
-          </div>
-        )}
+      {/* Tabs */}
+      <div className="flex gap-1 mb-6 border-b border-gray-200">
+        {tabs.map(tab => (
+          <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-all ${activeTab === tab.id ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>
+            {tab.label}
+          </button>
+        ))}
+      </div>
 
-        {/* Tabs */}
-        <div className="flex gap-1 mb-6 border-b border-gray-200">
-          {tabs.map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-all ${
-                activeTab === tab.id ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Data tab */}
-        {activeTab === 'data' && (
-          <div className="bg-white border border-gray-200 rounded-xl p-6">
-            {!workspaceData.meetingSchedule && !workspaceData.communicationTools ? (
-              <div className="text-center py-10">
-                <p className="text-gray-900 font-semibold text-lg mb-2">Welcome to your project workspace</p>
-                <p className="text-gray-400 text-sm">Set up your workspace to start collaborating with your team.</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {workspaceData.meetingSchedule && (
-                  <div>
-                    <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1">Meeting Schedule</p>
-                    <p className="text-gray-900 text-sm">{workspaceData.meetingSchedule}</p>
-                  </div>
-                )}
-                {workspaceData.communicationTools && (
-                  <div>
-                    <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1">Communication Tools</p>
-                    <p className="text-gray-900 text-sm">{workspaceData.communicationTools}</p>
-                  </div>
-                )}
-              </div>
+      {/* Discussion Forum */}
+      {activeTab === 'forum' && (
+        <div>
+          {/* Posts */}
+          <div className="space-y-4 mb-6 max-h-[60vh] overflow-y-auto pr-1">
+            {topPosts.length === 0 && (
+              <div className="text-center py-10"><p className="text-gray-400 text-sm">No posts yet. Start a discussion!</p></div>
             )}
-          </div>
-        )}
-
-        {/* Resources tab */}
-        {activeTab === 'resources' && (
-          <div className="bg-white border border-gray-200 rounded-xl p-6">
-            {workspaceData.resourceLinks.length === 0 ? (
-              <p className="text-gray-400 text-sm text-center py-6">No resource links added yet.</p>
-            ) : (
-              <div className="space-y-2 mb-4">
-                {workspaceData.resourceLinks.map((link, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 border border-gray-100 rounded-lg">
-                    <div className="min-w-0 flex-1">
-                      <p className="text-gray-900 text-sm font-medium truncate">{link.title}</p>
-                      <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-xs hover:underline truncate block">{link.url}</a>
+            {topPosts.map(post => (
+              <div key={post.id} className="bg-white border border-gray-200 rounded-xl p-4">
+                {/* Post header */}
+                <div className="flex items-start gap-3">
+                  {post.authorPhoto ? (
+                    <img src={post.authorPhoto} alt="" className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">{(post.authorName || 'U')[0].toUpperCase()}</div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <p className="text-gray-900 text-sm font-semibold">{post.authorName}</p>
+                      <span className="text-gray-400 text-xs">{formatTime(post.createdAt)}</span>
+                      {post.editedAt && <span className="text-gray-400 text-[10px] italic">edited</span>}
                     </div>
-                    {isOwner && (
-                      <button onClick={() => removeResourceLink(i)} className="text-red-400 hover:text-red-600 text-xs ml-2 flex-shrink-0">Remove</button>
+                    {/* Content */}
+                    {editingPost === post.id ? (
+                      <div className="mt-2 space-y-2">
+                        <textarea value={editText} onChange={e => setEditText(e.target.value)} className={inputCls + " resize-none"} rows={2} />
+                        <div className="flex gap-2">
+                          <button onClick={() => handleEdit(post.id)} className="bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-lg">Save</button>
+                          <button onClick={() => setEditingPost(null)} className="text-gray-500 text-xs px-3 py-1.5">Cancel</button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <p className="text-gray-700 text-sm mt-1 whitespace-pre-wrap">{post.text}</p>
+                        {post.link && <a href={post.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-xs hover:underline mt-1 block truncate">{post.link}</a>}
+                      </>
+                    )}
+                    {/* Reactions */}
+                    <div className="flex items-center gap-1 mt-2 flex-wrap">
+                      {emojis.map(emoji => {
+                        const count = (post.reactions?.[emoji] || []).length;
+                        const reacted = (post.reactions?.[emoji] || []).includes(currentUser?.uid);
+                        return (
+                          <button key={emoji} onClick={() => handleReact(post.id, emoji)} className={`text-xs px-1.5 py-0.5 rounded-full border transition-all ${reacted ? 'border-blue-300 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'}`}>
+                            {emoji}{count > 0 && <span className="ml-0.5 text-gray-600">{count}</span>}
+                          </button>
+                        );
+                      })}
+                      <button onClick={() => { setReplyTo(post.id); setReplyText(''); }} className="text-gray-500 text-xs hover:text-blue-600 ml-2">Reply</button>
+                      {post.authorId === currentUser?.uid && (
+                        <>
+                          <button onClick={() => { setEditingPost(post.id); setEditText(post.text); }} className="text-gray-400 text-xs hover:text-gray-600 ml-1">Edit</button>
+                          <button onClick={() => handleDelete(post.id)} className="text-gray-400 text-xs hover:text-red-500 ml-1">Delete</button>
+                        </>
+                      )}
+                    </div>
+                    {/* Replies */}
+                    {getReplies(post.id).length > 0 && (
+                      <div className="mt-3 pl-4 border-l-2 border-gray-100 space-y-3">
+                        {getReplies(post.id).map(reply => (
+                          <div key={reply.id} className="flex items-start gap-2">
+                            {reply.authorPhoto ? (
+                              <img src={reply.authorPhoto} alt="" className="w-6 h-6 rounded-full object-cover flex-shrink-0" />
+                            ) : (
+                              <div className="w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">{(reply.authorName || 'U')[0].toUpperCase()}</div>
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <span className="text-gray-900 text-xs font-semibold">{reply.authorName}</span>
+                                <span className="text-gray-400 text-[10px]">{formatTime(reply.createdAt)}</span>
+                                {reply.editedAt && <span className="text-gray-400 text-[10px] italic">edited</span>}
+                              </div>
+                              <p className="text-gray-600 text-xs mt-0.5">{reply.text}</p>
+                              <div className="flex items-center gap-1 mt-1">
+                                {emojis.map(emoji => {
+                                  const c = (reply.reactions?.[emoji] || []).length;
+                                  const r = (reply.reactions?.[emoji] || []).includes(currentUser?.uid);
+                                  return c > 0 || r ? (
+                                    <button key={emoji} onClick={() => handleReact(reply.id, emoji)} className={`text-[10px] px-1 py-0.5 rounded-full border ${r ? 'border-blue-300 bg-blue-50' : 'border-gray-200'}`}>
+                                      {emoji}{c > 0 && <span className="ml-0.5">{c}</span>}
+                                    </button>
+                                  ) : null;
+                                })}
+                                {reply.authorId === currentUser?.uid && (
+                                  <button onClick={() => handleDelete(reply.id)} className="text-gray-400 text-[10px] hover:text-red-500 ml-1">Delete</button>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {/* Reply input */}
+                    {replyTo === post.id && (
+                      <div className="mt-3 flex gap-2">
+                        <input value={replyText} onChange={e => setReplyText(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleReply(post.id)} className={inputCls + " text-xs"} placeholder="Write a reply..." />
+                        <button onClick={() => handleReply(post.id)} className="bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-lg flex-shrink-0">Reply</button>
+                      </div>
                     )}
                   </div>
-                ))}
+                </div>
               </div>
-            )}
-            {isOwner && (
-              <div className="flex gap-2 mt-4">
-                <input type="text" value={newLink.title} onChange={e => setNewLink(p => ({ ...p, title: e.target.value }))} placeholder="Link title" className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" />
-                <input type="url" value={newLink.url} onChange={e => setNewLink(p => ({ ...p, url: e.target.value }))} placeholder="https://..." className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" />
-                <button onClick={addResourceLink} className="bg-blue-600 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-blue-700">Add</button>
-              </div>
-            )}
+            ))}
+            <div ref={messagesEndRef} />
           </div>
-        )}
 
-        {/* Collaborators tab */}
-        {activeTab === 'collaborators' && (
-          <div className="bg-white border border-gray-200 rounded-xl p-6">
-            {(!project.members || project.members.length === 0) ? (
-              <p className="text-gray-400 text-sm text-center py-6">No collaborators yet.</p>
-            ) : (
-              <div className="space-y-3">
-                {project.memberDetails ? (
-                  project.memberDetails.map((member, i) => (
-                    <div key={i} className="flex items-center gap-3 p-3 border border-gray-100 rounded-lg">
-                      {member.photoURL ? (
-                        <img src={member.photoURL} alt="" className="w-10 h-10 rounded-full object-cover" />
-                      ) : (
-                        <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-bold">
-                          {(member.displayName || 'U')[0]}
-                        </div>
-                      )}
-                      <div>
-                        <p className="text-gray-900 text-sm font-medium">{member.displayName || 'User'}</p>
-                        <p className="text-gray-400 text-xs">{member.role || 'Collaborator'}</p>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-gray-500 text-sm">{project.members.length} collaborator{project.members.length !== 1 ? 's' : ''} on this project.</p>
-                )}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Setup Modal */}
-        {showSetupModal && (
-          <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4" onClick={() => setShowSetupModal(false)}>
-            <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6 space-y-4" onClick={e => e.stopPropagation()}>
-              <h3 className="text-gray-900 font-bold text-lg">Complete your workspace details</h3>
-              <div>
-                <label className="block text-gray-700 text-sm font-medium mb-1">Meeting Schedule</label>
-                <input type="text" value={workspaceData.meetingSchedule} onChange={e => setWorkspaceData(p => ({ ...p, meetingSchedule: e.target.value }))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="e.g., Tuesdays and Thursdays at 5pm EST" />
-              </div>
-              <div>
-                <label className="block text-gray-700 text-sm font-medium mb-1">Communication Tools</label>
-                <input type="text" value={workspaceData.communicationTools} onChange={e => setWorkspaceData(p => ({ ...p, communicationTools: e.target.value }))} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="e.g., Slack, Discord, Zoom" />
-              </div>
-              <div className="flex gap-2 pt-2">
-                <button onClick={() => setShowSetupModal(false)} className="flex-1 border border-gray-300 text-gray-700 font-medium text-sm py-2.5 rounded-lg hover:bg-gray-50">Cancel</button>
-                <button onClick={handleSaveWorkspace} className="flex-1 bg-blue-600 text-white font-semibold text-sm py-2.5 rounded-lg hover:bg-blue-700">Save</button>
-              </div>
+          {/* New post */}
+          <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
+            <textarea value={newPost} onChange={e => setNewPost(e.target.value)} className={inputCls + " resize-none"} rows={3} placeholder="Share an update, question, or file..." />
+            <div className="flex items-center gap-3">
+              <input value={newPostLink} onChange={e => setNewPostLink(e.target.value)} className={inputCls + " text-xs flex-1"} placeholder="Attach a link (optional)" />
+              <button onClick={handlePost} disabled={posting || (!newPost.trim() && !newPostLink.trim())} className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg disabled:opacity-50 transition-all flex-shrink-0">
+                {posting ? 'Posting...' : 'Post'}
+              </button>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* Save button for owner when editing resources */}
-        {isOwner && (activeTab === 'resources') && workspaceData.resourceLinks.length > 0 && (
-          <div className="mt-4">
-            <button onClick={handleSaveWorkspace} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-5 py-2.5 rounded-lg transition-all">
-              Save Workspace
-            </button>
-          </div>
-        )}
+      {/* Resources */}
+      {activeTab === 'resources' && (
+        <div className="space-y-4">
+          {/* Display resources */}
+          <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4">
+            <h3 className="text-base font-bold text-gray-900">Project Resources</h3>
+            {resources.submissionUrl ? (
+              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div><p className="text-gray-500 text-xs font-medium">Project Submission URL</p><a href={resources.submissionUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-sm hover:underline truncate block">{resources.submissionUrl}</a></div>
+              </div>
+            ) : <p className="text-gray-400 text-xs">No submission URL set</p>}
 
-        {/* Info notice */}
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-start gap-3">
-          <svg className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <div>
-            <p className="text-gray-900 text-sm font-semibold mb-0.5">Keep all project conversations here</p>
-            <p className="text-gray-600 text-xs leading-relaxed">Use this workspace and the platform's messaging system for all project discussions, agreements, and file sharing. In case of any payment dispute, conversations and activity logged here serve as your record and can be reviewed by admins.</p>
+            {resources.meetingUrl ? (
+              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div><p className="text-gray-500 text-xs font-medium">Meeting URL</p><a href={resources.meetingUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-sm hover:underline truncate block">{resources.meetingUrl}</a></div>
+              </div>
+            ) : <p className="text-gray-400 text-xs">No meeting URL set</p>}
+
+            {resources.detailsUrl ? (
+              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div><p className="text-gray-500 text-xs font-medium">Project Details URL</p><a href={resources.detailsUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-sm hover:underline truncate block">{resources.detailsUrl}</a></div>
+              </div>
+            ) : <p className="text-gray-400 text-xs">No details URL set</p>}
+
+            {resources.notes && (
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <p className="text-gray-500 text-xs font-medium mb-1">Important Notes</p>
+                <p className="text-gray-700 text-sm whitespace-pre-wrap">{resources.notes}</p>
+              </div>
+            )}
           </div>
+
+          {/* Edit resources — owner only */}
+          {isOwner && (
+            <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4">
+              <h3 className="text-base font-bold text-gray-900">Edit Resources</h3>
+              <div>
+                <label className="block text-gray-500 text-xs font-medium mb-1">Project Submission URL</label>
+                <input type="url" value={resources.submissionUrl} onChange={e => setResources(p => ({ ...p, submissionUrl: e.target.value }))} className={inputCls} placeholder="https://github.com/..." />
+              </div>
+              <div>
+                <label className="block text-gray-500 text-xs font-medium mb-1">Meeting URL</label>
+                <input type="url" value={resources.meetingUrl} onChange={e => setResources(p => ({ ...p, meetingUrl: e.target.value }))} className={inputCls} placeholder="https://zoom.us/... or Google Meet link" />
+              </div>
+              <div>
+                <label className="block text-gray-500 text-xs font-medium mb-1">Project Details URL</label>
+                <input type="url" value={resources.detailsUrl} onChange={e => setResources(p => ({ ...p, detailsUrl: e.target.value }))} className={inputCls} placeholder="https://docs.google.com/..." />
+              </div>
+              <div>
+                <label className="block text-gray-500 text-xs font-medium mb-1">Important Notes</label>
+                <textarea value={resources.notes} onChange={e => setResources(p => ({ ...p, notes: e.target.value }))} className={inputCls + " resize-none"} rows={3} placeholder="Any important updates or notes for the team..." />
+              </div>
+              <button onClick={handleSaveResources} disabled={savingResources} className="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-5 py-2.5 rounded-lg transition-all disabled:opacity-50">
+                {savingResources ? 'Saving...' : 'Save Resources'}
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Info notice */}
+      <div className="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-start gap-3">
+        <svg className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div>
+          <p className="text-gray-900 text-sm font-semibold mb-0.5">Keep all project conversations here</p>
+          <p className="text-gray-600 text-xs leading-relaxed">Use the Discussion tab for all project communications. In case of any payment dispute, conversations logged here serve as your record and can be reviewed by admins.</p>
         </div>
       </div>
-    
+    </div>
   );
 };
 

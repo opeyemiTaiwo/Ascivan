@@ -100,7 +100,7 @@ const ProjectsListing = () => {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
               <div>
                 <h1 className="text-2xl sm:text-3xl font-black text-gray-900" style={{ fontFamily: '"Inter", sans-serif' }}>
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-500">Projects</span>
+                  <span className="text-gray-900">Projects</span>
                 </h1>
                 <p className="text-gray-400 text-sm mt-1">{filteredProjects.length} active {filteredProjects.length === 1 ? 'project' : 'projects'}</p>
               </div>
@@ -164,7 +164,7 @@ const ProjectsListing = () => {
                 {filteredProjects.map(project => (
                   <div key={project.id}
                     onClick={() => navigate(`/projects/${project.id}`)}
-                    className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl p-4 sm:p-5 border border-gray-200 shadow-xl cursor-pointer hover:border-blue-500/40 hover:bg-gray-50 transition-all duration-200 active:scale-[0.99]"
+                    className="bg-white rounded-xl p-4 sm:p-5 border border-blue-200 cursor-pointer hover:border-blue-400 hover:shadow-sm transition-all duration-200 active:scale-[0.99]"
                   >
                     <div className="flex items-start justify-between gap-3 mb-3">
                       <h3 className="text-gray-900 font-bold text-sm sm:text-base line-clamp-2">{project.projectTitle}</h3>
@@ -192,7 +192,7 @@ const ProjectsListing = () => {
 
           </div>
         </main>
-        <style jsx>{`select option { background-color: #111; color: white; }`}</style>
+        <style jsx>{`select option { background-color: white; color: #111; }`}</style>
       </div>
     </>
   );

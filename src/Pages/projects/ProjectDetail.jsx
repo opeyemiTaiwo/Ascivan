@@ -257,6 +257,21 @@ const ProjectDetail = () => {
 
       // Notify project owner about new application
       try {
+        // In-app notification
+        if (project.submitterId) {
+          await addDoc(collection(db, 'notifications'), {
+            userId: project.submitterId,
+            type: 'project_application',
+            message: `${currentUser.displayName || currentUser.email} applied to "${project.projectTitle}" as ${applyForm.role}`,
+            projectId,
+            projectTitle: project.projectTitle,
+            mentionedByName: currentUser.displayName || currentUser.email,
+            mentionedByPhoto: currentUser.photoURL || null,
+            isRead: false,
+            createdAt: serverTimestamp(),
+          });
+        }
+        // Email notification
         await notifyNewApplicationToOwner({
           projectOwnerEmail: project.submitterEmail || project.contactEmail,
           projectOwnerName: project.contactName || project.submitterName,
@@ -268,7 +283,7 @@ const ProjectDetail = () => {
           message: applyForm.message.trim() || '',
         });
       } catch (emailErr) {
-        console.error('Email notification failed (non-blocking):', emailErr);
+        console.error('Notification failed (non-blocking):', emailErr);
       }
     } catch (err) {
       console.error('Error applying:', err);

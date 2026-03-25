@@ -78,7 +78,7 @@ const ProjectSubmission = () => {
 
   // Team roles — dynamic list, payment per role when paid
   const [teamRoles, setTeamRoles] = useState([
-    { role: '', skills: '', count: 1, experienceLevel: 'any-level', paymentPerPerson: '' }
+    { role: '', customRole: '', skills: '', count: 1, experienceLevel: 'any-level', description: '', detailsLink: '', paymentPerPerson: '' }
   ]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -124,7 +124,7 @@ const ProjectSubmission = () => {
 
   const addRole = () => {
     if (teamRoles.length < 10) {
-      setTeamRoles(prev => [...prev, { role: '', skills: '', count: 1, experienceLevel: 'any-level', paymentPerPerson: '' }]);
+      setTeamRoles(prev => [...prev, { role: '', customRole: '', skills: '', count: 1, experienceLevel: 'any-level', description: '', detailsLink: '', paymentPerPerson: '' }]);
     }
   };
 
@@ -203,11 +203,13 @@ const ProjectSubmission = () => {
     try {
       const isPaid = formData.pricingType === 'paid';
 
-      const validRoles = teamRoles.filter(r => r.role.trim()).map(r => ({
-        role: r.role.trim(),
+      const validRoles = teamRoles.filter(r => (r.role === '__other__' ? r.customRole?.trim() : r.role.trim())).map(r => ({
+        role: r.role === '__other__' ? r.customRole.trim() : r.role.trim(),
         skills: r.skills.trim(),
         count: parseInt(r.count) || 1,
         experienceLevel: r.experienceLevel || 'any-level',
+        description: r.description?.trim() || '',
+        detailsLink: r.detailsLink?.trim() || '',
         paymentPerPerson: isPaid ? (parseFloat(r.paymentPerPerson) || 0) : 0,
       }));
 
@@ -323,22 +325,13 @@ const ProjectSubmission = () => {
                   <textarea name="projectDescription" value={formData.projectDescription} onChange={handleInputChange} className={inputClass + " resize-none"} rows="4" placeholder="Describe the project, its purpose, and what the team will build..." maxLength={2000} />
                 </div>
 
-                {/* Industry + Experience */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className={labelClass}>Industry Track *</label>
-                    <select name="industryTrack" value={formData.industryTrack} onChange={handleInputChange} className={selectClass}>
-                      <option value="">Select industry</option>
-                      {industryTracks.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
-                    </select>
-                  </div>
-                  <div>
-                    <label className={labelClass}>Experience Level</label>
-                    <select name="experienceLevel" value={formData.experienceLevel} onChange={handleInputChange} className={selectClass}>
-                      <option value="">Select level</option>
-                      {experienceLevels.map(l => <option key={l.value} value={l.value}>{l.label}</option>)}
-                    </select>
-                  </div>
+                {/* Industry Track */}
+                <div>
+                  <label className={labelClass}>Industry Track *</label>
+                  <select name="industryTrack" value={formData.industryTrack} onChange={handleInputChange} className={selectClass}>
+                    <option value="">Select industry</option>
+                    {industryTracks.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                  </select>
                 </div>
 
                 {/* Timeline + Dates */}
@@ -422,38 +415,58 @@ const ProjectSubmission = () => {
                         <button type="button" onClick={() => removeRole(index)} className="text-red-400 hover:text-red-300 text-xs font-semibold transition-colors">Remove</button>
                       )}
                     </div>
-                    <div className={`grid grid-cols-1 gap-3 ${formData.pricingType === 'paid' ? 'sm:grid-cols-5' : 'sm:grid-cols-4'}`}>
-                      <div>
-                        <label className="block text-gray-400 text-xs mb-1">Role Title *</label>
-                        <select value={role.role} onChange={e => handleRoleChange(index, 'role', e.target.value)} className={selectClass}>
-                          <option value="">Select role</option>
-                          {roleTemplates.map(r => <option key={r} value={r}>{r}</option>)}
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-gray-400 text-xs mb-1">People Needed *</label>
-                        <input type="number" min="1" max="20" value={role.count} onChange={e => handleRoleChange(index, 'count', e.target.value)} className={inputClass} />
-                      </div>
-                      <div>
-                        <label className="block text-gray-400 text-xs mb-1">Skills Required *</label>
-                        <input type="text" value={role.skills} onChange={e => handleRoleChange(index, 'skills', e.target.value)} className={inputClass} placeholder="e.g., React, Node.js" />
-                      </div>
-                      <div>
-                        <label className="block text-gray-400 text-xs mb-1">Experience Level</label>
-                        <select value={role.experienceLevel || 'any-level'} onChange={e => handleRoleChange(index, 'experienceLevel', e.target.value)} className={selectClass}>
-                          <option value="any-level">Any Level</option>
-                          <option value="beginner">Beginner</option>
-                          <option value="intermediate">Intermediate</option>
-                          <option value="advanced">Advanced</option>
-                          <option value="expert">Expert</option>
-                        </select>
-                      </div>
-                      {formData.pricingType === 'paid' && (
+                    <div className="space-y-3">
+                      <div className={`grid grid-cols-1 gap-3 ${formData.pricingType === 'paid' ? 'sm:grid-cols-5' : 'sm:grid-cols-4'}`}>
                         <div>
-                          <label className="block text-gray-400 text-xs mb-1">Payment / Person (USD) *</label>
-                          <input type="number" min="0" step="0.01" value={role.paymentPerPerson} onChange={e => handleRoleChange(index, 'paymentPerPerson', e.target.value)} className={inputClass} placeholder="0.00" />
+                          <label className="block text-gray-400 text-xs mb-1">Role Title *</label>
+                          {role.role === '__other__' ? (
+                            <div className="flex gap-1">
+                              <input type="text" value={role.customRole || ''} onChange={e => handleRoleChange(index, 'customRole', e.target.value)} className={inputClass} placeholder="Enter custom role" />
+                              <button type="button" onClick={() => { handleRoleChange(index, 'role', ''); handleRoleChange(index, 'customRole', ''); }} className="text-gray-400 hover:text-gray-600 text-xs px-2 flex-shrink-0">✕</button>
+                            </div>
+                          ) : (
+                            <select value={role.role} onChange={e => handleRoleChange(index, 'role', e.target.value)} className={selectClass}>
+                              <option value="">Select role</option>
+                              {roleTemplates.map(r => <option key={r} value={r}>{r}</option>)}
+                              <option value="__other__">Other (type your own)</option>
+                            </select>
+                          )}
                         </div>
-                      )}
+                        <div>
+                          <label className="block text-gray-400 text-xs mb-1">People Needed *</label>
+                          <input type="number" min="1" max="20" value={role.count} onChange={e => handleRoleChange(index, 'count', e.target.value)} className={inputClass} />
+                        </div>
+                        <div>
+                          <label className="block text-gray-400 text-xs mb-1">Skills Required *</label>
+                          <input type="text" value={role.skills} onChange={e => handleRoleChange(index, 'skills', e.target.value)} className={inputClass} placeholder="e.g., React, Node.js" />
+                        </div>
+                        <div>
+                          <label className="block text-gray-400 text-xs mb-1">Experience Level</label>
+                          <select value={role.experienceLevel || 'any-level'} onChange={e => handleRoleChange(index, 'experienceLevel', e.target.value)} className={selectClass}>
+                            <option value="any-level">Any Level</option>
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                            <option value="expert">Expert</option>
+                          </select>
+                        </div>
+                        {formData.pricingType === 'paid' && (
+                          <div>
+                            <label className="block text-gray-400 text-xs mb-1">Payment / Person (USD) *</label>
+                            <input type="number" min="0" step="0.01" value={role.paymentPerPerson} onChange={e => handleRoleChange(index, 'paymentPerPerson', e.target.value)} className={inputClass} placeholder="0.00" />
+                          </div>
+                        )}
+                      </div>
+                      {/* Role Description */}
+                      <div>
+                        <label className="block text-gray-400 text-xs mb-1">Role Description</label>
+                        <textarea value={role.description || ''} onChange={e => handleRoleChange(index, 'description', e.target.value)} className={inputClass + " resize-none"} rows={2} placeholder="Describe what this role will do, responsibilities, deliverables..." />
+                      </div>
+                      {/* Role Details Link */}
+                      <div>
+                        <label className="block text-gray-400 text-xs mb-1">Details Link (optional)</label>
+                        <input type="url" value={role.detailsLink || ''} onChange={e => handleRoleChange(index, 'detailsLink', e.target.value)} className={inputClass} placeholder="https://docs.google.com/... or any URL with more details" />
+                      </div>
                     </div>
                   </div>
                 ))}

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../../components/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
-import { collection, query, where, onSnapshot, doc, updateDoc, addDoc, getDocs, deleteDoc, increment, serverTimestamp } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, doc, updateDoc, addDoc, getDocs, deleteDoc, increment, serverTimestamp, arrayUnion } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
 import { notifyApplicationApproved, notifyApplicationRejected } from '../../utils/emailNotifications';
@@ -71,8 +71,31 @@ const ProjectOwnerDashboard = () => {
       await updateDoc(doc(db, 'project_applications', app.id), {
         status: 'approved', approvedAt: serverTimestamp(), approvedBy: currentUser.email,
       });
-      await updateDoc(doc(db, 'projects', project.id), { applicationCount: increment(0) });
+      // Add member to project members array
+      await updateDoc(doc(db, 'projects', project.id), { 
+        applicationCount: increment(0),
+        members: arrayUnion(app.applicantId || app.applicantEmail),
+      });
       toast.success(`${app.applicantName} approved!`);
+
+      // Send notification to applicant
+      try {
+        const userQ = query(collection(db, 'users'), where('email', '==', app.applicantEmail));
+        const userSnap = await getDocs(userQ);
+        if (!userSnap.empty) {
+          await addDoc(collection(db, 'notifications'), {
+            userId: userSnap.docs[0].id,
+            type: 'application_approved',
+            message: `Your application for "${project.projectTitle}" has been approved! You can now access the workspace.`,
+            projectId: project.id,
+            projectTitle: project.projectTitle,
+            mentionedByName: currentUser.displayName || currentUser.email,
+            mentionedByPhoto: currentUser.photoURL || null,
+            isRead: false,
+            createdAt: serverTimestamp(),
+          });
+        }
+      } catch (notifErr) { console.error('Approval notification error:', notifErr); }
 
       // Send approval email to applicant
       try {

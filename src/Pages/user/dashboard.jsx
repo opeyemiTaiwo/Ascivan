@@ -450,14 +450,12 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
     if (accountType === 'company') {
       return [
         { id: 'community', label: 'Home' },
-        { id: 'hub', label: 'Jobs' },
         { id: 'projects', label: 'Projects' },
         { id: 'profile', label: 'Profile' },
       ];
     }
     return [
       { id: 'community', label: 'Home' },
-      { id: 'hub', label: 'Jobs' },
       { id: 'projects', label: 'Projects' },
       { id: 'profile', label: 'Profile' },
     ];
@@ -490,32 +488,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
             stats: 'Find people in your field',
             gradient: 'from-green-600 to-green-700',
             buttonLabel: 'Network'
-          }
-        ],
-        hub: [
-          {
-            title: 'Post Job',
-            description: 'List a job opportunity for tech professionals',
-            path: '/jobs/post',
-            stats: 'Post Now',
-            gradient: 'from-orange-500 to-orange-600',
-            buttonLabel: 'Post Job'
-          },
-          {
-            title: 'My Job Posts',
-            description: 'Manage and track job listings you have posted',
-            path: '/jobs/my-posts',
-            stats: 'Manage',
-            gradient: 'from-orange-400 to-orange-500',
-            buttonLabel: 'My Posts'
-          },
-          {
-            title: 'Applicants',
-            description: 'View and manage applications received for your job listings',
-            path: '/jobs/my-applications',
-            stats: 'Review',
-            gradient: 'from-green-500 to-green-600',
-            buttonLabel: 'View Applicants'
           }
         ],
         projects: [
@@ -572,32 +544,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
           stats: 'Find people in your field',
           gradient: 'from-green-600 to-green-700',
           buttonLabel: 'Network'
-        }
-      ],
-      hub: [
-        {
-          title: 'Browse Jobs',
-          description: 'Find full-time, freelance & internship roles, filtered by location & skill level',
-          path: '/jobs',
-          stats: 'Explore Jobs',
-          gradient: 'from-orange-500 to-orange-600',
-          buttonLabel: 'Browse Jobs'
-        },
-        {
-          title: 'My Applications',
-          description: 'Track and manage jobs you have applied to',
-          path: '/jobs/my-applications',
-          stats: 'Track Status',
-          gradient: 'from-green-500 to-green-600',
-          buttonLabel: 'My Applications'
-        },
-        {
-          title: 'My Job Posts',
-          description: 'Manage job listings you have posted',
-          path: '/jobs/my-posts',
-          stats: 'Manage',
-          gradient: 'from-orange-400 to-orange-500',
-          buttonLabel: 'My Posts'
         }
       ],
       projects: [
@@ -710,7 +656,6 @@ const UserDashboard = ({ currentUser, onNavigate }) => {
     // Section metadata for headers
     const sectionMeta = {
       community: { title: 'Home', description: 'Connect, collaborate, and grow with the Loomiqe community.', gradientColors: 'from-green-300 via-orange-400 to-green-500' },
-      hub: { title: 'Jobs', description: accountType === 'company' ? 'Post and manage job listings for tech professionals.' : 'Browse full-time, freelance & internship roles, filtered by location and relevance.', gradientColors: 'from-orange-300 via-orange-400 to-orange-500' },
       projects: { title: 'Projects', description: 'Build real projects, grow your skills, and earn badges.', gradientColors: 'from-purple-300 via-purple-400 to-orange-400' },
       directory: { title: 'Member Directory', description: 'Discover and connect with tech professionals and collaborators.', gradientColors: 'from-green-300 via-green-400 to-green-500' },
     };

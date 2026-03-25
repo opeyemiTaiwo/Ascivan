@@ -1088,7 +1088,12 @@ const CommunityPosts = () => {
         <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 py-4 xs:py-6 sm:py-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6">
 
-            <main className="lg:col-span-8">
+            {/* Left Sidebar — desktop only */}
+            <aside className="hidden lg:block lg:col-span-3">
+              <UserQuickLinksSidebar currentUser={currentUser} onNavigate={handleNavigation} />
+            </aside>
+
+            <main className="lg:col-span-6">
               {indexError && (
                 <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
                   <div className="flex items-start space-x-3">
@@ -1723,7 +1728,7 @@ const CommunityPosts = () => {
               </div>
             </main>
 
-            <aside className="hidden lg:block lg:col-span-4">
+            <aside className="hidden lg:block lg:col-span-3">
               <div className="space-y-6">
                 <FollowSuggestionsSidebar currentUser={currentUser} />
                 <CompanyInfoSidebar />

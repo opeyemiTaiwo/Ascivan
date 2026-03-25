@@ -310,7 +310,7 @@ const MembershipTab = ({ profileData, navigate }) => {
           <FeatureItem label="Everything in Basic" />
           <FeatureItem color="orange" label="Unlimited paid projects" detail="Post and apply to paid projects with no yearly cap. Take on as many paid collaborations as you can handle." />
           <FeatureItem color="orange" label="Verified Premium Badge" detail="An orange PRO badge displayed on your profile, directory listing, and across the platform. It tells project owners, teammates, and recruiters that you're a verified, committed professional." />
-          <FeatureItem color="orange" label="Talent Board access" detail="Browse and get listed on the Talent Board. Premium access is required for everyone — members, recruiters, companies, and project owners." />
+          <FeatureItem color="orange" label="Talent Board visibility" detail="Get listed on the Talent Board where recruiters and companies actively search for professionals to hire. Only Premium members appear here." />
           <FeatureItem color="orange" label="Priority support" detail="Get faster responses and dedicated assistance from the Loomiqe team." />
         </ul>
         <p className="text-gray-400 text-xs mb-4 leading-relaxed">Your Premium badge tells everyone on Loomiqe that you're invested, accountable, and serious about your work.</p>

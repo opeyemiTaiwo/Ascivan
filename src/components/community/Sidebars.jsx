@@ -327,7 +327,6 @@ export const FollowSuggestionsSidebar = ({ currentUser, isMobile = false }) => {
           <p className="text-gray-400 text-xs text-center">Expand your professional network</p>
         </div>
       </div>
-      </div>
     </div>
   );
 };

@@ -36,6 +36,7 @@ const ProjectWorkspace = () => {
   const [editingPost, setEditingPost] = useState(null);
   const [editText, setEditText] = useState('');
   const messagesEndRef = useRef(null);
+  const [showReactors, setShowReactors] = useState(null); // 'postId-emoji' key
 
   // Resource state
   const [resources, setResources] = useState({ submissionUrl: '', meetingUrl: '', detailsUrl: '', notes: '' });
@@ -128,7 +129,9 @@ const ProjectWorkspace = () => {
         text: newPost.trim(),
         link: newPostLink.trim() || null,
         authorId: currentUser.uid,
+        authorEmail: currentUser.email,
         authorName: currentUser.displayName || currentUser.email,
+        authorEmail: currentUser.email,
         authorPhoto: currentUser.photoURL || null,
         createdAt: serverTimestamp(),
         editedAt: null,
@@ -148,7 +151,9 @@ const ProjectWorkspace = () => {
         text: replyText.trim(),
         link: null,
         authorId: currentUser.uid,
+        authorEmail: currentUser.email,
         authorName: currentUser.displayName || currentUser.email,
+        authorEmail: currentUser.email,
         authorPhoto: currentUser.photoURL || null,
         createdAt: serverTimestamp(),
         editedAt: null,
@@ -210,6 +215,25 @@ const ProjectWorkspace = () => {
   const getReplies = (parentId) => posts.filter(p => p.parentId === parentId);
   const emojis = ['👍', '❤️', '🎉', '🔥', '👀'];
 
+  const getReactorNames = (reactorUids) => {
+    if (!reactorUids || reactorUids.length === 0) return [];
+    return reactorUids.map(uid => {
+      if (uid === currentUser?.uid) return 'You';
+      const member = teamMembers.find(m => m.applicantUid === uid || m.applicantEmail === uid);
+      return member?.applicantName || member?.displayName || 'Someone';
+    });
+  };
+
+  // Build uid → name/email map from team members + posts
+  const uidNameMap = {};
+  teamMembers.forEach(m => { if (m.applicantEmail) uidNameMap[m.applicantEmail] = m.displayName || m.applicantName; });
+  posts.forEach(p => { if (p.authorId) uidNameMap[p.authorId] = p.authorName; });
+
+  const getReactorNames = (reactorUids) => {
+    if (!reactorUids || reactorUids.length === 0) return '';
+    return reactorUids.map(uid => uidNameMap[uid] || 'Someone').join(', ');
+  };
+
   const inputCls = "w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none";
 
   if (loading) return <div className="flex items-center justify-center py-20"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div></div>;
@@ -251,7 +275,7 @@ const ProjectWorkspace = () => {
                   )}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <p className="text-gray-900 text-sm font-semibold">{post.authorName}</p>
+                      <a href={`/profile/${encodeURIComponent(post.authorEmail || '')}`} className="text-gray-900 text-sm font-semibold hover:text-blue-600 hover:underline">{post.authorName}</a>
                       <span className="text-gray-400 text-xs">{formatTime(post.createdAt)}</span>
                       {post.editedAt && <span className="text-gray-400 text-[10px] italic">edited</span>}
                     </div>
@@ -273,12 +297,26 @@ const ProjectWorkspace = () => {
                     {/* Reactions */}
                     <div className="flex items-center gap-1 mt-2 flex-wrap">
                       {emojis.map(emoji => {
-                        const count = (post.reactions?.[emoji] || []).length;
-                        const reacted = (post.reactions?.[emoji] || []).includes(currentUser?.uid);
+                        const reactors = post.reactions?.[emoji] || [];
+                        const count = reactors.length;
+                        const reacted = reactors.includes(currentUser?.uid);
+                        const key = `${post.id}-${emoji}`;
                         return (
-                          <button key={emoji} onClick={() => handleReact(post.id, emoji)} className={`text-xs px-1.5 py-0.5 rounded-full border transition-all ${reacted ? 'border-blue-300 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'}`}>
-                            {emoji}{count > 0 && <span className="ml-0.5 text-gray-600">{count}</span>}
-                          </button>
+                          <div key={emoji} className="relative">
+                            <button
+                              onClick={() => handleReact(post.id, emoji)}
+                              onMouseEnter={() => count > 0 && setShowReactors(key)}
+                              onMouseLeave={() => setShowReactors(null)}
+                              className={`text-xs px-1.5 py-0.5 rounded-full border transition-all ${reacted ? 'border-blue-300 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'}`}
+                            >
+                              {emoji}{count > 0 && <span className="ml-0.5 text-gray-600">{count}</span>}
+                            </button>
+                            {showReactors === key && count > 0 && (
+                              <div className="absolute bottom-full left-0 mb-1 bg-gray-900 text-white text-[10px] rounded-lg px-2 py-1.5 whitespace-nowrap z-10 shadow-lg">
+                                {getReactorNames(reactors).join(', ')}
+                              </div>
+                            )}
+                          </div>
                         );
                       })}
                       <button onClick={() => { setReplyTo(post.id); setReplyText(''); }} className="text-gray-500 text-xs hover:text-blue-600 ml-2">Reply</button>
@@ -301,7 +339,7 @@ const ProjectWorkspace = () => {
                             )}
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2">
-                                <span className="text-gray-900 text-xs font-semibold">{reply.authorName}</span>
+                                <a href={`/profile/${encodeURIComponent(reply.authorEmail || '')}`} className="text-gray-900 text-xs font-semibold hover:text-blue-600 hover:underline">{reply.authorName}</a>
                                 <span className="text-gray-400 text-[10px]">{formatTime(reply.createdAt)}</span>
                                 {reply.editedAt && <span className="text-gray-400 text-[10px] italic">edited</span>}
                               </div>

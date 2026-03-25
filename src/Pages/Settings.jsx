@@ -205,91 +205,7 @@ const Settings = () => {
 
         {/* Membership */}
         {activeTab === 'membership' && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {/* Basic */}
-            <div className={`bg-white border-2 rounded-xl p-6 ${profileData?.membershipPlan !== 'Premium' ? 'border-blue-500' : 'border-gray-200'}`}>
-              <h3 className="text-blue-600 font-bold text-lg mb-1">Basic Membership</h3>
-              <p className="text-gray-900 font-bold text-2xl mb-4">Free</p>
-              <p className="text-gray-500 text-sm mb-4">Everything you need to start building your tech career through real project experience.</p>
-              <ul className="space-y-2.5 text-sm text-gray-600 mb-6">
-                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> Unlimited free projects</li>
-                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> Up to 3 completed paid projects per year</li>
-                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> All 6 TechTalent Badge tracks</li>
-                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> Community, messaging, and workspace access</li>
-                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> Certificates on project completion</li>
-              </ul>
-              {profileData?.membershipPlan !== 'Premium' && (
-                <p className="text-blue-600 font-semibold text-sm">Current Plan</p>
-              )}
-            </div>
-
-            {/* Premium */}
-            <div className={`bg-white border-2 rounded-xl p-6 relative ${profileData?.membershipPlan === 'Premium' ? 'border-orange-400' : 'border-gray-200'}`}>
-              {/* Coming Soon tag */}
-              <div className="absolute -top-3 right-4">
-                <span className="bg-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-sm">COMING SOON</span>
-              </div>
-              <div className="flex items-center gap-2 mb-1 mt-1">
-                <h3 className="text-blue-600 font-bold text-lg">Premium Membership</h3>
-                <span className="text-[10px] font-bold bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">RECOMMENDED</span>
-              </div>
-              <p className="text-gray-900 font-bold text-2xl mb-0.5">$200<span className="text-gray-400 text-sm font-normal">/year</span></p>
-              <p className="text-gray-500 text-sm mb-4">or $20/month</p>
-              <p className="text-gray-500 text-sm mb-4">Build trust before you even start. Premium members are verified through their subscription — so teammates trust you'll pay, recruiters trust your commitment, and project owners trust your professionalism.</p>
-              <ul className="space-y-2.5 text-sm text-gray-600 mb-4">
-                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> Everything in Basic</li>
-                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-orange-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> <strong>Unlimited paid projects</strong> — post and apply with no yearly cap</li>
-                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-orange-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> <strong>Verified Premium Badge</strong> — an orange PRO badge displayed on your profile, directory listing, and across the platform so others know you're a verified, committed professional</li>
-                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-orange-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> <strong>Talent Board visibility</strong> — get discovered by recruiters and companies actively looking to hire</li>
-                <li className="flex items-start gap-2"><svg className="w-4 h-4 text-orange-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg> <strong>Priority support</strong> — direct access to our team at premium@loomiqe.com</li>
-              </ul>
-              <p className="text-gray-400 text-xs mb-4 leading-relaxed">Your Premium badge tells everyone on Loomiqe — project owners, team members, and recruiters — that you're invested, accountable, and serious about your work. It's the fastest way to build credibility on the platform.</p>
-              <button disabled className="w-full bg-gray-300 text-gray-500 font-semibold text-sm py-2.5 rounded-lg cursor-not-allowed">
-                Coming Soon
-              </button>
-              {profileData?.membershipPlan === 'Premium' && (
-                <p className="text-orange-600 font-semibold text-sm mt-3 text-center">Active Premium Member</p>
-              )}
-            </div>
-
-            {/* Plan Comparison */}
-            <div className="sm:col-span-2 bg-gray-50 border border-gray-200 rounded-xl p-5">
-              <p className="text-gray-900 text-sm font-bold mb-3">Plan Comparison</p>
-              <div className="grid grid-cols-3 gap-y-3 gap-x-2 text-xs">
-                <div className="text-gray-500 font-semibold pb-2 border-b border-gray-200">Feature</div>
-                <div className="text-gray-500 font-semibold text-center pb-2 border-b border-gray-200">Basic</div>
-                <div className="text-gray-500 font-semibold text-center pb-2 border-b border-gray-200">Premium</div>
-                
-                <div className="text-gray-700">Free projects</div>
-                <div className="text-center text-gray-900">Unlimited</div>
-                <div className="text-center text-gray-900">Unlimited</div>
-                
-                <div className="text-gray-700">Paid projects (per year)</div>
-                <div className="text-center text-gray-900">3</div>
-                <div className="text-center text-orange-600 font-semibold">Unlimited</div>
-                
-                <div className="text-gray-700">TechTalent Badges</div>
-                <div className="text-center text-gray-900">All 6 tracks</div>
-                <div className="text-center text-gray-900">All 6 tracks</div>
-                
-                <div className="text-gray-700">Verified Premium Badge</div>
-                <div className="text-center text-gray-400">—</div>
-                <div className="text-center text-orange-600 font-semibold">Yes</div>
-                
-                <div className="text-gray-700">Talent Board</div>
-                <div className="text-center text-gray-400">—</div>
-                <div className="text-center text-orange-600 font-semibold">Yes</div>
-                
-                <div className="text-gray-700">Messaging</div>
-                <div className="text-center text-gray-900">Yes</div>
-                <div className="text-center text-gray-900">Yes</div>
-                
-                <div className="text-gray-700">Priority support</div>
-                <div className="text-center text-gray-400">—</div>
-                <div className="text-center text-orange-600 font-semibold">Yes</div>
-              </div>
-            </div>
-          </div>
+          <MembershipTab profileData={profileData} navigate={navigate} />
         )}
 
         {/* Account */}
@@ -334,3 +250,94 @@ const Settings = () => {
 };
 
 export default Settings;
+
+// Membership Tab with toggle dropdowns
+const FeatureItem = ({ icon, label, detail, color = 'blue' }) => {
+  const [open, setOpen] = useState(false);
+  const iconColor = color === 'orange' ? 'text-orange-500' : 'text-blue-500';
+  return (
+    <li>
+      <button onClick={() => setOpen(!open)} className="w-full flex items-center gap-2 text-left py-1 group">
+        <svg className={`w-4 h-4 ${iconColor} mt-0.5 flex-shrink-0`} fill="currentColor" viewBox="0 0 20 20">
+          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+        </svg>
+        <span className="text-sm text-gray-700 font-medium flex-1">{label}</span>
+        {detail && (
+          <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform flex-shrink-0 ${open ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        )}
+      </button>
+      {open && detail && (
+        <p className="text-gray-500 text-xs leading-relaxed ml-6 pb-2">{detail}</p>
+      )}
+    </li>
+  );
+};
+
+const MembershipTab = ({ profileData, navigate }) => {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      {/* Basic */}
+      <div className={`bg-white border-2 rounded-xl p-6 ${profileData?.membershipPlan !== 'Premium' ? 'border-blue-500' : 'border-gray-200'}`}>
+        <h3 className="text-blue-600 font-bold text-lg mb-1">Basic Membership</h3>
+        <p className="text-gray-900 font-bold text-2xl mb-4">Free</p>
+        <p className="text-gray-500 text-sm mb-4">Everything you need to start building your tech career through real project experience.</p>
+        <ul className="space-y-1 mb-6">
+          <FeatureItem label="Unlimited free projects" detail="Create or join as many free projects as you want. No limits, ever." />
+          <FeatureItem label="Up to 3 paid projects per year" detail="Complete up to 3 paid projects annually. Upgrade to Premium for unlimited." />
+          <FeatureItem label="All 6 TechTalent Badge tracks" detail="Earn badges across all tracks: TechDev, TechQA, TechMO, TechLeads, TechArchs, and TechGuard." />
+          <FeatureItem label="Community, messaging, and workspace" detail="Post in the community feed, message any member, and collaborate in project workspaces." />
+          <FeatureItem label="Certificates on project completion" detail="Receive a certificate for every project you complete, documenting your role and contributions." />
+        </ul>
+        {profileData?.membershipPlan !== 'Premium' && (
+          <p className="text-blue-600 font-semibold text-sm">Current Plan</p>
+        )}
+      </div>
+
+      {/* Premium */}
+      <div className={`bg-white border-2 rounded-xl p-6 relative ${profileData?.membershipPlan === 'Premium' ? 'border-orange-400' : 'border-gray-200'}`}>
+        <div className="absolute -top-3 right-4">
+          <span className="bg-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-sm">COMING SOON</span>
+        </div>
+        <div className="flex items-center gap-2 mb-1 mt-1">
+          <h3 className="text-blue-600 font-bold text-lg">Premium Membership</h3>
+        </div>
+        <p className="text-gray-900 font-bold text-2xl mb-0.5">$200<span className="text-gray-400 text-sm font-normal">/year</span></p>
+        <p className="text-gray-500 text-sm mb-4">or $20/month</p>
+        <p className="text-gray-500 text-sm mb-4">Build trust before you even start. Premium members are verified through their subscription — so teammates trust you'll pay, recruiters trust your commitment, and project owners trust your professionalism.</p>
+        <ul className="space-y-1 mb-4">
+          <FeatureItem label="Everything in Basic" />
+          <FeatureItem color="orange" label="Unlimited paid projects" detail="Post and apply to paid projects with no yearly cap. Take on as many paid collaborations as you can handle." />
+          <FeatureItem color="orange" label="Verified Premium Badge" detail="An orange PRO badge displayed on your profile, directory listing, and across the platform. It tells project owners, teammates, and recruiters that you're a verified, committed professional." />
+          <FeatureItem color="orange" label="Talent Board visibility" detail="Get listed on the Talent Board where recruiters and companies actively search for professionals to hire. Only Premium members appear here." />
+          <FeatureItem color="orange" label="Priority support" detail="Direct access to our team at premium@loomiqe.com. Get faster responses and dedicated assistance." />
+        </ul>
+        <p className="text-gray-400 text-xs mb-4 leading-relaxed">Your Premium badge tells everyone on Loomiqe that you're invested, accountable, and serious about your work.</p>
+        <button disabled className="w-full bg-gray-300 text-gray-500 font-semibold text-sm py-2.5 rounded-lg cursor-not-allowed">
+          Coming Soon
+        </button>
+        {profileData?.membershipPlan === 'Premium' && (
+          <p className="text-orange-600 font-semibold text-sm mt-3 text-center">Active Premium Member</p>
+        )}
+      </div>
+
+      {/* Plan Comparison */}
+      <div className="sm:col-span-2 bg-gray-50 border border-gray-200 rounded-xl p-5">
+        <p className="text-gray-900 text-sm font-bold mb-3">Plan Comparison</p>
+        <div className="grid grid-cols-3 gap-y-3 gap-x-2 text-xs">
+          <div className="text-gray-500 font-semibold pb-2 border-b border-gray-200">Feature</div>
+          <div className="text-gray-500 font-semibold text-center pb-2 border-b border-gray-200">Basic</div>
+          <div className="text-gray-500 font-semibold text-center pb-2 border-b border-gray-200">Premium</div>
+          <div className="text-gray-700">Free projects</div><div className="text-center text-gray-900">Unlimited</div><div className="text-center text-gray-900">Unlimited</div>
+          <div className="text-gray-700">Paid projects / year</div><div className="text-center text-gray-900">3</div><div className="text-center text-orange-600 font-semibold">Unlimited</div>
+          <div className="text-gray-700">TechTalent Badges</div><div className="text-center text-gray-900">All 6</div><div className="text-center text-gray-900">All 6</div>
+          <div className="text-gray-700">Premium Badge</div><div className="text-center text-gray-400">—</div><div className="text-center text-orange-600 font-semibold">Yes</div>
+          <div className="text-gray-700">Talent Board</div><div className="text-center text-gray-400">—</div><div className="text-center text-orange-600 font-semibold">Yes</div>
+          <div className="text-gray-700">Messaging</div><div className="text-center text-gray-900">Yes</div><div className="text-center text-gray-900">Yes</div>
+          <div className="text-gray-700">Priority support</div><div className="text-center text-gray-400">—</div><div className="text-center text-orange-600 font-semibold">Yes</div>
+        </div>
+      </div>
+    </div>
+  );
+};

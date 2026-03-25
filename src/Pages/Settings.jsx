@@ -305,13 +305,13 @@ const MembershipTab = ({ profileData, navigate }) => {
         </div>
         <p className="text-gray-900 font-bold text-2xl mb-0.5">$200<span className="text-gray-400 text-sm font-normal">/year</span></p>
         <p className="text-gray-500 text-sm mb-4">or $20/month</p>
-        <p className="text-gray-500 text-sm mb-4">Build trust before you even start. Premium members are verified through their subscription — so teammates trust you'll pay, recruiters trust your commitment, and project owners trust your professionalism.</p>
+        <p className="text-gray-500 text-sm mb-4">Verified members. Trusted collaborations. Unlimited opportunities.</p>
         <ul className="space-y-1 mb-4">
           <FeatureItem label="Everything in Basic" />
           <FeatureItem color="orange" label="Unlimited paid projects" detail="Post and apply to paid projects with no yearly cap. Take on as many paid collaborations as you can handle." />
           <FeatureItem color="orange" label="Verified Premium Badge" detail="An orange PRO badge displayed on your profile, directory listing, and across the platform. It tells project owners, teammates, and recruiters that you're a verified, committed professional." />
-          <FeatureItem color="orange" label="Talent Board visibility" detail="Get listed on the Talent Board where recruiters and companies actively search for professionals to hire. Only Premium members appear here." />
-          <FeatureItem color="orange" label="Priority support" detail="Direct access to our team at premium@loomiqe.com. Get faster responses and dedicated assistance." />
+          <FeatureItem color="orange" label="Talent Board access" detail="Browse and get listed on the Talent Board. Premium access is required for everyone — members, recruiters, companies, and project owners." />
+          <FeatureItem color="orange" label="Priority support" detail="Get faster responses and dedicated assistance from the Loomiqe team." />
         </ul>
         <p className="text-gray-400 text-xs mb-4 leading-relaxed">Your Premium badge tells everyone on Loomiqe that you're invested, accountable, and serious about your work.</p>
         <button disabled className="w-full bg-gray-300 text-gray-500 font-semibold text-sm py-2.5 rounded-lg cursor-not-allowed">

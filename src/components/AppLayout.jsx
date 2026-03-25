@@ -65,9 +65,12 @@ const AppLayout = ({ children }) => {
     return location.pathname === path || location.pathname.startsWith(path + '/');
   };
 
+  const hideSidebar = location.pathname === '/community' || location.pathname.startsWith('/community/');
+
   return (
     <div className="min-h-screen flex bg-white">
       {/* Sidebar */}
+      {!hideSidebar && (
       <aside className={`fixed inset-y-0 left-0 z-50 w-60 bg-gray-950 flex flex-col transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static lg:inset-0`}>
         {/* Logo */}
         <div className="flex items-center gap-2 px-5 h-16 border-b border-white/10">
@@ -122,21 +125,24 @@ const AppLayout = ({ children }) => {
           </Link>
         </div>
       </aside>
+      )}
 
       {/* Overlay */}
-      {sidebarOpen && <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />}
+      {sidebarOpen && !hideSidebar && <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />}
 
       {/* Main content */}
       <div className="flex-1 min-w-0 flex flex-col">
         {/* Top bar — sticky, responsive */}
         <header className="sticky top-0 z-30 h-16 sm:h-[72px] flex items-center justify-between px-2 sm:px-4 border-b border-gray-200 bg-white lg:px-6">
+          {!hideSidebar && (
           <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 rounded-lg hover:bg-gray-100 min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0">
             <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
+          )}
           <div className="flex-1" />
-          <div className="flex items-center gap-3 sm:gap-5 md:gap-7">
+          <div className="flex items-center gap-3 sm:gap-5 md:gap-7 pr-6 sm:pr-12 lg:pr-16">
             {/* Account */}
             <Link to="/account" className={`relative flex flex-col items-center gap-0.5 px-1.5 sm:px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0 ${location.pathname === '/account' ? 'text-blue-600' : 'text-gray-500'}`}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

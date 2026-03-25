@@ -1,7 +1,7 @@
 {
-  "name": "Loomiqe - International Student Platform",
+  "name": "Loomiqe",
   "short_name": "Loomiqe",
-  "description": "All-in-one AI-powered solution that transforms the international student experience.",
+  "description": "Where tech professionals build, earn, and grow through real-world projects.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { doc, getDoc, updateDoc, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, deleteDoc, arrayUnion } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, deleteDoc, arrayUnion, where, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
 import { logActivity } from '../../utils/activityLog';
@@ -41,6 +41,9 @@ const ProjectWorkspace = () => {
   const [resources, setResources] = useState({ submissionUrl: '', meetingUrl: '', detailsUrl: '', notes: '' });
   const [savingResources, setSavingResources] = useState(false);
 
+  // Team state
+  const [teamMembers, setTeamMembers] = useState([]);
+
   useEffect(() => {
     const fetchProject = async () => {
       try {
@@ -62,6 +65,43 @@ const ProjectWorkspace = () => {
     };
     fetchProject();
   }, [projectId]);
+
+  // Fetch team members
+  useEffect(() => {
+    if (!project) return;
+    const fetchTeam = async () => {
+      try {
+        // Get approved applications
+        const appQ = query(collection(db, 'project_applications'), where('projectId', '==', projectId), where('status', '==', 'approved'));
+        const appSnap = await getDocs(appQ);
+        const members = appSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+        // Fetch user profiles for each member
+        const enriched = await Promise.all(members.map(async (m) => {
+          try {
+            const userQ = query(collection(db, 'users'), where('email', '==', m.applicantEmail));
+            const userSnap = await getDocs(userQ);
+            if (!userSnap.empty) {
+              const userData = userSnap.docs[0].data();
+              return { ...m, photoURL: userData.photoURL || null, displayName: userData.displayName || m.applicantName };
+            }
+          } catch (e) {}
+          return m;
+        }));
+
+        // Add owner
+        const ownerEntry = {
+          applicantName: project.submitterName || project.contactName || 'Project Owner',
+          applicantEmail: project.submitterEmail,
+          role: 'Project Owner',
+          photoURL: project.submitterPhoto || null,
+          isOwner: true,
+        };
+        setTeamMembers([ownerEntry, ...enriched]);
+      } catch (e) { console.error('Error fetching team:', e); }
+    };
+    fetchTeam();
+  }, [project, projectId]);
 
   // Listen to forum posts
   useEffect(() => {
@@ -163,6 +203,7 @@ const ProjectWorkspace = () => {
   const tabs = [
     { id: 'forum', label: 'Discussion' },
     { id: 'resources', label: 'Resources' },
+    { id: 'team', label: `Team (${teamMembers.length})` },
   ];
 
   const topPosts = posts.filter(p => !p.parentId);
@@ -368,6 +409,45 @@ const ProjectWorkspace = () => {
               </button>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Team */}
+      {activeTab === 'team' && (
+        <div className="space-y-3">
+          <div className="bg-white border border-gray-200 rounded-xl p-5">
+            <h3 className="text-base font-bold text-gray-900 mb-4">Team Members</h3>
+            {teamMembers.length === 0 ? (
+              <p className="text-gray-400 text-sm text-center py-6">No team members yet.</p>
+            ) : (
+              <div className="space-y-3">
+                {teamMembers.map((member, i) => (
+                  <div key={i} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                    {member.photoURL ? (
+                      <img src={member.photoURL} alt="" className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                        {(member.applicantName || member.displayName || 'U')[0].toUpperCase()}
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <a href={`/profile/${encodeURIComponent(member.applicantEmail)}`} className="text-gray-900 text-sm font-semibold hover:text-blue-600 hover:underline">
+                        {member.displayName || member.applicantName}
+                      </a>
+                      <p className="text-gray-500 text-xs">{member.role}</p>
+                      <div className="flex items-center gap-3 mt-0.5">
+                        {member.portfolioUrl && <a href={member.portfolioUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-[10px] hover:underline">Portfolio</a>}
+                        {member.linkedinUrl && <a href={member.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-[10px] hover:underline">LinkedIn</a>}
+                      </div>
+                    </div>
+                    {member.isOwner && (
+                      <span className="text-[10px] font-semibold bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full flex-shrink-0">Owner</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       )}
 

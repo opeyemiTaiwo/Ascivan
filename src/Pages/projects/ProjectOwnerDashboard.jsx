@@ -142,6 +142,14 @@ const ProjectOwnerDashboard = () => {
     } catch (e) { toast.error('Error removing member: ' + e.message); }
   };
 
+  const toggleApplications = async (project) => {
+    try {
+      const newState = project.applicationsOpen === false ? true : false;
+      await updateDoc(doc(db, 'projects', project.id), { applicationsOpen: newState });
+      toast.success(newState ? 'Applications opened' : 'Applications closed');
+    } catch (e) { toast.error('Error updating applications status'); }
+  };
+
   if (loading) {
     return (
       <>
@@ -198,6 +206,7 @@ const ProjectOwnerDashboard = () => {
                     onApprove={(app) => approveApplication(project, app)}
                     onReject={rejectApplication}
                     onRemove={(app) => removeMember(project, app)}
+                    onToggleApplications={toggleApplications}
                   />
                 ))}
               </div>
@@ -209,7 +218,7 @@ const ProjectOwnerDashboard = () => {
   );
 };
 
-const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove }) => {
+const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove, onToggleApplications }) => {
   const [showApps, setShowApps] = useState(false);
   const isCompleted = project.status === 'completed';
   const pendingApps = (project.applications || []).filter(a => a.status === 'submitted');
@@ -268,10 +277,18 @@ const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove }) =>
         <Link to={`/projects/${project.id}`} className="px-4 py-2 min-h-[40px] bg-gray-100 hover:bg-gray-100 text-gray-900 font-semibold rounded-lg text-xs transition-all flex items-center">
           View Details
         </Link>
+        <Link to={`/projects/${project.id}/workspace`} className="px-4 py-2 min-h-[40px] bg-gray-100 hover:bg-gray-100 text-gray-900 font-semibold rounded-lg text-xs transition-all flex items-center">
+          Workspace
+        </Link>
         {!isCompleted && (
           <Link to={`/projects/${project.id}/complete`} className="px-4 py-2 min-h-[40px] bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-xs transition-all flex items-center">
             Complete Project
           </Link>
+        )}
+        {!isCompleted && (
+          <button onClick={() => onToggleApplications(project)} className={`px-4 py-2 min-h-[40px] font-semibold rounded-lg text-xs transition-all ${project.applicationsOpen === false ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-orange-50 border border-orange-200 text-orange-700 hover:bg-orange-100'}`}>
+            {project.applicationsOpen === false ? 'Open Applications' : 'Close Applications'}
+          </button>
         )}
         {!isCompleted && pendingApps.length > 0 && (
           <button onClick={() => setShowApps(!showApps)} className="px-4 py-2 min-h-[40px] bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-xs transition-all">

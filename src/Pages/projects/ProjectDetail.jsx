@@ -452,6 +452,11 @@ const ProjectDetail = () => {
                       Open Workspace
                     </button>
                   </div>
+                ) : project.applicationsOpen === false ? (
+                  <div className="text-center py-4">
+                    <p className="text-gray-600 font-semibold text-sm mb-1">Applications are closed</p>
+                    <p className="text-gray-400 text-xs">The project owner has closed applications for this project.</p>
+                  </div>
                 ) : !showApplyForm ? (
                   <div className="text-center">
                     <button onClick={() => setShowApplyForm(true)}

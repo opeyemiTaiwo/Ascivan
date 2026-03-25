@@ -215,7 +215,7 @@ const MyFinanceApplications = () => {
                         className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all min-h-[36px] ${
                           filterStatus === f.id
                             ? 'bg-green-500 text-white'
-                            : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                            : 'bg-white/10 text-gray-600 hover:bg-white/20'
                         }`}>
                         {f.label}
                       </button>
@@ -238,7 +238,7 @@ const MyFinanceApplications = () => {
                         className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all min-h-[36px] ${
                           filterCategory === f.id
                             ? 'bg-orange-500 text-white'
-                            : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                            : 'bg-white/10 text-gray-600 hover:bg-white/20'
                         }`}>
                         {f.label}
                       </button>
@@ -341,7 +341,7 @@ const MyFinanceApplications = () => {
                       <div className="flex items-center gap-2 flex-shrink-0 mt-1 sm:mt-0">
                         <button
                           onClick={() => { setEditEntry(entry); setEditStatus(entry.status); setEditNotes(entry.notes || ''); }}
-                          className="flex-1 sm:flex-none px-4 py-2 bg-white/10 hover:bg-white/20 text-gray-300 rounded-lg text-xs font-semibold transition-all min-h-[40px]">
+                          className="flex-1 sm:flex-none px-4 py-2 bg-white/10 hover:bg-white/20 text-gray-600 rounded-lg text-xs font-semibold transition-all min-h-[40px]">
                           Update
                         </button>
                         <button

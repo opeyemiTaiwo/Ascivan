@@ -81,7 +81,7 @@ const MismatchBanner = ({ mismatches, onDismiss, dismissed }) => {
             {mismatches.map((m, i) => (
               <div key={i} className="flex items-start gap-2">
                 <span className={`mt-1 w-1.5 h-1.5 rounded-full flex-shrink-0 ${m.severity === 'error' ? 'bg-red-400' : 'bg-yellow-400'}`} />
-                <p className="text-gray-300 text-xs leading-relaxed">{m.message}</p>
+                <p className="text-gray-600 text-xs leading-relaxed">{m.message}</p>
               </div>
             ))}
           </div>
@@ -355,7 +355,7 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
           {idTypes.map(t => (
             <button key={t.value} type="button" onClick={() => handleChange('idType', t.value)}
               className={`p-3 rounded-xl border-2 text-center text-sm font-semibold transition-all active:scale-95 ${
-                idForm.idType === t.value ? 'border-orange-400 bg-orange-500/20 text-white' : 'border-white/15 bg-white/5 text-gray-300 hover:bg-white/10'
+                idForm.idType === t.value ? 'border-orange-400 bg-orange-500/20 text-white' : 'border-white/15 bg-white/5 text-gray-600 hover:bg-white/10'
               }`}>
               {t.label}
             </button>
@@ -447,7 +447,7 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
       <button type="button" onClick={handleSubmit} disabled={saving || hasBlockingMismatch}
         className={`w-full py-3 min-h-[44px] font-bold rounded-xl text-sm transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${
           hasBlockingMismatch
-            ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
+            ? 'bg-gray-600 text-gray-600 cursor-not-allowed'
             : 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white'
         }`}>
         {saving ? 'Saving...' : hasBlockingMismatch ? 'Fix Mismatches to Continue' : 'Save ID Information'}

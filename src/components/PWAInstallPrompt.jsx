@@ -41,7 +41,7 @@ const PWAInstallPrompt = () => {
       <div className="bg-gradient-to-br from-black/95 via-gray-900/95 to-black/95 border border-lime-500/30 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 shadow-2xl">
         <div className="flex items-start gap-2.5 sm:gap-3">
           {/* App Icon */}
-          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-lime-500 to-green-500 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-600 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
             <span className="text-lg sm:text-xl">📱</span>
           </div>
 
@@ -50,7 +50,7 @@ const PWAInstallPrompt = () => {
             <h3 className="text-white font-bold text-sm sm:text-base mb-1">
               Install Loomiqe
             </h3>
-            <p className="text-gray-300 text-xs sm:text-sm mb-3 sm:mb-4 leading-relaxed">
+            <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 leading-relaxed">
               Get quick access to jobs, housing, finance, and home feed from your home screen.
             </p>
 
@@ -59,7 +59,7 @@ const PWAInstallPrompt = () => {
               <button
                 onClick={handleInstall}
                 disabled={installing}
-                className="bg-gradient-to-r from-lime-500 to-green-500 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold hover:from-lime-600 hover:to-green-600 active:from-lime-700 active:to-green-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center whitespace-nowrap"
+                className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold hover:from-lime-600 hover:to-green-600 active:from-lime-700 active:to-green-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center whitespace-nowrap"
                 aria-label="Install application"
               >
                 {installing ? (
@@ -76,7 +76,7 @@ const PWAInstallPrompt = () => {
               </button>
               <button
                 onClick={handleDismiss}
-                className="text-gray-400 hover:text-white active:text-gray-300 px-3 py-2 text-xs sm:text-sm font-medium transition-colors rounded-lg hover:bg-white/5 active:bg-white/10"
+                className="text-gray-400 hover:text-white active:text-gray-600 px-3 py-2 text-xs sm:text-sm font-medium transition-colors rounded-lg hover:bg-white/5 active:bg-white/10"
                 aria-label="Dismiss install prompt"
               >
                 Not now

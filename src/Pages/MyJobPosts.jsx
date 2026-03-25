@@ -211,7 +211,7 @@ const MyJobPosts = () => {
                   Job Posts
                 </span>
               </h1>
-              <p className="text-sm xs:text-base sm:text-lg text-gray-200 mb-4 xs:mb-5 sm:mb-6 px-2">
+              <p className="text-sm xs:text-base sm:text-lg text-gray-700 mb-4 xs:mb-5 sm:mb-6 px-2">
                 Manage your job listings
               </p>
               
@@ -251,7 +251,7 @@ const MyJobPosts = () => {
                         className={`px-3 xs:px-4 py-2 rounded-lg font-medium transition-all text-xs xs:text-sm min-h-[44px] ${
                           selectedCategory === cat.id
                             ? 'bg-green-500 text-white shadow-md'
-                            : 'bg-white/10 text-gray-300 hover:bg-white/20 active:bg-white/30'
+                            : 'bg-white/10 text-gray-600 hover:bg-white/20 active:bg-white/30'
                         }`}
                       >
                         {cat.label}
@@ -324,7 +324,7 @@ const MyJobPosts = () => {
                               </span>
                             </div>
                             <h3 className="text-lg xs:text-xl font-bold text-white mb-2 line-clamp-2">{post.title}</h3>
-                            <p className="text-gray-300 text-xs xs:text-sm line-clamp-2">{post.description}</p>
+                            <p className="text-gray-600 text-xs xs:text-sm line-clamp-2">{post.description}</p>
                           </div>
                         </div>
 

@@ -177,7 +177,7 @@ const Housing = () => {
               <p className="text-orange-400 font-semibold text-sm"> Verified, affordable housing for international students</p>
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-3 sm:mb-4">Housing</h1>
-            <p className="text-gray-300 text-base sm:text-lg mb-6">Apartments · Rooms · Studios · Student Housing</p>
+            <p className="text-gray-600 text-base sm:text-lg mb-6">Apartments · Rooms · Studios · Student Housing</p>
             <button
               onClick={() => navigate('/housing/post')}
               className="px-6 py-3 min-h-[44px] bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all shadow-lg"
@@ -198,7 +198,7 @@ const Housing = () => {
                     className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all flex-shrink-0 ${
                       selectedType === type.id
                         ? 'bg-orange-500 text-white shadow-md'
-                        : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                        : 'bg-white/10 text-gray-600 hover:bg-white/20'
                     }`}
                   >
                     {type.label}
@@ -246,7 +246,7 @@ const Housing = () => {
                 </select>
               </div>
               <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-300">
+                <span className="text-gray-600">
                   <span className="text-orange-400 font-semibold">{filteredPosts.length}</span> listings found
                 </span>
                 {(searchQuery || locationFilter || selectedType !== 'all') && (
@@ -318,8 +318,8 @@ const Housing = () => {
                               ${post.monthlyRent.toLocaleString()}/mo
                             </span>
                           )}
-                          {post.bedrooms && <span className="bg-white/10 text-gray-300 px-2.5 py-1 rounded-lg">{post.bedrooms} bed</span>}
-                          {post.bathrooms && <span className="bg-white/10 text-gray-300 px-2.5 py-1 rounded-lg">{post.bathrooms} bath</span>}
+                          {post.bedrooms && <span className="bg-white/10 text-gray-600 px-2.5 py-1 rounded-lg">{post.bedrooms} bed</span>}
+                          {post.bathrooms && <span className="bg-white/10 text-gray-600 px-2.5 py-1 rounded-lg">{post.bathrooms} bath</span>}
                           {post.availableFrom && (
                             <span className="bg-blue-500/20 text-blue-300 px-2.5 py-1 rounded-lg">
                               Avail. {post.availableFrom.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
@@ -327,15 +327,15 @@ const Housing = () => {
                           )}
                         </div>
 
-                        <p className={`text-sm mb-4 line-clamp-3 flex-grow ${isClosed ? 'text-gray-500' : 'text-gray-300'}`}>{post.description}</p>
+                        <p className={`text-sm mb-4 line-clamp-3 flex-grow ${isClosed ? 'text-gray-500' : 'text-gray-600'}`}>{post.description}</p>
 
                         {/* Amenities */}
                         {post.amenities && post.amenities.length > 0 && (
                           <div className="flex flex-wrap gap-1.5 mb-4">
                             {post.amenities.slice(0, 3).map((a, i) => (
-                              <span key={i} className="bg-white/10 text-gray-300 px-2 py-0.5 rounded text-xs">{a}</span>
+                              <span key={i} className="bg-white/10 text-gray-600 px-2 py-0.5 rounded text-xs">{a}</span>
                             ))}
-                            {post.amenities.length > 3 && <span className="bg-white/10 text-gray-300 px-2 py-0.5 rounded text-xs">+{post.amenities.length - 3}</span>}
+                            {post.amenities.length > 3 && <span className="bg-white/10 text-gray-600 px-2 py-0.5 rounded text-xs">+{post.amenities.length - 3}</span>}
                           </div>
                         )}
 

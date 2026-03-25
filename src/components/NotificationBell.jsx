@@ -218,7 +218,7 @@ const NotificationBell = () => {
 
         {/* Notification Badge - Responsive positioning */}
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 xs:-top-2 xs:-right-2 bg-red-500 text-gray-900 text-[10px] xs:text-xs font-bold rounded-full min-w-[16px] xs:min-w-[20px] h-[16px] xs:h-[20px] flex items-center justify-center animate-pulse shadow-lg border border-gray-900 xs:border-2">
+          <span className="absolute -top-1 -right-1 xs:-top-2 xs:-right-2 bg-red-500 text-white text-[10px] xs:text-xs font-bold rounded-full min-w-[16px] xs:min-w-[20px] h-[16px] xs:h-[20px] flex items-center justify-center animate-pulse shadow-lg border border-gray-900 xs:border-2">
             {unreadCount > 99 ? '99+' : unreadCount}
           </span>
         )}
@@ -240,7 +240,7 @@ const NotificationBell = () => {
               <span className="hidden xs:inline">Notifications</span>
               <span className="xs:hidden">Alerts</span>
               {unreadCount > 0 && (
-                <span className="bg-red-500 text-gray-900 text-[10px] xs:text-xs px-1.5 xs:px-2 py-0.5 xs:py-1 rounded-full">
+                <span className="bg-red-500 text-white text-[10px] xs:text-xs px-1.5 xs:px-2 py-0.5 xs:py-1 rounded-full">
                   {unreadCount}
                 </span>
               )}

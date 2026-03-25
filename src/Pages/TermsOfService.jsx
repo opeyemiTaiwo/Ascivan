@@ -103,7 +103,7 @@ const TermsOfService = () => {
             {sections.map((section, i) => (
               <div key={i} className="bg-white/5 rounded-xl border border-white/20 p-5 sm:p-6">
                 <h2 className="text-white font-bold text-lg mb-3">{section.title}</h2>
-                <p className="text-gray-300 text-sm leading-relaxed">{section.content}</p>
+                <p className="text-gray-600 text-sm leading-relaxed">{section.content}</p>
               </div>
             ))}
           </div>

@@ -1043,7 +1043,7 @@ const CommunityPosts = () => {
               <button
                 onClick={() => handleRepost(postId)}
                 disabled={submittingRepost}
-                className="flex-1 px-3 xs:px-4 py-2 xs:py-2.5 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-gray-900 rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] text-sm xs:text-base"
+                className="flex-1 px-3 xs:px-4 py-2 xs:py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] text-sm xs:text-base"
               >
                 {submittingRepost ? (
                   <span className="flex items-center justify-center gap-2">
@@ -1116,7 +1116,7 @@ const CommunityPosts = () => {
                 <div className="relative view-menu-container flex justify-center items-center gap-3">
                   <Link
                     to="/community/submit"
-                    className="flex items-center gap-2 px-4 xs:px-5 py-2 xs:py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 min-h-[44px] text-sm xs:text-base"
+                    className="flex items-center gap-2 px-4 xs:px-5 py-2 xs:py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg xs:rounded-xl font-semibold transition-all duration-300 min-h-[44px] text-sm xs:text-base"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -1322,7 +1322,7 @@ const CommunityPosts = () => {
     <div className="p-3 xs:p-4 bg-gray-50 border border-gray-200 rounded-lg">
       {/* Original Author Info */}
       <div className="flex items-center gap-2 xs:gap-3 mb-3">
-        <div className="w-8 h-8 xs:w-10 xs:h-10 rounded-full overflow-hidden bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center text-gray-900 font-bold flex-shrink-0">
+        <div className="w-8 h-8 xs:w-10 xs:h-10 rounded-full overflow-hidden bg-blue-600 flex items-center justify-center text-white font-bold flex-shrink-0">
           {post.originalAuthorPhoto ? (
             <img src={post.originalAuthorPhoto} alt="" loading="lazy" className="w-full h-full object-cover" />
           ) : (
@@ -1403,7 +1403,7 @@ const CommunityPosts = () => {
                               <button
                                 onClick={() => savePostEdit(post.id)}
                                 disabled={savingEdit}
-                                className="flex-1 px-3 xs:px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-gray-900 rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 text-sm xs:text-base min-h-[44px]"
+                                className="flex-1 px-3 xs:px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 text-sm xs:text-base min-h-[44px]"
                               >
                                 {savingEdit ? 'Saving...' : 'Save Changes'}
                               </button>
@@ -1557,7 +1557,7 @@ const CommunityPosts = () => {
                               <button
                                 onClick={() => submitReply(post.id)}
                                 disabled={!replyText[post.id]?.trim() || submittingReply[post.id]}
-                                className="mt-2 xs:mt-3 px-3 xs:px-4 py-1.5 xs:py-2 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-gray-900 rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-xs xs:text-sm min-h-[44px]"
+                                className="mt-2 xs:mt-3 px-3 xs:px-4 py-1.5 xs:py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-xs xs:text-sm min-h-[44px]"
                               >
                                 {submittingReply[post.id] ? 'Posting...' : 'Post Reply'}
                               </button>
@@ -1656,7 +1656,7 @@ const CommunityPosts = () => {
                                               <button
                                                 onClick={() => saveReplyEdit(post.id, reply.id)}
                                                 disabled={savingReplyEdit}
-                                                className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-gray-900 rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 text-xs min-h-[44px]"
+                                                className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 text-xs min-h-[44px]"
                                               >
                                                 {savingReplyEdit ? 'Saving...' : 'Save'}
                                               </button>
@@ -1703,7 +1703,7 @@ const CommunityPosts = () => {
                     <button
                       onClick={loadMorePosts}
                       disabled={loadingMore}
-                      className="px-6 xs:px-8 py-3 xs:py-4 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-gray-900 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 disabled:opacity-50 min-h-[56px] text-sm xs:text-base"
+                      className="px-6 xs:px-8 py-3 xs:py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg xs:rounded-xl font-semibold transition-all duration-300 disabled:opacity-50 min-h-[56px] text-sm xs:text-base"
                     >
                       {loadingMore ? (
                         <span className="flex items-center gap-2">

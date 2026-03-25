@@ -174,7 +174,7 @@ const PostBanking = () => {
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-2 sm:mb-3">
                 List a <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Service</span>
               </h1>
-              <p className="text-gray-300">Share banking and financial resources with the community</p>
+              <p className="text-gray-600">Share banking and financial resources with the community</p>
             </section>
 
             <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-white/20 p-4 sm:p-6 md:p-8">

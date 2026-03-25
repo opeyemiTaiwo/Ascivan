@@ -137,7 +137,7 @@ const MyFinancePosts = () => {
                       className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
                         filterStatus === f.id
                           ? 'bg-green-500 text-white'
-                          : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                          : 'bg-white/10 text-gray-600 hover:bg-white/20'
                       }`}>
                       {f.label}
                     </button>

@@ -225,7 +225,7 @@ const Jobs = () => {
               </p>
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-3 sm:mb-4">Jobs</h1>
-            <p className="text-gray-300 text-sm sm:text-base md:text-lg mb-5 sm:mb-6">Full-time · Freelancer · Internship</p>
+            <p className="text-gray-600 text-sm sm:text-base md:text-lg mb-5 sm:mb-6">Full-time · Freelancer · Internship</p>
             <button
               onClick={() => navigate('/jobs/post')}
               className="px-6 py-3 min-h-[44px] bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all shadow-lg"
@@ -246,7 +246,7 @@ const Jobs = () => {
                     className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all flex-shrink-0 ${
                       selectedType === type.id
                         ? 'bg-orange-500 text-white shadow-md'
-                        : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                        : 'bg-white/10 text-gray-600 hover:bg-white/20'
                     }`}
                   >
                     {type.label}
@@ -306,7 +306,7 @@ const Jobs = () => {
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm border transition-all ${
                     visaFilter
                       ? 'bg-green-500/20 border-green-500/50 text-green-300'
-                      : 'bg-white/5 border-white/20 text-gray-300 hover:bg-white/10'
+                      : 'bg-white/5 border-white/20 text-gray-600 hover:bg-white/10'
                   }`}
                 >
                   <span className={`w-4 h-4 rounded flex items-center justify-center text-xs border ${visaFilter ? 'bg-green-500 border-green-400' : 'border-gray-500'}`}>
@@ -316,7 +316,7 @@ const Jobs = () => {
                 </button>
 
                 <div className="flex items-center gap-4 text-sm">
-                  <span className="text-gray-300">
+                  <span className="text-gray-600">
                     <span className="text-orange-400 font-semibold">{filteredPosts.length}</span> jobs found
                   </span>
                   {hasActiveFilters && (
@@ -408,7 +408,7 @@ const Jobs = () => {
                         {/* Location + salary */}
                         <div className="flex flex-wrap gap-2 text-xs mb-3">
                           {post.location && (
-                            <span className="flex items-center gap-1 text-gray-300">
+                            <span className="flex items-center gap-1 text-gray-600">
                               <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                               </svg>
@@ -426,7 +426,7 @@ const Jobs = () => {
                         </div>
 
                         {/* Description */}
-                        <p className={`text-sm mb-4 line-clamp-3 flex-grow ${isClosed ? 'text-gray-500' : 'text-gray-300'}`}>
+                        <p className={`text-sm mb-4 line-clamp-3 flex-grow ${isClosed ? 'text-gray-500' : 'text-gray-600'}`}>
                           {post.description}
                         </p>
 
@@ -434,10 +434,10 @@ const Jobs = () => {
                         {post.tags && post.tags.length > 0 && (
                           <div className="flex flex-wrap gap-1.5 mb-4">
                             {post.tags.slice(0, isMobile ? 2 : 3).map((tag, i) => (
-                              <span key={i} className="bg-white/10 text-gray-300 px-2 py-0.5 rounded text-xs">{tag}</span>
+                              <span key={i} className="bg-white/10 text-gray-600 px-2 py-0.5 rounded text-xs">{tag}</span>
                             ))}
                             {post.tags.length > (isMobile ? 2 : 3) && (
-                              <span className="bg-white/10 text-gray-300 px-2 py-0.5 rounded text-xs">
+                              <span className="bg-white/10 text-gray-600 px-2 py-0.5 rounded text-xs">
                                 +{post.tags.length - (isMobile ? 2 : 3)}
                               </span>
                             )}

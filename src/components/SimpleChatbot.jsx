@@ -283,7 +283,7 @@ const SimpleChatbot = () => {
                 </span>
               </h2>
               
-              <p className="text-xl sm:text-2xl text-gray-200 max-w-2xl mx-auto leading-relaxed mb-4" 
+              <p className="text-xl sm:text-2xl text-gray-700 max-w-2xl mx-auto leading-relaxed mb-4" 
                  style={{
                    textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
                    fontFamily: '"Inter", sans-serif'

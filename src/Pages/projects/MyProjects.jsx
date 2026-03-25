@@ -137,7 +137,7 @@ const MyProjects = () => {
                   ].map(t => (
                     <button key={t.id} onClick={() => setTab(t.id)}
                       className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all min-h-[40px] ${
-                        tab === t.id ? 'bg-blue-600 text-gray-900' : 'bg-gray-100 text-gray-600 hover:bg-gray-100'
+                        tab === t.id ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-100'
                       }`}>
                       {t.label}
                     </button>
@@ -162,11 +162,11 @@ const MyProjects = () => {
                 <p className="text-gray-900 font-semibold text-sm mb-2">Filter by Status</p>
                 <div className="flex flex-wrap gap-2">
                   <button onClick={() => setProjectFilter('ongoing')}
-                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all min-h-[40px] ${projectFilter === 'ongoing' ? 'bg-blue-600 text-gray-900' : 'bg-gray-100 text-gray-600 hover:bg-gray-100'}`}>
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all min-h-[40px] ${projectFilter === 'ongoing' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-100'}`}>
                     Ongoing
                   </button>
                   <button onClick={() => setProjectFilter('completed')}
-                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all min-h-[40px] ${projectFilter === 'completed' ? 'bg-blue-600 text-gray-900' : 'bg-gray-100 text-gray-600 hover:bg-gray-100'}`}>
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all min-h-[40px] ${projectFilter === 'completed' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-100'}`}>
                     Completed
                   </button>
                 </div>

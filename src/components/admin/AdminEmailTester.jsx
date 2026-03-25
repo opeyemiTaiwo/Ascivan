@@ -266,7 +266,7 @@ const AdminEmailTester = () => {
       {/* Email Testing Header */}
       <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl p-6 border border-white/20">
         <h3 className="text-2xl font-bold text-white mb-4">🧪 Email System Testing</h3>
-        <p className="text-gray-300 mb-6">Test all email notifications to verify functionality and templates</p>
+        <p className="text-gray-600 mb-6">Test all email notifications to verify functionality and templates</p>
         
         {/* Test Email Input */}
         <div className="mb-6">

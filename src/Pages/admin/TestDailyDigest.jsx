@@ -192,7 +192,7 @@ const TestDailyDigest = () => {
             <h3 className="text-xl text-white mb-4">📋 Checklist</h3>
             <div className="text-white space-y-2">
               <p className="font-semibold">✅ Environment Variables to Check:</p>
-              <ul className="list-disc list-inside ml-4 space-y-1 text-gray-300">
+              <ul className="list-disc list-inside ml-4 space-y-1 text-gray-600">
                 <li>FIREBASE_CLIENT_EMAIL</li>
                 <li>FIREBASE_PRIVATE_KEY</li>
                 <li>EMAIL_USER (Gmail address)</li>
@@ -201,7 +201,7 @@ const TestDailyDigest = () => {
               </ul>
               
               <p className="font-semibold mt-4">⚙️ Vercel Settings:</p>
-              <ul className="list-disc list-inside ml-4 space-y-1 text-gray-300">
+              <ul className="list-disc list-inside ml-4 space-y-1 text-gray-600">
                 <li>Check if cron job is configured in vercel.json</li>
                 <li>Verify cron job appears in Vercel dashboard</li>
                 <li>Check function logs in Vercel dashboard</li>

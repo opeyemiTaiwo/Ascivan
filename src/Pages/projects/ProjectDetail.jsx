@@ -274,7 +274,7 @@ const ProjectDetail = () => {
                 ) : !showApplyForm ? (
                   <div className="text-center">
                     <button onClick={() => setShowApplyForm(true)}
-                      className="px-8 py-3 min-h-[48px] bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 font-bold rounded-xl text-sm transition-all shadow-lg">
+                      className="px-8 py-3 min-h-[48px] bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-all shadow-lg">
                       Apply to This Project
                     </button>
                   </div>
@@ -307,7 +307,7 @@ const ProjectDetail = () => {
                         Cancel
                       </button>
                       <button onClick={handleApply} disabled={submittingApp}
-                        className="px-8 py-2.5 min-h-[44px] bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 font-bold rounded-xl text-sm transition-all shadow-lg disabled:opacity-50">
+                        className="px-8 py-2.5 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-all shadow-lg disabled:opacity-50">
                         {submittingApp ? 'Submitting...' : 'Submit Application'}
                       </button>
                     </div>

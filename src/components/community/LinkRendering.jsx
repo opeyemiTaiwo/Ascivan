@@ -204,7 +204,7 @@ export const TruncatedRichContent = ({ content, postId, limit = 300, expandedPos
     <div>
       <RichTextContent 
         content={displayContent}
-        className="text-gray-200 leading-relaxed whitespace-pre-wrap text-xs xs:text-sm sm:text-base"
+        className="text-gray-700 leading-relaxed whitespace-pre-wrap text-xs xs:text-sm sm:text-base"
       />
       
       {shouldTruncate && (

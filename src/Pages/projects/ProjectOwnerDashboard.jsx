@@ -142,7 +142,7 @@ const ProjectOwnerDashboard = () => {
                 <h1 className="text-2xl sm:text-3xl font-black text-gray-900">My <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-500">Projects</span></h1>
                 <p className="text-gray-400 text-sm mt-1">{myProjects.length} project{myProjects.length !== 1 ? 's' : ''} posted</p>
               </div>
-              <Link to="/projects/submit" className="inline-flex items-center justify-center px-5 py-2.5 min-h-[44px] bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 font-bold rounded-xl text-sm transition-all shadow-lg">
+              <Link to="/projects/submit" className="inline-flex items-center justify-center px-5 py-2.5 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-all shadow-lg">
                 Post New Project
               </Link>
             </div>
@@ -242,12 +242,12 @@ const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove }) =>
           View Details
         </Link>
         {!isCompleted && (
-          <Link to={`/projects/${project.id}/complete`} className="px-4 py-2 min-h-[40px] bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 font-semibold rounded-lg text-xs transition-all flex items-center">
+          <Link to={`/projects/${project.id}/complete`} className="px-4 py-2 min-h-[40px] bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-xs transition-all flex items-center">
             Complete Project
           </Link>
         )}
         {!isCompleted && pendingApps.length > 0 && (
-          <button onClick={() => setShowApps(!showApps)} className="px-4 py-2 min-h-[40px] bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 font-semibold rounded-lg text-xs transition-all">
+          <button onClick={() => setShowApps(!showApps)} className="px-4 py-2 min-h-[40px] bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-xs transition-all">
             Applications ({pendingApps.length})
           </button>
         )}
@@ -268,7 +268,7 @@ const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove }) =>
                   {app.message && <p className="text-gray-600 text-xs mt-2 italic">"{app.message}"</p>}
                 </div>
                 <div className="flex gap-2 flex-shrink-0">
-                  <button onClick={() => onApprove(app)} className="px-3 py-1.5 min-h-[36px] bg-blue-600 hover:bg-blue-700 text-gray-900 font-bold rounded-lg text-xs transition-all">
+                  <button onClick={() => onApprove(app)} className="px-3 py-1.5 min-h-[36px] bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition-all">
                     Approve
                   </button>
                   <button onClick={() => onReject(app)} className="px-3 py-1.5 min-h-[36px] bg-red-500/20 hover:bg-red-500/40 text-red-300 font-bold rounded-lg text-xs transition-all border border-red-500/30">

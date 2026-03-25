@@ -220,8 +220,8 @@ const DirectoryAccessManager = () => {
                 onClick={() => setFilter(filterOption.key)}
                 className={`px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
                   filter === filterOption.key
-                    ? 'bg-lime-500 text-black'
-                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                    ? 'bg-lime-500 text-gray-900'
+                    : 'bg-gray-800 text-gray-600 hover:bg-gray-700'
                 }`}
               >
                 {filterOption.label}
@@ -237,12 +237,12 @@ const DirectoryAccessManager = () => {
             <table className="w-full min-w-[640px]">
               <thead>
                 <tr className="bg-gray-900 border-b border-gray-700">
-                  <th className="text-left p-4 font-semibold text-gray-300">User</th>
-                  <th className="text-left p-4 font-semibold text-gray-300">Type</th>
-                  <th className="text-left p-4 font-semibold text-gray-300">Status</th>
-                  <th className="text-left p-4 font-semibold text-gray-300">Requested</th>
-                  <th className="text-left p-4 font-semibold text-gray-300">Expires</th>
-                  <th className="text-left p-4 font-semibold text-gray-300">Actions</th>
+                  <th className="text-left p-4 font-semibold text-gray-600">User</th>
+                  <th className="text-left p-4 font-semibold text-gray-600">Type</th>
+                  <th className="text-left p-4 font-semibold text-gray-600">Status</th>
+                  <th className="text-left p-4 font-semibold text-gray-600">Requested</th>
+                  <th className="text-left p-4 font-semibold text-gray-600">Expires</th>
+                  <th className="text-left p-4 font-semibold text-gray-600">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -258,7 +258,7 @@ const DirectoryAccessManager = () => {
                           />
                         ) : (
                           <div className="w-10 h-10 rounded-full bg-lime-500 flex items-center justify-center mr-3">
-                            <span className="text-black font-bold">
+                            <span className="text-gray-900 font-bold">
                               {request.userName?.charAt(0)?.toUpperCase() || '?'}
                             </span>
                           </div>
@@ -281,11 +281,11 @@ const DirectoryAccessManager = () => {
                     <td className="p-4">
                       {getStatusBadge(request)}
                     </td>
-                    <td className="p-4 text-gray-300 text-sm">
+                    <td className="p-4 text-gray-600 text-sm">
                       {request.requestedAt?.toLocaleDateString()} <br />
                       <span className="text-gray-500">{request.requestedAt?.toLocaleTimeString()}</span>
                     </td>
-                    <td className="p-4 text-gray-300 text-sm">
+                    <td className="p-4 text-gray-600 text-sm">
                       {request.expiryDate ? (
                         <>
                           {request.expiryDate.toLocaleDateString()} <br />

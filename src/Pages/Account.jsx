@@ -147,7 +147,7 @@ const Account = () => {
       {/* Empty state */}
       {activeProjects.length === 0 && completedProjects.length === 0 && (
         <div className="bg-white border border-gray-200 rounded-xl p-10 text-center">
-          <svg className="w-12 h-12 mx-auto text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-12 h-12 mx-auto text-gray-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
           </svg>
           <p className="text-gray-900 font-semibold mb-1">No paid projects yet</p>

@@ -211,7 +211,7 @@ const Finance = () => {
               <p className="text-orange-400 font-semibold text-sm"> Financial resources for international students</p>
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-3 sm:mb-4">Finance</h1>
-            <p className="text-gray-300 text-base sm:text-lg mb-6">Scholarships · Loans · Work-Study · Grants · Fellowships · Banking · Tax Help</p>
+            <p className="text-gray-600 text-base sm:text-lg mb-6">Scholarships · Loans · Work-Study · Grants · Fellowships · Banking · Tax Help</p>
             <button
               onClick={() => navigate('/finance/post')}
               className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all shadow-lg"
@@ -231,7 +231,7 @@ const Finance = () => {
                     className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all flex-shrink-0 ${
                       selectedType === type.id
                         ? 'bg-orange-500 text-white shadow-md'
-                        : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                        : 'bg-white/10 text-gray-600 hover:bg-white/20'
                     }`}
                   >
                     {type.label}
@@ -284,7 +284,7 @@ const Finance = () => {
                 </select>
               </div>
               <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-300">
+                <span className="text-gray-600">
                   <span className="text-orange-400 font-semibold">{filteredPosts.length}</span> resources found
                 </span>
                 {hasActiveFilters && (
@@ -367,14 +367,14 @@ const Finance = () => {
                           <p className="text-yellow-400 text-xs font-semibold mb-2"> Deadline: {post.deadline}</p>
                         )}
 
-                        <p className={`text-sm mb-4 line-clamp-3 flex-grow ${isClosed ? 'text-gray-500' : 'text-gray-300'}`}>{post.description}</p>
+                        <p className={`text-sm mb-4 line-clamp-3 flex-grow ${isClosed ? 'text-gray-500' : 'text-gray-600'}`}>{post.description}</p>
 
                         {post.tags && post.tags.length > 0 && (
                           <div className="flex flex-wrap gap-1.5 mb-4">
                             {post.tags.slice(0, 3).map((t, i) => (
-                              <span key={i} className="bg-white/10 text-gray-300 px-2 py-0.5 rounded text-xs">{t}</span>
+                              <span key={i} className="bg-white/10 text-gray-600 px-2 py-0.5 rounded text-xs">{t}</span>
                             ))}
-                            {post.tags.length > 3 && <span className="bg-white/10 text-gray-300 px-2 py-0.5 rounded text-xs">+{post.tags.length - 3}</span>}
+                            {post.tags.length > 3 && <span className="bg-white/10 text-gray-600 px-2 py-0.5 rounded text-xs">+{post.tags.length - 3}</span>}
                           </div>
                         )}
 

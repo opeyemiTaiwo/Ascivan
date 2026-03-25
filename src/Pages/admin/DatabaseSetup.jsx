@@ -31,7 +31,7 @@ const DatabaseSetup = () => {
         
         <div className="bg-gray-800 rounded-lg p-6 mb-6">
           <h2 className="text-2xl font-semibold mb-4">Initialize Firebase Collections</h2>
-          <p className="text-gray-300 mb-6">
+          <p className="text-gray-600 mb-6">
             This will create all 17 required collections with sample data:
           </p>
           <ul className="list-disc list-inside text-gray-400 mb-6 space-y-1">
@@ -71,7 +71,7 @@ const DatabaseSetup = () => {
 
         <div className="bg-yellow-900/30 border border-yellow-600 rounded-lg p-6 mt-6">
           <h3 className="text-xl font-semibold mb-2">Important Notes:</h3>
-          <ul className="list-disc list-inside text-gray-300 space-y-2">
+          <ul className="list-disc list-inside text-gray-600 space-y-2">
             <li>Run this only once when setting up a new database</li>
             <li>Check the browser console for detailed logs</li>
             <li>After setup, deploy Firestore rules and indexes</li>

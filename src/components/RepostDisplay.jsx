@@ -223,7 +223,7 @@ export const RepostModal = ({ isOpen, onClose, post, onRepost, isSubmitting }) =
               <button
                 onClick={handleRepost}
                 disabled={isSubmitting}
-                className="flex-1 sm:flex-none px-4 sm:px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                className="flex-1 sm:flex-none px-4 sm:px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
               >
                 {isSubmitting ? (
                   <span className="flex items-center justify-center">

@@ -45,7 +45,7 @@ const SERVICES = [
     theme: {
       bg: "bg-gray-950",
       text: "text-white",
-      subtext: "text-gray-300",
+      subtext: "text-gray-600",
       checkBg: "bg-green-900/50",
       checkColor: "text-green-400",
       btnBg: "bg-orange-500 hover:bg-orange-600",
@@ -68,7 +68,7 @@ const SERVICES = [
     theme: {
       bg: "bg-green-700",
       text: "text-white",
-      subtext: "text-green-100",
+      subtext: "text-green-600",
       checkBg: "bg-white/20",
       checkColor: "text-white",
       btnBg: "bg-white hover:bg-green-50",
@@ -114,7 +114,7 @@ const SERVICES = [
     theme: {
       bg: "bg-gray-950",
       text: "text-white",
-      subtext: "text-gray-300",
+      subtext: "text-gray-600",
       checkBg: "bg-orange-900/50",
       checkColor: "text-orange-400",
       btnBg: "bg-orange-500 hover:bg-orange-600",
@@ -379,7 +379,7 @@ const CareerHome = () => {
                 We Build Intelligent Ecosystems.
               </span>
             </h2>
-            <p className="text-gray-300 text-base sm:text-lg md:text-xl leading-relaxed"
+            <p className="text-gray-600 text-base sm:text-lg md:text-xl leading-relaxed"
                style={{ fontFamily: '"Inter", sans-serif' }}>
               Loomiqe is a digital innovation organization that builds cutting-edge technology solutions for businesses and empowers the next generation of tech professionals. We combine software engineering, strategy, and emerging technologies to build scalable solutions for growth.
             </p>
@@ -395,7 +395,7 @@ const CareerHome = () => {
               Our Core{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-emerald-400 to-green-300">Values</span>
             </h2>
-            <p className="text-gray-200 text-base sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
+            <p className="text-gray-700 text-base sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
                style={{ fontFamily: '"Inter", sans-serif' }}>
               The principles that guide every solution we build and every partnership we forge
             </p>
@@ -407,7 +407,7 @@ const CareerHome = () => {
                   <div className="text-3xl sm:text-4xl md:text-5xl mb-2 sm:mb-3 transform">{item.icon}</div>
                   <h3 className="text-lg sm:text-xl md:text-2xl font-black mb-1 sm:mb-2 text-white group-hover:text-orange-400 transition-colors"
                       style={{ fontFamily: '"Inter", sans-serif' }}>{item.value}</h3>
-                  <p className="text-gray-200 text-sm sm:text-base leading-relaxed flex-grow"
+                  <p className="text-gray-700 text-sm sm:text-base leading-relaxed flex-grow"
                      style={{ fontFamily: '"Inter", sans-serif' }}>{item.description}</p>
                 </div>
               </div>
@@ -423,7 +423,7 @@ const CareerHome = () => {
               Our{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-emerald-400 to-green-300">Services</span>
             </h2>
-            <p className="text-gray-200 text-base sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
+            <p className="text-gray-700 text-base sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
                style={{ fontFamily: '"Inter", sans-serif' }}>
               End-to-end AI-powered solutions — from strategy to implementation to ongoing optimization
             </p>
@@ -481,7 +481,7 @@ const CareerHome = () => {
               Business{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-emerald-400 to-green-300">Outcomes We Drive</span>
             </h2>
-            <p className="text-gray-200 text-base sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
+            <p className="text-gray-700 text-base sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
                style={{ fontFamily: '"Inter", sans-serif' }}>
               Our solutions deliver measurable impact across your organization
             </p>
@@ -504,7 +504,7 @@ const CareerHome = () => {
               Trusted by{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-emerald-400 to-green-300">Industry Leaders</span>
             </h2>
-            <p className="text-gray-200 text-base sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
+            <p className="text-gray-700 text-base sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
                style={{ fontFamily: '"Inter", sans-serif' }}>
               From startups to established enterprises, we've delivered exceptional digital solutions
             </p>
@@ -557,7 +557,7 @@ const CareerHome = () => {
                   Engagement Process
                 </span>
               </h2>
-              <p className="text-gray-300 text-base sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
+              <p className="text-gray-600 text-base sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
                  style={{ fontFamily: '"Inter", sans-serif' }}>
                 We believe in full transparency before any project begins. Here's a brief overview of how our client engagement works.
               </p>
@@ -573,7 +573,7 @@ const CareerHome = () => {
                   <h3 className="text-white text-lg sm:text-xl font-black mb-3" style={{ fontFamily: '"Inter", sans-serif' }}>
                     Consultation Fee
                   </h3>
-                  <p className="text-gray-300 text-sm sm:text-base leading-relaxed flex-grow" style={{ fontFamily: '"Inter", sans-serif' }}>
+                  <p className="text-gray-600 text-sm sm:text-base leading-relaxed flex-grow" style={{ fontFamily: '"Inter", sans-serif' }}>
                     We begin every engagement with a paid consultation. This fee is <span className="text-green-400 font-semibold">credited toward your project</span> if you choose to build with us — so your investment starts working immediately.
                   </p>
                 </div>
@@ -588,7 +588,7 @@ const CareerHome = () => {
                   <h3 className="text-white text-lg sm:text-xl font-black mb-3" style={{ fontFamily: '"Inter", sans-serif' }}>
                     Custom Proposal Delivered
                   </h3>
-                  <p className="text-gray-300 text-sm sm:text-base leading-relaxed flex-grow" style={{ fontFamily: '"Inter", sans-serif' }}>
+                  <p className="text-gray-600 text-sm sm:text-base leading-relaxed flex-grow" style={{ fontFamily: '"Inter", sans-serif' }}>
                     After your consultation, we deliver a tailored proposal — covering our full services, how we operate, project timeline, and transparent pricing based on exactly what you want to build.
                   </p>
                 </div>
@@ -602,7 +602,7 @@ const CareerHome = () => {
                   <h3 className="text-white text-lg sm:text-xl font-black mb-3" style={{ fontFamily: '"Inter", sans-serif' }}>
                     Build & Transform Together
                   </h3>
-                  <p className="text-gray-300 text-sm sm:text-base leading-relaxed flex-grow" style={{ fontFamily: '"Inter", sans-serif' }}>
+                  <p className="text-gray-600 text-sm sm:text-base leading-relaxed flex-grow" style={{ fontFamily: '"Inter", sans-serif' }}>
                     If you move forward, we kick off your project with a dedicated team. If you don't, the consultation fee is non-refundable — it compensates for the expertise and time invested in your discovery session.
                   </p>
                 </div>
@@ -655,7 +655,7 @@ const CareerHome = () => {
                     <span className={`transform transition-transform text-xl text-orange-400 flex-shrink-0 ${expandedFAQ === index ? 'rotate-180' : ''}`}>⌄</span>
                   </div>
                   <div className={`overflow-hidden transition-all duration-300 ${expandedFAQ === index ? 'max-h-[600px] mt-3' : 'max-h-0'}`}>
-                    <p className="text-gray-200 leading-relaxed text-sm sm:text-base md:text-lg" style={{ fontFamily: '"Inter", sans-serif' }}>{faq.answer}</p>
+                    <p className="text-gray-700 leading-relaxed text-sm sm:text-base md:text-lg" style={{ fontFamily: '"Inter", sans-serif' }}>{faq.answer}</p>
                     {/* Terms of Service nudge on relevant FAQ items */}
                     {(index === 2 || index === 3 || index === 10 || index === 11) && expandedFAQ === index && (
                       <div className="mt-4 flex items-center gap-3 bg-green-950/40 border border-green-500/25 rounded-xl px-4 py-3">
@@ -714,14 +714,14 @@ const CareerHome = () => {
                 </a>
               </div>
               <div className="flex flex-wrap justify-center items-center gap-4">
-                <a href="/solutions/privacy" className="text-gray-300 hover:text-green-400 text-base transition-colors font-medium">Privacy Policy</a>
+                <a href="/solutions/privacy" className="text-gray-600 hover:text-green-400 text-base transition-colors font-medium">Privacy Policy</a>
                 <span className="text-gray-500">•</span>
-                <a href="/solutions/terms" className="text-gray-300 hover:text-green-400 text-base transition-colors font-medium">Terms of Service</a>
+                <a href="/solutions/terms" className="text-gray-600 hover:text-green-400 text-base transition-colors font-medium">Terms of Service</a>
                 <span className="text-gray-500">•</span>
-                <a href="/" className="text-gray-300 hover:text-green-400 text-base transition-colors font-medium">Student Platform</a>
+                <a href="/" className="text-gray-600 hover:text-green-400 text-base transition-colors font-medium">Student Platform</a>
               </div>
               <div className="text-center">
-                <p className="text-gray-300 text-sm sm:text-base">© {new Date().getFullYear()} Loomiqe. All rights reserved.</p>
+                <p className="text-gray-600 text-sm sm:text-base">© {new Date().getFullYear()} Loomiqe. All rights reserved.</p>
                 <p className="text-gray-500 text-sm mt-1">Your Digital Intelligence Partner</p>
               </div>
             </div>

@@ -684,7 +684,7 @@ const SinglePost = () => {
               </p>
               <button
                 onClick={() => navigate('/community')}
-                className="bg-blue-600 hover:bg-blue-700 text-gray-900 px-4 xs:px-5 sm:px-6 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold transition-colors text-sm xs:text-base min-h-[44px]"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 xs:px-5 sm:px-6 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold transition-colors text-sm xs:text-base min-h-[44px]"
               >
                 Back to Home
               </button>
@@ -844,7 +844,7 @@ const SinglePost = () => {
                   <button
                     onClick={savePostEdit}
                     disabled={savingEdit || !editContent.content?.trim()}
-                    className="flex-1 xs:flex-none bg-blue-600 hover:bg-blue-700 text-gray-900 px-4 xs:px-6 py-2 xs:py-2.5 rounded-lg xs:rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm xs:text-base min-h-[44px]"
+                    className="flex-1 xs:flex-none bg-blue-600 hover:bg-blue-700 text-white px-4 xs:px-6 py-2 xs:py-2.5 rounded-lg xs:rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm xs:text-base min-h-[44px]"
                   >
                     {savingEdit ? 'Saving...' : 'Save Changes'}
                   </button>
@@ -980,7 +980,7 @@ const SinglePost = () => {
                       <button
                         onClick={submitReply}
                         disabled={submittingReply || !replyText.trim()}
-                        className="flex-1 xs:flex-none bg-blue-600 hover:bg-blue-700 text-gray-900 px-4 xs:px-6 py-2 xs:py-2.5 rounded-lg xs:rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm xs:text-base min-h-[44px]"
+                        className="flex-1 xs:flex-none bg-blue-600 hover:bg-blue-700 text-white px-4 xs:px-6 py-2 xs:py-2.5 rounded-lg xs:rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm xs:text-base min-h-[44px]"
                       >
                         {submittingReply ? 'Posting...' : 'Post Reply'}
                       </button>
@@ -1106,7 +1106,7 @@ const SinglePost = () => {
                               <button
                                 onClick={() => saveReplyEdit(reply.id)}
                                 disabled={savingReplyEdit || !editReplyContent.trim()}
-                                className="flex-1 xs:flex-none bg-blue-600 hover:bg-blue-700 text-gray-900 px-3 xs:px-4 py-1.5 xs:py-2 rounded-lg xs:rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-xs xs:text-sm min-h-[44px]"
+                                className="flex-1 xs:flex-none bg-blue-600 hover:bg-blue-700 text-white px-3 xs:px-4 py-1.5 xs:py-2 rounded-lg xs:rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-xs xs:text-sm min-h-[44px]"
                               >
                                 {savingReplyEdit ? 'Saving...' : 'Save'}
                               </button>

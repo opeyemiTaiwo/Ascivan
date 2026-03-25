@@ -441,7 +441,7 @@ const AdminDashboard = () => {
                   Dashboard
                 </span>
               </h1>
-              <p className="text-lg text-gray-300 mb-8">Simplified Project Management</p>
+              <p className="text-lg text-gray-600 mb-8">Simplified Project Management</p>
             </div>
           </section>
 
@@ -500,10 +500,10 @@ const AdminDashboard = () => {
               
               <div className="mb-6 p-4 sm:p-6 bg-orange-500/10 border-2 border-orange-500/30 rounded-xl">
                 <h4 className="text-orange-500 font-bold mb-2 text-base sm:text-lg">📋 Project Review Guidelines</h4>
-                <p className="text-gray-300 text-sm sm:text-base mb-2">
+                <p className="text-gray-600 text-sm sm:text-base mb-2">
                   Please verify the following before approving:
                 </p>
-                <ul className="text-gray-300 text-sm sm:text-base space-y-1 ml-4">
+                <ul className="text-gray-600 text-sm sm:text-base space-y-1 ml-4">
                   <li>✓ GitHub repository is public and accessible</li>
                   <li>✓ Loomiqe is added as collaborator</li>
                   <li>✓ All team member names are visible in the project</li>
@@ -515,13 +515,13 @@ const AdminDashboard = () => {
               {loading ? (
                 <div className="text-center py-12">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto mb-4"></div>
-                  <p className="text-gray-300 text-sm sm:text-base">Loading project reviews...</p>
+                  <p className="text-gray-600 text-sm sm:text-base">Loading project reviews...</p>
                 </div>
               ) : pendingCompletions.length === 0 ? (
                 <div className="text-center py-12 bg-gray-900 rounded-2xl border-2 border-green-500/30">
                   <div className="text-5xl sm:text-6xl mb-4">🎉</div>
                   <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">All caught up!</h3>
-                  <p className="text-gray-300 text-sm sm:text-base">No project reviews pending.</p>
+                  <p className="text-gray-600 text-sm sm:text-base">No project reviews pending.</p>
                 </div>
               ) : (
                 <div className="space-y-8">
@@ -698,11 +698,11 @@ const AdminDashboard = () => {
                         
                         {completion.projectReview?.projectSummary && (
                           <div className="p-6 bg-gray-800 border-2 border-gray-700 rounded-xl">
-                            <h5 className="text-gray-300 font-bold text-lg mb-4 flex items-center">
+                            <h5 className="text-gray-600 font-bold text-lg mb-4 flex items-center">
                               📝 Project Summary
                             </h5>
                             <div className="bg-gray-900 border-2 border-gray-700 rounded-lg p-4">
-                              <p className="text-gray-200 leading-relaxed text-sm sm:text-base">
+                              <p className="text-gray-700 leading-relaxed text-sm sm:text-base">
                                 {completion.projectReview.projectSummary}
                               </p>
                             </div>
@@ -715,7 +715,7 @@ const AdminDashboard = () => {
                               💻 Technologies Used
                             </h5>
                             <div className="bg-gray-900 border-2 border-green-500/30 rounded-lg p-4">
-                              <p className="text-green-100 leading-relaxed text-sm sm:text-base">
+                              <p className="text-green-600 leading-relaxed text-sm sm:text-base">
                                 {completion.projectReview.technologiesUsed}
                               </p>
                             </div>
@@ -728,7 +728,7 @@ const AdminDashboard = () => {
                               ⭐ Key Features
                             </h5>
                             <div className="bg-gray-900 border-2 border-orange-500/30 rounded-lg p-4">
-                              <p className="text-orange-100 leading-relaxed text-sm sm:text-base">
+                              <p className="text-gray-500 leading-relaxed text-sm sm:text-base">
                                 {completion.projectReview.keyFeatures}
                               </p>
                             </div>
@@ -772,7 +772,7 @@ const AdminDashboard = () => {
                 
                 <div className="mb-6 p-4 sm:p-6 bg-orange-500/10 border-2 border-orange-500/30 rounded-xl">
                   <h4 className="text-orange-500 font-bold mb-2 text-base sm:text-lg">🗑️ Delete Projects</h4>
-                  <p className="text-gray-300 text-sm sm:text-base">
+                  <p className="text-gray-600 text-sm sm:text-base">
                     Delete any project and its associated group permanently. This action cannot be undone.
                   </p>
                 </div>
@@ -781,7 +781,7 @@ const AdminDashboard = () => {
                   <div className="text-center py-12 bg-gray-900 rounded-2xl border-2 border-green-500/30">
                     <div className="text-5xl sm:text-6xl mb-4">📁</div>
                     <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">No projects found</h3>
-                    <p className="text-gray-300 text-sm sm:text-base">No projects exist in the system.</p>
+                    <p className="text-gray-600 text-sm sm:text-base">No projects exist in the system.</p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -837,7 +837,7 @@ const AdminDashboard = () => {
                               </div>
                             </div>
                             
-                            <div className="mt-2 p-2 bg-gray-800 border border-gray-700 rounded text-xs text-gray-300">
+                            <div className="mt-2 p-2 bg-gray-800 border border-gray-700 rounded text-xs text-gray-600">
                               {project.projectDescription?.length > 100 ? 
                                 `${project.projectDescription.substring(0, 100)}...` : 
                                 project.projectDescription || 'No description'}

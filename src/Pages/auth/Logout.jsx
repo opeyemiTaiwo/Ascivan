@@ -132,7 +132,7 @@ const Logout = () => {
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-300 font-medium text-xs xs:text-sm sm:text-base" style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
+                <p className="text-gray-600 font-medium text-xs xs:text-sm sm:text-base" style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
                   Securely signing you out...
                 </p>
                 <div className="mt-2 xs:mt-3 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-full h-1.5 xs:h-2 overflow-hidden">

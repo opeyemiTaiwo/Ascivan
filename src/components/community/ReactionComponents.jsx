@@ -230,7 +230,7 @@ export const ReactionsModal = ({ isOpen, onClose, postId, reactions, reactionCou
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <span className="text-black font-bold text-xs xs:text-sm">
+                      <span className="text-gray-900 font-bold text-xs xs:text-sm">
                         {user.firstName && user.lastName 
                           ? `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase()
                           : user.initials || user.displayName?.charAt(0)?.toUpperCase() || 'U'

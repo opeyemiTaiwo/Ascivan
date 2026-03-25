@@ -148,7 +148,7 @@ const SubmitApplication = () => {
                 </span>
               </h1>
 
-              <p className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 leading-relaxed font-light mb-6 xs:mb-7 sm:mb-8 md:mb-10 lg:mb-12 px-4" 
+              <p className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 leading-relaxed font-light mb-6 xs:mb-7 sm:mb-8 md:mb-10 lg:mb-12 px-4" 
                  style={{
                    textShadow: '1px 1px 3px rgba(0,0,0,0.8)',
                    fontFamily: '"Inter", sans-serif'
@@ -173,7 +173,7 @@ const SubmitApplication = () => {
                     <div className="text-green-400 text-xl xs:text-2xl mr-3 xs:mr-4 flex-shrink-0">✓</div>
                     <div className="flex-1">
                       <h3 className="text-green-400 font-bold text-base xs:text-lg mb-1 xs:mb-2">Application Submitted Successfully</h3>
-                      <p className="text-gray-200 text-xs xs:text-sm sm:text-base">Thank you for your application. Our team will review it and get back to you within 3-5 business days.</p>
+                      <p className="text-gray-700 text-xs xs:text-sm sm:text-base">Thank you for your application. Our team will review it and get back to you within 3-5 business days.</p>
                     </div>
                   </div>
                 </div>
@@ -185,7 +185,7 @@ const SubmitApplication = () => {
                     <div className="text-orange-400 text-xl xs:text-2xl mr-3 xs:mr-4 flex-shrink-0">⚠</div>
                     <div className="flex-1">
                       <h3 className="text-orange-400 font-bold text-base xs:text-lg mb-1 xs:mb-2">Submission Failed</h3>
-                      <p className="text-gray-200 text-xs xs:text-sm sm:text-base">There was an error submitting your application. Please try again or contact support.</p>
+                      <p className="text-gray-700 text-xs xs:text-sm sm:text-base">There was an error submitting your application. Please try again or contact support.</p>
                     </div>
                   </div>
                 </div>
@@ -384,7 +384,7 @@ const SubmitApplication = () => {
                 {/* Application Guidelines */}
                 <div className="bg-green-500/10 border border-green-500/30 rounded-lg xs:rounded-xl p-4 xs:p-5 sm:p-6">
                   <h3 className="text-green-300 font-bold text-base xs:text-lg mb-3 xs:mb-4">Application Guidelines</h3>
-                  <ul className="text-gray-300 space-y-1.5 xs:space-y-2 text-xs xs:text-sm">
+                  <ul className="text-gray-600 space-y-1.5 xs:space-y-2 text-xs xs:text-sm">
                     <li>• <strong>Be authentic:</strong> Tell us your real story and motivations</li>
                     <li>• <strong>Showcase your skills:</strong> Highlight relevant experience and projects</li>
                     <li>• <strong>Community focus:</strong> We value collaborative and helpful members</li>
@@ -452,7 +452,7 @@ const SubmitApplication = () => {
                   Loomiqe
                 </span>
               </div>
-              <p className="text-gray-300 text-xs xs:text-sm sm:text-base leading-relaxed max-w-sm mx-auto sm:mx-0"
+              <p className="text-gray-600 text-xs xs:text-sm sm:text-base leading-relaxed max-w-sm mx-auto sm:mx-0"
                  style={{
                    textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
                    fontFamily: '"Inter", sans-serif'
@@ -471,25 +471,25 @@ const SubmitApplication = () => {
               </h4>
               <ul className="space-y-1.5 xs:space-y-2 sm:space-y-3">
                 <li>
-                  <Link to="/" className="text-gray-300 hover:text-green-400 transition-colors duration-300 text-xs xs:text-sm sm:text-base font-medium"
+                  <Link to="/" className="text-gray-600 hover:text-green-400 transition-colors duration-300 text-xs xs:text-sm sm:text-base font-medium"
                         style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
                     Home
                   </Link>
                 </li>
                 <li>
-                  <Link to="/projects" className="text-gray-300 hover:text-green-400 transition-colors duration-300 text-xs xs:text-sm sm:text-base font-medium"
+                  <Link to="/projects" className="text-gray-600 hover:text-green-400 transition-colors duration-300 text-xs xs:text-sm sm:text-base font-medium"
                         style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
                     Projects
                   </Link>
                 </li>
                 <li>
-                  <Link to="/community" className="text-gray-300 hover:text-green-400 transition-colors duration-300 text-xs xs:text-sm sm:text-base font-medium"
+                  <Link to="/community" className="text-gray-600 hover:text-green-400 transition-colors duration-300 text-xs xs:text-sm sm:text-base font-medium"
                         style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
                     Home
                   </Link>
                 </li>
                 <li>
-                  <Link to="/career/contact" className="text-gray-300 hover:text-green-400 transition-colors duration-300 text-xs xs:text-sm sm:text-base font-medium"
+                  <Link to="/career/contact" className="text-gray-600 hover:text-green-400 transition-colors duration-300 text-xs xs:text-sm sm:text-base font-medium"
                         style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
                     Hire Talents
                   </Link>
@@ -507,25 +507,25 @@ const SubmitApplication = () => {
               </h4>
               <ul className="space-y-1.5 xs:space-y-2 sm:space-y-3">
                 <li>
-                  <Link to="/career/support" className="text-gray-300 hover:text-green-400 transition-colors duration-300 text-xs xs:text-sm sm:text-base font-medium"
+                  <Link to="/career/support" className="text-gray-600 hover:text-green-400 transition-colors duration-300 text-xs xs:text-sm sm:text-base font-medium"
                         style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
                     Support
                   </Link>
                 </li>
                 <li>
-                  <Link to="/career/about" className="text-gray-300 hover:text-green-400 transition-colors duration-300 text-xs xs:text-sm sm:text-base font-medium"
+                  <Link to="/career/about" className="text-gray-600 hover:text-green-400 transition-colors duration-300 text-xs xs:text-sm sm:text-base font-medium"
                         style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
                     About
                   </Link>
                 </li>
                 <li>
-                  <Link to="/career/terms" className="text-gray-300 hover:text-green-400 transition-colors duration-300 text-xs xs:text-sm sm:text-base font-medium"
+                  <Link to="/career/terms" className="text-gray-600 hover:text-green-400 transition-colors duration-300 text-xs xs:text-sm sm:text-base font-medium"
                         style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
                     Terms of Service
                   </Link>
                 </li>
                 <li>
-                  <Link to="/career/privacy" className="text-gray-300 hover:text-green-400 transition-colors duration-300 text-xs xs:text-sm sm:text-base font-medium"
+                  <Link to="/career/privacy" className="text-gray-600 hover:text-green-400 transition-colors duration-300 text-xs xs:text-sm sm:text-base font-medium"
                         style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
                     Privacy Policy
                   </Link>
@@ -536,7 +536,7 @@ const SubmitApplication = () => {
 
           <div className="border-t border-white/10 pt-4 xs:pt-5 sm:pt-6 md:pt-8 text-center">
             <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 xs:space-y-4 sm:space-y-0">
-              <p className="text-gray-300 text-xs xs:text-sm sm:text-base" 
+              <p className="text-gray-600 text-xs xs:text-sm sm:text-base" 
                  style={{
                    textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
                    fontFamily: '"Inter", sans-serif'
@@ -545,7 +545,7 @@ const SubmitApplication = () => {
               </p>
 
               <div className="flex items-center">
-                <span className="text-gray-300 text-xs xs:text-sm font-medium"
+                <span className="text-gray-600 text-xs xs:text-sm font-medium"
                       style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
                   All-in-one AI-powered solution for international students
                 </span>

@@ -108,7 +108,7 @@ export const ClickableUserAvatar = ({
           }}
         />
       ) : (
-        <span className={`text-black font-bold ${textSizeClasses[size]}`}>
+        <span className={`text-gray-900 font-bold ${textSizeClasses[size]}`}>
           {getInitials()}
         </span>
       )}

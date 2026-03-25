@@ -105,7 +105,7 @@ const ProjectsListing = () => {
                 <p className="text-gray-400 text-sm mt-1">{filteredProjects.length} active {filteredProjects.length === 1 ? 'project' : 'projects'}</p>
               </div>
               <Link to="/projects/submit"
-                className="inline-flex items-center justify-center px-5 py-2.5 min-h-[44px] bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 font-bold rounded-xl text-sm transition-all shadow-lg">
+                className="inline-flex items-center justify-center px-5 py-2.5 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-all shadow-lg">
                 Post a Project
               </Link>
             </div>

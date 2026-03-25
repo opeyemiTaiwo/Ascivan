@@ -352,7 +352,7 @@ const Messages = () => {
                         </p>
                       </div>
                       {unreadCounts[conv.id] > 0 && (
-                        <span className="flex-shrink-0 bg-blue-600 text-gray-900 text-xs rounded-full min-w-[20px] h-5 px-1.5 flex items-center justify-center font-bold">
+                        <span className="flex-shrink-0 bg-blue-600 text-white text-xs rounded-full min-w-[20px] h-5 px-1.5 flex items-center justify-center font-bold">
                           {unreadCounts[conv.id] > 9 ? '9+' : unreadCounts[conv.id]}
                         </span>
                       )}
@@ -411,7 +411,7 @@ const Messages = () => {
                               <div className={`
                                 px-4 py-2.5 rounded-2xl text-sm leading-relaxed break-words overflow-hidden
                                 ${isOwn
-                                  ? 'bg-blue-600 text-gray-900 rounded-br-sm'
+                                  ? 'bg-blue-600 text-white rounded-br-sm'
                                   : 'bg-white text-gray-900 border border-gray-200 rounded-bl-sm shadow-sm'}
                               `} style={{ overflowWrap: 'anywhere' }}>
                                 {msg.text}
@@ -472,7 +472,7 @@ const Messages = () => {
                   {followedUsers.length > 0 && (
                     <button
                       onClick={() => setShowNewChat(true)}
-                      className="mt-5 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-gray-900 font-semibold rounded-xl text-sm transition-colors"
+                      className="mt-5 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-sm transition-colors"
                     >
                       Start a conversation
                     </button>

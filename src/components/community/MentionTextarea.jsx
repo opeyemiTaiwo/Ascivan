@@ -239,7 +239,7 @@ const MentionTextarea = ({
                 index === selectedSuggestionIndex ? 'bg-blue-600/20 text-orange-300' : 'text-gray-900'
               }`}
             >
-              <div className="w-7 h-7 xs:w-8 xs:h-8 rounded-full overflow-hidden bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center text-gray-900 font-bold text-xs xs:text-sm flex-shrink-0">
+              <div className="w-7 h-7 xs:w-8 xs:h-8 rounded-full overflow-hidden bg-blue-600 flex items-center justify-center text-white font-bold text-xs xs:text-sm flex-shrink-0">
                 {user.photoURL ? (
                   <img 
                     src={user.photoURL} 

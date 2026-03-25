@@ -252,7 +252,7 @@ const DirectoryAccessControl = () => {
                   }}>
                 Premium Members Directory
               </h1>
-              <p className="text-base sm:text-lg md:text-xl text-gray-200 leading-relaxed mb-6 sm:mb-8 px-4"
+              <p className="text-base sm:text-lg md:text-xl text-gray-700 leading-relaxed mb-6 sm:mb-8 px-4"
                  style={{textShadow: '1px 1px 3px rgba(0,0,0,0.8)'}}>
                 Access our curated directory of verified tech professionals with proven project experience.
               </p>
@@ -262,10 +262,10 @@ const DirectoryAccessControl = () => {
             {accessStatus === 'unauthorized' && (
               <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20 mb-6 sm:mb-8">
                 <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Login Required</h2>
-                <p className="text-gray-300 text-sm sm:text-base mb-4 sm:mb-6">Please log in to access the Members Directory.</p>
+                <p className="text-gray-600 text-sm sm:text-base mb-4 sm:mb-6">Please log in to access the Members Directory.</p>
                 <button 
                   onClick={() => window.location.href = '/login'}
-                  className="bg-gradient-to-r from-lime-500 to-green-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold hover:from-lime-600 hover:to-green-600 transition-all duration-300 text-sm sm:text-base"
+                  className="bg-blue-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold hover:from-lime-600 hover:to-green-600 transition-all duration-300 text-sm sm:text-base"
                 >
                   Login to Continue
                 </button>
@@ -279,7 +279,7 @@ const DirectoryAccessControl = () => {
                 <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20">
                   <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">📋</div>
                   <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Request Access</h3>
-                  <p className="text-gray-300 text-sm sm:text-base mb-4 sm:mb-6">
+                  <p className="text-gray-600 text-sm sm:text-base mb-4 sm:mb-6">
                     Submit a request for manual approval. Perfect for verified recruiters and hiring managers.
                   </p>
                   <div className="mb-4 sm:mb-6">
@@ -297,13 +297,13 @@ const DirectoryAccessControl = () => {
                 {/* Purchase Monthly Access */}
                 <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20 relative">
                   <div className="absolute -top-2 sm:-top-3 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-gradient-to-r from-lime-500 to-green-500 text-black px-3 sm:px-4 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-bold">
+                    <span className="bg-blue-600 text-white px-3 sm:px-4 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-bold">
                       POPULAR
                     </span>
                   </div>
                   <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">💳</div>
                   <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Monthly Access</h3>
-                  <p className="text-gray-300 text-sm sm:text-base mb-4 sm:mb-6">
+                  <p className="text-gray-600 text-sm sm:text-base mb-4 sm:mb-6">
                     Get instant access to the complete directory with contact information and advanced filtering.
                   </p>
                   <div className="mb-4 sm:mb-6">
@@ -312,7 +312,7 @@ const DirectoryAccessControl = () => {
                   </div>
                   <button 
                     onClick={initializePayment}
-                    className="w-full bg-gradient-to-r from-lime-500 to-green-500 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-xl font-bold hover:from-lime-600 hover:to-green-600 transition-all duration-300 text-sm sm:text-base"
+                    className="w-full bg-blue-600 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-xl font-bold hover:from-lime-600 hover:to-green-600 transition-all duration-300 text-sm sm:text-base"
                   >
                     Get Instant Access
                   </button>
@@ -324,7 +324,7 @@ const DirectoryAccessControl = () => {
               <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20">
                 <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">⏳</div>
                 <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Request Under Review</h2>
-                <p className="text-gray-300 text-sm sm:text-base mb-4 sm:mb-6">
+                <p className="text-gray-600 text-sm sm:text-base mb-4 sm:mb-6">
                   Your access request is being reviewed by our team. You'll receive an email notification once approved.
                 </p>
                 <div className="bg-yellow-500/20 border border-yellow-500/30 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6">
@@ -334,7 +334,7 @@ const DirectoryAccessControl = () => {
                 </div>
                 <button 
                   onClick={initializePayment}
-                  className="bg-gradient-to-r from-lime-500 to-green-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold hover:from-lime-600 hover:to-green-600 transition-all duration-300 text-sm sm:text-base"
+                  className="bg-blue-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold hover:from-lime-600 hover:to-green-600 transition-all duration-300 text-sm sm:text-base"
                 >
                   <span className="hidden sm:inline">Get Instant Access - $29.99/month</span>
                   <span className="sm:hidden">Get Access - $29.99/mo</span>
@@ -346,7 +346,7 @@ const DirectoryAccessControl = () => {
               <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20">
                 <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">🔄</div>
                 <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Access Expired</h2>
-                <p className="text-gray-300 text-sm sm:text-base mb-4 sm:mb-6">
+                <p className="text-gray-600 text-sm sm:text-base mb-4 sm:mb-6">
                   Your monthly access has expired. Renew now to continue accessing the Members Directory.
                 </p>
                 <div className="bg-red-500/20 border border-red-500/30 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6">
@@ -356,7 +356,7 @@ const DirectoryAccessControl = () => {
                 </div>
                 <button 
                   onClick={initializePayment}
-                  className="bg-gradient-to-r from-lime-500 to-green-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold hover:from-lime-600 hover:to-green-600 transition-all duration-300 text-sm sm:text-base"
+                  className="bg-blue-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold hover:from-lime-600 hover:to-green-600 transition-all duration-300 text-sm sm:text-base"
                 >
                   <span className="hidden sm:inline">Renew Access - $29.99/month</span>
                   <span className="sm:hidden">Renew - $29.99/mo</span>
@@ -396,7 +396,7 @@ const DirectoryAccessControl = () => {
             <div className="text-center">
               <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">💳</div>
               <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Complete Payment</h3>
-              <p className="text-gray-300 text-sm sm:text-base mb-4 sm:mb-6">
+              <p className="text-gray-600 text-sm sm:text-base mb-4 sm:mb-6">
                 Monthly access to the Members Directory
               </p>
               <div className="bg-white/10 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6">
@@ -411,7 +411,7 @@ const DirectoryAccessControl = () => {
                 </p>
                 <button 
                   onClick={completePayment}
-                  className="w-full bg-gradient-to-r from-lime-500 to-green-500 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-bold hover:from-lime-600 hover:to-green-600 transition-all duration-300 text-sm sm:text-base"
+                  className="w-full bg-blue-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-bold hover:from-lime-600 hover:to-green-600 transition-all duration-300 text-sm sm:text-base"
                 >
                   Complete Payment (Demo)
                 </button>

@@ -402,7 +402,7 @@ const MembersDirectory = () => {
                     />
                   ) : (
                     <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-blue-500 flex items-center justify-center ring-4 ring-blue-400/50">
-                      <span className="text-2xl text-black font-bold">
+                      <span className="text-2xl text-gray-900 font-bold">
                         {selectedMember.name?.charAt(0)?.toUpperCase() || '?'}
                       </span>
                     </div>

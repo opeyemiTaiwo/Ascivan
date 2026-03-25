@@ -464,7 +464,7 @@ const SubmitPost = () => {
                 className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg"
               />
               <div>
-                <h1 className="text-base sm:text-xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+                <h1 className="text-base sm:text-xl font-bold text-blue-600 font-bold">
                   Create Post
                 </h1>
                 <p className="text-[10px] sm:text-xs text-gray-400 hidden xs:block">Share with the community</p>
@@ -495,7 +495,7 @@ const SubmitPost = () => {
               
               {/* Author Info - Responsive */}
               <div className="flex items-center space-x-2 sm:space-x-3 mb-4 sm:mb-6">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center text-gray-900 font-bold flex-shrink-0">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-blue-600 flex items-center justify-center text-white font-bold flex-shrink-0">
                   {currentUser.photoURL ? (
                     <img 
                       src={currentUser.photoURL} 
@@ -716,7 +716,7 @@ const SubmitPost = () => {
                   <button
                     type="submit"
                     disabled={submitting || uploading || !formData.content.trim()}
-                    className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                    className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                   >
                     {submitting ? (
                       <span className="flex items-center justify-center">

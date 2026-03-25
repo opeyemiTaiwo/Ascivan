@@ -863,7 +863,7 @@ const FollowersFollowing = () => {
                   />
                 ) : (
                   <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-lime-500 to-blue-500 flex items-center justify-center ring-2 xs:ring-3 sm:ring-4 ring-blue-400/50">
-                    <span className="text-base xs:text-lg sm:text-xl md:text-2xl text-black font-bold">
+                    <span className="text-base xs:text-lg sm:text-xl md:text-2xl text-gray-900 font-bold">
                       {member.name?.charAt(0)?.toUpperCase() || '?'}
                     </span>
                   </div>
@@ -1257,7 +1257,7 @@ const FollowersFollowing = () => {
 
                     <button
                       onClick={clearFilters}
-                      className="bg-gradient-to-r from-red-500 to-red-600 text-gray-900 px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold hover:from-red-600 hover:to-red-700 active:from-red-700 active:to-red-800 transition-all duration-300 text-xs xs:text-sm sm:text-base min-h-[44px]"
+                      className="bg-red-500 text-white px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold hover:from-red-600 hover:to-red-700 active:from-red-700 active:to-red-800 transition-all duration-300 text-xs xs:text-sm sm:text-base min-h-[44px]"
                     >
                       Clear All
                     </button>
@@ -1417,7 +1417,7 @@ const FollowersFollowing = () => {
                                               onClick={() => setCurrentPage(pageNum)}
                                               className={`w-7 h-7 xs:w-8 xs:h-8 sm:w-10 sm:h-10 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 active:scale-95 text-xs xs:text-sm ${
                                                 currentPage === pageNum
-                                                  ? 'bg-gradient-to-r from-lime-500 to-blue-500 text-gray-900'
+                                                  ? 'bg-blue-600 text-white'
                                                   : 'bg-gray-100 text-gray-600 hover:bg-gray-100 hover:text-gray-900 active:bg-white/30'
                                               }`}
                                             >

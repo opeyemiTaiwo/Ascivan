@@ -229,7 +229,7 @@ const Support = () => {
                   <button
                     type="submit"
                     disabled={sending}
-                    className="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 font-bold rounded-xl transition-all disabled:opacity-50 text-sm"
+                    className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all disabled:opacity-50 text-sm"
                   >
                     {sending ? (
                       <span className="flex items-center gap-2">

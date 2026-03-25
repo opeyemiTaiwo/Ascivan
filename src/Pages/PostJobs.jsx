@@ -230,7 +230,7 @@ const PostJobs = () => {
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-2 sm:mb-3">
                 Post a <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Job</span>
               </h1>
-              <p className="text-gray-300 text-base">Reach international students looking for work opportunities</p>
+              <p className="text-gray-600 text-base">Reach international students looking for work opportunities</p>
             </section>
 
             {/* Form */}

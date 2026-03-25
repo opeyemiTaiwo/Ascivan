@@ -365,7 +365,7 @@ const ProjectCompletion = () => {
                 </div>
 
                 <button onClick={() => setStep(2)}
-                  className="w-full py-3.5 min-h-[48px] bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 font-black rounded-xl text-sm transition-all shadow-lg">
+                  className="w-full py-3.5 min-h-[48px] bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl text-sm transition-all shadow-lg">
                   {members.length > 0 ? 'Proceed to Evaluation' : 'Complete Solo Project'}
                 </button>
               </div>
@@ -378,7 +378,7 @@ const ProjectCompletion = () => {
                   <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6 text-center">
                     <p className="text-gray-600 text-sm mb-4">Solo project - no members to evaluate.</p>
                     <button onClick={handleComplete} disabled={submitting}
-                      className="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 font-bold rounded-xl text-sm transition-all disabled:opacity-50">
+                      className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-all disabled:opacity-50">
                       {submitting ? 'Completing...' : 'Complete Project'}
                     </button>
                   </div>
@@ -451,7 +451,7 @@ const ProjectCompletion = () => {
                         Back
                       </button>
                       <button onClick={handleComplete} disabled={submitting}
-                        className="flex-1 py-3.5 min-h-[48px] bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 font-black rounded-xl text-sm transition-all shadow-lg disabled:opacity-50">
+                        className="flex-1 py-3.5 min-h-[48px] bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl text-sm transition-all shadow-lg disabled:opacity-50">
                         {submitting ? 'Completing Project...' : 'Complete Project and Award Badges'}
                       </button>
                     </div>

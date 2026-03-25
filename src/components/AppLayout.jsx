@@ -39,9 +39,6 @@ const AppLayout = ({ children }) => {
     { path: '/community', label: 'Home' },
     { path: '/dashboard', label: 'Dashboard' },
     { path: '/projects', label: 'Projects' },
-    { path: '/talent-board', label: 'Talent Board' },
-    { path: '/project-vault', label: 'Project Vault' },
-    { path: '/messages', label: 'Messages', badge: unreadMessages },
     { path: '/support', label: 'Support' },
     { path: '/settings', label: 'Settings' },
   ];
@@ -66,12 +63,12 @@ const AppLayout = ({ children }) => {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
+        <nav className="flex-1 py-6 px-3 space-y-3 overflow-y-auto">
           {navItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
-              className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+              className={`flex items-center justify-between px-3 py-3 rounded-lg text-sm font-medium transition-all ${
                 isActive(item.path)
                   ? 'bg-blue-600 text-white'
                   : 'text-gray-400 hover:text-white hover:bg-white/5'
@@ -116,44 +113,70 @@ const AppLayout = ({ children }) => {
       {/* Main content */}
       <div className="flex-1 min-w-0 flex flex-col">
         {/* Top bar (mobile hamburger + notifications) */}
-        <header className="h-14 flex items-center justify-between px-4 border-b border-gray-200 bg-white lg:px-6">
+        <header className="h-16 flex items-center justify-between px-4 border-b border-gray-200 bg-white lg:px-6">
           <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 rounded-lg hover:bg-gray-100 min-h-[44px] min-w-[44px] flex items-center justify-center">
             <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
           <div className="flex-1 lg:block" />
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4 sm:gap-6">
             {/* Account */}
-            <Link to="/account" className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors" title="Account">
-              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+            <Link to="/account" className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors ${location.pathname === '/account' ? 'text-blue-600' : 'text-gray-500'}`}>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
               </svg>
+              <span className="text-[10px] font-medium leading-none">Account</span>
             </Link>
-            <Link to="/members-directory" className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors" title="Members Directory">
-              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            {/* Projects */}
+            <Link to="/projects" className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors ${location.pathname.startsWith('/projects') ? 'text-blue-600' : 'text-gray-500'}`}>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
               </svg>
+              <span className="text-[10px] font-medium leading-none">Projects</span>
             </Link>
-            <Link to="/notifications" className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors">
-              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            {/* Members */}
+            <Link to="/members-directory" className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors ${location.pathname.startsWith('/members') ? 'text-blue-600' : 'text-gray-500'}`}>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
+              <span className="text-[10px] font-medium leading-none">Network</span>
+            </Link>
+            {/* Messages */}
+            <Link to="/messages" className={`relative flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors ${location.pathname === '/messages' ? 'text-blue-600' : 'text-gray-500'}`}>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+              <span className="text-[10px] font-medium leading-none">Messaging</span>
+              {unreadMessages > 0 && (
+                <span className="absolute -top-0.5 right-0 bg-red-500 text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold leading-none">
+                  {unreadMessages > 9 ? '9+' : unreadMessages}
+                </span>
+              )}
+            </Link>
+            {/* Notifications */}
+            <Link to="/notifications" className={`relative flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors ${location.pathname === '/notifications' ? 'text-blue-600' : 'text-gray-500'}`}>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              </svg>
+              <span className="text-[10px] font-medium leading-none">Notifications</span>
               {unreadNotifications > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold leading-none text-[10px]">
+                <span className="absolute -top-0.5 right-0 bg-red-500 text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold leading-none">
                   {unreadNotifications > 9 ? '9+' : unreadNotifications}
                 </span>
               )}
             </Link>
+            {/* Me / Profile */}
             {currentUser && (
-              <Link to={`/profile/${currentUser.email}`} className="lg:hidden">
+              <Link to={`/profile/${currentUser.email}`} className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors ${location.pathname.startsWith('/profile') ? 'text-blue-600' : 'text-gray-500'}`}>
                 {currentUser.photoURL ? (
-                  <img src={currentUser.photoURL} alt="" className="w-8 h-8 rounded-full object-cover border-2 border-blue-600" />
+                  <img src={currentUser.photoURL} alt="" className="w-5 h-5 rounded-full object-cover" />
                 ) : (
-                  <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-bold">
+                  <div className="w-5 h-5 rounded-full bg-gray-400 flex items-center justify-center text-white text-[8px] font-bold">
                     {currentUser.displayName?.[0] || 'U'}
                   </div>
                 )}
+                <span className="text-[10px] font-medium leading-none">Me</span>
               </Link>
             )}
           </div>

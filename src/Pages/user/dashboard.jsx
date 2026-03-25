@@ -21,6 +21,7 @@ const DashboardOverview = () => {
   const [profileData, setProfileData] = useState(null);
   const [stats, setStats] = useState({ projectsCompleted: 0, ongoingProjects: 0, badgesEarned: 0 });
   const [ongoingProjects, setOngoingProjects] = useState([]);
+  const [completedProjects, setCompletedProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [membershipPlan, setMembershipPlan] = useState('Free');
   const [earnings, setEarnings] = useState({ pending: 0, earned: 0, total: 0 });
@@ -63,6 +64,8 @@ const DashboardOverview = () => {
             where('status', '==', 'completed')
           );
           const completedSnap = await getDocs(completedQ);
+          const completedList = completedSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+          setCompletedProjects(completedList.slice(0, 5));
           setStats(prev => ({ ...prev, projectsCompleted: completedSnap.size }));
 
           // Calculate earned from completed paid projects
@@ -189,6 +192,29 @@ const DashboardOverview = () => {
                         <p className="text-gray-400 text-xs mt-0.5">{project.category || 'General'}</p>
                       </div>
                       <span className="text-xs font-medium px-2 py-1 bg-green-50 text-green-700 rounded-md flex-shrink-0 ml-3">Active</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Completed Projects */}
+            <div className="bg-white border border-gray-200 rounded-xl p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-bold text-gray-900">Completed Projects</h3>
+                <Link to="/project-vault" className="text-blue-600 text-sm font-medium hover:underline">View All</Link>
+              </div>
+              {completedProjects.length === 0 ? (
+                <p className="text-gray-400 text-sm">No completed projects yet. Finish a project to see it here.</p>
+              ) : (
+                <div className="space-y-3">
+                  {completedProjects.map(project => (
+                    <div key={project.id} className="flex items-center justify-between p-3 border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => navigate(`/projects/${project.id}`)}>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-gray-900 text-sm font-medium truncate">{project.title || 'Untitled Project'}</p>
+                        <p className="text-gray-400 text-xs mt-0.5">{project.category || 'General'}</p>
+                      </div>
+                      <span className="text-xs font-medium px-2 py-1 bg-blue-50 text-blue-700 rounded-md flex-shrink-0 ml-3">Completed</span>
                     </div>
                   ))}
                 </div>

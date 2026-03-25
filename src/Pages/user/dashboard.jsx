@@ -224,24 +224,53 @@ const DashboardOverview = () => {
 
           {/* Right column */}
           <div className="space-y-6">
-            {/* Current Badge Level */}
+            {/* Your Badges */}
             <div className="bg-white border border-gray-200 rounded-xl p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-3">Your Badges</h3>
-              {profileData?.badges && profileData.badges.length > 0 ? (
-                <div className="grid grid-cols-3 gap-2">
-                  {profileData.badges.map((badge, i) => {
-                    const bd = badgeData.find(b => b.id === badge.id || b.title === badge.title);
-                    return (
-                      <div key={i} className="text-center p-2">
-                        <img src={bd?.image || '/Images/TechDev.png'} alt={badge.title} className="w-10 h-10 mx-auto mb-1" />
-                        <p className="text-xs text-gray-600 font-medium">{badge.level || 'Novice'}</p>
+              <h3 className="text-lg font-bold text-gray-900 mb-1">Your Badges</h3>
+              <p className="text-gray-500 text-xs mb-4">Earn badges by completing projects in each track.</p>
+
+              {/* Badge Levels */}
+              <div className="flex items-center gap-2 mb-4 p-2.5 bg-gray-50 rounded-lg">
+                <p className="text-gray-500 text-[10px] font-medium">Levels:</p>
+                {['Novice', 'Associate', 'Advanced', 'Expert'].map((level, i) => (
+                  <span key={level} className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${
+                    i === 0 ? 'bg-blue-50 text-blue-600' :
+                    i === 1 ? 'bg-blue-100 text-blue-700' :
+                    i === 2 ? 'bg-orange-50 text-orange-600' :
+                    'bg-orange-100 text-orange-700'
+                  }`}>
+                    {level}
+                  </span>
+                ))}
+              </div>
+
+              {/* All 6 Badges */}
+              <div className="space-y-3">
+                {badgeData.map((badge) => {
+                  const earned = profileData?.badges?.find(b => b.id === badge.id || b.title === badge.title);
+                  return (
+                    <div key={badge.id} className={`flex items-center gap-3 p-3 rounded-lg border ${earned ? 'border-blue-200 bg-blue-50/30' : 'border-gray-100 bg-gray-50/50'}`}>
+                      <img src={badge.image} alt={badge.title} className={`w-10 h-10 flex-shrink-0 ${earned ? '' : 'opacity-40 grayscale'}`} />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className={`text-sm font-semibold ${earned ? 'text-gray-900' : 'text-gray-400'}`}>{badge.title}</p>
+                          {earned && (
+                            <span className="text-[10px] font-medium px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded-full">{earned.level || 'Novice'}</span>
+                          )}
+                        </div>
+                        <p className={`text-xs ${earned ? 'text-gray-600' : 'text-gray-400'}`}>{badge.label}</p>
                       </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <p className="text-gray-400 text-sm">Complete projects to earn your first badge.</p>
-              )}
+                      {earned ? (
+                        <svg className="w-5 h-5 text-blue-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                      ) : (
+                        <span className="text-gray-300 text-xs flex-shrink-0">Locked</span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Plan */}

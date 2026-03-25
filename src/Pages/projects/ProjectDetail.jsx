@@ -189,7 +189,7 @@ const ProjectDetail = () => {
 
   // Application form state
   const [showApplyForm, setShowApplyForm] = useState(false);
-  const [applyForm, setApplyForm] = useState({ role: '', skills: '', message: '' });
+  const [applyForm, setApplyForm] = useState({ role: '', skills: '', message: '', portfolioUrl: '', linkedinUrl: '' });
   const [submittingApp, setSubmittingApp] = useState(false);
   const [paidLimit, setPaidLimit] = useState({ allowed: true, remaining: 3, used: 0, limit: 3, plan: 'Free' });
 
@@ -247,6 +247,8 @@ const ProjectDetail = () => {
         role: applyForm.role,
         skills: applyForm.skills.trim(),
         message: applyForm.message.trim() || null,
+        portfolioUrl: applyForm.portfolioUrl.trim() || null,
+        linkedinUrl: applyForm.linkedinUrl.trim() || null,
         status: 'submitted',
         createdAt: serverTimestamp(),
       });
@@ -443,6 +445,13 @@ const ProjectDetail = () => {
                     <p className="text-blue-600 font-bold text-sm">You have already applied to this project</p>
                     <p className="text-gray-500 text-xs mt-1">The project owner will review your application</p>
                   </div>
+                ) : isMember ? (
+                  <div className="text-center py-4">
+                    <p className="text-blue-600 font-bold text-sm mb-2">You are a member of this project</p>
+                    <button onClick={() => navigate(`/projects/${projectId}/workspace`)} className="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-5 py-2 rounded-lg transition-all">
+                      Open Workspace
+                    </button>
+                  </div>
                 ) : !showApplyForm ? (
                   <div className="text-center">
                     <button onClick={() => setShowApplyForm(true)}
@@ -472,6 +481,18 @@ const ProjectDetail = () => {
                       <label className="block text-blue-600 font-semibold mb-2 text-sm">Message to Project Owner</label>
                       <textarea value={applyForm.message} onChange={e => setApplyForm(p => ({ ...p, message: e.target.value }))}
                         className={inputClass + " resize-none"} rows="3" placeholder="Why are you interested in this project?" />
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-blue-600 font-semibold mb-2 text-sm">Portfolio / Resume URL</label>
+                        <input type="url" value={applyForm.portfolioUrl} onChange={e => setApplyForm(p => ({ ...p, portfolioUrl: e.target.value }))}
+                          className={inputClass} placeholder="https://your-portfolio.com or resume link" />
+                      </div>
+                      <div>
+                        <label className="block text-blue-600 font-semibold mb-2 text-sm">LinkedIn URL</label>
+                        <input type="url" value={applyForm.linkedinUrl} onChange={e => setApplyForm(p => ({ ...p, linkedinUrl: e.target.value }))}
+                          className={inputClass} placeholder="https://linkedin.com/in/..." />
+                      </div>
                     </div>
                     <div className="flex gap-3">
                       <button onClick={() => setShowApplyForm(false)}
@@ -537,7 +558,7 @@ const ProjectDetail = () => {
 
           </div>
         </main>
-        <style jsx>{`select option { background-color: #111; color: white; }`}</style>
+        <style jsx>{`select option { background-color: white; color: #111; }`}</style>
       </div>
     </>
   );

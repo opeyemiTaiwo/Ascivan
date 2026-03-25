@@ -39,6 +39,7 @@ const AppLayout = ({ children }) => {
     { path: '/community', label: 'Home' },
     { path: '/dashboard', label: 'Dashboard' },
     { path: '/projects', label: 'Projects' },
+    { path: '/my-workspaces', label: 'Workspace' },
     { path: '/support', label: 'Support' },
     { path: '/settings', label: 'Settings' },
   ];

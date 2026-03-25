@@ -74,7 +74,7 @@ const ProjectOwnerDashboard = () => {
       // Add member to project members array
       await updateDoc(doc(db, 'projects', project.id), { 
         applicationCount: increment(0),
-        members: arrayUnion(app.applicantId || app.applicantEmail),
+        members: arrayUnion(app.applicantUid || app.applicantId || app.applicantEmail),
       });
       toast.success(`${app.applicantName} approved!`);
 
@@ -245,8 +245,12 @@ const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove }) =>
             {approvedApps.map(app => (
               <div key={app.id} className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg p-3">
                 <div>
-                  <p className="text-gray-900 text-sm font-semibold">{app.applicantName}</p>
-                  <p className="text-gray-500 text-xs">{app.role} -- {app.applicantEmail}</p>
+                  <Link to={`/profile/${encodeURIComponent(app.applicantEmail)}`} className="text-gray-900 text-sm font-semibold hover:text-blue-600 hover:underline">{app.applicantName}</Link>
+                  <p className="text-gray-500 text-xs">{app.role}</p>
+                  <div className="flex items-center gap-3 mt-1">
+                    {app.portfolioUrl && <a href={app.portfolioUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-[10px] hover:underline">Portfolio</a>}
+                    {app.linkedinUrl && <a href={app.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-[10px] hover:underline">LinkedIn</a>}
+                  </div>
                 </div>
                 {!isCompleted && (
                   <button onClick={() => onRemove(app)} className="text-red-400 hover:text-red-300 text-xs font-semibold transition-colors px-2 py-1">
@@ -284,11 +288,14 @@ const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove }) =>
             <div key={app.id} className="bg-gray-50 border border-gray-200 rounded-xl p-4">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                 <div>
-                  <p className="text-gray-900 font-semibold text-sm">{app.applicantName}</p>
-                  <p className="text-gray-400 text-xs">{app.applicantEmail}</p>
+                  <Link to={`/profile/${encodeURIComponent(app.applicantEmail)}`} className="text-gray-900 font-semibold text-sm hover:text-blue-600 hover:underline">{app.applicantName}</Link>
                   <p className="text-gray-400 text-xs mt-1">Role: <span className="text-gray-900">{app.role}</span></p>
                   <p className="text-gray-400 text-xs">Skills: <span className="text-gray-900">{app.skills}</span></p>
                   {app.message && <p className="text-gray-600 text-xs mt-2 italic">"{app.message}"</p>}
+                  <div className="flex items-center gap-3 mt-2">
+                    {app.portfolioUrl && <a href={app.portfolioUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-xs hover:underline">Portfolio / Resume</a>}
+                    {app.linkedinUrl && <a href={app.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-xs hover:underline">LinkedIn</a>}
+                  </div>
                 </div>
                 <div className="flex gap-2 flex-shrink-0">
                   <button onClick={() => onApprove(app)} className="px-3 py-1.5 min-h-[36px] bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition-all">

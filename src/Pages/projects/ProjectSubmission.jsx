@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../../components/Navbar';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
 import usePosterName from '../../hooks/usePosterName';
@@ -202,6 +202,17 @@ const ProjectSubmission = () => {
 
     try {
       const isPaid = formData.pricingType === 'paid';
+
+      // Check for duplicate project name
+      try {
+        const dupQ = query(collection(db, 'projects'), where('projectTitle', '==', formData.projectTitle.trim()));
+        const dupSnap = await getDocs(dupQ);
+        if (!dupSnap.empty) {
+          toast.error('A project with this name already exists. Please choose a different title.');
+          setIsSubmitting(false);
+          return;
+        }
+      } catch (e) { console.log('Duplicate check skipped:', e.message); }
 
       const validRoles = teamRoles.filter(r => (r.role === '__other__' ? r.customRole?.trim() : r.role.trim())).map(r => ({
         role: r.role === '__other__' ? r.customRole.trim() : r.role.trim(),

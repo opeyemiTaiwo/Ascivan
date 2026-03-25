@@ -36,6 +36,7 @@ const ProjectOwnerDashboard = lazy(() => import('./Pages/projects/ProjectOwnerDa
 const ProjectCompletion = lazy(() => import('./Pages/projects/ProjectCompletion'));
 const MyProjects = lazy(() => import('./Pages/projects/MyProjects'));
 const ProjectWorkspace = lazy(() => import('./Pages/projects/ProjectWorkspace'));
+const MyWorkspaces = lazy(() => import('./Pages/projects/MyWorkspaces'));
 const TalentBoard = lazy(() => import('./Pages/TalentBoard'));
 const ProjectVault = lazy(() => import('./Pages/ProjectVault'));
 const Settings = lazy(() => import('./Pages/Settings'));
@@ -128,6 +129,7 @@ function App() {
                 <Route path="/projects/:projectId/complete" element={<SidebarRoute><ProjectCompletion /></SidebarRoute>} />
                 <Route path="/projects/:projectId/workspace" element={<SidebarRoute><ProjectWorkspace /></SidebarRoute>} />
                 <Route path="/projects/:projectId" element={<SidebarRoute><ProjectDetail /></SidebarRoute>} />
+                <Route path="/my-workspaces" element={<SidebarRoute><MyWorkspaces /></SidebarRoute>} />
 
                 <Route path="/talent-board" element={<SidebarRoute><TalentBoard /></SidebarRoute>} />
                 <Route path="/project-vault" element={<SidebarRoute><ProjectVault /></SidebarRoute>} />

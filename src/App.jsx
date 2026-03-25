@@ -39,6 +39,7 @@ const ProjectWorkspace = lazy(() => import('./Pages/projects/ProjectWorkspace'))
 const TalentBoard = lazy(() => import('./Pages/TalentBoard'));
 const ProjectVault = lazy(() => import('./Pages/ProjectVault'));
 const Settings = lazy(() => import('./Pages/Settings'));
+const Account = lazy(() => import('./Pages/Account'));
 
 try { require('./services/googleFormService'); } catch (e) {}
 
@@ -131,6 +132,7 @@ function App() {
                 <Route path="/talent-board" element={<SidebarRoute><TalentBoard /></SidebarRoute>} />
                 <Route path="/project-vault" element={<SidebarRoute><ProjectVault /></SidebarRoute>} />
                 <Route path="/settings" element={<SidebarRoute><Settings /></SidebarRoute>} />
+                <Route path="/account" element={<SidebarRoute><Account /></SidebarRoute>} />
 
                 <Route path="/messages" element={<SidebarRoute><Messages /></SidebarRoute>} />
                 <Route path="/notifications" element={<SidebarRoute><NotificationsPage /></SidebarRoute>} />

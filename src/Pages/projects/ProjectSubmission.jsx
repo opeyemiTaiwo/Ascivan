@@ -356,7 +356,7 @@ const ProjectSubmission = () => {
 
                 {formData.pricingType === 'free' && (
                   <div className="bg-blue-600/10 border border-gray-200 rounded-xl p-3">
-                    <p className="text-green-300 text-sm">This is a free project. Team members will contribute on a volunteer or learning basis.</p>
+                    <p className="text-blue-500 text-sm">This is a free project. Team members will contribute on a volunteer or learning basis.</p>
                   </div>
                 )}
               </div>

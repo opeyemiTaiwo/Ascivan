@@ -102,7 +102,7 @@ const MyFinancePosts = () => {
           {/* Header */}
           <div className="text-center mb-10">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-2" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
-              My <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-orange-400">Finance Posts</span>
+              My <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-orange-400">Finance Posts</span>
             </h1>
             <p className="text-gray-400 text-sm sm:text-base">Manage your finance resource listings</p>
 
@@ -110,7 +110,7 @@ const MyFinancePosts = () => {
             <div className="flex justify-center gap-6 mt-6">
               {[
                 { label: 'Total Posts', value: statCounts.total, color: 'text-orange-400' },
-                { label: 'Active', value: statCounts.active, color: 'text-green-400' },
+                { label: 'Active', value: statCounts.active, color: 'text-blue-400' },
                 { label: 'Closed', value: statCounts.closed, color: 'text-gray-400' },
                 { label: 'Total Views', value: statCounts.totalViews, color: 'text-blue-400' },
               ].map((s, i) => (
@@ -136,7 +136,7 @@ const MyFinancePosts = () => {
                     <button key={f.id} onClick={() => setFilterStatus(f.id)}
                       className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
                         filterStatus === f.id
-                          ? 'bg-green-500 text-white'
+                          ? 'bg-blue-500 text-white'
                           : 'bg-white/10 text-gray-600 hover:bg-white/20'
                       }`}>
                       {f.label}
@@ -147,7 +147,7 @@ const MyFinancePosts = () => {
               <div>
                 <p className="text-white font-semibold text-sm mb-2">Sort By</p>
                 <select value={sortBy} onChange={e => setSortBy(e.target.value)}
-                  className="bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm focus:border-green-400 focus:outline-none">
+                  className="bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm focus:border-blue-400 focus:outline-none">
                   <option value="newest">Newest</option>
                   <option value="oldest">Oldest</option>
                   <option value="views">Most Views</option>
@@ -159,7 +159,7 @@ const MyFinancePosts = () => {
           {/* Posts List */}
           {loading ? (
             <div className="text-center py-16">
-              <div className="w-8 h-8 border-2 border-green-400 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+              <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
               <p className="text-gray-400 text-sm">Loading your posts...</p>
             </div>
           ) : sorted.length === 0 ? (
@@ -173,7 +173,7 @@ const MyFinancePosts = () => {
                   : 'No posts match the selected filter.'}
               </p>
               {myPosts.length === 0 && (
-                <Link to="/finance/post" className="px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold rounded-xl text-sm transition-all hover:from-green-600 hover:to-green-700">
+                <Link to="/finance/post" className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-xl text-sm transition-all hover:from-blue-500 hover:to-blue-600">
                   Post a Resource
                 </Link>
               )}
@@ -190,12 +190,12 @@ const MyFinancePosts = () => {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="text-white font-bold text-base truncate">{post.title || 'Finance Resource'}</h3>
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold flex-shrink-0 ${isActive ? 'bg-green-500/20 text-green-300 border border-green-500/30' : 'bg-gray-500/20 text-gray-400 border border-gray-500/30'}`}>
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold flex-shrink-0 ${isActive ? 'bg-blue-500/20 text-blue-500 border border-blue-500/30' : 'bg-gray-500/20 text-gray-400 border border-gray-500/30'}`}>
                             {isActive ? 'Active' : 'Closed'}
                           </span>
                         </div>
                         {post.category && (
-                          <p className="text-green-400 text-xs font-semibold mb-1">{post.category}</p>
+                          <p className="text-blue-400 text-xs font-semibold mb-1">{post.category}</p>
                         )}
                         {post.description && (
                           <p className="text-gray-400 text-sm line-clamp-2">{post.description}</p>
@@ -209,7 +209,7 @@ const MyFinancePosts = () => {
                       <div className="flex items-center gap-2 flex-shrink-0">
                         <button onClick={() => handleToggleStatus(post.id, post.status)}
                           className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all min-h-[32px] ${
-                            isActive ? 'bg-yellow-500/20 text-yellow-300 hover:bg-yellow-500/30' : 'bg-green-500/20 text-green-300 hover:bg-green-500/30'
+                            isActive ? 'bg-orange-500/20 text-orange-500 hover:bg-orange-500/30' : 'bg-blue-500/20 text-blue-500 hover:bg-blue-500/30'
                           }`}>
                           {isActive ? 'Close' : 'Reactivate'}
                         </button>

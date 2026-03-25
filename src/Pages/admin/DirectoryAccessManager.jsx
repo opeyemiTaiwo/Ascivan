@@ -142,19 +142,19 @@ const DirectoryAccessManager = () => {
 
   const getStatusBadge = (request) => {
     if (request.accessType === 'paid' && request.approved && request.expiryDate > new Date()) {
-      return <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded-full text-xs">Active Paid</span>;
+      return <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full text-xs">Active Paid</span>;
     }
     if (request.accessType === 'paid' && request.expiryDate && request.expiryDate < new Date()) {
       return <span className="bg-red-500/20 text-red-400 px-2 py-1 rounded-full text-xs">Expired</span>;
     }
     if (request.accessType === 'manual_approval' && request.approved) {
-      return <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded-full text-xs">Manually Approved</span>;
+      return <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full text-xs">Manually Approved</span>;
     }
     if (request.status === 'denied' || request.status === 'revoked') {
       return <span className="bg-red-500/20 text-red-400 px-2 py-1 rounded-full text-xs">Denied</span>;
     }
     if (request.accessType === 'manual_approval' && !request.approved) {
-      return <span className="bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded-full text-xs">Pending Approval</span>;
+      return <span className="bg-orange-500/20 text-orange-500 px-2 py-1 rounded-full text-xs">Pending Approval</span>;
     }
     return <span className="bg-gray-500/20 text-gray-400 px-2 py-1 rounded-full text-xs">Unknown</span>;
   };
@@ -163,7 +163,7 @@ const DirectoryAccessManager = () => {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="text-white text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-lime-400 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-400 mx-auto mb-4"></div>
           <p>Loading directory access data...</p>
         </div>
       </div>
@@ -183,17 +183,17 @@ const DirectoryAccessManager = () => {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-            <div className="text-2xl font-bold text-lime-400">{accessRequests.length}</div>
+            <div className="text-2xl font-bold text-orange-400">{accessRequests.length}</div>
             <div className="text-gray-400 text-sm">Total Requests</div>
           </div>
           <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-            <div className="text-2xl font-bold text-green-400">
+            <div className="text-2xl font-bold text-blue-400">
               {accessRequests.filter(r => r.accessType === 'manual_approval' && !r.approved && r.status !== 'denied').length}
             </div>
             <div className="text-gray-400 text-sm">Pending Approval</div>
           </div>
           <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-            <div className="text-2xl font-bold text-green-400">{activeSubscriptions.length}</div>
+            <div className="text-2xl font-bold text-blue-400">{activeSubscriptions.length}</div>
             <div className="text-gray-400 text-sm">Active Subscriptions</div>
           </div>
           <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
@@ -220,7 +220,7 @@ const DirectoryAccessManager = () => {
                 onClick={() => setFilter(filterOption.key)}
                 className={`px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
                   filter === filterOption.key
-                    ? 'bg-lime-500 text-gray-900'
+                    ? 'bg-orange-500 text-gray-900'
                     : 'bg-gray-800 text-gray-600 hover:bg-gray-700'
                 }`}
               >
@@ -257,7 +257,7 @@ const DirectoryAccessManager = () => {
                             className="w-10 h-10 rounded-full mr-3"
                           />
                         ) : (
-                          <div className="w-10 h-10 rounded-full bg-lime-500 flex items-center justify-center mr-3">
+                          <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center mr-3">
                             <span className="text-gray-900 font-bold">
                               {request.userName?.charAt(0)?.toUpperCase() || '?'}
                             </span>
@@ -272,8 +272,8 @@ const DirectoryAccessManager = () => {
                     <td className="p-4">
                       <span className={`px-2 py-1 rounded-full text-xs ${
                         request.accessType === 'paid' 
-                          ? 'bg-green-500/20 text-green-400' 
-                          : 'bg-green-500/20 text-green-400'
+                          ? 'bg-blue-500/20 text-blue-400' 
+                          : 'bg-blue-500/20 text-blue-400'
                       }`}>
                         {request.accessType === 'paid' ? 'Paid' : 'Manual Approval'}
                       </span>
@@ -289,7 +289,7 @@ const DirectoryAccessManager = () => {
                       {request.expiryDate ? (
                         <>
                           {request.expiryDate.toLocaleDateString()} <br />
-                          <span className={request.expiryDate < new Date() ? 'text-red-400' : 'text-green-400'}>
+                          <span className={request.expiryDate < new Date() ? 'text-red-400' : 'text-blue-400'}>
                             {request.expiryDate < new Date() ? 'Expired' : 'Active'}
                           </span>
                         </>
@@ -303,7 +303,7 @@ const DirectoryAccessManager = () => {
                           <>
                             <button
                               onClick={() => approveAccess(request.userEmail, request.userName)}
-                              className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm font-semibold transition-colors"
+                              className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm font-semibold transition-colors"
                             >
                               Approve
                             </button>

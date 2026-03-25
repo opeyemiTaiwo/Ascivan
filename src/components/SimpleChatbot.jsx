@@ -278,7 +278,7 @@ const SimpleChatbot = () => {
                     fontFamily: '"Inter", sans-serif'
                   }}>
                 Chat With{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-emerald-400 to-blue-300">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-400 to-blue-300">
                   Our Team
                 </span>
               </h2>
@@ -311,23 +311,23 @@ const SimpleChatbot = () => {
                     </svg>
                     Start Chatting
                   </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-yellow-400 opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-orange-600 opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
                 </button>
               </div>
 
               <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-6">
                 <div className="inline-flex items-center bg-blue-600/20 rounded-full px-3 sm:px-5 py-2 sm:py-2.5 border border-blue-500/30">
-                  <span className="text-green-300 font-bold text-xs sm:text-sm" style={{ fontFamily: '"Inter", sans-serif' }}>
+                  <span className="text-blue-500 font-bold text-xs sm:text-sm" style={{ fontFamily: '"Inter", sans-serif' }}>
                     🏢 Business Solutions
                   </span>
                 </div>
                 <div className="inline-flex items-center bg-blue-600/15 rounded-full px-3 sm:px-5 py-2 sm:py-2.5 border border-blue-500/25">
-                  <span className="text-green-200 font-bold text-xs sm:text-sm" style={{ fontFamily: '"Inter", sans-serif' }}>
+                  <span className="text-blue-400 font-bold text-xs sm:text-sm" style={{ fontFamily: '"Inter", sans-serif' }}>
                     💬 General Inquiries
                   </span>
                 </div>
                 <div className="inline-flex items-center bg-blue-600/20 rounded-full px-3 sm:px-5 py-2 sm:py-2.5 border border-blue-500/30">
-                  <span className="text-green-300 font-bold text-xs sm:text-sm" style={{ fontFamily: '"Inter", sans-serif' }}>
+                  <span className="text-blue-500 font-bold text-xs sm:text-sm" style={{ fontFamily: '"Inter", sans-serif' }}>
                     👤 Real Human Follow-up
                   </span>
                 </div>
@@ -379,7 +379,7 @@ const SimpleChatbot = () => {
                                   href={part} 
                                   target="_blank" 
                                   rel="noopener noreferrer"
-                                  className="underline hover:text-green-300 transition-colors font-semibold break-all"
+                                  className="underline hover:text-blue-500 transition-colors font-semibold break-all"
                                 >
                                   {part}
                                 </a>
@@ -435,7 +435,7 @@ const SimpleChatbot = () => {
                     onChange={(e) => setInputValue(e.target.value)}
                     placeholder={step === 3 ? "Or type your answer..." : "Type your message..."}
                     disabled={step >= 99}
-                    className="flex-1 px-3 sm:px-4 md:px-6 py-3 sm:py-4 rounded-lg sm:rounded-xl bg-gray-100 border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-50 text-base"
+                    className="flex-1 px-3 sm:px-4 md:px-6 py-3 sm:py-4 rounded-lg sm:rounded-xl bg-gray-100 border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-50 text-base"
                   />
                   <button
                     type="submit"

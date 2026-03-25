@@ -11,11 +11,11 @@ import { toast } from 'react-toastify';
 const formatTimeline = (t) => ({ '1-week': '1 Week', '2-weeks': '2 Weeks', '1-month': '1 Month', '2-3-months': '2-3 Months', '3-6-months': '3-6 Months', '6-months-plus': '6+ Months', 'flexible': 'Flexible' }[t] || t);
 
 const statusColors = {
-  submitted: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
-  approved: 'bg-blue-600/20 text-green-300 border-blue-600/30',
+  submitted: 'bg-orange-500/20 text-orange-500 border-orange-500/30',
+  approved: 'bg-blue-600/20 text-blue-500 border-blue-600/30',
   rejected: 'bg-red-500/20 text-red-300 border-red-500/30',
   removed: 'bg-red-500/20 text-red-300 border-red-500/30',
-  completed: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+  completed: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
   active: 'bg-blue-600/20 text-blue-500 border-blue-600/30',
 };
 
@@ -86,7 +86,7 @@ const MyProjects = () => {
       <>
         <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#ffffff' }}>
           <div className="text-center">
-            <div className="w-8 h-8 border-2 border-purple-400 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+            <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
             <p className="text-gray-400 text-sm">Loading your projects...</p>
           </div>
         </div>
@@ -103,7 +103,7 @@ const MyProjects = () => {
           {/* Header */}
           <div className="text-center mb-10">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-2" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
-              My <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">Projects</span>
+              My <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-500">Projects</span>
             </h1>
             <p className="text-gray-400 text-sm sm:text-base">Manage your applications, posted projects, and earned badges</p>
 
@@ -112,9 +112,9 @@ const MyProjects = () => {
               {[
                 { label: 'Applied', value: statCounts.applied, color: 'text-blue-600' },
                 { label: 'Approved', value: statCounts.approved, color: 'text-blue-600' },
-                { label: 'Posted', value: statCounts.posted, color: 'text-purple-400' },
+                { label: 'Posted', value: statCounts.posted, color: 'text-blue-500' },
                 { label: 'Completed', value: statCounts.completed, color: 'text-blue-400' },
-                { label: 'Badges', value: statCounts.badges, color: 'text-yellow-400' },
+                { label: 'Badges', value: statCounts.badges, color: 'text-orange-500' },
               ].map((s, i) => (
                 <div key={i} className="text-center">
                   <p className={`text-xl xs:text-2xl font-black ${s.color}`}>{s.value}</p>
@@ -185,7 +185,7 @@ const MyProjects = () => {
                   {applications.length === 0 ? "You haven't applied to any projects yet" : `No ${projectFilter} applications match`}
                 </p>
                 {applications.length === 0 && (
-                  <Link to="/projects" className="px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-gray-900 font-bold rounded-xl text-sm transition-all hover:from-purple-600 hover:to-purple-700">
+                  <Link to="/projects" className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-gray-900 font-bold rounded-xl text-sm transition-all hover:from-blue-500 hover:to-blue-600">
                     Browse Projects
                   </Link>
                 )}
@@ -247,10 +247,10 @@ const MyProjects = () => {
                           </span>
                         </div>
                         {project.timeline && (
-                          <p className="text-purple-400 text-xs font-semibold mb-1">{formatTimeline(project.timeline)}</p>
+                          <p className="text-blue-500 text-xs font-semibold mb-1">{formatTimeline(project.timeline)}</p>
                         )}
                         <div className="flex flex-wrap items-center gap-3 mt-2 text-gray-500 text-xs">
-                          <span className={`font-bold ${project.pricingType === 'paid' ? 'text-blue-500' : 'text-green-300'}`}>
+                          <span className={`font-bold ${project.pricingType === 'paid' ? 'text-blue-500' : 'text-blue-500'}`}>
                             {project.pricingType === 'paid' ? `$${project.totalBudget?.toLocaleString()}` : 'Free'}
                           </span>
                           {project.createdAt?.toDate && (
@@ -271,7 +271,7 @@ const MyProjects = () => {
               <div className="text-center py-16">
                 <p className="text-gray-900 text-xl font-bold mb-2">No Badges Earned Yet</p>
                 <p className="text-gray-400 text-sm mb-6">Complete projects to earn tech badges</p>
-                <Link to="/projects" className="px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-gray-900 font-bold rounded-xl text-sm transition-all hover:from-purple-600 hover:to-purple-700">
+                <Link to="/projects" className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-gray-900 font-bold rounded-xl text-sm transition-all hover:from-blue-500 hover:to-blue-600">
                   Browse Projects
                 </Link>
               </div>
@@ -288,7 +288,7 @@ const MyProjects = () => {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="text-gray-900 font-bold text-base truncate">{badge.badgeName}</h3>
-                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 flex-shrink-0">
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-orange-500/20 text-orange-500 border border-orange-500/30 flex-shrink-0">
                             {badge.badgeLevel}
                           </span>
                         </div>

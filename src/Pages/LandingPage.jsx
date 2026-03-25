@@ -171,7 +171,7 @@ const LandingPage = () => {
 
           <h1 id="hero-title" data-animate className={`fade-up delay-1 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-800 leading-[1.05] tracking-tight mb-6 ${isVisible('hero-title') ? 'visible' : ''}`}>
             <span className="text-blue-600">Ascend</span>{' '}
-            <span className="text-yellow-500">Achieve</span>{' '}
+            <span className="text-orange-500">Achieve</span>{' '}
             <span className="text-gray-900">Advance</span>
           </h1>
 

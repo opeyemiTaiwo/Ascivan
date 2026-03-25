@@ -286,9 +286,9 @@ const PostJobs = () => {
 
                   {/* Visa / Sponsorship */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
-                    <label className="flex items-center gap-3 cursor-pointer p-3 bg-white/5 rounded-xl border border-white/10 hover:border-green-500/30 transition-all">
+                    <label className="flex items-center gap-3 cursor-pointer p-3 bg-white/5 rounded-xl border border-white/10 hover:border-blue-500/30 transition-all">
                       <input type="checkbox" name="visaCompliant" checked={formData.visaCompliant} onChange={handleInputChange}
-                        className="w-5 h-5 rounded border-white/30 bg-white/10 text-green-500 focus:ring-green-400 cursor-pointer" />
+                        className="w-5 h-5 rounded border-white/30 bg-white/10 text-blue-500 focus:ring-blue-400 cursor-pointer" />
                       <div>
                         <div className="text-white text-sm font-semibold">🛂 Visa-Compliant</div>
                         <div className="text-gray-400 text-xs">Open to F-1, OPT, H-1B or similar</div>

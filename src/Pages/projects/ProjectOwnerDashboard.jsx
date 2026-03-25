@@ -151,9 +151,9 @@ const ProjectOwnerDashboard = () => {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
               {[
                 ['Total Projects', myProjects.length, 'from-blue-500 to-blue-600'],
-                ['Pending Apps', myProjects.reduce((s, p) => s + (p.pendingCount || 0), 0), 'from-yellow-500 to-yellow-600'],
+                ['Pending Apps', myProjects.reduce((s, p) => s + (p.pendingCount || 0), 0), 'from-orange-500 to-orange-600'],
                 ['Team Members', myProjects.reduce((s, p) => s + (p.approvedMembers?.length || 0), 0), 'from-blue-500 to-blue-600'],
-                ['Completed', myProjects.filter(p => p.status === 'completed').length, 'from-purple-500 to-purple-600'],
+                ['Completed', myProjects.filter(p => p.status === 'completed').length, 'from-blue-500 to-blue-600'],
               ].map(([label, val, grad]) => (
                 <div key={label} className="bg-gray-50 border border-gray-200 rounded-xl p-4">
                   <p className="text-gray-500 text-[10px] uppercase tracking-wider font-semibold">{label}</p>
@@ -202,13 +202,13 @@ const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove }) =>
           <div className="flex flex-wrap gap-2 mt-2">
             <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-600 text-[10px] font-medium">{getIndustryLabel(project.industryTrack)}</span>
             <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-600 text-[10px] font-medium">{formatTimeline(project.timeline)}</span>
-            <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${isPaid ? 'bg-blue-600/20 text-blue-500' : 'bg-blue-600/20 text-green-300'}`}>
+            <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${isPaid ? 'bg-blue-600/20 text-blue-500' : 'bg-blue-600/20 text-blue-500'}`}>
               {isPaid ? `$${project.totalBudget?.toLocaleString()}` : 'Free'}
             </span>
           </div>
         </div>
         <div className="flex gap-2">
-          <span className={`px-3 py-1 rounded-full text-xs font-bold ${isCompleted ? 'bg-blue-600/20 text-green-300 border border-blue-600/30' : 'bg-blue-600/20 text-blue-500 border border-blue-600/30'}`}>
+          <span className={`px-3 py-1 rounded-full text-xs font-bold ${isCompleted ? 'bg-blue-600/20 text-blue-500 border border-blue-600/30' : 'bg-blue-600/20 text-blue-500 border border-blue-600/30'}`}>
             {isCompleted ? 'Completed' : 'Active'}
           </span>
         </div>

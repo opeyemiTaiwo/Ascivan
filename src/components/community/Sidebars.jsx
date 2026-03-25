@@ -235,9 +235,9 @@ export const FollowSuggestionsSidebar = ({ currentUser, isMobile = false }) => {
     const statusInfo = {
       veteran: { 
         label: 'Veteran', 
-        color: 'text-yellow-400', 
-        bg: 'bg-yellow-500/20', 
-        border: 'border-yellow-500/30',
+        color: 'text-orange-500', 
+        bg: 'bg-orange-500/20', 
+        border: 'border-orange-500/30',
       },
       achiever: { 
         label: 'Achiever', 
@@ -259,115 +259,74 @@ export const FollowSuggestionsSidebar = ({ currentUser, isMobile = false }) => {
 
   const containerClass = isMobile 
     ? "p-3 xs:p-4 h-full" 
-    : "h-fit";
-
-  const contentClass = isMobile
-    ? "h-full flex flex-col"
-    : "bg-gray-100 rounded-xl xs:rounded-2xl border border-blue-600/10 p-3 xs:p-4 sm:p-6 shadow-2xl sidebar-content h-full flex flex-col";
+    : "h-fit space-y-3";
 
   return (
     <div className={containerClass}>
-      <div className={contentClass}>
-        <div className="flex items-center justify-between mb-3 xs:mb-4 flex-shrink-0">
-          <div>
-            <h3 className="text-gray-900 font-bold text-base xs:text-lg flex items-center gap-1.5 xs:gap-2">
-              <svg className="w-4 h-4 xs:w-5 xs:h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-              <span className="hidden sm:inline">Discover People</span>
-              <span className="sm:hidden">Discover</span>
-            </h3>
-            <p className="text-gray-400 text-[10px] xs:text-xs mt-0.5 xs:mt-1 hidden sm:block">New connections to follow</p>
-          </div>
+      {/* Discover People Card */}
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        {/* Header */}
+        <div className="px-4 pt-4 pb-3">
+          <h3 className="text-gray-900 font-semibold text-sm flex items-center gap-2">
+            <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            Discover People
+          </h3>
+          <p className="text-gray-500 text-xs mt-0.5">New connections to follow</p>
         </div>
-        
-        <div className="mb-3 xs:mb-4 p-2.5 xs:p-3 bg-gradient-to-r from-blue-500/10 to-blue-600/10 rounded-lg border border-gray-200 flex-shrink-0">
-          <div className="grid grid-cols-2 gap-2 xs:gap-3 text-center">
+
+        {/* Stats */}
+        <div className="mx-4 mb-3 p-3 bg-blue-50 border border-blue-100 rounded-lg">
+          <div className="grid grid-cols-2 gap-3 text-center">
             <div>
-              <div className="text-base xs:text-lg font-bold text-blue-600">{userCounts.following}</div>
-              <div className="text-[10px] xs:text-xs text-orange-300">Following</div>
+              <div className="text-lg font-bold text-blue-600">{userCounts.following}</div>
+              <div className="text-xs text-blue-500">Following</div>
             </div>
             <div>
-              <div className="text-base xs:text-lg font-bold text-blue-600">{userCounts.followers}</div>
-              <div className="text-[10px] xs:text-xs text-green-300">Followers</div>
+              <div className="text-lg font-bold text-blue-600">{userCounts.followers}</div>
+              <div className="text-xs text-blue-500">Followers</div>
             </div>
           </div>
         </div>
-        
-        <div className={`space-y-2 xs:space-y-3 ${isMobile ? 'flex-1 overflow-y-auto' : 'flex-1'}`}>
+
+        {/* Suggestions */}
+        <div className="px-4 pb-4">
           {loading ? (
-            <div className="text-center py-6 xs:py-8">
-              <div className="animate-spin rounded-full h-5 w-5 xs:h-6 xs:w-6 border-b-2 border-blue-500 mx-auto mb-2 xs:mb-3"></div>
-              <p className="text-gray-400 text-xs xs:text-sm">Finding people...</p>
+            <div className="text-center py-6">
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500 mx-auto mb-2"></div>
+              <p className="text-gray-400 text-xs">Finding people...</p>
             </div>
           ) : suggestedUsers.length === 0 ? (
-            <div className="text-center py-6 xs:py-8">
-              <svg className="w-8 h-8 xs:w-10 xs:h-10 mx-auto mb-2 xs:mb-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            <div className="text-center py-4">
+              <svg className="w-8 h-8 mx-auto mb-2 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
-              <p className="text-gray-400 text-xs xs:text-sm">
-                All caught up! You're following everyone we can suggest right now.
-              </p>
+              <p className="text-gray-500 text-xs">All caught up! You're following everyone we can suggest.</p>
             </div>
           ) : (
-            suggestedUsers.map((user) => {
-              const statusInfo = getUserStatusInfo(user.userStatus);
-              
-              return (
-                <div
-                  key={user.uid}
-                  className="flex items-center gap-2 xs:gap-3 p-2.5 xs:p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 active:bg-gray-200 transition-all duration-300 group"
-                >
-                  <ClickableUserAvatar 
-                    user={user}
-                    size="md"
-                    className="flex-shrink-0 ring-2 ring-orange-400/30"
-                  />
-                  
+            <div className="space-y-3">
+              {suggestedUsers.map((user) => (
+                <div key={user.uid} className="flex items-center gap-3">
+                  <ClickableUserAvatar user={user} size="md" className="flex-shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1 xs:gap-2 mb-0.5 xs:mb-1">
-                      <EnhancedClickableUserName
-                        user={user}
-                        className="font-semibold text-gray-900 text-xs xs:text-sm group-hover:text-orange-300 transition-colors truncate"
-                      />
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="text-[10px] xs:text-xs text-gray-400">
-                        {user.badges > 0 ? (
-                          <span>{user.badges} badge{user.badges !== 1 ? 's' : ''}</span>
-                        ) : (
-                          <span>New member</span>
-                        )}
-                      </div>
-                      
-                      {user.followerCount > 0 && (
-                        <div className="text-[10px] xs:text-xs text-blue-600">
-                          {user.followerCount} followers
-                        </div>
-                      )}
-                    </div>
+                    <EnhancedClickableUserName user={user} className="font-medium text-gray-900 text-sm truncate block" />
+                    <p className="text-gray-500 text-xs">{user.badges > 0 ? `${user.badges} badge${user.badges !== 1 ? 's' : ''}` : 'New member'}</p>
                   </div>
-                  
                   <div className="flex-shrink-0">
-                    <FollowButton
-                      targetUser={user}
-                      currentUser={currentUser}
-                      size="xs"
-                      onCountUpdate={handleCountUpdate}
-                    />
+                    <FollowButton targetUser={user} currentUser={currentUser} size="xs" onCountUpdate={handleCountUpdate} />
                   </div>
                 </div>
-              );
-            })
+              ))}
+            </div>
           )}
         </div>
 
-        <div className="mt-3 xs:mt-4 pt-3 xs:pt-4 border-t border-blue-600/10 flex-shrink-0">
-          <p className="text-gray-400 text-center text-[10px] xs:text-xs">
-            Expand your professional network
-          </p>
+        {/* Footer */}
+        <div className="border-t border-gray-100 px-4 py-3">
+          <p className="text-gray-400 text-xs text-center">Expand your professional network</p>
         </div>
+      </div>
       </div>
     </div>
   );
@@ -415,54 +374,35 @@ export const CompanyInfoSidebar = ({ isMobile = false }) => {
     ? "p-3 xs:p-4 h-full" 
     : "h-fit";
 
-  const contentClass = isMobile
-    ? "h-full flex flex-col"
-    : "bg-gray-100 rounded-xl xs:rounded-2xl border border-blue-600/10 p-3 xs:p-4 sm:p-6 shadow-2xl sidebar-content h-full flex flex-col";
-
   return (
     <div className={containerClass}>
-      <div className={contentClass}>
-        <div className="flex items-center justify-center mb-3 xs:mb-4 sm:mb-6 flex-shrink-0">
-          <div className="text-center">
-            <img 
-              src="/Images/512X512.png" 
-              alt="Loomiqe Logo" 
-              className="w-10 h-10 xs:w-12 xs:h-12 sm:w-16 sm:h-16 mx-auto mb-2 xs:mb-2 sm:mb-3 rounded-xl shadow-lg"
-            />
-            <h3 className="text-gray-900 font-bold text-sm xs:text-base sm:text-lg">
-              Loomiqe
-            </h3>
-          </div>
-        </div>
-        
-        <div className="mb-3 xs:mb-4 sm:mb-6 flex-shrink-0">
-          <p className="text-gray-600 text-xs sm:text-sm leading-relaxed text-center">
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="text-center px-4 py-5">
+          <img 
+            src="/Images/512X512.png" 
+            alt="Loomiqe Logo" 
+            className="w-12 h-12 mx-auto mb-2 rounded-xl"
+          />
+          <h3 className="text-gray-900 font-semibold text-sm">Loomiqe</h3>
+          <p className="text-gray-500 text-xs mt-1 leading-relaxed">
             Accelerating tech careers through projects, badges, and community.
           </p>
         </div>
 
-        <div className={`grid grid-cols-2 gap-2 xs:gap-2.5 sm:gap-3 ${isMobile ? 'flex-1' : ''}`}>
+        <div className="grid grid-cols-2 gap-2 px-4 pb-4">
           {companyLinks.map((link, index) => (
             <button
               key={index}
               onClick={() => handleLinkClick(link)}
-              className={`flex flex-col items-center justify-center p-2.5 xs:p-3 sm:p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 active:bg-gray-200 cursor-pointer text-center group sidebar-item ${
-                isMobile ? 'min-h-[56px] xs:min-h-[60px]' : 'min-h-[48px] xs:min-h-[50px]'
-              }`}
+              className="px-3 py-2 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 text-xs font-medium text-gray-700 text-center transition-colors"
             >
-              <div className="flex-1 min-w-0 flex items-center justify-center">
-                <p className={`font-medium text-gray-900 group-hover:text-orange-300 transition-colors text-center leading-tight ${isMobile ? 'text-xs xs:text-sm' : 'text-[10px] xs:text-xs sm:text-sm'}`}>
-                  {link.title}
-                </p>
-              </div>
+              {link.title}
             </button>
           ))}
         </div>
 
-        <div className="mt-3 xs:mt-4 sm:mt-6 pt-2.5 xs:pt-3 sm:pt-4 border-t border-blue-600/10 flex-shrink-0">
-          <p className={`text-gray-400 text-center font-medium ${isMobile ? 'text-[10px] xs:text-xs' : 'text-[10px] xs:text-xs'}`}>
-            Accelerating tech careers
-          </p>
+        <div className="border-t border-gray-100 px-4 py-3">
+          <p className="text-gray-400 text-xs text-center">Accelerating tech careers</p>
         </div>
       </div>
     </div>

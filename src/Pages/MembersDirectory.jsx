@@ -286,7 +286,7 @@ const MembersDirectory = () => {
                             </div>
                           )}
                           {member.isActive && (
-                            <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                            <div className="absolute bottom-0 right-0 w-4 h-4 bg-blue-500 rounded-full border-2 border-white"></div>
                           )}
                         </div>
                         

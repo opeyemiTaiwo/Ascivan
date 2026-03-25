@@ -161,11 +161,11 @@ const Finance = () => {
 
   const getTypeBadge = (type) => {
     const map = {
-      'scholarships': { label: ' Scholarship', cls: 'bg-yellow-500/20 text-yellow-300' },
+      'scholarships': { label: ' Scholarship', cls: 'bg-orange-500/20 text-orange-500' },
       'loans': { label: ' Loan', cls: 'bg-blue-500/20 text-blue-300' },
-      'work-study': { label: ' Work-Study', cls: 'bg-indigo-500/20 text-indigo-300' },
-      'grants': { label: ' Grant', cls: 'bg-emerald-500/20 text-emerald-300' },
-      'assistantships': { label: ' Assistantship', cls: 'bg-cyan-500/20 text-cyan-300' },
+      'work-study': { label: ' Work-Study', cls: 'bg-blue-500/20 text-blue-300' },
+      'grants': { label: ' Grant', cls: 'bg-blue-500/20 text-blue-300' },
+      'assistantships': { label: ' Assistantship', cls: 'bg-blue-500/20 text-blue-500' },
       'fellowships': { label: ' Fellowship', cls: 'bg-amber-500/20 text-amber-300' },
     };
     return map[type] || { label: type || 'Financial Resource', cls: 'bg-orange-500/20 text-orange-300' };
@@ -176,8 +176,8 @@ const Finance = () => {
       'university': { label: ' University', cls: 'bg-blue-600/20 text-blue-200' },
       'federal': { label: ' Federal', cls: 'bg-slate-500/20 text-slate-300' },
       'state': { label: ' State', cls: 'bg-violet-500/20 text-violet-300' },
-      'private': { label: ' Private', cls: 'bg-pink-500/20 text-pink-300' },
-      'nonprofit': { label: ' Nonprofit', cls: 'bg-green-600/20 text-green-200' },
+      'private': { label: ' Private', cls: 'bg-orange-500/20 text-orange-500' },
+      'nonprofit': { label: ' Nonprofit', cls: 'bg-blue-600/20 text-blue-400' },
       'employer': { label: ' Employer', cls: 'bg-amber-600/20 text-amber-200' },
     };
     return map[source] || null;
@@ -325,14 +325,14 @@ const Finance = () => {
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${typeBadge.cls}`}>{typeBadge.label}</span>
                             {sourceBadge && <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${sourceBadge.cls}`}>{sourceBadge.label}</span>}
-                            {post.noSSNRequired && <span className="bg-green-500/20 text-green-300 px-2.5 py-1 rounded-lg text-xs font-semibold">No SSN Req.</span>}
+                            {post.noSSNRequired && <span className="bg-blue-500/20 text-blue-500 px-2.5 py-1 rounded-lg text-xs font-semibold">No SSN Req.</span>}
                             {post.internationalFriendly && <span className="bg-blue-500/20 text-blue-300 px-2.5 py-1 rounded-lg text-xs font-semibold">Intl. Friendly</span>}
-                            {post.availableNationwide && <span className="bg-teal-500/20 text-teal-300 px-2.5 py-1 rounded-lg text-xs font-semibold"> Nationwide</span>}
+                            {post.availableNationwide && <span className="bg-blue-500/20 text-blue-500 px-2.5 py-1 rounded-lg text-xs font-semibold"> Nationwide</span>}
                             {isClosed && <span className="bg-white/10 text-gray-400 px-2.5 py-1 rounded-lg text-xs font-semibold">Closed</span>}
                           </div>
                           {isOwnPost && (
                             <div className="flex gap-1 flex-shrink-0">
-                              <button onClick={() => handleMarkClosed(post.id, post.status)} className={`${isClosed ? 'text-green-400' : 'text-yellow-400'} px-2 py-1 text-xs font-semibold hover:opacity-75 min-h-[44px] flex items-center`}>
+                              <button onClick={() => handleMarkClosed(post.id, post.status)} className={`${isClosed ? 'text-blue-400' : 'text-orange-500'} px-2 py-1 text-xs font-semibold hover:opacity-75 min-h-[44px] flex items-center`}>
                                 {isClosed ? 'Reopen' : 'Close'}
                               </button>
                               <button onClick={() => handleDelete(post.id)} className="text-red-400 hover:text-red-300 px-2 py-1 text-xs font-semibold min-h-[44px] flex items-center">Delete</button>
@@ -357,14 +357,14 @@ const Finance = () => {
                         {/* Amount / Fees */}
                         {(post.fees || post.amount) && (
                           <div className="mb-3 flex flex-wrap gap-2">
-                            {post.amount && <span className="bg-green-500/20 text-green-300 px-2.5 py-1 rounded-lg text-xs font-semibold">{post.amount}</span>}
+                            {post.amount && <span className="bg-blue-500/20 text-blue-500 px-2.5 py-1 rounded-lg text-xs font-semibold">{post.amount}</span>}
                             {post.fees && <span className="bg-orange-500/20 text-orange-300 px-2.5 py-1 rounded-lg text-xs font-semibold">{post.fees}</span>}
                           </div>
                         )}
 
                         {/* Deadline */}
                         {post.deadline && (
-                          <p className="text-yellow-400 text-xs font-semibold mb-2"> Deadline: {post.deadline}</p>
+                          <p className="text-orange-500 text-xs font-semibold mb-2"> Deadline: {post.deadline}</p>
                         )}
 
                         <p className={`text-sm mb-4 line-clamp-3 flex-grow ${isClosed ? 'text-gray-500' : 'text-gray-600'}`}>{post.description}</p>

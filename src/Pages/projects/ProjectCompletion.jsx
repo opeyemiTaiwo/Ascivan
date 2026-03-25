@@ -13,8 +13,8 @@ const badgeCategories = {
   'mentorship': { id: 'techmo', name: 'TechMO (Mentor)', color: 'from-blue-500 to-blue-600' },
   'quality-assurance': { id: 'techqa', name: 'TechQA (QA Tester)', color: 'from-blue-500 to-blue-600' },
   'development': { id: 'techdev', name: 'TechDev (Developer)', color: 'from-blue-500 to-blue-600' },
-  'leadership': { id: 'techleads', name: 'TechLeads (Leader)', color: 'from-purple-500 to-purple-600' },
-  'design': { id: 'techarchs', name: 'TechArchs (Designer)', color: 'from-pink-500 to-pink-600' },
+  'leadership': { id: 'techleads', name: 'TechLeads (Leader)', color: 'from-blue-500 to-blue-600' },
+  'design': { id: 'techarchs', name: 'TechArchs (Designer)', color: 'from-orange-500 to-orange-600' },
   'security': { id: 'techguard', name: 'TechGuard (Security)', color: 'from-red-500 to-red-600' },
 };
 
@@ -308,7 +308,7 @@ const ProjectCompletion = () => {
                 <svg className="w-16 h-16 text-blue-600 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <h2 className="text-xl font-bold text-green-300 mb-2">Project Completed</h2>
+                <h2 className="text-xl font-bold text-blue-500 mb-2">Project Completed</h2>
                 <p className="text-gray-400 text-sm mb-6">Badges have been awarded and payments updated for all qualifying members.</p>
                 <div className="flex justify-center gap-3">
                   <Link to="/projects/owner-dashboard" className="px-6 py-2.5 bg-gray-100 hover:bg-gray-100 text-gray-900 font-semibold rounded-xl text-sm transition-all">
@@ -433,8 +433,8 @@ const ProjectCompletion = () => {
                         )}
 
                         {ev.contribution === 'poor' && ev.awardBadge && (
-                          <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-3">
-                            <p className="text-yellow-300 text-xs">Poor contribution - badge will not be awarded even if selected.</p>
+                          <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl p-3">
+                            <p className="text-orange-500 text-xs">Poor contribution - badge will not be awarded even if selected.</p>
                           </div>
                         )}
 

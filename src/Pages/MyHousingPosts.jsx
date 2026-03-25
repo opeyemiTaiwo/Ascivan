@@ -97,7 +97,7 @@ const MyHousingPosts = () => {
             <div className="flex justify-center gap-6 mt-6">
               {[
                 { label: 'Total Posts', value: statCounts.total, color: 'text-orange-400' },
-                { label: 'Active', value: statCounts.active, color: 'text-green-400' },
+                { label: 'Active', value: statCounts.active, color: 'text-blue-400' },
                 { label: 'Inactive', value: statCounts.inactive, color: 'text-gray-400' },
               ].map((s, i) => (
                 <div key={i} className="text-center">
@@ -144,7 +144,7 @@ const MyHousingPosts = () => {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="text-white font-bold text-base truncate">{post.title || 'Housing Listing'}</h3>
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold flex-shrink-0 ${isActive ? 'bg-green-500/20 text-green-300 border border-green-500/30' : 'bg-gray-500/20 text-gray-400 border border-gray-500/30'}`}>
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold flex-shrink-0 ${isActive ? 'bg-blue-500/20 text-blue-500 border border-blue-500/30' : 'bg-gray-500/20 text-gray-400 border border-gray-500/30'}`}>
                             {isActive ? 'Active' : 'Inactive'}
                           </span>
                         </div>
@@ -158,7 +158,7 @@ const MyHousingPosts = () => {
                       <div className="flex items-center gap-2 flex-shrink-0">
                         <button onClick={() => handleToggleActive(post.id, isActive)}
                           className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all min-h-[32px] ${
-                            isActive ? 'bg-yellow-500/20 text-yellow-300 hover:bg-yellow-500/30' : 'bg-green-500/20 text-green-300 hover:bg-green-500/30'
+                            isActive ? 'bg-orange-500/20 text-orange-500 hover:bg-orange-500/30' : 'bg-blue-500/20 text-blue-500 hover:bg-blue-500/30'
                           }`}>
                           {isActive ? 'Deactivate' : 'Activate'}
                         </button>

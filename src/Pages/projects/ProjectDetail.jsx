@@ -174,7 +174,7 @@ const ProjectDetail = () => {
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-8 mb-6">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">{project.projectTitle}</h1>
-                <span className={`flex-shrink-0 px-3 py-1 rounded-full text-xs font-bold ${isPaid ? 'bg-blue-600/20 text-blue-500 border border-blue-600/30' : 'bg-blue-600/20 text-green-300 border border-blue-600/30'}`}>
+                <span className={`flex-shrink-0 px-3 py-1 rounded-full text-xs font-bold ${isPaid ? 'bg-blue-600/20 text-blue-500 border border-blue-600/30' : 'bg-blue-600/20 text-blue-500 border border-blue-600/30'}`}>
                   {isPaid ? `$${project.totalBudget?.toLocaleString()} Budget` : 'Free Project'}
                 </span>
               </div>

@@ -57,19 +57,19 @@ const DatabaseSetup = () => {
           <button
             onClick={runSetup}
             disabled={isRunning}
-            className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold disabled:opacity-50"
+            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold disabled:opacity-50"
           >
             {isRunning ? 'Running Setup...' : 'Run Database Setup'}
           </button>
         </div>
 
         {setupStatus && (
-          <div className={`p-4 rounded-lg ${setupStatus.includes('Success') ? 'bg-green-900/50' : 'bg-red-900/50'}`}>
+          <div className={`p-4 rounded-lg ${setupStatus.includes('Success') ? 'bg-blue-900/50' : 'bg-red-900/50'}`}>
             <pre className="whitespace-pre-wrap">{setupStatus}</pre>
           </div>
         )}
 
-        <div className="bg-yellow-900/30 border border-yellow-600 rounded-lg p-6 mt-6">
+        <div className="bg-orange-900/30 border border-orange-600 rounded-lg p-6 mt-6">
           <h3 className="text-xl font-semibold mb-2">Important Notes:</h3>
           <ul className="list-disc list-inside text-gray-600 space-y-2">
             <li>Run this only once when setting up a new database</li>

@@ -38,7 +38,7 @@ const PWAInstallPrompt = () => {
 
   return (
     <div className="fixed bottom-3 sm:bottom-4 left-3 right-3 sm:left-4 sm:right-4 md:left-auto md:right-4 md:max-w-sm z-50 animate-slide-up">
-      <div className="bg-gradient-to-br from-black/95 via-gray-900/95 to-black/95 border border-lime-500/30 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 shadow-2xl">
+      <div className="bg-gradient-to-br from-black/95 via-gray-900/95 to-black/95 border border-orange-500/30 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 shadow-2xl">
         <div className="flex items-start gap-2.5 sm:gap-3">
           {/* App Icon */}
           <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-600 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
@@ -59,7 +59,7 @@ const PWAInstallPrompt = () => {
               <button
                 onClick={handleInstall}
                 disabled={installing}
-                className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold hover:from-lime-600 hover:to-green-600 active:from-lime-700 active:to-green-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center whitespace-nowrap"
+                className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold hover:from-orange-600 hover:to-blue-600 active:from-orange-700 active:to-blue-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center whitespace-nowrap"
                 aria-label="Install application"
               >
                 {installing ? (

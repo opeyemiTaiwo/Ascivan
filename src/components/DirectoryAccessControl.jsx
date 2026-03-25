@@ -169,7 +169,7 @@ const DirectoryAccessControl = () => {
         style={{}}
       >
         <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-white/20 text-center max-w-sm w-full">
-          <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-lime-400 mx-auto mb-3 sm:mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-orange-400 mx-auto mb-3 sm:mb-4"></div>
           <p className="text-white text-base sm:text-lg">Checking access permissions...</p>
         </div>
       </div>
@@ -212,20 +212,20 @@ const DirectoryAccessControl = () => {
             <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4">
               <button 
                 onClick={() => window.location.href = '/tech-badges'}
-                className="text-white/90 hover:text-lime-400 font-semibold transition-colors text-xs sm:text-sm md:text-base"
+                className="text-white/90 hover:text-orange-400 font-semibold transition-colors text-xs sm:text-sm md:text-base"
               >
                 Badges
               </button>
               <button 
                 onClick={() => window.location.href = '/projects'}
-                className="text-white/90 hover:text-lime-400 font-semibold transition-colors text-xs sm:text-sm md:text-base hidden xs:block"
+                className="text-white/90 hover:text-orange-400 font-semibold transition-colors text-xs sm:text-sm md:text-base hidden xs:block"
               >
                 Projects
               </button>
               {currentUser && (
                 <button 
                   onClick={() => window.location.href = '/dashboard'}
-                  className="text-white/90 hover:text-lime-400 font-semibold transition-colors text-xs sm:text-sm md:text-base hidden sm:block"
+                  className="text-white/90 hover:text-orange-400 font-semibold transition-colors text-xs sm:text-sm md:text-base hidden sm:block"
                 >
                   Dashboard
                 </button>
@@ -265,7 +265,7 @@ const DirectoryAccessControl = () => {
                 <p className="text-gray-600 text-sm sm:text-base mb-4 sm:mb-6">Please log in to access the Members Directory.</p>
                 <button 
                   onClick={() => window.location.href = '/login'}
-                  className="bg-blue-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold hover:from-lime-600 hover:to-green-600 transition-all duration-300 text-sm sm:text-base"
+                  className="bg-blue-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold hover:from-orange-600 hover:to-blue-600 transition-all duration-300 text-sm sm:text-base"
                 >
                   Login to Continue
                 </button>
@@ -283,12 +283,12 @@ const DirectoryAccessControl = () => {
                     Submit a request for manual approval. Perfect for verified recruiters and hiring managers.
                   </p>
                   <div className="mb-4 sm:mb-6">
-                    <div className="text-lime-400 text-lg sm:text-xl font-semibold">Free</div>
+                    <div className="text-orange-400 text-lg sm:text-xl font-semibold">Free</div>
                     <div className="text-gray-400 text-xs sm:text-sm">Subject to approval</div>
                   </div>
                   <button 
                     onClick={requestManualApproval}
-                    className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-xl font-bold hover:from-green-600 hover:to-green-700 transition-all duration-300 text-sm sm:text-base"
+                    className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-xl font-bold hover:from-blue-500 hover:to-blue-600 transition-all duration-300 text-sm sm:text-base"
                   >
                     Request Access
                   </button>
@@ -307,12 +307,12 @@ const DirectoryAccessControl = () => {
                     Get instant access to the complete directory with contact information and advanced filtering.
                   </p>
                   <div className="mb-4 sm:mb-6">
-                    <div className="text-lime-400 text-2xl sm:text-3xl font-black">$29.99</div>
+                    <div className="text-orange-400 text-2xl sm:text-3xl font-black">$29.99</div>
                     <div className="text-gray-400 text-xs sm:text-sm">per month</div>
                   </div>
                   <button 
                     onClick={initializePayment}
-                    className="w-full bg-blue-600 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-xl font-bold hover:from-lime-600 hover:to-green-600 transition-all duration-300 text-sm sm:text-base"
+                    className="w-full bg-blue-600 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-xl font-bold hover:from-orange-600 hover:to-blue-600 transition-all duration-300 text-sm sm:text-base"
                   >
                     Get Instant Access
                   </button>
@@ -327,14 +327,14 @@ const DirectoryAccessControl = () => {
                 <p className="text-gray-600 text-sm sm:text-base mb-4 sm:mb-6">
                   Your access request is being reviewed by our team. You'll receive an email notification once approved.
                 </p>
-                <div className="bg-yellow-500/20 border border-yellow-500/30 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6">
-                  <p className="text-yellow-300 text-xs sm:text-sm">
+                <div className="bg-orange-500/20 border border-orange-500/30 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6">
+                  <p className="text-orange-500 text-xs sm:text-sm">
                     <strong>Need immediate access?</strong> Purchase monthly access below for instant activation.
                   </p>
                 </div>
                 <button 
                   onClick={initializePayment}
-                  className="bg-blue-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold hover:from-lime-600 hover:to-green-600 transition-all duration-300 text-sm sm:text-base"
+                  className="bg-blue-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold hover:from-orange-600 hover:to-blue-600 transition-all duration-300 text-sm sm:text-base"
                 >
                   <span className="hidden sm:inline">Get Instant Access - $29.99/month</span>
                   <span className="sm:hidden">Get Access - $29.99/mo</span>
@@ -356,7 +356,7 @@ const DirectoryAccessControl = () => {
                 </div>
                 <button 
                   onClick={initializePayment}
-                  className="bg-blue-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold hover:from-lime-600 hover:to-green-600 transition-all duration-300 text-sm sm:text-base"
+                  className="bg-blue-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold hover:from-orange-600 hover:to-blue-600 transition-all duration-300 text-sm sm:text-base"
                 >
                   <span className="hidden sm:inline">Renew Access - $29.99/month</span>
                   <span className="sm:hidden">Renew - $29.99/mo</span>
@@ -400,18 +400,18 @@ const DirectoryAccessControl = () => {
                 Monthly access to the Members Directory
               </p>
               <div className="bg-white/10 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6">
-                <div className="text-lime-400 text-xl sm:text-2xl font-bold">$29.99</div>
+                <div className="text-orange-400 text-xl sm:text-2xl font-bold">$29.99</div>
                 <div className="text-gray-400 text-xs sm:text-sm">per month</div>
               </div>
               
               {/* Payment Form Placeholder */}
               <div className="bg-white/5 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 border border-white/10">
-                <p className="text-yellow-300 text-xs sm:text-sm mb-3 sm:mb-4">
+                <p className="text-orange-500 text-xs sm:text-sm mb-3 sm:mb-4">
                   🔧 <strong>Integration Note:</strong> Replace this with Stripe payment form
                 </p>
                 <button 
                   onClick={completePayment}
-                  className="w-full bg-blue-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-bold hover:from-lime-600 hover:to-green-600 transition-all duration-300 text-sm sm:text-base"
+                  className="w-full bg-blue-600 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-bold hover:from-orange-600 hover:to-blue-600 transition-all duration-300 text-sm sm:text-base"
                 >
                   Complete Payment (Demo)
                 </button>

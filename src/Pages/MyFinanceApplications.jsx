@@ -15,18 +15,18 @@ import { toast } from 'react-toastify';
 const statusColors = {
   interested:  { bg: 'bg-blue-500/20',   text: 'text-blue-300',   border: 'border-blue-500/30',   label: 'Interested'    },
   applied:     { bg: 'bg-orange-500/20', text: 'text-orange-300', border: 'border-orange-500/30', label: 'Applied'       },
-  in_review:   { bg: 'bg-yellow-500/20', text: 'text-yellow-300', border: 'border-yellow-500/30', label: 'Under Review'  },
-  awarded:     { bg: 'bg-green-500/20',  text: 'text-green-300',  border: 'border-green-500/30',  label: 'Awarded'       },
+  in_review:   { bg: 'bg-orange-500/20', text: 'text-orange-500', border: 'border-orange-500/30', label: 'Under Review'  },
+  awarded:     { bg: 'bg-blue-500/20',  text: 'text-blue-500',  border: 'border-blue-500/30',  label: 'Awarded'       },
   not_selected:{ bg: 'bg-red-500/20',    text: 'text-red-300',    border: 'border-red-500/30',    label: 'Not Selected'  },
 };
 
 const categoryColors = {
-  scholarships:    'text-purple-400',
+  scholarships:    'text-blue-500',
   loans:           'text-blue-400',
   'work-study':    'text-orange-400',
-  grants:          'text-green-400',
-  assistantships:  'text-cyan-400',
-  fellowships:     'text-pink-400',
+  grants:          'text-blue-400',
+  assistantships:  'text-blue-500',
+  fellowships:     'text-orange-500',
 };
 
 const MyFinanceApplications = () => {
@@ -155,8 +155,8 @@ const MyFinanceApplications = () => {
     }
   };
 
-  const inputCls = "w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:border-green-400 focus:outline-none text-sm transition-all min-h-[44px]";
-  const labelCls = "block text-green-400 font-semibold mb-1.5 text-sm";
+  const inputCls = "w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:border-blue-400 focus:outline-none text-sm transition-all min-h-[44px]";
+  const labelCls = "block text-blue-400 font-semibold mb-1.5 text-sm";
 
   if (authLoading || !currentUser) return null;
 
@@ -171,7 +171,7 @@ const MyFinanceApplications = () => {
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-2"
                 style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
               Finance{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-orange-400">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-orange-400">
                 Applied To
               </span>
             </h1>
@@ -185,8 +185,8 @@ const MyFinanceApplications = () => {
             {[
               { label: 'Total',        value: statCounts.total,        color: 'text-white'       },
               { label: 'Applied',      value: statCounts.applied,      color: 'text-orange-400'  },
-              { label: 'Under Review', value: statCounts.in_review,    color: 'text-yellow-400'  },
-              { label: 'Awarded',      value: statCounts.awarded,      color: 'text-green-400'   },
+              { label: 'Under Review', value: statCounts.in_review,    color: 'text-orange-500'  },
+              { label: 'Awarded',      value: statCounts.awarded,      color: 'text-blue-400'   },
               { label: 'Not Selected', value: statCounts.not_selected, color: 'text-red-400'     },
             ].map((s, i) => (
               <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-3 sm:p-4 text-center">
@@ -214,7 +214,7 @@ const MyFinanceApplications = () => {
                       <button key={f.id} onClick={() => setFilterStatus(f.id)}
                         className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all min-h-[36px] ${
                           filterStatus === f.id
-                            ? 'bg-green-500 text-white'
+                            ? 'bg-blue-500 text-white'
                             : 'bg-white/10 text-gray-600 hover:bg-white/20'
                         }`}>
                         {f.label}
@@ -249,7 +249,7 @@ const MyFinanceApplications = () => {
 
               <button
                 onClick={() => setShowAddModal(true)}
-                className="w-full sm:w-auto sm:self-start flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold rounded-xl text-sm transition-all shadow-lg min-h-[44px]"
+                className="w-full sm:w-auto sm:self-start flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-500 hover:to-blue-600 text-white font-bold rounded-xl text-sm transition-all shadow-lg min-h-[44px]"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -262,13 +262,13 @@ const MyFinanceApplications = () => {
           {/* ── List ── */}
           {loading ? (
             <div className="text-center py-16">
-              <div className="w-8 h-8 border-2 border-green-400 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+              <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
               <p className="text-gray-400 text-sm">Loading your tracker...</p>
             </div>
           ) : filtered.length === 0 ? (
             <div className="text-center py-16">
-              <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-green-400/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-blue-400/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
@@ -283,7 +283,7 @@ const MyFinanceApplications = () => {
               {entries.length === 0 && (
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                   <Link to="/finance"
-                    className="px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold rounded-xl text-sm transition-all hover:from-green-600 hover:to-green-700">
+                    className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-xl text-sm transition-all hover:from-blue-500 hover:to-blue-600">
                     Browse Resources
                   </Link>
                   <button onClick={() => setShowAddModal(true)}
@@ -330,7 +330,7 @@ const MyFinanceApplications = () => {
                           )}
                           {entry.resourceUrl && (
                             <a href={entry.resourceUrl} target="_blank" rel="noopener noreferrer"
-                              className="text-green-400 hover:text-green-300 font-medium underline underline-offset-2 transition-colors"
+                              className="text-blue-400 hover:text-blue-500 font-medium underline underline-offset-2 transition-colors"
                               onClick={e => e.stopPropagation()}>
                               View Resource
                             </a>
@@ -428,7 +428,7 @@ const MyFinanceApplications = () => {
                 Cancel
               </button>
               <button onClick={handleAdd} disabled={addSaving}
-                className="flex-1 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold rounded-xl text-sm transition-all disabled:opacity-50 min-h-[44px]">
+                className="flex-1 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-500 hover:to-blue-600 text-white font-bold rounded-xl text-sm transition-all disabled:opacity-50 min-h-[44px]">
                 {addSaving ? 'Saving...' : 'Add to Tracker'}
               </button>
             </div>

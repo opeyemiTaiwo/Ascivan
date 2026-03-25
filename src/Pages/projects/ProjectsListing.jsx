@@ -168,7 +168,7 @@ const ProjectsListing = () => {
                   >
                     <div className="flex items-start justify-between gap-3 mb-3">
                       <h3 className="text-gray-900 font-bold text-sm sm:text-base line-clamp-2">{project.projectTitle}</h3>
-                      <span className={`flex-shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold ${project.pricingType === 'paid' ? 'bg-blue-600/20 text-blue-500 border border-blue-600/30' : 'bg-blue-600/20 text-green-300 border border-blue-600/30'}`}>
+                      <span className={`flex-shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold ${project.pricingType === 'paid' ? 'bg-blue-600/20 text-blue-500 border border-blue-600/30' : 'bg-blue-600/20 text-blue-500 border border-blue-600/30'}`}>
                         {project.pricingType === 'paid' ? `$${project.totalBudget?.toLocaleString()}` : 'Free'}
                       </span>
                     </div>

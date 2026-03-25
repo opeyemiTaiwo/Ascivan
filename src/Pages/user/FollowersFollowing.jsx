@@ -75,8 +75,8 @@ const FollowersFollowing = () => {
   const badgeCategories = {
     'mentorship': { 
       name: 'TechMO',
-      color: 'text-yellow-400', 
-      bgColor: 'from-yellow-500/20 to-yellow-600/20',
+      color: 'text-orange-500', 
+      bgColor: 'from-orange-500/20 to-orange-600/20',
       skills: ['Mentorship', 'Leadership', 'Technical Coaching', 'Team Development']
     },
     'quality-assurance': { 
@@ -737,7 +737,7 @@ const FollowersFollowing = () => {
         className={`${sizeClasses[size]} rounded-full font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 min-h-[44px] ${
           isFollowing
             ? 'bg-gray-500/20 text-gray-600 border border-gray-500/30 hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/30 active:bg-red-500/30'
-            : 'bg-gradient-to-r from-lime-500 to-blue-600 hover:from-lime-600 hover:to-blue-700 active:from-lime-700 active:to-blue-800 text-gray-900'
+            : 'bg-gradient-to-r from-orange-500 to-blue-600 hover:from-orange-600 hover:to-blue-700 active:from-orange-700 active:to-blue-800 text-gray-900'
         }`}
       >
         {loading ? (
@@ -775,7 +775,7 @@ const FollowersFollowing = () => {
           onClick={() => handleUserClick(user)}
           className="relative flex-shrink-0 group active:scale-95 transition-transform"
         >
-          <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full overflow-hidden bg-gradient-to-br from-lime-400 to-blue-500 flex items-center justify-center text-gray-900 font-bold shadow-lg cursor-pointer">
+          <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full overflow-hidden bg-gradient-to-br from-orange-400 to-blue-500 flex items-center justify-center text-gray-900 font-bold shadow-lg cursor-pointer">
             {user.photoURL ? (
               <img 
                 src={user.photoURL} 
@@ -800,7 +800,7 @@ const FollowersFollowing = () => {
             onClick={() => handleUserClick(user)}
             className="text-left w-full group active:scale-[0.98] transition-transform"
           >
-            <h3 className="font-bold text-gray-900 text-xs xs:text-sm sm:text-base md:text-lg truncate group-hover:text-lime-300 transition-colors">
+            <h3 className="font-bold text-gray-900 text-xs xs:text-sm sm:text-base md:text-lg truncate group-hover:text-orange-400 transition-colors">
               {user.firstName && user.lastName 
                 ? `${user.firstName} ${user.lastName}`
                 : user.displayName || 'Professional User'
@@ -862,7 +862,7 @@ const FollowersFollowing = () => {
                     className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full object-cover ring-2 xs:ring-3 sm:ring-4 ring-blue-400/50"
                   />
                 ) : (
-                  <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-lime-500 to-blue-500 flex items-center justify-center ring-2 xs:ring-3 sm:ring-4 ring-blue-400/50">
+                  <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-orange-500 to-blue-500 flex items-center justify-center ring-2 xs:ring-3 sm:ring-4 ring-blue-400/50">
                     <span className="text-base xs:text-lg sm:text-xl md:text-2xl text-gray-900 font-bold">
                       {member.name?.charAt(0)?.toUpperCase() || '?'}
                     </span>
@@ -881,7 +881,7 @@ const FollowersFollowing = () => {
                 onClick={() => handleUserClick(member)}
                 className="text-left group w-full active:scale-[0.98] transition-transform"
               >
-                <h3 className="text-sm xs:text-base sm:text-lg md:text-xl font-black text-gray-900 group-hover:text-lime-300 transition-colors duration-300 truncate">
+                <h3 className="text-sm xs:text-base sm:text-lg md:text-xl font-black text-gray-900 group-hover:text-orange-400 transition-colors duration-300 truncate">
                   {member.name}
                 </h3>
                 
@@ -898,13 +898,13 @@ const FollowersFollowing = () => {
           </div>
 
           <div className="grid grid-cols-3 gap-1.5 xs:gap-2 sm:gap-3 mb-3 xs:mb-4 sm:mb-6">
-            <div className="bg-yellow-500/10 rounded-md xs:rounded-lg p-1.5 xs:p-2 sm:p-3 text-center border border-yellow-500/20">
-              <div className="text-sm xs:text-base sm:text-lg font-bold text-yellow-400">{member.badges}</div>
-              <div className="text-[10px] xs:text-xs text-yellow-300">Badges</div>
+            <div className="bg-orange-500/10 rounded-md xs:rounded-lg p-1.5 xs:p-2 sm:p-3 text-center border border-orange-500/20">
+              <div className="text-sm xs:text-base sm:text-lg font-bold text-orange-500">{member.badges}</div>
+              <div className="text-[10px] xs:text-xs text-orange-500">Badges</div>
             </div>
             <div className="bg-blue-600/10 rounded-md xs:rounded-lg p-1.5 xs:p-2 sm:p-3 text-center border border-gray-200">
               <div className="text-sm xs:text-base sm:text-lg font-bold text-blue-600">{member.totalProjects}</div>
-              <div className="text-[10px] xs:text-xs text-green-300">Projects</div>
+              <div className="text-[10px] xs:text-xs text-blue-500">Projects</div>
             </div>
             <div className="bg-blue-600/10 rounded-md xs:rounded-lg p-1.5 xs:p-2 sm:p-3 text-center border border-blue-600/20">
               <div className="text-sm xs:text-base sm:text-lg font-bold text-blue-600">{member.memberScore}</div>
@@ -1035,7 +1035,7 @@ const FollowersFollowing = () => {
                       onClick={() => handleUserClick(userProfile)}
                       className="relative flex-shrink-0 group active:scale-95 transition-transform"
                     >
-                      <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full overflow-hidden bg-gradient-to-br from-lime-400 to-blue-500 flex items-center justify-center text-gray-900 font-bold shadow-lg cursor-pointer">
+                      <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full overflow-hidden bg-gradient-to-br from-orange-400 to-blue-500 flex items-center justify-center text-gray-900 font-bold shadow-lg cursor-pointer">
                         {userProfile?.photoURL ? (
                           <img 
                             src={userProfile.photoURL} 
@@ -1058,7 +1058,7 @@ const FollowersFollowing = () => {
                         onClick={() => handleUserClick(userProfile)}
                         className="text-left group w-full active:scale-[0.98] transition-transform"
                       >
-                        <h1 className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl font-black text-gray-900 mb-1 xs:mb-2 group-hover:text-lime-300 transition-colors truncate" 
+                        <h1 className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl font-black text-gray-900 mb-1 xs:mb-2 group-hover:text-orange-400 transition-colors truncate" 
                             style={{
                               textShadow: '0 0 20px rgba(255,255,255,0.3), 2px 2px 4px rgba(0,0,0,0.9)',
                               fontFamily: '"Inter", sans-serif'
@@ -1095,7 +1095,7 @@ const FollowersFollowing = () => {
                         onClick={() => handleTabChange('followers')}
                         className={`flex-1 px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 active:scale-95 text-xs xs:text-sm sm:text-base min-h-[44px] flex items-center justify-center ${
                           activeTab === 'followers'
-                            ? 'bg-gradient-to-r from-lime-500 to-blue-600 text-gray-900 shadow-lg'
+                            ? 'bg-gradient-to-r from-orange-500 to-blue-600 text-gray-900 shadow-lg'
                             : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 active:bg-gray-100'
                         }`}
                       >
@@ -1109,7 +1109,7 @@ const FollowersFollowing = () => {
                         onClick={() => handleTabChange('following')}
                         className={`flex-1 px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 active:scale-95 text-xs xs:text-sm sm:text-base min-h-[44px] flex items-center justify-center ${
                           activeTab === 'following'
-                            ? 'bg-gradient-to-r from-lime-500 to-blue-600 text-gray-900 shadow-lg'
+                            ? 'bg-gradient-to-r from-orange-500 to-blue-600 text-gray-900 shadow-lg'
                             : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 active:bg-gray-100'
                         }`}
                       >
@@ -1125,7 +1125,7 @@ const FollowersFollowing = () => {
                     onClick={() => handleTabChange('members')}
                     className={`flex-1 px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 active:scale-95 text-xs xs:text-sm sm:text-base min-h-[44px] flex items-center justify-center ${
                       activeTab === 'members'
-                        ? 'bg-gradient-to-r from-lime-500 to-blue-600 text-gray-900 shadow-lg'
+                        ? 'bg-gradient-to-r from-orange-500 to-blue-600 text-gray-900 shadow-lg'
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 active:bg-gray-100'
                     }`}
                   >
@@ -1265,7 +1265,7 @@ const FollowersFollowing = () => {
 
                   <div className="flex justify-between items-center text-gray-600 text-xs xs:text-sm sm:text-base">
                     <span>
-                      <span className="text-lime-300 font-semibold">{filteredMembers.length}</span> members found
+                      <span className="text-orange-400 font-semibold">{filteredMembers.length}</span> members found
                     </span>
                   </div>
                 </div>

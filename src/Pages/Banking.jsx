@@ -137,10 +137,10 @@ const Banking = () => {
   const getTypeBadge = (type) => {
     const map = {
       'bank-account': { label: 'Bank Account', cls: 'bg-blue-500/20 text-blue-300' },
-      'credit-card': { label: 'Credit Card', cls: 'bg-purple-500/20 text-purple-300' },
-      'insurance': { label: 'Insurance', cls: 'bg-green-500/20 text-green-300' },
-      'money-transfer': { label: 'Money Transfer', cls: 'bg-yellow-500/20 text-yellow-300' },
-      'investment': { label: 'Investment', cls: 'bg-teal-500/20 text-teal-300' },
+      'credit-card': { label: 'Credit Card', cls: 'bg-blue-500/20 text-blue-400' },
+      'insurance': { label: 'Insurance', cls: 'bg-blue-500/20 text-blue-500' },
+      'money-transfer': { label: 'Money Transfer', cls: 'bg-orange-500/20 text-orange-500' },
+      'investment': { label: 'Investment', cls: 'bg-blue-500/20 text-blue-500' },
       'tax-services': { label: 'Tax Services', cls: 'bg-red-500/20 text-red-300' },
       'financial-aid': { label: 'Financial Aid', cls: 'bg-orange-500/20 text-orange-300' },
     };
@@ -278,14 +278,14 @@ const Banking = () => {
                         <div className="flex items-start justify-between mb-3 gap-2">
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${typeBadge.cls}`}>{typeBadge.label}</span>
-                            {post.noSSNRequired && <span className="bg-green-500/20 text-green-300 px-2.5 py-1 rounded-lg text-xs font-semibold">No SSN Req.</span>}
+                            {post.noSSNRequired && <span className="bg-blue-500/20 text-blue-500 px-2.5 py-1 rounded-lg text-xs font-semibold">No SSN Req.</span>}
                             {post.internationalFriendly && <span className="bg-blue-500/20 text-blue-300 px-2.5 py-1 rounded-lg text-xs font-semibold">Intl. Friendly</span>}
-                            {post.availableNationwide && <span className="bg-teal-500/20 text-teal-300 px-2.5 py-1 rounded-lg text-xs font-semibold">🌎 Nationwide</span>}
+                            {post.availableNationwide && <span className="bg-blue-500/20 text-blue-500 px-2.5 py-1 rounded-lg text-xs font-semibold">🌎 Nationwide</span>}
                             {isClosed && <span className="bg-white/10 text-gray-400 px-2.5 py-1 rounded-lg text-xs font-semibold">Closed</span>}
                           </div>
                           {isOwnPost && (
                             <div className="flex gap-1 flex-shrink-0">
-                              <button onClick={() => handleMarkClosed(post.id, post.status)} className={`${isClosed ? 'text-green-400' : 'text-yellow-400'} px-2 py-1 text-xs font-semibold hover:opacity-75 min-h-[44px] flex items-center`}>
+                              <button onClick={() => handleMarkClosed(post.id, post.status)} className={`${isClosed ? 'text-blue-400' : 'text-orange-500'} px-2 py-1 text-xs font-semibold hover:opacity-75 min-h-[44px] flex items-center`}>
                                 {isClosed ? 'Reopen' : 'Close'}
                               </button>
                               <button onClick={() => handleDelete(post.id)} className="text-red-400 hover:text-red-300 px-2 py-1 text-xs font-semibold min-h-[44px] flex items-center">Delete</button>
@@ -309,7 +309,7 @@ const Banking = () => {
                         {/* Fees */}
                         {post.fees && (
                           <div className="mb-3">
-                            <span className="bg-green-500/20 text-green-300 px-2.5 py-1 rounded-lg text-xs font-semibold">{post.fees}</span>
+                            <span className="bg-blue-500/20 text-blue-500 px-2.5 py-1 rounded-lg text-xs font-semibold">{post.fees}</span>
                           </div>
                         )}
 

@@ -67,8 +67,8 @@ const Logout = () => {
             {/* Hero Section */}
             <div className="mb-4 xs:mb-5 sm:mb-6 md:mb-8">
               <div className="flex items-center justify-center gap-1.5 xs:gap-2 mb-3 xs:mb-4 animate-pulse">
-                <div className="h-1.5 w-1.5 xs:h-2 xs:w-2 sm:h-3 sm:w-3 bg-green-400 rounded-full"></div>
-                <span className="text-green-300 uppercase tracking-wider xs:tracking-widest text-[10px] xs:text-xs sm:text-sm font-black"
+                <div className="h-1.5 w-1.5 xs:h-2 xs:w-2 sm:h-3 sm:w-3 bg-blue-400 rounded-full"></div>
+                <span className="text-blue-500 uppercase tracking-wider xs:tracking-widest text-[10px] xs:text-xs sm:text-sm font-black"
                       style={{
                         textShadow: '0 0 20px rgba(34, 197, 94, 0.8), 2px 2px 4px rgba(0,0,0,0.9)',
                         fontFamily: '"Inter", sans-serif',
@@ -76,7 +76,7 @@ const Logout = () => {
                       }}>
                   Signing Out
                 </span>
-                <div className="h-1.5 w-1.5 xs:h-2 xs:w-2 sm:h-3 sm:w-3 bg-green-400 rounded-full"></div>
+                <div className="h-1.5 w-1.5 xs:h-2 xs:w-2 sm:h-3 sm:w-3 bg-blue-400 rounded-full"></div>
               </div>
 
               <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 xs:mb-3 px-2"
@@ -87,7 +87,7 @@ const Logout = () => {
                 {isLoggedOut ? (
                   <>
                     See You{' '}
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-300 via-orange-400 to-green-500"
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-orange-400 to-blue-600"
                           style={{ textShadow: 'none', filter: 'drop-shadow(0 0 20px rgba(34, 197, 94, 0.5))' }}>
                       Soon!
                     </span>
@@ -103,7 +103,7 @@ const Logout = () => {
                 )}
               </h1>
 
-              <div className="h-0.5 xs:h-1 w-12 xs:w-16 sm:w-20 bg-gradient-to-r from-green-400 to-orange-500 mx-auto rounded-full shadow-2xl"></div>
+              <div className="h-0.5 xs:h-1 w-12 xs:w-16 sm:w-20 bg-gradient-to-r from-blue-500 to-orange-500 mx-auto rounded-full shadow-2xl"></div>
             </div>
 
             {/* Error Message */}
@@ -126,9 +126,9 @@ const Logout = () => {
               <div className="mb-4 xs:mb-5 sm:mb-6">
                 <div className="flex items-center justify-center mb-3 xs:mb-4">
                   <div className="relative">
-                    <div className="animate-spin h-10 w-10 xs:h-12 xs:w-12 sm:h-14 sm:w-14 border-3 xs:border-4 border-green-400/20 border-t-green-400 rounded-full shadow-lg"></div>
+                    <div className="animate-spin h-10 w-10 xs:h-12 xs:w-12 sm:h-14 sm:w-14 border-3 xs:border-4 border-blue-400/20 border-t-blue-500 rounded-full shadow-lg"></div>
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 bg-green-400 rounded-full animate-pulse shadow-lg"></div>
+                      <div className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 bg-blue-400 rounded-full animate-pulse shadow-lg"></div>
                     </div>
                   </div>
                 </div>
@@ -144,17 +144,17 @@ const Logout = () => {
             {/* Success State */}
             {isLoggedOut && !error && (
               <div className="mb-4 xs:mb-5 sm:mb-6">
-                <div className="bg-gradient-to-br from-green-900/40 via-green-800/40 to-green-900/40 border border-green-500/30 text-green-300 px-3 xs:px-4 py-3 xs:py-4 rounded-lg xs:rounded-xl mb-3 xs:mb-4 shadow-2xl">
+                <div className="bg-gradient-to-br from-blue-500/40 via-blue-500/40 to-blue-600/40 border border-blue-500/30 text-blue-500 px-3 xs:px-4 py-3 xs:py-4 rounded-lg xs:rounded-xl mb-3 xs:mb-4 shadow-2xl">
                   <div className="flex items-center justify-center mb-2 xs:mb-3">
                     <div className="relative">
-                      <svg className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
-                      <div className="absolute inset-0 bg-green-400/20 rounded-full"></div>
+                      <div className="absolute inset-0 bg-blue-400/20 rounded-full"></div>
                     </div>
                   </div>
-                  <p className="font-bold text-base xs:text-lg sm:text-xl text-green-300 mb-1 xs:mb-2">Successfully Logged Out!</p>
-                  <p className="text-xs xs:text-sm text-green-200">Thank you for using Loomiqe</p>
+                  <p className="font-bold text-base xs:text-lg sm:text-xl text-blue-500 mb-1 xs:mb-2">Successfully Logged Out!</p>
+                  <p className="text-xs xs:text-sm text-blue-400">Thank you for using Loomiqe</p>
                 </div>
 
                 <div className="bg-gradient-to-br from-orange-900/30 via-orange-800/30 to-orange-900/30 border border-orange-500/20 text-orange-300 px-3 xs:px-4 py-2.5 xs:py-3 rounded-lg xs:rounded-xl">
@@ -165,7 +165,7 @@ const Logout = () => {
                   </p>
                   <div className="mt-1.5 xs:mt-2 bg-orange-500/20 rounded-full h-1.5 xs:h-2 overflow-hidden">
                     <div
-                      className="bg-gradient-to-r from-orange-500 to-green-500 h-full rounded-full transition-all duration-1000 ease-linear"
+                      className="bg-gradient-to-r from-orange-500 to-blue-600 h-full rounded-full transition-all duration-1000 ease-linear"
                       style={{width: `${((3 - countdown) / 3) * 100}%`}}
                     ></div>
                   </div>
@@ -176,14 +176,14 @@ const Logout = () => {
             {/* Not Logged In */}
             {!currentUser && !isLoggedOut && (
               <div className="mb-4 xs:mb-5 sm:mb-6">
-                <div className="bg-gradient-to-br from-yellow-900/40 via-yellow-800/40 to-orange-900/40 border border-yellow-500/30 text-yellow-300 px-3 xs:px-4 py-2.5 xs:py-3 rounded-lg xs:rounded-xl">
+                <div className="bg-gradient-to-br from-orange-500/40 via-orange-800/40 to-orange-900/40 border border-orange-500/30 text-orange-500 px-3 xs:px-4 py-2.5 xs:py-3 rounded-lg xs:rounded-xl">
                   <div className="flex items-center justify-center mb-2">
-                    <svg className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
                     </svg>
                   </div>
-                  <p className="font-bold text-yellow-300 text-sm xs:text-base">Not Currently Logged In</p>
-                  <p className="text-xs xs:text-sm text-yellow-200 mt-1">You are already signed out</p>
+                  <p className="font-bold text-orange-500 text-sm xs:text-base">Not Currently Logged In</p>
+                  <p className="text-xs xs:text-sm text-orange-400 mt-1">You are already signed out</p>
                 </div>
               </div>
             )}
@@ -212,7 +212,7 @@ const Logout = () => {
 
               <button
                 onClick={() => { window.location.href = externalHomeUrl; }}
-                className="w-full bg-gradient-to-r from-green-500 to-orange-500 hover:from-green-600 hover:to-orange-600 text-white py-2.5 xs:py-3 sm:py-3.5 px-4 rounded-lg xs:rounded-xl font-bold transition-all duration-300 text-xs xs:text-sm sm:text-base min-h-[44px]"
+                className="w-full bg-gradient-to-r from-blue-500 to-orange-500 hover:from-blue-500 hover:to-orange-600 text-white py-2.5 xs:py-3 sm:py-3.5 px-4 rounded-lg xs:rounded-xl font-bold transition-all duration-300 text-xs xs:text-sm sm:text-base min-h-[44px]"
                 style={{ boxShadow: '0 10px 30px rgba(34, 197, 94, 0.3)' }}
               >
                 Go to Home

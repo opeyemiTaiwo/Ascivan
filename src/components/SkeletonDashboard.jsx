@@ -47,7 +47,7 @@ const SkeletonDashboard = () => {
         
         <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 md:p-8">
           {/* User Profile Summary Skeleton */}
-          <div className="mb-6 sm:mb-8 p-4 sm:p-6 bg-green-50 rounded-lg">
+          <div className="mb-6 sm:mb-8 p-4 sm:p-6 bg-blue-50 rounded-lg">
             <div className="h-5 sm:h-6 md:h-7 bg-gray-300 rounded w-1/2 sm:w-1/3 md:w-1/4 mb-3 sm:mb-4"></div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>

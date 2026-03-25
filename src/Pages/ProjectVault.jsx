@@ -73,7 +73,7 @@ const ProjectVault = () => {
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="text-gray-900 font-semibold text-base truncate">{project.title || 'Untitled Project'}</h3>
-                      <span className="text-xs font-medium px-2 py-0.5 bg-green-50 text-green-700 rounded-md flex-shrink-0">Completed</span>
+                      <span className="text-xs font-medium px-2 py-0.5 bg-blue-50 text-blue-700 rounded-md flex-shrink-0">Completed</span>
                     </div>
                     <p className="text-gray-400 text-xs">{project.category || 'General'}</p>
                     {project.completedAt && (

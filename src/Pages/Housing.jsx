@@ -141,9 +141,9 @@ const Housing = () => {
   const getTypeBadge = (type) => {
     const map = {
       'apartment': { label: 'Apartment', cls: 'bg-blue-500/20 text-blue-300' },
-      'room': { label: 'Room / Shared', cls: 'bg-purple-500/20 text-purple-300' },
-      'studio': { label: 'Studio', cls: 'bg-teal-500/20 text-teal-300' },
-      'house': { label: 'House', cls: 'bg-green-500/20 text-green-300' },
+      'room': { label: 'Room / Shared', cls: 'bg-blue-500/20 text-blue-400' },
+      'studio': { label: 'Studio', cls: 'bg-blue-500/20 text-blue-500' },
+      'house': { label: 'House', cls: 'bg-blue-500/20 text-blue-500' },
       'student-housing': { label: 'Student Housing', cls: 'bg-orange-500/20 text-orange-300' },
     };
     return map[type] || { label: type || 'Housing', cls: 'bg-orange-500/20 text-orange-300' };
@@ -286,12 +286,12 @@ const Housing = () => {
                         <div className="flex items-start justify-between mb-3 gap-2">
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${typeBadge.cls}`}>{typeBadge.label}</span>
-                            {post.studentFriendly && <span className="bg-green-500/20 text-green-300 px-2.5 py-1 rounded-lg text-xs font-semibold">✓ Student-Friendly</span>}
+                            {post.studentFriendly && <span className="bg-blue-500/20 text-blue-500 px-2.5 py-1 rounded-lg text-xs font-semibold">✓ Student-Friendly</span>}
                             {isClosed && <span className="bg-white/10 text-gray-400 px-2.5 py-1 rounded-lg text-xs font-semibold">Unavailable</span>}
                           </div>
                           {isOwnPost && (
                             <div className="flex gap-1 flex-shrink-0">
-                              <button onClick={() => handleMarkClosed(post.id, post.status)} className={`${isClosed ? 'text-green-400' : 'text-yellow-400'} px-2 py-1 text-xs font-semibold hover:opacity-75 min-h-[44px] flex items-center`}>
+                              <button onClick={() => handleMarkClosed(post.id, post.status)} className={`${isClosed ? 'text-blue-400' : 'text-orange-500'} px-2 py-1 text-xs font-semibold hover:opacity-75 min-h-[44px] flex items-center`}>
                                 {isClosed ? 'Reopen' : 'Close'}
                               </button>
                               <button onClick={() => handleDelete(post.id)} className="text-red-400 hover:text-red-300 px-2 py-1 text-xs font-semibold min-h-[44px] flex items-center">Delete</button>
@@ -314,7 +314,7 @@ const Housing = () => {
                         {/* Price & Details */}
                         <div className="flex flex-wrap gap-2 text-xs mb-3">
                           {post.monthlyRent && (
-                            <span className="bg-green-500/20 text-green-300 px-2.5 py-1 rounded-lg font-semibold">
+                            <span className="bg-blue-500/20 text-blue-500 px-2.5 py-1 rounded-lg font-semibold">
                               ${post.monthlyRent.toLocaleString()}/mo
                             </span>
                           )}

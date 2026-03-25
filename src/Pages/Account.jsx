@@ -85,15 +85,15 @@ const Account = () => {
 
       {/* Earnings Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-5">
-          <p className="text-yellow-700 text-sm mb-1">Pending</p>
-          <p className="text-2xl font-bold text-yellow-700">{fmt(earnings.pending)}</p>
-          <p className="text-yellow-600 text-xs mt-1">From {activeProjects.length} active project{activeProjects.length !== 1 ? 's' : ''}</p>
+        <div className="bg-orange-50 border border-orange-200 rounded-xl p-5">
+          <p className="text-orange-700 text-sm mb-1">Pending</p>
+          <p className="text-2xl font-bold text-orange-700">{fmt(earnings.pending)}</p>
+          <p className="text-orange-600 text-xs mt-1">From {activeProjects.length} active project{activeProjects.length !== 1 ? 's' : ''}</p>
         </div>
-        <div className="bg-green-50 border border-green-200 rounded-xl p-5">
-          <p className="text-green-700 text-sm mb-1">Earned</p>
-          <p className="text-2xl font-bold text-green-700">{fmt(earnings.earned)}</p>
-          <p className="text-green-600 text-xs mt-1">From {completedProjects.length} completed project{completedProjects.length !== 1 ? 's' : ''}</p>
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
+          <p className="text-blue-700 text-sm mb-1">Earned</p>
+          <p className="text-2xl font-bold text-blue-700">{fmt(earnings.earned)}</p>
+          <p className="text-blue-600 text-xs mt-1">From {completedProjects.length} completed project{completedProjects.length !== 1 ? 's' : ''}</p>
         </div>
         <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
           <p className="text-blue-700 text-sm mb-1">Total</p>
@@ -114,8 +114,8 @@ const Account = () => {
                   {p.category && <p className="text-gray-400 text-xs">{p.category}</p>}
                 </div>
                 <div className="flex items-center gap-3 flex-shrink-0 ml-3">
-                  <span className="text-yellow-600 font-semibold text-sm">{fmt(p.budget)}</span>
-                  <span className="text-xs font-medium px-2 py-0.5 bg-yellow-50 text-yellow-700 rounded-md">Pending</span>
+                  <span className="text-orange-600 font-semibold text-sm">{fmt(p.budget)}</span>
+                  <span className="text-xs font-medium px-2 py-0.5 bg-orange-50 text-orange-700 rounded-md">Pending</span>
                 </div>
               </div>
             ))}
@@ -135,8 +135,8 @@ const Account = () => {
                   <p className="text-gray-400 text-xs">{p.completedAt ? p.completedAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Completed'}</p>
                 </div>
                 <div className="flex items-center gap-3 flex-shrink-0 ml-3">
-                  <span className="text-green-600 font-semibold text-sm">{fmt(p.budget)}</span>
-                  <span className="text-xs font-medium px-2 py-0.5 bg-green-50 text-green-700 rounded-md">Earned</span>
+                  <span className="text-blue-600 font-semibold text-sm">{fmt(p.budget)}</span>
+                  <span className="text-xs font-medium px-2 py-0.5 bg-blue-50 text-blue-700 rounded-md">Earned</span>
                 </div>
               </div>
             ))}

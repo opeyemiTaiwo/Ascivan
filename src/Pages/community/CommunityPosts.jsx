@@ -1022,7 +1022,7 @@ const CommunityPosts = () => {
             </div>
 
             <div className="mt-3 xs:mt-4 p-3 xs:p-4 bg-blue-600/10 border border-gray-200 rounded-lg">
-              <p className="text-green-300 text-xs xs:text-sm flex items-start gap-2">
+              <p className="text-blue-500 text-xs xs:text-sm flex items-start gap-2">
                 <svg className="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -1152,7 +1152,7 @@ const CommunityPosts = () => {
                       <button
                         onClick={() => changeViewMode('all')}
                         className={`w-full text-left px-3 xs:px-4 py-2.5 xs:py-3 hover:bg-gray-100 transition-colors text-sm xs:text-base ${
-                          viewMode === 'all' ? 'bg-blue-600/20 text-green-300' : 'text-gray-900'
+                          viewMode === 'all' ? 'bg-blue-600/20 text-blue-500' : 'text-gray-900'
                         }`}
                       >
                         All Posts
@@ -1160,7 +1160,7 @@ const CommunityPosts = () => {
                       <button
                         onClick={() => changeViewMode('myPosts')}
                         className={`w-full text-left px-3 xs:px-4 py-2.5 xs:py-3 hover:bg-gray-100 transition-colors text-sm xs:text-base ${
-                          viewMode === 'myPosts' ? 'bg-blue-600/20 text-green-300' : 'text-gray-900'
+                          viewMode === 'myPosts' ? 'bg-blue-600/20 text-blue-500' : 'text-gray-900'
                         }`}
                       >
                         My Posts
@@ -1168,7 +1168,7 @@ const CommunityPosts = () => {
                       <button
                         onClick={() => changeViewMode('mentions')}
                         className={`w-full text-left px-3 xs:px-4 py-2.5 xs:py-3 hover:bg-gray-100 transition-colors text-sm xs:text-base ${
-                          viewMode === 'mentions' ? 'bg-blue-600/20 text-green-300' : 'text-gray-900'
+                          viewMode === 'mentions' ? 'bg-blue-600/20 text-blue-500' : 'text-gray-900'
                         }`}
                       >
                         Mentions
@@ -1239,7 +1239,7 @@ const CommunityPosts = () => {
                                     lastName: post.authorLastName,
                                     displayName: post.authorName
                                   }}
-                                  className="font-semibold text-gray-900 hover:text-green-300 transition-colors text-sm xs:text-base"
+                                  className="font-semibold text-gray-900 hover:text-blue-500 transition-colors text-sm xs:text-base"
                                 />
                                 
                                 {post.authorTitle && (
@@ -1535,7 +1535,7 @@ const CommunityPosts = () => {
 
                             <button
                               onClick={() => handleSharePost(post.id)}
-                              className="flex items-center gap-1 xs:gap-1.5 px-2 xs:px-3 py-1.5 xs:py-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg text-gray-400 hover:text-cyan-400 font-medium transition-all duration-300 text-xs xs:text-sm min-h-[44px]"
+                              className="flex items-center gap-1 xs:gap-1.5 px-2 xs:px-3 py-1.5 xs:py-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg text-gray-400 hover:text-blue-500 font-medium transition-all duration-300 text-xs xs:text-sm min-h-[44px]"
                             >
                               <svg className="w-4 h-4 xs:w-5 xs:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
@@ -1610,7 +1610,7 @@ const CommunityPosts = () => {
                                                 lastName: reply.authorLastName,
                                                 displayName: reply.authorName
                                               }}
-                                              className="font-semibold text-gray-900 hover:text-green-300 transition-colors text-xs xs:text-sm"
+                                              className="font-semibold text-gray-900 hover:text-blue-500 transition-colors text-xs xs:text-sm"
                                             />
                                             
                                             {reply.authorTitle && (

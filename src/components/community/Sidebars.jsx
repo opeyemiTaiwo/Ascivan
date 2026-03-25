@@ -16,6 +16,12 @@ import { EnhancedClickableUserName } from './UserComponents';
 export const UserQuickLinksSidebar = ({ currentUser, onNavigate, isMobile = false }) => {
   const quickLinks = [
     {
+      title: 'Dashboard',
+      description: 'View your overview',
+      path: '/dashboard',
+      gradient: 'from-blue-600 to-blue-700'
+    },
+    {
       title: 'Projects',
       description: 'Browse active projects',
       path: '/projects',

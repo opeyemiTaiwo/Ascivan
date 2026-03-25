@@ -78,7 +78,7 @@ const ProjectSubmission = () => {
 
   // Team roles — dynamic list, payment per role when paid
   const [teamRoles, setTeamRoles] = useState([
-    { role: '', skills: '', count: 1, paymentPerPerson: '' }
+    { role: '', skills: '', count: 1, experienceLevel: 'any-level', paymentPerPerson: '' }
   ]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -124,7 +124,7 @@ const ProjectSubmission = () => {
 
   const addRole = () => {
     if (teamRoles.length < 10) {
-      setTeamRoles(prev => [...prev, { role: '', skills: '', count: 1, paymentPerPerson: '' }]);
+      setTeamRoles(prev => [...prev, { role: '', skills: '', count: 1, experienceLevel: 'any-level', paymentPerPerson: '' }]);
     }
   };
 
@@ -201,14 +201,16 @@ const ProjectSubmission = () => {
     }
 
     try {
+      const isPaid = formData.pricingType === 'paid';
+
       const validRoles = teamRoles.filter(r => r.role.trim()).map(r => ({
         role: r.role.trim(),
         skills: r.skills.trim(),
         count: parseInt(r.count) || 1,
+        experienceLevel: r.experienceLevel || 'any-level',
         paymentPerPerson: isPaid ? (parseFloat(r.paymentPerPerson) || 0) : 0,
       }));
 
-      const isPaid = formData.pricingType === 'paid';
       const computedTotalBudget = isPaid 
         ? validRoles.reduce((sum, r) => sum + (r.paymentPerPerson * r.count), 0) 
         : 0;
@@ -420,7 +422,7 @@ const ProjectSubmission = () => {
                         <button type="button" onClick={() => removeRole(index)} className="text-red-400 hover:text-red-300 text-xs font-semibold transition-colors">Remove</button>
                       )}
                     </div>
-                    <div className={`grid grid-cols-1 gap-3 ${formData.pricingType === 'paid' ? 'sm:grid-cols-4' : 'sm:grid-cols-3'}`}>
+                    <div className={`grid grid-cols-1 gap-3 ${formData.pricingType === 'paid' ? 'sm:grid-cols-5' : 'sm:grid-cols-4'}`}>
                       <div>
                         <label className="block text-gray-400 text-xs mb-1">Role Title *</label>
                         <select value={role.role} onChange={e => handleRoleChange(index, 'role', e.target.value)} className={selectClass}>
@@ -435,6 +437,16 @@ const ProjectSubmission = () => {
                       <div>
                         <label className="block text-gray-400 text-xs mb-1">Skills Required *</label>
                         <input type="text" value={role.skills} onChange={e => handleRoleChange(index, 'skills', e.target.value)} className={inputClass} placeholder="e.g., React, Node.js" />
+                      </div>
+                      <div>
+                        <label className="block text-gray-400 text-xs mb-1">Experience Level</label>
+                        <select value={role.experienceLevel || 'any-level'} onChange={e => handleRoleChange(index, 'experienceLevel', e.target.value)} className={selectClass}>
+                          <option value="any-level">Any Level</option>
+                          <option value="beginner">Beginner</option>
+                          <option value="intermediate">Intermediate</option>
+                          <option value="advanced">Advanced</option>
+                          <option value="expert">Expert</option>
+                        </select>
                       </div>
                       {formData.pricingType === 'paid' && (
                         <div>

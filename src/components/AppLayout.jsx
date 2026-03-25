@@ -142,10 +142,12 @@ const AppLayout = ({ children }) => {
               </svg>
             </button>
             )}
-            <a href="/community" className="hidden lg:flex items-center gap-1">
+            {location.pathname === '/community' && (
+            <a href="/community" className="hidden lg:flex items-center gap-1 ml-4">
               <span className="text-gray-900 text-base font-bold tracking-tight">Loomiqe</span>
               <span className="w-2 h-2 rounded-full bg-orange-500"></span>
             </a>
+            )}
           </div>
           <div className="flex-1" />
           <div className="flex items-center gap-3 sm:gap-5 md:gap-7 pr-6 sm:pr-12 lg:pr-16">

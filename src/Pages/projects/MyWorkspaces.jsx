@@ -15,17 +15,41 @@ const MyWorkspaces = () => {
     if (!currentUser) return;
     const fetchProjects = async () => {
       try {
-        // Fetch projects where user is a member and status is active or awaiting payment
-        const q = query(
-          collection(db, 'projects'),
-          where('members', 'array-contains', currentUser.uid),
-        );
-        const snap = await getDocs(q);
-        const active = snap.docs
-          .map(d => ({ id: d.id, ...d.data() }))
-          .filter(p => p.status === 'active' || p.status === 'awaiting_payment_confirmation');
-        active.sort((a, b) => (b.createdAt?.toDate?.() || 0) - (a.createdAt?.toDate?.() || 0));
-        setProjects(active);
+        const allProjects = new Map();
+
+        // Fetch projects where user is a member
+        try {
+          const memberQ = query(
+            collection(db, 'projects'),
+            where('members', 'array-contains', currentUser.uid),
+          );
+          const memberSnap = await getDocs(memberQ);
+          memberSnap.docs.forEach(d => {
+            const data = { id: d.id, ...d.data(), isOwner: false };
+            if (data.status === 'active' || data.status === 'awaiting_payment_confirmation') {
+              allProjects.set(d.id, data);
+            }
+          });
+        } catch (e) { console.log('Member projects query skipped:', e.message); }
+
+        // Fetch projects where user is the owner
+        try {
+          const ownerQ = query(
+            collection(db, 'projects'),
+            where('submitterId', '==', currentUser.uid),
+          );
+          const ownerSnap = await getDocs(ownerQ);
+          ownerSnap.docs.forEach(d => {
+            const data = { id: d.id, ...d.data(), isOwner: true };
+            if (data.status === 'active' || data.status === 'awaiting_payment_confirmation') {
+              allProjects.set(d.id, data); // overwrites if already exists, marks as owner
+            }
+          });
+        } catch (e) { console.log('Owner projects query skipped:', e.message); }
+
+        const projects = Array.from(allProjects.values());
+        projects.sort((a, b) => (b.createdAt?.toDate?.() || 0) - (a.createdAt?.toDate?.() || 0));
+        setProjects(projects);
       } catch (e) { console.error('Error fetching workspaces:', e); }
       setLoading(false);
     };
@@ -64,6 +88,9 @@ const MyWorkspaces = () => {
                   <p className="text-gray-500 text-xs mt-0.5">{project.category || project.industryTrack || 'General'}</p>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0 ml-3">
+                  {project.isOwner && (
+                    <span className="text-[10px] font-semibold bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Owner</span>
+                  )}
                   <span className={`text-xs font-medium px-2 py-0.5 rounded-md ${project.status === 'active' ? 'bg-blue-50 text-blue-700' : 'bg-orange-50 text-orange-700'}`}>
                     {project.status === 'active' ? 'Active' : 'Awaiting Payment'}
                   </span>

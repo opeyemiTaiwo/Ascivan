@@ -12,7 +12,10 @@ const AppLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
+  const [unreadNetwork, setUnreadNetwork] = useState(0);
+  const [unreadAccount, setUnreadAccount] = useState(0);
 
+  // Unread messages
   useEffect(() => {
     if (!currentUser) return;
     const q = query(collection(db, 'conversations'), where('participants', 'array-contains', currentUser.uid));
@@ -24,10 +27,22 @@ const AppLayout = ({ children }) => {
     return () => unsub();
   }, [currentUser]);
 
+  // All unread notifications
   useEffect(() => {
     if (!currentUser) return;
     const q = query(collection(db, 'notifications'), where('userId', '==', currentUser.uid), where('isRead', '==', false));
-    const unsub = onSnapshot(q, (snap) => setUnreadNotifications(snap.size), () => {});
+    const unsub = onSnapshot(q, (snap) => {
+      setUnreadNotifications(snap.size);
+      // Count network (follow) notifications
+      let network = 0, account = 0;
+      snap.docs.forEach(d => {
+        const type = d.data().type || '';
+        if (type === 'follow' || type === 'new_follower' || type.includes('follow')) network++;
+        if (type === 'project_completed' || type === 'payment_confirmed' || type === 'payment_confirmation' || type === 'application_approved') account++;
+      });
+      setUnreadNetwork(network);
+      setUnreadAccount(account);
+    }, () => {});
     return () => unsub();
   }, [currentUser]);
 
@@ -123,18 +138,28 @@ const AppLayout = ({ children }) => {
           <div className="flex-1" />
           <div className="flex items-center gap-3 sm:gap-5 md:gap-7">
             {/* Account */}
-            <Link to="/account" className={`flex flex-col items-center gap-0.5 px-1.5 sm:px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0 ${location.pathname === '/account' ? 'text-blue-600' : 'text-gray-500'}`}>
+            <Link to="/account" className={`relative flex flex-col items-center gap-0.5 px-1.5 sm:px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0 ${location.pathname === '/account' ? 'text-blue-600' : 'text-gray-500'}`}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
               </svg>
               <span className="text-[10px] sm:text-[11px] font-semibold leading-none">Account</span>
+              {unreadAccount > 0 && (
+                <span className="absolute -top-0.5 right-0 bg-red-500 text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold leading-none">
+                  {unreadAccount > 9 ? '9+' : unreadAccount}
+                </span>
+              )}
             </Link>
             {/* Network */}
-            <Link to="/members-directory" className={`flex flex-col items-center gap-0.5 px-1.5 sm:px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0 ${location.pathname.startsWith('/members') ? 'text-blue-600' : 'text-gray-500'}`}>
+            <Link to="/members-directory" className={`relative flex flex-col items-center gap-0.5 px-1.5 sm:px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0 ${location.pathname.startsWith('/members') ? 'text-blue-600' : 'text-gray-500'}`}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
               <span className="text-[10px] sm:text-[11px] font-semibold leading-none">Network</span>
+              {unreadNetwork > 0 && (
+                <span className="absolute -top-0.5 right-0 bg-red-500 text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold leading-none">
+                  {unreadNetwork > 9 ? '9+' : unreadNetwork}
+                </span>
+              )}
             </Link>
             {/* Messaging */}
             <Link to="/messages" className={`relative flex flex-col items-center gap-0.5 px-1.5 sm:px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0 ${location.pathname === '/messages' ? 'text-blue-600' : 'text-gray-500'}`}>

@@ -442,9 +442,9 @@ const SubmitPost = () => {
   // Loading state
   if (!currentUser) {
     return (
-      <div className="min-h-screen overflow-x-hidden bg-black text-white flex items-center justify-center">
+      <div className="min-h-screen overflow-x-hidden bg-white text-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-orange-400 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
           <p className="text-gray-400 text-sm sm:text-base">Loading...</p>
         </div>
       </div>
@@ -452,9 +452,9 @@ const SubmitPost = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-white text-gray-900">
       {/* Header - Responsive */}
-      <header className="sticky top-0 z-50 bg-black/80 border-b border-orange-500/20">
+      <header className="sticky top-0 z-50 bg-white/80 border-b border-blue-600/20">
         <div className="max-w-4xl mx-auto px-3 sm:px-4 lg:px-8">
           <div className="flex items-center justify-between h-14 sm:h-16">
             <Link to="/community" className="flex items-center space-x-2 sm:space-x-3 group">
@@ -464,7 +464,7 @@ const SubmitPost = () => {
                 className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg"
               />
               <div>
-                <h1 className="text-base sm:text-xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
+                <h1 className="text-base sm:text-xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
                   Create Post
                 </h1>
                 <p className="text-[10px] sm:text-xs text-gray-400 hidden xs:block">Share with the community</p>
@@ -473,7 +473,7 @@ const SubmitPost = () => {
 
             <Link
               to="/community"
-              className="flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-gray-400 hover:text-white transition-all duration-300 text-sm"
+              className="flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg text-gray-400 hover:text-gray-900 transition-all duration-300 text-sm"
               aria-label="Cancel and return to community"
             >
               <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -490,12 +490,12 @@ const SubmitPost = () => {
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           
           {/* Post Form Card */}
-          <div className="bg-gradient-to-br from-gray-900/50 via-black/50 to-gray-900/50 rounded-xl sm:rounded-2xl border border-orange-500/10 shadow-2xl overflow-hidden">
+          <div className="bg-gradient-to-br from-gray-900/50 via-black/50 to-gray-900/50 rounded-xl sm:rounded-2xl border border-blue-600/10 shadow-2xl overflow-hidden">
             <div className="p-4 sm:p-6 lg:p-8">
               
               {/* Author Info - Responsive */}
               <div className="flex items-center space-x-2 sm:space-x-3 mb-4 sm:mb-6">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center text-white font-bold flex-shrink-0">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center text-gray-900 font-bold flex-shrink-0">
                   {currentUser.photoURL ? (
                     <img 
                       src={currentUser.photoURL} 
@@ -512,19 +512,19 @@ const SubmitPost = () => {
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="font-semibold text-white text-sm sm:text-base truncate">
+                  <p className="font-semibold text-gray-900 text-sm sm:text-base truncate">
                     {profilePosterName || currentUser.displayName || currentUser.email}
                     
                   </p>
                   {currentUser.profile?.title && (
-                    <p className="text-xs sm:text-sm text-orange-400 truncate">{currentUser.profile.title}</p>
+                    <p className="text-xs sm:text-sm text-blue-600 truncate">{currentUser.profile.title}</p>
                   )}
                 </div>
               </div>
 
               {/* Title Input - Responsive */}
               <div className="mb-3 sm:mb-4">
-                <label htmlFor="title" className="block text-white font-medium mb-2 text-sm sm:text-base">
+                <label htmlFor="title" className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
                   Title <span className="text-gray-400 text-xs sm:text-sm">(Optional)</span>
                 </label>
                 <input
@@ -534,7 +534,7 @@ const SubmitPost = () => {
                   onChange={(e) => handleChange('title', e.target.value)}
                   placeholder="Give your post a title..."
                   maxLength={200}
-                  className="w-full p-2.5 sm:p-3 bg-black/30 border border-orange-500/20 rounded-lg text-white placeholder-gray-400 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-400/20 transition-colors text-sm sm:text-base"
+                  className="w-full p-2.5 sm:p-3 bg-white/30 border border-blue-600/20 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-colors text-sm sm:text-base"
                 />
                 <div className="flex justify-between items-center mt-1">
                   <p className="text-[10px] sm:text-xs text-gray-400">Make your post stand out</p>
@@ -544,14 +544,14 @@ const SubmitPost = () => {
 
               {/* Content Input - Responsive */}
               <div className="mb-3 sm:mb-4">
-                <label htmlFor="content" className="block text-white font-medium mb-2 text-sm sm:text-base">
+                <label htmlFor="content" className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
                   Content *
                 </label>
                 <MentionTextarea
                   value={formData.content}
                   onChange={(value) => handleChange('content', value)}
                   placeholder="What's on your mind? Share your thoughts... Use @ to mention someone"
-                  className="w-full p-2.5 sm:p-3 bg-black/30 border border-orange-500/20 rounded-lg text-white placeholder-gray-400 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-400/20 transition-colors resize-none text-sm sm:text-base"
+                  className="w-full p-2.5 sm:p-3 bg-white/30 border border-blue-600/20 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-colors resize-none text-sm sm:text-base"
                   rows={8}
                   onMentionSelect={handleMentionSelect}
                   showLinkButton={true}
@@ -574,7 +574,7 @@ const SubmitPost = () => {
 
               {/* Image Upload Section - Responsive */}
               <div className="mb-4 sm:mb-6">
-                <label className="block text-white font-medium mb-2 text-sm sm:text-base">
+                <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
                   Images <span className="text-gray-400 text-xs sm:text-sm">(Optional - Max 4)</span>
                 </label>
                 
@@ -586,8 +586,8 @@ const SubmitPost = () => {
                   onDrop={handleDrop}
                   className={`relative border-2 border-dashed rounded-lg p-4 sm:p-6 lg:p-8 text-center transition-all duration-300 ${
                     dragActive 
-                      ? 'border-orange-400 bg-orange-500/10' 
-                      : 'border-orange-500/20 bg-black/20 hover:border-orange-500/40 hover:bg-black/30'
+                      ? 'border-blue-500 bg-blue-600/10' 
+                      : 'border-blue-600/20 bg-gray-100 hover:border-blue-600/40 hover:bg-white/30'
                   }`}
                 >
                   <input
@@ -602,7 +602,7 @@ const SubmitPost = () => {
                   <div className="space-y-2 sm:space-y-3">
                     
                     <div>
-                      <p className="text-white font-medium mb-1 text-sm sm:text-base">
+                      <p className="text-gray-900 font-medium mb-1 text-sm sm:text-base">
                         Drag and drop images here
                       </p>
                       <p className="text-gray-400 text-xs sm:text-sm mb-2 sm:mb-3">
@@ -611,7 +611,7 @@ const SubmitPost = () => {
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        className="inline-flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/40 rounded-lg text-orange-300 hover:text-orange-200 transition-all duration-300 text-sm"
+                        className="inline-flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-600/40 rounded-lg text-blue-500 hover:text-orange-200 transition-all duration-300 text-sm"
                       >
                         <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -645,14 +645,14 @@ const SubmitPost = () => {
                         <img 
                           src={previewUrls[index]} 
                           alt={`Preview ${index + 1}`}
-                          className="w-full h-32 sm:h-40 object-cover rounded-lg border border-orange-500/20"
+                          className="w-full h-32 sm:h-40 object-cover rounded-lg border border-blue-600/20"
                         />
                         
                         {/* Remove Button - Responsive */}
                         <button
                           type="button"
                           onClick={() => removeFile(index)}
-                          className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-7 h-7 sm:w-8 sm:h-8 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition-colors opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
+                          className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-7 h-7 sm:w-8 sm:h-8 bg-red-500 hover:bg-red-600 text-gray-900 rounded-full flex items-center justify-center transition-colors opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                           aria-label={`Remove ${file.name}`}
                         >
                           <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -661,28 +661,28 @@ const SubmitPost = () => {
                         </button>
 
                         {/* File Info - Responsive */}
-                        <div className="absolute bottom-0 left-0 right-0 bg-black/70 p-1.5 sm:p-2 rounded-b-lg">
-                          <p className="text-[10px] sm:text-xs text-white truncate">{file.name}</p>
+                        <div className="absolute bottom-0 left-0 right-0 bg-white/70 p-1.5 sm:p-2 rounded-b-lg">
+                          <p className="text-[10px] sm:text-xs text-gray-900 truncate">{file.name}</p>
                           <p className="text-[9px] sm:text-xs text-gray-400">{formatFileSize(file.size)}</p>
                         </div>
 
                         {/* Upload Progress */}
                         {uploading && uploadProgress[index] !== undefined && (
-                          <div className="absolute inset-0 bg-black/80 flex items-center justify-center rounded-lg">
+                          <div className="absolute inset-0 bg-white/80 flex items-center justify-center rounded-lg">
                             {uploadProgress[index] === -1 ? (
                               <div className="text-red-400 text-center">
                                 <div className="text-xl sm:text-2xl mb-1">❌</div>
                                 <div className="text-[10px] sm:text-xs">Failed</div>
                               </div>
                             ) : uploadProgress[index] === 100 ? (
-                              <div className="text-green-400 text-center">
+                              <div className="text-blue-600 text-center">
                                 <div className="text-xl sm:text-2xl mb-1">✅</div>
                                 <div className="text-[10px] sm:text-xs">Uploaded</div>
                               </div>
                             ) : (
                               <div className="text-center">
-                                <div className="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-orange-400 mx-auto mb-1.5 sm:mb-2"></div>
-                                <div className="text-white text-[10px] sm:text-xs">Uploading...</div>
+                                <div className="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-blue-500 mx-auto mb-1.5 sm:mb-2"></div>
+                                <div className="text-gray-900 text-[10px] sm:text-xs">Uploading...</div>
                               </div>
                             )}
                           </div>
@@ -695,7 +695,7 @@ const SubmitPost = () => {
             </div>
 
             {/* Footer Actions - Responsive */}
-            <div className="p-4 sm:p-6 bg-black/20 border-t border-orange-500/10">
+            <div className="p-4 sm:p-6 bg-gray-100 border-t border-blue-600/10">
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between space-y-2 sm:space-y-0 sm:space-x-4">
                 <div className="text-gray-400 text-xs sm:text-sm">
                   {selectedFiles.length > 0 && (
@@ -709,14 +709,14 @@ const SubmitPost = () => {
                 <div className="flex space-x-2 sm:space-x-3">
                   <Link
                     to="/community"
-                    className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors text-center text-sm"
+                    className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-gray-700 hover:bg-gray-600 text-gray-900 rounded-lg font-medium transition-colors text-center text-sm"
                   >
                     Cancel
                   </Link>
                   <button
                     type="submit"
                     disabled={submitting || uploading || !formData.content.trim()}
-                    className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                    className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                   >
                     {submitting ? (
                       <span className="flex items-center justify-center">

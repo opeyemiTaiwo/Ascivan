@@ -129,14 +129,14 @@ const ProjectDetail = () => {
     setSubmittingApp(false);
   };
 
-  const inputClass = "w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 min-h-[44px] text-white placeholder-gray-400 focus:border-orange-400 focus:outline-none text-sm transition-all";
+  const inputClass = "w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 min-h-[44px] text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none text-sm transition-all";
 
   if (loading) {
     return (
       <>
         
-        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#000' }}>
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-400"></div>
+        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#ffffff' }}>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
         </div>
       </>
     );
@@ -146,10 +146,10 @@ const ProjectDetail = () => {
     return (
       <>
         
-        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#000' }}>
+        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#ffffff' }}>
           <div className="text-center">
-            <p className="text-white text-lg font-bold mb-4">Project not found</p>
-            <Link to="/projects" className="text-orange-400 hover:text-orange-300 font-semibold text-sm">Back to Projects</Link>
+            <p className="text-gray-900 text-lg font-bold mb-4">Project not found</p>
+            <Link to="/projects" className="text-blue-600 hover:text-blue-500 font-semibold text-sm">Back to Projects</Link>
           </div>
         </div>
       </>
@@ -161,25 +161,25 @@ const ProjectDetail = () => {
   return (
     <>
       
-      <div className="min-h-screen overflow-x-hidden " style={{ backgroundColor: '#000' }}>
+      <div className="min-h-screen overflow-x-hidden " style={{ backgroundColor: '#ffffff' }}>
         <main className="pb-16 sm:pb-20">
           <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-4xl">
 
             {/* Back */}
-            <Link to="/projects" className="inline-flex items-center text-gray-400 hover:text-white text-sm font-semibold mb-6 transition-colors">
+            <Link to="/projects" className="inline-flex items-center text-gray-400 hover:text-gray-900 text-sm font-semibold mb-6 transition-colors">
               ← Back to Projects
             </Link>
 
             {/* Header */}
-            <div className="bg-white/5 border border-white/20 rounded-2xl p-5 sm:p-8 mb-6">
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-8 mb-6">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white">{project.projectTitle}</h1>
-                <span className={`flex-shrink-0 px-3 py-1 rounded-full text-xs font-bold ${isPaid ? 'bg-orange-500/20 text-orange-300 border border-orange-500/30' : 'bg-green-500/20 text-green-300 border border-green-500/30'}`}>
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">{project.projectTitle}</h1>
+                <span className={`flex-shrink-0 px-3 py-1 rounded-full text-xs font-bold ${isPaid ? 'bg-blue-600/20 text-blue-500 border border-blue-600/30' : 'bg-blue-600/20 text-green-300 border border-blue-600/30'}`}>
                   {isPaid ? `$${project.totalBudget?.toLocaleString()} Budget` : 'Free Project'}
                 </span>
               </div>
 
-              <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-6">{project.projectDescription}</p>
+              <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-6">{project.projectDescription}</p>
 
               {/* Info Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
@@ -189,40 +189,40 @@ const ProjectDetail = () => {
                   ['Team Size', `${project.maxTeamSize || 0} people`],
                   ['Level', project.experienceLevel === 'any-level' ? 'Any Level' : project.experienceLevel || 'Any'],
                 ].map(([label, val]) => (
-                  <div key={label} className="bg-white/5 rounded-xl p-3 border border-white/10">
+                  <div key={label} className="bg-gray-50 rounded-xl p-3 border border-gray-200">
                     <p className="text-gray-500 text-[10px] uppercase tracking-wider font-semibold">{label}</p>
-                    <p className="text-white text-sm font-medium mt-0.5">{val}</p>
+                    <p className="text-gray-900 text-sm font-medium mt-0.5">{val}</p>
                   </div>
                 ))}
               </div>
 
               {/* Dates */}
               <div className="grid grid-cols-2 gap-3 mb-6">
-                <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+                <div className="bg-gray-50 rounded-xl p-3 border border-gray-200">
                   <p className="text-gray-500 text-[10px] uppercase tracking-wider font-semibold">Start Date</p>
-                  <p className="text-white text-sm font-medium mt-0.5">{project.startDate ? new Date(project.startDate).toLocaleDateString() : 'TBD'}</p>
+                  <p className="text-gray-900 text-sm font-medium mt-0.5">{project.startDate ? new Date(project.startDate).toLocaleDateString() : 'TBD'}</p>
                 </div>
-                <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+                <div className="bg-gray-50 rounded-xl p-3 border border-gray-200">
                   <p className="text-gray-500 text-[10px] uppercase tracking-wider font-semibold">End Date</p>
-                  <p className="text-white text-sm font-medium mt-0.5">{project.endDate ? new Date(project.endDate).toLocaleDateString() : 'TBD'}</p>
+                  <p className="text-gray-900 text-sm font-medium mt-0.5">{project.endDate ? new Date(project.endDate).toLocaleDateString() : 'TBD'}</p>
                 </div>
               </div>
 
               {/* Goals */}
               {project.projectGoals && (
                 <div className="mb-6">
-                  <h3 className="text-orange-400 font-semibold text-sm mb-2">Project Goals</h3>
-                  <p className="text-gray-300 text-sm leading-relaxed">{project.projectGoals}</p>
+                  <h3 className="text-blue-600 font-semibold text-sm mb-2">Project Goals</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">{project.projectGoals}</p>
                 </div>
               )}
 
               {/* Posted by */}
-              <div className="flex items-center gap-3 pt-4 border-t border-white/10">
+              <div className="flex items-center gap-3 pt-4 border-t border-gray-200">
                 {project.submitterPhoto && (
                   <img src={project.submitterPhoto} alt="" className="w-8 h-8 rounded-full object-cover" />
                 )}
                 <div>
-                  <p className="text-white text-sm font-semibold">{project.contactName || 'Project Owner'}</p>
+                  <p className="text-gray-900 text-sm font-semibold">{project.contactName || 'Project Owner'}</p>
                   <p className="text-gray-500 text-xs">{project.companyName || project.submitterEmail}</p>
                 </div>
               </div>
@@ -230,18 +230,18 @@ const ProjectDetail = () => {
 
             {/* Team Roles */}
             {project.teamRoles && project.teamRoles.length > 0 && (
-              <div className="bg-white/5 border border-white/20 rounded-2xl p-5 sm:p-8 mb-6">
-                <h2 className="text-lg font-bold text-white mb-4">Team Roles Needed</h2>
+              <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-8 mb-6">
+                <h2 className="text-lg font-bold text-gray-900 mb-4">Team Roles Needed</h2>
                 <div className="space-y-3">
                   {project.teamRoles.map((role, i) => (
-                    <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <div key={i} className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                       <div>
-                        <p className="text-white font-semibold text-sm">{role.role}</p>
+                        <p className="text-gray-900 font-semibold text-sm">{role.role}</p>
                         <p className="text-gray-400 text-xs mt-0.5">Skills: {role.skills}</p>
                       </div>
                       <div className="flex items-center gap-3 flex-shrink-0">
                         {isPaid && role.paymentPerPerson > 0 && (
-                          <span className="text-orange-300 text-xs font-bold">${role.paymentPerPerson.toLocaleString()} / person</span>
+                          <span className="text-blue-500 text-xs font-bold">${role.paymentPerPerson.toLocaleString()} / person</span>
                         )}
                         <span className="text-gray-400 text-xs font-bold">{role.count} {role.count === 1 ? 'person' : 'people'}</span>
                       </div>
@@ -253,11 +253,11 @@ const ProjectDetail = () => {
 
             {/* Payment Summary */}
             {isPaid && (
-              <div className="bg-white/5 border border-white/20 rounded-2xl p-5 sm:p-8 mb-6">
-                <h2 className="text-lg font-bold text-white mb-4">Payment Summary</h2>
-                <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl p-4 text-center">
+              <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-8 mb-6">
+                <h2 className="text-lg font-bold text-gray-900 mb-4">Payment Summary</h2>
+                <div className="bg-blue-600/10 border border-blue-600/20 rounded-xl p-4 text-center">
                   <p className="text-gray-400 text-xs uppercase tracking-wider font-semibold">Total Project Budget</p>
-                  <p className="text-orange-300 text-xl font-black mt-1">${project.totalBudget?.toLocaleString()}</p>
+                  <p className="text-blue-500 text-xl font-black mt-1">${project.totalBudget?.toLocaleString()}</p>
                   <p className="text-gray-500 text-xs mt-1">Payment is distributed per role upon project completion</p>
                 </div>
               </div>
@@ -265,24 +265,24 @@ const ProjectDetail = () => {
 
             {/* Apply Section */}
             {!isOwner && currentUser && (
-              <div className="bg-white/5 border border-white/20 rounded-2xl p-5 sm:p-8">
+              <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-8">
                 {hasApplied ? (
                   <div className="text-center py-4">
-                    <p className="text-green-400 font-bold text-sm">You have already applied to this project</p>
+                    <p className="text-blue-600 font-bold text-sm">You have already applied to this project</p>
                     <p className="text-gray-500 text-xs mt-1">The project owner will review your application</p>
                   </div>
                 ) : !showApplyForm ? (
                   <div className="text-center">
                     <button onClick={() => setShowApplyForm(true)}
-                      className="px-8 py-3 min-h-[48px] bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl text-sm transition-all shadow-lg">
+                      className="px-8 py-3 min-h-[48px] bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 font-bold rounded-xl text-sm transition-all shadow-lg">
                       Apply to This Project
                     </button>
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    <h3 className="text-white font-bold text-base">Apply to this project</h3>
+                    <h3 className="text-gray-900 font-bold text-base">Apply to this project</h3>
                     <div>
-                      <label className="block text-orange-400 font-semibold mb-2 text-sm">Role you are applying for *</label>
+                      <label className="block text-blue-600 font-semibold mb-2 text-sm">Role you are applying for *</label>
                       <select value={applyForm.role} onChange={e => setApplyForm(p => ({ ...p, role: e.target.value }))}
                         className={inputClass + " appearance-none"}>
                         <option value="">Select a role</option>
@@ -292,22 +292,22 @@ const ProjectDetail = () => {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-orange-400 font-semibold mb-2 text-sm">Your Relevant Skills *</label>
+                      <label className="block text-blue-600 font-semibold mb-2 text-sm">Your Relevant Skills *</label>
                       <input type="text" value={applyForm.skills} onChange={e => setApplyForm(p => ({ ...p, skills: e.target.value }))}
                         className={inputClass} placeholder="e.g., React, Python, UI/UX Design" />
                     </div>
                     <div>
-                      <label className="block text-orange-400 font-semibold mb-2 text-sm">Message to Project Owner</label>
+                      <label className="block text-blue-600 font-semibold mb-2 text-sm">Message to Project Owner</label>
                       <textarea value={applyForm.message} onChange={e => setApplyForm(p => ({ ...p, message: e.target.value }))}
                         className={inputClass + " resize-none"} rows="3" placeholder="Why are you interested in this project?" />
                     </div>
                     <div className="flex gap-3">
                       <button onClick={() => setShowApplyForm(false)}
-                        className="px-5 py-2.5 min-h-[44px] bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl text-sm transition-all">
+                        className="px-5 py-2.5 min-h-[44px] bg-gray-100 hover:bg-gray-100 text-gray-900 font-semibold rounded-xl text-sm transition-all">
                         Cancel
                       </button>
                       <button onClick={handleApply} disabled={submittingApp}
-                        className="px-8 py-2.5 min-h-[44px] bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl text-sm transition-all shadow-lg disabled:opacity-50">
+                        className="px-8 py-2.5 min-h-[44px] bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 font-bold rounded-xl text-sm transition-all shadow-lg disabled:opacity-50">
                         {submittingApp ? 'Submitting...' : 'Submit Application'}
                       </button>
                     </div>
@@ -318,17 +318,17 @@ const ProjectDetail = () => {
 
             {/* Owner notice */}
             {isOwner && (
-              <div className="bg-orange-500/10 border border-orange-500/20 rounded-2xl p-5 text-center">
-                <p className="text-orange-300 font-semibold text-sm">You are the owner of this project</p>
+              <div className="bg-blue-600/10 border border-blue-600/20 rounded-2xl p-5 text-center">
+                <p className="text-blue-500 font-semibold text-sm">You are the owner of this project</p>
                 <p className="text-gray-400 text-xs mt-1">Manage applications from your dashboard</p>
               </div>
             )}
 
             {/* Not logged in */}
             {!currentUser && (
-              <div className="bg-white/5 border border-white/20 rounded-2xl p-5 text-center">
-                <p className="text-gray-300 text-sm mb-3">Sign in to apply for this project</p>
-                <Link to="/login" className="inline-flex px-6 py-2.5 min-h-[44px] bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-xl text-sm transition-all shadow-lg items-center">
+              <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 text-center">
+                <p className="text-gray-600 text-sm mb-3">Sign in to apply for this project</p>
+                <Link to="/login" className="inline-flex px-6 py-2.5 min-h-[44px] bg-gradient-to-r from-blue-500 to-blue-600 text-gray-900 font-bold rounded-xl text-sm transition-all shadow-lg items-center">
                   Sign In
                 </Link>
               </div>

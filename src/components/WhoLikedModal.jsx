@@ -68,14 +68,14 @@ const WhoLikedModal = ({ isOpen, onClose, postId, userIds = [], postTitle }) => 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-2 sm:p-4">
-      <div className="bg-gradient-to-br from-gray-900/95 via-black/95 to-gray-900/95 rounded-xl sm:rounded-2xl border border-white/20 shadow-2xl w-full max-w-[95vw] sm:max-w-md max-h-[90vh] sm:max-h-[80vh] md:max-h-[70vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-gray-500 z-50 flex items-center justify-center p-2 sm:p-4">
+      <div className="bg-gradient-to-br from-gray-900/95 via-black/95 to-gray-900/95 rounded-xl sm:rounded-2xl border border-gray-200 shadow-2xl w-full max-w-[95vw] sm:max-w-md max-h-[90vh] sm:max-h-[80vh] md:max-h-[70vh] overflow-hidden flex flex-col">
         
         {/* Modal Header */}
-        <div className="p-4 sm:p-5 md:p-6 border-b border-white/10 flex-shrink-0">
+        <div className="p-4 sm:p-5 md:p-6 border-b border-gray-200 flex-shrink-0">
           <div className="flex items-start sm:items-center justify-between gap-3">
             <div className="flex-1 min-w-0">
-              <h3 className="text-base sm:text-lg font-bold text-white flex items-center flex-wrap gap-1 sm:gap-2">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 flex items-center flex-wrap gap-1 sm:gap-2">
                 <span className="text-red-400">❤️</span>
                 <span className="truncate">
                   Liked by {userIds.length} {userIds.length === 1 ? 'person' : 'people'}
@@ -89,7 +89,7 @@ const WhoLikedModal = ({ isOpen, onClose, postId, userIds = [], postTitle }) => 
             </div>
             <button
               onClick={onClose}
-              className="p-1.5 sm:p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors flex-shrink-0"
+              className="p-1.5 sm:p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0"
               aria-label="Close modal"
             >
               <svg className="h-5 w-5 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -104,19 +104,19 @@ const WhoLikedModal = ({ isOpen, onClose, postId, userIds = [], postTitle }) => 
           {loading ? (
             <div className="text-center py-6 sm:py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-400 mx-auto mb-4"></div>
-              <p className="text-gray-300 text-sm sm:text-base">Loading who liked this post...</p>
+              <p className="text-gray-600 text-sm sm:text-base">Loading who liked this post...</p>
             </div>
           ) : likedUsers.length === 0 ? (
             <div className="text-center py-6 sm:py-8">
               <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">💔</div>
-              <p className="text-gray-300 text-sm sm:text-base">No likes yet</p>
+              <p className="text-gray-600 text-sm sm:text-base">No likes yet</p>
             </div>
           ) : (
             <div className="space-y-2 sm:space-y-3">
               {likedUsers.map((user, index) => (
                 <div 
                   key={user.uid || index} 
-                  className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 hover:bg-white/5 rounded-lg transition-colors"
+                  className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 hover:bg-gray-50 rounded-lg transition-colors"
                 >
                   {/* Avatar */}
                   <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden ring-2 ring-red-400/30 flex-shrink-0">
@@ -127,7 +127,7 @@ const WhoLikedModal = ({ isOpen, onClose, postId, userIds = [], postTitle }) => 
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-red-400 to-red-500 flex items-center justify-center text-white font-bold text-xs sm:text-sm">
+                      <div className="w-full h-full bg-gradient-to-br from-red-400 to-red-500 flex items-center justify-center text-gray-900 font-bold text-xs sm:text-sm">
                         {(user.displayName || user.email || 'U').charAt(0).toUpperCase()}
                       </div>
                     )}
@@ -135,7 +135,7 @@ const WhoLikedModal = ({ isOpen, onClose, postId, userIds = [], postTitle }) => 
                   
                   {/* User Info */}
                   <div className="flex-1 min-w-0">
-                    <div className="font-semibold text-white truncate text-sm sm:text-base">
+                    <div className="font-semibold text-gray-900 truncate text-sm sm:text-base">
                       {user.displayName || user.email || 'Unknown User'}
                     </div>
                     {user.email && user.displayName && (
@@ -156,10 +156,10 @@ const WhoLikedModal = ({ isOpen, onClose, postId, userIds = [], postTitle }) => 
         </div>
 
         {/* Modal Footer */}
-        <div className="p-4 sm:p-5 md:p-6 border-t border-white/10 flex-shrink-0">
+        <div className="p-4 sm:p-5 md:p-6 border-t border-gray-200 flex-shrink-0">
           <button
             onClick={onClose}
-            className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-4 py-2.5 sm:py-2 rounded-lg font-semibold transition-all duration-300 text-sm sm:text-base"
+            className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-gray-900 px-4 py-2.5 sm:py-2 rounded-lg font-semibold transition-all duration-300 text-sm sm:text-base"
           >
             Close
           </button>

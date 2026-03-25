@@ -69,11 +69,12 @@ const MembersDirectory = () => {
             name: userData.displayName || email.split('@')[0],
             displayName: userData.displayName || email.split('@')[0],
             photoURL: userData.photoURL || null,
-            university: userData.university || '',
-            major: userData.major || '',
+            specialization: userData.specialization || '',
+            experienceLevel: userData.experienceLevel || '',
+            primarySkillTrack: userData.primarySkillTrack || '',
             city: userData.city || '',
             state: userData.state || '',
-            visaStatus: userData.visaStatus || '',
+            emailPublic: userData.emailPublic || false,
             joinedDate: userData.createdAt?.toDate?.() || null,
             lastActive: userData.lastLogin?.toDate?.()?.getTime() || userData.createdAt?.toDate?.()?.getTime() || 0,
             isActive: userData.lastLogin?.toDate?.()
@@ -176,10 +177,10 @@ const MembersDirectory = () => {
 
   if (authLoading || (currentUser && loading)) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#000000' }}>
-        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl p-5 sm:p-8 border border-white/20 text-center">
-          <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-green-500 mx-auto mb-4"></div>
-          <p className="text-white text-lg">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#ffffff' }}>
+        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl p-5 sm:p-8 border border-gray-200 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-900 text-lg">
             {authLoading ? 'Checking authentication...' : 'Loading member directory...'}
           </p>
         </div>
@@ -190,7 +191,7 @@ const MembersDirectory = () => {
   if (!currentUser) return null;
 
   return (
-    <div className="min-h-screen overflow-x-hidden flex flex-col relative" style={{ backgroundColor: '#000000' }}>
+    <div className="min-h-screen overflow-x-hidden flex flex-col relative" style={{ backgroundColor: '#ffffff' }}>
 
       
 
@@ -202,13 +203,13 @@ const MembersDirectory = () => {
             <div className="max-w-4xl mx-auto">
               
               <div className="flex items-center justify-center gap-4 mb-8">
-                <div className="h-4 w-4 bg-green-500 rounded-full" 
+                <div className="h-4 w-4 bg-blue-600 rounded-full" 
                      ></div>
-                <span className="text-green-400 uppercase tracking-widest text-lg font-black" 
+                <span className="text-blue-600 uppercase tracking-widest text-lg font-black" 
                       style={{ textShadow: '0 0 20px rgba(76, 175, 80, 0.8), 2px 2px 4px rgba(0,0,0,0.9)' }}>
                    Member Directory
                 </span>
-                <div className="h-4 w-4 bg-green-500 rounded-full" 
+                <div className="h-4 w-4 bg-blue-600 rounded-full" 
                      ></div>
               </div>
               
@@ -220,7 +221,7 @@ const MembersDirectory = () => {
                     filter: 'drop-shadow(3px 3px 6px rgba(0,0,0,0.9))'
                   }}>
                 Connect With Our{' '}
-                <span className="block mt-4 text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-green-500 to-orange-500"
+                <span className="block mt-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-500 to-blue-500"
                       style={{filter: 'drop-shadow(0 0 20px rgba(34, 197, 94, 0.5))'}}>
                   Community
                 </span>
@@ -228,17 +229,17 @@ const MembersDirectory = () => {
 
               <p className="text-xl md:text-2xl text-gray-200 leading-relaxed font-light mb-8" 
                  style={{textShadow: '1px 1px 3px rgba(0,0,0,0.8)'}}>
-                Discover and connect with <span className="text-green-400 font-semibold">international students</span> and <span className="text-green-400 font-semibold">alumni</span> in your field.
+                Discover and connect with <span className="text-blue-600 font-semibold">international students</span> and <span className="text-blue-600 font-semibold">alumni</span> in your field.
               </p>
 
               {/* Directory Stats */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12 max-w-lg mx-auto">
-                <div className="bg-gradient-to-br from-green-500/20 to-orange-500/20 rounded-xl p-4 border border-green-500/30">
-                  <div className="text-2xl font-bold text-green-400">{members.length}</div>
+                <div className="bg-gradient-to-br from-blue-500/20 to-blue-500/20 rounded-xl p-4 border border-blue-600/30">
+                  <div className="text-2xl font-bold text-blue-600">{members.length}</div>
                   <div className="text-sm text-green-100">Total Members</div>
                 </div>
-                <div className="bg-gradient-to-br from-orange-500/20 to-orange-600/20 rounded-xl p-4 border border-orange-500/30">
-                  <div className="text-2xl font-bold text-orange-300">{members.filter(m => m.isActive).length}</div>
+                <div className="bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-xl p-4 border border-blue-600/30">
+                  <div className="text-2xl font-bold text-blue-500">{members.filter(m => m.isActive).length}</div>
                   <div className="text-sm text-orange-100">Recently Active</div>
                 </div>
               </div>
@@ -247,7 +248,7 @@ const MembersDirectory = () => {
 
           {/* Search and Filters */}
           <section className="mb-12">
-            <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl p-6 sm:p-8 border border-white/20">
+            <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl p-6 sm:p-8 border border-gray-200">
               
               <div className="mb-6">
                 <input
@@ -255,7 +256,7 @@ const MembersDirectory = () => {
                   placeholder="Search by name, university, major, or city..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-white/10 border border-white/20 rounded-xl px-6 py-4 text-white placeholder-gray-400 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400/20 transition-all duration-300 text-lg"
+                  className="w-full bg-gray-100 border border-gray-200 rounded-xl px-6 py-4 text-gray-900 placeholder-gray-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-all duration-300 text-lg"
                 />
               </div>
 
@@ -263,7 +264,7 @@ const MembersDirectory = () => {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white focus:border-green-500 focus:outline-none transition-all duration-300"
+                  className="bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:border-blue-600 focus:outline-none transition-all duration-300"
                 >
                   <option value="recent">Recently Active</option>
                   <option value="name">Name A-Z</option>
@@ -271,15 +272,15 @@ const MembersDirectory = () => {
 
                 <button
                   onClick={clearFilters}
-                  className="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-3 rounded-xl font-semibold hover:from-red-600 hover:to-red-700 transition-all duration-300"
+                  className="bg-gradient-to-r from-red-500 to-red-600 text-gray-900 px-4 py-3 rounded-xl font-semibold hover:from-red-600 hover:to-red-700 transition-all duration-300"
                 >
                   Clear All
                 </button>
               </div>
 
-              <div className="flex justify-between items-center text-gray-300">
+              <div className="flex justify-between items-center text-gray-600">
                 <span>
-                  <span className="text-green-400 font-semibold">{filteredMembers.length}</span> members found
+                  <span className="text-blue-600 font-semibold">{filteredMembers.length}</span> members found
                   {filteredMembers.length > 0 && (
                     <span className="ml-2 text-sm">
                       • Showing {startIndex + 1}-{Math.min(endIndex, filteredMembers.length)} of {filteredMembers.length}
@@ -294,8 +295,8 @@ const MembersDirectory = () => {
           <section>
             {filteredMembers.length === 0 ? (
               <div className="text-center py-20">
-                <h3 className="text-2xl font-bold text-white mb-4">No members found</h3>
-                <p className="text-gray-300">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">No members found</h3>
+                <p className="text-gray-600">
                   {members.length === 0 
                     ? "Loading member directory..."
                     : "Try adjusting your search to find more members."
@@ -307,7 +308,7 @@ const MembersDirectory = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                   {currentMembers.map((member) => (
                     <div key={member.email} className="group">
-                      <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl p-6 border border-white/20 shadow-2xl h-full flex flex-col">
+                      <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl p-6 border border-gray-200 shadow-2xl h-full flex flex-col">
                         
                         {/* Member Header */}
                         <div className="flex items-center mb-4">
@@ -316,28 +317,28 @@ const MembersDirectory = () => {
                               <img 
                                 src={member.photoURL} 
                                 alt={`${member.name}'s profile`}
-                                className="w-16 h-16 rounded-full object-cover ring-4 ring-green-400/50"
+                                className="w-16 h-16 rounded-full object-cover ring-4 ring-blue-400/50"
                               />
                             ) : (
-                              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-orange-500 flex items-center justify-center ring-4 ring-green-400/50">
+                              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-500 flex items-center justify-center ring-4 ring-blue-400/50">
                                 <span className="text-xl text-black font-bold">
                                   {member.name?.charAt(0)?.toUpperCase() || '?'}
                                 </span>
                               </div>
                             )}
                             {member.isActive && (
-                              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-400 rounded-full border-2 border-white flex items-center justify-center">
+                              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center">
                                 <div className="w-2 h-2 bg-white rounded-full"></div>
                               </div>
                             )}
                           </div>
                           
                           <div className="flex-grow min-w-0">
-                            <h3 className="text-xl font-black text-white group-hover:text-green-400 transition-colors duration-300 truncate">
+                            <h3 className="text-xl font-black text-gray-900 group-hover:text-blue-600 transition-colors duration-300 truncate">
                               {member.name}
                             </h3>
                             {member.university && (
-                              <p className="text-green-400 text-sm truncate">{member.university}</p>
+                              <p className="text-blue-600 text-sm truncate">{member.university}</p>
                             )}
                             {member.major && (
                               <p className="text-gray-400 text-xs truncate">{member.major}</p>
@@ -366,7 +367,7 @@ const MembersDirectory = () => {
                         <div className="flex gap-2 mt-auto">
                           <button
                             onClick={() => navigate(`/profile/${member.uid}`)}
-                            className="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white px-3 py-3 rounded-xl font-semibold hover:from-green-600 hover:to-green-700 transition-all duration-300 text-xs"
+                            className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-gray-900 px-3 py-3 rounded-xl font-semibold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 text-xs"
                           >
                             View Profile
                           </button>
@@ -382,15 +383,17 @@ const MembersDirectory = () => {
                             </div>
                           )}
                           
-                          <button
-                            onClick={() => copyEmail(member.email)}
-                            className="px-3 py-3 rounded-xl font-semibold transition-all duration-300 text-xs bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700"
-                            title="Copy email address"
-                          >
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
-                          </button>
+                          {member.uid !== currentUser.uid && (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); navigate(`/messages?to=${member.uid}`); }}
+                              className="px-3 py-3 rounded-xl font-semibold transition-all duration-300 text-xs bg-blue-600 text-white hover:bg-blue-700"
+                              title="Send message"
+                            >
+                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                              </svg>
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -400,7 +403,7 @@ const MembersDirectory = () => {
                 {/* Pagination */}
                 {totalPages > 1 && (
                   <div className="flex justify-center items-center mt-12 space-x-4">
-                    <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl p-6 border border-white/20">
+                    <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-2xl p-6 border border-gray-200">
                       <div className="flex items-center space-x-4">
                         <button
                           onClick={goToPrevPage}
@@ -408,7 +411,7 @@ const MembersDirectory = () => {
                           className={`flex items-center px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
                             currentPage === 1
                               ? 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
-                              : 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700'
+                              : 'bg-gradient-to-r from-blue-500 to-blue-600 text-gray-900 hover:from-blue-600 hover:to-blue-700'
                           }`}
                         >
                           ← Previous
@@ -430,8 +433,8 @@ const MembersDirectory = () => {
                                 onClick={() => goToPage(pageNum)}
                                 className={`w-10 h-10 rounded-xl font-semibold transition-all duration-300 ${
                                   currentPage === pageNum
-                                    ? 'bg-gradient-to-r from-green-500 to-orange-500 text-white'
-                                    : 'bg-white/10 text-gray-300 hover:bg-white/20 hover:text-white'
+                                    ? 'bg-gradient-to-r from-blue-500 to-blue-500 text-gray-900'
+                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                                 }`}
                               >
                                 {pageNum}
@@ -446,14 +449,14 @@ const MembersDirectory = () => {
                           className={`flex items-center px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
                             currentPage === totalPages
                               ? 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
-                              : 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700'
+                              : 'bg-gradient-to-r from-blue-500 to-blue-600 text-gray-900 hover:from-blue-600 hover:to-blue-700'
                           }`}
                         >
                           Next →
                         </button>
                       </div>
 
-                      <div className="text-center mt-4 text-gray-300 text-sm">
+                      <div className="text-center mt-4 text-gray-600 text-sm">
                         Page {currentPage} of {totalPages} • {filteredMembers.length} total members
                       </div>
                     </div>
@@ -467,8 +470,8 @@ const MembersDirectory = () => {
 
       {/* Member Detail Modal */}
       {showMemberModal && selectedMember && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-black/90 via-gray-900/90 to-black/90 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 border border-white/20 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-white/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-br from-black/90 via-gray-900/90 to-black/90 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 border border-gray-200 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             
             {/* Modal Header */}
             <div className="flex justify-between items-start mb-6">
@@ -478,26 +481,26 @@ const MembersDirectory = () => {
                     <img 
                       src={selectedMember.photoURL} 
                       alt={`${selectedMember.name}'s profile`}
-                      className="w-20 h-20 rounded-full object-cover ring-4 ring-green-400/50"
+                      className="w-20 h-20 rounded-full object-cover ring-4 ring-blue-400/50"
                     />
                   ) : (
-                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-orange-500 flex items-center justify-center ring-4 ring-green-400/50">
+                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-blue-500 flex items-center justify-center ring-4 ring-blue-400/50">
                       <span className="text-2xl text-black font-bold">
                         {selectedMember.name?.charAt(0)?.toUpperCase() || '?'}
                       </span>
                     </div>
                   )}
                   {selectedMember.isActive && (
-                    <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-green-400 rounded-full border-4 border-white flex items-center justify-center">
+                    <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-blue-500 rounded-full border-4 border-white flex items-center justify-center">
                       <div className="w-3 h-3 bg-white rounded-full"></div>
                     </div>
                   )}
                 </div>
                 <div>
-                  <h2 className="text-2xl sm:text-3xl font-black text-white mb-1">{selectedMember.name}</h2>
+                  <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-1">{selectedMember.name}</h2>
                   
                   {selectedMember.university && (
-                    <p className="text-green-400 text-sm font-semibold">{selectedMember.university}</p>
+                    <p className="text-blue-600 text-sm font-semibold">{selectedMember.university}</p>
                   )}
                   {selectedMember.major && (
                     <p className="text-gray-400 text-sm">{selectedMember.major}</p>
@@ -505,10 +508,10 @@ const MembersDirectory = () => {
                   
                   <div className="flex items-center mt-2">
                     <div className={`w-3 h-3 rounded-full mr-2 ${
-                      selectedMember.isActive ? 'bg-green-400' : 'bg-gray-400'
+                      selectedMember.isActive ? 'bg-blue-500' : 'bg-gray-400'
                     }`}></div>
                     <span className={`text-sm font-medium ${
-                      selectedMember.isActive ? 'text-green-400' : 'text-gray-400'
+                      selectedMember.isActive ? 'text-blue-600' : 'text-gray-400'
                     }`}>
                       {selectedMember.isActive ? 'Recently Active' : 'Less Active'}
                     </span>
@@ -523,7 +526,7 @@ const MembersDirectory = () => {
               </div>
               <button
                 onClick={closeMemberModal}
-                className="text-gray-400 hover:text-white transition-colors text-2xl ml-4"
+                className="text-gray-400 hover:text-gray-900 transition-colors text-2xl ml-4"
               >
                 ×
               </button>
@@ -533,46 +536,46 @@ const MembersDirectory = () => {
             <div className="space-y-6">
               
               {/* Info */}
-              <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                <h3 className="text-green-400 font-semibold mb-4 text-lg">About</h3>
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <h3 className="text-blue-600 font-semibold mb-4 text-lg">About</h3>
                 <div className="space-y-3">
-                  {selectedMember.university && (
+                  {selectedMember.specialization && (
                     <div className="flex justify-between">
-                      <span className="text-gray-400">University</span>
-                      <span className="text-white font-medium">{selectedMember.university}</span>
+                      <span className="text-gray-500">Specialization</span>
+                      <span className="text-gray-900 font-medium">{selectedMember.specialization}</span>
                     </div>
                   )}
-                  {selectedMember.major && (
+                  {selectedMember.experienceLevel && (
                     <div className="flex justify-between">
-                      <span className="text-gray-400">Major</span>
-                      <span className="text-white font-medium">{selectedMember.major}</span>
+                      <span className="text-gray-500">Experience Level</span>
+                      <span className="text-gray-900 font-medium capitalize">{selectedMember.experienceLevel}</span>
+                    </div>
+                  )}
+                  {selectedMember.primarySkillTrack && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Skill Track</span>
+                      <span className="text-gray-900 font-medium">{selectedMember.primarySkillTrack}</span>
                     </div>
                   )}
                   {(selectedMember.city || selectedMember.state) && (
                     <div className="flex justify-between">
-                      <span className="text-gray-400">Location</span>
-                      <span className="text-white font-medium">{[selectedMember.city, selectedMember.state].filter(Boolean).join(', ')}</span>
+                      <span className="text-gray-500">Location</span>
+                      <span className="text-gray-900 font-medium">{[selectedMember.city, selectedMember.state].filter(Boolean).join(', ')}</span>
                     </div>
                   )}
-                  {selectedMember.visaStatus && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Visa Status</span>
-                      <span className="text-white font-medium">{selectedMember.visaStatus}</span>
-                    </div>
-                  )}
-                  {!selectedMember.university && !selectedMember.major && !selectedMember.city && !selectedMember.visaStatus && (
+                  {!selectedMember.specialization && !selectedMember.experienceLevel && !selectedMember.city && !selectedMember.primarySkillTrack && (
                     <p className="text-gray-500 text-sm text-center py-4">This member hasn't updated their profile details yet.</p>
                   )}
                 </div>
               </div>
 
               {/* Connect Section */}
-              <div className="bg-gradient-to-r from-green-500/10 to-orange-500/10 rounded-xl p-6 border border-green-500/20">
-                <h3 className="text-green-400 font-semibold mb-4 text-lg">Connect</h3>
-                <p className="text-gray-300 mb-4">
-                  Want to connect with {selectedMember.name}? Follow them or copy their email to reach out.
+              <div className="bg-blue-50 rounded-xl p-6 border border-gray-200">
+                <h3 className="text-blue-600 font-semibold mb-4 text-lg">Connect</h3>
+                <p className="text-gray-600 mb-4">
+                  Want to connect with {selectedMember.name}? Follow them or send a message.
                 </p>
-                <div className="flex gap-4">
+                <div className="flex gap-3">
                   {selectedMember.uid !== currentUser.uid && (
                     <div className="flex-1">
                       <FollowButton
@@ -585,14 +588,36 @@ const MembersDirectory = () => {
                     </div>
                   )}
                   
-                  <button
-                    onClick={() => copyEmail(selectedMember.email)}
-                    className="flex-1 px-6 py-3 rounded-xl font-bold transition-all duration-300 bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700"
-                    title="Copy email address"
-                  >
-                    Copy Email
-                  </button>
+                  {selectedMember.uid !== currentUser.uid && (
+                    <button
+                      onClick={() => { closeMemberModal(); navigate(`/messages?to=${selectedMember.uid}`); }}
+                      className="flex-1 px-6 py-3 rounded-xl font-bold transition-all duration-300 bg-blue-600 text-white hover:bg-blue-700 flex items-center justify-center gap-2"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      </svg>
+                      Message
+                    </button>
+                  )}
                 </div>
+
+                {/* Email - only shown if member has it set to public */}
+                {selectedMember.emailPublic && selectedMember.email && (
+                  <div className="mt-4 pt-4 border-t border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-gray-500 text-xs font-medium mb-0.5">Email</p>
+                        <p className="text-gray-900 text-sm">{selectedMember.email}</p>
+                      </div>
+                      <button
+                        onClick={() => copyEmail(selectedMember.email)}
+                        className="px-3 py-2 rounded-lg text-xs font-medium border border-gray-200 text-gray-600 hover:bg-gray-100 transition-all"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

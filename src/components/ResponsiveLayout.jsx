@@ -195,7 +195,7 @@ export const ResponsiveCard = ({
   return (
     <div 
       className={`
-        bg-white/10 border border-white/20
+        bg-gray-100 border border-gray-200
         ${variantClasses[variant] || variantClasses.base}
         ${hoverClasses}
         ${className}
@@ -279,7 +279,7 @@ export const MobileMenu = ({
     <>
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black/50 z-40 md:hidden"
+        className="fixed inset-0 bg-gray-500 z-40 md:hidden"
         onClick={onClose}
       />
       
@@ -288,7 +288,7 @@ export const MobileMenu = ({
         className={`
           fixed top-0 ${positionClasses[position]} bottom-0
           w-64 sm:w-80
-          bg-white/10 border-l border-white/20
+          bg-gray-100 border-l border-gray-200
           z-50 md:hidden
           transform transition-transform duration-300
           overflow-y-auto
@@ -298,7 +298,7 @@ export const MobileMenu = ({
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-white hover:text-gray-300"
+          className="absolute top-4 right-4 text-gray-900 hover:text-gray-600"
           aria-label="Close menu"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

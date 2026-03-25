@@ -19,13 +19,13 @@ export const UserQuickLinksSidebar = ({ currentUser, onNavigate, isMobile = fals
       title: 'Jobs',
       description: 'Browse job listings',
       path: '/jobs',
-      gradient: 'from-orange-500 to-orange-600'
+      gradient: 'from-blue-500 to-blue-600'
     },
     {
       title: 'Connect',
       description: 'Find people near you',
       path: '/members-directory',
-      gradient: 'from-orange-400 to-orange-500'
+      gradient: 'from-blue-400 to-blue-500'
     }
   ];
 
@@ -45,15 +45,15 @@ export const UserQuickLinksSidebar = ({ currentUser, onNavigate, isMobile = fals
 
   const contentClass = isMobile
     ? "h-full flex flex-col"
-    : "bg-black/20 rounded-xl xs:rounded-2xl border border-orange-500/10 p-3 xs:p-4 sm:p-6 shadow-2xl sidebar-content h-full flex flex-col";
+    : "bg-gray-100 rounded-xl xs:rounded-2xl border border-blue-600/10 p-3 xs:p-4 sm:p-6 shadow-2xl sidebar-content h-full flex flex-col";
 
   return (
     <div className={containerClass}>
       <div className={contentClass}>
         {!isMobile && (
           <div className="flex items-center justify-between mb-3 xs:mb-4 flex-shrink-0">
-            <h3 className="text-white font-bold text-base xs:text-lg flex items-center gap-1.5 xs:gap-2">
-              <svg className="w-4 h-4 xs:w-5 xs:h-5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <h3 className="text-gray-900 font-bold text-base xs:text-lg flex items-center gap-1.5 xs:gap-2">
+              <svg className="w-4 h-4 xs:w-5 xs:h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
               Quick Actions
@@ -66,17 +66,17 @@ export const UserQuickLinksSidebar = ({ currentUser, onNavigate, isMobile = fals
             <button
               key={index}
               onClick={() => handleLinkClick(link.path)}
-              className={`flex items-center gap-2 xs:gap-3 p-2.5 xs:p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 active:bg-white/15 cursor-pointer w-full text-left group sidebar-item ${
+              className={`flex items-center gap-2 xs:gap-3 p-2.5 xs:p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 active:bg-white/15 cursor-pointer w-full text-left group sidebar-item ${
                 isMobile ? 'py-3 xs:py-4' : ''
               }`}
             >
-              <div className={`w-8 h-8 xs:w-10 xs:h-10 bg-gradient-to-r ${link.gradient} rounded-lg flex items-center justify-center text-white flex-shrink-0`}>
+              <div className={`w-8 h-8 xs:w-10 xs:h-10 bg-gradient-to-r ${link.gradient} rounded-lg flex items-center justify-center text-gray-900 flex-shrink-0`}>
                 <svg className="w-4 h-4 xs:w-5 xs:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
               <div className="flex-1 min-w-0">
-                <p className={`font-semibold text-white group-hover:text-orange-300 transition-colors truncate ${isMobile ? 'text-sm xs:text-base' : 'text-xs xs:text-sm'}`}>
+                <p className={`font-semibold text-gray-900 group-hover:text-orange-300 transition-colors truncate ${isMobile ? 'text-sm xs:text-base' : 'text-xs xs:text-sm'}`}>
                   {link.title}
                 </p>
                 <p className={`text-gray-400 truncate ${isMobile ? 'text-xs xs:text-sm' : 'text-[10px] xs:text-xs'}`}>
@@ -88,7 +88,7 @@ export const UserQuickLinksSidebar = ({ currentUser, onNavigate, isMobile = fals
         </div>
 
         {/* Footer */}
-        <div className="mt-3 xs:mt-4 pt-3 xs:pt-4 border-t border-orange-500/10 flex-shrink-0">
+        <div className="mt-3 xs:mt-4 pt-3 xs:pt-4 border-t border-blue-600/10 flex-shrink-0">
           <p className={`text-gray-400 text-center ${isMobile ? 'text-xs xs:text-sm' : 'text-[10px] xs:text-xs'}`}>
             Quick access to all your tools
           </p>
@@ -257,15 +257,15 @@ export const FollowSuggestionsSidebar = ({ currentUser, isMobile = false }) => {
       },
       achiever: { 
         label: 'Achiever', 
-        color: 'text-green-400', 
-        bg: 'bg-green-500/20', 
-        border: 'border-green-500/30',
+        color: 'text-blue-600', 
+        bg: 'bg-blue-600/20', 
+        border: 'border-blue-600/30',
       },
       newcomer: { 
         label: 'Newcomer', 
-        color: 'text-green-400', 
-        bg: 'bg-green-500/20', 
-        border: 'border-green-500/30',
+        color: 'text-blue-600', 
+        bg: 'bg-blue-600/20', 
+        border: 'border-blue-600/30',
       }
     };
     return statusInfo[userStatus] || statusInfo.newcomer;
@@ -279,15 +279,15 @@ export const FollowSuggestionsSidebar = ({ currentUser, isMobile = false }) => {
 
   const contentClass = isMobile
     ? "h-full flex flex-col"
-    : "bg-black/20 rounded-xl xs:rounded-2xl border border-orange-500/10 p-3 xs:p-4 sm:p-6 shadow-2xl sidebar-content h-full flex flex-col";
+    : "bg-gray-100 rounded-xl xs:rounded-2xl border border-blue-600/10 p-3 xs:p-4 sm:p-6 shadow-2xl sidebar-content h-full flex flex-col";
 
   return (
     <div className={containerClass}>
       <div className={contentClass}>
         <div className="flex items-center justify-between mb-3 xs:mb-4 flex-shrink-0">
           <div>
-            <h3 className="text-white font-bold text-base xs:text-lg flex items-center gap-1.5 xs:gap-2">
-              <svg className="w-4 h-4 xs:w-5 xs:h-5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <h3 className="text-gray-900 font-bold text-base xs:text-lg flex items-center gap-1.5 xs:gap-2">
+              <svg className="w-4 h-4 xs:w-5 xs:h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
               <span className="hidden sm:inline">Discover People</span>
@@ -297,14 +297,14 @@ export const FollowSuggestionsSidebar = ({ currentUser, isMobile = false }) => {
           </div>
         </div>
         
-        <div className="mb-3 xs:mb-4 p-2.5 xs:p-3 bg-gradient-to-r from-orange-500/10 to-orange-600/10 rounded-lg border border-orange-500/20 flex-shrink-0">
+        <div className="mb-3 xs:mb-4 p-2.5 xs:p-3 bg-gradient-to-r from-blue-500/10 to-blue-600/10 rounded-lg border border-blue-600/20 flex-shrink-0">
           <div className="grid grid-cols-2 gap-2 xs:gap-3 text-center">
             <div>
-              <div className="text-base xs:text-lg font-bold text-orange-400">{userCounts.following}</div>
+              <div className="text-base xs:text-lg font-bold text-blue-600">{userCounts.following}</div>
               <div className="text-[10px] xs:text-xs text-orange-300">Following</div>
             </div>
             <div>
-              <div className="text-base xs:text-lg font-bold text-green-400">{userCounts.followers}</div>
+              <div className="text-base xs:text-lg font-bold text-blue-600">{userCounts.followers}</div>
               <div className="text-[10px] xs:text-xs text-green-300">Followers</div>
             </div>
           </div>
@@ -313,7 +313,7 @@ export const FollowSuggestionsSidebar = ({ currentUser, isMobile = false }) => {
         <div className={`space-y-2 xs:space-y-3 ${isMobile ? 'flex-1 overflow-y-auto' : 'flex-1'}`}>
           {loading ? (
             <div className="text-center py-6 xs:py-8">
-              <div className="animate-spin rounded-full h-5 w-5 xs:h-6 xs:w-6 border-b-2 border-orange-400 mx-auto mb-2 xs:mb-3"></div>
+              <div className="animate-spin rounded-full h-5 w-5 xs:h-6 xs:w-6 border-b-2 border-blue-500 mx-auto mb-2 xs:mb-3"></div>
               <p className="text-gray-400 text-xs xs:text-sm">Finding people...</p>
             </div>
           ) : suggestedUsers.length === 0 ? (
@@ -332,7 +332,7 @@ export const FollowSuggestionsSidebar = ({ currentUser, isMobile = false }) => {
               return (
                 <div
                   key={user.uid}
-                  className="flex items-center gap-2 xs:gap-3 p-2.5 xs:p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 active:bg-white/15 transition-all duration-300 group"
+                  className="flex items-center gap-2 xs:gap-3 p-2.5 xs:p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 active:bg-white/15 transition-all duration-300 group"
                 >
                   <ClickableUserAvatar 
                     user={user}
@@ -344,7 +344,7 @@ export const FollowSuggestionsSidebar = ({ currentUser, isMobile = false }) => {
                     <div className="flex items-center gap-1 xs:gap-2 mb-0.5 xs:mb-1">
                       <EnhancedClickableUserName
                         user={user}
-                        className="font-semibold text-white text-xs xs:text-sm group-hover:text-orange-300 transition-colors truncate"
+                        className="font-semibold text-gray-900 text-xs xs:text-sm group-hover:text-orange-300 transition-colors truncate"
                       />
                     </div>
                     
@@ -358,7 +358,7 @@ export const FollowSuggestionsSidebar = ({ currentUser, isMobile = false }) => {
                       </div>
                       
                       {user.followerCount > 0 && (
-                        <div className="text-[10px] xs:text-xs text-green-400">
+                        <div className="text-[10px] xs:text-xs text-blue-600">
                           {user.followerCount} followers
                         </div>
                       )}
@@ -379,7 +379,7 @@ export const FollowSuggestionsSidebar = ({ currentUser, isMobile = false }) => {
           )}
         </div>
 
-        <div className="mt-3 xs:mt-4 pt-3 xs:pt-4 border-t border-orange-500/10 flex-shrink-0">
+        <div className="mt-3 xs:mt-4 pt-3 xs:pt-4 border-t border-blue-600/10 flex-shrink-0">
           <p className="text-gray-400 text-center text-[10px] xs:text-xs">
             Expand your professional network
           </p>
@@ -433,7 +433,7 @@ export const CompanyInfoSidebar = ({ isMobile = false }) => {
 
   const contentClass = isMobile
     ? "h-full flex flex-col"
-    : "bg-black/20 rounded-xl xs:rounded-2xl border border-orange-500/10 p-3 xs:p-4 sm:p-6 shadow-2xl sidebar-content h-full flex flex-col";
+    : "bg-gray-100 rounded-xl xs:rounded-2xl border border-blue-600/10 p-3 xs:p-4 sm:p-6 shadow-2xl sidebar-content h-full flex flex-col";
 
   return (
     <div className={containerClass}>
@@ -445,14 +445,14 @@ export const CompanyInfoSidebar = ({ isMobile = false }) => {
               alt="Loomiqe Logo" 
               className="w-10 h-10 xs:w-12 xs:h-12 sm:w-16 sm:h-16 mx-auto mb-2 xs:mb-2 sm:mb-3 rounded-xl shadow-lg"
             />
-            <h3 className="text-white font-bold text-sm xs:text-base sm:text-lg">
+            <h3 className="text-gray-900 font-bold text-sm xs:text-base sm:text-lg">
               Loomiqe
             </h3>
           </div>
         </div>
         
         <div className="mb-3 xs:mb-4 sm:mb-6 flex-shrink-0">
-          <p className="text-gray-300 text-xs sm:text-sm leading-relaxed text-center">
+          <p className="text-gray-600 text-xs sm:text-sm leading-relaxed text-center">
             Empowering international students with housing, finance, jobs, and home support.
           </p>
         </div>
@@ -462,12 +462,12 @@ export const CompanyInfoSidebar = ({ isMobile = false }) => {
             <button
               key={index}
               onClick={() => handleLinkClick(link)}
-              className={`flex flex-col items-center justify-center p-2.5 xs:p-3 sm:p-4 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 active:bg-white/15 cursor-pointer text-center group sidebar-item ${
+              className={`flex flex-col items-center justify-center p-2.5 xs:p-3 sm:p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 active:bg-white/15 cursor-pointer text-center group sidebar-item ${
                 isMobile ? 'min-h-[56px] xs:min-h-[60px]' : 'min-h-[48px] xs:min-h-[50px]'
               }`}
             >
               <div className="flex-1 min-w-0 flex items-center justify-center">
-                <p className={`font-medium text-white group-hover:text-orange-300 transition-colors text-center leading-tight ${isMobile ? 'text-xs xs:text-sm' : 'text-[10px] xs:text-xs sm:text-sm'}`}>
+                <p className={`font-medium text-gray-900 group-hover:text-orange-300 transition-colors text-center leading-tight ${isMobile ? 'text-xs xs:text-sm' : 'text-[10px] xs:text-xs sm:text-sm'}`}>
                   {link.title}
                 </p>
               </div>
@@ -475,7 +475,7 @@ export const CompanyInfoSidebar = ({ isMobile = false }) => {
           ))}
         </div>
 
-        <div className="mt-3 xs:mt-4 sm:mt-6 pt-2.5 xs:pt-3 sm:pt-4 border-t border-orange-500/10 flex-shrink-0">
+        <div className="mt-3 xs:mt-4 sm:mt-6 pt-2.5 xs:pt-3 sm:pt-4 border-t border-blue-600/10 flex-shrink-0">
           <p className={`text-gray-400 text-center font-medium ${isMobile ? 'text-[10px] xs:text-xs' : 'text-[10px] xs:text-xs'}`}>
             Empowering international students
           </p>

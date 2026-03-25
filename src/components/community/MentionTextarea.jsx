@@ -192,7 +192,7 @@ const MentionTextarea = ({
             <button
               type="button"
               onClick={() => setShowLinkModal(true)}
-              className="flex items-center gap-1 px-2 py-1 bg-orange-500/20 hover:bg-orange-500/30 active:bg-orange-500/40 border border-orange-500/40 rounded text-orange-300 hover:text-orange-200 transition-colors text-[10px] xs:text-xs"
+              className="flex items-center gap-1 px-2 py-1 bg-blue-600/20 hover:bg-blue-600/30 active:bg-blue-600/40 border border-blue-600/40 rounded text-orange-300 hover:text-orange-200 transition-colors text-[10px] xs:text-xs"
               title="Insert Link"
               aria-label="Insert link"
             >
@@ -224,7 +224,7 @@ const MentionTextarea = ({
       {/* Mention Suggestions Dropdown */}
       {showSuggestions && suggestions.length > 0 && (
         <div 
-          className="absolute z-50 w-full max-w-[calc(100vw-2rem)] xs:max-w-xs bg-gray-900/95 border border-orange-500/20 rounded-lg shadow-2xl max-h-48 xs:max-h-56 overflow-y-auto"
+          className="absolute z-50 w-full max-w-[calc(100vw-2rem)] xs:max-w-xs bg-gray-900/95 border border-blue-600/20 rounded-lg shadow-2xl max-h-48 xs:max-h-56 overflow-y-auto"
           style={{
             top: '100%',
             left: 0,
@@ -235,11 +235,11 @@ const MentionTextarea = ({
             <button
               key={user.uid}
               onClick={() => selectSuggestion(user, index)}
-              className={`flex items-center gap-2 xs:gap-3 w-full px-3 xs:px-4 py-2 xs:py-3 text-left hover:bg-white/10 active:bg-white/20 transition-colors ${
-                index === selectedSuggestionIndex ? 'bg-orange-500/20 text-orange-300' : 'text-white'
+              className={`flex items-center gap-2 xs:gap-3 w-full px-3 xs:px-4 py-2 xs:py-3 text-left hover:bg-gray-100 active:bg-gray-100 transition-colors ${
+                index === selectedSuggestionIndex ? 'bg-blue-600/20 text-orange-300' : 'text-gray-900'
               }`}
             >
-              <div className="w-7 h-7 xs:w-8 xs:h-8 rounded-full overflow-hidden bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center text-white font-bold text-xs xs:text-sm flex-shrink-0">
+              <div className="w-7 h-7 xs:w-8 xs:h-8 rounded-full overflow-hidden bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center text-gray-900 font-bold text-xs xs:text-sm flex-shrink-0">
                 {user.photoURL ? (
                   <img 
                     src={user.photoURL} 

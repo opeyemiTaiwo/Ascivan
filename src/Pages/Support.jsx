@@ -88,30 +88,30 @@ const Support = () => {
   return (
     <>
       
-      <div className="min-h-screen overflow-x-hidden" style={{ backgroundColor: '#000' }}>
+      <div className="min-h-screen overflow-x-hidden" style={{ backgroundColor: '#ffffff' }}>
         <div className="container mx-auto px-4 sm:px-6 max-w-4xl py-20 sm:py-28">
 
           {/* Hero */}
           <section className="text-center mb-16">
-            <div className="mb-4 inline-block px-4 py-2 bg-orange-500/10 border border-orange-500/20 rounded-xl">
-              <p className="text-orange-400 font-semibold text-sm">Support Center</p>
+            <div className="mb-4 inline-block px-4 py-2 bg-blue-600/10 border border-blue-600/20 rounded-xl">
+              <p className="text-blue-600 font-semibold text-sm">Support Center</p>
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-4">
               How Can We{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-green-500">Help?</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-500">Help?</span>
             </h1>
-            <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
               We're here to support you. Browse FAQs or send us a message.
             </p>
           </section>
 
           {/* FAQs */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold text-white mb-6">Frequently Asked Questions</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
             <div className="space-y-3">
               {faqs.map((faq, i) => (
-                <details key={i} className="group bg-white/5 rounded-xl border border-white/20 overflow-hidden">
-                  <summary className="cursor-pointer px-5 py-4 text-white font-semibold text-sm sm:text-base flex items-center justify-between list-none">
+                <details key={i} className="group bg-gray-50 rounded-xl border border-gray-200 overflow-hidden">
+                  <summary className="cursor-pointer px-5 py-4 text-gray-900 font-semibold text-sm sm:text-base flex items-center justify-between list-none">
                     {faq.q}
                     <svg className="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform flex-shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -127,30 +127,30 @@ const Support = () => {
 
           {/* Contact Form */}
           <section className="mb-12">
-            <div className="bg-white/5 rounded-xl border border-white/20 p-6 sm:p-8">
-              <h2 className="text-2xl font-bold text-white mb-2">Send Us a Message</h2>
+            <div className="bg-gray-50 rounded-xl border border-gray-200 p-6 sm:p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Send Us a Message</h2>
               <p className="text-gray-400 text-sm mb-6">
                 Your message goes directly to our support team.
               </p>
 
               {submitted ? (
                 <div className="text-center py-12">
-                  <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                  <h3 className="text-white text-xl font-bold mb-2">Message Sent!</h3>
+                  <h3 className="text-gray-900 text-xl font-bold mb-2">Message Sent!</h3>
                   <p className="text-gray-400 text-sm mb-6">
                     Thank you for reaching out. We'll get back to you at{' '}
-                    <span className="text-orange-400">{form.email}</span> as soon as possible.
+                    <span className="text-blue-600">{form.email}</span> as soon as possible.
                   </p>
                   <button
                     onClick={() => {
                       setSubmitted(false);
                       setForm(prev => ({ ...prev, phone: '', message: '' }));
                     }}
-                    className="px-6 py-2.5 border border-white/20 text-white rounded-lg hover:bg-white/10 transition-all text-sm"
+                    className="px-6 py-2.5 border border-gray-200 text-gray-900 rounded-lg hover:bg-gray-100 transition-all text-sm"
                   >
                     Send Another Message
                   </button>
@@ -160,27 +160,27 @@ const Support = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-gray-400 text-sm mb-1">
-                        First Name <span className="text-orange-400">*</span>
+                        First Name <span className="text-blue-600">*</span>
                       </label>
                       <input
                         type="text"
                         value={form.firstName}
                         onChange={handleChange('firstName')}
                         required
-                        className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:border-orange-400 focus:outline-none text-sm"
+                        className="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none text-sm"
                         placeholder="First name"
                       />
                     </div>
                     <div>
                       <label className="block text-gray-400 text-sm mb-1">
-                        Last Name <span className="text-orange-400">*</span>
+                        Last Name <span className="text-blue-600">*</span>
                       </label>
                       <input
                         type="text"
                         value={form.lastName}
                         onChange={handleChange('lastName')}
                         required
-                        className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:border-orange-400 focus:outline-none text-sm"
+                        className="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none text-sm"
                         placeholder="Last name"
                       />
                     </div>
@@ -189,14 +189,14 @@ const Support = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-gray-400 text-sm mb-1">
-                        Email Address <span className="text-orange-400">*</span>
+                        Email Address <span className="text-blue-600">*</span>
                       </label>
                       <input
                         type="email"
                         value={form.email}
                         onChange={handleChange('email')}
                         required
-                        className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:border-orange-400 focus:outline-none text-sm"
+                        className="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none text-sm"
                         placeholder="your@email.com"
                       />
                     </div>
@@ -206,7 +206,7 @@ const Support = () => {
                         type="tel"
                         value={form.phone}
                         onChange={handleChange('phone')}
-                        className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:border-orange-400 focus:outline-none text-sm"
+                        className="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none text-sm"
                         placeholder="+1 (xxx) xxx-xxxx"
                       />
                     </div>
@@ -214,14 +214,14 @@ const Support = () => {
 
                   <div>
                     <label className="block text-gray-400 text-sm mb-1">
-                      Describe Your Issue or Question <span className="text-orange-400">*</span>
+                      Describe Your Issue or Question <span className="text-blue-600">*</span>
                     </label>
                     <textarea
                       value={form.message}
                       onChange={handleChange('message')}
                       rows={5}
                       required
-                      className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:border-orange-400 focus:outline-none text-sm resize-none"
+                      className="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none text-sm resize-none"
                       placeholder="Describe your issue or question in detail..."
                     />
                   </div>
@@ -229,7 +229,7 @@ const Support = () => {
                   <button
                     type="submit"
                     disabled={sending}
-                    className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all disabled:opacity-50 text-sm"
+                    className="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 font-bold rounded-xl transition-all disabled:opacity-50 text-sm"
                   >
                     {sending ? (
                       <span className="flex items-center gap-2">

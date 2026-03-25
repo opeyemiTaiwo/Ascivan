@@ -10,8 +10,8 @@ import { toast } from 'react-toastify';
 import { notifyBadgeAwarded } from '../../utils/emailNotifications';
 
 const badgeCategories = {
-  'mentorship': { id: 'techmo', name: 'TechMO (Mentor)', color: 'from-orange-500 to-orange-600' },
-  'quality-assurance': { id: 'techqa', name: 'TechQA (QA Tester)', color: 'from-green-500 to-green-600' },
+  'mentorship': { id: 'techmo', name: 'TechMO (Mentor)', color: 'from-blue-500 to-blue-600' },
+  'quality-assurance': { id: 'techqa', name: 'TechQA (QA Tester)', color: 'from-blue-500 to-blue-600' },
   'development': { id: 'techdev', name: 'TechDev (Developer)', color: 'from-blue-500 to-blue-600' },
   'leadership': { id: 'techleads', name: 'TechLeads (Leader)', color: 'from-purple-500 to-purple-600' },
   'design': { id: 'techarchs', name: 'TechArchs (Designer)', color: 'from-pink-500 to-pink-600' },
@@ -262,13 +262,13 @@ const ProjectCompletion = () => {
     }
   };
 
-  const inputClass = "w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 min-h-[44px] text-white placeholder-gray-400 focus:border-orange-400 focus:outline-none text-sm transition-all";
+  const inputClass = "w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 min-h-[44px] text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none text-sm transition-all";
 
   if (loading) {
     return (
       <>
-        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#000' }}>
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-400"></div>
+        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#ffffff' }}>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
         </div>
       </>
     );
@@ -277,8 +277,8 @@ const ProjectCompletion = () => {
   if (!project) {
     return (
       <>
-        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#000' }}>
-          <p className="text-white">Project not found</p>
+        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#ffffff' }}>
+          <p className="text-gray-900">Project not found</p>
         </div>
       </>
     );
@@ -287,34 +287,34 @@ const ProjectCompletion = () => {
   return (
     <>
       
-      <div className="min-h-screen overflow-x-hidden " style={{ backgroundColor: '#000' }}>
+      <div className="min-h-screen overflow-x-hidden " style={{ backgroundColor: '#ffffff' }}>
         <main className="pb-16 sm:pb-20">
           <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-4xl">
 
-            <Link to="/projects/owner-dashboard" className="inline-flex items-center text-gray-400 hover:text-white text-sm font-semibold mb-6 transition-colors">
+            <Link to="/projects/owner-dashboard" className="inline-flex items-center text-gray-400 hover:text-gray-900 text-sm font-semibold mb-6 transition-colors">
               Back to My Projects
             </Link>
 
             <div className="text-center mb-8">
-              <h1 className="text-2xl sm:text-3xl font-black text-white mb-2">
-                Complete <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-500">Project</span>
+              <h1 className="text-2xl sm:text-3xl font-black text-gray-900 mb-2">
+                Complete <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-500">Project</span>
               </h1>
               <p className="text-gray-400 text-sm">{project.projectTitle}</p>
             </div>
 
             {/* Step 3: Done */}
             {step === 3 && (
-              <div className="bg-green-500/10 border border-green-500/20 rounded-2xl p-8 text-center">
-                <svg className="w-16 h-16 text-green-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="bg-blue-600/10 border border-gray-200 rounded-2xl p-8 text-center">
+                <svg className="w-16 h-16 text-blue-600 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <h2 className="text-xl font-bold text-green-300 mb-2">Project Completed</h2>
                 <p className="text-gray-400 text-sm mb-6">Badges have been awarded and payments updated for all qualifying members.</p>
                 <div className="flex justify-center gap-3">
-                  <Link to="/projects/owner-dashboard" className="px-6 py-2.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl text-sm transition-all">
+                  <Link to="/projects/owner-dashboard" className="px-6 py-2.5 bg-gray-100 hover:bg-gray-100 text-gray-900 font-semibold rounded-xl text-sm transition-all">
                     Back to Dashboard
                   </Link>
-                  <Link to="/projects" className="px-6 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-xl text-sm transition-all">
+                  <Link to="/projects" className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-gray-900 font-bold rounded-xl text-sm transition-all">
                     Browse Projects
                   </Link>
                 </div>
@@ -324,21 +324,21 @@ const ProjectCompletion = () => {
             {/* Step 1: Review */}
             {step === 1 && (
               <div className="space-y-6">
-                <div className="bg-white/5 border border-white/20 rounded-2xl p-5 sm:p-6">
-                  <h2 className="text-lg font-bold text-white mb-4">Project Summary</h2>
+                <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-6">
+                  <h2 className="text-lg font-bold text-gray-900 mb-4">Project Summary</h2>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
-                    <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+                    <div className="bg-gray-50 rounded-xl p-3 border border-gray-200">
                       <p className="text-gray-500 text-[10px] uppercase font-semibold">Team Size</p>
-                      <p className="text-white text-lg font-bold mt-0.5">{members.length}</p>
+                      <p className="text-gray-900 text-lg font-bold mt-0.5">{members.length}</p>
                     </div>
-                    <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+                    <div className="bg-gray-50 rounded-xl p-3 border border-gray-200">
                       <p className="text-gray-500 text-[10px] uppercase font-semibold">Type</p>
-                      <p className="text-white text-lg font-bold mt-0.5">{project.pricingType === 'paid' ? 'Paid' : 'Free'}</p>
+                      <p className="text-gray-900 text-lg font-bold mt-0.5">{project.pricingType === 'paid' ? 'Paid' : 'Free'}</p>
                     </div>
                     {project.pricingType === 'paid' && (
-                      <div className="bg-orange-500/10 rounded-xl p-3 border border-orange-500/20">
+                      <div className="bg-blue-600/10 rounded-xl p-3 border border-blue-600/20">
                         <p className="text-gray-500 text-[10px] uppercase font-semibold">Budget</p>
-                        <p className="text-orange-300 text-lg font-bold mt-0.5">${project.totalBudget?.toLocaleString()}</p>
+                        <p className="text-blue-500 text-lg font-bold mt-0.5">${project.totalBudget?.toLocaleString()}</p>
                       </div>
                     )}
                   </div>
@@ -352,9 +352,9 @@ const ProjectCompletion = () => {
                       <p className="text-gray-400 text-xs font-semibold mb-3">Team Members</p>
                       <div className="space-y-2">
                         {members.map(m => (
-                          <div key={m.id} className="flex items-center justify-between bg-white/5 border border-white/10 rounded-lg p-3">
+                          <div key={m.id} className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg p-3">
                             <div>
-                              <p className="text-white text-sm font-semibold">{m.applicantName}</p>
+                              <p className="text-gray-900 text-sm font-semibold">{m.applicantName}</p>
                               <p className="text-gray-500 text-xs">{m.role}</p>
                             </div>
                           </div>
@@ -365,7 +365,7 @@ const ProjectCompletion = () => {
                 </div>
 
                 <button onClick={() => setStep(2)}
-                  className="w-full py-3.5 min-h-[48px] bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black rounded-xl text-sm transition-all shadow-lg">
+                  className="w-full py-3.5 min-h-[48px] bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 font-black rounded-xl text-sm transition-all shadow-lg">
                   {members.length > 0 ? 'Proceed to Evaluation' : 'Complete Solo Project'}
                 </button>
               </div>
@@ -375,10 +375,10 @@ const ProjectCompletion = () => {
             {step === 2 && (
               <div className="space-y-6">
                 {members.length === 0 ? (
-                  <div className="bg-white/5 border border-white/20 rounded-2xl p-6 text-center">
-                    <p className="text-gray-300 text-sm mb-4">Solo project - no members to evaluate.</p>
+                  <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6 text-center">
+                    <p className="text-gray-600 text-sm mb-4">Solo project - no members to evaluate.</p>
                     <button onClick={handleComplete} disabled={submitting}
-                      className="px-8 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold rounded-xl text-sm transition-all disabled:opacity-50">
+                      className="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 font-bold rounded-xl text-sm transition-all disabled:opacity-50">
                       {submitting ? 'Completing...' : 'Complete Project'}
                     </button>
                   </div>
@@ -387,16 +387,16 @@ const ProjectCompletion = () => {
                     <p className="text-gray-400 text-sm text-center">Evaluate each team member. You can choose to award or skip a badge.</p>
 
                     {evaluations.map((ev, index) => (
-                      <div key={ev.memberId} className="bg-white/5 border border-white/20 rounded-2xl p-5 space-y-4">
+                      <div key={ev.memberId} className="bg-gray-50 border border-gray-200 rounded-2xl p-5 space-y-4">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-white font-bold text-sm">{ev.memberName}</p>
+                            <p className="text-gray-900 font-bold text-sm">{ev.memberName}</p>
                             <p className="text-gray-500 text-xs">{ev.memberRole} - {ev.memberEmail}</p>
                           </div>
                           <label className="flex items-center gap-2 cursor-pointer">
                             <input type="checkbox" checked={ev.awardBadge} onChange={e => updateEval(index, 'awardBadge', e.target.checked)}
-                              className="w-4 h-4 rounded border-white/30 text-orange-500 focus:ring-orange-400" />
-                            <span className="text-gray-300 text-xs font-semibold">Award Badge</span>
+                              className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-400" />
+                            <span className="text-gray-600 text-xs font-semibold">Award Badge</span>
                           </label>
                         </div>
 
@@ -413,7 +413,7 @@ const ProjectCompletion = () => {
                             </div>
                             <div>
                               <label className="block text-gray-400 text-xs mb-1">Badge Level (auto)</label>
-                              <input type="text" value={ev.badgeLevel} readOnly className={inputClass + " bg-white/5 cursor-not-allowed"} />
+                              <input type="text" value={ev.badgeLevel} readOnly className={inputClass + " bg-gray-50 cursor-not-allowed"} />
                               <p className="text-gray-600 text-[10px] mt-0.5">{ev.projectCount} previous project{ev.projectCount !== 1 ? 's' : ''}</p>
                             </div>
                             <div>
@@ -447,11 +447,11 @@ const ProjectCompletion = () => {
                     ))}
 
                     <div className="flex gap-3">
-                      <button onClick={() => setStep(1)} className="px-5 py-2.5 min-h-[44px] bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl text-sm transition-all">
+                      <button onClick={() => setStep(1)} className="px-5 py-2.5 min-h-[44px] bg-gray-100 hover:bg-gray-100 text-gray-900 font-semibold rounded-xl text-sm transition-all">
                         Back
                       </button>
                       <button onClick={handleComplete} disabled={submitting}
-                        className="flex-1 py-3.5 min-h-[48px] bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-black rounded-xl text-sm transition-all shadow-lg disabled:opacity-50">
+                        className="flex-1 py-3.5 min-h-[48px] bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 font-black rounded-xl text-sm transition-all shadow-lg disabled:opacity-50">
                         {submitting ? 'Completing Project...' : 'Complete Project and Award Badges'}
                       </button>
                     </div>

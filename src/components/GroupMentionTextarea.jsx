@@ -187,7 +187,7 @@ export const GroupMentionTextarea = ({
       {showSuggestions && suggestions.length > 0 && (
         <div 
           ref={suggestionsRef}
-          className="absolute z-50 w-full sm:max-w-sm md:max-w-md lg:max-w-lg bg-gray-900/95 border border-white/20 rounded-lg shadow-2xl max-h-56 sm:max-h-64 md:max-h-72 overflow-y-auto"
+          className="absolute z-50 w-full sm:max-w-sm md:max-w-md lg:max-w-lg bg-gray-900/95 border border-gray-200 rounded-lg shadow-2xl max-h-56 sm:max-h-64 md:max-h-72 overflow-y-auto"
           style={{
             top: '100%',
             left: 0,
@@ -196,12 +196,12 @@ export const GroupMentionTextarea = ({
         >
           <div className="p-1.5 sm:p-2">
             {/* Header */}
-            <div className="text-xs sm:text-sm text-gray-400 px-2 sm:px-3 py-1 sm:py-1.5 border-b border-white/10 mb-1 flex items-center justify-between">
+            <div className="text-xs sm:text-sm text-gray-400 px-2 sm:px-3 py-1 sm:py-1.5 border-b border-gray-200 mb-1 flex items-center justify-between">
               <span className="truncate">
                 <span className="hidden xs:inline">Mention team member</span>
                 <span className="xs:hidden">Mention</span>
               </span>
-              <span className="text-lime-400 text-xs ml-2 flex-shrink-0">
+              <span className="text-blue-600 text-xs ml-2 flex-shrink-0">
                 {suggestions.length}
                 <span className="hidden sm:inline"> available</span>
               </span>
@@ -214,12 +214,12 @@ export const GroupMentionTextarea = ({
                 <button
                   key={member.id || member.userId || index}
                   onClick={() => selectSuggestion(member, index)}
-                  className={`flex items-center space-x-2 sm:space-x-3 w-full px-2 sm:px-3 py-2 sm:py-3 text-left hover:bg-white/10 rounded-lg transition-colors ${
-                    index === selectedSuggestionIndex ? 'bg-lime-500/20 text-lime-300' : 'text-white'
+                  className={`flex items-center space-x-2 sm:space-x-3 w-full px-2 sm:px-3 py-2 sm:py-3 text-left hover:bg-gray-100 rounded-lg transition-colors ${
+                    index === selectedSuggestionIndex ? 'bg-blue-600/20 text-lime-300' : 'text-gray-900'
                   }`}
                 >
                   {/* Member Avatar */}
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full overflow-hidden bg-gradient-to-r from-lime-500 to-green-500 flex items-center justify-center text-white font-bold text-xs sm:text-sm flex-shrink-0">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full overflow-hidden bg-gradient-to-r from-blue-500 to-blue-500 flex items-center justify-center text-gray-900 font-bold text-xs sm:text-sm flex-shrink-0">
                     {user.photoURL ? (
                       <img 
                         src={user.photoURL} 
@@ -257,7 +257,7 @@ export const GroupMentionTextarea = ({
                   </div>
                   
                   {/* Mention Preview - Hidden on small screens */}
-                  <div className="hidden md:block text-xs sm:text-sm text-lime-400 bg-lime-400/10 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded flex-shrink-0 max-w-[80px] sm:max-w-[100px] lg:max-w-[120px] truncate">
+                  <div className="hidden md:block text-xs sm:text-sm text-blue-600 bg-blue-500/10 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded flex-shrink-0 max-w-[80px] sm:max-w-[100px] lg:max-w-[120px] truncate">
                     {formatUserForMention(user)}
                   </div>
                 </button>
@@ -266,7 +266,7 @@ export const GroupMentionTextarea = ({
           </div>
           
           {/* Helper Text - Responsive */}
-          <div className="px-2 sm:px-3 py-1.5 sm:py-2 border-t border-white/10 bg-black/20">
+          <div className="px-2 sm:px-3 py-1.5 sm:py-2 border-t border-gray-200 bg-gray-100">
             <div className="text-xs text-gray-400">
               {/* Desktop version */}
               <span className="hidden sm:inline">

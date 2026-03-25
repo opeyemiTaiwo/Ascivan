@@ -14,8 +14,8 @@ export const MobileSidebarToggle = ({ leftSidebarOpen, onToggleLeftSidebar }) =>
         onClick={onToggleLeftSidebar}
         className={`w-11 h-11 xs:w-12 xs:h-12 rounded-full shadow-2xl border-2 transition-all duration-300 flex items-center justify-center group active:scale-95 ${
           leftSidebarOpen 
-            ? 'bg-orange-500 border-orange-400 text-white' 
-            : 'bg-black/80 border-white/20 text-orange-400 hover:bg-orange-500 hover:text-white'
+            ? 'bg-blue-600 border-blue-500 text-gray-900' 
+            : 'bg-white/80 border-gray-200 text-blue-600 hover:bg-blue-600 hover:text-gray-900'
         }`}
         aria-label="Toggle quick actions"
         title="Quick Actions"
@@ -64,25 +64,25 @@ export const MobileSidebarDrawer = ({ isOpen, onClose, children, title, position
     <div className="fixed inset-0 z-[90] lg:hidden">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/50"
+        className="absolute inset-0 bg-gray-500"
         onClick={onClose}
       />
       
       {/* Drawer */}
       <div 
-        className={`absolute top-0 ${positionClass} h-full w-72 xs:w-80 max-w-[85vw] bg-gradient-to-br from-gray-900/98 via-black/98 to-gray-900/98 ${borderClass} border-orange-500/20 shadow-2xl transition-transform duration-300 overflow-hidden ${slideClass}`}
+        className={`absolute top-0 ${positionClass} h-full w-72 xs:w-80 max-w-[85vw] bg-gradient-to-br from-gray-900/98 via-black/98 to-gray-900/98 ${borderClass} border-blue-600/20 shadow-2xl transition-transform duration-300 overflow-hidden ${slideClass}`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-3 xs:p-4 border-b border-orange-500/10 bg-black/20">
-          <h3 className="text-white font-bold text-base xs:text-lg flex items-center gap-1.5 xs:gap-2">
-            <svg className="w-4 h-4 xs:w-5 xs:h-5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="flex items-center justify-between p-3 xs:p-4 border-b border-blue-600/10 bg-gray-100">
+          <h3 className="text-gray-900 font-bold text-base xs:text-lg flex items-center gap-1.5 xs:gap-2">
+            <svg className="w-4 h-4 xs:w-5 xs:h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
             <span className="truncate">{title}</span>
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white active:text-gray-300 transition-colors p-1 xs:p-2 rounded-lg hover:bg-white/10 active:bg-white/20 flex-shrink-0"
+            className="text-gray-400 hover:text-gray-900 active:text-gray-600 transition-colors p-1 xs:p-2 rounded-lg hover:bg-gray-100 active:bg-gray-100 flex-shrink-0"
             aria-label="Close sidebar"
           >
             <svg className="h-5 w-5 xs:h-6 xs:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

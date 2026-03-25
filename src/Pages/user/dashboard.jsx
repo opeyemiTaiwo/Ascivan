@@ -181,7 +181,7 @@ const DashboardOverview = () => {
               <div className="space-y-2">
                 <Link to="/community" className="block text-sm text-gray-600 hover:text-blue-600 font-medium transition-colors">Home Feed</Link>
                 <Link to="/community/submit" className="block text-sm text-gray-600 hover:text-blue-600 font-medium transition-colors">Create Post</Link>
-                <Link to="/members-directory" className="block text-sm text-gray-600 hover:text-blue-600 font-medium transition-colors">Member Directory</Link>
+                <Link to="/members-directory" className="block text-sm text-gray-600 hover:text-blue-600 font-medium transition-colors">Follow</Link>
                 <Link to="/projects/submit" className="block text-sm text-gray-600 hover:text-blue-600 font-medium transition-colors">Post a Project</Link>
               </div>
             </div>

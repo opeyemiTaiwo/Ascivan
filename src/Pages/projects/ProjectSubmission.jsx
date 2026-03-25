@@ -248,16 +248,16 @@ const ProjectSubmission = () => {
     return tomorrow.toISOString().split('T')[0];
   };
 
-  const inputClass = "w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 min-h-[44px] text-white placeholder-gray-400 focus:border-orange-400 focus:outline-none text-sm transition-all";
-  const labelClass = "block text-orange-400 font-semibold mb-2 text-sm";
+  const inputClass = "w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 min-h-[44px] text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none text-sm transition-all";
+  const labelClass = "block text-blue-600 font-semibold mb-2 text-sm";
   const selectClass = inputClass + " appearance-none";
 
   if (authLoading || !currentUser) {
     return (
       <>
         
-        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#000' }}>
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-400 mx-auto"></div>
+        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#ffffff' }}>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
         </div>
       </>
     );
@@ -266,20 +266,20 @@ const ProjectSubmission = () => {
   return (
     <>
       
-      <div className="min-h-screen overflow-x-hidden " style={{ backgroundColor: '#000' }}>
+      <div className="min-h-screen overflow-x-hidden " style={{ backgroundColor: '#ffffff' }}>
         <main className="pb-16 sm:pb-20 md:pb-24">
           <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 md:py-10 max-w-3xl">
 
             {/* Header */}
             <div className="text-center mb-8">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-2" style={{ fontFamily: '"Inter", sans-serif' }}>
-                Post a <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-500">Project</span>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 mb-2" style={{ fontFamily: '"Inter", sans-serif' }}>
+                Post a <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-500">Project</span>
               </h1>
               <p className="text-gray-400 text-sm sm:text-base">Create a project and build your team</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="bg-white/5 border border-white/20 rounded-2xl p-4 sm:p-6 space-y-5">
+              <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 sm:p-6 space-y-5">
 
                 {/* Project Title */}
                 <div>
@@ -338,40 +338,40 @@ const ProjectSubmission = () => {
               </div>
 
               {/* ── PRICING ── */}
-              <div className="bg-white/5 border border-white/20 rounded-2xl p-4 sm:p-6 space-y-5">
-                <h2 className="text-lg font-bold text-white">Project Pricing</h2>
+              <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 sm:p-6 space-y-5">
+                <h2 className="text-lg font-bold text-gray-900">Project Pricing</h2>
 
                 <div className="grid grid-cols-2 gap-3">
                   <button type="button" onClick={() => setFormData(p => ({ ...p, pricingType: 'free' }))}
-                    className={`p-4 rounded-xl border-2 text-center transition-all active:scale-95 ${formData.pricingType === 'free' ? 'border-green-400 bg-green-500/20 text-white' : 'border-white/15 bg-white/5 text-gray-300 hover:bg-white/10'}`}>
+                    className={`p-4 rounded-xl border-2 text-center transition-all active:scale-95 ${formData.pricingType === 'free' ? 'border-blue-500 bg-blue-600/20 text-gray-900' : 'border-white/15 bg-gray-50 text-gray-600 hover:bg-gray-100'}`}>
                     <div className="text-sm font-bold">Free</div>
                     <div className="text-gray-400 text-xs mt-1">Volunteer / learning project</div>
                   </button>
                   <button type="button" onClick={() => setFormData(p => ({ ...p, pricingType: 'paid' }))}
-                    className={`p-4 rounded-xl border-2 text-center transition-all active:scale-95 ${formData.pricingType === 'paid' ? 'border-orange-400 bg-orange-500/20 text-white' : 'border-white/15 bg-white/5 text-gray-300 hover:bg-white/10'}`}>
+                    className={`p-4 rounded-xl border-2 text-center transition-all active:scale-95 ${formData.pricingType === 'paid' ? 'border-blue-500 bg-blue-600/20 text-gray-900' : 'border-white/15 bg-gray-50 text-gray-600 hover:bg-gray-100'}`}>
                     <div className="text-sm font-bold">Paid</div>
                     <div className="text-gray-400 text-xs mt-1">Compensated project</div>
                   </button>
                 </div>
 
                 {formData.pricingType === 'free' && (
-                  <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-3">
+                  <div className="bg-blue-600/10 border border-gray-200 rounded-xl p-3">
                     <p className="text-green-300 text-sm">This is a free project. Team members will contribute on a volunteer or learning basis.</p>
                   </div>
                 )}
               </div>
 
               {/* ── TEAM ROLES ── */}
-              <div className="bg-white/5 border border-white/20 rounded-2xl p-4 sm:p-6 space-y-5">
+              <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 sm:p-6 space-y-5">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-bold text-white">Team Roles</h2>
+                  <h2 className="text-lg font-bold text-gray-900">Team Roles</h2>
                   <span className="text-gray-400 text-xs">Total team: {totalTeamSize} {totalTeamSize === 1 ? 'person' : 'people'}</span>
                 </div>
 
                 {teamRoles.map((role, index) => (
-                  <div key={index} className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
+                  <div key={index} className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-white text-sm font-semibold">Role {index + 1}</span>
+                      <span className="text-gray-900 text-sm font-semibold">Role {index + 1}</span>
                       {teamRoles.length > 1 && (
                         <button type="button" onClick={() => removeRole(index)} className="text-red-400 hover:text-red-300 text-xs font-semibold transition-colors">Remove</button>
                       )}
@@ -403,14 +403,14 @@ const ProjectSubmission = () => {
                 ))}
 
                 {teamRoles.length < 10 && (
-                  <button type="button" onClick={addRole} className="w-full py-2.5 border border-dashed border-white/20 rounded-xl text-orange-400 text-sm font-semibold hover:bg-white/5 transition-all min-h-[44px]">
+                  <button type="button" onClick={addRole} className="w-full py-2.5 border border-dashed border-gray-200 rounded-xl text-blue-600 text-sm font-semibold hover:bg-gray-50 transition-all min-h-[44px]">
                     + Add Another Role
                   </button>
                 )}
 
                 {formData.pricingType === 'paid' && totalBudget > 0 && (
-                  <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl p-3">
-                    <p className="text-orange-300 text-sm font-semibold">
+                  <div className="bg-blue-600/10 border border-blue-600/20 rounded-xl p-3">
+                    <p className="text-blue-500 text-sm font-semibold">
                       Total project budget: ${totalBudget.toLocaleString(undefined, { minimumFractionDigits: 2 })} ({totalTeamSize} team members)
                     </p>
                   </div>
@@ -418,8 +418,8 @@ const ProjectSubmission = () => {
               </div>
 
               {/* ── CONTACT INFO ── */}
-              <div className="bg-white/5 border border-white/20 rounded-2xl p-4 sm:p-6 space-y-5">
-                <h2 className="text-lg font-bold text-white">Contact Information</h2>
+              <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 sm:p-6 space-y-5">
+                <h2 className="text-lg font-bold text-gray-900">Contact Information</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className={labelClass}>Your Name</label>
@@ -438,7 +438,7 @@ const ProjectSubmission = () => {
 
               {/* Submit */}
               <button type="submit" disabled={isSubmitting}
-                className="w-full py-3.5 min-h-[48px] bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-black rounded-xl text-sm sm:text-base transition-all shadow-lg hover:shadow-orange-500/30 disabled:opacity-50 disabled:cursor-not-allowed">
+                className="w-full py-3.5 min-h-[48px] bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900 font-black rounded-xl text-sm sm:text-base transition-all shadow-lg hover:shadow-orange-500/30 disabled:opacity-50 disabled:cursor-not-allowed">
                 {isSubmitting ? (
                   <span className="flex items-center justify-center gap-2">
                     <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>

@@ -684,7 +684,7 @@ const SinglePost = () => {
               </p>
               <button
                 onClick={() => navigate('/community')}
-                className="bg-orange-500 hover:bg-orange-600 text-white px-4 xs:px-5 sm:px-6 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold transition-colors text-sm xs:text-base min-h-[44px]"
+                className="bg-blue-600 hover:bg-blue-700 text-gray-900 px-4 xs:px-5 sm:px-6 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold transition-colors text-sm xs:text-base min-h-[44px]"
               >
                 Back to Home
               </button>
@@ -705,7 +705,7 @@ const SinglePost = () => {
         {/* Back Button */}
         <button
           onClick={() => navigate('/community')}
-          className="flex items-center text-gray-600 hover:text-orange-500 mb-4 xs:mb-5 sm:mb-6 transition-colors font-medium text-sm xs:text-base group min-h-[44px] px-2"
+          className="flex items-center text-gray-600 hover:text-blue-600 mb-4 xs:mb-5 sm:mb-6 transition-colors font-medium text-sm xs:text-base group min-h-[44px] px-2"
         >
           <svg className="w-4 h-4 xs:w-5 xs:h-5 mr-1.5 xs:mr-2 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -740,7 +740,7 @@ const SinglePost = () => {
                         displayName: post.authorName,
                         profile: { title: post.authorTitle || '' }
                       }}
-                      className="font-bold text-gray-900 hover:text-orange-500 transition-colors text-sm xs:text-base sm:text-lg truncate"
+                      className="font-bold text-gray-900 hover:text-blue-600 transition-colors text-sm xs:text-base sm:text-lg truncate"
                     />
                     {post.authorTitle && (
                       <span className="text-xs xs:text-sm text-gray-500 truncate">
@@ -830,7 +830,7 @@ const SinglePost = () => {
                     value={editContent.title}
                     onChange={(e) => setEditContent({...editContent, title: e.target.value})}
                     placeholder="Post title (optional)"
-                    className="w-full px-3 xs:px-4 py-2 xs:py-2.5 border border-gray-300 rounded-lg xs:rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm xs:text-base"
+                    className="w-full px-3 xs:px-4 py-2 xs:py-2.5 border border-gray-300 rounded-lg xs:rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm xs:text-base"
                   />
                 )}
                 <textarea
@@ -838,13 +838,13 @@ const SinglePost = () => {
                   onChange={(e) => setEditContent({...editContent, content: e.target.value})}
                   rows={6}
                   placeholder="Post content"
-                  className="w-full px-3 xs:px-4 py-2 xs:py-2.5 border border-gray-300 rounded-lg xs:rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-vertical text-sm xs:text-base"
+                  className="w-full px-3 xs:px-4 py-2 xs:py-2.5 border border-gray-300 rounded-lg xs:rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical text-sm xs:text-base"
                 />
                 <div className="flex flex-col xs:flex-row gap-2 xs:gap-3">
                   <button
                     onClick={savePostEdit}
                     disabled={savingEdit || !editContent.content?.trim()}
-                    className="flex-1 xs:flex-none bg-orange-500 hover:bg-orange-600 text-white px-4 xs:px-6 py-2 xs:py-2.5 rounded-lg xs:rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm xs:text-base min-h-[44px]"
+                    className="flex-1 xs:flex-none bg-blue-600 hover:bg-blue-700 text-gray-900 px-4 xs:px-6 py-2 xs:py-2.5 rounded-lg xs:rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm xs:text-base min-h-[44px]"
                   >
                     {savingEdit ? 'Saving...' : 'Save Changes'}
                   </button>
@@ -893,7 +893,7 @@ const SinglePost = () => {
                     disabled={submittingReaction}
                     className={`flex items-center space-x-1.5 xs:space-x-2 px-3 xs:px-4 py-1.5 xs:py-2 rounded-lg xs:rounded-xl font-semibold transition-all text-xs xs:text-sm sm:text-base min-h-[44px] ${
                       isPostLikedByUser()
-                        ? 'bg-orange-50 text-orange-600 hover:bg-orange-100'
+                        ? 'bg-blue-50 text-blue-700 hover:bg-blue-50'
                         : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
                     }`}
                   >
@@ -962,7 +962,7 @@ const SinglePost = () => {
                       onChange={setReplyText}
                       onMentionSelect={handleReplyMentionSelect}
                       placeholder="Write a reply..."
-                      className="w-full px-3 xs:px-4 py-2 xs:py-2.5 sm:py-3 border border-gray-300 rounded-lg xs:rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-vertical text-sm xs:text-base"
+                      className="w-full px-3 xs:px-4 py-2 xs:py-2.5 sm:py-3 border border-gray-300 rounded-lg xs:rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical text-sm xs:text-base"
                       rows={3}
                     />
                     
@@ -980,7 +980,7 @@ const SinglePost = () => {
                       <button
                         onClick={submitReply}
                         disabled={submittingReply || !replyText.trim()}
-                        className="flex-1 xs:flex-none bg-orange-500 hover:bg-orange-600 text-white px-4 xs:px-6 py-2 xs:py-2.5 rounded-lg xs:rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm xs:text-base min-h-[44px]"
+                        className="flex-1 xs:flex-none bg-blue-600 hover:bg-blue-700 text-gray-900 px-4 xs:px-6 py-2 xs:py-2.5 rounded-lg xs:rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm xs:text-base min-h-[44px]"
                       >
                         {submittingReply ? 'Posting...' : 'Post Reply'}
                       </button>
@@ -1049,7 +1049,7 @@ const SinglePost = () => {
                                 displayName: reply.authorName,
                                 profile: { title: reply.authorTitle || '' }
                               }}
-                              className="font-bold text-gray-900 hover:text-orange-500 transition-colors text-xs xs:text-sm sm:text-base truncate"
+                              className="font-bold text-gray-900 hover:text-blue-600 transition-colors text-xs xs:text-sm sm:text-base truncate"
                             />
                             {reply.authorTitle && (
                               <span className="text-[10px] xs:text-xs text-gray-500 truncate">
@@ -1072,7 +1072,7 @@ const SinglePost = () => {
                                 {editingReply !== reply.id && (
                                   <button
                                     onClick={() => startEditingReply(reply)}
-                                    className="p-1 xs:p-1.5 hover:bg-gray-100 rounded text-gray-500 hover:text-orange-500 transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center"
+                                    className="p-1 xs:p-1.5 hover:bg-gray-100 rounded text-gray-500 hover:text-blue-600 transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center"
                                     aria-label="Edit reply"
                                   >
                                     <svg className="w-3.5 h-3.5 xs:w-4 xs:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1100,13 +1100,13 @@ const SinglePost = () => {
                               value={editReplyContent}
                               onChange={(e) => setEditReplyContent(e.target.value)}
                               rows={3}
-                              className="w-full px-3 xs:px-4 py-2 xs:py-2.5 border border-gray-300 rounded-lg xs:rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-vertical text-sm xs:text-base"
+                              className="w-full px-3 xs:px-4 py-2 xs:py-2.5 border border-gray-300 rounded-lg xs:rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical text-sm xs:text-base"
                             />
                             <div className="flex flex-col xs:flex-row gap-2 xs:gap-3">
                               <button
                                 onClick={() => saveReplyEdit(reply.id)}
                                 disabled={savingReplyEdit || !editReplyContent.trim()}
-                                className="flex-1 xs:flex-none bg-orange-500 hover:bg-orange-600 text-white px-3 xs:px-4 py-1.5 xs:py-2 rounded-lg xs:rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-xs xs:text-sm min-h-[44px]"
+                                className="flex-1 xs:flex-none bg-blue-600 hover:bg-blue-700 text-gray-900 px-3 xs:px-4 py-1.5 xs:py-2 rounded-lg xs:rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-xs xs:text-sm min-h-[44px]"
                               >
                                 {savingReplyEdit ? 'Saving...' : 'Save'}
                               </button>

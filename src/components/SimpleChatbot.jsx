@@ -267,18 +267,18 @@ const SimpleChatbot = () => {
         {/* Chat Interface or Prompt */}
         {!isOpen ? (
           <div className="text-center">
-            <div className="bg-gradient-to-br from-green-950/30 via-gray-900/40 to-black/60 rounded-2xl border border-green-500/20 shadow-2xl p-6 sm:p-8 md:p-12">
+            <div className="bg-gradient-to-br from-blue-950/30 via-gray-900/40 to-black/60 rounded-2xl border border-gray-200 shadow-2xl p-6 sm:p-8 md:p-12">
               
               {/* Large Chat Icon */}
               <div className="text-5xl sm:text-6xl md:text-8xl mb-4 sm:mb-6 ">💬</div>
               
-              <h2 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 text-white" 
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 text-gray-900" 
                   style={{
                     textShadow: '0 0 30px rgba(255,255,255,0.2), 2px 2px 4px rgba(0,0,0,0.9)',
                     fontFamily: '"Inter", sans-serif'
                   }}>
                 Chat With{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-emerald-400 to-green-300">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-emerald-400 to-blue-300">
                   Our Team
                 </span>
               </h2>
@@ -299,7 +299,7 @@ const SimpleChatbot = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
                 <button
                   onClick={() => setIsOpen(true)}
-                  className="group relative bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 text-white px-10 sm:px-14 py-5 sm:py-6 rounded-full font-bold text-lg sm:text-xl transition-all duration-300 shadow-2xl overflow-hidden"
+                  className="group relative bg-gradient-to-r from-blue-500 via-blue-600 to-blue-500 text-gray-900 px-10 sm:px-14 py-5 sm:py-6 rounded-full font-bold text-lg sm:text-xl transition-all duration-300 shadow-2xl overflow-hidden"
                   style={{
                     boxShadow: '0 10px 50px rgba(249, 115, 22, 0.4), 0 0 30px rgba(249, 115, 22, 0.2)',
                     fontFamily: '"Inter", sans-serif'
@@ -311,22 +311,22 @@ const SimpleChatbot = () => {
                     </svg>
                     Start Chatting
                   </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-yellow-400 opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-yellow-400 opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
                 </button>
               </div>
 
               <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-6">
-                <div className="inline-flex items-center bg-green-500/20 rounded-full px-3 sm:px-5 py-2 sm:py-2.5 border border-green-400/30">
+                <div className="inline-flex items-center bg-blue-600/20 rounded-full px-3 sm:px-5 py-2 sm:py-2.5 border border-blue-500/30">
                   <span className="text-green-300 font-bold text-xs sm:text-sm" style={{ fontFamily: '"Inter", sans-serif' }}>
                     🏢 Business Solutions
                   </span>
                 </div>
-                <div className="inline-flex items-center bg-green-500/15 rounded-full px-3 sm:px-5 py-2 sm:py-2.5 border border-green-400/25">
+                <div className="inline-flex items-center bg-blue-600/15 rounded-full px-3 sm:px-5 py-2 sm:py-2.5 border border-blue-500/25">
                   <span className="text-green-200 font-bold text-xs sm:text-sm" style={{ fontFamily: '"Inter", sans-serif' }}>
                     💬 General Inquiries
                   </span>
                 </div>
-                <div className="inline-flex items-center bg-green-500/20 rounded-full px-3 sm:px-5 py-2 sm:py-2.5 border border-green-400/30">
+                <div className="inline-flex items-center bg-blue-600/20 rounded-full px-3 sm:px-5 py-2 sm:py-2.5 border border-blue-500/30">
                   <span className="text-green-300 font-bold text-xs sm:text-sm" style={{ fontFamily: '"Inter", sans-serif' }}>
                     👤 Real Human Follow-up
                   </span>
@@ -336,23 +336,23 @@ const SimpleChatbot = () => {
           </div>
         ) : (
           /* Chat Window */
-          <div className="bg-gradient-to-br from-green-950/30 via-gray-900/40 to-black/60 rounded-2xl border border-green-500/20 shadow-2xl overflow-hidden">
+          <div className="bg-gradient-to-br from-blue-950/30 via-gray-900/40 to-black/60 rounded-2xl border border-gray-200 shadow-2xl overflow-hidden">
             <div className="max-w-4xl mx-auto">
               
               {/* Header */}
-              <div className="bg-gradient-to-r from-green-600 to-green-500 p-3 sm:p-4 md:p-6 text-white flex items-center justify-between">
+              <div className="bg-gradient-to-r from-blue-600 to-blue-500 p-3 sm:p-4 md:p-6 text-gray-900 flex items-center justify-between">
                 <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4">
                   <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center text-xl sm:text-2xl md:text-3xl">
                     🤖
                   </div>
                   <div>
                     <h3 className="font-bold text-base sm:text-lg md:text-xl">Loomiqe Assistant</h3>
-                    <p className="text-sm text-white/80">Collecting your info — our team follows up personally</p>
+                    <p className="text-sm text-gray-900/80">Collecting your info — our team follows up personally</p>
                   </div>
                 </div>
                 <button 
                   onClick={() => setIsOpen(false)}
-                  className="text-white hover:bg-white/20 p-2 rounded-lg transition-all"
+                  className="text-gray-900 hover:bg-gray-100 p-2 rounded-lg transition-all"
                 >
                   <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -367,8 +367,8 @@ const SimpleChatbot = () => {
                     <div className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
                       <div className={`max-w-[85%] sm:max-w-[75%] p-3 sm:p-4 rounded-xl sm:rounded-2xl ${
                         msg.type === 'user' 
-                          ? 'bg-gradient-to-r from-green-600 to-green-500 text-white' 
-                          : 'bg-white/10 text-white border border-white/20'
+                          ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-gray-900' 
+                          : 'bg-gray-100 text-gray-900 border border-gray-200'
                       }`}>
                         {msg.text.includes('http') ? (
                           <p className="text-sm sm:text-base leading-relaxed whitespace-pre-line break-words">
@@ -401,7 +401,7 @@ const SimpleChatbot = () => {
                           <button
                             key={optIdx}
                             onClick={() => handleOptionClick(option)}
-                            className="text-left px-4 py-3 rounded-xl bg-gradient-to-r from-green-500/20 to-green-500/20 border border-green-400/30 text-white hover:from-green-500/40 hover:to-green-500/40 hover:border-green-400/50 transition-all duration-300 text-xs sm:text-sm md:text-base font-medium"
+                            className="text-left px-4 py-3 rounded-xl bg-gradient-to-r from-blue-500/20 to-blue-500/20 border border-blue-500/30 text-gray-900 hover:from-blue-500/40 hover:to-blue-500/40 hover:border-blue-500/50 transition-all duration-300 text-xs sm:text-sm md:text-base font-medium"
                           >
                             {option}
                           </button>
@@ -413,7 +413,7 @@ const SimpleChatbot = () => {
 
                 {isTyping && (
                   <div className="flex justify-start">
-                    <div className="bg-white/10 border border-white/20 p-4 rounded-2xl">
+                    <div className="bg-gray-100 border border-gray-200 p-4 rounded-2xl">
                       <div className="flex space-x-2">
                         <div className="w-3 h-3 bg-white rounded-full "></div>
                         <div className="w-3 h-3 bg-white rounded-full " style={{animationDelay: '0.2s'}}></div>
@@ -427,7 +427,7 @@ const SimpleChatbot = () => {
               </div>
 
               {/* Input */}
-              <div className="p-3 sm:p-4 md:p-6 border-t border-white/20 bg-black/20">
+              <div className="p-3 sm:p-4 md:p-6 border-t border-gray-200 bg-gray-100">
                 <form onSubmit={handleSubmit} className="flex space-x-3">
                   <input
                     type="text"
@@ -435,12 +435,12 @@ const SimpleChatbot = () => {
                     onChange={(e) => setInputValue(e.target.value)}
                     placeholder={step === 3 ? "Or type your answer..." : "Type your message..."}
                     disabled={step >= 99}
-                    className="flex-1 px-3 sm:px-4 md:px-6 py-3 sm:py-4 rounded-lg sm:rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-white/5 text-base"
+                    className="flex-1 px-3 sm:px-4 md:px-6 py-3 sm:py-4 rounded-lg sm:rounded-xl bg-gray-100 border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-50 text-base"
                   />
                   <button
                     type="submit"
                     disabled={!inputValue.trim() || step >= 99}
-                    className="bg-gradient-to-r from-green-600 to-green-500 text-white px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg sm:rounded-xl font-bold hover:opacity-90 disabled:opacity-50 transition-all text-base"
+                    className="bg-gradient-to-r from-blue-600 to-blue-500 text-gray-900 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg sm:rounded-xl font-bold hover:opacity-90 disabled:opacity-50 transition-all text-base"
                   >
                     Send
                   </button>

@@ -81,26 +81,26 @@ const FollowersFollowing = () => {
     },
     'quality-assurance': { 
       name: 'TechQA',
-      color: 'text-green-400', 
-      bgColor: 'from-green-500/20 to-green-600/20',
+      color: 'text-blue-600', 
+      bgColor: 'from-blue-500/20 to-blue-600/20',
       skills: ['Quality Assurance', 'Testing', 'Bug Detection', 'Test Automation']
     },
     'development': { 
       name: 'TechDev',
-      color: 'text-green-400', 
-      bgColor: 'from-green-500/20 to-green-600/20',
+      color: 'text-blue-600', 
+      bgColor: 'from-blue-500/20 to-blue-600/20',
       skills: ['Programming', 'Software Development', 'Code Review', 'Debugging']
     },
     'leadership': { 
       name: 'TechLeads',
-      color: 'text-orange-400', 
-      bgColor: 'from-orange-500/20 to-orange-600/20',
+      color: 'text-blue-600', 
+      bgColor: 'from-blue-500/20 to-blue-600/20',
       skills: ['Project Management', 'Leadership', 'Strategic Planning', 'Team Coordination']
     },
     'design': { 
       name: 'TechArchs',
-      color: 'text-orange-400', 
-      bgColor: 'from-orange-500/20 to-orange-600/20',
+      color: 'text-blue-600', 
+      bgColor: 'from-blue-500/20 to-blue-600/20',
       skills: ['No-Code Development', 'UI/UX Design', 'Visual Design', 'Platform Architecture']
     },
     'security': { 
@@ -736,8 +736,8 @@ const FollowersFollowing = () => {
         disabled={loading}
         className={`${sizeClasses[size]} rounded-full font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 min-h-[44px] ${
           isFollowing
-            ? 'bg-gray-500/20 text-gray-300 border border-gray-500/30 hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/30 active:bg-red-500/30'
-            : 'bg-gradient-to-r from-lime-500 to-green-600 hover:from-lime-600 hover:to-green-700 active:from-lime-700 active:to-green-800 text-white'
+            ? 'bg-gray-500/20 text-gray-600 border border-gray-500/30 hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/30 active:bg-red-500/30'
+            : 'bg-gradient-to-r from-lime-500 to-blue-600 hover:from-lime-600 hover:to-blue-700 active:from-lime-700 active:to-blue-800 text-gray-900'
         }`}
       >
         {loading ? (
@@ -769,13 +769,13 @@ const FollowersFollowing = () => {
   };
 
   const UserCard = ({ user }) => (
-    <div className="bg-black/20 rounded-lg xs:rounded-xl border border-white/10 p-3 xs:p-4 sm:p-5">
+    <div className="bg-gray-100 rounded-lg xs:rounded-xl border border-gray-200 p-3 xs:p-4 sm:p-5">
       <div className="flex items-center gap-2 xs:gap-3 sm:gap-4">
         <button
           onClick={() => handleUserClick(user)}
           className="relative flex-shrink-0 group active:scale-95 transition-transform"
         >
-          <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full overflow-hidden bg-gradient-to-br from-lime-400 to-green-500 flex items-center justify-center text-white font-bold shadow-lg cursor-pointer">
+          <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full overflow-hidden bg-gradient-to-br from-lime-400 to-blue-500 flex items-center justify-center text-gray-900 font-bold shadow-lg cursor-pointer">
             {user.photoURL ? (
               <img 
                 src={user.photoURL} 
@@ -792,7 +792,7 @@ const FollowersFollowing = () => {
             )}
           </div>
           
-          <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4 bg-green-500 rounded-full border-2 border-gray-900"></div>
+          <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4 bg-blue-600 rounded-full border-2 border-gray-900"></div>
         </button>
         
         <div className="flex-1 min-w-0">
@@ -800,14 +800,14 @@ const FollowersFollowing = () => {
             onClick={() => handleUserClick(user)}
             className="text-left w-full group active:scale-[0.98] transition-transform"
           >
-            <h3 className="font-bold text-white text-xs xs:text-sm sm:text-base md:text-lg truncate group-hover:text-lime-300 transition-colors">
+            <h3 className="font-bold text-gray-900 text-xs xs:text-sm sm:text-base md:text-lg truncate group-hover:text-lime-300 transition-colors">
               {user.firstName && user.lastName 
                 ? `${user.firstName} ${user.lastName}`
                 : user.displayName || 'Professional User'
               }
             </h3>
             {user.profile?.title && (
-              <p className="text-lime-400 text-[10px] xs:text-xs sm:text-sm truncate">
+              <p className="text-blue-600 text-[10px] xs:text-xs sm:text-sm truncate">
                 {user.profile.title}
               </p>
             )}
@@ -847,7 +847,7 @@ const FollowersFollowing = () => {
     
     return (
       <div className="group">
-        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-5 md:p-6 border border-white/20 shadow-2xl h-full flex flex-col">
+        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-5 md:p-6 border border-gray-200 shadow-2xl h-full flex flex-col">
           
           <div className="flex items-center mb-3 xs:mb-4 sm:mb-6">
             <div className="relative flex-shrink-0 mr-2 xs:mr-3 sm:mr-4">
@@ -859,17 +859,17 @@ const FollowersFollowing = () => {
                   <img 
                     src={member.photoURL} 
                     alt={`${member.name}'s profile`} loading="lazy"
-                    className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full object-cover ring-2 xs:ring-3 sm:ring-4 ring-lime-400/50"
+                    className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full object-cover ring-2 xs:ring-3 sm:ring-4 ring-blue-400/50"
                   />
                 ) : (
-                  <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-lime-500 to-green-500 flex items-center justify-center ring-2 xs:ring-3 sm:ring-4 ring-lime-400/50">
+                  <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-lime-500 to-blue-500 flex items-center justify-center ring-2 xs:ring-3 sm:ring-4 ring-blue-400/50">
                     <span className="text-base xs:text-lg sm:text-xl md:text-2xl text-black font-bold">
                       {member.name?.charAt(0)?.toUpperCase() || '?'}
                     </span>
                   </div>
                 )}
                 {member.isActive && (
-                  <div className="absolute -bottom-0.5 -right-0.5 xs:-bottom-1 xs:-right-1 w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 bg-green-400 rounded-full border-2 border-white flex items-center justify-center">
+                  <div className="absolute -bottom-0.5 -right-0.5 xs:-bottom-1 xs:-right-1 w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center">
                     <div className="w-1 h-1 xs:w-1.5 xs:h-1.5 sm:w-2 sm:h-2 bg-white rounded-full"></div>
                   </div>
                 )}
@@ -881,7 +881,7 @@ const FollowersFollowing = () => {
                 onClick={() => handleUserClick(member)}
                 className="text-left group w-full active:scale-[0.98] transition-transform"
               >
-                <h3 className="text-sm xs:text-base sm:text-lg md:text-xl font-black text-white group-hover:text-lime-300 transition-colors duration-300 truncate">
+                <h3 className="text-sm xs:text-base sm:text-lg md:text-xl font-black text-gray-900 group-hover:text-lime-300 transition-colors duration-300 truncate">
                   {member.name}
                 </h3>
                 
@@ -890,7 +890,7 @@ const FollowersFollowing = () => {
                     <svg className={`w-3 h-3 xs:w-4 xs:h-4 ${topCategory.color} mr-1`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                     </svg>
-                    <span className="text-[10px] xs:text-xs text-gray-300 truncate">{topCategory.name}</span>
+                    <span className="text-[10px] xs:text-xs text-gray-600 truncate">{topCategory.name}</span>
                   </div>
                 )}
               </button>
@@ -902,13 +902,13 @@ const FollowersFollowing = () => {
               <div className="text-sm xs:text-base sm:text-lg font-bold text-yellow-400">{member.badges}</div>
               <div className="text-[10px] xs:text-xs text-yellow-300">Badges</div>
             </div>
-            <div className="bg-green-500/10 rounded-md xs:rounded-lg p-1.5 xs:p-2 sm:p-3 text-center border border-green-500/20">
-              <div className="text-sm xs:text-base sm:text-lg font-bold text-green-400">{member.totalProjects}</div>
+            <div className="bg-blue-600/10 rounded-md xs:rounded-lg p-1.5 xs:p-2 sm:p-3 text-center border border-gray-200">
+              <div className="text-sm xs:text-base sm:text-lg font-bold text-blue-600">{member.totalProjects}</div>
               <div className="text-[10px] xs:text-xs text-green-300">Projects</div>
             </div>
-            <div className="bg-orange-500/10 rounded-md xs:rounded-lg p-1.5 xs:p-2 sm:p-3 text-center border border-orange-500/20">
-              <div className="text-sm xs:text-base sm:text-lg font-bold text-orange-400">{member.memberScore}</div>
-              <div className="text-[10px] xs:text-xs text-orange-300">Score</div>
+            <div className="bg-blue-600/10 rounded-md xs:rounded-lg p-1.5 xs:p-2 sm:p-3 text-center border border-blue-600/20">
+              <div className="text-sm xs:text-base sm:text-lg font-bold text-blue-600">{member.memberScore}</div>
+              <div className="text-[10px] xs:text-xs text-blue-500">Score</div>
             </div>
           </div>
 
@@ -916,12 +916,12 @@ const FollowersFollowing = () => {
             <div className="text-gray-400 text-xs xs:text-sm mb-1.5 xs:mb-2">Skills:</div>
             <div className="flex flex-wrap gap-1 xs:gap-1.5 sm:gap-2">
               {member.skills.slice(0, isMobile ? 2 : 3).map((skill, idx) => (
-                <span key={idx} className="bg-white/10 text-gray-300 px-1.5 xs:px-2 py-0.5 xs:py-1 rounded xs:rounded-md sm:rounded-lg text-[10px] xs:text-xs border border-white/20 truncate">
+                <span key={idx} className="bg-gray-100 text-gray-600 px-1.5 xs:px-2 py-0.5 xs:py-1 rounded xs:rounded-md sm:rounded-lg text-[10px] xs:text-xs border border-gray-200 truncate">
                   {skill}
                 </span>
               ))}
               {member.skills.length > (isMobile ? 2 : 3) && (
-                <span className="bg-white/10 text-gray-300 px-1.5 xs:px-2 py-0.5 xs:py-1 rounded xs:rounded-md sm:rounded-lg text-[10px] xs:text-xs border border-white/20">
+                <span className="bg-gray-100 text-gray-600 px-1.5 xs:px-2 py-0.5 xs:py-1 rounded xs:rounded-md sm:rounded-lg text-[10px] xs:text-xs border border-gray-200">
                   +{member.skills.length - (isMobile ? 2 : 3)}
                 </span>
               )}
@@ -931,7 +931,7 @@ const FollowersFollowing = () => {
           <div className="flex gap-1.5 xs:gap-2">
             <button
               onClick={() => handleUserClick(member)}
-              className="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white px-2 xs:px-3 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold hover:from-green-600 hover:to-green-700 active:from-green-700 active:to-green-800 transition-all duration-300 text-[10px] xs:text-xs sm:text-sm min-h-[44px] flex items-center justify-center"
+              className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-gray-900 px-2 xs:px-3 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold hover:from-blue-600 hover:to-blue-700 active:from-blue-700 active:to-blue-800 transition-all duration-300 text-[10px] xs:text-xs sm:text-sm min-h-[44px] flex items-center justify-center"
             >
               <svg className="w-3 h-3 xs:w-4 xs:h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -968,7 +968,7 @@ const FollowersFollowing = () => {
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1 || loadingPage}
-            className="px-3 xs:px-4 py-2 xs:py-2.5 sm:py-3 bg-black/20 border border-white/20 text-white rounded-lg xs:rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black/30 active:bg-black/40 transition-colors text-xs xs:text-sm min-h-[44px] flex items-center gap-1"
+            className="px-3 xs:px-4 py-2 xs:py-2.5 sm:py-3 bg-gray-100 border border-gray-200 text-gray-900 rounded-lg xs:rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/30 active:bg-white/40 transition-colors text-xs xs:text-sm min-h-[44px] flex items-center gap-1"
           >
             <svg className="w-3 h-3 xs:w-4 xs:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -976,7 +976,7 @@ const FollowersFollowing = () => {
             <span className="hidden xs:inline">Previous</span>
           </button>
           
-          <span className="px-2 xs:px-3 sm:px-4 py-2 text-white text-xs xs:text-sm">
+          <span className="px-2 xs:px-3 sm:px-4 py-2 text-gray-900 text-xs xs:text-sm">
             <span className="hidden sm:inline">Page </span>{currentPage}<span className="hidden sm:inline"> of {totalPages}</span>
             <span className="sm:hidden">/{totalPages}</span>
           </span>
@@ -984,7 +984,7 @@ const FollowersFollowing = () => {
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages || loadingPage}
-            className="px-3 xs:px-4 py-2 xs:py-2.5 sm:py-3 bg-black/20 border border-white/20 text-white rounded-lg xs:rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black/30 active:bg-black/40 transition-colors text-xs xs:text-sm min-h-[44px] flex items-center gap-1"
+            className="px-3 xs:px-4 py-2 xs:py-2.5 sm:py-3 bg-gray-100 border border-gray-200 text-gray-900 rounded-lg xs:rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/30 active:bg-white/40 transition-colors text-xs xs:text-sm min-h-[44px] flex items-center gap-1"
           >
             <span className="hidden xs:inline">Next</span>
             <svg className="w-3 h-3 xs:w-4 xs:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1010,9 +1010,9 @@ const FollowersFollowing = () => {
       <>
         
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center px-3 xs:px-4">
-          <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-6 xs:p-7 sm:p-8 border border-white/20 text-center max-w-sm w-full">
-            <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-2 border-lime-400 mx-auto mb-4"></div>
-            <p className="text-white text-sm xs:text-base sm:text-lg">Loading...</p>
+          <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-6 xs:p-7 sm:p-8 border border-gray-200 text-center max-w-sm w-full">
+            <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <p className="text-gray-900 text-sm xs:text-base sm:text-lg">Loading...</p>
           </div>
         </div>
       </>
@@ -1029,13 +1029,13 @@ const FollowersFollowing = () => {
             
             {userProfile && activeTab !== 'members' && (
               <section className="mb-4 xs:mb-5 sm:mb-6 md:mb-8">
-                <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-5 md:p-6 lg:p-8 border border-white/20">
+                <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-5 md:p-6 lg:p-8 border border-gray-200">
                   <div className="flex items-center gap-2 xs:gap-3 sm:gap-4 md:gap-6 mb-3 xs:mb-4 sm:mb-6">
                     <button
                       onClick={() => handleUserClick(userProfile)}
                       className="relative flex-shrink-0 group active:scale-95 transition-transform"
                     >
-                      <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full overflow-hidden bg-gradient-to-br from-lime-400 to-green-500 flex items-center justify-center text-white font-bold shadow-lg cursor-pointer">
+                      <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full overflow-hidden bg-gradient-to-br from-lime-400 to-blue-500 flex items-center justify-center text-gray-900 font-bold shadow-lg cursor-pointer">
                         {userProfile?.photoURL ? (
                           <img 
                             src={userProfile.photoURL} 
@@ -1058,7 +1058,7 @@ const FollowersFollowing = () => {
                         onClick={() => handleUserClick(userProfile)}
                         className="text-left group w-full active:scale-[0.98] transition-transform"
                       >
-                        <h1 className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl font-black text-white mb-1 xs:mb-2 group-hover:text-lime-300 transition-colors truncate" 
+                        <h1 className="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl font-black text-gray-900 mb-1 xs:mb-2 group-hover:text-lime-300 transition-colors truncate" 
                             style={{
                               textShadow: '0 0 20px rgba(255,255,255,0.3), 2px 2px 4px rgba(0,0,0,0.9)',
                               fontFamily: '"Inter", sans-serif'
@@ -1070,11 +1070,11 @@ const FollowersFollowing = () => {
                         </h1>
                       </button>
                       {userProfile?.profile?.title && (
-                        <p className="text-lime-400 text-xs xs:text-sm sm:text-base md:text-lg font-medium mb-1 xs:mb-2 truncate">
+                        <p className="text-blue-600 text-xs xs:text-sm sm:text-base md:text-lg font-medium mb-1 xs:mb-2 truncate">
                           {userProfile.profile.title}
                         </p>
                       )}
-                      <div className="flex items-center gap-1.5 xs:gap-2 sm:gap-4 text-gray-300 text-xs xs:text-sm sm:text-base">
+                      <div className="flex items-center gap-1.5 xs:gap-2 sm:gap-4 text-gray-600 text-xs xs:text-sm sm:text-base">
                         <span>{totalFollowers} followers</span>
                         <span>•</span>
                         <span>{totalFollowing} following</span>
@@ -1087,7 +1087,7 @@ const FollowersFollowing = () => {
 
             {/* Tabs */}
             <div className="mb-4 xs:mb-5 sm:mb-6 md:mb-8">
-              <div className="bg-black/20 rounded-xl xs:rounded-2xl border border-white/10 p-1 xs:p-1.5 sm:p-2">
+              <div className="bg-gray-100 rounded-xl xs:rounded-2xl border border-gray-200 p-1 xs:p-1.5 sm:p-2">
                 <div className="flex gap-1">
                   {userProfile && (
                     <>
@@ -1095,8 +1095,8 @@ const FollowersFollowing = () => {
                         onClick={() => handleTabChange('followers')}
                         className={`flex-1 px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 active:scale-95 text-xs xs:text-sm sm:text-base min-h-[44px] flex items-center justify-center ${
                           activeTab === 'followers'
-                            ? 'bg-gradient-to-r from-lime-500 to-green-600 text-white shadow-lg'
-                            : 'text-gray-300 hover:text-white hover:bg-white/5 active:bg-white/10'
+                            ? 'bg-gradient-to-r from-lime-500 to-blue-600 text-gray-900 shadow-lg'
+                            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 active:bg-gray-100'
                         }`}
                       >
                         <svg className="w-4 h-4 xs:w-5 xs:h-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1109,8 +1109,8 @@ const FollowersFollowing = () => {
                         onClick={() => handleTabChange('following')}
                         className={`flex-1 px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 active:scale-95 text-xs xs:text-sm sm:text-base min-h-[44px] flex items-center justify-center ${
                           activeTab === 'following'
-                            ? 'bg-gradient-to-r from-lime-500 to-green-600 text-white shadow-lg'
-                            : 'text-gray-300 hover:text-white hover:bg-white/5 active:bg-white/10'
+                            ? 'bg-gradient-to-r from-lime-500 to-blue-600 text-gray-900 shadow-lg'
+                            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 active:bg-gray-100'
                         }`}
                       >
                         <svg className="w-4 h-4 xs:w-5 xs:h-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1125,8 +1125,8 @@ const FollowersFollowing = () => {
                     onClick={() => handleTabChange('members')}
                     className={`flex-1 px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 active:scale-95 text-xs xs:text-sm sm:text-base min-h-[44px] flex items-center justify-center ${
                       activeTab === 'members'
-                        ? 'bg-gradient-to-r from-lime-500 to-green-600 text-white shadow-lg'
-                        : 'text-gray-300 hover:text-white hover:bg-white/5 active:bg-white/10'
+                        ? 'bg-gradient-to-r from-lime-500 to-blue-600 text-gray-900 shadow-lg'
+                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 active:bg-gray-100'
                     }`}
                   >
                     <svg className="w-4 h-4 xs:w-5 xs:h-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1145,7 +1145,7 @@ const FollowersFollowing = () => {
             {/* Members Filters */}
             {activeTab === 'members' && (
               <section className="mb-4 xs:mb-5 sm:mb-6 md:mb-8">
-                <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-5 md:p-6 border border-white/20">
+                <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-5 md:p-6 border border-gray-200">
                   
                   <div className="mb-3 xs:mb-4 sm:mb-6">
                     <input
@@ -1153,7 +1153,7 @@ const FollowersFollowing = () => {
                       placeholder="Search by name, email, or skills..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full bg-white/10 border border-white/20 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-6 py-2.5 xs:py-3 sm:py-4 text-white placeholder-gray-400 focus:border-lime-400 focus:outline-none focus:ring-2 focus:ring-lime-400/20 transition-all duration-300 text-xs xs:text-sm sm:text-base"
+                      className="w-full bg-gray-100 border border-gray-200 rounded-lg xs:rounded-xl px-3 xs:px-4 sm:px-6 py-2.5 xs:py-3 sm:py-4 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-all duration-300 text-xs xs:text-sm sm:text-base"
                     />
                   </div>
 
@@ -1166,13 +1166,13 @@ const FollowersFollowing = () => {
                         className="sr-only"
                       />
                       <div className={`relative inline-flex h-5 w-9 xs:h-6 xs:w-11 items-center rounded-full transition-colors ${
-                        showOnlyBadgedUsers ? 'bg-lime-500' : 'bg-gray-600'
+                        showOnlyBadgedUsers ? 'bg-blue-600' : 'bg-gray-600'
                       }`}>
                         <span className={`inline-block h-3 w-3 xs:h-4 xs:w-4 transform rounded-full bg-white transition-transform ${
                           showOnlyBadgedUsers ? 'translate-x-5 xs:translate-x-6' : 'translate-x-1'
                         }`} />
                       </div>
-                      <span className="ml-2 xs:ml-3 text-white text-xs xs:text-sm sm:text-base">Show only members with achievements</span>
+                      <span className="ml-2 xs:ml-3 text-gray-900 text-xs xs:text-sm sm:text-base">Show only members with achievements</span>
                     </label>
                     
                     <div className="text-[10px] xs:text-xs sm:text-sm text-gray-400">
@@ -1186,7 +1186,7 @@ const FollowersFollowing = () => {
                   <div className="mb-3 xs:mb-4 sm:hidden">
                     <button
                       onClick={() => setShowFilters(!showFilters)}
-                      className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-3 xs:px-4 py-2.5 xs:py-3 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 active:scale-95 min-h-[44px] text-xs xs:text-sm"
+                      className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-gray-900 px-3 xs:px-4 py-2.5 xs:py-3 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 active:scale-95 min-h-[44px] text-xs xs:text-sm"
                     >
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
@@ -1200,7 +1200,7 @@ const FollowersFollowing = () => {
                     <select
                       value={selectedBadgeCategory}
                       onChange={(e) => setSelectedBadgeCategory(e.target.value)}
-                      className="bg-white/10 border border-white/20 rounded-lg xs:rounded-xl px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-white focus:border-lime-400 focus:outline-none transition-all duration-300 text-xs xs:text-sm sm:text-base"
+                      className="bg-gray-100 border border-gray-200 rounded-lg xs:rounded-xl px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-gray-900 focus:border-blue-500 focus:outline-none transition-all duration-300 text-xs xs:text-sm sm:text-base"
                     >
                       <option value="all">All Badge Types</option>
                       {Object.entries(badgeCategories).map(([key, category]) => (
@@ -1211,7 +1211,7 @@ const FollowersFollowing = () => {
                     <select
                       value={selectedSkill}
                       onChange={(e) => setSelectedSkill(e.target.value)}
-                      className="bg-white/10 border border-white/20 rounded-lg xs:rounded-xl px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-white focus:border-lime-400 focus:outline-none transition-all duration-300 text-xs xs:text-sm sm:text-base"
+                      className="bg-gray-100 border border-gray-200 rounded-lg xs:rounded-xl px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-gray-900 focus:border-blue-500 focus:outline-none transition-all duration-300 text-xs xs:text-sm sm:text-base"
                     >
                       <option value="">All Skills</option>
                       {uniqueSkills.map(skill => (
@@ -1222,7 +1222,7 @@ const FollowersFollowing = () => {
                     <select
                       value={minProjects}
                       onChange={(e) => setMinProjects(Number(e.target.value))}
-                      className="bg-white/10 border border-white/20 rounded-lg xs:rounded-xl px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-white focus:border-lime-400 focus:outline-none transition-all duration-300 text-xs xs:text-sm sm:text-base"
+                      className="bg-gray-100 border border-gray-200 rounded-lg xs:rounded-xl px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-gray-900 focus:border-blue-500 focus:outline-none transition-all duration-300 text-xs xs:text-sm sm:text-base"
                     >
                       <option value={0}>Any Projects</option>
                       <option value={1}>1+ Projects</option>
@@ -1234,7 +1234,7 @@ const FollowersFollowing = () => {
                     <select
                       value={minBadges}
                       onChange={(e) => setMinBadges(Number(e.target.value))}
-                      className="bg-white/10 border border-white/20 rounded-lg xs:rounded-xl px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-white focus:border-lime-400 focus:outline-none transition-all duration-300 text-xs xs:text-sm sm:text-base"
+                      className="bg-gray-100 border border-gray-200 rounded-lg xs:rounded-xl px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-gray-900 focus:border-blue-500 focus:outline-none transition-all duration-300 text-xs xs:text-sm sm:text-base"
                     >
                       <option value={0}>Any Badges</option>
                       <option value={1}>1+ Badges</option>
@@ -1246,7 +1246,7 @@ const FollowersFollowing = () => {
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
-                      className="bg-white/10 border border-white/20 rounded-lg xs:rounded-xl px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-white focus:border-lime-400 focus:outline-none transition-all duration-300 text-xs xs:text-sm sm:text-base"
+                      className="bg-gray-100 border border-gray-200 rounded-lg xs:rounded-xl px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 text-gray-900 focus:border-blue-500 focus:outline-none transition-all duration-300 text-xs xs:text-sm sm:text-base"
                     >
                       <option value="recent">Recently Active</option>
                       <option value="badges">Most Badges</option>
@@ -1257,13 +1257,13 @@ const FollowersFollowing = () => {
 
                     <button
                       onClick={clearFilters}
-                      className="bg-gradient-to-r from-red-500 to-red-600 text-white px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold hover:from-red-600 hover:to-red-700 active:from-red-700 active:to-red-800 transition-all duration-300 text-xs xs:text-sm sm:text-base min-h-[44px]"
+                      className="bg-gradient-to-r from-red-500 to-red-600 text-gray-900 px-2 xs:px-3 sm:px-4 py-2 xs:py-2.5 sm:py-3 rounded-lg xs:rounded-xl font-semibold hover:from-red-600 hover:to-red-700 active:from-red-700 active:to-red-800 transition-all duration-300 text-xs xs:text-sm sm:text-base min-h-[44px]"
                     >
                       Clear All
                     </button>
                   </div>
 
-                  <div className="flex justify-between items-center text-gray-300 text-xs xs:text-sm sm:text-base">
+                  <div className="flex justify-between items-center text-gray-600 text-xs xs:text-sm sm:text-base">
                     <span>
                       <span className="text-lime-300 font-semibold">{filteredMembers.length}</span> members found
                     </span>
@@ -1281,7 +1281,7 @@ const FollowersFollowing = () => {
                     placeholder={`Search ${activeTab}...`}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full px-3 xs:px-4 py-2.5 xs:py-3 pl-10 xs:pl-12 bg-black/20 border border-white/20 rounded-lg xs:rounded-xl text-white placeholder-gray-400 focus:border-lime-400 focus:outline-none focus:ring-2 focus:ring-lime-400/20 text-xs xs:text-sm sm:text-base"
+                    className="w-full px-3 xs:px-4 py-2.5 xs:py-3 pl-10 xs:pl-12 bg-gray-100 border border-gray-200 rounded-lg xs:rounded-xl text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400/20 text-xs xs:text-sm sm:text-base"
                   />
                   <svg className="absolute left-3 xs:left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 xs:h-5 xs:w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -1299,12 +1299,12 @@ const FollowersFollowing = () => {
             <section>
               {loadingPage ? (
                 <div className="text-center py-8 xs:py-10 sm:py-12">
-                  <div className="animate-spin rounded-full h-8 w-8 xs:h-10 xs:w-10 sm:h-12 sm:w-12 border-b-2 border-lime-400 mx-auto mb-4"></div>
-                  <p className="text-white text-sm xs:text-base sm:text-lg">Loading users...</p>
+                  <div className="animate-spin rounded-full h-8 w-8 xs:h-10 xs:w-10 sm:h-12 sm:w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                  <p className="text-gray-900 text-sm xs:text-base sm:text-lg">Loading users...</p>
                 </div>
               ) : (
                 <div>
-                  <h2 className="text-base xs:text-lg sm:text-xl md:text-2xl font-bold text-white mb-3 xs:mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center gap-2">
+                  <h2 className="text-base xs:text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-3 xs:mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center gap-2">
                     <span className="flex items-center gap-2">
                       <svg className="w-5 h-5 xs:w-6 xs:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         {activeTab === 'followers' ? (
@@ -1331,7 +1331,7 @@ const FollowersFollowing = () => {
                       <svg className="w-12 h-12 xs:w-16 xs:h-16 sm:w-20 sm:h-20 mx-auto mb-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                       </svg>
-                      <h3 className="text-base xs:text-lg sm:text-xl font-bold text-white mb-2">
+                      <h3 className="text-base xs:text-lg sm:text-xl font-bold text-gray-900 mb-2">
                         {searchTerm || searchQuery
                           ? 'No users found' 
                           : activeTab === 'followers' 
@@ -1341,7 +1341,7 @@ const FollowersFollowing = () => {
                           : 'No members found'
                         }
                       </h3>
-                      <p className="text-gray-300 text-xs xs:text-sm sm:text-base max-w-md mx-auto">
+                      <p className="text-gray-600 text-xs xs:text-sm sm:text-base max-w-md mx-auto">
                         {searchTerm || searchQuery
                           ? 'Try adjusting your search terms'
                           : activeTab === 'members'
@@ -1377,7 +1377,7 @@ const FollowersFollowing = () => {
                             if (totalPages > 1) {
                               return (
                                 <div className="flex justify-center items-center mt-6 xs:mt-8 sm:mt-12 px-4">
-                                  <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-6 border border-white/20 w-full max-w-lg">
+                                  <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-3 xs:p-4 sm:p-6 border border-gray-200 w-full max-w-lg">
                                     <div className="flex items-center justify-center gap-2 xs:gap-3 sm:gap-4 mb-3 xs:mb-4">
                                       
                                       <button
@@ -1386,7 +1386,7 @@ const FollowersFollowing = () => {
                                         className={`flex items-center px-2.5 xs:px-3 sm:px-4 py-2 xs:py-2.5 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 active:scale-95 text-xs xs:text-sm min-h-[44px] ${
                                           currentPage === 1
                                             ? 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
-                                            : 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700'
+                                            : 'bg-gradient-to-r from-blue-500 to-blue-600 text-gray-900 hover:from-blue-600 hover:to-blue-700'
                                         }`}
                                       >
                                         <svg className="w-3 h-3 xs:w-4 xs:h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1417,8 +1417,8 @@ const FollowersFollowing = () => {
                                               onClick={() => setCurrentPage(pageNum)}
                                               className={`w-7 h-7 xs:w-8 xs:h-8 sm:w-10 sm:h-10 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 active:scale-95 text-xs xs:text-sm ${
                                                 currentPage === pageNum
-                                                  ? 'bg-gradient-to-r from-lime-500 to-green-500 text-white'
-                                                  : 'bg-white/10 text-gray-300 hover:bg-white/20 hover:text-white active:bg-white/30'
+                                                  ? 'bg-gradient-to-r from-lime-500 to-blue-500 text-gray-900'
+                                                  : 'bg-gray-100 text-gray-600 hover:bg-gray-100 hover:text-gray-900 active:bg-white/30'
                                               }`}
                                             >
                                               {pageNum}
@@ -1433,7 +1433,7 @@ const FollowersFollowing = () => {
                                         className={`flex items-center px-2.5 xs:px-3 sm:px-4 py-2 xs:py-2.5 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 active:scale-95 text-xs xs:text-sm min-h-[44px] ${
                                           currentPage === totalPages
                                             ? 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
-                                            : 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700'
+                                            : 'bg-gradient-to-r from-blue-500 to-blue-600 text-gray-900 hover:from-blue-600 hover:to-blue-700'
                                         }`}
                                       >
                                         <span className="hidden xs:inline">Next</span>
@@ -1443,7 +1443,7 @@ const FollowersFollowing = () => {
                                       </button>
                                     </div>
 
-                                    <div className="text-center text-gray-300 text-[10px] xs:text-xs sm:text-sm">
+                                    <div className="text-center text-gray-600 text-[10px] xs:text-xs sm:text-sm">
                                       Page {currentPage} of {totalPages} • {filteredMembers.length} total members
                                     </div>
                                   </div>

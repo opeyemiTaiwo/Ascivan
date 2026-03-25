@@ -23,7 +23,7 @@ const Settings = () => {
   const [profileData, setProfileData] = useState(null);
   const [form, setForm] = useState({
     displayName: '', specialization: '', experienceLevel: '', primarySkillTrack: '',
-    city: '', state: '', portfolioUrl: '', linkedinUrl: '', githubUrl: '',
+    city: '', state: '', portfolioUrl: '', linkedinUrl: '', githubUrl: '', emailPublic: false,
   });
 
   // Delete account state
@@ -49,6 +49,7 @@ const Settings = () => {
             portfolioUrl: data.portfolioUrl || '',
             linkedinUrl: data.linkedinUrl || '',
             githubUrl: data.githubUrl || '',
+            emailPublic: data.emailPublic || false,
           });
         }
       } catch (e) {
@@ -73,6 +74,7 @@ const Settings = () => {
         portfolioUrl: form.portfolioUrl.trim() || null,
         linkedinUrl: form.linkedinUrl.trim() || null,
         githubUrl: form.githubUrl.trim() || null,
+        emailPublic: form.emailPublic,
       });
       toast.success('Profile updated');
     } catch (e) {
@@ -181,6 +183,19 @@ const Settings = () => {
             <div>
               <label className={labelCls}>Portfolio URL</label>
               <input type="url" value={form.portfolioUrl} onChange={e => setForm(p => ({ ...p, portfolioUrl: e.target.value }))} className={inputCls} placeholder="https://your-site.com" />
+            </div>
+            <div className="flex items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-lg">
+              <div>
+                <p className="text-gray-900 text-sm font-medium">Email Visibility</p>
+                <p className="text-gray-500 text-xs mt-0.5">{form.emailPublic ? 'Your email is visible to other members' : 'Your email is hidden from other members'}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setForm(p => ({ ...p, emailPublic: !p.emailPublic }))}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${form.emailPublic ? 'bg-blue-600' : 'bg-gray-300'}`}
+              >
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${form.emailPublic ? 'translate-x-6' : 'translate-x-1'}`} />
+              </button>
             </div>
             <button onClick={handleSaveProfile} disabled={saving} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-6 py-2.5 rounded-lg transition-all disabled:opacity-50">
               {saving ? 'Saving...' : 'Save Changes'}

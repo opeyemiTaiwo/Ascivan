@@ -248,8 +248,8 @@ const NotificationsPage = () => {
         
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-2 border-lime-400 mx-auto mb-4"></div>
-            <p className="text-white text-base xs:text-lg">Loading notifications...</p>
+            <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <p className="text-gray-900 text-base xs:text-lg">Loading notifications...</p>
           </div>
         </div>
       </>
@@ -262,13 +262,13 @@ const NotificationsPage = () => {
       <div className="min-h-screen overflow-x-hidden bg-gradient-to-br from-gray-900 via-black to-gray-900">
         
         {/* Header */}
-        <div className="bg-black/50 border-b border-white/10 sticky top-16 z-40">
+        <div className="bg-gray-500 border-b border-gray-200 sticky top-16 z-40">
           <div className="container mx-auto px-3 xs:px-4 sm:px-6 py-4 xs:py-5 sm:py-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
               <div className="flex items-center space-x-3 xs:space-x-4">
                 <Link 
                   to="/community"
-                  className="text-gray-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10 active:bg-white/20"
+                  className="text-gray-400 hover:text-gray-900 transition-colors p-2 rounded-lg hover:bg-gray-100 active:bg-gray-100"
                   title="Back to Home"
                 >
                   <svg className="h-5 w-5 xs:h-6 xs:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -276,9 +276,9 @@ const NotificationsPage = () => {
                   </svg>
                 </Link>
                 <div>
-                  <h1 className="text-xl xs:text-2xl sm:text-3xl font-bold text-white">Notifications</h1>
+                  <h1 className="text-xl xs:text-2xl sm:text-3xl font-bold text-gray-900">Notifications</h1>
                   {notifications.filter(n => !n.isRead).length > 0 && (
-                    <p className="text-lime-400 text-xs xs:text-sm mt-0.5">
+                    <p className="text-blue-600 text-xs xs:text-sm mt-0.5">
                       {notifications.filter(n => !n.isRead).length} unread
                     </p>
                   )}
@@ -290,7 +290,7 @@ const NotificationsPage = () => {
                   <button
                     onClick={markAllAsRead}
                     disabled={processing}
-                    className="flex-1 sm:flex-none bg-lime-500 hover:bg-lime-600 active:bg-lime-700 text-black px-3 xs:px-4 py-2 rounded-lg text-xs xs:text-sm font-medium transition-colors disabled:opacity-50 min-h-[44px]"
+                    className="flex-1 sm:flex-none bg-blue-600 hover:bg-lime-600 active:bg-lime-700 text-black px-3 xs:px-4 py-2 rounded-lg text-xs xs:text-sm font-medium transition-colors disabled:opacity-50 min-h-[44px]"
                   >
                     {processing ? 'Processing...' : 'Mark all read'}
                   </button>
@@ -299,7 +299,7 @@ const NotificationsPage = () => {
                   <button
                     onClick={clearAllNotifications}
                     disabled={processing}
-                    className="flex-1 sm:flex-none bg-red-500 hover:bg-red-600 active:bg-red-700 text-white px-3 xs:px-4 py-2 rounded-lg text-xs xs:text-sm font-medium transition-colors disabled:opacity-50 min-h-[44px]"
+                    className="flex-1 sm:flex-none bg-red-500 hover:bg-red-600 active:bg-red-700 text-gray-900 px-3 xs:px-4 py-2 rounded-lg text-xs xs:text-sm font-medium transition-colors disabled:opacity-50 min-h-[44px]"
                   >
                     Clear all
                   </button>
@@ -313,7 +313,7 @@ const NotificationsPage = () => {
           
           {/* Filter Tabs */}
           <div className="mb-6 xs:mb-7 sm:mb-8">
-            <div className="flex bg-black/30 p-1 rounded-xl overflow-x-auto scrollbar-hide">
+            <div className="flex bg-white/30 p-1 rounded-xl overflow-x-auto scrollbar-hide">
               {[
                 { key: 'all', label: 'All', count: notifications.length },
                 { key: 'unread', label: 'Unread', count: notifications.filter(n => !n.isRead).length },
@@ -325,14 +325,14 @@ const NotificationsPage = () => {
                   onClick={() => setFilter(tab.key)}
                   className={`flex-1 flex items-center justify-center gap-1.5 whitespace-nowrap px-3 py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all min-h-[40px] ${
                     filter === tab.key
-                      ? 'bg-lime-500 text-black shadow-md'
-                      : 'text-gray-400 hover:text-white hover:bg-white/10'
+                      ? 'bg-blue-600 text-black shadow-md'
+                      : 'text-gray-400 hover:text-gray-900 hover:bg-gray-100'
                   }`}
                 >
                   {tab.label}
                   {tab.count > 0 && (
                     <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
-                      filter === tab.key ? 'bg-black/20 text-black' : 'bg-white/20 text-gray-300'
+                      filter === tab.key ? 'bg-gray-100 text-black' : 'bg-gray-100 text-gray-600'
                     }`}>
                       {tab.count}
                     </span>
@@ -350,7 +350,7 @@ const NotificationsPage = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
               </div>
-              <h3 className="text-lg xs:text-xl font-bold text-white mb-2">
+              <h3 className="text-lg xs:text-xl font-bold text-gray-900 mb-2">
                 {filter === 'all' ? 'No notifications yet' : 
                  filter === 'unread' ? 'No unread notifications' :
                  `No ${filter} notifications`}
@@ -363,7 +363,7 @@ const NotificationsPage = () => {
               </p>
               <Link
                 to="/community"
-                className="inline-block mt-4 xs:mt-5 sm:mt-6 bg-lime-500 hover:bg-lime-600 active:bg-lime-700 text-black px-5 xs:px-6 py-2.5 xs:py-3 rounded-lg font-semibold transition-colors text-sm xs:text-base min-h-[44px]"
+                className="inline-block mt-4 xs:mt-5 sm:mt-6 bg-blue-600 hover:bg-lime-600 active:bg-lime-700 text-black px-5 xs:px-6 py-2.5 xs:py-3 rounded-lg font-semibold transition-colors text-sm xs:text-base min-h-[44px]"
               >
                 Go to Home
               </Link>
@@ -374,17 +374,17 @@ const NotificationsPage = () => {
                 <div
                   key={notification.id}
                   onClick={() => handleNotificationClick(notification)}
-                  className={`bg-black/20 rounded-xl xs:rounded-2xl border transition-all hover:bg-black/30 cursor-pointer group ${
+                  className={`bg-gray-100 rounded-xl xs:rounded-2xl border transition-all hover:bg-white/30 cursor-pointer group ${
                     notification.isRead 
-                      ? 'border-white/10' 
-                      : 'border-lime-400/30 bg-lime-500/5'
+                      ? 'border-gray-200' 
+                      : 'border-blue-500/30 bg-blue-600/5'
                   }`}
                 >
                   <div className="p-4 xs:p-5 sm:p-6">
                     <div className="flex items-start space-x-3 xs:space-x-4">
                       
                       {/* Notification Icon */}
-                      <div className="w-10 h-10 xs:w-12 xs:h-12 bg-gradient-to-r from-lime-500 to-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 xs:w-12 xs:h-12 bg-gradient-to-r from-lime-500 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
                         <span className="text-black">
                           {getNotificationIcon(notification.type)}
                         </span>
@@ -402,7 +402,7 @@ const NotificationsPage = () => {
                                   className="w-5 h-5 xs:w-6 xs:h-6 rounded-full flex-shrink-0"
                                 />
                               )}
-                              <p className="text-white font-semibold text-sm xs:text-base truncate">
+                              <p className="text-gray-900 font-semibold text-sm xs:text-base truncate">
                                 {notification.mentionedByFirstName && notification.mentionedByLastName 
                                   ? `${notification.mentionedByFirstName} ${notification.mentionedByLastName}`
                                   : notification.mentionedByName || 'Someone'
@@ -410,7 +410,7 @@ const NotificationsPage = () => {
                               </p>
                             </div>
                             
-                            <p className="text-gray-300 mb-2 text-xs xs:text-sm sm:text-base">
+                            <p className="text-gray-600 mb-2 text-xs xs:text-sm sm:text-base">
                               {notification.message || 
                                `${notification.mentionedByName || 'Someone'} ${
                                  notification.type?.includes('mention') ? 'mentioned you' :
@@ -421,7 +421,7 @@ const NotificationsPage = () => {
                             </p>
                             
                             {notification.postTitle && (
-                              <p className="text-lime-400 text-xs xs:text-sm mb-2 truncate flex items-center gap-1.5">
+                              <p className="text-blue-600 text-xs xs:text-sm mb-2 truncate flex items-center gap-1.5">
                                 <svg className="w-3 h-3 xs:w-4 xs:h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
@@ -430,8 +430,8 @@ const NotificationsPage = () => {
                             )}
                             
                             {notification.replyContent && (
-                              <div className="mt-2 p-2 xs:p-3 bg-white/5 rounded-lg border-l-4 border-lime-400">
-                                <p className="text-gray-300 text-xs xs:text-sm italic line-clamp-3">
+                              <div className="mt-2 p-2 xs:p-3 bg-gray-50 rounded-lg border-l-4 border-blue-500">
+                                <p className="text-gray-600 text-xs xs:text-sm italic line-clamp-3">
                                   "{notification.replyContent.length > 100 
                                     ? notification.replyContent.substring(0, 100) + '...'
                                     : notification.replyContent}"
@@ -440,7 +440,7 @@ const NotificationsPage = () => {
                             )}
 
                             {notification.groupTitle && (
-                              <p className="text-green-400 text-xs xs:text-sm flex items-center gap-1.5 mt-2">
+                              <p className="text-blue-600 text-xs xs:text-sm flex items-center gap-1.5 mt-2">
                                 <svg className="w-3 h-3 xs:w-4 xs:h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
@@ -457,7 +457,7 @@ const NotificationsPage = () => {
                                   e.stopPropagation();
                                   markAsRead(notification.id);
                                 }}
-                                className="text-lime-400 hover:text-lime-300 active:text-lime-500 text-xs xs:text-sm transition-colors p-1.5 xs:p-2 rounded hover:bg-lime-400/10 active:bg-lime-400/20 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                                className="text-blue-600 hover:text-lime-300 active:text-blue-600 text-xs xs:text-sm transition-colors p-1.5 xs:p-2 rounded hover:bg-blue-500/10 active:bg-blue-500/20 min-w-[44px] min-h-[44px] flex items-center justify-center"
                                 title="Mark as read"
                               >
                                 <svg className="w-4 h-4 xs:w-5 xs:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -485,7 +485,7 @@ const NotificationsPage = () => {
                             {formatNotificationTime(notification.createdAt)}
                           </p>
                           
-                          <div className="text-gray-400 group-hover:text-lime-400 transition-colors opacity-0 group-hover:opacity-100 flex items-center text-xs xs:text-sm">
+                          <div className="text-gray-400 group-hover:text-blue-600 transition-colors opacity-0 group-hover:opacity-100 flex items-center text-xs xs:text-sm">
                             <span className="mr-1 hidden xs:inline">Click to view</span>
                             <svg className="h-3 w-3 xs:h-4 xs:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -496,7 +496,7 @@ const NotificationsPage = () => {
 
                       {/* Unread Indicator */}
                       {!notification.isRead && (
-                        <div className="w-2.5 h-2.5 xs:w-3 xs:h-3 bg-lime-400 rounded-full flex-shrink-0 mt-2"></div>
+                        <div className="w-2.5 h-2.5 xs:w-3 xs:h-3 bg-blue-500 rounded-full flex-shrink-0 mt-2"></div>
                       )}
                     </div>
                   </div>

@@ -92,8 +92,8 @@ const FollowButton = ({ targetUser, currentUser, size = 'sm', onCountUpdate }) =
       aria-label={isCurrentlyFollowing ? 'Unfollow user' : 'Follow user'}
       className={`${sizeClasses[size]} rounded-full font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
         isCurrentlyFollowing
-          ? 'bg-gray-500/20 text-gray-300 border border-gray-500/30 hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/30'
-          : 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white'
+          ? 'bg-gray-500/20 text-gray-600 border border-gray-500/30 hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/30'
+          : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-gray-900'
       }`}
     >
       {loading || followingLoading[targetUserId] ? (

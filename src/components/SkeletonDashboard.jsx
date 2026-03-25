@@ -5,10 +5,10 @@ const SkeletonDashboard = () => {
   return (
     <div className="bg-gray-50 min-h-screen pb-8 sm:pb-12 animate-pulse">
       {/* Header Skeleton */}
-      <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 sm:p-6">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-gray-900 p-4 sm:p-6">
         <div className="container mx-auto">
-          <div className="h-6 sm:h-8 bg-green-400 rounded w-3/4 sm:w-2/3 mb-2"></div>
-          <div className="h-4 sm:h-6 bg-green-400 rounded w-2/3 sm:w-1/2 opacity-70"></div>
+          <div className="h-6 sm:h-8 bg-blue-500 rounded w-3/4 sm:w-2/3 mb-2"></div>
+          <div className="h-4 sm:h-6 bg-blue-500 rounded w-2/3 sm:w-1/2 opacity-70"></div>
         </div>
       </div>
       

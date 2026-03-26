@@ -49,20 +49,20 @@ const LandingPage = () => {
 
   const features = [
     {
-      title: 'Projects',
-      desc: 'Browse and join real-world tech projects across every discipline. Gain hands-on experience building production-grade applications, systems, and tools with collaborative teams.',
+      title: 'Real-World Projects',
+      desc: 'Join or post collaborative tech projects — free or paid. Work with real teams, build real products, and gain experience that matters to employers.',
     },
     {
-      title: 'Career Advancement',
-      desc: 'Access AI-powered career path guidance tailored to your skill level and goals. Get personalized project recommendations that match your expertise and growth trajectory.',
+      title: 'TechTalent Badges',
+      desc: 'Earn verified credentials across 6 skill tracks as you complete projects. Badges progress from Novice to Expert, building a portfolio that proves what you can do.',
     },
     {
       title: 'Talent Board',
-      desc: 'Showcase your verified skills and badge credentials to employers and collaborators. Get discovered by companies looking for talent with proven, project-based experience.',
+      desc: 'Premium members are showcased to recruiters and companies looking for verified talent. Your badges and project history speak for themselves.',
     },
     {
-      title: 'Community',
-      desc: 'Connect with thousands of tech professionals at every stage of their career. Share knowledge, get advice, and build a network that accelerates your growth.',
+      title: 'Community & Workspace',
+      desc: 'Connect with tech professionals, collaborate in project workspaces with built-in discussion forums, and grow your network through meaningful work.',
     },
   ];
 
@@ -83,9 +83,9 @@ const LandingPage = () => {
   ];
 
   const steps = [
-    { num: '01', title: 'Create Your Profile', desc: 'Sign in and tell us about your skills, experience level, and career goals. Individual or organization.' },
-    { num: '02', title: 'Get Matched to Projects', desc: 'Our AI recommends projects that fit your skill set and growth trajectory. From beginner tasks to expert challenges.' },
-    { num: '03', title: 'Earn Badges and Grow', desc: 'Complete projects, earn TechTalent Badges, and build a verified portfolio that speaks for itself.' },
+    { num: '01', title: 'Create Your Profile', desc: 'Sign in with Google, choose your skill track, and set your experience level. Ready in under a minute.' },
+    { num: '02', title: 'Join or Post Projects', desc: 'Browse open projects or post your own. Apply with your portfolio and get matched with teams that need your skills.' },
+    { num: '03', title: 'Earn Badges & Grow', desc: 'Complete projects to earn TechTalent Badges. Build a verified portfolio that proves your skills to recruiters and collaborators.' },
   ];
 
   return (

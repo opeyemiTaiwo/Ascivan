@@ -279,11 +279,11 @@ export const FollowSuggestionsSidebar = ({ currentUser, isMobile = false }) => {
         {/* Stats */}
         <div className="mx-4 mb-3 p-3 bg-blue-50 border border-blue-100 rounded-lg">
           <div className="grid grid-cols-2 gap-3 text-center">
-            <button onClick={() => window.location.href = `/profile/${currentUser.email}?tab=following`} className="hover:bg-blue-100 rounded-lg p-1 transition-colors">
+            <button onClick={() => window.location.href = '/my-connections?tab=following'} className="hover:bg-blue-100 rounded-lg p-1 transition-colors">
               <div className="text-lg font-bold text-blue-600">{userCounts.following}</div>
               <div className="text-xs text-blue-500">Following</div>
             </button>
-            <button onClick={() => window.location.href = `/profile/${currentUser.email}?tab=followers`} className="hover:bg-blue-100 rounded-lg p-1 transition-colors">
+            <button onClick={() => window.location.href = '/my-connections?tab=followers'} className="hover:bg-blue-100 rounded-lg p-1 transition-colors">
               <div className="text-lg font-bold text-blue-600">{userCounts.followers}</div>
               <div className="text-xs text-blue-500">Followers</div>
             </button>

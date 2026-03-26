@@ -41,6 +41,7 @@ const TalentBoard = lazy(() => import('./Pages/TalentBoard'));
 const ProjectVault = lazy(() => import('./Pages/ProjectVault'));
 const Settings = lazy(() => import('./Pages/Settings'));
 const PremiumSuccess = lazy(() => import('./Pages/PremiumSuccess'));
+const FollowList = lazy(() => import('./Pages/FollowList'));
 const Account = lazy(() => import('./Pages/Account'));
 
 try { require('./services/googleFormService'); } catch (e) {}
@@ -136,6 +137,7 @@ function App() {
                 <Route path="/project-vault" element={<SidebarRoute><ProjectVault /></SidebarRoute>} />
                 <Route path="/settings" element={<SidebarRoute><Settings /></SidebarRoute>} />
                 <Route path="/premium-success" element={<SidebarRoute><PremiumSuccess /></SidebarRoute>} />
+                <Route path="/my-connections" element={<SidebarRoute><FollowList /></SidebarRoute>} />
                 <Route path="/account" element={<SidebarRoute><Account /></SidebarRoute>} />
 
                 <Route path="/messages" element={<SidebarRoute><Messages /></SidebarRoute>} />

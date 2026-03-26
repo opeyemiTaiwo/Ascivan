@@ -108,27 +108,75 @@ const ProjectVault = () => {
         {/* Certificate Modal */}
         {viewingCert && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setViewingCert(null)}>
-            <div className="bg-white rounded-2xl p-8 max-w-lg w-full text-center shadow-xl" onClick={e => e.stopPropagation()}>
-              <div className="border-2 border-blue-200 rounded-xl p-8">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <img src="/Images/512X512.png" alt="Loomiqe" className="w-10 h-10" />
-                  <span className="text-xl font-bold text-gray-900">Loomiqe</span>
+            <div className="bg-white rounded-2xl max-w-lg w-full shadow-xl overflow-hidden" onClick={e => e.stopPropagation()}>
+              <div id="certificate-content" className="p-8 text-center bg-white">
+                <div className="border-2 border-blue-200 rounded-xl p-8">
+                  <img src="/Images/512X512.png" alt="Loomiqe" className="w-16 h-16 mx-auto mb-3" />
+                  <p className="text-blue-600 text-xs font-semibold uppercase tracking-widest mb-6">Certificate of Completion</p>
+                  <p className="text-gray-500 text-sm mb-1">This certifies that</p>
+                  <p className="text-gray-900 text-2xl font-bold mb-1">{currentUser?.displayName || 'Member'}</p>
+                  <p className="text-gray-500 text-sm mb-4">has successfully completed the project</p>
+                  <p className="text-blue-600 text-lg font-bold mb-1">"{viewingCert.projectTitle}"</p>
+                  <p className="text-gray-600 text-sm mb-1">as <span className="font-semibold">{viewingCert.role}</span></p>
+                  {viewingCert.badgeName && (
+                    <p className="text-gray-500 text-xs mt-2">Badge earned: {viewingCert.badgeName} ({viewingCert.badgeLevel})</p>
+                  )}
+                  {viewingCert.isOwner && viewingCert.teamSize > 0 && (
+                    <p className="text-gray-500 text-xs mt-1">Team size: {viewingCert.teamSize} members</p>
+                  )}
+                  <p className="text-gray-400 text-xs mt-4">Completed: {viewingCert.completedAt}</p>
+                  <p className="text-gray-300 text-[10px] mt-2">loomiqe.com</p>
                 </div>
-                <p className="text-blue-600 text-xs font-semibold uppercase tracking-widest mb-6">Certificate of Completion</p>
-                <p className="text-gray-500 text-sm mb-1">This certifies that</p>
-                <p className="text-gray-900 text-2xl font-bold mb-1">{currentUser?.displayName || 'Member'}</p>
-                <p className="text-gray-500 text-sm mb-4">has successfully completed the project</p>
-                <p className="text-blue-600 text-lg font-bold mb-1">"{viewingCert.projectTitle}"</p>
-                <p className="text-gray-600 text-sm mb-1">as <span className="font-semibold">{viewingCert.role}</span></p>
-                {viewingCert.badgeName && (
-                  <p className="text-gray-500 text-xs mt-2">Badge earned: {viewingCert.badgeName} ({viewingCert.badgeLevel})</p>
-                )}
-                {viewingCert.isOwner && viewingCert.teamSize > 0 && (
-                  <p className="text-gray-500 text-xs mt-1">Team size: {viewingCert.teamSize} members</p>
-                )}
-                <p className="text-gray-400 text-xs mt-4">Completed: {viewingCert.completedAt}</p>
               </div>
-              <button onClick={() => setViewingCert(null)} className="mt-4 text-gray-500 text-sm hover:text-gray-700">Close</button>
+              <div className="px-8 pb-6 space-y-3">
+                <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
+                  <p className="text-orange-700 text-xs text-center">Please download and save your certificate. Do not rely on our server for long-term storage.</p>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      const el = document.getElementById('certificate-content');
+                      if (!el) return;
+                      const printWindow = window.open('', '_blank');
+                      printWindow.document.write(`
+                        <html><head><title>Certificate - ${viewingCert.projectTitle}</title>
+                        <style>body{margin:0;padding:40px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;text-align:center}
+                        .border{border:2px solid #bfdbfe;border-radius:12px;padding:40px}
+                        img{width:64px;height:64px;margin-bottom:12px}
+                        .subtitle{color:#2563eb;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:3px;margin-bottom:24px}
+                        .label{color:#6b7280;font-size:14px;margin:4px 0}
+                        .name{font-size:28px;font-weight:700;color:#111;margin:4px 0}
+                        .project{color:#2563eb;font-size:18px;font-weight:700;margin:4px 0}
+                        .role{color:#374151;font-size:14px}
+                        .meta{color:#9ca3af;font-size:11px;margin-top:16px}
+                        .site{color:#d1d5db;font-size:10px;margin-top:8px}
+                        </style></head><body>
+                        <div class="border">
+                        <img src="/Images/512X512.png" alt="Loomiqe" />
+                        <div class="subtitle">Certificate of Completion</div>
+                        <div class="label">This certifies that</div>
+                        <div class="name">${currentUser?.displayName || 'Member'}</div>
+                        <div class="label">has successfully completed the project</div>
+                        <div class="project">"${viewingCert.projectTitle}"</div>
+                        <div class="role">as <strong>${viewingCert.role}</strong></div>
+                        ${viewingCert.badgeName ? `<div class="meta">Badge earned: ${viewingCert.badgeName} (${viewingCert.badgeLevel})</div>` : ''}
+                        ${viewingCert.isOwner && viewingCert.teamSize > 0 ? `<div class="meta">Team size: ${viewingCert.teamSize} members</div>` : ''}
+                        <div class="meta">Completed: ${viewingCert.completedAt}</div>
+                        <div class="site">loomiqe.com</div>
+                        </div></body></html>
+                      `);
+                      printWindow.document.close();
+                      setTimeout(() => { printWindow.print(); }, 500);
+                    }}
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm py-2.5 rounded-lg transition-all"
+                  >
+                    Download Certificate
+                  </button>
+                  <button onClick={() => setViewingCert(null)} className="px-4 py-2.5 text-gray-500 text-sm font-medium hover:text-gray-700 border border-gray-200 rounded-lg">
+                    Close
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}

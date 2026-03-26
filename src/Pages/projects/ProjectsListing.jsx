@@ -51,7 +51,7 @@ const ProjectsListing = () => {
   useEffect(() => {
     const q = query(
       collection(db, 'projects'),
-      where('status', '==', 'active'),
+      where('status', 'in', ['active', 'awaiting_payment_confirmation']),
       orderBy('createdAt', 'desc')
     );
     const unsub = onSnapshot(q, (snap) => {

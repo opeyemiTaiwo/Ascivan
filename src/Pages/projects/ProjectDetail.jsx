@@ -41,6 +41,9 @@ const getIndustryLabel = (val) => industryTracks.find(t => t.value === val)?.lab
 const PaymentConfirmationCard = ({ project, projectId, currentUser }) => {
   const [status, setStatus] = useState('pending');
   const [submitting, setSubmitting] = useState(false);
+  const [resolveNote, setResolveNote] = useState('');
+  const [satisfied, setSatisfied] = useState(false);
+  const [showResolveForm, setShowResolveForm] = useState(false);
 
   useEffect(() => {
     const confirmations = project.paymentConfirmations || {};
@@ -53,98 +56,90 @@ const PaymentConfirmationCard = ({ project, projectId, currentUser }) => {
     setSubmitting(true);
     try {
       const emailKey = sanitizeEmailKey(currentUser.email);
-      const updates = {
+      await updateDoc(doc(db, 'projects', projectId), {
         [`paymentConfirmations.${emailKey}.status`]: newStatus,
         [`paymentConfirmations.${emailKey}.confirmedAt`]: new Date().toISOString(),
-      };
-
-      // Save dispute history entry on the project
-      if (newStatus === 'disputed' || newStatus === 'confirmed') {
-        const historyEntry = {
+        disputeHistory: arrayUnion({
           memberEmail: currentUser.email,
           memberName: currentUser.displayName || currentUser.email,
           action: newStatus,
           timestamp: new Date().toISOString(),
-        };
-        await updateDoc(doc(db, 'projects', projectId), {
-          ...updates,
-          disputeHistory: arrayUnion(historyEntry),
-        });
-      } else {
-        await updateDoc(doc(db, 'projects', projectId), updates);
-      }
+        }),
+      });
 
-      // Notify the project owner
-      if (project.submitterId || project.submitterEmail) {
+      if (project.submitterId) {
         try {
-          let ownerUid = project.submitterId;
-          if (!ownerUid && project.submitterEmail) {
-            const ownerQ = query(collection(db, 'users'), where('email', '==', project.submitterEmail));
-            const ownerSnap = await getDocs(ownerQ);
-            if (!ownerSnap.empty) ownerUid = ownerSnap.docs[0].id;
-          }
-          if (ownerUid) {
-            await addDoc(collection(db, 'notifications'), {
-              userId: ownerUid,
-              type: newStatus === 'confirmed' ? 'payment_confirmed' : 'payment_disputed',
-              message: newStatus === 'confirmed'
-                ? `${currentUser.displayName || currentUser.email} confirmed payment for "${project.projectTitle || project.title}"`
-                : `⚠️ ${currentUser.displayName || currentUser.email} disputed payment for "${project.projectTitle || project.title}"`,
-              projectId: projectId,
-              projectTitle: project.projectTitle || project.title,
-              mentionedByName: currentUser.displayName || currentUser.email,
-              mentionedByPhoto: currentUser.photoURL || null,
-              isRead: false,
-              createdAt: serverTimestamp(),
-            });
-          }
-        } catch (e) { console.error('Owner notification error:', e); }
+          await addDoc(collection(db, 'notifications'), {
+            userId: project.submitterId,
+            type: newStatus === 'confirmed' ? 'payment_confirmed' : 'payment_disputed',
+            message: newStatus === 'confirmed'
+              ? `${currentUser.displayName || currentUser.email} confirmed payment for "${project.projectTitle || project.title}"`
+              : `⚠️ ${currentUser.displayName || currentUser.email} disputed payment for "${project.projectTitle || project.title}"`,
+            projectId, projectTitle: project.projectTitle || project.title,
+            mentionedByName: currentUser.displayName || currentUser.email,
+            mentionedByPhoto: currentUser.photoURL || null,
+            isRead: false, createdAt: serverTimestamp(),
+          });
+        } catch (e) { console.error('Notification error:', e); }
       }
 
-      // If disputed, also notify all admins
       if (newStatus === 'disputed') {
         try {
           const adminQ = query(collection(db, 'users'), where('role', '==', 'admin'));
           const adminSnap = await getDocs(adminQ);
-          for (const adminDoc of adminSnap.docs) {
+          for (const ad of adminSnap.docs) {
             await addDoc(collection(db, 'notifications'), {
-              userId: adminDoc.id,
-              type: 'payment_disputed',
+              userId: ad.id, type: 'payment_disputed',
               message: `🚨 Payment Dispute: ${currentUser.displayName || currentUser.email} disputed payment for "${project.projectTitle || project.title}"`,
-              projectId: projectId,
-              projectTitle: project.projectTitle || project.title,
-              mentionedByName: currentUser.displayName || currentUser.email,
-              mentionedByPhoto: currentUser.photoURL || null,
-              isRead: false,
-              createdAt: serverTimestamp(),
+              projectId, projectTitle: project.projectTitle || project.title,
+              isRead: false, createdAt: serverTimestamp(),
             });
           }
         } catch (e) { console.error('Admin notification error:', e); }
       }
 
       setStatus(newStatus);
-      toast.success(newStatus === 'confirmed' ? 'Payment confirmed!' : 'Dispute submitted. Admin has been notified.');
-
-      // Log activity
-      logActivity(projectId, {
-        type: newStatus === 'confirmed' ? 'payment_confirmed' : 'payment_disputed',
-        actor: currentUser.email,
-        actorName: currentUser.displayName || currentUser.email,
-        description: newStatus === 'confirmed'
-          ? `${currentUser.displayName || currentUser.email} confirmed payment`
-          : `${currentUser.displayName || currentUser.email} disputed payment`,
-      });
-    } catch (e) {
-      toast.error('Error updating status');
-    }
+      toast.success(newStatus === 'confirmed' ? 'Payment confirmed!' : 'Dispute submitted.');
+      logActivity(projectId, { type: newStatus === 'confirmed' ? 'payment_confirmed' : 'payment_disputed', actor: currentUser.email, actorName: currentUser.displayName || currentUser.email, description: `${currentUser.displayName || currentUser.email} ${newStatus} payment` });
+    } catch (e) { console.error('Error:', e); toast.error('Error updating status'); }
     setSubmitting(false);
   };
 
-  if (status === 'confirmed') {
+  const handleResolve = async () => {
+    if (!resolveNote.trim()) { toast.error('Please add a note before resolving'); return; }
+    setSubmitting(true);
+    try {
+      const emailKey = sanitizeEmailKey(currentUser.email);
+      await updateDoc(doc(db, 'projects', projectId), {
+        [`paymentConfirmations.${emailKey}.status`]: 'resolved',
+        [`paymentConfirmations.${emailKey}.resolvedAt`]: new Date().toISOString(),
+        [`paymentConfirmations.${emailKey}.resolveNote`]: resolveNote.trim(),
+        [`paymentConfirmations.${emailKey}.satisfied`]: satisfied,
+        disputeHistory: arrayUnion({
+          memberEmail: currentUser.email, memberName: currentUser.displayName || currentUser.email,
+          action: 'resolved', satisfied, note: resolveNote.trim(), timestamp: new Date().toISOString(),
+        }),
+      });
+      if (project.submitterId) {
+        await addDoc(collection(db, 'notifications'), {
+          userId: project.submitterId, type: 'dispute_resolved',
+          message: `${currentUser.displayName || currentUser.email} resolved their dispute for "${project.projectTitle || project.title}"${satisfied ? ' (satisfied)' : ''}`,
+          projectId, projectTitle: project.projectTitle || project.title,
+          mentionedByName: currentUser.displayName || currentUser.email, isRead: false, createdAt: serverTimestamp(),
+        });
+      }
+      setStatus('resolved'); setShowResolveForm(false);
+      toast.success('Dispute resolved!');
+      logActivity(projectId, { type: 'dispute_resolved', actor: currentUser.email, actorName: currentUser.displayName || currentUser.email, description: `Dispute resolved — ${satisfied ? 'satisfied' : 'not fully satisfied'}` });
+    } catch (e) { console.error('Error:', e); toast.error('Error resolving dispute'); }
+    setSubmitting(false);
+  };
+
+  if (status === 'confirmed' || status === 'resolved') {
     return (
       <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
-        <p className="text-blue-700 font-semibold text-sm">Payment confirmed</p>
-        <p className="text-gray-500 text-xs mt-1">You've confirmed payment for this project. Badges will be awarded once all members confirm.</p>
+        <p className="text-blue-700 font-semibold text-sm">{status === 'confirmed' ? 'Payment confirmed' : 'Dispute resolved'}</p>
+        <p className="text-gray-500 text-xs mt-1">Badges will be awarded once all members confirm or resolve.</p>
       </div>
     );
   }
@@ -152,8 +147,28 @@ const PaymentConfirmationCard = ({ project, projectId, currentUser }) => {
   if (status === 'disputed') {
     return (
       <div className="bg-red-50 border border-red-200 rounded-xl p-5">
-        <p className="text-red-700 font-semibold text-sm">Payment disputed</p>
-        <p className="text-gray-500 text-xs mt-1">Your dispute has been flagged for admin review.</p>
+        <p className="text-red-700 font-semibold text-sm mb-1">Payment disputed</p>
+        <p className="text-gray-500 text-xs mb-3">Your dispute has been flagged to the project owner and admins.</p>
+        {!showResolveForm ? (
+          <button onClick={() => setShowResolveForm(true)} className="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition-all">
+            Resolve Dispute
+          </button>
+        ) : (
+          <div className="space-y-3 mt-3 p-4 bg-white border border-gray-200 rounded-lg">
+            <p className="text-gray-900 text-sm font-semibold">Resolve your dispute</p>
+            <textarea value={resolveNote} onChange={e => setResolveNote(e.target.value)} className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none resize-none" rows={3} placeholder="Describe how the dispute was resolved..." />
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={satisfied} onChange={e => setSatisfied(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-400" />
+              <span className="text-gray-700 text-sm">I am satisfied with the resolution</span>
+            </label>
+            <div className="flex gap-2">
+              <button onClick={handleResolve} disabled={submitting || !resolveNote.trim()} className="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition-all disabled:opacity-50">
+                {submitting ? 'Submitting...' : 'Submit Resolution'}
+              </button>
+              <button onClick={() => setShowResolveForm(false)} className="text-gray-500 text-sm px-3 py-2">Cancel</button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -173,6 +188,7 @@ const PaymentConfirmationCard = ({ project, projectId, currentUser }) => {
     </div>
   );
 };
+
 const formatTimeline = (t) => ({
   '1-week': '1 Week', '2-weeks': '2 Weeks', '1-month': '1 Month',
   '2-3-months': '2-3 Months', '3-6-months': '3-6 Months',

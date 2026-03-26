@@ -439,8 +439,8 @@ const ProjectCompletion = () => {
   };
 
   // Check if all payments are confirmed
-  const allPaymentsConfirmed = Object.values(paymentConfirmations).every(p => p.status === 'confirmed');
-  const confirmedCount = Object.values(paymentConfirmations).filter(p => p.status === 'confirmed').length;
+  const allPaymentsConfirmed = Object.values(paymentConfirmations).every(p => p.status === 'confirmed' || p.status === 'resolved');
+  const confirmedCount = Object.values(paymentConfirmations).filter(p => p.status === 'confirmed' || p.status === 'resolved').length;
   const totalPaidMembers = Object.keys(paymentConfirmations).length;
 
   // Refresh payment confirmations
@@ -515,17 +515,18 @@ const ProjectCompletion = () => {
                   </div>
                   <div className="space-y-3">
                     {Object.entries(paymentConfirmations).map(([email, data]) => (
-                      <div key={email} className={`flex items-center justify-between p-3 rounded-lg border ${data.status === 'confirmed' ? 'border-blue-200 bg-blue-50' : data.status === 'disputed' ? 'border-red-200 bg-red-50' : 'border-gray-200 bg-gray-50'}`}>
+                      <div key={email} className={`flex items-center justify-between p-3 rounded-lg border ${data.status === 'confirmed' || data.status === 'resolved' ? 'border-blue-200 bg-blue-50' : data.status === 'disputed' ? 'border-red-200 bg-red-50' : 'border-gray-200 bg-gray-50'}`}>
                         <div>
                           <p className="text-gray-900 text-sm font-medium">{data.name}</p>
                           <p className="text-gray-500 text-xs">{data.role}</p>
                         </div>
                         <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
                           data.status === 'confirmed' ? 'bg-blue-100 text-blue-700' :
+                          data.status === 'resolved' ? 'bg-blue-100 text-blue-700' :
                           data.status === 'disputed' ? 'bg-red-100 text-red-700' :
                           'bg-gray-200 text-gray-600'
                         }`}>
-                          {data.status === 'confirmed' ? 'Paid' : data.status === 'disputed' ? 'Disputed' : 'Pending'}
+                          {data.status === 'confirmed' ? 'Paid' : data.status === 'resolved' ? 'Resolved' : data.status === 'disputed' ? 'Disputed' : 'Pending'}
                         </span>
                       </div>
                     ))}

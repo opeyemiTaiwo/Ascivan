@@ -11,38 +11,55 @@ const ProjectVault = () => {
   const [disputedProjects, setDisputedProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedHistory, setExpandedHistory] = useState({});
+  const [viewingCert, setViewingCert] = useState(null);
 
   useEffect(() => {
     if (!currentUser) return;
     const fetchProjects = async () => {
       try {
-        // Completed projects
-        const completedQ = query(
-          collection(db, 'projects'),
-          where('members', 'array-contains', currentUser.uid),
-          where('status', '==', 'completed')
-        );
-        const completedSnap = await getDocs(completedQ);
-        const completed = completedSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const allCompleted = new Map();
+        const allDisputed = [];
+
+        // Completed projects where user is a member
+        try {
+          const memberQ = query(collection(db, 'projects'), where('members', 'array-contains', currentUser.uid), where('status', '==', 'completed'));
+          const memberSnap = await getDocs(memberQ);
+          memberSnap.docs.forEach(d => allCompleted.set(d.id, { id: d.id, ...d.data(), isOwner: false }));
+        } catch (e) { console.log('Member completed query:', e.message); }
+
+        // Completed projects where user is the owner
+        try {
+          const ownerQ = query(collection(db, 'projects'), where('submitterId', '==', currentUser.uid), where('status', '==', 'completed'));
+          const ownerSnap = await getDocs(ownerQ);
+          ownerSnap.docs.forEach(d => allCompleted.set(d.id, { id: d.id, ...d.data(), isOwner: true }));
+        } catch (e) { console.log('Owner completed query:', e.message); }
+
+        const completed = Array.from(allCompleted.values());
         completed.sort((a, b) => (b.completedAt?.toDate?.() || 0) - (a.completedAt?.toDate?.() || 0));
         setCompletedProjects(completed);
 
-        // Disputed / awaiting payment projects
-        const disputedQ = query(
-          collection(db, 'projects'),
-          where('members', 'array-contains', currentUser.uid),
-          where('status', '==', 'awaiting_payment_confirmation')
-        );
-        const disputedSnap = await getDocs(disputedQ);
-        const disputed = disputedSnap.docs.map(d => ({ id: d.id, ...d.data() }))
-          .filter(p => {
-            const confirmations = p.paymentConfirmations || {};
-            return Object.values(confirmations).some(c => c.status === 'disputed');
+        // Disputed projects — member
+        try {
+          const dMemberQ = query(collection(db, 'projects'), where('members', 'array-contains', currentUser.uid), where('status', '==', 'awaiting_payment_confirmation'));
+          const dMemberSnap = await getDocs(dMemberQ);
+          dMemberSnap.docs.forEach(d => {
+            const data = { id: d.id, ...d.data() };
+            if (Object.values(data.paymentConfirmations || {}).some(c => c.status === 'disputed')) allDisputed.push(data);
           });
-        setDisputedProjects(disputed);
-      } catch (e) {
-        console.error('Error fetching projects:', e);
-      }
+        } catch (e) {}
+
+        // Disputed projects — owner
+        try {
+          const dOwnerQ = query(collection(db, 'projects'), where('submitterId', '==', currentUser.uid), where('status', '==', 'awaiting_payment_confirmation'));
+          const dOwnerSnap = await getDocs(dOwnerQ);
+          dOwnerSnap.docs.forEach(d => {
+            const data = { id: d.id, ...d.data(), isOwner: true };
+            if (Object.values(data.paymentConfirmations || {}).some(c => c.status === 'disputed') && !allDisputed.find(p => p.id === d.id)) allDisputed.push(data);
+          });
+        } catch (e) {}
+
+        setDisputedProjects(allDisputed);
+      } catch (e) { console.error('Error fetching projects:', e); }
       setLoading(false);
     };
     fetchProjects();
@@ -52,22 +69,34 @@ const ProjectVault = () => {
     setExpandedHistory(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const handleViewCertificate = (project) => {
-    // Certificate could be a stored URL or generated
-    if (project.certificateUrl) {
-      window.open(project.certificateUrl, '_blank');
-    } else {
-      alert('Certificate will be available once the project owner finalizes it.');
+  // Find the user's certificate for this project
+  const getUserCertificate = (project) => {
+    const userDoc = currentUser;
+    // Check if user is owner
+    if (project.submitterId === currentUser.uid) {
+      return {
+        role: 'Project Owner',
+        projectTitle: project.projectTitle || project.title,
+        completedAt: project.completedAt?.toDate?.()?.toLocaleDateString() || 'N/A',
+        teamSize: (project.members || []).length,
+        isOwner: true,
+      };
     }
+    // Check completionData for member info
+    const evals = project.completionData?.evaluations || project.pendingEvaluations || [];
+    const myEval = evals.find(e => e.memberEmail === currentUser.email);
+    return {
+      role: myEval?.memberRole || 'Team Member',
+      projectTitle: project.projectTitle || project.title,
+      completedAt: project.completedAt?.toDate?.()?.toLocaleDateString() || 'N/A',
+      badgeName: myEval?.badgeCategory || '',
+      badgeLevel: myEval?.badgeLevel || '',
+      isOwner: false,
+    };
   };
 
-  const handleDownloadCertificate = (project) => {
-    if (project.certificateUrl) {
-      const link = document.createElement('a');
-      link.href = project.certificateUrl;
-      link.download = `${project.title || 'project'}-certificate.pdf`;
-      link.click();
-    }
+  const handleViewCertificate = (project) => {
+    setViewingCert(getUserCertificate(project));
   };
 
   return (
@@ -75,6 +104,34 @@ const ProjectVault = () => {
       <div className="max-w-4xl mx-auto">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Project Vault</h1>
         <p className="text-gray-500 text-sm mb-6">Your completed projects and earned certificates.</p>
+
+        {/* Certificate Modal */}
+        {viewingCert && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setViewingCert(null)}>
+            <div className="bg-white rounded-2xl p-8 max-w-lg w-full text-center shadow-xl" onClick={e => e.stopPropagation()}>
+              <div className="border-2 border-blue-200 rounded-xl p-8">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <img src="/Images/512X512.png" alt="Loomiqe" className="w-10 h-10" />
+                  <span className="text-xl font-bold text-gray-900">Loomiqe</span>
+                </div>
+                <p className="text-blue-600 text-xs font-semibold uppercase tracking-widest mb-6">Certificate of Completion</p>
+                <p className="text-gray-500 text-sm mb-1">This certifies that</p>
+                <p className="text-gray-900 text-2xl font-bold mb-1">{currentUser?.displayName || 'Member'}</p>
+                <p className="text-gray-500 text-sm mb-4">has successfully completed the project</p>
+                <p className="text-blue-600 text-lg font-bold mb-1">"{viewingCert.projectTitle}"</p>
+                <p className="text-gray-600 text-sm mb-1">as <span className="font-semibold">{viewingCert.role}</span></p>
+                {viewingCert.badgeName && (
+                  <p className="text-gray-500 text-xs mt-2">Badge earned: {viewingCert.badgeName} ({viewingCert.badgeLevel})</p>
+                )}
+                {viewingCert.isOwner && viewingCert.teamSize > 0 && (
+                  <p className="text-gray-500 text-xs mt-1">Team size: {viewingCert.teamSize} members</p>
+                )}
+                <p className="text-gray-400 text-xs mt-4">Completed: {viewingCert.completedAt}</p>
+              </div>
+              <button onClick={() => setViewingCert(null)} className="mt-4 text-gray-500 text-sm hover:text-gray-700">Close</button>
+            </div>
+          </div>
+        )}
 
         {loading ? (
           <div className="flex items-center justify-center py-20">
@@ -147,6 +204,7 @@ const ProjectVault = () => {
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="text-gray-900 font-semibold text-base truncate">{project.title || project.projectTitle || 'Untitled Project'}</h3>
                           <span className="text-xs font-medium px-2 py-0.5 bg-blue-50 text-blue-700 rounded-md flex-shrink-0">Completed</span>
+                          {project.isOwner && <span className="text-[10px] font-semibold px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full flex-shrink-0">Owner</span>}
                         </div>
                         <p className="text-gray-400 text-xs">{project.category || 'General'}</p>
                         {project.completedAt && (

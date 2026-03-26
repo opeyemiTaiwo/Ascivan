@@ -42,25 +42,26 @@ const TalentBoard = () => {
   useEffect(() => {
     const fetchTalents = async () => {
       try {
-        const q = query(collection(db, 'users'), orderBy('displayName'), limit(50));
+        const q = query(collection(db, 'users'), orderBy('displayName'), limit(100));
         const snap = await getDocs(q);
         const users = snap.docs
           .map(d => ({ id: d.id, ...d.data() }))
-          .filter(u => u.onboardingComplete && !u.isCompany && u.uid !== currentUser?.uid);
+          .filter(u => u.onboardingComplete && !u.isCompany && u.uid !== currentUser?.uid && (u.badges || []).length > 0);
         setTalents(users);
       } catch (e) {
         console.error('Error fetching talents:', e);
       }
       setLoading(false);
     };
-    fetchTalents();
-  }, [currentUser]);
+    if (isPremium) fetchTalents();
+    else setLoading(false);
+  }, [currentUser, isPremium]);
 
   const filtered = talents.filter(t => {
     const matchesSearch = !searchTerm || 
       (t.displayName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       (t.specialization || '').toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesBadge = !filterBadge || t.primarySkillTrack === filterBadge;
+    const matchesBadge = !filterBadge || (t.badges || []).some(b => b.badgeName?.includes(filterBadge) || b.badgeCategory === filterBadge);
     return matchesSearch && matchesBadge;
   });
 

@@ -294,7 +294,7 @@ const MembersDirectory = () => {
                         </div>
                         
                         {/* Name and info */}
-                        <p className="text-gray-900 text-sm font-semibold truncate flex items-center gap-1">
+                        <p className="text-gray-900 text-sm font-semibold truncate flex items-center justify-center gap-1">
                           {member.name}
                           {(member.membershipPlan === 'Premium' || member.role === 'admin') && <PremiumBadge size="xs" />}
                         </p>

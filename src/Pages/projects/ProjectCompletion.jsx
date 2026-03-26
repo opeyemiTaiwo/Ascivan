@@ -9,6 +9,7 @@ import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
 import { notifyBadgeAwarded } from '../../utils/emailNotifications';
 import { logActivity } from '../../utils/activityLog';
+import { sanitizeEmailKey } from '../../utils/firestoreHelpers';
 
 const badgeCategories = {
   'mentorship': { id: 'techmo', name: 'TechMO (Mentor)', color: 'from-blue-500 to-blue-600' },
@@ -146,7 +147,8 @@ const ProjectCompletion = () => {
       const confirmations = {};
       const paidMembers = evaluations.filter(e => e.contribution !== 'poor');
       paidMembers.forEach(ev => {
-        confirmations[ev.memberEmail] = { status: 'pending', name: ev.memberName, role: ev.memberRole };
+        const key = sanitizeEmailKey(ev.memberEmail);
+        confirmations[key] = { status: 'pending', name: ev.memberName, role: ev.memberRole, email: ev.memberEmail };
       });
 
       // Save evaluations and set project to awaiting payment confirmation

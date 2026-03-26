@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
 const AppLayout = ({ children }) => {
@@ -14,6 +14,20 @@ const AppLayout = ({ children }) => {
   const [unreadNotifications, setUnreadNotifications] = useState(0);
   const [unreadNetwork, setUnreadNetwork] = useState(0);
   const [unreadAccount, setUnreadAccount] = useState(0);
+  const [userPlan, setUserPlan] = useState('Free');
+  const [userRole, setUserRole] = useState('member');
+
+  // Fetch user plan/role
+  useEffect(() => {
+    if (!currentUser) return;
+    getDoc(doc(db, 'users', currentUser.uid)).then(snap => {
+      if (snap.exists()) {
+        const data = snap.data();
+        setUserPlan(data.membershipPlan || 'Free');
+        setUserRole(data.role || 'member');
+      }
+    }).catch(() => {});
+  }, [currentUser]);
 
   // Unread messages
   useEffect(() => {
@@ -50,11 +64,17 @@ const AppLayout = ({ children }) => {
     setSidebarOpen(false);
   }, [location.pathname]);
 
+  const isPremiumOrAdmin = userPlan === 'Premium' || userRole === 'admin';
+
   const navItems = [
     { path: '/community', label: 'Home' },
     { path: '/dashboard', label: 'Dashboard' },
     { path: '/projects', label: 'Projects' },
     { path: '/my-workspaces', label: 'Workspace' },
+    ...(isPremiumOrAdmin ? [
+      { path: '/talent-board', label: 'Talent Board' },
+    ] : []),
+    { path: '/project-vault', label: 'Project Vault' },
     { path: '/support', label: 'Support' },
     { path: '/settings', label: 'Settings' },
   ];

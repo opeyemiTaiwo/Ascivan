@@ -9,6 +9,7 @@ import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
 import { notifyNewApplicationToOwner } from '../../utils/emailNotifications';
 import { logActivity } from '../../utils/activityLog';
+import { sanitizeEmailKey } from '../../utils/firestoreHelpers';
 
 const industryTracks = [
   { value: 'healthcare', label: 'Healthcare / Medical' },
@@ -43,16 +44,18 @@ const PaymentConfirmationCard = ({ project, projectId, currentUser }) => {
 
   useEffect(() => {
     const confirmations = project.paymentConfirmations || {};
-    const myStatus = confirmations[currentUser.email]?.status;
+    const emailKey = sanitizeEmailKey(currentUser.email);
+    const myStatus = confirmations[emailKey]?.status;
     if (myStatus) setStatus(myStatus);
   }, [project, currentUser]);
 
   const handleConfirm = async (newStatus) => {
     setSubmitting(true);
     try {
+      const emailKey = sanitizeEmailKey(currentUser.email);
       const updates = {
-        [`paymentConfirmations.${currentUser.email}.status`]: newStatus,
-        [`paymentConfirmations.${currentUser.email}.confirmedAt`]: new Date().toISOString(),
+        [`paymentConfirmations.${emailKey}.status`]: newStatus,
+        [`paymentConfirmations.${emailKey}.confirmedAt`]: new Date().toISOString(),
       };
 
       // Save dispute history entry on the project

@@ -859,6 +859,48 @@ const SinglePost = () => {
               </div>
             ) : (
               <>
+                {/* Repost indicator + original content */}
+                {post.type === 'repost' && (
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2 mb-3 text-blue-500 text-sm">
+                      <svg className="w-5 h-5 text-blue-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
+                      <span>Reposted from <Link to={`/profile/${post.originalAuthorEmail || ''}`} className="font-semibold hover:underline">{post.originalAuthorName}</Link></span>
+                    </div>
+                    <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                      <div className="flex items-center gap-3 mb-3">
+                        {post.originalAuthorPhoto ? (
+                          <img src={post.originalAuthorPhoto} alt="" className="w-10 h-10 rounded-full object-cover" />
+                        ) : (
+                          <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">
+                            {(post.originalAuthorName || 'U')[0].toUpperCase()}
+                          </div>
+                        )}
+                        <div>
+                          <p className="font-semibold text-gray-900 text-sm">{post.originalAuthorName || 'Unknown'}</p>
+                          {post.originalCreatedAt && (
+                            <p className="text-xs text-gray-400">
+                              {formatDate(post.originalCreatedAt instanceof Date ? post.originalCreatedAt : post.originalCreatedAt?.toDate ? post.originalCreatedAt.toDate() : post.originalCreatedAt?.seconds ? new Date(post.originalCreatedAt.seconds * 1000) : new Date(post.originalCreatedAt))}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      {post.originalTitle && <h3 className="text-base font-bold text-gray-900 mb-2">{post.originalTitle}</h3>}
+                      {post.originalContent && (
+                        <div className="prose prose-sm max-w-none mb-3">
+                          <RichTextContent content={post.originalContent} />
+                        </div>
+                      )}
+                      {post.originalMedia && post.originalMedia.length > 0 && (
+                        <div className="mt-3">
+                          <ImageGallery images={post.originalMedia} />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 {/* Post Title */}
                 {post.title && (
                   <h1 className="text-xl xs:text-2xl sm:text-3xl font-bold text-gray-900 mb-3 xs:mb-4 sm:mb-5 break-words">

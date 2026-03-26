@@ -40,6 +40,7 @@ const MyWorkspaces = lazy(() => import('./Pages/projects/MyWorkspaces'));
 const TalentBoard = lazy(() => import('./Pages/TalentBoard'));
 const ProjectVault = lazy(() => import('./Pages/ProjectVault'));
 const Settings = lazy(() => import('./Pages/Settings'));
+const PremiumSuccess = lazy(() => import('./Pages/PremiumSuccess'));
 const Account = lazy(() => import('./Pages/Account'));
 
 try { require('./services/googleFormService'); } catch (e) {}
@@ -107,8 +108,8 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/about" element={<About />} />
-                <Route path="/terms" element={<TermsOfService />} />
-                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/terms" element={<div className="min-h-screen bg-white"><div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16"><TermsOfService /></div></div>} />
+                <Route path="/privacy" element={<div className="min-h-screen bg-white"><div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16"><PrivacyPolicy /></div></div>} />
 
                 {/* Auth flow — no sidebar */}
                 <Route path="/account-type" element={<BasicProtectedRoute skipOnboardingCheck={true}><AccountTypeSelection /></BasicProtectedRoute>} />
@@ -134,6 +135,7 @@ function App() {
                 <Route path="/talent-board" element={<SidebarRoute><TalentBoard /></SidebarRoute>} />
                 <Route path="/project-vault" element={<SidebarRoute><ProjectVault /></SidebarRoute>} />
                 <Route path="/settings" element={<SidebarRoute><Settings /></SidebarRoute>} />
+                <Route path="/premium-success" element={<SidebarRoute><PremiumSuccess /></SidebarRoute>} />
                 <Route path="/account" element={<SidebarRoute><Account /></SidebarRoute>} />
 
                 <Route path="/messages" element={<SidebarRoute><Messages /></SidebarRoute>} />

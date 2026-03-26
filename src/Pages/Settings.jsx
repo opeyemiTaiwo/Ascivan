@@ -5,6 +5,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
+import { PAYMENT_CONFIG } from '../config/payment';
 import { deleteUserAccount } from '../utils/deleteUserContent';
 import { toast } from 'react-toastify';
 
@@ -314,11 +315,40 @@ const MembershipTab = ({ profileData, navigate }) => {
           <FeatureItem color="orange" label="Priority support" detail="Get faster responses and dedicated assistance from the Loomiqe team." />
         </ul>
         <p className="text-gray-400 text-xs mb-4 leading-relaxed">Your Premium badge tells everyone on Loomiqe that you're invested, accountable, and serious about your work.</p>
-        <button disabled className="w-full bg-gray-300 text-gray-500 font-semibold text-sm py-2.5 rounded-lg cursor-not-allowed">
-          Coming Soon
-        </button>
-        {(profileData?.membershipPlan === 'Premium' || profileData?.role === 'admin') && (
-          <p className="text-orange-600 font-semibold text-sm mt-3 text-center">Active Premium Member</p>
+        {(profileData?.membershipPlan === 'Premium' || profileData?.role === 'admin') ? (
+          <div>
+            <div className="w-full bg-orange-500 text-white font-semibold text-sm py-2.5 rounded-lg text-center">Active Premium Member</div>
+            <p className="text-gray-500 text-xs mt-2 text-center">
+              {profileData?.premiumBillingCycle === 'yearly' ? 'Yearly plan' : profileData?.premiumBillingCycle === 'monthly' ? 'Monthly plan' : 'Premium access'}
+              {profileData?.premiumExpiresAt && ` · Renews ${profileData.premiumExpiresAt.toDate?.().toLocaleDateString() || ''}`}
+            </p>
+          </div>
+        ) : PAYMENT_CONFIG.enabled ? (
+          <div className="space-y-2">
+            <div className="grid grid-cols-2 gap-2">
+              <a href={PAYMENT_CONFIG.stripe.yearly} target="_blank" rel="noopener noreferrer" className="block bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm py-2.5 rounded-lg text-center transition-all">
+                $200/year
+              </a>
+              <a href={PAYMENT_CONFIG.stripe.monthly} target="_blank" rel="noopener noreferrer" className="block bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm py-2.5 rounded-lg text-center transition-all">
+                $20/month
+              </a>
+            </div>
+            {(PAYMENT_CONFIG.paypal.yearly && !PAYMENT_CONFIG.paypal.yearly.includes('YOUR_')) && (
+              <div className="grid grid-cols-2 gap-2">
+                <a href={PAYMENT_CONFIG.paypal.yearly} target="_blank" rel="noopener noreferrer" className="block bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold text-sm py-2.5 rounded-lg text-center transition-all">
+                  PayPal Yearly
+                </a>
+                <a href={PAYMENT_CONFIG.paypal.monthly} target="_blank" rel="noopener noreferrer" className="block bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold text-sm py-2.5 rounded-lg text-center transition-all">
+                  PayPal Monthly
+                </a>
+              </div>
+            )}
+            <p className="text-gray-400 text-xs text-center">Secure payment via Stripe or PayPal</p>
+          </div>
+        ) : (
+          <button disabled className="w-full bg-gray-300 text-gray-500 font-semibold text-sm py-2.5 rounded-lg cursor-not-allowed">
+            Coming Soon
+          </button>
         )}
       </div>
 

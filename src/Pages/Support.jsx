@@ -21,7 +21,10 @@ const Support = () => {
   useEffect(() => {
     if (currentUser) {
       getDoc(doc(db, 'users', currentUser.uid)).then(snap => {
-        if (snap.exists()) setIsPremium(snap.data().membershipPlan === 'Premium');
+        if (snap.exists()) {
+          const data = snap.data();
+          setIsPremium(data.membershipPlan === 'Premium' || data.role === 'admin');
+        }
       }).catch(() => {});
     }
   }, [currentUser]);

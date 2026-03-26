@@ -314,23 +314,23 @@ const NotificationBell = () => {
                       <div className="flex-1 min-w-0">
                         {/* User info - Responsive */}
                         <div className="flex items-center gap-1.5 xs:gap-2 mb-1">
-                          {notification.mentionedByPhoto ? (
+                          {(notification.mentionedByPhoto || notification.followedByPhoto) ? (
                             <img 
-                              src={notification.mentionedByPhoto} 
+                              src={notification.mentionedByPhoto || notification.followedByPhoto} 
                               alt="Profile" 
                               className="w-4 h-4 xs:w-5 xs:h-5 rounded-full object-cover"
                             />
                           ) : (
                             <div className="w-4 h-4 xs:w-5 xs:h-5 bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
                               <span className="text-[10px] xs:text-xs text-gray-900 font-bold">
-                                {(notification.mentionedByFirstName || notification.mentionedByName || 'U').charAt(0).toUpperCase()}
+                                {(notification.mentionedByFirstName || notification.mentionedByName || notification.followedByName || 'U').charAt(0).toUpperCase()}
                               </span>
                             </div>
                           )}
                           <span className="text-gray-900 font-medium text-xs xs:text-sm truncate">
                             {notification.mentionedByFirstName && notification.mentionedByLastName 
                               ? `${notification.mentionedByFirstName} ${notification.mentionedByLastName}`
-                              : notification.mentionedByName || 'Someone'
+                              : notification.mentionedByName || notification.followedByName || 'A member'
                             }
                           </span>
                           {!notification.isRead && (

@@ -50,6 +50,7 @@ const NotificationsPage = () => {
   const handleClick = (n) => {
     if (!n.isRead) markAsRead(n.id);
     if (n.projectId && projectTypes.includes(n.type)) navigate(`/projects/${n.projectId}`);
+    else if (n.type === 'follow' && n.followedBy) navigate(`/profile/${n.followedByName || n.followedBy}`);
     else if (n.postId) navigate(`/community/post/${n.postId}`);
     else if (n.mentionedByEmail) navigate(`/profile/${n.mentionedByEmail}`);
     else navigate('/community');
@@ -155,11 +156,11 @@ const NotificationsPage = () => {
             >
               {/* Avatar */}
               <div className="flex-shrink-0">
-                {n.mentionedByPhoto ? (
-                  <img src={n.mentionedByPhoto} alt="" className="w-10 h-10 rounded-full object-cover border border-gray-200" />
+                {(n.mentionedByPhoto || n.followedByPhoto) ? (
+                  <img src={n.mentionedByPhoto || n.followedByPhoto} alt="" className="w-10 h-10 rounded-full object-cover border border-gray-200" />
                 ) : (
                   <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm">
-                    {(n.mentionedByName || n.fromName || 'U')[0].toUpperCase()}
+                    {(n.mentionedByName || n.followedByName || n.fromName || 'U')[0].toUpperCase()}
                   </div>
                 )}
               </div>
@@ -167,8 +168,7 @@ const NotificationsPage = () => {
               {/* Content */}
               <div className="flex-1 min-w-0">
                 <p className="text-gray-900 text-sm">
-                  <span className="font-semibold">{n.mentionedByName || n.fromName || 'Someone'}</span>
-                  {' '}<span className="text-gray-600">{n.message || n.text || 'interacted with your content'}</span>
+                  {n.message || n.text || 'interacted with your content'}
                 </p>
                 <p className="text-gray-400 text-xs mt-1">{formatTime(n.createdAt)}</p>
               </div>

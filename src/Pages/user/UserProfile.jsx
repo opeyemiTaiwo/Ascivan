@@ -211,7 +211,7 @@ const UserProfile = () => {
             {/* Name */}
             <h1 className="text-2xl font-bold text-gray-900 mb-0.5 flex items-center gap-2">
               {displayName}
-              {profile.membershipPlan === 'Premium' && <PremiumBadge size="md" />}
+              {(profile.membershipPlan === 'Premium' || profile.role === 'admin') && <PremiumBadge size="md" />}
             </h1>
             {profile.specialization && (
               <p className="text-gray-600 text-sm">{profile.specialization}</p>

@@ -25,6 +25,8 @@ const DashboardOverview = () => {
   const [completedProjects, setCompletedProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [membershipPlan, setMembershipPlan] = useState('Free');
+  const [userRole, setUserRole] = useState('member');
+  const isPremiumUser = membershipPlan === 'Premium' || userRole === 'admin';
   const [earnings, setEarnings] = useState({ pending: 0, earned: 0, total: 0 });
 
   useEffect(() => {
@@ -37,6 +39,7 @@ const DashboardOverview = () => {
           const data = userSnap.data();
           setProfileData(data);
           setMembershipPlan(data.membershipPlan || 'Free');
+          setUserRole(data.role || 'member');
           setStats(prev => ({ ...prev, badgesEarned: (data.badges || []).length }));
         }
 
@@ -279,21 +282,21 @@ const DashboardOverview = () => {
               <h3 className="text-lg font-bold text-gray-900 mb-2">Current Plan</h3>
               <div className="flex items-center gap-2 mb-1">
                 <p className="text-blue-600 font-semibold text-lg">{membershipPlan} Plan</p>
-                {membershipPlan === 'Premium' && <PremiumBadge size="md" />}
+                {isPremiumUser && <PremiumBadge size="md" />}
               </div>
-              <p className="text-gray-400 text-xs mb-3">{membershipPlan === 'Free' ? 'Access to projects, community, and badges. 3 paid projects/year.' : 'Unlimited paid projects, Talent Board visibility, priority support.'}</p>
-              {membershipPlan === 'Free' && (
+              <p className="text-gray-400 text-xs mb-3">{!isPremiumUser ? 'Access to projects, community, and badges. 3 paid projects/year.' : 'Unlimited paid projects, Talent Board visibility, priority support.'}</p>
+              {!isPremiumUser && (
                 <button onClick={() => navigate('/settings?tab=membership')} className="text-blue-600 text-sm font-medium hover:underline">
                   Upgrade to Premium
                 </button>
               )}
-              {membershipPlan === 'Premium' && (
+              {isPremiumUser && (
                 <p className="text-gray-500 text-xs mt-2">Priority support: <a href="mailto:premium@loomiqe.com" className="text-blue-600 hover:underline">premium@loomiqe.com</a></p>
               )}
             </div>
 
             {/* Talent Board — Premium only */}
-            {membershipPlan === 'Premium' && (
+            {isPremiumUser && (
               <div className="bg-orange-50 border border-orange-200 rounded-xl p-6">
                 <h3 className="text-base font-bold text-gray-900 mb-1 flex items-center gap-2">
                   Talent Board

@@ -148,7 +148,7 @@ const PaymentConfirmationCard = ({ project, projectId, currentUser }) => {
     return (
       <div className="bg-red-50 border border-red-200 rounded-xl p-5">
         <p className="text-red-700 font-semibold text-sm mb-1">Payment disputed</p>
-        <p className="text-gray-500 text-xs mb-3">Your dispute has been flagged to the project owner and admins.</p>
+        <p className="text-gray-600 text-xs mb-3">If your dispute has been resolved and payment received, click "Resolve Dispute" below and share your feedback. If not, reach out to the project owner directly. For unresolved disagreements, contact us through the <a href="/support" className="text-blue-600 hover:underline">Support page</a>.</p>
         {!showResolveForm ? (
           <button onClick={() => setShowResolveForm(true)} className="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition-all">
             Resolve Dispute
@@ -537,19 +537,14 @@ const ProjectDetail = () => {
             {isOwner && (
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
                 <p className="text-blue-700 font-semibold text-sm mb-1">You are the owner of this project</p>
-                <p className="text-gray-500 text-xs mb-3">Manage applications from your dashboard</p>
-                <div className="flex gap-2">
+                <p className="text-gray-500 text-xs mb-3">Manage applications, project completion, and badge assignment from your dashboard.</p>
+                <div className="flex gap-2 flex-wrap">
                   <button onClick={() => navigate(`/projects/${projectId}/workspace`)} className="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition-all">
                     Open Workspace
                   </button>
                   <button onClick={() => navigate('/projects/owner-dashboard')} className="bg-white border border-gray-300 text-gray-700 font-medium text-sm px-4 py-2 rounded-lg hover:bg-gray-50 transition-all">
-                    Manage Applications
+                    Manage Project
                   </button>
-                  {project.status === 'active' && (
-                    <button onClick={() => navigate(`/projects/${projectId}/complete`)} className="bg-white border border-gray-300 text-gray-700 font-medium text-sm px-4 py-2 rounded-lg hover:bg-gray-50 transition-all">
-                      Complete Project
-                    </button>
-                  )}
                 </div>
               </div>
             )}

@@ -49,13 +49,20 @@ const Navbar = () => {
     return () => unsub();
   }, [currentUser]);
 
-  const navItems = [
-    { path: '/community', label: 'Home' },
-    { path: '/projects', label: 'Projects' },
-    { path: '/dashboard', label: 'Dashboard' },
-  ];
+  const navItems = currentUser
+    ? [
+        { path: '/', label: 'Home' },
+        { path: '/community', label: 'Feed' },
+        { path: '/projects', label: 'Projects' },
+        { path: '/dashboard', label: 'Dashboard' },
+      ]
+    : [
+        { path: '/', label: 'Home' },
+        { path: '/projects', label: 'Projects' },
+        { path: '/about', label: 'About' },
+      ];
 
-  const isActive = (path) => location.pathname === path || location.pathname.startsWith(path + '/');
+  const isActive = (path) => path === '/' ? location.pathname === '/' : (location.pathname === path || location.pathname.startsWith(path + '/'));
 
   const getNavButtonClass = (path) => `px-2.5 lg:px-3 xl:px-4 py-2 rounded-lg text-xs lg:text-sm xl:text-base font-semibold transition-all duration-300 border ${
     isActive(path)
@@ -75,7 +82,7 @@ const Navbar = () => {
         <div className="container mx-auto px-3 xs:px-4 sm:px-6 max-w-7xl">
           <div className="flex items-center justify-between h-16 sm:h-20">
 
-            <Link to="/community" className="flex-shrink-0 group flex items-center gap-2">
+            <Link to="/" className="flex-shrink-0 group flex items-center gap-2">
               <img src="/Images/512X512.png" alt="Loomiqe" className="h-14 w-14 sm:h-16 sm:w-16" />
             </Link>
 

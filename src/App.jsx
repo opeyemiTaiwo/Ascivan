@@ -1,4 +1,5 @@
-// src/App.jsx
+// src/App.jsx - UPDATED
+
 import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -97,6 +98,14 @@ const SidebarRoute = ({ children }) => (
   </BasicProtectedRoute>
 );
 
+// Home: logged-out visitors see the landing page; logged-in members go to their dashboard.
+const HomeRoute = () => {
+  const { currentUser, loading } = useAuth();
+  if (loading) return <PageLoader />;
+  if (currentUser) return <Navigate to="/dashboard" replace />;
+  return <LandingPage />;
+};
+
 function App() {
   return (
     <ErrorBoundary>
@@ -106,7 +115,7 @@ function App() {
             <Suspense fallback={<PageLoader />}>
               <Routes>
                 {/* Public — no sidebar */}
-                <Route path="/" element={<LandingPage />} />
+                <Route path="/" element={<HomeRoute />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/about" element={<About />} />

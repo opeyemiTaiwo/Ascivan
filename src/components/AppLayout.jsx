@@ -67,8 +67,8 @@ const AppLayout = ({ children }) => {
   const isPremiumOrAdmin = userPlan === 'Premium' || userRole === 'admin';
 
   const navItems = [
-    { path: '/community', label: 'Home' },
-    { path: '/dashboard', label: 'Dashboard' },
+    { path: '/dashboard', label: 'Home' },
+    { path: '/community', label: 'Feed' },
     { path: '/projects', label: 'Projects' },
     { path: '/my-workspaces', label: 'Workspace' },
     ...(isPremiumOrAdmin ? [

@@ -9,7 +9,8 @@ import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
 import { notifyNewApplicationToOwner } from '../../utils/emailNotifications';
 import { logActivity } from '../../utils/activityLog';
-import { sanitizeEmailKey } from '../../utils/firestoreHelpers';
+import { checkRoleEligibility } from '../../utils/roleEligibility';
+import { checkProfileComplete } from '../../utils/profileCompletion';
 
 const industryTracks = [
   { value: 'healthcare', label: 'Healthcare / Medical' },
@@ -37,158 +38,6 @@ const industryTracks = [
 
 const getIndustryLabel = (val) => industryTracks.find(t => t.value === val)?.label || val;
 
-// Payment confirmation card for members
-const PaymentConfirmationCard = ({ project, projectId, currentUser }) => {
-  const [status, setStatus] = useState('pending');
-  const [submitting, setSubmitting] = useState(false);
-  const [resolveNote, setResolveNote] = useState('');
-  const [satisfied, setSatisfied] = useState(false);
-  const [showResolveForm, setShowResolveForm] = useState(false);
-
-  useEffect(() => {
-    const confirmations = project.paymentConfirmations || {};
-    const emailKey = sanitizeEmailKey(currentUser.email);
-    const myStatus = confirmations[emailKey]?.status;
-    if (myStatus) setStatus(myStatus);
-  }, [project, currentUser]);
-
-  const handleConfirm = async (newStatus) => {
-    setSubmitting(true);
-    try {
-      const emailKey = sanitizeEmailKey(currentUser.email);
-      await updateDoc(doc(db, 'projects', projectId), {
-        [`paymentConfirmations.${emailKey}.status`]: newStatus,
-        [`paymentConfirmations.${emailKey}.confirmedAt`]: new Date().toISOString(),
-        disputeHistory: arrayUnion({
-          memberEmail: currentUser.email,
-          memberName: currentUser.displayName || currentUser.email,
-          action: newStatus,
-          timestamp: new Date().toISOString(),
-        }),
-      });
-
-      if (project.submitterId) {
-        try {
-          await addDoc(collection(db, 'notifications'), {
-            userId: project.submitterId,
-            type: newStatus === 'confirmed' ? 'payment_confirmed' : 'payment_disputed',
-            message: newStatus === 'confirmed'
-              ? `${currentUser.displayName || currentUser.email} confirmed payment for "${project.projectTitle || project.title}"`
-              : `⚠️ ${currentUser.displayName || currentUser.email} disputed payment for "${project.projectTitle || project.title}"`,
-            projectId, projectTitle: project.projectTitle || project.title,
-            mentionedByName: currentUser.displayName || currentUser.email,
-            mentionedByPhoto: currentUser.photoURL || null,
-            isRead: false, createdAt: serverTimestamp(),
-          });
-        } catch (e) { console.error('Notification error:', e); }
-      }
-
-      if (newStatus === 'disputed') {
-        try {
-          const adminQ = query(collection(db, 'users'), where('role', '==', 'admin'));
-          const adminSnap = await getDocs(adminQ);
-          for (const ad of adminSnap.docs) {
-            await addDoc(collection(db, 'notifications'), {
-              userId: ad.id, type: 'payment_disputed',
-              message: `🚨 Payment Dispute: ${currentUser.displayName || currentUser.email} disputed payment for "${project.projectTitle || project.title}"`,
-              projectId, projectTitle: project.projectTitle || project.title,
-              isRead: false, createdAt: serverTimestamp(),
-            });
-          }
-        } catch (e) { console.error('Admin notification error:', e); }
-      }
-
-      setStatus(newStatus);
-      toast.success(newStatus === 'confirmed' ? 'Payment confirmed!' : 'Dispute submitted.');
-      logActivity(projectId, { type: newStatus === 'confirmed' ? 'payment_confirmed' : 'payment_disputed', actor: currentUser.email, actorName: currentUser.displayName || currentUser.email, description: `${currentUser.displayName || currentUser.email} ${newStatus} payment` });
-    } catch (e) { console.error('Error:', e); toast.error('Error updating status'); }
-    setSubmitting(false);
-  };
-
-  const handleResolve = async () => {
-    if (!resolveNote.trim()) { toast.error('Please add a note before resolving'); return; }
-    setSubmitting(true);
-    try {
-      const emailKey = sanitizeEmailKey(currentUser.email);
-      await updateDoc(doc(db, 'projects', projectId), {
-        [`paymentConfirmations.${emailKey}.status`]: 'resolved',
-        [`paymentConfirmations.${emailKey}.resolvedAt`]: new Date().toISOString(),
-        [`paymentConfirmations.${emailKey}.resolveNote`]: resolveNote.trim(),
-        [`paymentConfirmations.${emailKey}.satisfied`]: satisfied,
-        disputeHistory: arrayUnion({
-          memberEmail: currentUser.email, memberName: currentUser.displayName || currentUser.email,
-          action: 'resolved', satisfied, note: resolveNote.trim(), timestamp: new Date().toISOString(),
-        }),
-      });
-      if (project.submitterId) {
-        await addDoc(collection(db, 'notifications'), {
-          userId: project.submitterId, type: 'dispute_resolved',
-          message: `${currentUser.displayName || currentUser.email} resolved their dispute for "${project.projectTitle || project.title}"${satisfied ? ' (satisfied)' : ''}`,
-          projectId, projectTitle: project.projectTitle || project.title,
-          mentionedByName: currentUser.displayName || currentUser.email, isRead: false, createdAt: serverTimestamp(),
-        });
-      }
-      setStatus('resolved'); setShowResolveForm(false);
-      toast.success('Dispute resolved!');
-      logActivity(projectId, { type: 'dispute_resolved', actor: currentUser.email, actorName: currentUser.displayName || currentUser.email, description: `Dispute resolved — ${satisfied ? 'satisfied' : 'not fully satisfied'}` });
-    } catch (e) { console.error('Error:', e); toast.error('Error resolving dispute'); }
-    setSubmitting(false);
-  };
-
-  if (status === 'confirmed' || status === 'resolved') {
-    return (
-      <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
-        <p className="text-blue-700 font-semibold text-sm">{status === 'confirmed' ? 'Payment confirmed' : 'Dispute resolved'}</p>
-        <p className="text-gray-500 text-xs mt-1">Badges will be awarded once all members confirm or resolve.</p>
-      </div>
-    );
-  }
-
-  if (status === 'disputed') {
-    return (
-      <div className="bg-red-50 border border-red-200 rounded-xl p-5">
-        <p className="text-red-700 font-semibold text-sm mb-1">Payment disputed</p>
-        <p className="text-gray-600 text-xs mb-3">If your dispute has been resolved and payment received, click "Resolve Dispute" below and share your feedback. If not, reach out to the project owner directly. For unresolved disagreements, contact us through the <a href="/support" className="text-blue-600 hover:underline">Support page</a>.</p>
-        {!showResolveForm ? (
-          <button onClick={() => setShowResolveForm(true)} className="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition-all">
-            Resolve Dispute
-          </button>
-        ) : (
-          <div className="space-y-3 mt-3 p-4 bg-white border border-gray-200 rounded-lg">
-            <p className="text-gray-900 text-sm font-semibold">Resolve your dispute</p>
-            <textarea value={resolveNote} onChange={e => setResolveNote(e.target.value)} className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none resize-none" rows={3} placeholder="Describe how the dispute was resolved..." />
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={satisfied} onChange={e => setSatisfied(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-400" />
-              <span className="text-gray-700 text-sm">I am satisfied with the resolution</span>
-            </label>
-            <div className="flex gap-2">
-              <button onClick={handleResolve} disabled={submitting || !resolveNote.trim()} className="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition-all disabled:opacity-50">
-                {submitting ? 'Submitting...' : 'Submit Resolution'}
-              </button>
-              <button onClick={() => setShowResolveForm(false)} className="text-gray-500 text-sm px-3 py-2">Cancel</button>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  return (
-    <div className="bg-orange-50 border border-orange-200 rounded-xl p-5">
-      <p className="text-orange-700 font-semibold text-sm mb-1">Payment Confirmation Required</p>
-      <p className="text-gray-600 text-xs mb-4">The project owner has marked this project for completion. Please confirm you've been paid before badges are awarded.</p>
-      <div className="flex gap-2">
-        <button onClick={() => handleConfirm('confirmed')} disabled={submitting} className="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition-all disabled:opacity-50">
-          {submitting ? 'Submitting...' : 'Confirm Payment Received'}
-        </button>
-        <button onClick={() => handleConfirm('disputed')} disabled={submitting} className="bg-white border border-red-300 text-red-600 font-medium text-sm px-4 py-2 rounded-lg hover:bg-red-50 transition-all disabled:opacity-50">
-          Dispute
-        </button>
-      </div>
-    </div>
-  );
-};
-
 const formatTimeline = (t) => ({
   '1-week': '1 Week', '2-weeks': '2 Weeks', '1-month': '1 Month',
   '2-3-months': '2-3 Months', '3-6-months': '3-6 Months',
@@ -210,13 +59,13 @@ const ProjectDetail = () => {
   const [showApplyForm, setShowApplyForm] = useState(false);
   const [applyForm, setApplyForm] = useState({ role: '', skills: '', message: '', portfolioUrl: '', linkedinUrl: '' });
   const [submittingApp, setSubmittingApp] = useState(false);
-  const [paidLimit, setPaidLimit] = useState({ allowed: true, remaining: 3, used: 0, limit: 3, plan: 'Free' });
+  const [memberProfile, setMemberProfile] = useState(null);
 
   useEffect(() => {
     if (currentUser) {
-      import('../../utils/paidProjectLimits').then(({ checkPaidProjectLimit }) => {
-        checkPaidProjectLimit(currentUser).then(setPaidLimit);
-      });
+      getDoc(doc(db, 'users', currentUser.uid))
+        .then(snap => setMemberProfile(snap.exists() ? snap.data() : {}))
+        .catch(() => setMemberProfile({}));
     }
   }, [currentUser]);
 
@@ -249,10 +98,74 @@ const ProjectDetail = () => {
     fetchProject();
   }, [projectId, currentUser]);
 
+  const handleApplyToLead = async () => {
+    if (!currentUser) { navigate('/login'); return; }
+
+    // A complete profile is still required, but there is NO badge gate to lead —
+    // leading is itself a skill-building path open to anyone.
+    const profileStatus = checkProfileComplete(memberProfile);
+    if (!profileStatus.complete) {
+      toast.error('Please complete your profile before applying to lead.');
+      navigate('/settings?tab=profile');
+      return;
+    }
+
+    setSubmittingApp(true);
+    try {
+      // Re-read the project to avoid a race: only the FIRST applicant becomes lead.
+      const fresh = await getDoc(doc(db, 'projects', projectId));
+      if (!fresh.exists()) { toast.error('Project no longer exists'); setSubmittingApp(false); return; }
+      const data = fresh.data();
+      if (data.status !== 'lead_recruitment' || data.leadConfirmed) {
+        toast.error('This project already has a lead.');
+        setSubmittingApp(false);
+        const refreshed = await getDoc(doc(db, 'projects', projectId));
+        setProject({ id: refreshed.id, ...refreshed.data() });
+        return;
+      }
+
+      // Auto-confirm: this user becomes the lead and the project owner, and the
+      // project moves into setup so they can refine content + open the team.
+      await updateDoc(doc(db, 'projects', projectId), {
+        status: 'setup',
+        leadConfirmed: true,
+        submitterId: currentUser.uid,
+        submitterEmail: currentUser.email,
+        submitterName: memberProfile?.displayName || currentUser.displayName || currentUser.email,
+        leadConfirmedAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+      toast.success('You are now the project lead! Set it up and open your team.');
+      navigate(`/projects/${projectId}/setup`);
+    } catch (e) {
+      console.error(e);
+      toast.error('Could not confirm you as lead. Please try again.');
+      setSubmittingApp(false);
+    }
+  };
+
   const handleApply = async () => {
     if (!currentUser) { navigate('/login'); return; }
+
+    // Require a complete profile before joining a project
+    const profileStatus = checkProfileComplete(memberProfile);
+    if (!profileStatus.complete) {
+      toast.error('Please complete your profile before applying to a project.');
+      navigate('/settings?tab=profile');
+      return;
+    }
+
     if (!applyForm.role) { toast.error('Please select a role'); return; }
     if (!applyForm.skills.trim()) { toast.error('Please list your relevant skills'); return; }
+
+    // Enforced role-difficulty matching: block applications to roles the member
+    // has not earned the badge level for. Beginner / any-level roles pass freely.
+    const selectedRole = (project.teamRoles || []).find(r => r.role === applyForm.role);
+    const eligibility = checkRoleEligibility(memberProfile, selectedRole);
+    if (!eligibility.eligible) {
+      toast.error(eligibility.reason || 'You do not meet the level requirement for this role.');
+      return;
+    }
 
     setSubmittingApp(true);
     try {
@@ -264,6 +177,9 @@ const ProjectDetail = () => {
         applicantName: currentUser.displayName || currentUser.email,
         applicantPhoto: currentUser.photoURL || null,
         role: applyForm.role,
+        roleExperienceLevel: selectedRole?.experienceLevel || 'any-level',
+        applicantBadgeLevel: eligibility.current || 'None',
+        badgeCategory: eligibility.category,
         skills: applyForm.skills.trim(),
         message: applyForm.message.trim() || null,
         portfolioUrl: applyForm.portfolioUrl.trim() || null,
@@ -340,8 +256,6 @@ const ProjectDetail = () => {
     );
   }
 
-  const isPaid = project.pricingType === 'paid';
-
   return (
     <>
       
@@ -358,8 +272,8 @@ const ProjectDetail = () => {
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-8 mb-6">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">{project.projectTitle}</h1>
-                <span className={`flex-shrink-0 px-3 py-1 rounded-full text-xs font-bold ${isPaid ? 'bg-blue-600/20 text-blue-500 border border-blue-600/30' : 'bg-blue-600/20 text-blue-500 border border-blue-600/30'}`}>
-                  {isPaid ? `$${project.totalBudget?.toLocaleString()} Budget` : 'Free Project'}
+                <span className={`flex-shrink-0 px-3 py-1 rounded-full text-xs font-bold border ${project.status === 'lead_recruitment' ? 'bg-amber-100 text-amber-700 border-amber-200' : 'bg-blue-600/20 text-blue-500 border-blue-600/30'}`}>
+                  {project.status === 'lead_recruitment' ? 'Looking for a Lead' : 'Collaborative Project'}
                 </span>
               </div>
 
@@ -424,8 +338,8 @@ const ProjectDetail = () => {
                         <p className="text-gray-400 text-xs mt-0.5">Skills: {role.skills}</p>
                       </div>
                       <div className="flex items-center gap-3 flex-shrink-0">
-                        {isPaid && role.paymentPerPerson > 0 && (
-                          <span className="text-blue-500 text-xs font-bold">${role.paymentPerPerson.toLocaleString()} / person</span>
+                        {role.experienceLevel && role.experienceLevel !== 'any-level' && (
+                          <span className="text-blue-500 text-xs font-bold capitalize">{role.experienceLevel}</span>
                         )}
                         <span className="text-gray-400 text-xs font-bold">{role.count} {role.count === 1 ? 'person' : 'people'}</span>
                       </div>
@@ -435,28 +349,52 @@ const ProjectDetail = () => {
               </div>
             )}
 
-            {/* Payment Summary */}
-            {isPaid && (
-              <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-8 mb-6">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">Payment Summary</h2>
-                <div className="bg-blue-600/10 border border-blue-600/20 rounded-xl p-4 text-center">
-                  <p className="text-gray-400 text-xs uppercase tracking-wider font-semibold">Total Project Budget</p>
-                  <p className="text-blue-500 text-xl font-black mt-1">${project.totalBudget?.toLocaleString()}</p>
-                  <p className="text-gray-500 text-xs mt-1">Payment is distributed per role upon project completion</p>
-                </div>
+            {/* Lead Recruitment — only the lead opening is available */}
+            {project.status === 'lead_recruitment' && (
+              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 sm:p-8">
+                <h2 className="text-lg font-bold text-gray-900 mb-1">This project needs a lead</h2>
+                <p className="text-gray-600 text-sm mb-3">
+                  No one is leading this project yet. Apply to lead it — as the lead, you'll shape the idea, decide which roles and how many people the team needs, then open it up for others to join. Leading is its own skill path and earns a Leadership badge on completion. No badge is required to apply.
+                </p>
+                <p className="text-gray-500 text-xs mb-4">
+                  New to how roles work? <a href="/about#how-it-works" className="text-blue-600 underline">Learn about roles on Loomiqe</a>.
+                </p>
+                {!currentUser ? (
+                  <button onClick={() => navigate('/login')} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-6 py-2.5 rounded-lg transition-all">
+                    Sign in to lead this project
+                  </button>
+                ) : memberProfile && !checkProfileComplete(memberProfile).complete ? (
+                  <div>
+                    <p className="text-amber-700 text-xs mb-2">Complete your profile first: {checkProfileComplete(memberProfile).missing.join(', ')}.</p>
+                    <button onClick={() => navigate('/settings?tab=profile')} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-5 py-2 rounded-lg transition-all">
+                      Complete Profile
+                    </button>
+                  </div>
+                ) : (
+                  <button onClick={handleApplyToLead} disabled={submittingApp} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-6 py-2.5 rounded-lg transition-all disabled:opacity-50">
+                    {submittingApp ? 'Confirming…' : 'Apply to Lead This Project'}
+                  </button>
+                )}
               </div>
             )}
 
-            {/* Apply Section */}
-            {!isOwner && currentUser && (
+            {/* Setup in progress — lead is configuring the team */}
+            {project.status === 'setup' && !isOwner && (
+              <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-8 text-center">
+                <p className="text-gray-900 font-semibold text-sm mb-1">A lead is setting up this project</p>
+                <p className="text-gray-500 text-xs">Roles will open for applications shortly. Check back soon.</p>
+              </div>
+            )}
+
+            {/* Apply Section — only once the lead has opened the project */}
+            {project.status === 'active' && !isOwner && currentUser && (
               <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-8">
-                {/* Paid project limit check */}
-                {project.pricingType === 'paid' && !paidLimit.allowed && paidLimit.plan !== 'Premium' ? (
+                {memberProfile && !checkProfileComplete(memberProfile).complete ? (
                   <div className="text-center py-4">
-                    <p className="text-red-600 font-semibold text-sm mb-1">Paid project limit reached</p>
-                    <p className="text-gray-500 text-xs mb-3">Basic members can complete up to {paidLimit.limit} paid projects per year. You've used {paidLimit.used} of {paidLimit.limit}.</p>
-                    <button onClick={() => navigate('/settings?tab=membership')} className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg transition-all">
-                      Upgrade to Premium
+                    <p className="text-amber-700 font-semibold text-sm mb-1">Complete your profile to apply</p>
+                    <p className="text-gray-500 text-xs mb-3">Please fill in: {checkProfileComplete(memberProfile).missing.join(', ')}. A complete profile is how recruiters and project owners find you.</p>
+                    <button onClick={() => navigate('/settings?tab=profile')} className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg transition-all">
+                      Complete Profile
                     </button>
                   </div>
                 ) : hasApplied ? (
@@ -491,10 +429,27 @@ const ProjectDetail = () => {
                       <select value={applyForm.role} onChange={e => setApplyForm(p => ({ ...p, role: e.target.value }))}
                         className={inputClass + " appearance-none"}>
                         <option value="">Select a role</option>
-                        {(project.teamRoles || []).map((r, i) => (
-                          <option key={i} value={r.role}>{r.role} ({r.count} {r.count === 1 ? 'spot' : 'spots'})</option>
-                        ))}
+                        {(project.teamRoles || []).map((r, i) => {
+                          const elig = checkRoleEligibility(memberProfile, r);
+                          const lvl = (r.experienceLevel && r.experienceLevel !== 'any-level')
+                            ? r.experienceLevel.charAt(0).toUpperCase() + r.experienceLevel.slice(1)
+                            : 'Any Level';
+                          return (
+                            <option key={i} value={r.role} disabled={!elig.eligible}>
+                              {r.role} · {lvl} ({r.count} {r.count === 1 ? 'spot' : 'spots'}){!elig.eligible ? ' — Locked' : ''}
+                            </option>
+                          );
+                        })}
                       </select>
+                      {applyForm.role && (() => {
+                        const sel = (project.teamRoles || []).find(r => r.role === applyForm.role);
+                        const elig = checkRoleEligibility(memberProfile, sel);
+                        if (elig.eligible) return null;
+                        return <p className="text-red-600 text-xs mt-2 leading-relaxed">{elig.reason}</p>;
+                      })()}
+                      {(project.teamRoles || []).some(r => !checkRoleEligibility(memberProfile, r).eligible) && (
+                        <p className="text-gray-400 text-xs mt-2">Locked roles require a higher badge level in that track. Start with open roles to earn badges and unlock them.</p>
+                      )}
                     </div>
                     <div>
                       <label className="block text-blue-600 font-semibold mb-2 text-sm">Your Relevant Skills *</label>
@@ -533,8 +488,19 @@ const ProjectDetail = () => {
               </div>
             )}
 
+            {/* Lead setup in progress (owner) */}
+            {isOwner && project.status === 'setup' && (
+              <div className="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <p className="text-amber-800 font-semibold text-sm mb-1">Finish setting up your project</p>
+                <p className="text-gray-600 text-xs mb-3">You're the lead. Refine the details and open the team roles so others can apply.</p>
+                <button onClick={() => navigate(`/projects/${projectId}/setup`)} className="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition-all">
+                  Continue Setup
+                </button>
+              </div>
+            )}
+
             {/* Owner notice */}
-            {isOwner && (
+            {isOwner && project.status !== 'setup' && (
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
                 <p className="text-blue-700 font-semibold text-sm mb-1">You are the owner of this project</p>
                 <p className="text-gray-500 text-xs mb-3">Manage applications, project completion, and badge assignment from your dashboard.</p>
@@ -550,7 +516,7 @@ const ProjectDetail = () => {
             )}
 
             {/* Member workspace access */}
-            {isMember && !isOwner && project.status !== 'awaiting_payment_confirmation' && (
+            {isMember && !isOwner && (
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
                 <p className="text-blue-700 font-semibold text-sm mb-1">You are a member of this project</p>
                 <p className="text-gray-500 text-xs mb-3">Access the workspace to collaborate with your team.</p>
@@ -560,13 +526,8 @@ const ProjectDetail = () => {
               </div>
             )}
 
-            {/* Payment Confirmation for members */}
-            {isMember && !isOwner && project.status === 'awaiting_payment_confirmation' && (
-              <PaymentConfirmationCard project={project} projectId={projectId} currentUser={currentUser} />
-            )}
-
             {/* Not logged in */}
-            {!currentUser && (
+            {!currentUser && project.status === 'active' && (
               <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 text-center">
                 <p className="text-gray-600 text-sm mb-3">Sign in to apply for this project</p>
                 <Link to="/login" className="inline-flex px-6 py-2.5 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-sm transition-all items-center">

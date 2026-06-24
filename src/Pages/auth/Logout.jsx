@@ -255,7 +255,7 @@ const Logout = () => {
             </div>
 
             <p className="text-gray-500 text-[10px] xs:text-xs sm:text-sm font-medium mb-2">
-              Transforming the international student experience with AI
+              Build real experience. Earn verified credentials. Get discovered.
             </p>
 
             <p className="text-gray-400 text-[10px] xs:text-xs sm:text-sm">

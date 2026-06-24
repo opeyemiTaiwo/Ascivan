@@ -1,4 +1,4 @@
-// src/Pages/Jobs.jsx - Jobs Board with Location & Visa Filters
+// src/Pages/Jobs.jsx - Jobs Board with Location Filter
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +20,6 @@ const Jobs = () => {
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [selectedType, setSelectedType] = useState('all');
   const [locationFilter, setLocationFilter] = useState('');
-  const [visaFilter, setVisaFilter] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('newest');
   const [loading, setLoading] = useState(true);
@@ -92,11 +91,6 @@ const Jobs = () => {
       );
     }
 
-    // Visa-compliant filter
-    if (visaFilter) {
-      filtered = filtered.filter(p => p.visaCompliant === true || p.sponsorshipAvailable === true);
-    }
-
     // Search
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
@@ -122,7 +116,7 @@ const Jobs = () => {
     });
 
     setFilteredPosts(filtered);
-  }, [posts, selectedType, locationFilter, visaFilter, searchQuery, sortBy]);
+  }, [posts, selectedType, locationFilter, searchQuery, sortBy]);
 
   const handlePostClick = async (post) => {
     try {
@@ -190,10 +184,9 @@ const Jobs = () => {
     setSearchQuery('');
     setLocationFilter('');
     setSelectedType('all');
-    setVisaFilter(false);
   };
 
-  const hasActiveFilters = searchQuery || locationFilter || selectedType !== 'all' || visaFilter;
+  const hasActiveFilters = searchQuery || locationFilter || selectedType !== 'all';
 
   if (authLoading || (currentUser && loading)) {
     return (
@@ -298,33 +291,16 @@ const Jobs = () => {
                 </select>
               </div>
 
-              {/* Visa Toggle + Results count */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                {/* Visa-compliant toggle */}
-                <button
-                  onClick={() => setVisaFilter(v => !v)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm border transition-all ${
-                    visaFilter
-                      ? 'bg-blue-500/20 border-blue-500/50 text-blue-500'
-                      : 'bg-white/5 border-white/20 text-gray-600 hover:bg-white/10'
-                  }`}
-                >
-                  <span className={`w-4 h-4 rounded flex items-center justify-center text-xs border ${visaFilter ? 'bg-blue-500 border-blue-400' : 'border-gray-500'}`}>
-                    {visaFilter && '✓'}
-                  </span>
-                  Visa-Compliant / Sponsorship Available
-                </button>
-
-                <div className="flex items-center gap-4 text-sm">
-                  <span className="text-gray-600">
-                    <span className="text-orange-400 font-semibold">{filteredPosts.length}</span> jobs found
-                  </span>
-                  {hasActiveFilters && (
-                    <button onClick={clearAll} className="text-orange-400 hover:text-orange-300 font-semibold">
-                      Clear All
-                    </button>
-                  )}
-                </div>
+              {/* Results count */}
+              <div className="flex items-center justify-end gap-4 text-sm">
+                <span className="text-gray-600">
+                  <span className="text-orange-400 font-semibold">{filteredPosts.length}</span> jobs found
+                </span>
+                {hasActiveFilters && (
+                  <button onClick={clearAll} className="text-orange-400 hover:text-orange-300 font-semibold">
+                    Clear All
+                  </button>
+                )}
               </div>
             </div>
           </section>
@@ -369,16 +345,6 @@ const Jobs = () => {
                             <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${typeBadge.cls}`}>
                               {typeBadge.label}
                             </span>
-                            {post.visaCompliant && (
-                              <span className="bg-blue-500/20 text-blue-500 px-2.5 py-1 rounded-lg text-xs font-semibold">
-                                Visa OK
-                              </span>
-                            )}
-                            {post.sponsorshipAvailable && (
-                              <span className="bg-blue-500/20 text-blue-300 px-2.5 py-1 rounded-lg text-xs font-semibold">
-                                Sponsorship
-                              </span>
-                            )}
                             {isClosed && (
                               <span className="bg-white/10 text-gray-400 px-2.5 py-1 rounded-lg text-xs font-semibold">Closed</span>
                             )}

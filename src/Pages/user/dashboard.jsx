@@ -27,7 +27,6 @@ const DashboardOverview = () => {
   const [membershipPlan, setMembershipPlan] = useState('Free');
   const [userRole, setUserRole] = useState('member');
   const isPremiumUser = membershipPlan === 'Premium' || userRole === 'admin';
-  const [earnings, setEarnings] = useState({ pending: 0, earned: 0, total: 0 });
 
   useEffect(() => {
     if (!currentUser) return;
@@ -71,34 +70,8 @@ const DashboardOverview = () => {
           const completedList = completedSnap.docs.map(d => ({ id: d.id, ...d.data() }));
           setCompletedProjects(completedList.slice(0, 5));
           setStats(prev => ({ ...prev, projectsCompleted: completedSnap.size }));
-
-          // Calculate earned from completed paid projects
-          let earnedTotal = 0;
-          completedSnap.docs.forEach(d => {
-            const budget = parseFloat(d.data().budget || d.data().payment || 0);
-            if (budget > 0) earnedTotal += budget;
-          });
-          setEarnings(prev => ({ ...prev, earned: earnedTotal, total: prev.pending + earnedTotal }));
         } catch (e) {
           console.log('Completed projects query skipped:', e.message);
-        }
-
-        // Calculate pending from active paid projects
-        try {
-          const activeQ = query(
-            collection(db, 'projects'),
-            where('members', 'array-contains', currentUser.uid),
-            where('status', '==', 'active')
-          );
-          const activeSnap = await getDocs(activeQ);
-          let pendingTotal = 0;
-          activeSnap.docs.forEach(d => {
-            const budget = parseFloat(d.data().budget || d.data().payment || 0);
-            if (budget > 0) pendingTotal += budget;
-          });
-          setEarnings(prev => ({ ...prev, pending: pendingTotal, total: prev.earned + pendingTotal }));
-        } catch (e) {
-          console.log('Active earnings query skipped:', e.message);
         }
       } catch (e) {
         console.error('Error fetching dashboard data:', e);
@@ -138,34 +111,12 @@ const DashboardOverview = () => {
             <p className="text-3xl font-bold text-gray-900">{stats.badgesEarned}</p>
           </div>
           <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <p className="text-gray-500 text-sm mb-1">Total Earnings</p>
-            <p className="text-3xl font-bold text-gray-900">${earnings.total.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
+            <p className="text-gray-500 text-sm mb-1">Talent Board</p>
+            <p className="text-3xl font-bold text-gray-900">{stats.badgesEarned > 0 ? 'Listed' : '—'}</p>
+            <p className="text-gray-400 text-xs mt-1">{stats.badgesEarned > 0 ? 'Recruiters can find you' : 'Earn a badge to get listed'}</p>
           </div>
         </div>
 
-        {/* Earnings Overview */}
-        {(earnings.pending > 0 || earnings.earned > 0) && (
-          <div className="bg-white border border-gray-200 rounded-xl p-5 mb-8">
-            <h3 className="text-base font-bold text-gray-900 mb-4">Earnings Overview</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-                <p className="text-orange-700 text-xs font-medium mb-1">Pending</p>
-                <p className="text-xl font-bold text-orange-700">${earnings.pending.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
-                <p className="text-orange-600 text-xs mt-1">From active projects</p>
-              </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-blue-700 text-xs font-medium mb-1">Earned</p>
-                <p className="text-xl font-bold text-blue-700">${earnings.earned.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
-                <p className="text-blue-600 text-xs mt-1">From completed projects</p>
-              </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-blue-700 text-xs font-medium mb-1">Total</p>
-                <p className="text-xl font-bold text-blue-700">${earnings.total.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
-                <p className="text-blue-600 text-xs mt-1">Pending + Earned</p>
-              </div>
-            </div>
-          </div>
-        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left column */}

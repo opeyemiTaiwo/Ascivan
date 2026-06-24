@@ -4,11 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../../components/Navbar';
-import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
 import usePosterName from '../../hooks/usePosterName';
-import { checkPaidProjectLimit } from '../../utils/paidProjectLimits';
+import { checkProfileComplete } from '../../utils/profileCompletion';
 
 const industryTracks = [
   { value: 'healthcare', label: 'Healthcare / Medical' },
@@ -73,16 +73,15 @@ const ProjectSubmission = () => {
     contactName: '',
     companyName: '',
     // Pricing
-    pricingType: 'free', // 'free' | 'paid'
   });
 
   // Team roles — dynamic list, payment per role when paid
   const [teamRoles, setTeamRoles] = useState([
-    { role: '', customRole: '', skills: '', count: 1, experienceLevel: 'any-level', description: '', detailsLink: '', paymentPerPerson: '' }
+    { role: '', customRole: '', skills: '', count: 1, experienceLevel: 'any-level', description: '', detailsLink: '' }
   ]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [paidLimit, setPaidLimit] = useState({ allowed: true, remaining: 3, used: 0, limit: 3, plan: 'Free' });
+  const [profileGate, setProfileGate] = useState({ checked: false, complete: true, missing: [] });
 
   useEffect(() => {
     if (!authLoading && !currentUser) {
@@ -90,11 +89,15 @@ const ProjectSubmission = () => {
     }
   }, [currentUser, authLoading, navigate]);
 
-  // Check paid project limit
+  // Require a complete profile before posting a project
   useEffect(() => {
-    if (currentUser) {
-      checkPaidProjectLimit(currentUser).then(setPaidLimit);
-    }
+    if (!currentUser) return;
+    getDoc(doc(db, 'users', currentUser.uid))
+      .then(snap => {
+        const result = checkProfileComplete(snap.exists() ? snap.data() : null);
+        setProfileGate({ checked: true, ...result });
+      })
+      .catch(() => setProfileGate({ checked: true, complete: true, missing: [] }));
   }, [currentUser]);
 
   useEffect(() => {
@@ -124,7 +127,7 @@ const ProjectSubmission = () => {
 
   const addRole = () => {
     if (teamRoles.length < 10) {
-      setTeamRoles(prev => [...prev, { role: '', customRole: '', skills: '', count: 1, experienceLevel: 'any-level', description: '', detailsLink: '', paymentPerPerson: '' }]);
+      setTeamRoles(prev => [...prev, { role: '', customRole: '', skills: '', count: 1, experienceLevel: 'any-level', description: '', detailsLink: '' }]);
     }
   };
 
@@ -135,9 +138,6 @@ const ProjectSubmission = () => {
   };
 
   const totalTeamSize = teamRoles.reduce((sum, r) => sum + (parseInt(r.count) || 0), 0);
-  const totalBudget = formData.pricingType === 'paid' 
-    ? teamRoles.reduce((sum, r) => sum + ((parseFloat(r.paymentPerPerson) || 0) * (parseInt(r.count) || 0)), 0) 
-    : 0;
 
   const validateForm = () => {
     const errors = [];
@@ -164,14 +164,6 @@ const ProjectSubmission = () => {
       if (!r.count || r.count < 1) errors.push(`Number of people for "${r.role}" must be at least 1`);
     }
 
-    if (formData.pricingType === 'paid') {
-      for (const r of validRoles) {
-        if (!r.paymentPerPerson || parseFloat(r.paymentPerPerson) <= 0) {
-          errors.push(`Payment amount required for "${r.role}" role`);
-        }
-      }
-    }
-
     return errors;
   };
 
@@ -186,6 +178,20 @@ const ProjectSubmission = () => {
       return;
     }
 
+    // Require a complete profile before creating a project
+    try {
+      const snap = await getDoc(doc(db, 'users', currentUser.uid));
+      const { complete } = checkProfileComplete(snap.exists() ? snap.data() : null);
+      if (!complete) {
+        toast.error('Please complete your profile before posting a project.');
+        setIsSubmitting(false);
+        navigate('/settings?tab=profile');
+        return;
+      }
+    } catch (e) {
+      console.log('Profile check skipped:', e.message);
+    }
+
     const errors = validateForm();
     if (errors.length > 0) {
       toast.error(errors[0]);
@@ -193,16 +199,7 @@ const ProjectSubmission = () => {
       return;
     }
 
-    // Check paid project limit for basic members
-    if (formData.pricingType === 'paid' && !paidLimit.allowed) {
-      toast.error(`Basic members can only complete ${paidLimit.limit} paid projects per year. Upgrade to Premium for unlimited.`);
-      setIsSubmitting(false);
-      return;
-    }
-
     try {
-      const isPaid = formData.pricingType === 'paid';
-
       // Check for duplicate project name
       try {
         const dupQ = query(collection(db, 'projects'), where('projectTitle', '==', formData.projectTitle.trim()));
@@ -221,12 +218,7 @@ const ProjectSubmission = () => {
         experienceLevel: r.experienceLevel || 'any-level',
         description: r.description?.trim() || '',
         detailsLink: r.detailsLink?.trim() || '',
-        paymentPerPerson: isPaid ? (parseFloat(r.paymentPerPerson) || 0) : 0,
       }));
-
-      const computedTotalBudget = isPaid 
-        ? validRoles.reduce((sum, r) => sum + (r.paymentPerPerson * r.count), 0) 
-        : 0;
 
       const submissionData = {
         projectTitle: formData.projectTitle.trim(),
@@ -240,9 +232,6 @@ const ProjectSubmission = () => {
         contactEmail: formData.contactEmail.trim(),
         contactName: formData.contactName.trim() || 'Project Owner',
         companyName: formData.companyName.trim() || null,
-        // Pricing
-        pricingType: formData.pricingType,
-        totalBudget: computedTotalBudget,
         // Team
         teamRoles: validRoles,
         maxTeamSize: totalTeamSize,
@@ -269,8 +258,8 @@ const ProjectSubmission = () => {
           type: 'project_created',
           actor: currentUser.email,
           actorName: currentUser.displayName || currentUser.email,
-          description: `Project "${formData.projectTitle}" created (${formData.pricingType})`,
-          metadata: { pricingType: formData.pricingType, teamSize: teamRoles.reduce((s, r) => s + (parseInt(r.count) || 1), 0) },
+          description: `Project "${formData.projectTitle}" created`,
+          metadata: { teamSize: teamRoles.reduce((s, r) => s + (parseInt(r.count) || 1), 0) },
         });
       } catch (e) { console.log('Activity log skipped:', e.message); }
 
@@ -322,6 +311,15 @@ const ProjectSubmission = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+              {profileGate.checked && !profileGate.complete && (
+                <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 sm:p-5">
+                  <p className="text-amber-800 text-sm font-semibold mb-1">Complete your profile to post a project</p>
+                  <p className="text-gray-600 text-xs mb-3">Recruiters discover talent through complete profiles. Please fill in: {profileGate.missing.join(', ')}.</p>
+                  <button type="button" onClick={() => navigate('/settings?tab=profile')} className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium px-4 py-2 rounded-lg transition-all">
+                    Complete Profile
+                  </button>
+                </div>
+              )}
               <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 sm:p-6 space-y-5">
 
                 {/* Project Title */}
@@ -371,52 +369,13 @@ const ProjectSubmission = () => {
                 </div>
               </div>
 
-              {/* ── PRICING ── */}
-              <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 sm:p-6 space-y-5">
-                <h2 className="text-lg font-bold text-gray-900">Project Pricing</h2>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <button type="button" onClick={() => setFormData(p => ({ ...p, pricingType: 'free' }))}
-                    className={`p-4 rounded-xl border-2 text-center transition-all active:scale-95 ${formData.pricingType === 'free' ? 'border-blue-500 bg-blue-600/20 text-gray-900' : 'border-white/15 bg-gray-50 text-gray-600 hover:bg-gray-100'}`}>
-                    <div className="text-sm font-bold">Free</div>
-                    <div className="text-gray-400 text-xs mt-1">Volunteer / learning project</div>
-                  </button>
-                  <button type="button" onClick={() => setFormData(p => ({ ...p, pricingType: 'paid' }))}
-                    className={`p-4 rounded-xl border-2 text-center transition-all active:scale-95 ${formData.pricingType === 'paid' ? 'border-blue-500 bg-blue-600/20 text-gray-900' : 'border-white/15 bg-gray-50 text-gray-600 hover:bg-gray-100'}`}>
-                    <div className="text-sm font-bold">Paid</div>
-                    <div className="text-gray-400 text-xs mt-1">Compensated project</div>
-                  </button>
-                </div>
-
-                {formData.pricingType === 'free' && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-3">
-                    <p className="text-blue-700 text-sm">This is a free project. Team members will contribute on a volunteer or learning basis.</p>
-                  </div>
-                )}
-
-                {formData.pricingType === 'paid' && !paidLimit.allowed && paidLimit.plan !== 'Premium' && (
-                  <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-                    <p className="text-red-700 text-sm font-semibold mb-1">Paid project limit reached</p>
-                    <p className="text-gray-600 text-xs mb-3">Basic members can complete up to {paidLimit.limit} paid projects per year. You've used {paidLimit.used} of {paidLimit.limit}.</p>
-                    <button type="button" onClick={() => navigate('/settings?tab=membership')} className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium px-4 py-2 rounded-lg transition-all">
-                      Upgrade to Premium
-                    </button>
-                  </div>
-                )}
-
-                {formData.pricingType === 'paid' && paidLimit.allowed && paidLimit.plan !== 'Premium' && (
-                  <div className="bg-orange-50 border border-orange-200 rounded-xl p-3">
-                    <p className="text-orange-700 text-sm">Paid project — {paidLimit.remaining} of {paidLimit.limit} paid projects remaining this year.</p>
-                  </div>
-                )}
-              </div>
-
               {/* ── TEAM ROLES ── */}
               <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 sm:p-6 space-y-5">
                 <div className="flex items-center justify-between">
                   <h2 className="text-lg font-bold text-gray-900">Team Roles</h2>
                   <span className="text-gray-400 text-xs">Total team: {totalTeamSize} {totalTeamSize === 1 ? 'person' : 'people'}</span>
                 </div>
+                <p className="text-gray-500 text-xs -mt-2">Set an experience level per role. Intermediate and Advanced roles can only be filled by members who've earned the matching badge level in that track — keeping your team realistic and your project outcomes protected. Use Beginner or Any Level for roles open to newcomers.</p>
 
                 {teamRoles.map((role, index) => (
                   <div key={index} className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-3">
@@ -427,7 +386,7 @@ const ProjectSubmission = () => {
                       )}
                     </div>
                     <div className="space-y-3">
-                      <div className={`grid grid-cols-1 gap-3 ${formData.pricingType === 'paid' ? 'sm:grid-cols-5' : 'sm:grid-cols-4'}`}>
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
                         <div>
                           <label className="block text-gray-400 text-xs mb-1">Role Title *</label>
                           {role.role === '__other__' ? (
@@ -458,15 +417,8 @@ const ProjectSubmission = () => {
                             <option value="beginner">Beginner</option>
                             <option value="intermediate">Intermediate</option>
                             <option value="advanced">Advanced</option>
-                            <option value="expert">Expert</option>
                           </select>
                         </div>
-                        {formData.pricingType === 'paid' && (
-                          <div>
-                            <label className="block text-gray-400 text-xs mb-1">Payment / Person (USD) *</label>
-                            <input type="number" min="0" step="0.01" value={role.paymentPerPerson} onChange={e => handleRoleChange(index, 'paymentPerPerson', e.target.value)} className={inputClass} placeholder="0.00" />
-                          </div>
-                        )}
                       </div>
                       {/* Role Description */}
                       <div>
@@ -488,13 +440,6 @@ const ProjectSubmission = () => {
                   </button>
                 )}
 
-                {formData.pricingType === 'paid' && totalBudget > 0 && (
-                  <div className="bg-blue-600/10 border border-blue-600/20 rounded-xl p-3">
-                    <p className="text-blue-500 text-sm font-semibold">
-                      Total project budget: ${totalBudget.toLocaleString(undefined, { minimumFractionDigits: 2 })} ({totalTeamSize} team members)
-                    </p>
-                  </div>
-                )}
               </div>
 
               {/* ── CONTACT INFO ── */}

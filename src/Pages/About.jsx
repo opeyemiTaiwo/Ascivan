@@ -40,14 +40,17 @@ const About = () => {
         {/* Hero */}
         <section className="text-center mb-16">
           <div className="mb-4 inline-block px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-blue-600 font-semibold text-sm">About Loomiqe</p>
+            <p className="text-blue-600 font-semibold text-sm">About Loomiqe <span className="text-gray-400 font-normal">(pronounced "loo-meek")</span></p>
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
             Where Tech Professionals{' '}
             <span className="text-blue-600">Build, Earn, and Grow</span>
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Loomiqe is a project-based platform where tech professionals at every level collaborate on real projects, earn verified skill badges, and build careers through meaningful work.
+            Loomiqe is where you build real-world experience — collaborating on real products from start to finish, earning verified skill badges, and getting discovered by recruiters, wherever you are.
+          </p>
+          <p className="text-gray-400 text-sm mt-3">
+            Loomiqe is pronounced <span className="text-gray-600 font-medium">"loo-meek."</span>
           </p>
         </section>
 
@@ -56,10 +59,10 @@ const About = () => {
           <div className="bg-gray-50 rounded-xl border border-gray-200 p-6 sm:p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h2>
             <p className="text-gray-600 leading-relaxed mb-4">
-              Whether you're a beginner writing your first lines of code or an expert leading distributed systems, your skills deserve a platform that proves what you can do — not just what you say you can do.
+              Talent is everywhere, but the chance to prove it is not. Many capable people — international students especially — have the skills but no easy way to gain real, verifiable work experience that recruiters trust. Research, coursework, and competitions build ability; they rarely produce the one thing employers look for: proof that you've shipped a real product, with a team, from start to finish.
             </p>
             <p className="text-gray-600 leading-relaxed">
-              Loomiqe bridges the gap between learning and doing. We give tech professionals real projects to work on, verified badges that document their growth, workspaces to collaborate with their teams, and a community that accelerates every stage of a tech career.
+              Loomiqe closes that gap. We simulate real-world experience — collaborative teams building products end to end — so you earn verified credentials and a portfolio of genuine work, then become visible to recruiters hiring for remote and onsite roles. No matter where you are in the world, your work speaks for you.
             </p>
           </div>
         </section>
@@ -69,12 +72,12 @@ const About = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">What We Offer</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
-              { title: 'Real-World Projects', desc: 'Join or post collaborative projects — free or paid. Work with real teams across development, QA, architecture, security, and more.' },
-              { title: 'TechTalent Badges', desc: 'Earn verified credentials across 6 skill tracks with 4 progression levels each. Badges are awarded automatically based on your role in completed projects.' },
-              { title: 'Talent Board', desc: 'Premium members are showcased to recruiters and companies. Your badges, project history, and verified profile do the talking.' },
+              { title: 'Real-World Projects', desc: 'Join or post collaborative projects and build real products with real teams across development, QA, architecture, security, and more — from start to finish.' },
+              { title: 'TechTalent Badges', desc: 'Earn verified credentials across 6 skill tracks with 4 progression levels each. Badges are awarded based on your role and contribution in completed projects.' },
+              { title: 'Talent Board', desc: 'Every member with verified work is listed for recruiters and companies to discover. Your badges, project history, and verified profile do the talking.' },
               { title: 'Project Workspaces', desc: 'Every project gets a dedicated workspace with a discussion forum, resource sharing, and team directory — all logged for accountability.' },
               { title: 'Community & Messaging', desc: 'Post updates, follow professionals, and message anyone on the platform. Build a network through collaboration, not just connections.' },
-              { title: 'Payment Confirmation', desc: 'For paid projects, every member must confirm payment before badges are awarded. Disputes are flagged to admins with a full activity log.' },
+              { title: 'Verified by Contribution', desc: 'Project owners evaluate each member, and badges record the role and contribution level — so the proof on your profile is honest and trusted by recruiters.' },
             ].map((item, i) => (
               <div key={i} className="bg-white rounded-xl border border-gray-200 p-5">
                 <h3 className="text-gray-900 font-bold text-lg mb-2">{item.title}</h3>
@@ -99,14 +102,14 @@ const About = () => {
         </section>
 
         {/* How It Works */}
-        <section className="mb-12">
+        <section id="how-it-works" className="mb-12 scroll-mt-24">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">How It Works</h2>
           <div className="space-y-4">
             {[
               { num: '1', title: 'Sign up and build your profile', desc: 'Sign in with Google, pick your skill track, and set your experience level. Takes under a minute.' },
               { num: '2', title: 'Join or post a project', desc: 'Browse open projects and apply with your portfolio and LinkedIn. Or post your own project and build a team.' },
               { num: '3', title: 'Collaborate in workspaces', desc: 'Once approved, access the project workspace. Discuss in the forum, share resources, and coordinate with your team.' },
-              { num: '4', title: 'Complete and earn badges', desc: 'When the project is done, the owner evaluates the team. Badges are awarded automatically based on your role. For paid projects, members confirm payment first.' },
+              { num: '4', title: 'Complete and earn badges', desc: 'When the project is done, the owner evaluates the team. Badges are awarded based on your role and contribution, building a verified portfolio recruiters can trust.' },
             ].map((step, i) => (
               <div key={i} className="flex gap-4 items-start">
                 <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold flex-shrink-0">{step.num}</div>
@@ -126,11 +129,11 @@ const About = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <h3 className="text-gray-900 font-semibold text-base mb-2">Free (Basic)</h3>
-                <p className="text-gray-500 text-sm">Unlimited free projects, up to 3 paid projects per year, all 6 badge tracks, community access, messaging, and project workspaces.</p>
+                <p className="text-gray-500 text-sm">Unlimited collaborative projects, all 6 badge tracks, a Talent Board listing for recruiters, community access, messaging, and project workspaces.</p>
               </div>
               <div>
                 <h3 className="text-gray-900 font-semibold text-base mb-2">Premium — $200/year or $20/month</h3>
-                <p className="text-gray-500 text-sm">Everything in Basic plus unlimited paid projects, Talent Board visibility, verified Premium badge on your profile, and priority support at premium@loomiqe.com.</p>
+                <p className="text-gray-500 text-sm">Everything in Basic plus priority Talent Board ranking, direct recruiter outreach, a verified Premium badge on your profile, and priority support at premium@loomiqe.com.</p>
               </div>
             </div>
           </div>

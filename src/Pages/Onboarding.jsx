@@ -35,6 +35,7 @@ const Onboarding = () => {
     primarySkillTrack: '', // TechMO, TechQA, TechDev, TechLeads, TechArchs, TechGuard
     specialization: '',
     yearsOfExperience: '',
+    country: '',
     city: '',
     state: '',
     interests: [],
@@ -135,6 +136,7 @@ const Onboarding = () => {
         if (!formData.companyEmail.trim()) { toast.error('Please enter your business email'); return; }
         if (!isBusinessEmail(formData.companyEmail)) { toast.error('Please use a business email (not Gmail, Yahoo, Outlook, etc.)'); return; }
       }
+      if (step === 3 && !formData.country.trim()) { toast.error('Please enter your current country'); return; }
       if (step === 4 && formData.interests.length === 0) { toast.error('Please select at least one interest'); return; }
     } else {
       // Individual: step 1=experience level, 2=name/profile/links, 3=location, 4=interests
@@ -143,6 +145,7 @@ const Onboarding = () => {
         if (!formData.displayName.trim()) { toast.error('Please enter your name'); return; }
         if (!formData.linkedinUrl.trim()) { toast.error('Please enter your LinkedIn URL'); return; }
       }
+      if (step === 3 && !formData.country.trim()) { toast.error('Please enter your current country'); return; }
       if (step === 4 && formData.interests.length === 0) { toast.error('Please select at least one interest'); return; }
     }
     setStep(s => s + 1);
@@ -152,33 +155,30 @@ const Onboarding = () => {
     setStep(s => s - 1);
   };
 
-  const handleSkip = async () => {
-    try { await saveOnboarding(true); } catch (err) { console.error('Error skipping onboarding:', err); toast.error('Something went wrong. Please try again.'); }
-  };
-
   const handleComplete = async () => {
     if (isCompany) {
       if (!formData.companyName.trim()) { toast.error('Please enter your company name'); return; }
       if (!formData.companyEmail.trim()) { toast.error('Please enter your business email'); return; }
       if (!isBusinessEmail(formData.companyEmail)) { toast.error('Please use a business email (not Gmail, Yahoo, Outlook, etc.)'); return; }
     }
-    try { await saveOnboarding(false); } catch (err) { console.error('Error completing onboarding:', err); toast.error('Something went wrong. Please try again.'); }
+    try { await saveOnboarding(); } catch (err) { console.error('Error completing onboarding:', err); toast.error('Something went wrong. Please try again.'); }
   };
 
-  const saveOnboarding = async (skipped = false) => {
+  const saveOnboarding = async () => {
     if (!currentUser) return;
     setSaving(true);
     try {
       const updateData = {
         displayName: formData.displayName.trim() || currentUser.displayName || '',
+        country: formData.country.trim() || null,
         city: formData.city.trim() || null,
         state: formData.state.trim() || null,
         interests: formData.interests,
         isCompany: isCompany,
         onboardingComplete: true,
-        onboardingSkipped: skipped,
+        onboardingSkipped: false,
         onboardingCompletedAt: new Date(),
-        profileComplete: !skipped,
+        profileComplete: true,
       };
       if (isCompany) {
         updateData.companyProfile = {
@@ -200,7 +200,7 @@ const Onboarding = () => {
         updateData.githubUrl = formData.githubUrl.trim() || null;
       }
       await updateDoc(doc(db, 'users', currentUser.uid), updateData);
-      toast.success(skipped ? 'Welcome to Loomiqe! You can complete your profile later.' : 'Welcome to Loomiqe!');
+      toast.success('Welcome to Loomiqe!');
       navigate('/dashboard', { replace: true });
     } catch (error) {
       console.error('Error saving onboarding:', error);
@@ -285,16 +285,20 @@ const Onboarding = () => {
           <div className="space-y-5">
             <div>
               <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 mb-1">Where are you based?</h2>
-              <p className="text-gray-500 text-sm">Helps us show you relevant local opportunities.</p>
+              <p className="text-gray-500 text-sm">Your country helps recruiters know where you can work from. Remote opportunities are open to everyone.</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="col-span-2">
+                <label className={labelClass}>Country *</label>
+                <input type="text" value={formData.country} onChange={e => setFormData(p => ({ ...p, country: e.target.value }))} className={inputClass} placeholder="e.g., Nigeria, India, United States" autoFocus />
+              </div>
               <div className="col-span-2 sm:col-span-1">
                 <label className={labelClass}>City</label>
-                <input type="text" value={formData.city} onChange={e => setFormData(p => ({ ...p, city: e.target.value }))} className={inputClass} placeholder="e.g., Baltimore" autoFocus />
+                <input type="text" value={formData.city} onChange={e => setFormData(p => ({ ...p, city: e.target.value }))} className={inputClass} placeholder="e.g., Lagos" />
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <label className={labelClass}>State / Region</label>
-                <input type="text" value={formData.state} onChange={e => setFormData(p => ({ ...p, state: e.target.value }))} className={inputClass} placeholder="e.g., MD" />
+                <input type="text" value={formData.state} onChange={e => setFormData(p => ({ ...p, state: e.target.value }))} className={inputClass} placeholder="e.g., Lagos State" />
               </div>
             </div>
           </div>
@@ -380,8 +384,12 @@ const Onboarding = () => {
               <p className="text-gray-500 text-sm">Helps professionals find opportunities near them.</p>
             </div>
             <div>
+              <label className={labelClass}>Country *</label>
+              <input type="text" value={formData.country} onChange={e => setFormData(p => ({ ...p, country: e.target.value }))} className={inputClass} placeholder="e.g., Nigeria, India, United States" autoFocus />
+            </div>
+            <div>
               <label className={labelClass}>Company Location</label>
-              <input type="text" value={formData.companyLocation} onChange={e => setFormData(p => ({ ...p, companyLocation: e.target.value }))} className={inputClass} placeholder="e.g., Baltimore, MD or Remote" autoFocus />
+              <input type="text" value={formData.companyLocation} onChange={e => setFormData(p => ({ ...p, companyLocation: e.target.value }))} className={inputClass} placeholder="e.g., Lagos or Remote" />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -447,9 +455,6 @@ const Onboarding = () => {
         <div className="p-4 sm:p-6 md:p-8">
           <div className="flex items-center justify-between mb-4 sm:mb-6">
             <span className="text-gray-400 text-xs font-semibold uppercase tracking-widest">Step {step} of {TOTAL_STEPS}</span>
-            {step < TOTAL_STEPS && (
-              <button onClick={handleSkip} className="text-gray-400 hover:text-gray-600 text-xs font-semibold transition-colors">Complete Later</button>
-            )}
           </div>
 
           {isCompany ? renderCompanyStep() : renderIndividualStep()}

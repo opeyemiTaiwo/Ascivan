@@ -5,7 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../firebase/config';
 import Navbar from '../../components/Navbar';
-import { collection, query, orderBy, onSnapshot, where } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, where, doc, getDoc } from 'firebase/firestore';
 
 const industryTracks = [
   { value: 'healthcare', label: 'Healthcare / Medical' },
@@ -41,17 +41,25 @@ const formatTimeline = (t) => ({
 
 const ProjectsListing = () => {
   const { currentUser } = useAuth();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (!currentUser) { setIsAdmin(false); return; }
+    getDoc(doc(db, 'users', currentUser.uid))
+      .then(snap => setIsAdmin(snap.exists() && snap.data().role === 'admin'))
+      .catch(() => setIsAdmin(false));
+  }, [currentUser]);
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filters, setFilters] = useState({ industryTrack: '', timeline: '', pricingType: '' });
+  const [filters, setFilters] = useState({ industryTrack: '', timeline: '' });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const q = query(
       collection(db, 'projects'),
-      where('status', 'in', ['active', 'awaiting_payment_confirmation']),
+      where('status', 'in', ['active', 'lead_recruitment']),
       orderBy('createdAt', 'desc')
     );
     const unsub = onSnapshot(q, (snap) => {
@@ -78,13 +86,12 @@ const ProjectsListing = () => {
     }
     if (filters.industryTrack) result = result.filter(p => p.industryTrack === filters.industryTrack);
     if (filters.timeline) result = result.filter(p => p.timeline === filters.timeline);
-    if (filters.pricingType) result = result.filter(p => p.pricingType === filters.pricingType);
     setFilteredProjects(result);
   }, [searchQuery, filters, projects]);
 
   const clearFilters = () => {
     setSearchQuery('');
-    setFilters({ industryTrack: '', timeline: '', pricingType: '' });
+    setFilters({ industryTrack: '', timeline: '' });
   };
 
   const selectClass = "bg-gray-100 border border-gray-200 rounded-xl px-3 py-2.5 min-h-[44px] text-gray-900 text-sm focus:border-blue-500 focus:outline-none transition-all appearance-none";
@@ -104,10 +111,18 @@ const ProjectsListing = () => {
                 </h1>
                 <p className="text-gray-400 text-sm mt-1">{filteredProjects.length} active {filteredProjects.length === 1 ? 'project' : 'projects'}</p>
               </div>
-              <Link to="/projects/submit"
-                className="inline-flex items-center justify-center px-5 py-2.5 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-all shadow-lg">
-                Post a Project
-              </Link>
+              <div className="flex items-center gap-2">
+                {isAdmin && (
+                  <Link to="/projects/generate"
+                    className="inline-flex items-center justify-center px-4 py-2.5 min-h-[44px] bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl text-sm transition-all">
+                    Generate
+                  </Link>
+                )}
+                <Link to="/projects/submit"
+                  className="inline-flex items-center justify-center px-5 py-2.5 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-all shadow-lg">
+                  Post a Project
+                </Link>
+              </div>
             </div>
 
             {/* Search + Filters */}
@@ -132,12 +147,7 @@ const ProjectsListing = () => {
                   <option value="6-months-plus">6+ Months</option>
                   <option value="flexible">Flexible</option>
                 </select>
-                <select value={filters.pricingType} onChange={e => setFilters(p => ({ ...p, pricingType: e.target.value }))} className={selectClass}>
-                  <option value="">Free & Paid</option>
-                  <option value="free">Free</option>
-                  <option value="paid">Paid</option>
-                </select>
-                {(searchQuery || filters.industryTrack || filters.timeline || filters.pricingType) && (
+                {(searchQuery || filters.industryTrack || filters.timeline) && (
                   <button onClick={clearFilters} className="text-blue-600 hover:text-blue-500 text-xs font-semibold px-3 py-2 transition-colors">Clear All</button>
                 )}
               </div>
@@ -168,8 +178,8 @@ const ProjectsListing = () => {
                   >
                     <div className="flex items-start justify-between gap-3 mb-3">
                       <h3 className="text-gray-900 font-bold text-sm sm:text-base line-clamp-2">{project.projectTitle}</h3>
-                      <span className={`flex-shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold ${project.pricingType === 'paid' ? 'bg-blue-600/20 text-blue-500 border border-blue-600/30' : 'bg-blue-600/20 text-blue-500 border border-blue-600/30'}`}>
-                        {project.pricingType === 'paid' ? `$${project.totalBudget?.toLocaleString()}` : 'Free'}
+                      <span className={`flex-shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold border ${project.status === 'lead_recruitment' ? 'bg-amber-100 text-amber-700 border-amber-200' : 'bg-blue-600/20 text-blue-500 border-blue-600/30'}`}>
+                        {project.status === 'lead_recruitment' ? 'Needs a Lead' : 'Collaborative'}
                       </span>
                     </div>
 
@@ -178,11 +188,15 @@ const ProjectsListing = () => {
                     <div className="flex flex-wrap gap-1.5 mb-3">
                       <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-600 text-[10px] font-medium">{getIndustryLabel(project.industryTrack)}</span>
                       <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-600 text-[10px] font-medium">{formatTimeline(project.timeline)}</span>
-                      <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-600 text-[10px] font-medium">{project.maxTeamSize || 0} team members</span>
+                      {project.status === 'lead_recruitment' ? (
+                        <span className="px-2 py-0.5 bg-amber-50 text-amber-700 rounded-md text-[10px] font-medium">Apply to lead</span>
+                      ) : (
+                        <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-600 text-[10px] font-medium">{project.maxTeamSize || 0} team members</span>
+                      )}
                     </div>
 
                     <div className="flex items-center justify-between text-[10px] text-gray-500">
-                      <span>Posted by {project.contactName || 'Project Owner'}</span>
+                      <span>{project.status === 'lead_recruitment' ? 'Auto-generated by Loomiqe' : `Posted by ${project.contactName || 'Project Owner'}`}</span>
                       <span>{project.createdAt?.toDate ? new Date(project.createdAt.toDate()).toLocaleDateString() : ''}</span>
                     </div>
                   </div>

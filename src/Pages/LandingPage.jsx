@@ -50,7 +50,7 @@ const LandingPage = () => {
   const features = [
     {
       title: 'Real-World Projects',
-      desc: 'Join or post collaborative tech projects — free or paid. Work with real teams, build real products, and gain experience that matters to employers.',
+      desc: 'Join or post collaborative tech projects and build real products with real teams, from start to finish — the kind of hands-on experience employers actually look for.',
     },
     {
       title: 'TechTalent Badges',
@@ -58,7 +58,7 @@ const LandingPage = () => {
     },
     {
       title: 'Talent Board',
-      desc: 'Premium members are showcased to recruiters and companies looking for verified talent. Your badges and project history speak for themselves.',
+      desc: 'Members with verified work are listed for recruiters and companies looking for proven talent. Your badges and project history speak for themselves.',
     },
     {
       title: 'Community & Workspace',
@@ -84,8 +84,8 @@ const LandingPage = () => {
 
   const steps = [
     { num: '01', title: 'Create Your Profile', desc: 'Sign in with Google, choose your skill track, and set your experience level. Ready in under a minute.' },
-    { num: '02', title: 'Join or Post Projects', desc: 'Browse open projects or post your own. Apply with your portfolio and get matched with teams that need your skills.' },
-    { num: '03', title: 'Earn Badges & Grow', desc: 'Complete projects to earn TechTalent Badges. Build a verified portfolio that proves your skills to recruiters and collaborators.' },
+    { num: '02', title: 'Build Real Products', desc: 'Join or post collaborative projects and ship real products with a team, start to finish — gaining experience that counts.' },
+    { num: '03', title: 'Earn Badges & Get Discovered', desc: 'Complete projects to earn TechTalent Badges and a verified portfolio — then get found by recruiters hiring for remote and onsite roles.' },
   ];
 
   return (
@@ -165,7 +165,7 @@ const LandingPage = () => {
           <div id="hero-badge" data-animate className={`fade-up inline-block mb-6 ${isVisible('hero-badge') ? 'visible' : ''}`}>
             <span className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-full px-4 py-2">
               <span className="w-2 h-2 rounded-full bg-blue-500" />
-              <span className="text-blue-700 text-sm font-medium">Built for tech professionals</span>
+              <span className="text-blue-700 text-sm font-medium">Build real experience. Get discovered.</span>
             </span>
           </div>
 
@@ -176,7 +176,7 @@ const LandingPage = () => {
           </h1>
 
           <p id="hero-desc" data-animate className={`fade-up delay-2 text-gray-600 text-lg sm:text-xl max-w-2xl mx-auto mb-10 font-normal leading-relaxed ${isVisible('hero-desc') ? 'visible' : ''}`}>
-            Loomiqe connects tech professionals with real-world projects, verified skill badges, and a community built to accelerate your career — whether you are just starting out or leading at the expert level.
+            Loomiqe <span className="text-gray-400 font-normal">(say: "loo-meek")</span> is where you gain real-world experience — building real products with real teams, from start to finish. Earn verified skill badges, build a portfolio that proves what you can do, and get discovered by recruiters for remote and onsite roles.
           </p>
 
           <div id="hero-cta" data-animate className={`fade-up delay-3 flex flex-col sm:flex-row items-center justify-center gap-4 ${isVisible('hero-cta') ? 'visible' : ''}`}>
@@ -221,7 +221,7 @@ const LandingPage = () => {
           <p className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-3">Everything You Need</p>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-800 text-gray-900 mb-4">Accelerate Your Tech Career</h2>
           <p className="text-gray-500 max-w-xl mx-auto text-base">
-            From project-based learning to verified credentials, Loomiqe gives beginners and experts every tool they need to grow.
+            From real collaborative projects to verified credentials and recruiter visibility, Loomiqe gives you everything you need to prove your skills and get hired.
           </p>
         </div>
 
@@ -302,7 +302,7 @@ const LandingPage = () => {
         <div id="cta" data-animate className={`fade-up max-w-2xl mx-auto px-4 sm:px-6 text-center ${isVisible('cta') ? 'visible' : ''}`}>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-800 text-gray-900 leading-tight mb-6">Your career starts here.</h2>
           <p className="text-gray-500 text-lg mb-10 leading-relaxed">
-            Join tech professionals who are building their portfolios, earning verified badges, and advancing their careers through real project experience.
+            Build real experience, earn verified badges, and get discovered by recruiters — through real product work, wherever you are in the world.
           </p>
           <button
             onClick={handleSignIn}

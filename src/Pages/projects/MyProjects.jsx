@@ -250,8 +250,8 @@ const MyProjects = () => {
                           <p className="text-blue-500 text-xs font-semibold mb-1">{formatTimeline(project.timeline)}</p>
                         )}
                         <div className="flex flex-wrap items-center gap-3 mt-2 text-gray-500 text-xs">
-                          <span className={`font-bold ${project.pricingType === 'paid' ? 'text-blue-500' : 'text-blue-500'}`}>
-                            {project.pricingType === 'paid' ? `$${project.totalBudget?.toLocaleString()}` : 'Free'}
+                          <span className="font-bold text-blue-500">
+                            Collaborative
                           </span>
                           {project.createdAt?.toDate && (
                             <span>Posted {new Date(project.createdAt.toDate()).toLocaleDateString()}</span>

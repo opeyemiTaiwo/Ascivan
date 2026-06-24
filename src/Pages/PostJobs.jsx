@@ -26,8 +26,6 @@ const PostJobs = () => {
     jobType: '',
     salaryRange: '',
     location: '',
-    visaCompliant: false,
-    sponsorshipAvailable: false,
     expirationOption: '30',
     customExpirationDate: '',
   });
@@ -158,8 +156,6 @@ const PostJobs = () => {
         companyName: formData.companyName.trim() || null,
         salaryRange: formData.salaryRange.trim() || null,
         location: formData.location.trim() || null,
-        visaCompliant: formData.visaCompliant,
-        sponsorshipAvailable: formData.sponsorshipAvailable,
         posterName: formData.posterName.trim(),
         posterEmail: formData.posterEmail.trim(),
         posterPhone: formData.posterPhone.trim() || null,
@@ -230,7 +226,7 @@ const PostJobs = () => {
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-2 sm:mb-3">
                 Post a <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Job</span>
               </h1>
-              <p className="text-gray-600 text-base">Reach international students looking for work opportunities</p>
+              <p className="text-gray-600 text-base">Reach a global pool of verified tech talent ready for remote and onsite roles</p>
             </section>
 
             {/* Form */}
@@ -282,26 +278,6 @@ const PostJobs = () => {
                       <label className={labelClass}>Salary / Compensation</label>
                       <input type="text" name="salaryRange" value={formData.salaryRange} onChange={handleInputChange} className={inputClass} placeholder="e.g., $50k–$70k / year" />
                     </div>
-                  </div>
-
-                  {/* Visa / Sponsorship */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
-                    <label className="flex items-center gap-3 cursor-pointer p-3 bg-white/5 rounded-xl border border-white/10 hover:border-blue-500/30 transition-all">
-                      <input type="checkbox" name="visaCompliant" checked={formData.visaCompliant} onChange={handleInputChange}
-                        className="w-5 h-5 rounded border-white/30 bg-white/10 text-blue-500 focus:ring-blue-400 cursor-pointer" />
-                      <div>
-                        <div className="text-white text-sm font-semibold">🛂 Visa-Compliant</div>
-                        <div className="text-gray-400 text-xs">Open to F-1, OPT, H-1B or similar</div>
-                      </div>
-                    </label>
-                    <label className="flex items-center gap-3 cursor-pointer p-3 bg-white/5 rounded-xl border border-white/10 hover:border-blue-500/30 transition-all">
-                      <input type="checkbox" name="sponsorshipAvailable" checked={formData.sponsorshipAvailable} onChange={handleInputChange}
-                        className="w-5 h-5 rounded border-white/30 bg-white/10 text-blue-500 focus:ring-blue-400 cursor-pointer" />
-                      <div>
-                        <div className="text-white text-sm font-semibold">📋 Sponsorship Available</div>
-                        <div className="text-gray-400 text-xs">Employer willing to sponsor visa</div>
-                      </div>
-                    </label>
                   </div>
 
                   <div>

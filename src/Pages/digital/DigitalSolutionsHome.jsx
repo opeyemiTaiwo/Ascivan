@@ -150,7 +150,7 @@ const SERVICES = [
 const FAQs = [
   {
     question: "What does Loomiqe do?",
-    answer: "Loomiqe builds cutting-edge technology solutions for businesses. We transform web and mobile applications into intelligent systems using AI, automation, and data-driven architecture. We also run an all-in-one platform for international students — explore it from our homepage."
+    answer: "Loomiqe builds cutting-edge technology solutions for businesses. We transform web and mobile applications into intelligent systems using AI, automation, and data-driven architecture. We also run a platform where people build real-world experience through collaborative projects and get discovered by recruiters — explore it from our homepage."
   },
   {
     question: "How is Loomiqe different from other development companies?",
@@ -178,7 +178,7 @@ const FAQs = [
   },
   {
     question: "Do you offer career guidance or tech training?",
-    answer: "Yes! Our student platform helps international students find jobs, housing, financial aid, and build a professional network. Head to our homepage to get started for free."
+    answer: "Yes! Our platform helps people build real-world experience through collaborative projects, earn verified credentials, and get discovered by recruiters for remote and onsite roles. Head to our homepage to get started for free."
   },
   {
     question: "Will I be working with real people or just AI?",

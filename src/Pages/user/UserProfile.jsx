@@ -243,15 +243,29 @@ const UserProfile = () => {
         {/* Badges Section */}
         {userBadges.length > 0 && (
           <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Badges Earned</h3>
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+            <h3 className="text-lg font-bold text-gray-900 mb-1">Badges Earned</h3>
+            <p className="text-gray-400 text-xs mb-4">Each badge shows the level reached and the contribution rating given by the project owner — verified proof of real collaborative work.</p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {userBadges.map((badge, i) => {
                 const bd = badgeData.find(b => b.id === badge.id || b.title === badge.title || b.id === badge.id?.toLowerCase());
+                const contribStyle = {
+                  excellent: 'bg-green-100 text-green-700',
+                  good: 'bg-blue-100 text-blue-700',
+                  fair: 'bg-amber-100 text-amber-700',
+                }[badge.contribution] || 'bg-gray-100 text-gray-600';
                 return (
-                  <div key={i} className="text-center p-2 bg-gray-50 rounded-lg border border-gray-100">
+                  <div key={i} className="text-center p-3 bg-gray-50 rounded-lg border border-gray-100">
                     <img src={bd?.image || '/Images/TechDev.png'} alt={badge.title || badge.id} className="w-10 h-10 mx-auto mb-1" />
                     <p className="text-xs text-gray-900 font-medium">{bd?.label || badge.title || badge.id}</p>
                     <p className="text-xs text-gray-400">{badge.level || 'Novice'}</p>
+                    {badge.contribution && (
+                      <span className={`inline-block mt-1 text-[10px] font-semibold px-2 py-0.5 rounded-full capitalize ${contribStyle}`}>
+                        {badge.contribution}
+                      </span>
+                    )}
+                    {badge.projectTitle && (
+                      <p className="text-[10px] text-gray-400 mt-1 truncate" title={badge.projectTitle}>{badge.projectTitle}</p>
+                    )}
                   </div>
                 );
               })}
@@ -275,10 +289,10 @@ const UserProfile = () => {
                 <p className="text-gray-900 font-medium text-sm">{skillTrackLabels[profile.primarySkillTrack] || profile.primarySkillTrack}</p>
               </div>
             )}
-            {(profile.city || profile.state) && (
+            {(profile.country || profile.city || profile.state) && (
               <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
                 <p className="text-gray-500 text-xs uppercase tracking-wider mb-0.5">Location</p>
-                <p className="text-gray-900 font-medium text-sm">{[profile.city, profile.state].filter(Boolean).join(', ')}</p>
+                <p className="text-gray-900 font-medium text-sm">{[profile.city, profile.state, profile.country].filter(Boolean).join(', ')}</p>
               </div>
             )}
             {profile.linkedinUrl && (
@@ -317,7 +331,7 @@ const UserProfile = () => {
           </div>
 
           {/* Empty state */}
-          {!profile.experienceLevel && !profile.primarySkillTrack && !profile.city && !profile.linkedinUrl && !profile.githubUrl && !profile.portfolioUrl && (
+          {!profile.experienceLevel && !profile.primarySkillTrack && !profile.country && !profile.city && !profile.linkedinUrl && !profile.githubUrl && !profile.portfolioUrl && (
             <div className="text-center py-6">
               <p className="text-gray-500 text-sm">
                 {isOwnProfile

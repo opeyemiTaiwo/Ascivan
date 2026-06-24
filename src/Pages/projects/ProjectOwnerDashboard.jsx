@@ -223,7 +223,6 @@ const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove, onTo
   const isCompleted = project.status === 'completed';
   const pendingApps = (project.applications || []).filter(a => a.status === 'submitted');
   const approvedApps = (project.applications || []).filter(a => a.status === 'approved');
-  const isPaid = project.pricingType === 'paid';
 
   return (
     <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-6">
@@ -234,8 +233,8 @@ const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove, onTo
           <div className="flex flex-wrap gap-2 mt-2">
             <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-600 text-[10px] font-medium">{getIndustryLabel(project.industryTrack)}</span>
             <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-600 text-[10px] font-medium">{formatTimeline(project.timeline)}</span>
-            <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${isPaid ? 'bg-blue-600/20 text-blue-500' : 'bg-blue-600/20 text-blue-500'}`}>
-              {isPaid ? `$${project.totalBudget?.toLocaleString()}` : 'Free'}
+            <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-600/20 text-blue-500">
+              Collaborative
             </span>
           </div>
         </div>

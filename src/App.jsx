@@ -32,6 +32,8 @@ const PrivacyPolicy = lazy(() => import('./Pages/PrivacyPolicy'));
 const ProjectsListing = lazy(() => import('./Pages/projects/ProjectsListing'));
 const ProjectSubmission = lazy(() => import('./Pages/projects/ProjectSubmission'));
 const ProjectDetail = lazy(() => import('./Pages/projects/ProjectDetail'));
+const ProjectSetup = lazy(() => import('./Pages/projects/ProjectSetup'));
+const GenerateProject = lazy(() => import('./Pages/admin/GenerateProject'));
 const ProjectOwnerDashboard = lazy(() => import('./Pages/projects/ProjectOwnerDashboard'));
 const ProjectCompletion = lazy(() => import('./Pages/projects/ProjectCompletion'));
 const MyProjects = lazy(() => import('./Pages/projects/MyProjects'));
@@ -125,7 +127,9 @@ function App() {
                 <Route path="/post/:postId" element={<SidebarRoute><SinglePost /></SidebarRoute>} />
 
                 <Route path="/projects" element={<SidebarRoute><ProjectsListing /></SidebarRoute>} />
+                <Route path="/projects/generate" element={<SidebarRoute><GenerateProject /></SidebarRoute>} />
                 <Route path="/projects/submit" element={<SidebarRoute><ProjectSubmission /></SidebarRoute>} />
+                <Route path="/projects/:projectId/setup" element={<SidebarRoute><ProjectSetup /></SidebarRoute>} />
                 <Route path="/projects/owner-dashboard" element={<SidebarRoute><ProjectOwnerDashboard /></SidebarRoute>} />
                 <Route path="/projects/my-projects" element={<SidebarRoute><MyProjects /></SidebarRoute>} />
                 <Route path="/projects/:projectId/complete" element={<SidebarRoute><ProjectCompletion /></SidebarRoute>} />

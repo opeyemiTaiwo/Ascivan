@@ -51,7 +51,7 @@ const PWAInstallPrompt = () => {
               Install Loomiqe
             </h3>
             <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 leading-relaxed">
-              Get quick access to jobs, housing, finance, and home feed from your home screen.
+              Get quick access to projects, jobs, and your home feed from your home screen.
             </p>
 
             {/* Action Buttons */}

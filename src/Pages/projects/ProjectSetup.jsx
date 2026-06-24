@@ -1,0 +1,224 @@
+// src/Pages/projects/ProjectSetup.jsx
+// The confirmed lead refines the auto-generated project (title, description, goals,
+// industry, and team roles) and then opens it for applications. Only the project's
+// confirmed lead (owner) can access this. The lead's role is Project Lead only —
+// they manage; others build. Opening flips status from 'setup' to 'active'.
+
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../../firebase/config';
+import { toast } from 'react-toastify';
+
+const industryTracks = [
+  'healthcare', 'finance', 'education', 'ecommerce', 'entertainment', 'government',
+  'technology', 'cybersecurity', 'transportation', 'realestate', 'energy',
+  'agriculture', 'manufacturing', 'legal', 'nonprofit', 'travel', 'sports',
+  'food', 'fashion', 'construction', 'marketing',
+];
+// Contributor roles only — the lead is the lead; they don't take a building role.
+const roleOptions = ['Developer', 'Designer', 'QA Tester', 'Mentor', 'Security Specialist', 'Data Analyst', 'Content Writer'];
+const experienceLevels = ['any-level', 'beginner', 'intermediate', 'advanced'];
+
+const inputClass = "w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 text-sm focus:border-blue-500 focus:outline-none transition-all";
+const labelClass = "block text-gray-700 font-semibold mb-2 text-sm";
+
+const ProjectSetup = () => {
+  const { projectId } = useParams();
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [authorized, setAuthorized] = useState(false);
+  const [form, setForm] = useState({ projectTitle: '', projectDescription: '', projectGoals: '', industryTrack: 'technology' });
+  const [roles, setRoles] = useState([]);
+
+  useEffect(() => {
+    if (!currentUser) { navigate('/login', { replace: true }); return; }
+    const load = async () => {
+      try {
+        const snap = await getDoc(doc(db, 'projects', projectId));
+        if (!snap.exists()) { toast.error('Project not found'); navigate('/projects', { replace: true }); return; }
+        const data = snap.data();
+
+        // Only the confirmed lead can set up the project
+        if (data.submitterId !== currentUser.uid) {
+          toast.error('Only the project lead can set this up.');
+          navigate(`/projects/${projectId}`, { replace: true });
+          return;
+        }
+        if (data.status === 'active') {
+          // Already opened — go manage it
+          navigate(`/projects/${projectId}`, { replace: true });
+          return;
+        }
+
+        setForm({
+          projectTitle: data.projectTitle || '',
+          projectDescription: data.projectDescription || '',
+          projectGoals: data.projectGoals || '',
+          industryTrack: data.industryTrack || 'technology',
+        });
+        // Pre-fill roles from the generator's proposal
+        const proposed = Array.isArray(data.proposedRoles) ? data.proposedRoles : [];
+        setRoles(proposed.length ? proposed.map(r => ({
+          role: roleOptions.includes(r.role) ? r.role : 'Developer',
+          skills: r.skills || '',
+          count: r.count || 1,
+          experienceLevel: experienceLevels.includes(r.experienceLevel) ? r.experienceLevel : 'any-level',
+          description: r.description || '',
+        })) : [{ role: 'Developer', skills: '', count: 1, experienceLevel: 'any-level', description: '' }]);
+        setAuthorized(true);
+      } catch (e) {
+        console.error(e);
+        toast.error('Could not load the project.');
+        navigate('/projects', { replace: true });
+      }
+      setLoading(false);
+    };
+    load();
+  }, [currentUser, projectId, navigate]);
+
+  const updateRole = (i, field, value) => setRoles(prev => prev.map((r, idx) => idx === i ? { ...r, [field]: value } : r));
+  const addRole = () => { if (roles.length < 8) setRoles(prev => [...prev, { role: 'Developer', skills: '', count: 1, experienceLevel: 'any-level', description: '' }]); };
+  const removeRole = (i) => setRoles(prev => prev.filter((_, idx) => idx !== i));
+
+  const handleOpen = async () => {
+    if (!form.projectTitle.trim()) { toast.error('Title is required'); return; }
+    if (!form.projectDescription.trim()) { toast.error('Description is required'); return; }
+    const valid = roles.filter(r => r.role && (parseInt(r.count, 10) || 0) > 0);
+    if (valid.length === 0) { toast.error('Add at least one team role'); return; }
+
+    setSaving(true);
+    try {
+      const teamRoles = valid.map(r => ({
+        role: r.role,
+        skills: (r.skills || '').trim(),
+        count: parseInt(r.count, 10) || 1,
+        experienceLevel: r.experienceLevel || 'any-level',
+        description: (r.description || '').trim(),
+        detailsLink: '',
+      }));
+      const maxTeamSize = teamRoles.reduce((s, r) => s + r.count, 0);
+
+      await updateDoc(doc(db, 'projects', projectId), {
+        projectTitle: form.projectTitle.trim(),
+        projectDescription: form.projectDescription.trim(),
+        projectGoals: form.projectGoals.trim() || null,
+        industryTrack: form.industryTrack,
+        teamRoles,
+        maxTeamSize,
+        status: 'active',
+        openedAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+      toast.success('Project is now open for applications!');
+      navigate(`/projects/${projectId}`);
+    } catch (e) {
+      console.error(e);
+      toast.error('Could not open the project.');
+    }
+    setSaving(false);
+  };
+
+  const handleSaveExit = async () => {
+    setSaving(true);
+    try {
+      const teamRoles = roles
+        .filter(r => r.role && (parseInt(r.count, 10) || 0) > 0)
+        .map(r => ({
+          role: r.role,
+          skills: (r.skills || '').trim(),
+          count: parseInt(r.count, 10) || 1,
+          experienceLevel: r.experienceLevel || 'any-level',
+          description: (r.description || '').trim(),
+          detailsLink: '',
+        }));
+      await updateDoc(doc(db, 'projects', projectId), {
+        projectTitle: form.projectTitle.trim(),
+        projectDescription: form.projectDescription.trim(),
+        projectGoals: form.projectGoals.trim() || null,
+        industryTrack: form.industryTrack,
+        proposedRoles: teamRoles, // keep draft in proposedRoles until opened
+        updatedAt: serverTimestamp(),
+      });
+      toast.success('Progress saved. Open it when you\u2019re ready.');
+      navigate(`/projects/${projectId}`);
+    } catch (e) {
+      console.error(e);
+      toast.error('Could not save.');
+    }
+    setSaving(false);
+  };
+
+  if (loading) return <div className="flex items-center justify-center py-20"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div></div>;
+  if (!authorized) return null;
+
+  return (
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">Set up your project</h1>
+      <p className="text-gray-500 text-sm mb-6">You're the lead. Refine the idea, decide what roles your team needs, then open it for others to apply. You manage the project — team members fill the building roles below.</p>
+
+      <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-6 space-y-5">
+        <div>
+          <label className={labelClass}>Project Title *</label>
+          <input type="text" value={form.projectTitle} onChange={e => setForm(p => ({ ...p, projectTitle: e.target.value }))} className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>Description *</label>
+          <textarea rows={4} value={form.projectDescription} onChange={e => setForm(p => ({ ...p, projectDescription: e.target.value }))} className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>Goals</label>
+          <textarea rows={2} value={form.projectGoals} onChange={e => setForm(p => ({ ...p, projectGoals: e.target.value }))} className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>Industry</label>
+          <select value={form.industryTrack} onChange={e => setForm(p => ({ ...p, industryTrack: e.target.value }))} className={inputClass + ' appearance-none'}>
+            {industryTracks.map(t => <option key={t} value={t} className="capitalize">{t}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-6 space-y-4 mt-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-bold text-gray-900">Team Roles</h2>
+          <button onClick={addRole} className="text-blue-600 text-sm font-semibold">+ Add role</button>
+        </div>
+        <p className="text-gray-500 text-xs -mt-2">Intermediate and Advanced roles can only be filled by members who've earned the matching badge level in that track. Use Beginner or Any Level for roles open to newcomers.</p>
+
+        {roles.map((r, i) => (
+          <div key={i} className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-gray-400 text-xs font-semibold">Role {i + 1}</span>
+              {roles.length > 1 && <button onClick={() => removeRole(i)} className="text-red-500 text-xs font-semibold">Remove</button>}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+              <select value={r.role} onChange={e => updateRole(i, 'role', e.target.value)} className={inputClass + ' appearance-none'}>
+                {roleOptions.map(o => <option key={o} value={o}>{o}</option>)}
+              </select>
+              <select value={r.experienceLevel} onChange={e => updateRole(i, 'experienceLevel', e.target.value)} className={inputClass + ' appearance-none capitalize'}>
+                {experienceLevels.map(l => <option key={l} value={l}>{l === 'any-level' ? 'Any Level' : l.charAt(0).toUpperCase() + l.slice(1)}</option>)}
+              </select>
+              <input type="number" min="1" max="10" value={r.count} onChange={e => updateRole(i, 'count', e.target.value)} className={inputClass} placeholder="Count" />
+              <input type="text" value={r.skills} onChange={e => updateRole(i, 'skills', e.target.value)} className={inputClass} placeholder="Skills" />
+            </div>
+            <input type="text" value={r.description} onChange={e => updateRole(i, 'description', e.target.value)} className={inputClass} placeholder="What this role does (optional)" />
+          </div>
+        ))}
+      </div>
+
+      <div className="flex gap-3 mt-6">
+        <button onClick={handleOpen} disabled={saving} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-6 py-3 rounded-lg transition-all disabled:opacity-50">
+          {saving ? 'Opening…' : 'Open for Applications'}
+        </button>
+        <button onClick={handleSaveExit} disabled={saving} className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-sm px-5 py-3 rounded-lg transition-all">
+          Save & Exit
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default ProjectSetup;

@@ -24,7 +24,7 @@ const Settings = () => {
   const [profileData, setProfileData] = useState(null);
   const [form, setForm] = useState({
     displayName: '', specialization: '', experienceLevel: '', primarySkillTrack: '',
-    city: '', state: '', portfolioUrl: '', linkedinUrl: '', githubUrl: '', emailPublic: false,
+    country: '', city: '', state: '', portfolioUrl: '', linkedinUrl: '', githubUrl: '', emailPublic: false,
   });
 
   // Delete account state
@@ -45,6 +45,7 @@ const Settings = () => {
             specialization: data.specialization || '',
             experienceLevel: data.experienceLevel || '',
             primarySkillTrack: data.primarySkillTrack || '',
+            country: data.country || '',
             city: data.city || '',
             state: data.state || '',
             portfolioUrl: data.portfolioUrl || '',
@@ -63,19 +64,32 @@ const Settings = () => {
 
   const handleSaveProfile = async () => {
     if (!form.displayName.trim()) { toast.error('Name is required'); return; }
+    if (!form.country.trim()) { toast.error('Current country is required'); return; }
+    // Individuals must provide the fields required to create/join projects
+    if (!profileData?.isCompany) {
+      if (!form.experienceLevel) { toast.error('Experience level is required'); return; }
+      if (!form.linkedinUrl.trim()) { toast.error('LinkedIn URL is required'); return; }
+    }
     setSaving(true);
     try {
+      const hasInterests = Array.isArray(profileData?.interests) && profileData.interests.length > 0;
+      const requiredCommon = !!form.displayName.trim() && !!form.country.trim() && hasInterests;
       await updateDoc(doc(db, 'users', currentUser.uid), {
         displayName: form.displayName.trim(),
         specialization: form.specialization.trim() || null,
         experienceLevel: form.experienceLevel || null,
         primarySkillTrack: form.primarySkillTrack || null,
+        country: form.country.trim(),
         city: form.city.trim() || null,
         state: form.state.trim() || null,
         portfolioUrl: form.portfolioUrl.trim() || null,
         linkedinUrl: form.linkedinUrl.trim() || null,
         githubUrl: form.githubUrl.trim() || null,
         emailPublic: form.emailPublic,
+        // Mark complete when the required set is satisfied
+        profileComplete: profileData?.isCompany
+          ? requiredCommon
+          : (requiredCommon && !!form.experienceLevel && !!form.linkedinUrl.trim()),
       });
       toast.success('Profile updated');
     } catch (e) {
@@ -154,7 +168,7 @@ const Settings = () => {
               <input type="text" value={form.specialization} onChange={e => setForm(p => ({ ...p, specialization: e.target.value }))} className={inputCls} placeholder="e.g., React, Python, AWS" />
             </div>
             <div>
-              <label className={labelCls}>Experience Level</label>
+              <label className={labelCls}>Experience Level{!profileData?.isCompany ? ' *' : ''}</label>
               <select value={form.experienceLevel} onChange={e => setForm(p => ({ ...p, experienceLevel: e.target.value }))} className={inputCls}>
                 <option value="">Select</option>
                 <option value="beginner">Beginner</option>
@@ -163,18 +177,22 @@ const Settings = () => {
                 <option value="expert">Expert</option>
               </select>
             </div>
+            <div>
+              <label className={labelCls}>Current Country *</label>
+              <input type="text" value={form.country} onChange={e => setForm(p => ({ ...p, country: e.target.value }))} className={inputCls} placeholder="e.g., Nigeria, India, United States" />
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className={labelCls}>City</label>
-                <input type="text" value={form.city} onChange={e => setForm(p => ({ ...p, city: e.target.value }))} className={inputCls} placeholder="e.g., Baltimore" />
+                <input type="text" value={form.city} onChange={e => setForm(p => ({ ...p, city: e.target.value }))} className={inputCls} placeholder="e.g., Lagos" />
               </div>
               <div>
                 <label className={labelCls}>State</label>
-                <input type="text" value={form.state} onChange={e => setForm(p => ({ ...p, state: e.target.value }))} className={inputCls} placeholder="e.g., MD" />
+                <input type="text" value={form.state} onChange={e => setForm(p => ({ ...p, state: e.target.value }))} className={inputCls} placeholder="e.g., Lagos State" />
               </div>
             </div>
             <div>
-              <label className={labelCls}>LinkedIn URL</label>
+              <label className={labelCls}>LinkedIn URL{!profileData?.isCompany ? ' *' : ''}</label>
               <input type="url" value={form.linkedinUrl} onChange={e => setForm(p => ({ ...p, linkedinUrl: e.target.value }))} className={inputCls} placeholder="https://linkedin.com/in/..." />
             </div>
             <div>
@@ -286,7 +304,7 @@ const MembershipTab = ({ profileData, navigate }) => {
         <p className="text-gray-500 text-sm mb-4">Everything you need to start building your tech career through real project experience.</p>
         <ul className="space-y-1 mb-6">
           <FeatureItem label="Unlimited free projects" detail="Create or join as many free projects as you want. No limits, ever." />
-          <FeatureItem label="Up to 3 paid projects per year" detail="Complete up to 3 paid projects annually. Upgrade to Premium for unlimited." />
+          <FeatureItem label="Unlimited collaborative projects" detail="Join real product-build projects in any tech field and earn verified badges — no caps, no fees, ever." />
           <FeatureItem label="All 6 TechTalent Badge tracks" detail="Earn badges across all tracks: TechDev, TechQA, TechMO, TechLeads, TechArchs, and TechGuard." />
           <FeatureItem label="Community, messaging, and workspace" detail="Post in the community feed, message any member, and collaborate in project workspaces." />
           <FeatureItem label="Certificates on project completion" detail="Receive a certificate for every project you complete, documenting your role and contributions." />
@@ -309,9 +327,9 @@ const MembershipTab = ({ profileData, navigate }) => {
         <p className="text-gray-500 text-sm mb-4">Verified members. Trusted collaborations. Unlimited opportunities.</p>
         <ul className="space-y-1 mb-4">
           <FeatureItem label="Everything in Basic" />
-          <FeatureItem color="orange" label="Unlimited paid projects" detail="Post and apply to paid projects with no yearly cap. Take on as many paid collaborations as you can handle." />
+          <FeatureItem color="orange" label="Priority Talent Board ranking" detail="Appear higher when recruiters search the Talent Board, so your verified work gets seen first." />
           <FeatureItem color="orange" label="Verified Premium Badge" detail="An orange PRO badge displayed on your profile, directory listing, and across the platform. It tells project owners, teammates, and recruiters that you're a verified, committed professional." />
-          <FeatureItem color="orange" label="Talent Board visibility" detail="Get listed on the Talent Board where recruiters and companies actively search for professionals to hire. Only Premium members appear here." />
+          <FeatureItem color="orange" label="Direct recruiter outreach" detail="Recruiters can contact you directly about roles — remote or onsite — based on your verified project work." />
           <FeatureItem color="orange" label="Priority support" detail="Get faster responses and dedicated assistance from the Loomiqe team." />
         </ul>
         <p className="text-gray-400 text-xs mb-4 leading-relaxed">Your Premium badge tells everyone on Loomiqe that you're invested, accountable, and serious about your work.</p>
@@ -359,11 +377,10 @@ const MembershipTab = ({ profileData, navigate }) => {
           <div className="text-gray-500 font-semibold pb-2 border-b border-gray-200">Feature</div>
           <div className="text-gray-500 font-semibold text-center pb-2 border-b border-gray-200">Basic</div>
           <div className="text-gray-500 font-semibold text-center pb-2 border-b border-gray-200">Premium</div>
-          <div className="text-gray-700">Free projects</div><div className="text-center text-gray-900">Unlimited</div><div className="text-center text-gray-900">Unlimited</div>
-          <div className="text-gray-700">Paid projects / year</div><div className="text-center text-gray-900">3</div><div className="text-center text-orange-600 font-semibold">Unlimited</div>
+          <div className="text-gray-700">Collaborative projects</div><div className="text-center text-gray-900">Unlimited</div><div className="text-center text-gray-900">Unlimited</div>
           <div className="text-gray-700">TechTalent Badges</div><div className="text-center text-gray-900">All 6</div><div className="text-center text-gray-900">All 6</div>
           <div className="text-gray-700">Premium Badge</div><div className="text-center text-gray-400">—</div><div className="text-center text-orange-600 font-semibold">Yes</div>
-          <div className="text-gray-700">Talent Board</div><div className="text-center text-gray-400">—</div><div className="text-center text-orange-600 font-semibold">Yes</div>
+          <div className="text-gray-700">Talent Board</div><div className="text-center text-gray-900">Listed</div><div className="text-center text-orange-600 font-semibold">Priority</div>
           <div className="text-gray-700">Messaging</div><div className="text-center text-gray-900">Yes</div><div className="text-center text-gray-900">Yes</div>
           <div className="text-gray-700">Priority support</div><div className="text-center text-gray-400">—</div><div className="text-center text-orange-600 font-semibold">Yes</div>
         </div>

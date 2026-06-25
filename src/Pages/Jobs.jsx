@@ -198,10 +198,10 @@ const Jobs = () => {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#000' }}>
+        <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
-            <p className="text-white">Loading Jobs...</p>
+            <p className="text-gray-600">Loading Jobs...</p>
           </div>
         </div>
       </>
@@ -213,7 +213,7 @@ const Jobs = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen overflow-x-hidden pt-20 sm:pt-24" style={{ backgroundColor: '#000' }}>
+      <div className="min-h-screen overflow-x-hidden pt-20 sm:pt-24">
         <div className="container mx-auto px-4 sm:px-6 max-w-7xl py-6 sm:py-8 md:py-10">
 
           {/* Hero */}
@@ -223,8 +223,8 @@ const Jobs = () => {
                 Welcome, {currentUser.displayName?.split(' ')[0] || 'User'}! Find your next opportunity.
               </p>
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-3 sm:mb-4">Jobs</h1>
-            <p className="text-gray-600 text-sm sm:text-base md:text-lg mb-5 sm:mb-6">Full-time · Freelancer · Internship</p>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-3 sm:mb-4">Jobs</h1>
+            <p className="text-gray-600 text-sm sm:text-base md:text-lg mb-5 sm:mb-6">Full-time · Part-time · Contract · Freelance · Internship · Virtual/Online</p>
             <button
               onClick={() => navigate('/jobs/post')}
               className="px-6 py-3 min-h-[44px] bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all shadow-lg"
@@ -235,7 +235,7 @@ const Jobs = () => {
 
           {/* Job Type Pills */}
           <section className="mb-5">
-            <div className="bg-white/5 rounded-xl border border-white/20 p-4">
+            <div className="bg-white rounded-xl border border-gray-200 p-4">
               <div className="relative">
               <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide justify-start sm:justify-center flex-nowrap sm:flex-wrap">
                 {jobTypes.map(type => (
@@ -245,21 +245,21 @@ const Jobs = () => {
                     className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all flex-shrink-0 ${
                       selectedType === type.id
                         ? 'bg-orange-500 text-white shadow-md'
-                        : 'bg-white/10 text-gray-600 hover:bg-white/20'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     }`}
                   >
                     {type.label}
                   </button>
                 ))}
               </div>
-              <div className="absolute right-0 top-0 bottom-1 w-8 bg-gradient-to-l from-white/5 to-transparent pointer-events-none sm:hidden" />
+              <div className="absolute right-0 top-0 bottom-1 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none sm:hidden" />
               </div>
             </div>
           </section>
 
           {/* Filters Row */}
           <section className="mb-8">
-            <div className="bg-white/5 rounded-xl border border-white/20 p-4 sm:p-5">
+            <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-5">
               <div className="flex flex-col sm:grid sm:grid-cols-3 gap-3 mb-4">
                 {/* Search */}
                 <input
@@ -267,7 +267,7 @@ const Jobs = () => {
                   placeholder="Search title, company, skills…"
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  className="bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder-gray-400 focus:border-orange-400 focus:outline-none text-sm"
+                  className="bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-900 placeholder-gray-400 focus:border-orange-400 focus:outline-none text-sm"
                 />
 
                 {/* Location */}
@@ -281,7 +281,7 @@ const Jobs = () => {
                     placeholder="City, state, or 'remote'…"
                     value={locationFilter}
                     onChange={e => setLocationFilter(e.target.value)}
-                    className="w-full bg-white/10 border border-white/20 rounded-lg pl-10 pr-4 py-2.5 text-white placeholder-gray-400 focus:border-orange-400 focus:outline-none text-sm"
+                    className="w-full bg-white border border-gray-300 rounded-lg pl-10 pr-4 py-2.5 text-gray-900 placeholder-gray-400 focus:border-orange-400 focus:outline-none text-sm"
                   />
                 </div>
 
@@ -289,7 +289,7 @@ const Jobs = () => {
                 <select
                   value={sortBy}
                   onChange={e => setSortBy(e.target.value)}
-                  className="bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-white focus:border-orange-400 focus:outline-none text-sm"
+                  className="bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-900 focus:border-orange-400 focus:outline-none text-sm"
                 >
                   <option value="newest">Newest First</option>
                   <option value="oldest">Oldest First</option>
@@ -315,14 +315,14 @@ const Jobs = () => {
           <section>
             {filteredPosts.length === 0 ? (
               <div className="text-center py-16">
-                <h3 className="text-2xl font-bold text-white mb-3">
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">
                   {posts.length === 0 ? 'No jobs posted yet' : 'No jobs match your filters'}
                 </h3>
-                <p className="text-gray-400 mb-8">
+                <p className="text-gray-500 mb-8">
                   {posts.length === 0 ? 'Be the first to post a job!' : 'Try adjusting your filters.'}
                 </p>
                 {hasActiveFilters
-                  ? <button onClick={clearAll} className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl transition-all mr-3">Clear Filters</button>
+                  ? <button onClick={clearAll} className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-all mr-3">Clear Filters</button>
                   : null}
                 <button
                   onClick={() => navigate('/jobs/post')}
@@ -341,8 +341,8 @@ const Jobs = () => {
 
                   return (
                     <div key={post.id} className="group">
-                      <div className={`bg-white/5 border rounded-xl p-5 sm:p-6 h-full flex flex-col ${
-                        isClosed ? 'border-white/10 opacity-75' : 'border-white/20 border-white/20'
+                      <div className={`bg-white border rounded-xl p-5 sm:p-6 h-full flex flex-col ${
+                        isClosed ? 'border-gray-200 opacity-75' : 'border-gray-200'
                       }`}>
 
                         {/* Header row */}
@@ -354,12 +354,12 @@ const Jobs = () => {
                             {post.workAuth === 'provided' || post.workAuthProvided ? (
                               <span className="bg-green-500/20 text-green-300 px-2.5 py-1 rounded-lg text-xs font-semibold">Visa/sponsorship provided</span>
                             ) : post.workAuth === 'required' ? (
-                              <span className="bg-white/10 text-gray-300 px-2.5 py-1 rounded-lg text-xs font-semibold">Must be authorized to work</span>
+                              <span className="bg-gray-100 text-gray-600 px-2.5 py-1 rounded-lg text-xs font-semibold">Must be authorized to work</span>
                             ) : post.workAuth === 'not_required' ? (
                               <span className="bg-teal-500/20 text-teal-300 px-2.5 py-1 rounded-lg text-xs font-semibold">Work authorization not required</span>
                             ) : null}
                             {isClosed && (
-                              <span className="bg-white/10 text-gray-400 px-2.5 py-1 rounded-lg text-xs font-semibold">Closed</span>
+                              <span className="bg-gray-100 text-gray-500 px-2.5 py-1 rounded-lg text-xs font-semibold">Closed</span>
                             )}
                           </div>
                           {isOwnPost && (
@@ -377,7 +377,7 @@ const Jobs = () => {
                         </div>
 
                         {/* Title & company */}
-                        <h3 className={`text-lg font-bold mb-1 line-clamp-2 ${isClosed ? 'text-gray-500' : 'text-white'}`}>
+                        <h3 className={`text-lg font-bold mb-1 line-clamp-2 ${isClosed ? 'text-gray-400' : 'text-gray-900'}`}>
                           {post.title}
                         </h3>
                         {post.companyName && (
@@ -413,10 +413,10 @@ const Jobs = () => {
                         {post.tags && post.tags.length > 0 && (
                           <div className="flex flex-wrap gap-1.5 mb-4">
                             {post.tags.slice(0, isMobile ? 2 : 3).map((tag, i) => (
-                              <span key={i} className="bg-white/10 text-gray-600 px-2 py-0.5 rounded text-xs">{tag}</span>
+                              <span key={i} className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs">{tag}</span>
                             ))}
                             {post.tags.length > (isMobile ? 2 : 3) && (
-                              <span className="bg-white/10 text-gray-600 px-2 py-0.5 rounded text-xs">
+                              <span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs">
                                 +{post.tags.length - (isMobile ? 2 : 3)}
                               </span>
                             )}
@@ -424,14 +424,14 @@ const Jobs = () => {
                         )}
 
                         {/* Footer */}
-                        <div className="mt-auto pt-4 border-t border-white/10">
-                          <div className="flex justify-between text-xs text-gray-400 mb-3">
+                        <div className="mt-auto pt-4 border-t border-gray-200">
+                          <div className="flex justify-between text-xs text-gray-500 mb-3">
                             <span className="truncate max-w-[120px] flex items-center gap-1">{post.posterName}</span>
                             <span className={expiringSoon && !isClosed ? 'text-red-400' : ''}>
                               {formatExpiration(post.expiresAt)}
                             </span>
                           </div>
-                          <div className="flex justify-between text-xs text-gray-400 mb-3">
+                          <div className="flex justify-between text-xs text-gray-500 mb-3">
                             <span>{formatTimeAgo(post.createdAt)}</span>
                             <span>{post.viewCount || 0} views</span>
                           </div>
@@ -440,7 +440,7 @@ const Jobs = () => {
                             disabled={isClosed}
                             className={`w-full py-2.5 rounded-lg font-bold text-sm transition-all ${
                               isClosed
-                                ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
                                 : 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white'
                             }`}
                           >

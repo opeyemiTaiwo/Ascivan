@@ -129,11 +129,11 @@ const About = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <h3 className="text-gray-900 font-semibold text-base mb-2">Free (Basic)</h3>
-                <p className="text-gray-500 text-sm">Unlimited collaborative projects, all 6 badge tracks, a Talent Board listing for recruiters, community access, messaging, and project workspaces.</p>
+                <p className="text-gray-500 text-sm">Unlimited collaborative projects, all 6 badge tracks, a Talent Board listing for recruiters, community access, messaging, project workspaces, and up to 2 job posts per month.</p>
               </div>
               <div>
                 <h3 className="text-gray-900 font-semibold text-base mb-2">Premium — $200/year or $20/month</h3>
-                <p className="text-gray-500 text-sm">Everything in Basic plus priority Talent Board ranking (premium members seen first), unlimited recruiter outreach, a verified company badge, and priority support at premium@loomiqe.com.</p>
+                <p className="text-gray-500 text-sm">Everything in Basic plus priority Talent Board ranking (premium members seen first), unlimited recruiter outreach, unlimited job posts, a verified company badge, and priority support at premium@loomiqe.com.</p>
               </div>
             </div>
           </div>

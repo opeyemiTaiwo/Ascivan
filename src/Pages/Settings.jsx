@@ -307,6 +307,7 @@ const MembershipTab = ({ profileData, navigate }) => {
           <FeatureItem label="All 6 TechTalent Badge tracks" detail="Earn badges across all tracks: TechDev, TechQA, TechMO, TechLeads, TechArchs, and TechGuard." />
           <FeatureItem label="Community, messaging, and workspace" detail="Post in the community feed, message any member, and collaborate in project workspaces." />
           <FeatureItem label="Certificates on project completion" detail="Receive a certificate for every project you complete, documenting your role and contributions." />
+          <FeatureItem label="Post up to 2 jobs / month" detail="Free accounts can post up to 2 job openings per month on the job board." />
         </ul>
         {(profileData?.membershipPlan !== 'Premium' && profileData?.role !== 'admin') && (
           <p className="text-blue-600 font-semibold text-sm">Current Plan</p>
@@ -327,8 +328,9 @@ const MembershipTab = ({ profileData, navigate }) => {
         <ul className="space-y-1 mb-4">
           <FeatureItem label="Everything in Basic" />
           <FeatureItem color="orange" label="Priority Talent Board ranking" detail="Premium members appear first when recruiters search the Talent Board, so your work gets seen before others." />
-          <FeatureItem color="orange" label="Verified Company Badge" detail="A verified badge shown on your company profile and listings. Because verification is tied to a real payment, it tells talent you're a genuine, traceable, accountable organization — not a fake or spam account. (Talent are already verified through their completed project work.)" />
+          <FeatureItem color="orange" label="Verified Company Badge" detail="A verified badge shown on your company profile and listings." />
           <FeatureItem color="orange" label="Unlimited recruiter outreach" detail="Recruiters on Premium can contact unlimited talent. Free recruiter accounts can contact up to 5 new people per month." />
+          <FeatureItem color="orange" label="Unlimited job posts" detail="Post unlimited job openings on the job board. Free accounts are limited to 2 per month." />
           <FeatureItem color="orange" label="Priority support" detail="Get faster responses and dedicated assistance from the Loomiqe team." />
         </ul>
         <p className="text-gray-400 text-xs mb-4 leading-relaxed">Premium helps talent get discovered faster, and lets companies hire with confidence as verified, traceable organizations.</p>

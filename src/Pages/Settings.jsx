@@ -303,8 +303,8 @@ const MembershipTab = ({ profileData, navigate }) => {
         <p className="text-gray-900 font-bold text-2xl mb-4">Free</p>
         <p className="text-gray-500 text-sm mb-4">Everything you need to start building your tech career through real project experience.</p>
         <ul className="space-y-1 mb-6">
-          <FeatureItem label="Unlimited free projects" detail="Create or join as many free projects as you want. No limits, ever." />
-          <FeatureItem label="Unlimited collaborative projects" detail="Join real product-build projects in any tech field and earn verified badges — no caps, no fees, ever." />
+          <FeatureItem label="Unlimited projects" detail="Create or join as many projects as you want. No limits, ever." />
+          <FeatureItem label="Real collaborative work" detail="Build real products in any tech field with real teams, and earn verified badges — no caps, no fees, ever." />
           <FeatureItem label="All 6 TechTalent Badge tracks" detail="Earn badges across all tracks: TechDev, TechQA, TechMO, TechLeads, TechArchs, and TechGuard." />
           <FeatureItem label="Community, messaging, and workspace" detail="Post in the community feed, message any member, and collaborate in project workspaces." />
           <FeatureItem label="Certificates on project completion" detail="Receive a certificate for every project you complete, documenting your role and contributions." />
@@ -329,7 +329,7 @@ const MembershipTab = ({ profileData, navigate }) => {
           <FeatureItem label="Everything in Basic" />
           <FeatureItem color="orange" label="Priority Talent Board ranking" detail="Appear higher when recruiters search the Talent Board, so your verified work gets seen first." />
           <FeatureItem color="orange" label="Verified Premium Badge" detail="An orange PRO badge displayed on your profile, directory listing, and across the platform. It tells project owners, teammates, and recruiters that you're a verified, committed professional." />
-          <FeatureItem color="orange" label="Direct recruiter outreach" detail="Recruiters can contact you directly about roles — remote or onsite — based on your verified project work." />
+          <FeatureItem color="orange" label="Unlimited recruiter outreach" detail="Recruiters on Premium can contact unlimited talent. Free recruiter accounts can contact up to 5 new people per month." />
           <FeatureItem color="orange" label="Priority support" detail="Get faster responses and dedicated assistance from the Loomiqe team." />
         </ul>
         <p className="text-gray-400 text-xs mb-4 leading-relaxed">Your Premium badge tells everyone on Loomiqe that you're invested, accountable, and serious about your work.</p>

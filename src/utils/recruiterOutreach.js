@@ -13,6 +13,7 @@ import { doc, getDoc, setDoc, increment, serverTimestamp, collection, query, whe
 import { db } from '../firebase/config';
 
 export const FREE_RECRUITER_OUTREACH_LIMIT = 5; // new contacts per month on the free tier
+export const FREE_JOB_POST_LIMIT = 2; // job posts per month on the free tier
 
 // Current period key like "2026-06" (per calendar month).
 const periodKey = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
@@ -84,5 +85,39 @@ export const recordOutreach = async (currentUserData, currentUid) => {
     );
   } catch (e) {
     console.error('Outreach record failed:', e);
+  }
+};
+
+// --- Job posting limit (free: 2/month, Premium: unlimited) ---
+
+// Returns { limited, remaining, premium }. Premium accounts are never limited.
+export const getJobPostStatus = async (currentUserData, currentUid) => {
+  if (isPremiumRecruiter(currentUserData)) {
+    return { limited: false, remaining: Infinity, premium: true };
+  }
+  let used = 0;
+  try {
+    const ref = doc(db, 'jobposts_quota', `${currentUid}_${periodKey()}`);
+    const snap = await getDoc(ref);
+    used = snap.exists() ? (snap.data().count || 0) : 0;
+  } catch (e) {
+    console.error('Job-post status read failed:', e);
+  }
+  const remaining = Math.max(0, FREE_JOB_POST_LIMIT - used);
+  return { limited: remaining <= 0, remaining, premium: false };
+};
+
+// Call AFTER a job is successfully posted, to record it. No-op for Premium.
+export const recordJobPost = async (currentUserData, currentUid) => {
+  if (isPremiumRecruiter(currentUserData)) return;
+  try {
+    const ref = doc(db, 'jobposts_quota', `${currentUid}_${periodKey()}`);
+    await setDoc(
+      ref,
+      { userId: currentUid, period: periodKey(), count: increment(1), updatedAt: serverTimestamp() },
+      { merge: true }
+    );
+  } catch (e) {
+    console.error('Job-post record failed:', e);
   }
 };

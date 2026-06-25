@@ -303,8 +303,7 @@ const MembershipTab = ({ profileData, navigate }) => {
         <p className="text-gray-900 font-bold text-2xl mb-4">Free</p>
         <p className="text-gray-500 text-sm mb-4">Everything you need to start building your tech career through real project experience.</p>
         <ul className="space-y-1 mb-6">
-          <FeatureItem label="Unlimited projects" detail="Create or join as many projects as you want. No limits, ever." />
-          <FeatureItem label="Real collaborative work" detail="Build real products in any tech field with real teams, and earn verified badges — no caps, no fees, ever." />
+          <FeatureItem label="Unlimited collaborative projects" detail="Create or join as many real product-build projects as you want, in any tech field — work with real teams and earn verified badges. No caps, no fees, ever." />
           <FeatureItem label="All 6 TechTalent Badge tracks" detail="Earn badges across all tracks: TechDev, TechQA, TechMO, TechLeads, TechArchs, and TechGuard." />
           <FeatureItem label="Community, messaging, and workspace" detail="Post in the community feed, message any member, and collaborate in project workspaces." />
           <FeatureItem label="Certificates on project completion" detail="Receive a certificate for every project you complete, documenting your role and contributions." />
@@ -324,15 +323,15 @@ const MembershipTab = ({ profileData, navigate }) => {
         </div>
         <p className="text-gray-900 font-bold text-2xl mb-0.5">$200<span className="text-gray-400 text-sm font-normal">/year</span></p>
         <p className="text-gray-500 text-sm mb-4">or $20/month</p>
-        <p className="text-gray-500 text-sm mb-4">Verified members. Trusted collaborations. Unlimited opportunities.</p>
+        <p className="text-gray-500 text-sm mb-4">Get seen first, connect without limits, and stand out — for talent and companies alike.</p>
         <ul className="space-y-1 mb-4">
           <FeatureItem label="Everything in Basic" />
-          <FeatureItem color="orange" label="Priority Talent Board ranking" detail="Appear higher when recruiters search the Talent Board, so your verified work gets seen first." />
-          <FeatureItem color="orange" label="Verified Premium Badge" detail="An orange PRO badge displayed on your profile, directory listing, and across the platform. It tells project owners, teammates, and recruiters that you're a verified, committed professional." />
+          <FeatureItem color="orange" label="Priority Talent Board ranking" detail="Premium members appear first when recruiters search the Talent Board, so your work gets seen before others." />
+          <FeatureItem color="orange" label="Verified Company Badge" detail="A verified badge shown on your company profile and listings. Because verification is tied to a real payment, it tells talent you're a genuine, traceable, accountable organization — not a fake or spam account. (Talent are already verified through their completed project work.)" />
           <FeatureItem color="orange" label="Unlimited recruiter outreach" detail="Recruiters on Premium can contact unlimited talent. Free recruiter accounts can contact up to 5 new people per month." />
           <FeatureItem color="orange" label="Priority support" detail="Get faster responses and dedicated assistance from the Loomiqe team." />
         </ul>
-        <p className="text-gray-400 text-xs mb-4 leading-relaxed">Your Premium badge tells everyone on Loomiqe that you're invested, accountable, and serious about your work.</p>
+        <p className="text-gray-400 text-xs mb-4 leading-relaxed">Premium helps talent get discovered faster, and lets companies hire with confidence as verified, traceable organizations.</p>
         {(profileData?.membershipPlan === 'Premium' || profileData?.role === 'admin') ? (
           <div>
             <div className="w-full bg-orange-500 text-white font-semibold text-sm py-2.5 rounded-lg text-center">Active Premium Member</div>

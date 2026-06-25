@@ -70,6 +70,7 @@ const AppLayout = ({ children }) => {
     { path: '/dashboard', label: 'Home' },
     { path: '/community', label: 'Feed' },
     { path: '/projects', label: 'Projects' },
+    { path: '/jobs', label: 'Jobs' },
     { path: '/my-workspaces', label: 'Workspace' },
     ...(isPremiumOrAdmin ? [
       { path: '/talent-board', label: 'Talent Board' },

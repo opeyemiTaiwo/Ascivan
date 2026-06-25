@@ -133,7 +133,7 @@ const About = () => {
               </div>
               <div>
                 <h3 className="text-gray-900 font-semibold text-base mb-2">Premium — $200/year or $20/month</h3>
-                <p className="text-gray-500 text-sm">Everything in Basic plus priority Talent Board ranking, direct recruiter outreach, a verified Premium badge on your profile, and priority support at premium@loomiqe.com.</p>
+                <p className="text-gray-500 text-sm">Everything in Basic plus priority Talent Board ranking (premium members seen first), unlimited recruiter outreach, a verified company badge, and priority support at premium@loomiqe.com.</p>
               </div>
             </div>
           </div>

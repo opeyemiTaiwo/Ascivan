@@ -41,6 +41,8 @@ const MyProjects = lazy(() => import('./Pages/projects/MyProjects'));
 const ProjectWorkspace = lazy(() => import('./Pages/projects/ProjectWorkspace'));
 const MyWorkspaces = lazy(() => import('./Pages/projects/MyWorkspaces'));
 const TalentBoard = lazy(() => import('./Pages/TalentBoard'));
+const Jobs = lazy(() => import('./Pages/Jobs'));
+const PostJobs = lazy(() => import('./Pages/PostJobs'));
 const ProjectVault = lazy(() => import('./Pages/ProjectVault'));
 const Settings = lazy(() => import('./Pages/Settings'));
 const PremiumSuccess = lazy(() => import('./Pages/PremiumSuccess'));
@@ -169,7 +171,8 @@ function App() {
                 {/* Legacy redirects */}
                 <Route path="/user/dashboard" element={<Navigate to="/dashboard" replace />} />
                 <Route path="/payment" element={<Navigate to="/dashboard" replace />} />
-                <Route path="/jobs" element={<Navigate to="/projects" replace />} />
+                <Route path="/jobs" element={<SidebarRoute><Jobs /></SidebarRoute>} />
+                <Route path="/jobs/post" element={<SidebarRoute><PostJobs /></SidebarRoute>} />
                 <Route path="/housing" element={<Navigate to="/dashboard" replace />} />
                 <Route path="/finance" element={<Navigate to="/dashboard" replace />} />
                 <Route path="/banking" element={<Navigate to="/dashboard" replace />} />

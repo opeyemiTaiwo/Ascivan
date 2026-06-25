@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { getOutreachStatus, recordOutreach, FREE_RECRUITER_OUTREACH_LIMIT } from '../utils/recruiterOutreach';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
 import {
@@ -71,6 +73,7 @@ const Messages = () => {
   const [showNewChat, setShowNewChat]     = useState(false);
   const [unreadCounts, setUnreadCounts]   = useState({});
   const [mobileView, setMobileView]       = useState('list'); // 'list' | 'chat'
+  const [myData, setMyData]               = useState(null);
 
   const messagesEndRef = useRef(null);
   const inputRef       = useRef(null);
@@ -86,6 +89,7 @@ const Messages = () => {
       try {
         const snap = await getDoc(doc(db, 'users', currentUser.uid));
         if (!snap.exists()) return;
+        setMyData({ uid: currentUser.uid, ...snap.data() });
         const { following = [] } = snap.data();
         const profiles = await Promise.all(
           following.map(async (uid) => {
@@ -179,7 +183,26 @@ const Messages = () => {
       const convId  = getConversationId(currentUser.uid, targetUid);
       const convRef = doc(db, 'conversations', convId);
       const convSnap = await getDoc(convRef);
+
+      // Fetch the target's profile up front (also used for the cap check)
+      const otherSnap = await getDoc(doc(db, 'users', targetUid));
+      const otherUser = otherSnap.exists() ? { uid: targetUid, ...otherSnap.data() } : { uid: targetUid };
+
       if (!convSnap.exists()) {
+        // NEW outreach. If a free recruiter is contacting an individual (talent),
+        // enforce the monthly cap. Talent and Premium recruiters are never blocked.
+        const targetIsTalent = otherUser.isCompany !== true;
+        if (myData && targetIsTalent) {
+          const status = await getOutreachStatus(myData, currentUser.uid);
+          if (status.limited) {
+            toast.error(
+              `You've reached your limit of ${FREE_RECRUITER_OUTREACH_LIMIT} new contacts this month. Upgrade to Premium for unlimited recruiter outreach.`
+            );
+            navigate('/settings?tab=membership');
+            return;
+          }
+        }
+
         await setDoc(convRef, {
           participants:  [currentUser.uid, targetUid],
           lastMessage:   '',
@@ -187,9 +210,13 @@ const Messages = () => {
           createdAt:     serverTimestamp(),
           unreadBy:      { [currentUser.uid]: 0, [targetUid]: 0 },
         });
+
+        // Record the outreach (no-op unless free recruiter → talent)
+        if (otherUser.isCompany !== true) {
+          await recordOutreach(myData, currentUser.uid);
+        }
       }
-      const otherSnap = await getDoc(doc(db, 'users', targetUid));
-      const otherUser = otherSnap.exists() ? { uid: targetUid, ...otherSnap.data() } : { uid: targetUid };
+
       setActiveConvId(convId);
       setActiveUser(otherUser);
       setShowNewChat(false);

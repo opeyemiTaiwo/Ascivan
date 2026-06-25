@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
 import usePosterName from '../hooks/usePosterName';
@@ -174,6 +174,13 @@ const PostJobs = () => {
         updatedAt: serverTimestamp(),
         submissionSource: 'web_form',
       });
+
+      // Mark this user as a recruiter for outreach purposes (posted a job).
+      try {
+        await updateDoc(doc(db, 'users', currentUser.uid), { hasPostedJob: true });
+      } catch (flagErr) {
+        console.error('Could not set hasPostedJob flag:', flagErr);
+      }
 
       toast.success('Job posted successfully!');
       setTimeout(() => navigate('/jobs'), 1500);

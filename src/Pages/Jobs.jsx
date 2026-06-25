@@ -27,8 +27,11 @@ const Jobs = () => {
   const jobTypes = [
     { id: 'all',        label: 'All Jobs' },
     { id: 'full-time',  label: 'Full-time' },
-    { id: 'freelancer', label: 'Freelancer' },
+    { id: 'part-time',  label: 'Part-time' },
+    { id: 'contract',   label: 'Contract' },
+    { id: 'freelance',  label: 'Freelance' },
     { id: 'internship', label: 'Internship' },
+    { id: 'remote',     label: 'Virtual / Online' },
   ];
 
   useEffect(() => {
@@ -87,7 +90,7 @@ const Jobs = () => {
         (p.location && p.location.toLowerCase().includes(loc)) ||
         (p.city && p.city.toLowerCase().includes(loc)) ||
         (p.state && p.state.toLowerCase().includes(loc)) ||
-        (p.jobType === 'freelancer') // freelancer = remote, always show
+        (p.jobType === 'remote' || p.jobType === 'freelance') // remote/freelance: location-agnostic, always show
       );
     }
 
@@ -173,9 +176,12 @@ const Jobs = () => {
 
   const getTypeBadge = (jobType) => {
     const map = {
-      'full-time':  { label: 'Full-time',  cls: 'bg-blue-500/20 text-blue-300' },
-      'freelancer': { label: 'Freelancer', cls: 'bg-blue-500/20 text-blue-400' },
-      'internship': { label: 'Internship', cls: 'bg-blue-500/20 text-blue-500' },
+      'full-time':  { label: 'Full-time',       cls: 'bg-blue-500/20 text-blue-300' },
+      'part-time':  { label: 'Part-time',       cls: 'bg-blue-500/20 text-blue-300' },
+      'contract':   { label: 'Contract',        cls: 'bg-purple-500/20 text-purple-300' },
+      'freelance':  { label: 'Freelance',       cls: 'bg-blue-500/20 text-blue-400' },
+      'internship': { label: 'Internship',      cls: 'bg-green-500/20 text-green-300' },
+      'remote':     { label: 'Virtual / Online', cls: 'bg-teal-500/20 text-teal-300' },
     };
     return map[jobType] || { label: jobType || 'Job', cls: 'bg-orange-500/20 text-orange-300' };
   };
@@ -345,6 +351,13 @@ const Jobs = () => {
                             <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${typeBadge.cls}`}>
                               {typeBadge.label}
                             </span>
+                            {post.workAuth === 'provided' || post.workAuthProvided ? (
+                              <span className="bg-green-500/20 text-green-300 px-2.5 py-1 rounded-lg text-xs font-semibold">Visa/sponsorship provided</span>
+                            ) : post.workAuth === 'required' ? (
+                              <span className="bg-white/10 text-gray-300 px-2.5 py-1 rounded-lg text-xs font-semibold">Must be authorized to work</span>
+                            ) : post.workAuth === 'not_required' ? (
+                              <span className="bg-teal-500/20 text-teal-300 px-2.5 py-1 rounded-lg text-xs font-semibold">Work authorization not required</span>
+                            ) : null}
                             {isClosed && (
                               <span className="bg-white/10 text-gray-400 px-2.5 py-1 rounded-lg text-xs font-semibold">Closed</span>
                             )}

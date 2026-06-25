@@ -4,8 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
-import { collection, addDoc, serverTimestamp, doc, updateDoc } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
+import { getJobPostStatus, recordJobPost, FREE_JOB_POST_LIMIT } from '../utils/recruiterOutreach';
 import { toast } from 'react-toastify';
 import usePosterName from '../hooks/usePosterName';
 
@@ -26,6 +27,7 @@ const PostJobs = () => {
     jobType: '',
     salaryRange: '',
     location: '',
+    workAuth: '', // required: 'provided' or 'required' (candidate must have own)
     expirationOption: '30',
     customExpirationDate: '',
   });
@@ -37,8 +39,11 @@ const PostJobs = () => {
 
   const jobTypes = [
     { id: 'full-time', label: 'Full-time', description: 'Permanent, full-time position' },
-    { id: 'freelancer', label: 'Freelancer', description: 'Contract or freelance work' },
+    { id: 'part-time', label: 'Part-time', description: 'Ongoing, part-time hours' },
+    { id: 'contract', label: 'Contract', description: 'Fixed-term contract role' },
+    { id: 'freelance', label: 'Freelance', description: 'Project-based freelance work' },
     { id: 'internship', label: 'Internship', description: 'Internship opportunity' },
+    { id: 'remote', label: 'Virtual / Online', description: 'Fully remote, work from anywhere' },
   ];
 
   const expirationOptions = [
@@ -105,6 +110,7 @@ const PostJobs = () => {
   const validateForm = () => {
     const errors = [];
     if (!formData.jobType) errors.push('Job type is required');
+    if (!formData.workAuth) errors.push('Please indicate whether work authorization is provided');
     if (!formData.title.trim()) errors.push('Job title is required');
     if (!formData.description.trim()) errors.push('Description is required');
     if (!validateUrl(formData.externalLink)) errors.push('Valid application link is required');
@@ -144,6 +150,25 @@ const PostJobs = () => {
       return;
     }
 
+    // Enforce the free job-post limit (2/month). Premium is unlimited.
+    let myUserData = null;
+    try {
+      const meSnap = await getDoc(doc(db, 'users', currentUser.uid));
+      myUserData = meSnap.exists() ? meSnap.data() : {};
+      const jobStatus = await getJobPostStatus(myUserData, currentUser.uid);
+      if (jobStatus.limited) {
+        toast.error(
+          `You've reached your limit of ${FREE_JOB_POST_LIMIT} job posts this month. Upgrade to Premium for unlimited posts.`
+        );
+        setIsSubmitting(false);
+        navigate('/settings?tab=membership');
+        return;
+      }
+    } catch (limitErr) {
+      console.error('Job-post limit check failed:', limitErr);
+      // Fail open: don't block posting if the check itself errors.
+    }
+
     try {
       const expirationDate = calculateExpirationDate();
 
@@ -156,6 +181,8 @@ const PostJobs = () => {
         companyName: formData.companyName.trim() || null,
         salaryRange: formData.salaryRange.trim() || null,
         location: formData.location.trim() || null,
+        workAuth: formData.workAuth,
+        workAuthProvided: formData.workAuth === 'provided',
         posterName: formData.posterName.trim(),
         posterEmail: formData.posterEmail.trim(),
         posterPhone: formData.posterPhone.trim() || null,
@@ -180,6 +207,13 @@ const PostJobs = () => {
         await updateDoc(doc(db, 'users', currentUser.uid), { hasPostedJob: true });
       } catch (flagErr) {
         console.error('Could not set hasPostedJob flag:', flagErr);
+      }
+
+      // Count this post against the monthly job-post quota (no-op for Premium).
+      try {
+        await recordJobPost(myUserData || {}, currentUser.uid);
+      } catch (quotaErr) {
+        console.error('Could not record job post quota:', quotaErr);
       }
 
       toast.success('Job posted successfully!');
@@ -284,6 +318,49 @@ const PostJobs = () => {
                     <div>
                       <label className={labelClass}>Salary / Compensation</label>
                       <input type="text" name="salaryRange" value={formData.salaryRange} onChange={handleInputChange} className={inputClass} placeholder="e.g., $50k–$70k / year" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className={labelClass}>Work authorization for this role *</label>
+                    <p className="text-gray-500 text-xs mb-2">Will work authorization (e.g. visa/sponsorship) be provided, must the candidate already have their own, or is it not required (e.g. quick freelance/remote work)?</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, workAuth: 'provided' }))}
+                        className={`text-left p-4 rounded-xl border transition-all ${
+                          formData.workAuth === 'provided'
+                            ? 'border-green-500 bg-green-50 ring-1 ring-green-500'
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                      >
+                        <div className="text-gray-900 text-sm font-semibold">Visa/sponsorship provided</div>
+                        <div className="text-gray-500 text-xs mt-0.5">Work authorization will be provided for this role.</div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, workAuth: 'required' }))}
+                        className={`text-left p-4 rounded-xl border transition-all ${
+                          formData.workAuth === 'required'
+                            ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-500'
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                      >
+                        <div className="text-gray-900 text-sm font-semibold">Must be authorized to work</div>
+                        <div className="text-gray-500 text-xs mt-0.5">Candidate must already have work authorization.</div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, workAuth: 'not_required' }))}
+                        className={`text-left p-4 rounded-xl border transition-all ${
+                          formData.workAuth === 'not_required'
+                            ? 'border-teal-500 bg-teal-50 ring-1 ring-teal-500'
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                      >
+                        <div className="text-gray-900 text-sm font-semibold">Work authorization not required</div>
+                        <div className="text-gray-500 text-xs mt-0.5">Not a factor — e.g. quick freelance or remote work.</div>
+                      </button>
                     </div>
                   </div>
 

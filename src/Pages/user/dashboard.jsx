@@ -97,7 +97,7 @@ const DashboardOverview = () => {
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Dashboard Overview</h1>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div className="bg-white border border-gray-200 rounded-xl p-5">
             <p className="text-gray-500 text-sm mb-1">Projects Completed</p>
             <p className="text-3xl font-bold text-gray-900">{stats.projectsCompleted}</p>
@@ -185,10 +185,10 @@ const DashboardOverview = () => {
               <p className="text-gray-500 text-xs mb-4">Earn badges by completing projects in each track.</p>
 
               {/* Badge Levels */}
-              <div className="flex items-center gap-2 mb-4 p-2.5 bg-gray-50 rounded-lg">
-                <p className="text-gray-500 text-[10px] font-medium">Levels:</p>
+              <div className="flex flex-wrap items-center gap-1.5 mb-4 p-2.5 bg-gray-50 rounded-lg">
+                <p className="text-gray-500 text-[10px] font-medium mr-0.5">Levels:</p>
                 {['Novice', 'Associate', 'Advanced', 'Expert'].map((level, i) => (
-                  <span key={level} className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${
+                  <span key={level} className={`text-[10px] font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${
                     i === 0 ? 'bg-blue-50 text-blue-600' :
                     i === 1 ? 'bg-blue-100 text-blue-700' :
                     i === 2 ? 'bg-orange-50 text-orange-600' :

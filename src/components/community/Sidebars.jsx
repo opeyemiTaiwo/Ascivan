@@ -15,7 +15,8 @@ import { EnhancedClickableUserName } from './UserComponents';
  */
 export const UserQuickLinksSidebar = ({ currentUser, onNavigate, isMobile = false }) => {
   const quickLinks = [
-    { title: 'Dashboard', path: '/dashboard' },
+    { title: 'Home', path: '/dashboard' },
+    { title: 'Workspace', path: '/my-workspaces' },
     { title: 'Projects', path: '/projects' },
     { title: 'Network', path: '/members-directory' },
   ];
@@ -382,7 +383,6 @@ export const CompanyInfoSidebar = ({ isMobile = false }) => {
             alt="Loomiqe Logo" 
             className="w-12 h-12 mx-auto mb-2 rounded-xl"
           />
-          <h3 className="text-gray-900 font-semibold text-sm">Loomiqe</h3>
           <p className="text-gray-500 text-xs mt-1 leading-relaxed">
             Accelerating tech careers through projects, badges, and community.
           </p>
@@ -398,10 +398,6 @@ export const CompanyInfoSidebar = ({ isMobile = false }) => {
               {link.title}
             </button>
           ))}
-        </div>
-
-        <div className="border-t border-gray-100 px-4 py-3">
-          <p className="text-gray-400 text-xs text-center">Accelerating tech careers</p>
         </div>
       </div>
     </div>

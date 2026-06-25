@@ -34,6 +34,7 @@ const ProjectSubmission = lazy(() => import('./Pages/projects/ProjectSubmission'
 const ProjectDetail = lazy(() => import('./Pages/projects/ProjectDetail'));
 const ProjectSetup = lazy(() => import('./Pages/projects/ProjectSetup'));
 const GenerateProject = lazy(() => import('./Pages/admin/GenerateProject'));
+const AdminPanel = lazy(() => import('./Pages/admin/AdminPanel'));
 const ProjectOwnerDashboard = lazy(() => import('./Pages/projects/ProjectOwnerDashboard'));
 const ProjectCompletion = lazy(() => import('./Pages/projects/ProjectCompletion'));
 const MyProjects = lazy(() => import('./Pages/projects/MyProjects'));
@@ -128,6 +129,7 @@ function App() {
 
                 {/* App pages — all wrapped in sidebar layout */}
                 <Route path="/dashboard" element={<SidebarRoute><UserDashboard /></SidebarRoute>} />
+                <Route path="/admin" element={<SidebarRoute><AdminPanel /></SidebarRoute>} />
 
                 <Route path="/community" element={<SidebarRoute><CommunityPosts /></SidebarRoute>} />
                 <Route path="/community/submit" element={<SidebarRoute><SubmitPost /></SidebarRoute>} />

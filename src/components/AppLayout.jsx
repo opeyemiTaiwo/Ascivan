@@ -77,6 +77,9 @@ const AppLayout = ({ children }) => {
     { path: '/project-vault', label: 'Project Vault' },
     { path: '/support', label: 'Support' },
     { path: '/settings', label: 'Settings' },
+    ...(userRole === 'admin' ? [
+      { path: '/admin', label: 'Admin' },
+    ] : []),
   ];
 
   const isActive = (path) => {
@@ -95,7 +98,6 @@ const AppLayout = ({ children }) => {
         {/* Logo */}
         <div className="flex items-center gap-2 px-5 h-16 sm:h-[72px] border-b border-white/10">
           <img src="/Images/512X512.png" alt="Loomiqe" className="w-8 h-8" />
-          <span className="text-white font-bold text-base">Loomiqe</span>
           <button onClick={() => setSidebarOpen(false)} className="lg:hidden ml-auto p-1 text-gray-400 hover:text-white">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
@@ -164,13 +166,19 @@ const AppLayout = ({ children }) => {
             )}
             {location.pathname === '/community' && (
             <a href="/community" className="hidden lg:flex items-center gap-1 ml-4">
-              <span className="text-gray-900 text-base font-bold tracking-tight">Loomiqe</span>
-              <span className="w-2 h-2 rounded-full bg-orange-500"></span>
+              <img src="/Images/512X512.png" alt="Loomiqe" className="h-9 w-9" />
             </a>
             )}
           </div>
           <div className="flex-1" />
           <div className="flex items-center gap-3 sm:gap-5 md:gap-7 pr-6 sm:pr-12 lg:pr-16">
+            {/* Home */}
+            <Link to="/dashboard" className={`relative flex flex-col items-center gap-0.5 px-1.5 sm:px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0 ${location.pathname === '/dashboard' ? 'text-blue-600' : 'text-gray-500'}`}>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+              <span className="text-[10px] sm:text-[11px] font-semibold leading-none">Home</span>
+            </Link>
             {/* Account */}
             <Link to="/account" className={`relative flex flex-col items-center gap-0.5 px-1.5 sm:px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0 ${location.pathname === '/account' ? 'text-blue-600' : 'text-gray-500'}`}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -12,6 +12,7 @@ import {
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
 import { generateProject } from '../../utils/projectGenerator';
+import { getRandomTemplate, TEMPLATE_COUNT } from '../../utils/projectTemplates';
 
 const fmtDate = (ts) => {
   try {
@@ -44,6 +45,7 @@ const AdminPanel = () => {
   const [generating, setGenerating] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [draft, setDraft] = useState(null);
+  const [useAI, setUseAI] = useState(false); // default: free template library
 
   const [userSearch, setUserSearch] = useState('');
 
@@ -139,9 +141,19 @@ const AdminPanel = () => {
   const handleGenerate = async () => {
     setGenerating(true);
     try {
-      setDraft(await generateProject());
-      toast.success('Generated — review and publish.');
-    } catch (e) { console.error(e); toast.error('Generation failed.'); }
+      if (useAI) {
+        // AI generation (requires a funded Anthropic API key on the server)
+        setDraft(await generateProject());
+        toast.success('Generated with AI — review and publish.');
+      } else {
+        // Free, instant: pick from the built-in template library
+        setDraft(getRandomTemplate());
+        toast.success('Loaded a project — review and publish.');
+      }
+    } catch (e) {
+      console.error(e);
+      toast.error(useAI ? 'AI generation failed (check API credits).' : 'Could not load a template.');
+    }
     setGenerating(false);
   };
 
@@ -288,10 +300,25 @@ const AdminPanel = () => {
       {/* GENERATE */}
       {!loadingData && tab === 'generate' && (
         <div>
-          <p className="text-gray-500 text-sm mb-4">Generate a software or AI project (no physical prototypes). It publishes in lead recruitment — anyone can apply to lead, then the confirmed lead refines it and opens the team.</p>
+          <p className="text-gray-500 text-sm mb-4">Publish a software or AI project (no physical prototypes) into lead recruitment — anyone can apply to lead, then the confirmed lead refines it and opens the team.</p>
+
+          {/* Source toggle */}
+          <div className="flex items-center gap-3 mb-4 p-3 bg-gray-50 border border-gray-200 rounded-xl">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={useAI} onChange={e => { setUseAI(e.target.checked); setDraft(null); }}
+                className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+              <span className="text-sm text-gray-700 font-medium">Use AI generation</span>
+            </label>
+            <span className="text-xs text-gray-400">
+              {useAI
+                ? 'Writes a fresh project via Claude (needs Anthropic API credits).'
+                : `Free — picks from ${TEMPLATE_COUNT} built-in project templates. No cost.`}
+            </span>
+          </div>
+
           <button onClick={handleGenerate} disabled={generating}
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-6 py-2.5 rounded-lg transition-all disabled:opacity-50">
-            {generating ? 'Generating…' : draft ? 'Regenerate' : 'Generate a Project'}
+            {generating ? 'Loading…' : draft ? (useAI ? 'Regenerate' : 'Load another') : (useAI ? 'Generate a Project' : 'Load a Project')}
           </button>
           {draft && (
             <div className="mt-5 bg-white border border-gray-200 rounded-xl p-5 space-y-3">

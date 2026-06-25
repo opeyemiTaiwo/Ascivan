@@ -9,7 +9,7 @@ import { useAuth } from '../../context/AuthContext';
 import { doc, getDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
-import { generateProject } from '../../utils/projectGenerator';
+import { getRandomTemplate } from '../../utils/projectTemplates';
 
 const GenerateProject = () => {
   const { currentUser } = useAuth();
@@ -39,12 +39,13 @@ const GenerateProject = () => {
   const handleGenerate = async () => {
     setGenerating(true);
     try {
-      const result = await generateProject();
+      // Free, instant: use the built-in template library
+      const result = getRandomTemplate();
       setDraft(result);
-      toast.success('Project generated — review and publish.');
+      toast.success('Project loaded — review and publish.');
     } catch (e) {
       console.error(e);
-      toast.error('Generation failed. Try again.');
+      toast.error('Could not load a project. Try again.');
     }
     setGenerating(false);
   };

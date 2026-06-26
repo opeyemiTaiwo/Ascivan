@@ -160,9 +160,9 @@ function App() {
                 <Route path="/notifications" element={<SidebarRoute><NotificationsPage /></SidebarRoute>} />
                 <Route path="/support" element={<SidebarRoute><Support /></SidebarRoute>} />
 
-                <Route path="/members" element={<SidebarRoute><MembersDirectory /></SidebarRoute>} />
-                <Route path="/directory" element={<SidebarRoute><MembersDirectory /></SidebarRoute>} />
-                <Route path="/members-directory" element={<SidebarRoute><MembersDirectory /></SidebarRoute>} />
+                <Route path="/members" element={<Navigate to="/talent-board" replace />} />
+                <Route path="/directory" element={<Navigate to="/talent-board" replace />} />
+                <Route path="/members-directory" element={<Navigate to="/talent-board" replace />} />
 
                 <Route path="/profile/:userEmail" element={<SidebarRoute><UserProfile /></SidebarRoute>} />
                 <Route path="/profile/:userEmail/followers" element={<SidebarRoute><FollowersFollowing /></SidebarRoute>} />

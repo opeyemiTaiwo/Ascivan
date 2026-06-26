@@ -165,7 +165,7 @@ const LandingPage = () => {
           <div id="hero-badge" data-animate className={`fade-up inline-block mb-6 ${isVisible('hero-badge') ? 'visible' : ''}`}>
             <span className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-full px-4 py-2">
               <span className="w-2 h-2 rounded-full bg-blue-500" />
-              <span className="text-blue-700 text-sm font-medium">Build real experience. Get discovered.</span>
+              <span className="text-blue-700 text-sm font-medium">Proof over pedigree.</span>
             </span>
           </div>
 
@@ -176,7 +176,7 @@ const LandingPage = () => {
           </h1>
 
           <p id="hero-desc" data-animate className={`fade-up delay-2 text-gray-600 text-lg sm:text-xl max-w-2xl mx-auto mb-10 font-normal leading-relaxed ${isVisible('hero-desc') ? 'visible' : ''}`}>
-            Loomiqe <span className="text-gray-400 font-normal">(say: "loo-meek")</span> is where you gain real-world experience — building real products with real teams, from start to finish. Earn verified skill badges, build a portfolio that proves what you can do, and get discovered by recruiters for remote and onsite roles.
+            Loomiqe <span className="text-gray-400 font-normal">(say: "loo-meek")</span> is where you build real experience, earn verified badges, and get discovered, wherever you are. We believe in proof over pedigree: what you can build matters more than where you came from. Ship real products with real teams, earn credentials that prove your skills, and get found by recruiters for remote and onsite roles.
           </p>
 
           <div id="hero-cta" data-animate className={`fade-up delay-3 flex flex-col sm:flex-row items-center justify-center gap-4 ${isVisible('hero-cta') ? 'visible' : ''}`}>

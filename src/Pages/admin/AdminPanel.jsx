@@ -13,6 +13,7 @@ import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
 import { generateProject } from '../../utils/projectGenerator';
 import { getRandomTemplate, TEMPLATE_COUNT } from '../../utils/projectTemplates';
+import { seedDummyActivity, deleteDummyActivity, countDummyActivity } from '../../utils/activityFeed';
 
 const fmtDate = (ts) => {
   try {
@@ -46,6 +47,8 @@ const AdminPanel = () => {
   const [publishing, setPublishing] = useState(false);
   const [draft, setDraft] = useState(null);
   const [useAI, setUseAI] = useState(false); // default: free template library
+  const [seeding, setSeeding] = useState(false);
+  const [dummyCount, setDummyCount] = useState(null);
 
   const [userSearch, setUserSearch] = useState('');
 
@@ -103,6 +106,8 @@ const AdminPanel = () => {
 
   useEffect(() => { if (isAdmin) loadData(); }, [isAdmin, loadData]);
 
+  useEffect(() => { if (tab === 'seed') refreshDummyCount(); }, [tab, refreshDummyCount]);
+
   // --- Actions ---
   const toggleAdmin = async (u) => {
     const makeAdmin = u.role !== 'admin';
@@ -136,6 +141,31 @@ const AdminPanel = () => {
       setStats(s => ({ ...s, posts: s.posts - 1 }));
       toast.success('Post deleted.');
     } catch (e) { console.error(e); toast.error('Delete failed.'); }
+  };
+
+  const refreshDummyCount = useCallback(async () => {
+    setDummyCount(await countDummyActivity());
+  }, []);
+
+  const handleSeedDummy = async () => {
+    setSeeding(true);
+    try {
+      const n = await seedDummyActivity();
+      toast.success(`Added ${n} sample activity items to the Proof Wall.`);
+      await refreshDummyCount();
+    } catch (e) { console.error(e); toast.error('Could not seed sample activity.'); }
+    setSeeding(false);
+  };
+
+  const handleDeleteDummy = async () => {
+    if (!window.confirm('Delete ALL sample (dummy) activity items? Real activity is never touched.')) return;
+    setSeeding(true);
+    try {
+      const n = await deleteDummyActivity();
+      toast.success(`Deleted ${n} sample activity items.`);
+      await refreshDummyCount();
+    } catch (e) { console.error(e); toast.error('Could not delete sample activity.'); }
+    setSeeding(false);
   };
 
   const handleGenerate = async () => {
@@ -207,6 +237,7 @@ const AdminPanel = () => {
     ['projects', 'Projects'],
     ['users', 'Users'],
     ['generate', 'Generate'],
+    ['seed', 'Seed'],
     ['moderation', 'Moderation'],
   ];
 
@@ -342,6 +373,27 @@ const AdminPanel = () => {
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* SEED (dummy Proof Wall content) */}
+      {!loadingData && tab === 'seed' && (
+        <div>
+          <p className="text-gray-500 text-sm mb-2">Seed the Proof Wall with sample activity so it doesn't look empty at launch. Every sample item is flagged as dummy and can be safely bulk-deleted later, without touching any real activity.</p>
+          <p className="text-gray-400 text-xs mb-5">
+            {dummyCount === null ? 'Checking how many sample items exist…' : `${dummyCount} sample item${dummyCount === 1 ? '' : 's'} currently on the wall.`}
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <button onClick={handleSeedDummy} disabled={seeding}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-5 py-2.5 rounded-lg transition-all disabled:opacity-50">
+              {seeding ? 'Working…' : 'Add sample activity'}
+            </button>
+            <button onClick={handleDeleteDummy} disabled={seeding || dummyCount === 0}
+              className="bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-sm px-5 py-2.5 rounded-lg transition-all disabled:opacity-40">
+              {seeding ? 'Working…' : 'Delete all sample activity'}
+            </button>
+          </div>
+          <p className="text-gray-400 text-xs mt-4 leading-relaxed">Tip: add sample activity now for launch, then once real members start earning badges and shipping projects, come back and delete it all in one click.</p>
         </div>
       )}
 

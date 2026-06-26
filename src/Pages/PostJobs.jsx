@@ -233,17 +233,17 @@ const PostJobs = () => {
     return tomorrow.toISOString().split('T')[0];
   };
 
-  const inputClass = "w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 min-h-[44px] text-white placeholder-gray-400 focus:border-orange-400 focus:outline-none text-sm transition-all";
+  const inputClass = "w-full bg-white border border-gray-300 rounded-xl px-4 py-3 min-h-[44px] text-gray-900 placeholder-gray-400 focus:border-orange-400 focus:outline-none text-sm transition-all";
   const labelClass = "block text-orange-400 font-semibold mb-2 text-sm";
 
   if (authLoading || !currentUser) {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#000000' }}>
+        <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-400 mx-auto mb-4"></div>
-            <p className="text-white">Loading...</p>
+            <p className="text-gray-700">Loading...</p>
           </div>
         </div>
       </>
@@ -253,7 +253,7 @@ const PostJobs = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen overflow-x-hidden pt-20 sm:pt-24" style={{ backgroundColor: '#000000' }}>
+      <div className="min-h-screen overflow-x-hidden pt-20 sm:pt-24">
         <main className="pb-16 sm:pb-20 md:pb-24">
           <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 md:py-10 max-w-3xl">
 
@@ -264,19 +264,19 @@ const PostJobs = () => {
                   {currentUser.displayName || currentUser.email} — Post a new job listing
                 </p>
               </div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-2 sm:mb-3">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-2 sm:mb-3">
                 Post a <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Job</span>
               </h1>
               <p className="text-gray-600 text-base">Reach a global pool of verified tech talent ready for remote and onsite roles</p>
             </section>
 
             {/* Form */}
-            <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-white/20 p-4 sm:p-6 md:p-8">
+            <div className="bg-white rounded-xl sm:rounded-2xl border border-gray-300 p-4 sm:p-6 md:p-8">
               <form onSubmit={handleSubmit} className="space-y-8">
 
                 {/* Job Type */}
                 <div>
-                  <h2 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">Job Type *</h2>
+                  <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Job Type *</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {jobTypes.map(type => (
                       <button
@@ -286,11 +286,11 @@ const PostJobs = () => {
                         className={`p-4 rounded-xl border-2 text-left ${
                           formData.jobType === type.id
                             ? 'border-orange-400 bg-orange-500/20'
-                            : 'border-white/20 bg-white/5 hover:bg-white/10'
+                            : 'border-gray-300 bg-white hover:bg-gray-50'
                         }`}
                       >
-                        <div className="text-white font-bold mb-1 text-sm">{type.label}</div>
-                        <div className="text-gray-400 text-xs">{type.description}</div>
+                        <div className="text-gray-900 font-bold mb-1 text-sm">{type.label}</div>
+                        <div className="text-gray-500 text-xs">{type.description}</div>
                       </button>
                     ))}
                   </div>
@@ -298,7 +298,7 @@ const PostJobs = () => {
 
                 {/* Basic Info */}
                 <div className="space-y-5">
-                  <h2 className="text-lg sm:text-xl font-bold text-white">Job Details</h2>
+                  <h2 className="text-lg sm:text-xl font-bold text-gray-900">Job Details</h2>
 
                   <div>
                     <label className={labelClass}>Job Title *</label>
@@ -382,7 +382,7 @@ const PostJobs = () => {
                       value={formData.externalLink}
                       onChange={handleUrlChange}
                       required
-                      className={`w-full bg-white/10 border ${urlError ? 'border-red-500' : 'border-white/20'} rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:border-orange-400 focus:outline-none text-sm`}
+                      className={`w-full bg-white border ${urlError ? 'border-red-500' : 'border-gray-300'} rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-orange-400 focus:outline-none text-sm`}
                       placeholder="https://example.com/careers/apply"
                     />
                     {urlError && <p className="text-red-400 text-xs mt-1.5">{urlError}</p>}
@@ -396,7 +396,7 @@ const PostJobs = () => {
 
                 {/* Your Info */}
                 <div className="space-y-5">
-                  <h2 className="text-lg sm:text-xl font-bold text-white">Your Contact Info</h2>
+                  <h2 className="text-lg sm:text-xl font-bold text-gray-900">Your Contact Info</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className={labelClass}>Your Name *</label>
@@ -414,7 +414,7 @@ const PostJobs = () => {
                       name="posterPhone"
                       value={formData.posterPhone}
                       onChange={handlePhoneChange}
-                      className={`w-full bg-white/10 border ${phoneError ? 'border-red-500' : 'border-white/20'} rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:border-orange-400 focus:outline-none text-sm`}
+                      className={`w-full bg-white border ${phoneError ? 'border-red-500' : 'border-gray-300'} rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-orange-400 focus:outline-none text-sm`}
                       placeholder="+1 (555) 123-4567"
                     />
                     {phoneError && <p className="text-red-400 text-xs mt-1.5">{phoneError}</p>}
@@ -423,7 +423,7 @@ const PostJobs = () => {
 
                 {/* Expiration */}
                 <div className="space-y-4">
-                  <h2 className="text-lg sm:text-xl font-bold text-white">Listing Duration</h2>
+                  <h2 className="text-lg sm:text-xl font-bold text-gray-900">Listing Duration</h2>
                   <div>
                     <label className={labelClass}>When should this listing expire?</label>
                     <select name="expirationOption" value={formData.expirationOption} onChange={handleInputChange} className={inputClass}>

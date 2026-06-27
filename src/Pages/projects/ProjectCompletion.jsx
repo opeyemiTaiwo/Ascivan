@@ -11,6 +11,7 @@ import { notifyBadgeAwarded } from '../../utils/emailNotifications';
 import { logActivity as logProofEvent } from '../../utils/activityFeed';
 import { logActivity } from '../../utils/activityLog';
 import { REVIEW_STATUS, submitProjectForReview, getProjectMemberEmails } from '../../utils/projectReview';
+import { sendPush } from '../../utils/pushNotifications';
 
 const badgeCategories = {
   'mentorship': { id: 'techmo', name: 'TechMO (Mentor)', color: 'from-blue-500 to-blue-600' },
@@ -69,6 +70,19 @@ const ProjectCompletion = () => {
       const memberEmails = await getProjectMemberEmails(projectId);
       await submitProjectForReview({ ...project, id: projectId }, currentUser, submissionUrl);
       toast.success('Submitted to Loomiqe for review. You will be notified once it is reviewed.');
+      // Push to admins (non-blocking).
+      try {
+        const adminSnap = await getDocs(query(collection(db, 'users'), where('role', '==', 'admin')));
+        const adminUids = adminSnap.docs.map(d => d.id);
+        if (adminUids.length) {
+          sendPush({
+            recipientUids: adminUids,
+            title: 'Project submitted for review',
+            body: `"${project.projectTitle || 'A project'}" was submitted and needs review.`,
+            link: '/admin',
+          });
+        }
+      } catch (e) { /* non-blocking */ }
       await fetchData();
     } catch (e) {
       toast.error(e.message || 'Could not submit for review.');

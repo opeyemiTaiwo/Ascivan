@@ -6,6 +6,7 @@ import Navbar from '../../components/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
 import { collection, query, where, onSnapshot, doc, updateDoc, addDoc, getDocs, deleteDoc, increment, serverTimestamp, arrayUnion } from 'firebase/firestore';
 import { db } from '../../firebase/config';
+import { sendPush } from '../../utils/pushNotifications';
 import { toast } from 'react-toastify';
 import { notifyApplicationApproved, notifyApplicationRejected } from '../../utils/emailNotifications';
 
@@ -106,6 +107,13 @@ const ProjectOwnerDashboard = () => {
             mentionedByPhoto: currentUser.photoURL || null,
             isRead: false,
             createdAt: serverTimestamp(),
+          });
+          // Push to the approved member (non-blocking)
+          sendPush({
+            recipientUid: userSnap.docs[0].id,
+            title: 'Application approved',
+            body: `Your application for "${project.projectTitle}" was approved! You can now access the workspace.`,
+            link: `/projects/${project.id}`,
           });
         }
       } catch (notifErr) { console.error('Approval notification error:', notifErr); }

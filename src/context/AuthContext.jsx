@@ -192,8 +192,18 @@ export const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
       setLoading(false);
+      // Push: if the user already granted notification permission, silently
+      // (re)register this device's token and start listening for foreground pushes.
+      if (user && typeof window !== 'undefined' && 'Notification' in window) {
+        import('../utils/pushNotifications').then(({ enablePushForCurrentUser, listenForForegroundPush }) => {
+          listenForForegroundPush();
+          if (Notification.permission === 'granted') {
+            enablePushForCurrentUser({ interactive: false });
+          }
+        }).catch(() => {});
+      }
     });
-    
+
     return unsubscribe;
   }, []);
 

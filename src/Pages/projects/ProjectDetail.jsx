@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { notifyNewApplicationToOwner } from '../../utils/emailNotifications';
 import { logActivity } from '../../utils/activityLog';
 import { logActivity as logProofEvent } from '../../utils/activityFeed';
+import { sendPush } from '../../utils/pushNotifications';
 import { checkRoleEligibility } from '../../utils/roleEligibility';
 import { checkProfileComplete } from '../../utils/profileCompletion';
 
@@ -228,6 +229,13 @@ const ProjectDetail = () => {
             mentionedByPhoto: currentUser.photoURL || null,
             isRead: false,
             createdAt: serverTimestamp(),
+          });
+          // Push to owner (non-blocking)
+          sendPush({
+            recipientUid: project.submitterId,
+            title: 'New project application',
+            body: `${currentUser.displayName || currentUser.email} applied to "${project.projectTitle}" as ${applyForm.role}`,
+            link: '/projects/owner-dashboard',
           });
         }
         // Email notification

@@ -23,6 +23,7 @@ import {
   limit,
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
+import { sendPush } from '../utils/pushNotifications';
 
 const getConversationId = (uid1, uid2) => [uid1, uid2].sort().join('_');
 
@@ -243,6 +244,15 @@ const Messages = () => {
         lastMessageAt: serverTimestamp(),
         [`unreadBy.${activeUser?.uid}`]: (unreadCounts[activeConvId] || 0) + 1,
       });
+      // Push to the recipient (non-blocking).
+      if (activeUser?.uid) {
+        sendPush({
+          recipientUid: activeUser.uid,
+          title: `New message from ${myData?.displayName || currentUser.displayName || 'someone'}`,
+          body: text.length > 80 ? text.slice(0, 80) + '…' : text,
+          link: '/messages',
+        });
+      }
     } catch (e) {
       console.error('Send error:', e);
     } finally {

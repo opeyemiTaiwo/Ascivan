@@ -13,6 +13,7 @@ import {
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { getMessaging, isSupported as messagingIsSupported } from "firebase/messaging";
 
 // Your web app's Firebase configuration for Loomiqe
 const firebaseConfig = {
@@ -32,6 +33,14 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 export const analytics = getAnalytics(app);
+
+// Messaging (push). Only available in supported browsers; guard at call sites.
+export let messaging = null;
+messagingIsSupported().then((ok) => {
+  if (ok) {
+    try { messaging = getMessaging(app); } catch (e) { console.warn('Messaging init skipped:', e?.message); }
+  }
+}).catch(() => {});
 
 // Configure auth persistence to handle Safari storage issues
 const configurePersistence = async () => {

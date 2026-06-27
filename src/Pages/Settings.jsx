@@ -7,6 +7,7 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { PAYMENT_CONFIG } from '../config/payment';
 import { deleteUserAccount } from '../utils/deleteUserContent';
+import { enablePushForCurrentUser } from '../utils/pushNotifications';
 import { toast } from 'react-toastify';
 
 const skillTrackOpts = [
@@ -230,6 +231,17 @@ const Settings = () => {
         {/* Account */}
         {activeTab === 'account' && (
           <div className="space-y-6">
+            <div className="bg-white border border-gray-200 rounded-xl p-6">
+              <h3 className="text-gray-900 font-bold text-base mb-2">Push Notifications</h3>
+              <p className="text-gray-500 text-sm mb-4">Get notified on this device about new messages, project applications, and approvals, even when Loomiqe isn't open. On iPhone, add Loomiqe to your Home Screen first (Share, then Add to Home Screen).</p>
+              <button
+                onClick={async () => { await enablePushForCurrentUser({ interactive: true }); }}
+                className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg transition-all"
+              >
+                Enable notifications on this device
+              </button>
+            </div>
+
             <div className="bg-white border border-gray-200 rounded-xl p-6">
               <h3 className="text-gray-900 font-bold text-base mb-3">Reset Password</h3>
               <p className="text-gray-500 text-sm mb-4">Since you signed in with Google, password management is handled through your Google account.</p>

@@ -134,10 +134,10 @@ function App() {
                 <Route path="/dashboard" element={<SidebarRoute><UserDashboard /></SidebarRoute>} />
                 <Route path="/admin" element={<SidebarRoute><AdminPanel /></SidebarRoute>} />
 
-                <Route path="/community" element={<SidebarRoute><CommunityPosts /></SidebarRoute>} />
+                <Route path="/community" element={<Navigate to="/proof-wall" replace />} />
                 <Route path="/proof-wall" element={<SidebarRoute><ProofWall /></SidebarRoute>} />
-                <Route path="/community/submit" element={<SidebarRoute><SubmitPost /></SidebarRoute>} />
-                <Route path="/community/post/:postId" element={<SidebarRoute><SinglePost /></SidebarRoute>} />
+                <Route path="/community/submit" element={<Navigate to="/proof-wall" replace />} />
+                <Route path="/community/post/:postId" element={<Navigate to="/proof-wall" replace />} />
                 <Route path="/post/:postId" element={<SidebarRoute><SinglePost /></SidebarRoute>} />
 
                 <Route path="/projects" element={<SidebarRoute><ProjectsListing /></SidebarRoute>} />

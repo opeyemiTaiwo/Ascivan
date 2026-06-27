@@ -68,13 +68,11 @@ const AppLayout = ({ children }) => {
 
   const navItems = [
     { path: '/dashboard', label: 'Home' },
-    { path: '/community', label: 'Feed' },
+    { path: '/proof-wall', label: 'Proof Wall' },
     { path: '/projects', label: 'Projects' },
     { path: '/jobs', label: 'Jobs' },
     { path: '/my-workspaces', label: 'Workspace' },
-    ...(isPremiumOrAdmin ? [
-      { path: '/talent-board', label: 'Talent Board' },
-    ] : []),
+    { path: '/talent-board', label: 'Talent Board' },
     { path: '/project-vault', label: 'Project Vault' },
     { path: '/support', label: 'Support' },
     { path: '/settings', label: 'Settings' },
@@ -84,7 +82,7 @@ const AppLayout = ({ children }) => {
   ];
 
   const isActive = (path) => {
-    if (path === '/community') return location.pathname === '/community' || location.pathname.startsWith('/community/');
+    if (path === '/proof-wall') return location.pathname === '/proof-wall';
     if (path === '/dashboard') return location.pathname === '/dashboard';
     return location.pathname === path || location.pathname.startsWith(path + '/');
   };
@@ -95,11 +93,11 @@ const AppLayout = ({ children }) => {
     <div className="min-h-screen flex bg-white">
       {/* Sidebar */}
       {!hideSidebar && (
-      <aside className={`fixed inset-y-0 left-0 z-50 w-60 bg-gray-950 flex flex-col transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static lg:inset-0`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 w-60 bg-white border-r border-gray-200 flex flex-col transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static lg:inset-0`}>
         {/* Logo */}
-        <div className="flex items-center gap-2 px-5 h-16 sm:h-[72px] border-b border-white/10">
+        <div className="flex items-center gap-2 px-5 h-16 sm:h-[72px] border-b border-gray-200">
           <img src="/Images/512X512.png" alt="Loomiqe" className="w-8 h-8" />
-          <button onClick={() => setSidebarOpen(false)} className="lg:hidden ml-auto p-1 text-gray-400 hover:text-white">
+          <button onClick={() => setSidebarOpen(false)} className="lg:hidden ml-auto p-1 text-gray-400 hover:text-gray-700">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
@@ -113,7 +111,7 @@ const AppLayout = ({ children }) => {
               className={`flex items-center justify-between px-3 py-3 rounded-lg text-sm font-medium transition-all ${
                 isActive(item.path)
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
               }`}
             >
               <span>{item.label}</span>
@@ -127,23 +125,23 @@ const AppLayout = ({ children }) => {
         </nav>
 
         {/* User + Logout */}
-        <div className="border-t border-white/10 p-3 space-y-2">
+        <div className="border-t border-gray-200 p-3 space-y-2">
           {currentUser && (
-            <Link to={`/profile/${currentUser.email}`} className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors">
+            <Link to={`/profile/${currentUser.email}`} className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors">
               {currentUser.photoURL ? (
-                <img src={currentUser.photoURL} alt="" className="w-8 h-8 rounded-full object-cover border border-white/20" />
+                <img src={currentUser.photoURL} alt="" className="w-8 h-8 rounded-full object-cover border border-gray-200" />
               ) : (
                 <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-bold">
                   {currentUser.displayName?.[0] || 'U'}
                 </div>
               )}
               <div className="min-w-0 flex-1">
-                <p className="text-white text-sm font-medium truncate">{currentUser.displayName || 'User'}</p>
+                <p className="text-gray-900 text-sm font-medium truncate">{currentUser.displayName || 'User'}</p>
                 <p className="text-gray-500 text-xs truncate">{currentUser.email}</p>
               </div>
             </Link>
           )}
-          <Link to="/logout" className="block px-3 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-red-400 hover:bg-white/5 transition-colors">
+          <Link to="/logout" className="block px-3 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-red-400 hover:bg-gray-100 transition-colors">
             Logout
           </Link>
         </div>
@@ -165,8 +163,8 @@ const AppLayout = ({ children }) => {
               </svg>
             </button>
             )}
-            {location.pathname === '/community' && (
-            <a href="/community" className="hidden lg:flex items-center gap-1 ml-4">
+            {location.pathname === '/proof-wall' && (
+            <a href="/proof-wall" className="hidden lg:flex items-center gap-1 ml-4">
               <img src="/Images/512X512.png" alt="Loomiqe" className="h-9 w-9" />
             </a>
             )}

@@ -206,7 +206,8 @@ const ProjectsListing = () => {
                     <div className="flex flex-wrap items-center gap-1.5 mb-3">
                       <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-900 text-[10px] font-medium">{getIndustryLabel(project.industryTrack)}</span>
                       <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-900 text-[10px] font-medium">{formatTimeline(project.timeline)}</span>
-                      {appliedProjectIds.has(project.id) ? (
+                      {(appliedProjectIds.has(project.id)
+                        || (currentUser && (project.submitterId === currentUser.uid || project.submitterEmail === currentUser.email))) ? (
                         <span className="px-3 py-1.5 bg-gray-800 text-white rounded-lg text-sm font-semibold">View Project</span>
                       ) : project.status === 'lead_recruitment' ? (
                         <span className="px-3 py-1.5 bg-amber-500 text-white rounded-lg text-sm font-semibold">Apply to lead</span>

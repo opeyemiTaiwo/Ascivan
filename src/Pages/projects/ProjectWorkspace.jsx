@@ -204,12 +204,21 @@ const ProjectWorkspace = () => {
   const handleReact = async (postId, emoji) => {
     try {
       const postRef = doc(db, 'projects', projectId, 'forum', postId);
-      const post = posts.find(p => p.id === postId);
+      const post = posts.find(p => p.id === postId) || posts.flatMap(p => getReplies(p.id)).find(r => r.id === postId);
       const reactions = post?.reactions || {};
-      const key = `reactions.${emoji}`;
+      const reactorInfo = post?.reactorInfo || {};
       const current = reactions[emoji] || [];
-      const updated = current.includes(currentUser.uid) ? current.filter(u => u !== currentUser.uid) : [...current, currentUser.uid];
-      await updateDoc(postRef, { [key]: updated });
+      const has = current.includes(currentUser.uid);
+      const updated = has ? current.filter(u => u !== currentUser.uid) : [...current, currentUser.uid];
+      const info = { ...reactorInfo };
+      if (has) {
+        // only remove their info if they have no other reactions on this post
+        const stillReacts = Object.entries(reactions).some(([e, arr]) => e !== emoji && (arr || []).includes(currentUser.uid));
+        if (!stillReacts) delete info[currentUser.uid];
+      } else {
+        info[currentUser.uid] = { name: currentUser.displayName || currentUser.email, photo: currentUser.photoURL || '' };
+      }
+      await updateDoc(postRef, { [`reactions.${emoji}`]: updated, reactorInfo: info });
     } catch (e) { console.error(e); }
   };
 
@@ -248,6 +257,29 @@ const ProjectWorkspace = () => {
   const getReactorNames = (reactorUids) => {
     if (!reactorUids || reactorUids.length === 0) return '';
     return reactorUids.map(uid => uidNameMap[uid] || 'Someone').join(', ');
+  };
+
+  // Render small profiles (avatar + name) of the people who reacted.
+  const renderReactorProfiles = (reactorUids, post) => {
+    if (!reactorUids || reactorUids.length === 0) return null;
+    const info = post?.reactorInfo || {};
+    return (
+      <div className="flex flex-col gap-1">
+        {reactorUids.map(ruid => {
+          const meta = info[ruid] || {};
+          const name = meta.name || uidNameMap[ruid] || 'Someone';
+          const photo = meta.photo;
+          return (
+            <div key={ruid} className="flex items-center gap-1.5">
+              {photo
+                ? <img src={photo} alt={name} className="w-4 h-4 rounded-full object-cover" />
+                : <span className="w-4 h-4 rounded-full bg-blue-500 text-white text-[8px] font-bold flex items-center justify-center">{(name || '?').charAt(0).toUpperCase()}</span>}
+              <span>{name}</span>
+            </div>
+          );
+        })}
+      </div>
+    );
   };
 
   const inputCls = "w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none";
@@ -330,7 +362,7 @@ const ProjectWorkspace = () => {
                             </button>
                             {showReactors === key && count > 0 && (
                               <div className="absolute bottom-full left-0 mb-1 bg-gray-900 text-white text-[10px] rounded-lg px-2 py-1.5 whitespace-nowrap z-10 shadow-lg">
-                                {getReactorNames(reactors)}
+                                {renderReactorProfiles(reactors, post)}
                               </div>
                             )}
                           </div>
@@ -454,9 +486,15 @@ const ProjectWorkspace = () => {
           {isOwner && (
             <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4">
               <h3 className="text-base font-bold text-gray-900">Edit Resources</h3>
-              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-1">
-                <p className="text-amber-800 text-xs font-medium">As project lead, a submission link is required. Use a GitHub repository (free and recommended) or another platform of your choice, so the team's work can be reviewed and badges can be verified on completion.</p>
-              </div>
+              {resources.submissionUrl && resources.submissionUrl.trim() ? (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-1">
+                  <p className="text-green-800 text-xs font-medium">You are all set. It is advised you also add a meeting link and a project details link, if you haven't done so, to help your team collaborate.</p>
+                </div>
+              ) : (
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-1">
+                  <p className="text-amber-800 text-xs font-medium">As project lead, a submission link is required. Use a GitHub repository (free and recommended) or another platform of your choice, so the team's work can be reviewed and badges can be verified on completion.</p>
+                </div>
+              )}
               <div>
                 <label className="block text-gray-500 text-xs font-medium mb-1">Project Submission URL <span className="text-red-500">*</span></label>
                 <input type="url" value={resources.submissionUrl} onChange={e => setResources(p => ({ ...p, submissionUrl: e.target.value }))} className={inputCls} placeholder="https://github.com/..." />

@@ -78,6 +78,19 @@ const ProjectOwnerDashboard = () => {
       });
       toast.success(`${app.applicantName} approved!`);
 
+      // Immediately reflect the approval in local state so the UI updates
+      // (the projects listener may not refire just from an application status change).
+      setMyProjects(prev => prev.map(p => {
+        if (p.id !== project.id) return p;
+        const applications = (p.applications || []).map(a => a.id === app.id ? { ...a, status: 'approved' } : a);
+        return {
+          ...p,
+          applications,
+          pendingCount: applications.filter(a => a.status === 'submitted').length,
+          approvedMembers: applications.filter(a => a.status === 'approved'),
+        };
+      }));
+
       // Send notification to applicant
       try {
         const userQ = query(collection(db, 'users'), where('email', '==', app.applicantEmail));
@@ -118,6 +131,17 @@ const ProjectOwnerDashboard = () => {
         status: 'rejected', rejectedAt: serverTimestamp(), rejectedBy: currentUser.email,
       });
       toast.success(`Application rejected`);
+
+      // Reflect immediately in local state.
+      setMyProjects(prev => prev.map(p => {
+        const applications = (p.applications || []).map(a => a.id === app.id ? { ...a, status: 'rejected' } : a);
+        return {
+          ...p,
+          applications,
+          pendingCount: applications.filter(a => a.status === 'submitted').length,
+          approvedMembers: applications.filter(a => a.status === 'approved'),
+        };
+      }));
 
       // Send rejection email to applicant
       try {
@@ -317,7 +341,7 @@ const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove, onTo
                   <button onClick={() => onApprove(app)} className="px-3 py-1.5 min-h-[36px] bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition-all">
                     Approve
                   </button>
-                  <button onClick={() => onReject(app)} className="px-3 py-1.5 min-h-[36px] bg-red-500/20 hover:bg-red-500/40 text-red-300 font-bold rounded-lg text-xs transition-all border border-red-500/30">
+                  <button onClick={() => onReject(app)} className="px-3 py-1.5 min-h-[36px] bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-lg text-xs transition-all border border-red-200">
                     Reject
                   </button>
                 </div>

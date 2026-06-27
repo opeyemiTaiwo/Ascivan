@@ -394,6 +394,9 @@ const ProjectSubmission = () => {
                   <span className="text-gray-400 text-xs">Total team: {totalTeamSize} {totalTeamSize === 1 ? 'person' : 'people'}</span>
                 </div>
                 <p className="text-gray-500 text-xs -mt-2">Set an experience level per role. Intermediate and Advanced roles can only be filled by members who've earned the matching badge level in that track — keeping your team realistic and your project outcomes protected. Use Beginner or Any Level for roles open to newcomers.</p>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                  <p className="text-gray-700 text-xs"><strong>Note:</strong> add or remove roles so the team matches exactly what your project needs. You decide how many people and which roles are required.</p>
+                </div>
 
                 {teamRoles.map((role, index) => (
                   <div key={index} className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-3">

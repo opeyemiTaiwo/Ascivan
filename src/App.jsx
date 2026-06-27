@@ -212,14 +212,16 @@ function App() {
             pauseOnHover
             theme="light"
             className="mt-4"
-            toastClassName="text-sm sm:text-base"
+            toastClassName="text-xs sm:text-sm"
             toastStyle={{
               backgroundColor: 'white',
               border: '1px solid #e5e7eb',
-              borderRadius: '0.75rem',
+              borderRadius: '0.6rem',
               color: '#111827',
               margin: '0.5rem',
-              maxWidth: '90vw',
+              minHeight: '48px',
+              padding: '0.5rem 0.75rem',
+              maxWidth: '340px',
               boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
             }}
           />

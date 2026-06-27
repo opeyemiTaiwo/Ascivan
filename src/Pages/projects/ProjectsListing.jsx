@@ -143,6 +143,14 @@ const ProjectsListing = () => {
               </div>
             </div>
 
+            {/* How leading works */}
+            <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-6">
+              <p className="text-gray-800 text-sm font-semibold mb-1">Two ways to lead a project</p>
+              <p className="text-gray-600 text-sm">
+                <span className="font-semibold">Apply to lead</span> an available project below, or <Link to="/projects/submit" className="text-blue-600 font-semibold hover:underline">create your own project</Link> to lead. As a lead you review and shape the project, set the dates and roles, and your team builds it with you.
+              </p>
+            </div>
+
             {/* Search + Filters */}
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 mb-6 space-y-3">
               <input

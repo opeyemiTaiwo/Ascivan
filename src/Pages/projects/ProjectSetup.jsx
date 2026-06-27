@@ -31,7 +31,7 @@ const ProjectSetup = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [authorized, setAuthorized] = useState(false);
-  const [form, setForm] = useState({ projectTitle: '', projectDescription: '', projectGoals: '', industryTrack: 'technology' });
+  const [form, setForm] = useState({ projectTitle: '', projectDescription: '', projectGoals: '', industryTrack: 'technology', startDate: '', endDate: '', submissionUrl: '', projectLink: '' });
   const [roles, setRoles] = useState([]);
 
   useEffect(() => {
@@ -59,6 +59,10 @@ const ProjectSetup = () => {
           projectDescription: data.projectDescription || '',
           projectGoals: data.projectGoals || '',
           industryTrack: data.industryTrack || 'technology',
+          startDate: data.startDate || '',
+          endDate: data.endDate || '',
+          submissionUrl: data.resources?.submissionUrl || '',
+          projectLink: data.projectLink || '',
         });
         // Pre-fill roles from the generator's proposal
         const proposed = Array.isArray(data.proposedRoles) ? data.proposedRoles : [];
@@ -87,6 +91,13 @@ const ProjectSetup = () => {
   const handleOpen = async () => {
     if (!form.projectTitle.trim()) { toast.error('Title is required'); return; }
     if (!form.projectDescription.trim()) { toast.error('Description is required'); return; }
+    if (!form.startDate) { toast.error('Start date is required'); return; }
+    if (!form.endDate) { toast.error('End date is required'); return; }
+    if (form.startDate && form.endDate && new Date(form.endDate) < new Date(form.startDate)) {
+      toast.error('End date must be after the start date'); return;
+    }
+    if (!form.submissionUrl.trim()) { toast.error('A project submission link is required'); return; }
+    if (!form.projectLink.trim()) { toast.error('A project link (full description doc) is required'); return; }
     const valid = roles.filter(r => r.role && (parseInt(r.count, 10) || 0) > 0);
     if (valid.length === 0) { toast.error('Add at least one team role'); return; }
 
@@ -107,6 +118,10 @@ const ProjectSetup = () => {
         projectDescription: form.projectDescription.trim(),
         projectGoals: form.projectGoals.trim() || null,
         industryTrack: form.industryTrack,
+        startDate: form.startDate,
+        endDate: form.endDate,
+        projectLink: form.projectLink.trim(),
+        resources: { ...(form.submissionUrl ? { submissionUrl: form.submissionUrl.trim() } : {}) },
         teamRoles,
         maxTeamSize,
         status: 'active',
@@ -158,7 +173,7 @@ const ProjectSetup = () => {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
       <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">Set up your project</h1>
-      <p className="text-gray-500 text-sm mb-6">You're the lead. Refine the idea, decide what roles your team needs, then open it for others to apply. You manage the project — team members fill the building roles below.</p>
+      <p className="text-gray-500 text-sm mb-6">You're the lead. Review this project carefully and modify it so you fully understand what you're leading. Refine the idea, set the start and end dates, add the submission and full-description links, decide what roles your team needs (add at least one role), then open it for others to apply. You manage the project — team members fill the building roles below.</p>
 
       <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-6 space-y-5">
         <div>
@@ -178,6 +193,29 @@ const ProjectSetup = () => {
           <select value={form.industryTrack} onChange={e => setForm(p => ({ ...p, industryTrack: e.target.value }))} className={inputClass + ' appearance-none'}>
             {industryTracks.map(t => <option key={t} value={t} className="capitalize">{t}</option>)}
           </select>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className={labelClass}>Start date <span className="text-red-500">*</span></label>
+            <input type="date" value={form.startDate} onChange={e => setForm(p => ({ ...p, startDate: e.target.value }))} className={inputClass} />
+          </div>
+          <div>
+            <label className={labelClass}>End date <span className="text-red-500">*</span></label>
+            <input type="date" value={form.endDate} onChange={e => setForm(p => ({ ...p, endDate: e.target.value }))} className={inputClass} />
+          </div>
+        </div>
+
+        <div>
+          <label className={labelClass}>Project submission link <span className="text-red-500">*</span></label>
+          <input type="url" value={form.submissionUrl} onChange={e => setForm(p => ({ ...p, submissionUrl: e.target.value }))} className={inputClass} placeholder="https://github.com/... (a folder with all the work, team, and final solutions)" />
+          <p className="text-gray-400 text-xs mt-1">A GitHub repo is recommended (free). This is the folder your team's work lives in and what gets reviewed.</p>
+        </div>
+
+        <div>
+          <label className={labelClass}>Project link — full description <span className="text-red-500">*</span></label>
+          <input type="url" value={form.projectLink} onChange={e => setForm(p => ({ ...p, projectLink: e.target.value }))} className={inputClass} placeholder="https://docs.google.com/... (a doc, slides, etc. fully describing the project)" />
+          <p className="text-gray-400 text-xs mt-1">A full description of the project — Google Doc, a .docx, a slide deck, etc. So everyone understands what is being built.</p>
         </div>
       </div>
 

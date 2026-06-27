@@ -47,15 +47,18 @@ const TalentBoard = () => {
         const snap = await getDocs(q);
         const users = snap.docs
           .map(d => ({ id: d.id, ...d.data() }))
-          // Show non-company individuals with at least one badge.
-          // Don't hard-require onboardingComplete (it's often unset on valid accounts);
-          // exclude only those explicitly marked incomplete.
-          .filter(u =>
-            !u.isCompany &&
-            u.uid !== currentUser?.uid &&
-            (u.badges || []).length > 0 &&
-            u.onboardingComplete !== false
-          )
+          // Show non-company individuals who have earned at least one badge or certificate.
+          // Check every place a badge/cert can live, so no earner is missed.
+          .filter(u => {
+            if (u.isCompany) return false;
+            if (u.uid === currentUser?.uid) return false;
+            if (u.onboardingComplete === false) return false;
+            const hasBadgeArray = Array.isArray(u.badges) && u.badges.length > 0;
+            const hasTotal = (u.totalBadges || 0) > 0;
+            const hasBadgeCounts = u.badgeCounts && Object.values(u.badgeCounts).some(n => (n || 0) > 0);
+            const hasCertificates = Array.isArray(u.certificates) && u.certificates.length > 0;
+            return hasBadgeArray || hasTotal || hasBadgeCounts || hasCertificates;
+          })
           .sort((a, b) => (a.displayName || '').localeCompare(b.displayName || ''));
         setTalents(users);
       } catch (e) {

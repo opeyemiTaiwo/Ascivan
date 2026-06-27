@@ -72,6 +72,8 @@ const ProjectSubmission = () => {
     contactEmail: '',
     contactName: '',
     companyName: '',
+    submissionUrl: '',
+    projectLink: '',
     // Pricing
   });
 
@@ -148,6 +150,8 @@ const ProjectSubmission = () => {
     if (!formData.startDate) errors.push('Start date is required');
     if (!formData.endDate) errors.push('End date is required');
     if (!formData.contactEmail.trim()) errors.push('Contact email is required');
+    if (!formData.submissionUrl.trim()) errors.push('Project submission link is required');
+    if (!formData.projectLink.trim()) errors.push('Project link (full description) is required');
 
     if (formData.startDate && formData.endDate) {
       const start = new Date(formData.startDate);
@@ -228,6 +232,8 @@ const ProjectSubmission = () => {
         startDate: formData.startDate,
         endDate: formData.endDate,
         projectGoals: formData.projectGoals.trim() || null,
+        projectLink: formData.projectLink.trim(),
+        resources: { submissionUrl: formData.submissionUrl.trim() },
         experienceLevel: formData.experienceLevel || 'any-level',
         contactEmail: formData.contactEmail.trim(),
         contactName: formData.contactName.trim() || 'Project Owner',
@@ -366,6 +372,18 @@ const ProjectSubmission = () => {
                 <div>
                   <label className={labelClass}>Project Goals</label>
                   <textarea name="projectGoals" value={formData.projectGoals} onChange={handleInputChange} className={inputClass + " resize-none"} rows="2" placeholder="What should the team achieve by the end?" maxLength={1000} />
+                </div>
+
+                {/* Submission + project links */}
+                <div>
+                  <label className={labelClass}>Project Submission Link *</label>
+                  <input type="url" name="submissionUrl" value={formData.submissionUrl} onChange={handleInputChange} className={inputClass} placeholder="https://github.com/... (folder with all the work, team, and final solutions)" />
+                  <p className="text-gray-400 text-xs mt-1">A GitHub repo is recommended (free). This is where the team's work lives and what gets reviewed.</p>
+                </div>
+                <div>
+                  <label className={labelClass}>Project Link — Full Description *</label>
+                  <input type="url" name="projectLink" value={formData.projectLink} onChange={handleInputChange} className={inputClass} placeholder="https://docs.google.com/... (a doc, slides, etc. describing the project)" />
+                  <p className="text-gray-400 text-xs mt-1">A full description of the project — Google Doc, a .docx, a slide deck, etc.</p>
                 </div>
               </div>
 

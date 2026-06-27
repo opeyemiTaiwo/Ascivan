@@ -42,11 +42,21 @@ const TalentBoard = () => {
   useEffect(() => {
     const fetchTalents = async () => {
       try {
-        const q = query(collection(db, 'users'), orderBy('displayName'), limit(100));
+        // Fetch users; don't orderBy a field that some docs may lack (that silently drops them).
+        const q = query(collection(db, 'users'), limit(500));
         const snap = await getDocs(q);
         const users = snap.docs
           .map(d => ({ id: d.id, ...d.data() }))
-          .filter(u => u.onboardingComplete && !u.isCompany && u.uid !== currentUser?.uid && (u.badges || []).length > 0);
+          // Show non-company individuals with at least one badge.
+          // Don't hard-require onboardingComplete (it's often unset on valid accounts);
+          // exclude only those explicitly marked incomplete.
+          .filter(u =>
+            !u.isCompany &&
+            u.uid !== currentUser?.uid &&
+            (u.badges || []).length > 0 &&
+            u.onboardingComplete !== false
+          )
+          .sort((a, b) => (a.displayName || '').localeCompare(b.displayName || ''));
         setTalents(users);
       } catch (e) {
         console.error('Error fetching talents:', e);

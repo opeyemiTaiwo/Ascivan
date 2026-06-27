@@ -5,6 +5,17 @@ import { useAuth } from '../context/AuthContext';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
+// Map a badge category (stored on evaluations) to its badge image in /public/Images.
+const BADGE_IMAGES = {
+  development: '/Images/TechDev.png',
+  'quality-assurance': '/Images/TechQA.png',
+  mentorship: '/Images/TechMO.png',
+  leadership: '/Images/TechLeads.png',
+  design: '/Images/TechArchs.png',
+  security: '/Images/TechGuard.png',
+};
+const getBadgeImage = (category) => BADGE_IMAGES[category] || null;
+
 const ProjectVault = () => {
   const { currentUser } = useAuth();
   const [completedProjects, setCompletedProjects] = useState([]);
@@ -79,6 +90,7 @@ const ProjectVault = () => {
         projectTitle: project.projectTitle || project.title,
         completedAt: project.completedAt?.toDate?.()?.toLocaleDateString() || 'N/A',
         teamSize: (project.members || []).length,
+        badgeCategory: 'leadership',
         isOwner: true,
       };
     }
@@ -90,6 +102,7 @@ const ProjectVault = () => {
       projectTitle: project.projectTitle || project.title,
       completedAt: project.completedAt?.toDate?.()?.toLocaleDateString() || 'N/A',
       badgeName: myEval?.badgeCategory || '',
+      badgeCategory: myEval?.badgeCategory || '',
       badgeLevel: myEval?.badgeLevel || '',
       isOwner: false,
     };
@@ -118,6 +131,9 @@ const ProjectVault = () => {
                   <p className="text-gray-500 text-sm mb-4">has successfully completed the project</p>
                   <p className="text-blue-600 text-lg font-bold mb-1">"{viewingCert.projectTitle}"</p>
                   <p className="text-gray-600 text-sm mb-1">as <span className="font-semibold">{viewingCert.role}</span></p>
+                  {getBadgeImage(viewingCert.badgeCategory) && (
+                    <img src={getBadgeImage(viewingCert.badgeCategory)} alt="Badge earned" className="w-20 h-20 mx-auto mt-3 mb-1 object-contain" />
+                  )}
                   {viewingCert.badgeName && (
                     <p className="text-gray-500 text-xs mt-2">Badge earned: {viewingCert.badgeName} ({viewingCert.badgeLevel})</p>
                   )}
@@ -152,13 +168,14 @@ const ProjectVault = () => {
                         .site{color:#d1d5db;font-size:10px;margin-top:8px}
                         </style></head><body>
                         <div class="border">
-                        <img src="/Images/512X512.png" alt="Loomiqe" />
+                        <img src="${window.location.origin}/Images/512X512.png" alt="Loomiqe" />
                         <div class="subtitle">Certificate of Completion</div>
                         <div class="label">This certifies that</div>
                         <div class="name">${currentUser?.displayName || 'Member'}</div>
                         <div class="label">has successfully completed the project</div>
                         <div class="project">"${viewingCert.projectTitle}"</div>
                         <div class="role">as <strong>${viewingCert.role}</strong></div>
+                        ${getBadgeImage(viewingCert.badgeCategory) ? `<div><img src="${window.location.origin}${getBadgeImage(viewingCert.badgeCategory)}" alt="Badge" style="width:80px;height:80px;margin:12px auto 4px;display:block;object-fit:contain" /></div>` : ''}
                         ${viewingCert.badgeName ? `<div class="meta">Badge earned: ${viewingCert.badgeName} (${viewingCert.badgeLevel})</div>` : ''}
                         ${viewingCert.isOwner && viewingCert.teamSize > 0 ? `<div class="meta">Team size: ${viewingCert.teamSize} members</div>` : ''}
                         <div class="meta">Completed: ${viewingCert.completedAt}</div>

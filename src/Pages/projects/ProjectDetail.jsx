@@ -80,15 +80,23 @@ const ProjectDetail = () => {
           if (currentUser) {
             setIsOwner(data.submitterId === currentUser.uid || data.submitterEmail === currentUser.email);
             const membersList = data.members || [];
-            setIsMember(membersList.includes(currentUser.uid) || data.submitterId === currentUser.uid || data.submitterEmail === currentUser.email);
-            // Check if already applied
+            // A user is a member if their uid OR email is in the members array, or they own it.
+            const memberByArray = membersList.includes(currentUser.uid) || membersList.includes(currentUser.email);
+            // Check their applications for this project.
             const appQuery = query(
               collection(db, 'project_applications'),
               where('projectId', '==', projectId),
               where('applicantEmail', '==', currentUser.email)
             );
             const appSnap = await getDocs(appQuery);
-            setHasApplied(!appSnap.empty);
+            const apps = appSnap.docs.map(d => d.data());
+            const approvedApp = apps.some(a => a.status === 'approved');
+            const pendingApp = apps.some(a => a.status === 'submitted' || a.status === 'pending');
+
+            const member = memberByArray || approvedApp || data.submitterId === currentUser.uid || data.submitterEmail === currentUser.email;
+            setIsMember(member);
+            // "Applied" should only show while genuinely pending — not once approved.
+            setHasApplied(pendingApp && !member);
           }
         }
       } catch (err) {
@@ -408,17 +416,18 @@ const ProjectDetail = () => {
                       Complete Profile
                     </button>
                   </div>
+                ) : isMember ? (
+                  <div className="text-center py-4">
+                    <p className="text-green-600 font-bold text-base mb-1">You have been approved!</p>
+                    <p className="text-gray-500 text-xs mb-3">You can click "Open Workspace" below to join your project team.</p>
+                    <button onClick={() => navigate(`/projects/${projectId}/workspace`)} className="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-5 py-2 rounded-lg transition-all">
+                      Open Workspace
+                    </button>
+                  </div>
                 ) : hasApplied ? (
                   <div className="text-center py-4">
                     <p className="text-blue-600 font-bold text-sm">You have already applied to this project</p>
                     <p className="text-gray-500 text-xs mt-1">The project owner will review your application</p>
-                  </div>
-                ) : isMember ? (
-                  <div className="text-center py-4">
-                    <p className="text-blue-600 font-bold text-sm mb-2">You are a member of this project</p>
-                    <button onClick={() => navigate(`/projects/${projectId}/workspace`)} className="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-5 py-2 rounded-lg transition-all">
-                      Open Workspace
-                    </button>
                   </div>
                 ) : project.applicationsOpen === false ? (
                   <div className="text-center py-4">
@@ -526,11 +535,11 @@ const ProjectDetail = () => {
               </div>
             )}
 
-            {/* Member workspace access */}
-            {isMember && !isOwner && (
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
-                <p className="text-blue-700 font-semibold text-sm mb-1">You are a member of this project</p>
-                <p className="text-gray-500 text-xs mb-3">Access the workspace to collaborate with your team.</p>
+            {/* Member workspace access — only when the apply card above isn't already showing the approved state */}
+            {isMember && !isOwner && project.status !== 'active' && (
+              <div className="bg-green-50 border border-green-200 rounded-xl p-5">
+                <p className="text-green-700 font-semibold text-sm mb-1">You have been approved!</p>
+                <p className="text-gray-500 text-xs mb-3">You can click "Open Workspace" below to join your project team.</p>
                 <button onClick={() => navigate(`/projects/${projectId}/workspace`)} className="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition-all">
                   Open Workspace
                 </button>

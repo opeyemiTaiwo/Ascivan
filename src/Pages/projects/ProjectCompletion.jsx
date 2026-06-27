@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { notifyBadgeAwarded } from '../../utils/emailNotifications';
 import { logActivity as logProofEvent } from '../../utils/activityFeed';
 import { logActivity } from '../../utils/activityLog';
+import { REVIEW_STATUS, submitProjectForReview, getProjectMemberEmails } from '../../utils/projectReview';
 
 const badgeCategories = {
   'mentorship': { id: 'techmo', name: 'TechMO (Mentor)', color: 'from-blue-500 to-blue-600' },
@@ -49,6 +50,31 @@ const ProjectCompletion = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [step, setStep] = useState(1); // 1=review, 2=evaluate, 4=done
+  const [submittingReview, setSubmittingReview] = useState(false);
+
+  const reviewStatus = project?.reviewStatus || REVIEW_STATUS.NONE;
+  const isApproved = reviewStatus === REVIEW_STATUS.APPROVED;
+  const isRejected = reviewStatus === REVIEW_STATUS.REJECTED;
+  const isUnderReview = reviewStatus === REVIEW_STATUS.SUBMITTED;
+  const needsChanges = reviewStatus === REVIEW_STATUS.NEEDS_CHANGES;
+
+  const handleSubmitForReview = async () => {
+    const submissionUrl = project?.resources?.submissionUrl;
+    if (!submissionUrl || !submissionUrl.trim()) {
+      toast.error('Add a project submission link on the workspace Resources tab before submitting for review.');
+      return;
+    }
+    setSubmittingReview(true);
+    try {
+      const memberEmails = await getProjectMemberEmails(projectId);
+      await submitProjectForReview({ ...project, id: projectId }, currentUser, submissionUrl);
+      toast.success('Submitted to Loomiqe for review. You will be notified once it is reviewed.');
+      await fetchData();
+    } catch (e) {
+      toast.error(e.message || 'Could not submit for review.');
+    }
+    setSubmittingReview(false);
+  };
 
   useEffect(() => {
     fetchData();
@@ -382,6 +408,54 @@ const ProjectCompletion = () => {
               <p className="text-gray-400 text-sm">{project.projectTitle}</p>
             </div>
 
+            {/* ===== Admin review gate ===== */}
+            {!isApproved && step !== 4 && (
+              <div className="mb-8">
+                {isRejected ? (
+                  <div className="bg-red-50 border border-red-200 rounded-2xl p-6 text-center">
+                    <h2 className="text-lg font-bold text-red-700 mb-1">Project not approved</h2>
+                    <p className="text-gray-600 text-sm mb-2">{project.reviewFeedback || 'This project did not meet the requirements for approval.'}</p>
+                    <p className="text-gray-500 text-xs">No badges can be assigned, and this project cannot be re-submitted.</p>
+                  </div>
+                ) : isUnderReview ? (
+                  <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 text-center">
+                    <h2 className="text-lg font-bold text-blue-700 mb-1">Submitted for review</h2>
+                    <p className="text-gray-600 text-sm">Your project is with the Loomiqe team. You will be notified once it is reviewed. Badges can be assigned only after approval.</p>
+                    <p className="text-gray-400 text-xs mt-3">Submission link: <a href={project.reviewSubmissionUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{project.reviewSubmissionUrl}</a></p>
+                  </div>
+                ) : (
+                  <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6">
+                    <h2 className="text-lg font-bold text-gray-900 mb-1">{needsChanges ? 'Changes requested' : 'Submit for review'}</h2>
+                    {needsChanges && (
+                      <div className="bg-white border border-amber-200 rounded-lg p-3 mb-3">
+                        <p className="text-amber-800 text-sm font-medium">Reviewer note:</p>
+                        <p className="text-gray-700 text-sm">{project.reviewFeedback || 'Please review your submission and re-submit.'}</p>
+                      </div>
+                    )}
+                    <p className="text-gray-600 text-sm mb-3">
+                      Before badges can be assigned, your project must be reviewed and approved by Loomiqe. We review the <strong>submission link</strong> from your Resources tab (a folder containing all your team's work, the team members, and your final solutions) along with your <strong>workspace</strong>, which is included automatically.
+                    </p>
+                    <div className="text-xs text-gray-500 mb-4 space-y-1">
+                      <p>Submission link: {project?.resources?.submissionUrl
+                        ? <a href={project.resources.submissionUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{project.resources.submissionUrl}</a>
+                        : <span className="text-red-500">Not set — add it on the workspace Resources tab.</span>}</p>
+                      <p>You can update the link on the Resources tab and re-submit at any time.</p>
+                    </div>
+                    <button onClick={handleSubmitForReview} disabled={submittingReview}
+                      className="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-all disabled:opacity-50">
+                      {submittingReview ? 'Submitting...' : needsChanges ? 'Re-submit for review' : 'Submit for review'}
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {isApproved && step !== 4 && (
+              <div className="mb-6 bg-green-50 border border-green-200 rounded-xl p-4 text-center">
+                <p className="text-green-700 font-bold text-sm">Approved by Loomiqe — you can now assign badges to your team.</p>
+              </div>
+            )}
+
             {/* Step 4: Done */}
             {step === 4 && (
               <div className="bg-blue-600/10 border border-gray-200 rounded-2xl p-8 text-center">
@@ -401,8 +475,8 @@ const ProjectCompletion = () => {
               </div>
             )}
 
-            {/* Step 1: Review */}
-            {step === 1 && (
+            {/* Step 1: Review (only after admin approval) */}
+            {isApproved && step === 1 && (
               <div className="space-y-6">
                 <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-6">
                   <h2 className="text-lg font-bold text-gray-900 mb-4">Project Summary</h2>
@@ -446,7 +520,7 @@ const ProjectCompletion = () => {
             )}
 
             {/* Step 2: Evaluate */}
-            {step === 2 && (
+            {isApproved && step === 2 && (
               <div className="space-y-6">
                 {members.length === 0 ? (
                   <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6 text-center">

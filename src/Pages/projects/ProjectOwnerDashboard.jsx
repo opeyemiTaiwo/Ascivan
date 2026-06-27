@@ -305,7 +305,11 @@ const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove, onTo
         </Link>
         {!isCompleted && (
           <Link to={`/projects/${project.id}/complete`} className="px-4 py-2 min-h-[40px] bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-xs transition-all flex items-center">
-            Complete Project
+            {project.reviewStatus === 'approved' ? 'Assign Badges'
+              : project.reviewStatus === 'submitted' ? 'Review Pending'
+              : project.reviewStatus === 'needs_changes' ? 'Changes Requested'
+              : project.reviewStatus === 'rejected' ? 'Not Approved'
+              : 'Submit for Review'}
           </Link>
         )}
         {!isCompleted && (

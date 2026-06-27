@@ -7,13 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
   collection, getDocs, doc, getDoc, updateDoc, deleteDoc, addDoc,
-  query, orderBy, limit, serverTimestamp,
+  query, orderBy, limit, serverTimestamp, where,
 } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
 import { generateProject } from '../../utils/projectGenerator';
 import { getRandomTemplate, TEMPLATE_COUNT } from '../../utils/projectTemplates';
 import { seedDummyActivity, deleteDummyActivity, countDummyActivity } from '../../utils/activityFeed';
+import { REVIEW_STATUS, approveProjectReview, requestChanges, rejectProjectReview, getProjectMemberEmails } from '../../utils/projectReview';
 
 const fmtDate = (ts) => {
   try {
@@ -51,6 +52,66 @@ const AdminPanel = () => {
   const [dummyCount, setDummyCount] = useState(null);
 
   const [userSearch, setUserSearch] = useState('');
+
+  // --- Reviews tab ---
+  const [reviewProjects, setReviewProjects] = useState([]);
+  const [loadingReviews, setLoadingReviews] = useState(false);
+  const [feedbackById, setFeedbackById] = useState({});
+  const [actingId, setActingId] = useState(null);
+
+  const loadReviews = useCallback(async () => {
+    setLoadingReviews(true);
+    try {
+      // Projects awaiting review (submitted) — fetched separately so admins see the queue.
+      const snap = await getDocs(query(collection(db, 'projects'), where('reviewStatus', '==', REVIEW_STATUS.SUBMITTED)));
+      const rows = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      rows.sort((a, b) => (b.reviewSubmittedAt?.seconds || 0) - (a.reviewSubmittedAt?.seconds || 0));
+      setReviewProjects(rows);
+    } catch (e) {
+      console.error('loadReviews failed:', e);
+      toast.error('Could not load review queue.');
+    }
+    setLoadingReviews(false);
+  }, []);
+
+  useEffect(() => { if (tab === 'reviews' && isAdmin) loadReviews(); }, [tab, isAdmin, loadReviews]);
+
+  const doApprove = async (project) => {
+    setActingId(project.id);
+    try {
+      const emails = await getProjectMemberEmails(project.id);
+      await approveProjectReview(project, currentUser, emails);
+      toast.success('Approved. Owner and team notified.');
+      setReviewProjects(prev => prev.filter(p => p.id !== project.id));
+    } catch (e) { toast.error('Approve failed: ' + e.message); }
+    setActingId(null);
+  };
+
+  const doRequestChanges = async (project) => {
+    const fb = (feedbackById[project.id] || '').trim();
+    if (!fb) { toast.error('Add a note describing the changes needed.'); return; }
+    setActingId(project.id);
+    try {
+      const emails = await getProjectMemberEmails(project.id);
+      await requestChanges(project, currentUser, fb, emails);
+      toast.success('Sent back for changes. Owner notified.');
+      setReviewProjects(prev => prev.filter(p => p.id !== project.id));
+    } catch (e) { toast.error('Failed: ' + e.message); }
+    setActingId(null);
+  };
+
+  const doReject = async (project) => {
+    if (!window.confirm('Reject this project? Badges cannot be assigned and it cannot be re-submitted.')) return;
+    const fb = (feedbackById[project.id] || '').trim();
+    setActingId(project.id);
+    try {
+      const emails = await getProjectMemberEmails(project.id);
+      await rejectProjectReview(project, currentUser, fb, emails);
+      toast.success('Rejected. Owner and team notified.');
+      setReviewProjects(prev => prev.filter(p => p.id !== project.id));
+    } catch (e) { toast.error('Reject failed: ' + e.message); }
+    setActingId(null);
+  };
 
   // --- Admin gate ---
   useEffect(() => {
@@ -234,6 +295,7 @@ const AdminPanel = () => {
 
   const tabs = [
     ['overview', 'Overview'],
+    ['reviews', 'Reviews'],
     ['projects', 'Projects'],
     ['users', 'Users'],
     ['generate', 'Generate'],
@@ -265,6 +327,69 @@ const AdminPanel = () => {
       </div>
 
       {loadingData && <div className="py-10 text-center text-gray-400 text-sm">Loading…</div>}
+
+      {/* REVIEWS */}
+      {tab === 'reviews' && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <p className="text-gray-500 text-sm">Projects submitted for completion review.</p>
+            <button onClick={loadReviews} className="text-blue-600 text-sm font-semibold hover:underline">Refresh</button>
+          </div>
+          {loadingReviews ? (
+            <p className="text-gray-400 text-sm py-6 text-center">Loading review queue…</p>
+          ) : reviewProjects.length === 0 ? (
+            <p className="text-gray-400 text-sm py-6 text-center">No projects awaiting review.</p>
+          ) : reviewProjects.map(p => (
+            <div key={p.id} className="bg-white border border-gray-200 rounded-xl p-5">
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="min-w-0">
+                  <h3 className="font-bold text-gray-900">{p.projectTitle || p.title || 'Untitled project'}</h3>
+                  <p className="text-gray-500 text-xs mt-0.5">Submitted by {p.reviewSubmittedBy || 'unknown'}</p>
+                </div>
+                <span className="flex-shrink-0 px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-100 text-gray-900">Awaiting review</span>
+              </div>
+
+              <div className="space-y-1.5 mb-4 text-sm">
+                <p className="text-gray-600">
+                  Submission link:{' '}
+                  {p.reviewSubmissionUrl
+                    ? <a href={p.reviewSubmissionUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-all">{p.reviewSubmissionUrl}</a>
+                    : <span className="text-red-500">none</span>}
+                </p>
+                <p className="text-gray-600">
+                  Workspace:{' '}
+                  {p.reviewWorkspaceUrl
+                    ? <a href={p.reviewWorkspaceUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-all">{p.reviewWorkspaceUrl}</a>
+                    : <span className="text-gray-400">n/a</span>}
+                </p>
+              </div>
+
+              <textarea
+                value={feedbackById[p.id] || ''}
+                onChange={e => setFeedbackById(prev => ({ ...prev, [p.id]: e.target.value }))}
+                placeholder="Feedback for the team (required for 'Request changes', optional for 'Reject')…"
+                rows={2}
+                className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none mb-3"
+              />
+
+              <div className="flex flex-wrap gap-2">
+                <button onClick={() => doApprove(p)} disabled={actingId === p.id}
+                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg disabled:opacity-50">
+                  {actingId === p.id ? '…' : 'Approve'}
+                </button>
+                <button onClick={() => doRequestChanges(p)} disabled={actingId === p.id}
+                  className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold rounded-lg disabled:opacity-50">
+                  Request changes
+                </button>
+                <button onClick={() => doReject(p)} disabled={actingId === p.id}
+                  className="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-sm font-semibold rounded-lg disabled:opacity-50">
+                  Reject
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* OVERVIEW */}
       {!loadingData && tab === 'overview' && (

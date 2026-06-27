@@ -89,6 +89,11 @@ service cloud.firestore {
       match /forum/{msgId} {
         allow read: if isSignedIn();
         allow create: if isSignedIn();
+        // Reactions: any signed-in member may update ONLY the reaction fields.
+        allow update: if isSignedIn()
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['reactions', 'reactorInfo']);
+        // Full edit/delete restricted to the author (or admin).
         allow update, delete: if isSignedIn() && (resource.data.authorId == myUid() || isAdmin());
       }
     }
@@ -193,7 +198,10 @@ service cloud.firestore {
     }
 
     match /adminUsers/{id} { allow read, write: if isAdmin(); }
-    match /admin_notifications/{id} { allow read, write: if isAdmin(); }
+    match /admin_notifications/{id} {
+      allow read, update, delete: if isAdmin();
+      allow create: if isSignedIn();
+    }
 
     // Anything not matched above is DENIED by default (safe).
   }

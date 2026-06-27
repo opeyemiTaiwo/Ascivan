@@ -5,7 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../firebase/config';
 import Navbar from '../../components/Navbar';
-import { collection, query, orderBy, onSnapshot, where, doc, getDoc } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, where, doc, getDoc, getDocs } from 'firebase/firestore';
 
 const industryTracks = [
   { value: 'healthcare', label: 'Healthcare / Medical' },
@@ -42,12 +42,30 @@ const formatTimeline = (t) => ({
 const ProjectsListing = () => {
   const { currentUser } = useAuth();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [appliedProjectIds, setAppliedProjectIds] = useState(new Set());
 
   useEffect(() => {
     if (!currentUser) { setIsAdmin(false); return; }
     getDoc(doc(db, 'users', currentUser.uid))
       .then(snap => setIsAdmin(snap.exists() && snap.data().role === 'admin'))
       .catch(() => setIsAdmin(false));
+  }, [currentUser]);
+
+  // Which projects has this user applied to (or is a member of / leading)?
+  useEffect(() => {
+    if (!currentUser) { setAppliedProjectIds(new Set()); return; }
+    (async () => {
+      const ids = new Set();
+      try {
+        const snap = await getDocs(query(collection(db, 'project_applications'), where('applicantUid', '==', currentUser.uid)));
+        snap.forEach(d => { const pid = d.data().projectId; if (pid) ids.add(pid); });
+      } catch (e) { /* ignore */ }
+      try {
+        const snap2 = await getDocs(query(collection(db, 'project_applications'), where('applicantEmail', '==', currentUser.email)));
+        snap2.forEach(d => { const pid = d.data().projectId; if (pid) ids.add(pid); });
+      } catch (e) { /* ignore */ }
+      setAppliedProjectIds(ids);
+    })();
   }, [currentUser]);
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
@@ -188,7 +206,9 @@ const ProjectsListing = () => {
                     <div className="flex flex-wrap items-center gap-1.5 mb-3">
                       <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-900 text-[10px] font-medium">{getIndustryLabel(project.industryTrack)}</span>
                       <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-900 text-[10px] font-medium">{formatTimeline(project.timeline)}</span>
-                      {project.status === 'lead_recruitment' ? (
+                      {appliedProjectIds.has(project.id) ? (
+                        <span className="px-3 py-1.5 bg-gray-800 text-white rounded-lg text-sm font-semibold">View Project</span>
+                      ) : project.status === 'lead_recruitment' ? (
                         <span className="px-3 py-1.5 bg-amber-500 text-white rounded-lg text-sm font-semibold">Apply to lead</span>
                       ) : (
                         <span className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-sm font-semibold">Join the Project</span>

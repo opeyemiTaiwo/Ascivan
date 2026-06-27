@@ -87,20 +87,23 @@ const ProofWall = () => {
     if (!uid) return;
     const celebrated = (a.celebratedBy || []).includes(uid);
     const myName = myData?.displayName || currentUser?.displayName || 'You';
-    // optimistic update
+    const myPhoto = myData?.photoURL || currentUser?.photoURL || '';
     setItems(prev => prev.map(x => {
       if (x.id !== a.id) return x;
       const names = { ...(x.celebratedByNames || {}) };
-      if (celebrated) delete names[uid]; else names[uid] = myName;
+      const photos = { ...(x.celebratedByPhotos || {}) };
+      if (celebrated) { delete names[uid]; delete photos[uid]; }
+      else { names[uid] = myName; photos[uid] = myPhoto; }
       return {
         ...x,
         celebratedBy: celebrated ? (x.celebratedBy || []).filter(u => u !== uid) : [...(x.celebratedBy || []), uid],
         celebrateCount: Math.max(0, (x.celebrateCount || 0) + (celebrated ? -1 : 1)),
         celebratedByNames: names,
+        celebratedByPhotos: photos,
       };
     }));
     try {
-      await toggleCelebrate(a.id, uid, celebrated, myName);
+      await toggleCelebrate(a.id, uid, celebrated, myName, myPhoto);
     } catch (e) {
       console.error(e);
       toast.error('Could not update reaction.');
@@ -308,13 +311,29 @@ const ProofWall = () => {
                         )}
                       </div>
                       {count > 0 && a.celebratedByNames && (
-                        <p className="text-xs text-gray-400 mt-1.5">
-                          Loved by {(() => {
-                            const names = Object.values(a.celebratedByNames);
-                            if (names.length <= 2) return names.join(' and ');
-                            return `${names.slice(0, 2).join(', ')} and ${names.length - 2} other${names.length - 2 > 1 ? 's' : ''}`;
-                          })()}
-                        </p>
+                        <div className="flex items-center gap-2 mt-2">
+                          <div className="flex -space-x-2">
+                            {Object.entries(a.celebratedByNames).slice(0, 5).map(([reactorUid, name]) => {
+                              const photo = a.celebratedByPhotos?.[reactorUid];
+                              return photo ? (
+                                <img key={reactorUid} src={photo} alt={name}
+                                  className="w-6 h-6 rounded-full border-2 border-white object-cover" />
+                              ) : (
+                                <span key={reactorUid} title={name}
+                                  className="w-6 h-6 rounded-full border-2 border-white bg-blue-100 text-blue-700 text-[10px] font-bold flex items-center justify-center">
+                                  {(name || '?').charAt(0).toUpperCase()}
+                                </span>
+                              );
+                            })}
+                          </div>
+                          <p className="text-xs text-gray-400">
+                            Loved by {(() => {
+                              const names = Object.values(a.celebratedByNames);
+                              if (names.length <= 2) return names.join(' and ');
+                              return `${names.slice(0, 2).join(', ')} and ${names.length - 2} other${names.length - 2 > 1 ? 's' : ''}`;
+                            })()}
+                          </p>
+                        </div>
                       )}
                     </div>
                   )}

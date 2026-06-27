@@ -139,14 +139,15 @@ export const countDummyActivity = async () => {
 // Toggles the current user's love on an activity item.
 // Stores uids in `celebratedBy` + denormalized `celebrateCount`,
 // plus a small `celebratedByNames` map {uid: name} for showing who reacted.
-export const toggleCelebrate = async (activityId, uid, currentlyCelebrated, userName) => {
+export const toggleCelebrate = async (activityId, uid, currentlyCelebrated, userName, userPhoto) => {
   const ref = doc(db, 'activity', activityId);
   const patch = {
     celebratedBy: currentlyCelebrated ? arrayRemove(uid) : arrayUnion(uid),
     celebrateCount: increment(currentlyCelebrated ? -1 : 1),
   };
-  // maintain a names map keyed by uid (dot-path update)
+  // maintain a names+photo map keyed by uid (dot-path update)
   patch[`celebratedByNames.${uid}`] = currentlyCelebrated ? deleteField() : (userName || 'A member');
+  patch[`celebratedByPhotos.${uid}`] = currentlyCelebrated ? deleteField() : (userPhoto || '');
   await updateDoc(ref, patch);
 };
 

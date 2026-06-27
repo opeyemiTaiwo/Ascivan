@@ -178,20 +178,20 @@ const ProjectsListing = () => {
                   >
                     <div className="flex items-start justify-between gap-3 mb-3">
                       <h3 className="text-gray-900 font-bold text-sm sm:text-base line-clamp-2">{project.projectTitle}</h3>
-                      <span className={`flex-shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold border ${project.status === 'lead_recruitment' ? 'bg-amber-100 text-amber-700 border-amber-200' : 'bg-blue-600/20 text-blue-500 border-blue-600/30'}`}>
-                        {project.status === 'lead_recruitment' ? 'Needs a Lead' : 'Collaborative'}
+                      <span className={`flex-shrink-0 px-2.5 py-1 rounded-full text-[10px] font-bold ${project.status === 'lead_recruitment' ? 'bg-amber-100 text-gray-900' : 'bg-blue-100 text-gray-900'}`}>
+                        {project.status === 'lead_recruitment' ? 'Needs a Lead' : 'Open to Join'}
                       </span>
                     </div>
 
                     <p className="text-gray-400 text-xs sm:text-sm line-clamp-2 mb-3">{project.projectDescription}</p>
 
-                    <div className="flex flex-wrap gap-1.5 mb-3">
-                      <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-600 text-[10px] font-medium">{getIndustryLabel(project.industryTrack)}</span>
-                      <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-600 text-[10px] font-medium">{formatTimeline(project.timeline)}</span>
+                    <div className="flex flex-wrap items-center gap-1.5 mb-3">
+                      <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-900 text-[10px] font-medium">{getIndustryLabel(project.industryTrack)}</span>
+                      <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-900 text-[10px] font-medium">{formatTimeline(project.timeline)}</span>
                       {project.status === 'lead_recruitment' ? (
-                        <span className="px-3 py-1.5 bg-amber-100 text-amber-800 rounded-lg text-sm font-semibold">Apply to lead</span>
+                        <span className="px-3 py-1.5 bg-amber-500 text-white rounded-lg text-sm font-semibold">Apply to lead</span>
                       ) : (
-                        <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-600 text-[10px] font-medium">{project.maxTeamSize || 0} team members</span>
+                        <span className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-sm font-semibold">Join the Project</span>
                       )}
                     </div>
 

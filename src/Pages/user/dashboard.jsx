@@ -257,17 +257,6 @@ const DashboardOverview = () => {
                 <Link to="/talent-board" className="text-blue-600 text-sm font-medium hover:underline">View Talent Board</Link>
               </div>
             )}
-
-            {/* Quick Links */}
-            <div className="bg-white border border-gray-200 rounded-xl p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-3">Quick Links</h3>
-              <div className="space-y-2">
-                <Link to="/proof-wall" className="block text-sm text-gray-600 hover:text-blue-600 font-medium transition-colors">Proof Wall</Link>
-                <Link to="/talent-board" className="block text-sm text-gray-600 hover:text-blue-600 font-medium transition-colors">Talent Board</Link>
-                <Link to="/jobs" className="block text-sm text-gray-600 hover:text-blue-600 font-medium transition-colors">Jobs</Link>
-                <Link to="/projects/submit" className="block text-sm text-gray-600 hover:text-blue-600 font-medium transition-colors">Post a Project</Link>
-              </div>
-            </div>
           </div>
         </div>
       </div>

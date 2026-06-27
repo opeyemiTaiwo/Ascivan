@@ -6,6 +6,7 @@ import { doc, getDoc, updateDoc, collection, query, orderBy, onSnapshot, addDoc,
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
 import { logActivity } from '../../utils/activityLog';
+import { uploadImageToBlob, validateImageFile } from '../../utils/blobStorage';
 
 const formatTime = (ts) => {
   if (!ts) return '';
@@ -30,6 +31,8 @@ const ProjectWorkspace = () => {
   const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState('');
   const [newPostLink, setNewPostLink] = useState('');
+  const [newPostImage, setNewPostImage] = useState(null); // {file, preview}
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [posting, setPosting] = useState(false);
   const [replyTo, setReplyTo] = useState(null);
   const [replyText, setReplyText] = useState('');
@@ -121,17 +124,32 @@ const ProjectWorkspace = () => {
   const isOwner = project?.submitterId === currentUser?.uid || project?.submitterEmail === currentUser?.email;
 
   // Forum handlers
+  const handleImageSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const v = validateImageFile(file);
+    if (v && v.valid === false) { toast.error(v.error || 'Invalid image.'); return; }
+    setNewPostImage({ file, preview: URL.createObjectURL(file) });
+  };
+
   const handlePost = async () => {
-    if (!newPost.trim() && !newPostLink.trim()) return;
+    if (!newPost.trim() && !newPostLink.trim() && !newPostImage) return;
     setPosting(true);
     try {
+      let imageUrl = null;
+      if (newPostImage) {
+        setUploadingImage(true);
+        const result = await uploadImageToBlob(newPostImage.file, 'workspace');
+        imageUrl = result?.url || result || null;
+        setUploadingImage(false);
+      }
       await addDoc(collection(db, 'projects', projectId, 'forum'), {
         text: newPost.trim(),
         link: newPostLink.trim() || null,
+        imageUrl: imageUrl,
         authorId: currentUser.uid,
         authorEmail: currentUser.email,
         authorName: currentUser.displayName || currentUser.email,
-        authorEmail: currentUser.email,
         authorPhoto: currentUser.photoURL || null,
         createdAt: serverTimestamp(),
         editedAt: null,
@@ -140,7 +158,8 @@ const ProjectWorkspace = () => {
       });
       setNewPost('');
       setNewPostLink('');
-    } catch (e) { toast.error('Failed to post'); }
+      setNewPostImage(null);
+    } catch (e) { toast.error('Failed to post'); setUploadingImage(false); }
     setPosting(false);
   };
 
@@ -196,6 +215,11 @@ const ProjectWorkspace = () => {
 
   // Resource handlers
   const handleSaveResources = async () => {
+    // Submission link is mandatory for the project lead — it's how work gets verified.
+    if (!resources.submissionUrl || !resources.submissionUrl.trim()) {
+      toast.error('A project submission link is required. Add a GitHub repo (or another platform) so your work can be reviewed and verified.');
+      return;
+    }
     setSavingResources(true);
     try {
       await updateDoc(doc(db, 'projects', projectId), { resources });
@@ -283,6 +307,7 @@ const ProjectWorkspace = () => {
                     ) : (
                       <>
                         <p className="text-gray-700 text-sm mt-1 whitespace-pre-wrap">{post.text}</p>
+                        {post.imageUrl && <img src={post.imageUrl} alt="attachment" className="mt-2 max-h-72 rounded-lg border border-gray-200" />}
                         {post.link && <a href={post.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-xs hover:underline mt-1 block truncate">{post.link}</a>}
                       </>
                     )}
@@ -372,10 +397,21 @@ const ProjectWorkspace = () => {
           {/* New post */}
           <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
             <textarea value={newPost} onChange={e => setNewPost(e.target.value)} className={inputCls + " resize-none"} rows={3} placeholder="Share an update, question, or file..." />
+            {newPostImage && (
+              <div className="relative inline-block">
+                <img src={newPostImage.preview} alt="preview" className="max-h-40 rounded-lg border border-gray-200" />
+                <button onClick={() => setNewPostImage(null)} className="absolute -top-2 -right-2 bg-gray-800 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">✕</button>
+              </div>
+            )}
             <div className="flex items-center gap-3">
               <input value={newPostLink} onChange={e => setNewPostLink(e.target.value)} className={inputCls + " text-xs flex-1"} placeholder="Attach a link (optional)" />
-              <button onClick={handlePost} disabled={posting || (!newPost.trim() && !newPostLink.trim())} className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg disabled:opacity-50 transition-all flex-shrink-0">
-                {posting ? 'Posting...' : 'Post'}
+              <label className="flex-shrink-0 cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-medium px-3 py-2 rounded-lg transition-all flex items-center gap-1.5">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                Image
+                <input type="file" accept="image/*" onChange={handleImageSelect} className="hidden" />
+              </label>
+              <button onClick={handlePost} disabled={posting || uploadingImage || (!newPost.trim() && !newPostLink.trim() && !newPostImage)} className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg disabled:opacity-50 transition-all flex-shrink-0">
+                {uploadingImage ? 'Uploading...' : posting ? 'Posting...' : 'Post'}
               </button>
             </div>
           </div>
@@ -418,8 +454,11 @@ const ProjectWorkspace = () => {
           {isOwner && (
             <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4">
               <h3 className="text-base font-bold text-gray-900">Edit Resources</h3>
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-1">
+                <p className="text-amber-800 text-xs font-medium">As project lead, a submission link is required. Use a GitHub repository (free and recommended) or another platform of your choice, so the team's work can be reviewed and badges can be verified on completion.</p>
+              </div>
               <div>
-                <label className="block text-gray-500 text-xs font-medium mb-1">Project Submission URL</label>
+                <label className="block text-gray-500 text-xs font-medium mb-1">Project Submission URL <span className="text-red-500">*</span></label>
                 <input type="url" value={resources.submissionUrl} onChange={e => setResources(p => ({ ...p, submissionUrl: e.target.value }))} className={inputCls} placeholder="https://github.com/..." />
               </div>
               <div>

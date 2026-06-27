@@ -226,7 +226,7 @@ const ProjectSetup = () => {
         </div>
         <p className="text-gray-500 text-xs -mt-2">Intermediate and Advanced roles can only be filled by members who've earned the matching badge level in that track. Use Beginner or Any Level for roles open to newcomers.</p>
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-          <p className="text-gray-700 text-xs"><strong>Note:</strong> these roles are defaults suggested for this project. As the lead, please review them and <strong>add or remove roles</strong> so the team matches what your project actually needs.</p>
+          <p className="text-gray-700 text-xs"><strong>Note:</strong> These roles are suggestions. Add or remove to fit your project.</p>
         </div>
 
         {roles.map((r, i) => (

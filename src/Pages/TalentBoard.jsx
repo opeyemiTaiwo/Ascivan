@@ -72,7 +72,17 @@ const TalentBoard = () => {
             return hasBadgeArray || hasTotal || hasBadgeCounts || hasCertificates || inMemberBadges;
           })
           .sort((a, b) => (a.displayName || '').localeCompare(b.displayName || ''));
-        console.log(`[TalentBoard] fetched ${allUsers.length} users, ${badgedUids.size} in member_badges, ${users.length} qualify as talent`);
+        // Diagnostic breakdown to pinpoint why the list may be empty for some viewers.
+        const breakdown = {
+          totalUsers: allUsers.length,
+          companies: allUsers.filter(u => u.isCompany).length,
+          individuals: allUsers.filter(u => !u.isCompany).length,
+          withAnyBadge: allUsers.filter(u => (Array.isArray(u.badges) && u.badges.length) || (u.totalBadges || 0) > 0 || (u.badgeCounts && Object.values(u.badgeCounts).some(n => n > 0)) || (Array.isArray(u.certificates) && u.certificates.length) || badgedUids.has(u.uid || u.id)).length,
+          inMemberBadges: badgedUids.size,
+          qualifyAfterFilter: users.length,
+          viewerUid: currentUser?.uid,
+        };
+        console.log('[TalentBoard] breakdown:', breakdown);
         setTalents(users);
       } catch (e) {
         console.error('Error fetching talents:', e);

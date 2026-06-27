@@ -106,6 +106,10 @@ const AdminPanel = () => {
 
   useEffect(() => { if (isAdmin) loadData(); }, [isAdmin, loadData]);
 
+  const refreshDummyCount = useCallback(async () => {
+    setDummyCount(await countDummyActivity());
+  }, []);
+
   useEffect(() => { if (tab === 'seed') refreshDummyCount(); }, [tab, refreshDummyCount]);
 
   // --- Actions ---
@@ -142,10 +146,6 @@ const AdminPanel = () => {
       toast.success('Post deleted.');
     } catch (e) { console.error(e); toast.error('Delete failed.'); }
   };
-
-  const refreshDummyCount = useCallback(async () => {
-    setDummyCount(await countDummyActivity());
-  }, []);
 
   const handleSeedDummy = async () => {
     setSeeding(true);

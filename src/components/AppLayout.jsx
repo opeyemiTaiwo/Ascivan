@@ -170,7 +170,7 @@ const AppLayout = ({ children }) => {
             )}
           </div>
           <div className="flex-1 min-w-0" />
-          <div className="flex items-center gap-2 sm:gap-5 md:gap-7 pr-2 sm:pr-12 lg:pr-16 overflow-x-auto scrollbar-hide max-w-full">
+          <div className="flex items-center gap-2 sm:gap-5 md:gap-7 pr-2 sm:pr-12 lg:pr-16 overflow-x-auto overflow-y-visible scrollbar-hide max-w-full pt-1">
             {/* Home */}
             <Link to="/dashboard" className={`relative flex flex-col items-center gap-0.5 px-1.5 sm:px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0 ${location.pathname === '/dashboard' ? 'text-blue-600' : 'text-gray-500'}`}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -185,7 +185,7 @@ const AppLayout = ({ children }) => {
               </svg>
               <span className="text-[10px] sm:text-[11px] font-semibold leading-none">Account</span>
               {unreadAccount > 0 && (
-                <span className="absolute -top-0.5 right-0 bg-red-500 text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold leading-none">
+                <span className="absolute top-0 -right-1 bg-red-500 text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold leading-none">
                   {unreadAccount > 9 ? '9+' : unreadAccount}
                 </span>
               )}
@@ -197,7 +197,7 @@ const AppLayout = ({ children }) => {
               </svg>
               <span className="text-[10px] sm:text-[11px] font-semibold leading-none ">Messaging</span>
               {unreadMessages > 0 && (
-                <span className="absolute -top-0.5 right-0 bg-red-500 text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold leading-none">
+                <span className="absolute top-0 -right-1 bg-red-500 text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold leading-none">
                   {unreadMessages > 9 ? '9+' : unreadMessages}
                 </span>
               )}
@@ -209,7 +209,7 @@ const AppLayout = ({ children }) => {
               </svg>
               <span className="text-[10px] sm:text-[11px] font-semibold leading-none ">Notifications</span>
               {unreadNotifications > 0 && (
-                <span className="absolute -top-0.5 right-0 bg-red-500 text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold leading-none">
+                <span className="absolute top-0 -right-1 bg-red-500 text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold leading-none">
                   {unreadNotifications > 9 ? '9+' : unreadNotifications}
                 </span>
               )}

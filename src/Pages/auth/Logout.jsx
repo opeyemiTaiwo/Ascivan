@@ -61,7 +61,7 @@ const Logout = () => {
 
       {/* Main Content */}
       <main className="flex-grow pb-6 xs:pb-8 sm:pb-10 flex items-center justify-center px-3 xs:px-4 sm:px-6 relative z-10">
-        <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl sm:rounded-3xl shadow-2xl p-4 xs:p-5 sm:p-6 md:p-8 lg:p-10 w-full max-w-[340px] xs:max-w-sm sm:max-w-md md:max-w-lg border border-white/20">
+        <div className="bg-white rounded-xl xs:rounded-2xl sm:rounded-3xl shadow-lg p-4 xs:p-5 sm:p-6 md:p-8 lg:p-10 w-full max-w-[340px] xs:max-w-sm sm:max-w-md md:max-w-lg border border-gray-200">
           <div className="text-center">
 
             {/* Hero Section */}
@@ -79,7 +79,7 @@ const Logout = () => {
                 <div className="h-1.5 w-1.5 xs:h-2 xs:w-2 sm:h-3 sm:w-3 bg-blue-400 rounded-full"></div>
               </div>
 
-              <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 xs:mb-3 px-2"
+              <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 mb-2 xs:mb-3 px-2"
                   style={{
                     fontFamily: '"Inter", sans-serif',
                     textShadow: '0 0 20px rgba(255,255,255,0.3), 2px 2px 4px rgba(0,0,0,0.9)'
@@ -132,7 +132,7 @@ const Logout = () => {
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-600 font-medium text-xs xs:text-sm sm:text-base" style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
+                <p className="text-gray-600 font-medium text-xs xs:text-sm sm:text-base">
                   Securely signing you out...
                 </p>
                 <div className="mt-2 xs:mt-3 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-full h-1.5 xs:h-2 overflow-hidden">
@@ -220,7 +220,7 @@ const Logout = () => {
 
               <button
                 onClick={() => navigate('/login')}
-                className="w-full bg-gradient-to-br from-white/10 via-white/5 to-white/10 border border-white/20 text-white py-2.5 xs:py-3 sm:py-3.5 px-4 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 hover:shadow-2xl text-xs xs:text-sm sm:text-base min-h-[44px]"
+                className="w-full bg-gray-100 hover:bg-gray-200 border border-gray-200 text-gray-700 py-2.5 xs:py-3 sm:py-3.5 px-4 rounded-lg xs:rounded-xl font-semibold transition-all duration-300 hover:shadow-2xl text-xs xs:text-sm sm:text-base min-h-[44px]"
                 style={{ boxShadow: '0 10px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)' }}
               >
                 Sign In Again
@@ -228,8 +228,8 @@ const Logout = () => {
             </div>
 
             {/* Footer note */}
-            <div className="mt-4 xs:mt-5 sm:mt-6 pt-3 xs:pt-4 border-t border-white/20">
-              <p className="text-[10px] xs:text-xs text-gray-400" style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
+            <div className="mt-4 xs:mt-5 sm:mt-6 pt-3 xs:pt-4 border-t border-gray-200">
+              <p className="text-[10px] xs:text-xs text-gray-400">
                 Your session has been securely terminated
               </p>
             </div>
@@ -258,7 +258,7 @@ const Logout = () => {
               Build real experience. Earn verified credentials. Get discovered.
             </p>
 
-            <p className="text-gray-400 text-[10px] xs:text-xs sm:text-sm">
+            <p className="text-gray-500 text-[10px] xs:text-xs sm:text-sm">
               © {new Date().getFullYear()} Loomiqe. All rights reserved.
             </p>
           </div>

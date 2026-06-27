@@ -25,6 +25,7 @@ const TalentBoard = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterBadge, setFilterBadge] = useState('');
   const [isPremium, setIsPremium] = useState(false);
+  const [debugInfo, setDebugInfo] = useState(null);
   const [checkingAccess, setCheckingAccess] = useState(true);
 
   // Check premium access
@@ -83,6 +84,7 @@ const TalentBoard = () => {
           viewerUid: currentUser?.uid,
         };
         console.log('[TalentBoard] breakdown:', breakdown);
+        setDebugInfo(breakdown);
         setTalents(users);
       } catch (e) {
         console.error('Error fetching talents:', e);
@@ -110,6 +112,15 @@ const TalentBoard = () => {
       <div className="max-w-6xl mx-auto">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Talent Board</h1>
         <p className="text-gray-500 text-sm mb-6">Discover and connect with verified tech professionals.</p>
+
+        {isPremium && debugInfo && (
+          <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-3 mb-4 text-xs text-gray-700 font-mono">
+            <p className="font-bold mb-1">Talent Board diagnostic (visible to admin/premium only):</p>
+            <p>Total users: {debugInfo.totalUsers} · Companies: {debugInfo.companies} · Individuals: {debugInfo.individuals}</p>
+            <p>Users with any badge: {debugInfo.withAnyBadge} · In member_badges: {debugInfo.inMemberBadges}</p>
+            <p>Qualify as talent (after excluding you): {debugInfo.qualifyAfterFilter}</p>
+          </div>
+        )}
 
         {/* Search and Filter */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">

@@ -19,6 +19,8 @@ import {
   serverTimestamp,
   setDoc,
   limitToLast,
+  getDocs,
+  limit,
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
@@ -71,6 +73,7 @@ const Messages = () => {
   const [sending, setSending]             = useState(false);
   const [loading, setLoading]             = useState(true);
   const [showNewChat, setShowNewChat]     = useState(false);
+  const [newChatSearch, setNewChatSearch] = useState('');
   const [unreadCounts, setUnreadCounts]   = useState({});
   const [mobileView, setMobileView]       = useState('list'); // 'list' | 'chat'
   const [myData, setMyData]               = useState(null);
@@ -82,24 +85,21 @@ const Messages = () => {
     if (!currentUser) navigate('/login');
   }, [currentUser, navigate]);
 
-  // Load users you follow (anyone you follow can be messaged)
+  // Load users you can message — anyone on the platform (follow is no longer required).
   useEffect(() => {
     if (!currentUser) return;
     (async () => {
       try {
-        const snap = await getDoc(doc(db, 'users', currentUser.uid));
-        if (!snap.exists()) return;
-        setMyData({ uid: currentUser.uid, ...snap.data() });
-        const { following = [] } = snap.data();
-        const profiles = await Promise.all(
-          following.map(async (uid) => {
-            const s = await getDoc(doc(db, 'users', uid));
-            return s.exists() ? { uid, ...s.data() } : null;
-          })
-        );
-        setFollowedUsers(profiles.filter(Boolean));
+        const meSnap = await getDoc(doc(db, 'users', currentUser.uid));
+        if (meSnap.exists()) setMyData({ uid: currentUser.uid, ...meSnap.data() });
+
+        const snap = await getDocs(query(collection(db, 'users'), limit(500)));
+        const profiles = snap.docs
+          .map(d => ({ uid: d.id, ...d.data() }))
+          .filter(u => (u.uid || u.id) !== currentUser.uid);
+        setFollowedUsers(profiles);
       } catch (e) {
-        console.error('Error loading followed users:', e);
+        console.error('Error loading users:', e);
       } finally {
         setLoading(false);
       }
@@ -314,13 +314,22 @@ const Messages = () => {
                   <p className="text-xs font-bold text-orange-700 uppercase tracking-wide mb-2">
                     New Conversation
                   </p>
+                  <input
+                    value={newChatSearch}
+                    onChange={e => setNewChatSearch(e.target.value)}
+                    placeholder="Search people by name…"
+                    className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none mb-2"
+                  />
                   {followedUsers.length === 0 ? (
                     <p className="text-xs text-gray-500 leading-relaxed">
-                      Follow someone to start messaging them.
+                      No other members to message yet.
                     </p>
                   ) : (
                     <div className="space-y-0.5 max-h-48 overflow-y-auto">
-                      {followedUsers.map(user => (
+                      {(newChatSearch
+                        ? followedUsers.filter(u => (u.displayName || u.email || '').toLowerCase().includes(newChatSearch.toLowerCase()))
+                        : followedUsers
+                      ).map(user => (
                         <button
                           key={user.uid}
                           onClick={() => openConversation(user.uid)}

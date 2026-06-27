@@ -441,10 +441,19 @@ const ProjectCompletion = () => {
                         : <span className="text-red-500">Not set — add it on the workspace Resources tab.</span>}</p>
                       <p>You can update the link on the Resources tab and re-submit at any time.</p>
                     </div>
-                    <button onClick={handleSubmitForReview} disabled={submittingReview}
-                      className="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-all disabled:opacity-50">
-                      {submittingReview ? 'Submitting...' : needsChanges ? 'Re-submit for review' : 'Submit for review'}
-                    </button>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                      <button onClick={handleSubmitForReview} disabled={submittingReview}
+                        className="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-all disabled:opacity-50">
+                        {submittingReview ? 'Submitting...' : needsChanges ? 'Re-submit for review' : 'Submit for review'}
+                      </button>
+                      <button onClick={() => navigate(`/projects/${projectId}/workspace`)}
+                        className="w-full sm:w-auto px-6 py-3 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold rounded-xl text-sm transition-all">
+                        Back to project
+                      </button>
+                    </div>
+                    {needsChanges && (
+                      <p className="text-gray-500 text-xs mt-2">Make your changes in the project workspace (update the submission link on the Resources tab), then come back here to re-submit.</p>
+                    )}
                   </div>
                 )}
               </div>

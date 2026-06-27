@@ -37,7 +37,7 @@ const Account = () => {
             mProjects.push({
               id: d.id,
               title: data.projectTitle || data.title || 'Untitled',
-              status: data.status === 'completed' ? 'completed' : 'active',
+              status: data.reviewStatus === 'rejected' ? 'rejected' : (data.status === 'completed' ? 'completed' : 'active'),
               completedAt: data.completedAt?.toDate?.() || null,
             });
           });
@@ -53,7 +53,7 @@ const Account = () => {
               id: d.id,
               title: data.projectTitle || data.title || 'Untitled',
               memberCount: (data.members || []).filter(m => m !== currentUser.uid).length,
-              status: data.status === 'completed' ? 'completed' : 'active',
+              status: data.reviewStatus === 'rejected' ? 'rejected' : (data.status === 'completed' ? 'completed' : 'active'),
               completedAt: data.completedAt?.toDate?.() || null,
             });
           });
@@ -63,9 +63,9 @@ const Account = () => {
         setOwnerProjects(oProjects);
         setStats({
           joined: mProjects.length,
-          completedJoined: mProjects.filter(p => p.status === 'completed').length,
+          completedJoined: mProjects.filter(p => p.status === 'completed' || p.status === 'rejected').length,
           owned: oProjects.length,
-          completedOwned: oProjects.filter(p => p.status === 'completed').length,
+          completedOwned: oProjects.filter(p => p.status === 'completed' || p.status === 'rejected').length,
           badges,
         });
       } catch (e) { console.error('Error:', e); }
@@ -115,8 +115,8 @@ const Account = () => {
             {memberProjects.map(p => (
               <div key={p.id} onClick={() => navigate(`/projects/${p.id}`)} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100 cursor-pointer hover:bg-gray-100 transition-all">
                 <p className="text-gray-900 text-sm font-medium">{p.title}</p>
-                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${p.status === 'completed' ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-700'}`}>
-                  {p.status === 'completed' ? 'Completed' : 'Active'}
+                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full text-gray-900 ${p.status === 'completed' ? 'bg-blue-100' : p.status === 'rejected' ? 'bg-red-100' : 'bg-amber-100'}`}>
+                  {p.status === 'completed' ? 'Completed' : p.status === 'rejected' ? 'Rejected' : 'Active'}
                 </span>
               </div>
             ))}
@@ -142,8 +142,8 @@ const Account = () => {
                   <p className="text-gray-900 text-sm font-medium">{p.title}</p>
                   <p className="text-gray-400 text-xs">{p.memberCount} {p.memberCount === 1 ? 'member' : 'members'}</p>
                 </div>
-                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${p.status === 'completed' ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-700'}`}>
-                  {p.status === 'completed' ? 'Completed' : 'Active'}
+                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full text-gray-900 ${p.status === 'completed' ? 'bg-blue-100' : p.status === 'rejected' ? 'bg-red-100' : 'bg-amber-100'}`}>
+                  {p.status === 'completed' ? 'Completed' : p.status === 'rejected' ? 'Rejected' : 'Active'}
                 </span>
               </div>
             ))}

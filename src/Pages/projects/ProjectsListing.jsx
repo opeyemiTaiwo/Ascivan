@@ -77,11 +77,13 @@ const ProjectsListing = () => {
   useEffect(() => {
     const q = query(
       collection(db, 'projects'),
-      where('status', 'in', ['active', 'lead_recruitment']),
+      where('status', 'in', ['active', 'lead_recruitment', 'setup']),
       orderBy('createdAt', 'desc')
     );
     const unsub = onSnapshot(q, (snap) => {
-      const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      const list = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+        // Rejected projects are dead — never show them on the board.
+        .filter(p => p.reviewStatus !== 'rejected');
       setProjects(list);
       setFilteredProjects(list);
       setLoading(false);
@@ -204,8 +206,15 @@ const ProjectsListing = () => {
                   >
                     <div className="flex items-start justify-between gap-3 mb-3">
                       <h3 className="text-gray-900 font-bold text-sm sm:text-base line-clamp-2">{project.projectTitle}</h3>
-                      <span className={`flex-shrink-0 px-2.5 py-1 rounded-full text-[10px] font-bold ${project.status === 'lead_recruitment' ? 'bg-amber-100 text-gray-900' : 'bg-blue-100 text-gray-900'}`}>
-                        {project.status === 'lead_recruitment' ? 'Needs a Lead' : 'Open to Join'}
+                      <span className={`flex-shrink-0 px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                        project.status === 'lead_recruitment' ? 'bg-amber-100 text-gray-900'
+                        : project.status === 'setup' ? 'bg-purple-100 text-gray-900'
+                        : project.applicationsOpen === false ? 'bg-gray-200 text-gray-700'
+                        : 'bg-blue-100 text-gray-900'}`}>
+                        {project.status === 'lead_recruitment' ? 'Needs a Lead'
+                          : project.status === 'setup' ? 'Being set up'
+                          : project.applicationsOpen === false ? 'Closed'
+                          : 'Open to Join'}
                       </span>
                     </div>
 
@@ -217,6 +226,10 @@ const ProjectsListing = () => {
                       {(appliedProjectIds.has(project.id)
                         || (currentUser && (project.submitterId === currentUser.uid || project.submitterEmail === currentUser.email))) ? (
                         <span className="px-3 py-1.5 bg-gray-800 text-white rounded-lg text-sm font-semibold">View Project</span>
+                      ) : project.status === 'setup' ? (
+                        <span className="px-3 py-1.5 bg-purple-100 text-gray-700 rounded-lg text-sm font-semibold">Ongoing application</span>
+                      ) : project.applicationsOpen === false ? (
+                        <span className="px-3 py-1.5 bg-gray-200 text-gray-600 rounded-lg text-sm font-semibold">Closed</span>
                       ) : project.status === 'lead_recruitment' ? (
                         <span className="px-3 py-1.5 bg-amber-500 text-white rounded-lg text-sm font-semibold">Apply to lead</span>
                       ) : (

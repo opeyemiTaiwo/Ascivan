@@ -46,6 +46,21 @@ const ProjectVault = () => {
         } catch (e) { console.log('Owner completed query:', e.message); }
 
         const completed = Array.from(allCompleted.values());
+
+        // Rejected projects — show here too, marked rejected, with no certificate.
+        const allRejected = new Map();
+        try {
+          const rMemberQ = query(collection(db, 'projects'), where('members', 'array-contains', currentUser.uid), where('reviewStatus', '==', 'rejected'));
+          const rMemberSnap = await getDocs(rMemberQ);
+          rMemberSnap.docs.forEach(d => allRejected.set(d.id, { id: d.id, ...d.data(), isOwner: false, isRejected: true }));
+        } catch (e) { console.log('Member rejected query:', e.message); }
+        try {
+          const rOwnerQ = query(collection(db, 'projects'), where('submitterId', '==', currentUser.uid), where('reviewStatus', '==', 'rejected'));
+          const rOwnerSnap = await getDocs(rOwnerQ);
+          rOwnerSnap.docs.forEach(d => allRejected.set(d.id, { id: d.id, ...d.data(), isOwner: true, isRejected: true }));
+        } catch (e) { console.log('Owner rejected query:', e.message); }
+        allRejected.forEach(v => completed.push(v));
+
         completed.sort((a, b) => (b.completedAt?.toDate?.() || 0) - (a.completedAt?.toDate?.() || 0));
         setCompletedProjects(completed);
 
@@ -268,23 +283,31 @@ const ProjectVault = () => {
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="text-gray-900 font-semibold text-base truncate">{project.title || project.projectTitle || 'Untitled Project'}</h3>
-                          <span className="text-xs font-medium px-2 py-0.5 bg-blue-50 text-blue-700 rounded-md flex-shrink-0">Completed</span>
+                          {project.isRejected ? (
+                            <span className="text-xs font-medium px-2 py-0.5 bg-red-50 text-red-600 rounded-md flex-shrink-0">Rejected</span>
+                          ) : (
+                            <span className="text-xs font-medium px-2 py-0.5 bg-blue-50 text-blue-700 rounded-md flex-shrink-0">Completed</span>
+                          )}
                           {project.isOwner && <span className="text-[10px] font-semibold px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full flex-shrink-0">Owner</span>}
                         </div>
                         <p className="text-gray-400 text-xs">{project.category || 'General'}</p>
-                        {project.completedAt && (
+                        {project.isRejected ? (
+                          <p className="text-red-500 text-xs mt-1">This project was rejected. No certificate was awarded.{project.reviewFeedback ? ` Reviewer note: ${project.reviewFeedback}` : ''}</p>
+                        ) : project.completedAt && (
                           <p className="text-gray-400 text-xs mt-1">
                             Completed {project.completedAt?.toDate?.().toLocaleDateString() || ''}
                           </p>
                         )}
                       </div>
                       <div className="flex gap-2 flex-shrink-0">
-                        <button
-                          onClick={() => handleViewCertificate(project)}
-                          className="text-blue-600 hover:text-blue-700 text-sm font-medium border border-blue-200 px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-all"
-                        >
-                          View Certificate
-                        </button>
+                        {!project.isRejected && (
+                          <button
+                            onClick={() => handleViewCertificate(project)}
+                            className="text-blue-600 hover:text-blue-700 text-sm font-medium border border-blue-200 px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-all"
+                          >
+                            View Certificate
+                          </button>
+                        )}
                       </div>
                     </div>
                     {/* Dispute/Confirmation History */}

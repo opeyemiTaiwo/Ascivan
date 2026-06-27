@@ -45,19 +45,31 @@ const TalentBoard = () => {
         // Fetch users; don't orderBy a field that some docs may lack (that silently drops them).
         const q = query(collection(db, 'users'), limit(500));
         const snap = await getDocs(q);
-        const users = snap.docs
-          .map(d => ({ id: d.id, ...d.data() }))
-          // Show non-company individuals who have earned at least one badge or certificate.
-          // Check every place a badge/cert can live, so no earner is missed.
+        const allUsers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+        // Collect uids that have earned a badge from the member_badges collection too,
+        // so anyone with a badge there is included even if their user doc wasn't denormalized.
+        const badgedUids = new Set();
+        try {
+          const mbSnap = await getDocs(query(collection(db, 'member_badges'), limit(1000)));
+          mbSnap.docs.forEach(d => {
+            const uid = d.data().userId || d.data().uid || d.data().memberId;
+            if (uid) badgedUids.add(uid);
+          });
+        } catch (e) { /* ignore */ }
+
+        const users = allUsers
           .filter(u => {
             if (u.isCompany) return false;
-            if (u.uid === currentUser?.uid) return false;
+            const thisUid = u.uid || u.id;
+            if (thisUid === currentUser?.uid) return false;
             if (u.onboardingComplete === false) return false;
             const hasBadgeArray = Array.isArray(u.badges) && u.badges.length > 0;
             const hasTotal = (u.totalBadges || 0) > 0;
             const hasBadgeCounts = u.badgeCounts && Object.values(u.badgeCounts).some(n => (n || 0) > 0);
             const hasCertificates = Array.isArray(u.certificates) && u.certificates.length > 0;
-            return hasBadgeArray || hasTotal || hasBadgeCounts || hasCertificates;
+            const inMemberBadges = badgedUids.has(thisUid);
+            return hasBadgeArray || hasTotal || hasBadgeCounts || hasCertificates || inMemberBadges;
           })
           .sort((a, b) => (a.displayName || '').localeCompare(b.displayName || ''));
         setTalents(users);

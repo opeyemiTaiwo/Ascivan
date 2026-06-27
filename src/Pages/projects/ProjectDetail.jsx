@@ -53,6 +53,7 @@ const ProjectDetail = () => {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [hasApplied, setHasApplied] = useState(false);
+  const [wasRejected, setWasRejected] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
   const [isMember, setIsMember] = useState(false);
 
@@ -92,11 +93,13 @@ const ProjectDetail = () => {
             const apps = appSnap.docs.map(d => d.data());
             const approvedApp = apps.some(a => a.status === 'approved');
             const pendingApp = apps.some(a => a.status === 'submitted' || a.status === 'pending');
+            const rejectedApp = apps.some(a => a.status === 'rejected') && !approvedApp;
 
             const member = memberByArray || approvedApp || data.submitterId === currentUser.uid || data.submitterEmail === currentUser.email;
             setIsMember(member);
             // "Applied" should only show while genuinely pending — not once approved.
             setHasApplied(pendingApp && !member);
+            setWasRejected(rejectedApp && !member);
           }
         }
       } catch (err) {
@@ -429,6 +432,11 @@ const ProjectDetail = () => {
                     <p className="text-blue-600 font-bold text-sm">You have already applied to this project</p>
                     <p className="text-gray-500 text-xs mt-1">The project owner will review your application</p>
                   </div>
+                ) : (wasRejected && project.applicationsOpen === false) ? (
+                  <div className="text-center py-4">
+                    <p className="text-gray-700 font-bold text-sm mb-1">You were not approved to join this project</p>
+                    <p className="text-gray-500 text-xs">Applications are now closed. You can apply to other projects on the <button onClick={() => navigate('/projects')} className="text-blue-600 font-semibold hover:underline">projects page</button>, or visit your <button onClick={() => navigate('/workspace')} className="text-blue-600 font-semibold hover:underline">workspace</button>.</p>
+                  </div>
                 ) : project.applicationsOpen === false ? (
                   <div className="text-center py-4">
                     <p className="text-gray-600 font-semibold text-sm mb-1">Applications are closed</p>
@@ -436,9 +444,12 @@ const ProjectDetail = () => {
                   </div>
                 ) : !showApplyForm ? (
                   <div className="text-center">
+                    {wasRejected && (
+                      <p className="text-gray-500 text-xs mb-3">Your previous application wasn't approved. You're welcome to apply again while applications are open.</p>
+                    )}
                     <button onClick={() => setShowApplyForm(true)}
                       className="px-8 py-3 min-h-[48px] bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-all shadow-lg">
-                      Apply to This Project
+                      {wasRejected ? 'Apply Again' : 'Apply to This Project'}
                     </button>
                   </div>
                 ) : (

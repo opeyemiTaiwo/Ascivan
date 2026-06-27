@@ -286,6 +286,13 @@ const ProjectWorkspace = () => {
 
   if (loading) return <div className="flex items-center justify-center py-20"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div></div>;
   if (!project) return <div className="text-center py-20"><p className="text-gray-900 font-semibold">Project not found</p></div>;
+  if (project.reviewStatus === 'rejected') return (
+    <div className="max-w-2xl mx-auto text-center py-20 px-4">
+      <h2 className="text-xl font-bold text-red-600 mb-2">This project was rejected</h2>
+      <p className="text-gray-500 text-sm mb-1">The workspace is closed. No badges or certificates were awarded.</p>
+      {project.reviewFeedback && <p className="text-gray-400 text-xs">Reviewer note: {project.reviewFeedback}</p>}
+    </div>
+  );
 
   return (
     <div className="max-w-4xl mx-auto">

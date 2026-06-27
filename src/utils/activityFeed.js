@@ -9,6 +9,7 @@
 import {
   collection, addDoc, getDocs, query, where, orderBy, limit,
   deleteDoc, doc, serverTimestamp, writeBatch,
+  updateDoc, arrayUnion, arrayRemove, increment,
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
@@ -131,4 +132,28 @@ export const countDummyActivity = async () => {
     console.error('countDummyActivity failed:', e);
     return 0;
   }
+};
+
+// --- Celebrate (positive-only reaction) ---
+// Toggles the current user's celebrate on an activity item.
+// Stored as an array of uids in `celebratedBy` + a denormalized `celebrateCount`.
+export const toggleCelebrate = async (activityId, uid, currentlyCelebrated) => {
+  const ref = doc(db, 'activity', activityId);
+  await updateDoc(ref, {
+    celebratedBy: currentlyCelebrated ? arrayRemove(uid) : arrayUnion(uid),
+    celebrateCount: increment(currentlyCelebrated ? -1 : 1),
+  });
+};
+
+// --- Edit your own update post ---
+export const editUpdate = async (activityId, newText, newProjectTitle) => {
+  const ref = doc(db, 'activity', activityId);
+  const patch = { text: newText };
+  if (newProjectTitle !== undefined) patch.projectTitle = newProjectTitle;
+  await updateDoc(ref, patch);
+};
+
+// --- Delete your own update post ---
+export const deleteActivityItem = async (activityId) => {
+  await deleteDoc(doc(db, 'activity', activityId));
 };

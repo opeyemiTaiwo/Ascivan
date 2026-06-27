@@ -131,6 +131,14 @@ service cloud.firestore {
             && request.resource.data.type == 'update'
             && request.resource.data.actorId == myUid()
             && request.resource.data.isDummy == false);
+      // Celebrate: any signed-in user, but ONLY the celebrate fields may change.
+      allow update: if isSignedIn()
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['celebratedBy', 'celebrateCount']);
+      // Edit own update post: author may change text/projectTitle only.
+      allow update: if isSignedIn() && resource.data.actorId == myUid()
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['text', 'projectTitle']);
       allow update: if isAdmin();
       allow delete: if isAdmin()
         || (isSignedIn() && resource.data.actorId == myUid());

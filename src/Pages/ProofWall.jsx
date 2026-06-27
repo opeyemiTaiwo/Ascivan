@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { getActivity, logActivity, ACTIVITY_TYPES } from '../utils/activityFeed';
+import { getActivity, logActivity, ACTIVITY_TYPES, toggleCelebrate, editUpdate, deleteActivityItem } from '../utils/activityFeed';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
@@ -72,6 +72,57 @@ const ProofWall = () => {
   const [updateText, setUpdateText] = useState('');
   const [updateProject, setUpdateProject] = useState('');
   const [posting, setPosting] = useState(false);
+
+  // Inline edit state
+  const [editingId, setEditingId] = useState(null);
+  const [editText, setEditText] = useState('');
+  const [editProject, setEditProject] = useState('');
+
+  const uid = currentUser?.uid;
+
+  // Optimistic celebrate toggle
+  const handleCelebrate = async (a) => {
+    if (!uid) return;
+    const celebrated = (a.celebratedBy || []).includes(uid);
+    // optimistic update
+    setItems(prev => prev.map(x => x.id === a.id ? {
+      ...x,
+      celebratedBy: celebrated ? (x.celebratedBy || []).filter(u => u !== uid) : [...(x.celebratedBy || []), uid],
+      celebrateCount: Math.max(0, (x.celebrateCount || 0) + (celebrated ? -1 : 1)),
+    } : x));
+    try {
+      await toggleCelebrate(a.id, uid, celebrated);
+    } catch (e) {
+      console.error(e);
+      toast.error('Could not update celebrate.');
+      load(filter); // revert by reloading
+    }
+  };
+
+  const startEdit = (a) => {
+    setEditingId(a.id);
+    setEditText(a.text || '');
+    setEditProject(a.projectTitle || '');
+  };
+
+  const saveEdit = async (a) => {
+    if (!editText.trim()) { toast.error('Update can\u2019t be empty.'); return; }
+    try {
+      await editUpdate(a.id, editText.trim(), editProject.trim());
+      setItems(prev => prev.map(x => x.id === a.id ? { ...x, text: editText.trim(), projectTitle: editProject.trim() } : x));
+      setEditingId(null);
+      toast.success('Update edited.');
+    } catch (e) { console.error(e); toast.error('Could not save edit.'); }
+  };
+
+  const handleDelete = async (a) => {
+    if (!window.confirm('Delete this update? This cannot be undone.')) return;
+    try {
+      await deleteActivityItem(a.id);
+      setItems(prev => prev.filter(x => x.id !== a.id));
+      toast.success('Update deleted.');
+    } catch (e) { console.error(e); toast.error('Could not delete.'); }
+  };
 
   const load = useCallback(async (f) => {
     setLoading(true);
@@ -182,6 +233,10 @@ const ProofWall = () => {
         <div className="flex flex-col gap-2.5">
           {items.map(a => {
             const st = typeStyle[a.type] || typeStyle.update;
+            const celebrated = uid && (a.celebratedBy || []).includes(uid);
+            const count = a.celebrateCount || 0;
+            const isMine = uid && a.actorId === uid && a.type === 'update';
+            const isEditing = editingId === a.id;
             return (
               <div key={a.id} className="flex gap-3.5 items-start bg-white border border-gray-200 rounded-xl p-3.5 sm:p-4">
                 <div className={`w-10 h-10 ${st.shape} ${st.bg} flex items-center justify-center flex-shrink-0`}>
@@ -189,14 +244,60 @@ const ProofWall = () => {
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="text-sm sm:text-[15px] text-gray-900 leading-relaxed">{renderHeadline(a)}</div>
-                  {a.type === 'update' && a.text && (
-                    <div className="text-sm text-gray-600 mt-1.5 leading-relaxed">{a.text}</div>
+
+                  {/* Inline edit mode (own updates only) */}
+                  {isEditing ? (
+                    <div className="mt-2 space-y-2">
+                      <input
+                        value={editProject}
+                        onChange={e => setEditProject(e.target.value)}
+                        placeholder="Project name"
+                        className="w-full bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none"
+                      />
+                      <textarea
+                        value={editText}
+                        onChange={e => setEditText(e.target.value)}
+                        rows={2}
+                        className="w-full bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none resize-none"
+                      />
+                      <div className="flex gap-2">
+                        <button onClick={() => saveEdit(a)} className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg">Save</button>
+                        <button onClick={() => setEditingId(null)} className="text-gray-500 text-xs font-semibold px-3 py-1.5">Cancel</button>
+                      </div>
+                    </div>
+                  ) : (
+                    a.type === 'update' && a.text && (
+                      <div className="text-sm text-gray-600 mt-1.5 leading-relaxed">{a.text}</div>
+                    )
                   )}
+
                   <div className="text-xs text-gray-400 mt-1.5">
                     {a.type === 'update' ? 'Project update' : (ACTIVITY_TYPES[a.type]?.label || 'Activity')}
                     {a.meta && a.type !== 'milestone' ? <> · {a.meta}</> : null}
                     {a.createdAt ? <> · {fmtAgo(a.createdAt)}</> : null}
                   </div>
+
+                  {/* Actions row: Celebrate (all) + edit/delete (own updates) */}
+                  {!isEditing && (
+                    <div className="flex items-center gap-3 mt-2.5">
+                      <button
+                        onClick={() => handleCelebrate(a)}
+                        className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full transition-all ${
+                          celebrated ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                        }`}
+                        title={celebrated ? 'You celebrated this' : 'Celebrate this'}
+                      >
+                        <span aria-hidden="true">🎉</span>
+                        Celebrate{count > 0 ? <span className="font-bold">· {count}</span> : null}
+                      </button>
+                      {isMine && (
+                        <>
+                          <button onClick={() => startEdit(a)} className="text-xs font-semibold text-gray-500 hover:text-gray-800">Edit</button>
+                          <button onClick={() => handleDelete(a)} className="text-xs font-semibold text-gray-500 hover:text-red-600">Delete</button>
+                        </>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             );

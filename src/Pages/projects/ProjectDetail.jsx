@@ -9,6 +9,7 @@ import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
 import { notifyNewApplicationToOwner } from '../../utils/emailNotifications';
 import { logActivity } from '../../utils/activityLog';
+import { logActivity as logProofEvent } from '../../utils/activityFeed';
 import { checkRoleEligibility } from '../../utils/roleEligibility';
 import { checkProfileComplete } from '../../utils/profileCompletion';
 
@@ -135,6 +136,16 @@ const ProjectDetail = () => {
         leadConfirmedAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
+
+      // Proof Wall: log a lead proof event (non-blocking).
+      logProofEvent({
+        type: 'lead',
+        actorId: currentUser.uid,
+        actorName: memberProfile?.displayName || currentUser.displayName || 'A member',
+        projectTitle: project?.projectTitle || project?.title || 'a project',
+        meta: 'Stepped up to lead',
+      });
+
       toast.success('You are now the project lead! Set it up and open your team.');
       navigate(`/projects/${projectId}/setup`);
     } catch (e) {

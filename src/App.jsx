@@ -155,7 +155,7 @@ function App() {
                 <Route path="/project-vault" element={<SidebarRoute><ProjectVault /></SidebarRoute>} />
                 <Route path="/settings" element={<SidebarRoute><Settings /></SidebarRoute>} />
                 <Route path="/premium-success" element={<SidebarRoute><PremiumSuccess /></SidebarRoute>} />
-                <Route path="/my-connections" element={<SidebarRoute><FollowList /></SidebarRoute>} />
+                <Route path="/my-connections" element={<Navigate to="/proof-wall" replace />} />
                 <Route path="/account" element={<SidebarRoute><Account /></SidebarRoute>} />
 
                 <Route path="/messages" element={<SidebarRoute><Messages /></SidebarRoute>} />
@@ -167,8 +167,8 @@ function App() {
                 <Route path="/members-directory" element={<Navigate to="/talent-board" replace />} />
 
                 <Route path="/profile/:userEmail" element={<SidebarRoute><UserProfile /></SidebarRoute>} />
-                <Route path="/profile/:userEmail/followers" element={<SidebarRoute><FollowersFollowing /></SidebarRoute>} />
-                <Route path="/profile/:userEmail/following" element={<SidebarRoute><FollowersFollowing /></SidebarRoute>} />
+                <Route path="/profile/:userEmail/followers" element={<Navigate to="/proof-wall" replace />} />
+                <Route path="/profile/:userEmail/following" element={<Navigate to="/proof-wall" replace />} />
 
                 {/* Legacy redirects */}
                 <Route path="/user/dashboard" element={<Navigate to="/dashboard" replace />} />

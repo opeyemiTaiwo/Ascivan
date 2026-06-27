@@ -8,6 +8,7 @@ import { doc, getDoc, updateDoc, addDoc, collection, query, where, getDocs, serv
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
 import { notifyBadgeAwarded } from '../../utils/emailNotifications';
+import { logActivity as logProofEvent } from '../../utils/activityFeed';
 import { logActivity } from '../../utils/activityLog';
 
 const badgeCategories = {
@@ -193,6 +194,15 @@ const ProjectCompletion = () => {
           } catch (emailErr) {
             console.error('Badge email failed (non-blocking):', emailErr);
           }
+
+          // Proof Wall: log a badge proof event (non-blocking).
+          logProofEvent({
+            type: 'badge',
+            actorName: ev.memberName || ev.memberEmail,
+            badgeName: `${badgeCategories[ev.badgeCategory]?.name || ev.badgeCategory} · ${ev.badgeLevel}`,
+            projectTitle: project.projectTitle || project.title || null,
+            meta: `Earned on ${project.projectTitle || 'a project'}`,
+          });
         }
       }
 
@@ -213,6 +223,14 @@ const ProjectCompletion = () => {
           teamSize: members.length,
           badgesAwarded: evaluations.filter(e => e.awardBadge && e.contribution !== 'poor').length,
         },
+      });
+
+      // Proof Wall: log a project-shipped proof event (non-blocking).
+      logProofEvent({
+        type: 'ship',
+        actorName: members.length > 0 ? `A team of ${members.length}` : (currentUser.displayName || 'A member'),
+        projectTitle: project.projectTitle || project.title || 'a project',
+        meta: 'Project completed and archived',
       });
 
       // Award owner a TechLeads badge + certificate automatically

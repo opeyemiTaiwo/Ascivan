@@ -42,7 +42,9 @@ const renderHeadline = (a) => {
     case 'ship':
       return <>{name} shipped {proj}</>;
     case 'lead':
-      return <>{proj} is looking for a lead</>;
+      return a.actorId
+        ? <>{name} stepped up to lead {proj}</>
+        : <>{proj} is looking for a lead</>;
     case 'milestone':
       return <>{name} {a.meta ? a.meta.replace(/^Completed /, 'completed ') : 'reached a milestone'}</>;
     case 'update':

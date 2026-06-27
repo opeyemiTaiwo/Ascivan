@@ -435,7 +435,7 @@ const ProjectDetail = () => {
                 ) : (wasRejected && project.applicationsOpen === false) ? (
                   <div className="text-center py-4">
                     <p className="text-gray-700 font-bold text-sm mb-1">You were not approved to join this project</p>
-                    <p className="text-gray-500 text-xs">Applications are now closed. You can apply to other projects on the <button onClick={() => navigate('/projects')} className="text-blue-600 font-semibold hover:underline">projects page</button>, or visit your <button onClick={() => navigate('/workspace')} className="text-blue-600 font-semibold hover:underline">workspace</button>.</p>
+                    <p className="text-gray-500 text-xs">Applications are now closed. You can apply to other projects on the <button onClick={() => navigate('/projects')} className="text-blue-600 font-semibold hover:underline">projects page</button>, or visit your <button onClick={() => navigate('/my-workspaces')} className="text-blue-600 font-semibold hover:underline">workspace</button>.</p>
                   </div>
                 ) : project.applicationsOpen === false ? (
                   <div className="text-center py-4">

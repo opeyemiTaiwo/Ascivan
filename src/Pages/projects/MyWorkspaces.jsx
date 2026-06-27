@@ -26,7 +26,7 @@ const MyWorkspaces = () => {
           const memberSnap = await getDocs(memberQ);
           memberSnap.docs.forEach(d => {
             const data = { id: d.id, ...d.data(), isOwner: false };
-            if (data.status === 'active' || data.status === 'awaiting_payment_confirmation') {
+            if ((data.status === 'active' || data.status === 'awaiting_payment_confirmation') && data.reviewStatus !== 'rejected') {
               allProjects.set(d.id, data);
             }
           });
@@ -41,7 +41,7 @@ const MyWorkspaces = () => {
           const ownerSnap = await getDocs(ownerQ);
           ownerSnap.docs.forEach(d => {
             const data = { id: d.id, ...d.data(), isOwner: true };
-            if (data.status === 'active' || data.status === 'awaiting_payment_confirmation') {
+            if ((data.status === 'active' || data.status === 'awaiting_payment_confirmation') && data.reviewStatus !== 'rejected') {
               allProjects.set(d.id, data); // overwrites if already exists, marks as owner
             }
           });

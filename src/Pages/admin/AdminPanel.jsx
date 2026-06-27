@@ -15,6 +15,7 @@ import { generateProject } from '../../utils/projectGenerator';
 import { getRandomTemplate, TEMPLATE_COUNT } from '../../utils/projectTemplates';
 import { seedDummyActivity, deleteDummyActivity, countDummyActivity } from '../../utils/activityFeed';
 import { REVIEW_STATUS, approveProjectReview, requestChanges, rejectProjectReview, getProjectMemberEmails } from '../../utils/projectReview';
+import { clearAllTestData } from '../../utils/adminDataReset';
 
 const fmtDate = (ts) => {
   try {
@@ -58,6 +59,41 @@ const AdminPanel = () => {
   const [loadingReviews, setLoadingReviews] = useState(false);
   const [feedbackById, setFeedbackById] = useState({});
   const [actingId, setActingId] = useState(null);
+
+  // --- Danger Zone: clear test data ---
+  const [clearing, setClearing] = useState(false);
+  const [clearConfirm, setClearConfirm] = useState('');
+  const [alsoResetUsers, setAlsoResetUsers] = useState(true);
+  const [clearProgress, setClearProgress] = useState('');
+  const [clearSummary, setClearSummary] = useState(null);
+
+  const handleClearAllData = async () => {
+    if (clearConfirm !== 'DELETE') {
+      toast.error('Type DELETE to confirm.');
+      return;
+    }
+    if (!window.confirm('This permanently deletes ALL projects, applications, posts, messages, notifications, badges and certificates. User accounts are kept. This cannot be undone. Continue?')) {
+      return;
+    }
+    setClearing(true);
+    setClearSummary(null);
+    setClearProgress('Starting…');
+    try {
+      const summary = await clearAllTestData(
+        { resetUsers: alsoResetUsers },
+        (coll, count) => setClearProgress(`Clearing ${coll}… (${count})`)
+      );
+      setClearSummary(summary);
+      setClearProgress('');
+      setClearConfirm('');
+      toast.success('Test data cleared.');
+      loadData?.();
+    } catch (e) {
+      console.error(e);
+      toast.error('Clear failed: ' + e.message);
+    }
+    setClearing(false);
+  };
 
   const loadReviews = useCallback(async () => {
     setLoadingReviews(true);
@@ -301,6 +337,7 @@ const AdminPanel = () => {
     ['generate', 'Generate'],
     ['seed', 'Seed'],
     ['moderation', 'Moderation'],
+    ['danger', 'Danger Zone'],
   ];
 
   const StatCard = ({ label, value, sub }) => (
@@ -327,6 +364,55 @@ const AdminPanel = () => {
       </div>
 
       {loadingData && <div className="py-10 text-center text-gray-400 text-sm">Loading…</div>}
+
+      {/* DANGER ZONE */}
+      {tab === 'danger' && (
+        <div className="space-y-4 max-w-2xl">
+          <div className="bg-red-50 border-2 border-red-200 rounded-xl p-5">
+            <h2 className="text-lg font-bold text-red-700 mb-1">Clear all test data</h2>
+            <p className="text-gray-600 text-sm mb-3">
+              Permanently deletes all projects, applications, the Proof Wall feed, posts, messages, notifications, jobs, badges, and certificates. <strong>User accounts are kept</strong> so people can still log in. All platform functionality stays intact — only the data is wiped. This cannot be undone.
+            </p>
+
+            <label className="flex items-center gap-2 mb-3 text-sm text-gray-700">
+              <input type="checkbox" checked={alsoResetUsers} onChange={e => setAlsoResetUsers(e.target.checked)} />
+              Also reset every user's badges &amp; certificates (recommended for a clean slate)
+            </label>
+
+            <p className="text-gray-600 text-sm mb-2">Type <span className="font-mono font-bold">DELETE</span> to confirm:</p>
+            <input
+              value={clearConfirm}
+              onChange={e => setClearConfirm(e.target.value)}
+              placeholder="DELETE"
+              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-red-500 focus:outline-none mb-3 font-mono"
+            />
+
+            <button
+              onClick={handleClearAllData}
+              disabled={clearing || clearConfirm !== 'DELETE'}
+              className="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg text-sm disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+            >
+              {clearing ? 'Clearing…' : 'Clear all test data'}
+            </button>
+
+            {clearProgress && <p className="text-gray-500 text-xs mt-3">{clearProgress}</p>}
+
+            {clearSummary && (
+              <div className="mt-4 bg-white border border-gray-200 rounded-lg p-3">
+                <p className="text-gray-700 text-sm font-semibold mb-2">Cleared:</p>
+                <div className="text-xs text-gray-600 space-y-0.5 max-h-60 overflow-y-auto">
+                  {Object.entries(clearSummary).map(([k, v]) => (
+                    <div key={k} className="flex justify-between">
+                      <span>{k}</span>
+                      <span className="font-mono">{String(v)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* REVIEWS */}
       {tab === 'reviews' && (

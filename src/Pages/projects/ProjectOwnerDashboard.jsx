@@ -208,7 +208,7 @@ const ProjectOwnerDashboard = () => {
                 ['Total Projects', myProjects.length, 'from-blue-500 to-blue-600'],
                 ['Pending Apps', myProjects.reduce((s, p) => s + (p.pendingCount || 0), 0), 'from-orange-500 to-orange-600'],
                 ['Team Members', myProjects.reduce((s, p) => s + (p.approvedMembers?.length || 0), 0), 'from-blue-500 to-blue-600'],
-                ['Completed', myProjects.filter(p => p.status === 'completed').length, 'from-blue-500 to-blue-600'],
+                ['Completed', myProjects.filter(p => p.status === 'completed' || p.reviewStatus === 'rejected').length, 'from-blue-500 to-blue-600'],
               ].map(([label, val, grad]) => (
                 <div key={label} className="bg-gray-50 border border-gray-200 rounded-xl p-4">
                   <p className="text-gray-500 text-[10px] uppercase tracking-wider font-semibold">{label}</p>
@@ -244,7 +244,8 @@ const ProjectOwnerDashboard = () => {
 
 const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove, onToggleApplications }) => {
   const [showApps, setShowApps] = useState(false);
-  const isCompleted = project.status === 'completed';
+  const isRejected = project.reviewStatus === 'rejected';
+  const isCompleted = project.status === 'completed' || isRejected;
   const pendingApps = (project.applications || []).filter(a => a.status === 'submitted');
   const approvedApps = (project.applications || []).filter(a => a.status === 'approved');
 
@@ -263,8 +264,8 @@ const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove, onTo
           </div>
         </div>
         <div className="flex gap-2">
-          <span className={`px-3 py-1 rounded-full text-xs font-bold ${isCompleted ? 'bg-blue-600/20 text-blue-500 border border-blue-600/30' : 'bg-blue-600/20 text-blue-500 border border-blue-600/30'}`}>
-            {isCompleted ? 'Completed' : 'Active'}
+          <span className={`px-3 py-1 rounded-full text-xs font-bold border ${isRejected ? 'bg-red-50 text-red-600 border-red-200' : 'bg-blue-600/20 text-blue-500 border-blue-600/30'}`}>
+            {isRejected ? 'Rejected' : isCompleted ? 'Completed' : 'Active'}
           </span>
         </div>
       </div>

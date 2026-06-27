@@ -65,7 +65,7 @@ service cloud.firestore {
       allow update: if isSignedIn() && ownsExisting('recruiterId') && ownsNew('recruiterId')
         && request.resource.data.count == resource.data.count + 1
         && (isPremium() || request.resource.data.count <= 5);
-      allow delete: if false;
+      allow delete: if isAdmin();
     }
 
     // job-post quota (2/mo free, Premium unlimited)
@@ -77,7 +77,7 @@ service cloud.firestore {
       allow update: if isSignedIn() && ownsExisting('userId') && ownsNew('userId')
         && request.resource.data.count == resource.data.count + 1
         && (isPremium() || request.resource.data.count <= 2);
-      allow delete: if false;
+      allow delete: if isAdmin();
     }
 
     // projects + forum subcollection
@@ -116,13 +116,14 @@ service cloud.firestore {
       allow read: if isSignedIn() && myUid() in resource.data.participants;
       allow create: if isSignedIn() && myUid() in request.resource.data.participants;
       allow update: if isSignedIn() && myUid() in resource.data.participants;
-      allow delete: if false;
+      allow delete: if isAdmin();
       match /messages/{msgId} {
         allow read: if isSignedIn()
           && myUid() in get(/databases/$(database)/documents/conversations/$(convId)).data.participants;
         allow create: if isSignedIn()
           && myUid() in get(/databases/$(database)/documents/conversations/$(convId)).data.participants;
-        allow update, delete: if false;
+        allow update: if false;
+        allow delete: if isAdmin();
       }
     }
 

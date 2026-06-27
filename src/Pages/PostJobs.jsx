@@ -259,11 +259,6 @@ const PostJobs = () => {
 
             {/* Header */}
             <section className="text-center mb-10">
-              <div className="inline-block mb-4 px-4 py-2 bg-orange-500/10 border border-orange-500/20 rounded-xl">
-                <p className="text-orange-400 font-semibold text-sm">
-                  {currentUser.displayName || currentUser.email} — Post a new job listing
-                </p>
-              </div>
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-2 sm:mb-3">
                 Post a <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Job</span>
               </h1>

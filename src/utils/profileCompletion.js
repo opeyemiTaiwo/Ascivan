@@ -25,31 +25,30 @@ const nonEmpty = (v) => typeof v === 'string' && v.trim().length > 0;
 
 // Returns { complete: boolean, missing: string[] }.
 // Pass the user's Firestore user-doc data.
+//
+// We intentionally gate on the ESSENTIAL fields only — the ones truly needed to
+// participate (a name, plus the account-type's core identifier). Country and
+// LinkedIn are encouraged but should not block someone from applying or posting,
+// which previously caused valid, onboarded users to be stuck on "complete your profile".
 export const checkProfileComplete = (userData) => {
   const missing = [];
   if (!userData) return { complete: false, missing: ['your profile'] };
 
-  // onboarding must have been completed at all
-  if (!userData.onboardingComplete) missing.push('onboarding');
-
+  // Must have a display name.
   if (!nonEmpty(userData.displayName)) missing.push('your name');
-  if (!nonEmpty(userData.country)) missing.push('your current country');
-  if (!Array.isArray(userData.interests) || userData.interests.length === 0) {
-    missing.push('at least one interest');
-  }
 
   if (userData.isCompany) {
     const cp = userData.companyProfile || {};
-    if (!nonEmpty(cp.companyName)) missing.push('company name');
-    if (!nonEmpty(cp.companyEmail) || !isBusinessEmail(cp.companyEmail)) {
-      missing.push('a business company email');
-    }
+    const companyName = cp.companyName || userData.companyName;
+    if (!nonEmpty(companyName)) missing.push('company name');
   } else {
-    if (!nonEmpty(userData.experienceLevel)) missing.push('experience level');
-    if (!nonEmpty(userData.linkedinUrl)) missing.push('LinkedIn URL');
+    // For individuals, require at least one interest OR an experience level.
+    const hasInterests = Array.isArray(userData.interests) && userData.interests.length > 0;
+    const hasExperience = nonEmpty(userData.experienceLevel);
+    if (!hasInterests && !hasExperience) missing.push('your interests or experience level');
   }
 
-  // Treat an explicitly-skipped profile as incomplete regardless of the above,
-  // unless the required fields above are actually present.
-  return { complete: missing.length === 0, missing };
+  // Complete if the essentials are present and onboarding wasn't explicitly left undone.
+  const complete = missing.length === 0 && (userData.onboardingComplete !== false);
+  return { complete, missing };
 };

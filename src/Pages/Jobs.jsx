@@ -176,14 +176,14 @@ const Jobs = () => {
 
   const getTypeBadge = (jobType) => {
     const map = {
-      'full-time':  { label: 'Full-time',       cls: 'bg-blue-500/20 text-blue-300' },
-      'part-time':  { label: 'Part-time',       cls: 'bg-blue-500/20 text-blue-300' },
-      'contract':   { label: 'Contract',        cls: 'bg-purple-500/20 text-purple-300' },
-      'freelance':  { label: 'Freelance',       cls: 'bg-blue-500/20 text-blue-400' },
-      'internship': { label: 'Internship',      cls: 'bg-green-500/20 text-green-300' },
-      'remote':     { label: 'Virtual / Online', cls: 'bg-teal-500/20 text-teal-300' },
+      'full-time':  { label: 'Full-time',       cls: 'bg-blue-100 text-gray-900' },
+      'part-time':  { label: 'Part-time',       cls: 'bg-blue-100 text-gray-900' },
+      'contract':   { label: 'Contract',        cls: 'bg-purple-100 text-gray-900' },
+      'freelance':  { label: 'Freelance',       cls: 'bg-blue-100 text-gray-900' },
+      'internship': { label: 'Internship',      cls: 'bg-green-100 text-gray-900' },
+      'remote':     { label: 'Virtual / Online', cls: 'bg-teal-100 text-gray-900' },
     };
-    return map[jobType] || { label: jobType || 'Job', cls: 'bg-orange-500/20 text-orange-300' };
+    return map[jobType] || { label: jobType || 'Job', cls: 'bg-orange-100 text-gray-900' };
   };
 
   const clearAll = () => {
@@ -218,11 +218,6 @@ const Jobs = () => {
 
           {/* Hero */}
           <section className="mb-10 text-center">
-            <div className="mb-4 inline-block px-4 py-2 bg-orange-500/10 border border-orange-500/20 rounded-xl">
-              <p className="text-orange-400 font-semibold text-sm">
-                Welcome, {currentUser.displayName?.split(' ')[0] || 'User'}! Find your next opportunity.
-              </p>
-            </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-3 sm:mb-4">Jobs</h1>
             <p className="text-gray-600 text-sm sm:text-base md:text-lg mb-5 sm:mb-6">Full-time · Part-time · Contract · Freelance · Internship · Virtual/Online</p>
             <button
@@ -352,11 +347,11 @@ const Jobs = () => {
                               {typeBadge.label}
                             </span>
                             {post.workAuth === 'provided' || post.workAuthProvided ? (
-                              <span className="bg-green-500/20 text-green-300 px-2.5 py-1 rounded-lg text-xs font-semibold">Visa/sponsorship provided</span>
+                              <span className="bg-green-100 text-gray-900 px-2.5 py-1 rounded-lg text-xs font-semibold">Visa/sponsorship provided</span>
                             ) : post.workAuth === 'required' ? (
-                              <span className="bg-gray-100 text-gray-600 px-2.5 py-1 rounded-lg text-xs font-semibold">Must be authorized to work</span>
+                              <span className="bg-blue-100 text-gray-900 px-2.5 py-1 rounded-lg text-xs font-semibold">Must be authorized to work</span>
                             ) : post.workAuth === 'not_required' ? (
-                              <span className="bg-teal-500/20 text-teal-300 px-2.5 py-1 rounded-lg text-xs font-semibold">Work authorization not required</span>
+                              <span className="bg-teal-100 text-gray-900 px-2.5 py-1 rounded-lg text-xs font-semibold">Work authorization not required</span>
                             ) : null}
                             {isClosed && (
                               <span className="bg-gray-100 text-gray-500 px-2.5 py-1 rounded-lg text-xs font-semibold">Closed</span>

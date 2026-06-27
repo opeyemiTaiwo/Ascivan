@@ -9,7 +9,7 @@
 import {
   collection, addDoc, getDocs, query, where, orderBy, limit,
   deleteDoc, doc, serverTimestamp, writeBatch,
-  updateDoc, arrayUnion, arrayRemove, increment,
+  updateDoc, arrayUnion, arrayRemove, increment, deleteField,
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
@@ -46,21 +46,22 @@ export const logActivity = async (event) => {
 // --- Read the wall ---
 export const getActivity = async (max = 50, typeFilter = null) => {
   try {
-    let q;
-    if (typeFilter) {
-      q = query(collection(db, 'activity'), where('type', '==', typeFilter), orderBy('createdAt', 'desc'), limit(max));
-    } else {
-      q = query(collection(db, 'activity'), orderBy('createdAt', 'desc'), limit(max));
-    }
+    // Fetch recent activity ordered by time (single-field index, always available),
+    // then filter by type client-side to avoid needing a composite index.
+    const q = query(collection(db, 'activity'), orderBy('createdAt', 'desc'), limit(max * 3));
     const snap = await getDocs(q);
-    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    let rows = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    if (typeFilter) rows = rows.filter(r => r.type === typeFilter);
+    return rows.slice(0, max);
   } catch (e) {
     console.error('getActivity failed:', e);
-    // Fallback without orderBy (in case index missing)
+    // Fallback without orderBy (in case the time index is still building)
     try {
-      const snap = await getDocs(query(collection(db, 'activity'), limit(max)));
-      return snap.docs.map(d => ({ id: d.id, ...d.data() }))
+      const snap = await getDocs(query(collection(db, 'activity'), limit(max * 3)));
+      let rows = snap.docs.map(d => ({ id: d.id, ...d.data() }))
         .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+      if (typeFilter) rows = rows.filter(r => r.type === typeFilter);
+      return rows.slice(0, max);
     } catch { return []; }
   }
 };
@@ -134,15 +135,19 @@ export const countDummyActivity = async () => {
   }
 };
 
-// --- Celebrate (positive-only reaction) ---
-// Toggles the current user's celebrate on an activity item.
-// Stored as an array of uids in `celebratedBy` + a denormalized `celebrateCount`.
-export const toggleCelebrate = async (activityId, uid, currentlyCelebrated) => {
+// --- Love (positive-only reaction) ---
+// Toggles the current user's love on an activity item.
+// Stores uids in `celebratedBy` + denormalized `celebrateCount`,
+// plus a small `celebratedByNames` map {uid: name} for showing who reacted.
+export const toggleCelebrate = async (activityId, uid, currentlyCelebrated, userName) => {
   const ref = doc(db, 'activity', activityId);
-  await updateDoc(ref, {
+  const patch = {
     celebratedBy: currentlyCelebrated ? arrayRemove(uid) : arrayUnion(uid),
     celebrateCount: increment(currentlyCelebrated ? -1 : 1),
-  });
+  };
+  // maintain a names map keyed by uid (dot-path update)
+  patch[`celebratedByNames.${uid}`] = currentlyCelebrated ? deleteField() : (userName || 'A member');
+  await updateDoc(ref, patch);
 };
 
 // --- Edit your own update post ---

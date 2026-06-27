@@ -86,18 +86,25 @@ const ProofWall = () => {
   const handleCelebrate = async (a) => {
     if (!uid) return;
     const celebrated = (a.celebratedBy || []).includes(uid);
+    const myName = myData?.displayName || currentUser?.displayName || 'You';
     // optimistic update
-    setItems(prev => prev.map(x => x.id === a.id ? {
-      ...x,
-      celebratedBy: celebrated ? (x.celebratedBy || []).filter(u => u !== uid) : [...(x.celebratedBy || []), uid],
-      celebrateCount: Math.max(0, (x.celebrateCount || 0) + (celebrated ? -1 : 1)),
-    } : x));
+    setItems(prev => prev.map(x => {
+      if (x.id !== a.id) return x;
+      const names = { ...(x.celebratedByNames || {}) };
+      if (celebrated) delete names[uid]; else names[uid] = myName;
+      return {
+        ...x,
+        celebratedBy: celebrated ? (x.celebratedBy || []).filter(u => u !== uid) : [...(x.celebratedBy || []), uid],
+        celebrateCount: Math.max(0, (x.celebrateCount || 0) + (celebrated ? -1 : 1)),
+        celebratedByNames: names,
+      };
+    }));
     try {
-      await toggleCelebrate(a.id, uid, celebrated);
+      await toggleCelebrate(a.id, uid, celebrated, myName);
     } catch (e) {
       console.error(e);
-      toast.error('Could not update celebrate.');
-      load(filter); // revert by reloading
+      toast.error('Could not update reaction.');
+      load(filter);
     }
   };
 
@@ -279,24 +286,35 @@ const ProofWall = () => {
                     {a.createdAt ? <> · {fmtAgo(a.createdAt)}</> : null}
                   </div>
 
-                  {/* Actions row: Celebrate (all) + edit/delete (own updates) */}
+                  {/* Actions row: Love (all) + edit/delete (own updates) */}
                   {!isEditing && (
-                    <div className="flex items-center gap-3 mt-2.5">
-                      <button
-                        onClick={() => handleCelebrate(a)}
-                        className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full transition-all ${
-                          celebrated ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-                        }`}
-                        title={celebrated ? 'You celebrated this' : 'Celebrate this'}
-                      >
-                        <span aria-hidden="true">🎉</span>
-                        Celebrate{count > 0 ? <span className="font-bold">· {count}</span> : null}
-                      </button>
-                      {isMine && (
-                        <>
-                          <button onClick={() => startEdit(a)} className="text-xs font-semibold text-gray-500 hover:text-gray-800">Edit</button>
-                          <button onClick={() => handleDelete(a)} className="text-xs font-semibold text-gray-500 hover:text-red-600">Delete</button>
-                        </>
+                    <div className="mt-2.5">
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => handleCelebrate(a)}
+                          className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full transition-all ${
+                            celebrated ? 'bg-red-50 text-red-600' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                          }`}
+                          title={celebrated ? 'You loved this' : 'Love this'}
+                        >
+                          <span aria-hidden="true">{celebrated ? '❤️' : '🤍'}</span>
+                          Love{count > 0 ? <span className="font-bold"> · {count}</span> : null}
+                        </button>
+                        {isMine && (
+                          <>
+                            <button onClick={() => startEdit(a)} className="text-xs font-semibold text-gray-500 hover:text-gray-800">Edit</button>
+                            <button onClick={() => handleDelete(a)} className="text-xs font-semibold text-gray-500 hover:text-red-600">Delete</button>
+                          </>
+                        )}
+                      </div>
+                      {count > 0 && a.celebratedByNames && (
+                        <p className="text-xs text-gray-400 mt-1.5">
+                          Loved by {(() => {
+                            const names = Object.values(a.celebratedByNames);
+                            if (names.length <= 2) return names.join(' and ');
+                            return `${names.slice(0, 2).join(', ')} and ${names.length - 2} other${names.length - 2 > 1 ? 's' : ''}`;
+                          })()}
+                        </p>
                       )}
                     </div>
                   )}

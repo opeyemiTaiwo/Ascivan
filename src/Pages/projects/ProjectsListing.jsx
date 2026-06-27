@@ -189,7 +189,7 @@ const ProjectsListing = () => {
                       <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-600 text-[10px] font-medium">{getIndustryLabel(project.industryTrack)}</span>
                       <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-600 text-[10px] font-medium">{formatTimeline(project.timeline)}</span>
                       {project.status === 'lead_recruitment' ? (
-                        <span className="px-2 py-0.5 bg-amber-50 text-amber-700 rounded-md text-[10px] font-medium">Apply to lead</span>
+                        <span className="px-3 py-1.5 bg-amber-100 text-amber-800 rounded-lg text-sm font-semibold">Apply to lead</span>
                       ) : (
                         <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-600 text-[10px] font-medium">{project.maxTeamSize || 0} team members</span>
                       )}

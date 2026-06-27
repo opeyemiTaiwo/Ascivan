@@ -235,7 +235,7 @@ const DashboardOverview = () => {
                 <p className="text-blue-600 font-semibold text-lg">{membershipPlan} Plan</p>
                 {isPremiumUser && <PremiumBadge size="md" />}
               </div>
-              <p className="text-gray-400 text-xs mb-3">{!isPremiumUser ? 'Access to projects, community, and badges. 3 paid projects/year.' : 'Unlimited paid projects, Talent Board visibility, priority support.'}</p>
+              <p className="text-gray-400 text-xs mb-3">{!isPremiumUser ? 'Unlimited collaborative projects, all badge tracks, Proof Wall, and messaging.' : 'Priority Talent Board ranking, verified company badge, unlimited job posts, priority support.'}</p>
               {!isPremiumUser && (
                 <button onClick={() => navigate('/settings?tab=membership')} className="text-blue-600 text-sm font-medium hover:underline">
                   Upgrade to Premium
@@ -262,9 +262,9 @@ const DashboardOverview = () => {
             <div className="bg-white border border-gray-200 rounded-xl p-6">
               <h3 className="text-lg font-bold text-gray-900 mb-3">Quick Links</h3>
               <div className="space-y-2">
-                <Link to="/community" className="block text-sm text-gray-600 hover:text-blue-600 font-medium transition-colors">Home Feed</Link>
-                <Link to="/community/submit" className="block text-sm text-gray-600 hover:text-blue-600 font-medium transition-colors">Create Post</Link>
-                <Link to="/members-directory" className="block text-sm text-gray-600 hover:text-blue-600 font-medium transition-colors">Follow</Link>
+                <Link to="/proof-wall" className="block text-sm text-gray-600 hover:text-blue-600 font-medium transition-colors">Proof Wall</Link>
+                <Link to="/talent-board" className="block text-sm text-gray-600 hover:text-blue-600 font-medium transition-colors">Talent Board</Link>
+                <Link to="/jobs" className="block text-sm text-gray-600 hover:text-blue-600 font-medium transition-colors">Jobs</Link>
                 <Link to="/projects/submit" className="block text-sm text-gray-600 hover:text-blue-600 font-medium transition-colors">Post a Project</Link>
               </div>
             </div>

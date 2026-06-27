@@ -308,7 +308,7 @@ const MembershipTab = ({ profileData, navigate }) => {
           <FeatureItem label="Community, messaging, and workspace" detail="Share work on the Proof Wall, message other members, and collaborate in project workspaces. Messaging is unlimited for talent." />
           <FeatureItem label="Certificates on project completion" detail="Receive a certificate for every project you complete, documenting your role and contributions." />
           <FeatureItem label="Post up to 2 jobs / month" detail="Free recruiter accounts can post up to 2 job openings per month on the job board. Upgrade to Premium for unlimited posts." />
-          <FeatureItem label="Contact up to 5 new candidates / month" detail="Free recruiter accounts can start conversations with up to 5 new candidates each month. Replies and existing conversations are always unlimited. Upgrade to Premium to contact unlimited candidates. (This limit applies to recruiters only, never to talent.)" />
+          <FeatureItem label="Contact up to 5 new talents / month" detail="Free recruiter accounts can start conversations with up to 5 new talents each month. Replies and existing conversations are always unlimited. Upgrade to Premium to contact unlimited talents." />
         </ul>
         {(profileData?.membershipPlan !== 'Premium' && profileData?.role !== 'admin') && (
           <p className="text-blue-600 font-semibold text-sm">Current Plan</p>
@@ -330,8 +330,8 @@ const MembershipTab = ({ profileData, navigate }) => {
           <FeatureItem label="Everything in Basic" />
           <FeatureItem color="orange" label="Priority Talent Board ranking" detail="Premium members appear first when recruiters search the Talent Board, so your work gets seen before others." />
           <FeatureItem color="orange" label="Verified Company Badge" detail="A verified badge shown on your company profile and listings." />
-          <FeatureItem color="orange" label="Unlimited candidate messages" detail="Contact unlimited new candidates. Free recruiter accounts can start up to 5 new conversations per month; replies and existing chats are always unlimited." />
-          <FeatureItem color="orange" label="Unlimited job posts" detail="Post unlimited job openings on the job board. Free accounts are limited to 2 per month." />
+          <FeatureItem color="orange" label="Unlimited talent messages" detail="Contact unlimited new talents, with no monthly cap." />
+          <FeatureItem color="orange" label="Unlimited job posts" detail="Post unlimited job openings on the job board." />
           <FeatureItem color="orange" label="Priority support" detail="Get faster responses and dedicated assistance from the Loomiqe team." />
         </ul>
         <p className="text-gray-400 text-xs mb-4 leading-relaxed">Premium helps talent get discovered faster, and lets companies hire with confidence as verified, traceable organizations.</p>
@@ -384,7 +384,7 @@ const MembershipTab = ({ profileData, navigate }) => {
           <div className="text-gray-700">Premium Badge</div><div className="text-center text-gray-400">No</div><div className="text-center text-orange-600 font-semibold">Yes</div>
           <div className="text-gray-700">Talent Board</div><div className="text-center text-gray-900">Listed</div><div className="text-center text-orange-600 font-semibold">Priority</div>
           <div className="text-gray-700">Messaging (talent)</div><div className="text-center text-gray-900">Unlimited</div><div className="text-center text-gray-900">Unlimited</div>
-          <div className="text-gray-700">New candidate contacts (recruiters)</div><div className="text-center text-gray-900">5 / month</div><div className="text-center text-orange-600 font-semibold">Unlimited</div>
+          <div className="text-gray-700">New talent contacts (recruiters)</div><div className="text-center text-gray-900">5 / month</div><div className="text-center text-orange-600 font-semibold">Unlimited</div>
           <div className="text-gray-700">Job posts (recruiters)</div><div className="text-center text-gray-900">2 / month</div><div className="text-center text-orange-600 font-semibold">Unlimited</div>
           <div className="text-gray-700">Priority support</div><div className="text-center text-gray-400">No</div><div className="text-center text-orange-600 font-semibold">Yes</div>
         </div>

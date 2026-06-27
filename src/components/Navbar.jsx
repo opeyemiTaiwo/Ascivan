@@ -52,7 +52,7 @@ const Navbar = () => {
   const navItems = currentUser
     ? [
         { path: '/', label: 'Home' },
-        { path: '/community', label: 'Feed' },
+        { path: '/proof-wall', label: 'Proof Wall' },
         { path: '/projects', label: 'Projects' },
         { path: '/dashboard', label: 'Dashboard' },
       ]

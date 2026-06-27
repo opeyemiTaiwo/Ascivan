@@ -73,7 +73,7 @@ const Login = () => {
                 <span className="text-blue-600">Loomiqe</span>
               </h1>
               <p className="text-gray-500 text-sm sm:text-base font-normal px-2 mb-3">
-                Loomiqe connects tech professionals with real-world projects, verified skill badges, and a career-accelerating community.
+                Proof over pedigree. Build real experience, earn verified badges, and get discovered, wherever you are.
               </p>
               <div className="h-0.5 w-16 bg-blue-600 mx-auto rounded-full mt-4"></div>
             </div>
@@ -153,7 +153,7 @@ const Login = () => {
                   <div className="min-w-0">
                     <p className="font-bold text-sm text-blue-700">Free to Get Started</p>
                     <p className="text-xs mt-1 text-blue-600">
-                      Sign in to access projects, badges, career tools, and community.
+                      Sign in to access projects, badges, career tools, and the Proof Wall.
                     </p>
                   </div>
                 </div>

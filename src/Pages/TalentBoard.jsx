@@ -72,6 +72,7 @@ const TalentBoard = () => {
             return hasBadgeArray || hasTotal || hasBadgeCounts || hasCertificates || inMemberBadges;
           })
           .sort((a, b) => (a.displayName || '').localeCompare(b.displayName || ''));
+        console.log(`[TalentBoard] fetched ${allUsers.length} users, ${badgedUids.size} in member_badges, ${users.length} qualify as talent`);
         setTalents(users);
       } catch (e) {
         console.error('Error fetching talents:', e);

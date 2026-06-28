@@ -23,6 +23,7 @@ const Settings = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [profileData, setProfileData] = useState(null);
+  const [weeklyDigest, setWeeklyDigest] = useState(false);
   const [form, setForm] = useState({
     displayName: '', specialization: '', experienceLevel: '', primarySkillTrack: '',
     country: '', city: '', state: '', portfolioUrl: '', linkedinUrl: '', githubUrl: '', emailPublic: false,
@@ -41,6 +42,7 @@ const Settings = () => {
         if (snap.exists()) {
           const data = snap.data();
           setProfileData(data);
+          setWeeklyDigest(data.emailPreferences?.weeklyDigest === true);
           setForm({
             displayName: data.displayName || '',
             specialization: data.specialization || '',
@@ -240,6 +242,30 @@ const Settings = () => {
               >
                 Enable notifications on this device
               </button>
+            </div>
+
+            <div className="bg-white border border-gray-200 rounded-xl p-6">
+              <h3 className="text-gray-900 font-bold text-base mb-2">Email Updates</h3>
+              <p className="text-gray-500 text-sm mb-4">Get a weekly email recap of your activity and what's new on Loomiqe: new projects, jobs, your badges, and unread messages. Sent every Sunday.</p>
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={weeklyDigest}
+                  onChange={async (e) => {
+                    const next = e.target.checked;
+                    setWeeklyDigest(next);
+                    try {
+                      await updateDoc(doc(db, 'users', currentUser.uid), { 'emailPreferences.weeklyDigest': next });
+                      toast.success(next ? 'Weekly digest turned on.' : 'Weekly digest turned off.');
+                    } catch (err) {
+                      setWeeklyDigest(!next);
+                      toast.error('Could not update preference.');
+                    }
+                  }}
+                  className="w-4 h-4"
+                />
+                <span className="text-sm text-gray-700">Send me the weekly digest email</span>
+              </label>
             </div>
 
             <div className="bg-white border border-gray-200 rounded-xl p-6">

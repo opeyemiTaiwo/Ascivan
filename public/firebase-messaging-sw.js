@@ -6,12 +6,12 @@ importScripts('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js
 importScripts('https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js');
 
 firebase.initializeApp({
-  apiKey: 'AIzaSyAWytpAg0Lb7nw5sndNu5t1YAij_uRqqXs',
-  authDomain: 'loomiq-8c3e9.firebaseapp.com',
-  projectId: 'loomiq-8c3e9',
-  storageBucket: 'loomiq-8c3e9.firebasestorage.app',
-  messagingSenderId: '906774108626',
-  appId: '1:906774108626:web:d207a2f9387bc32250500b',
+  apiKey: 'AIzaSyBx_q4j-3uQlOxLmRkg1hQ4ZQHUfDU8CfM',
+  authDomain: 'ascivan-5b4f4.firebaseapp.com',
+  projectId: 'ascivan-5b4f4',
+  storageBucket: 'ascivan-5b4f4.firebasestorage.app',
+  messagingSenderId: '237454613250',
+  appId: '1:237454613250:web:4304adece445ed20f7c01b',
 });
 
 const messaging = firebase.messaging();

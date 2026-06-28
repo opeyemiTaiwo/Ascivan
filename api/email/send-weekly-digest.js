@@ -12,11 +12,11 @@ if (!admin.apps.length) {
     admin.initializeApp({
       credential: admin.credential.cert({
         type: 'service_account',
-        project_id: process.env.FIREBASE_PROJECT_ID || 'loomiq-8c3e9',
+        project_id: process.env.FIREBASE_PROJECT_ID || 'ascivan-5b4f4',
         private_key: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
         client_email: process.env.FIREBASE_CLIENT_EMAIL,
       }),
-      projectId: process.env.FIREBASE_PROJECT_ID || 'loomiq-8c3e9',
+      projectId: process.env.FIREBASE_PROJECT_ID || 'ascivan-5b4f4',
     });
   } catch (err) {
     console.error('Firebase Admin init failed:', err.message);

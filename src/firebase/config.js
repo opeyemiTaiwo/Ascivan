@@ -17,13 +17,13 @@ import { getMessaging, isSupported as messagingIsSupported } from "firebase/mess
 
 // Your web app's Firebase configuration for Ascivan
 const firebaseConfig = {
-  apiKey: "AIzaSyAWytpAg0Lb7nw5sndNu5t1YAij_uRqqXs",
-  authDomain: "loomiq-8c3e9.firebaseapp.com",
-  projectId: "loomiq-8c3e9",
-  storageBucket: "loomiq-8c3e9.firebasestorage.app",
-  messagingSenderId: "906774108626",
-  appId: "1:906774108626:web:d207a2f9387bc32250500b",
-  measurementId: "G-NMJPKGW72W"
+  apiKey: "AIzaSyBx_q4j-3uQlOxLmRkg1hQ4ZQHUfDU8CfM",
+  authDomain: "ascivan-5b4f4.firebaseapp.com",
+  projectId: "ascivan-5b4f4",
+  storageBucket: "ascivan-5b4f4.firebasestorage.app",
+  messagingSenderId: "237454613250",
+  appId: "1:237454613250:web:4304adece445ed20f7c01b",
+  measurementId: "G-RGN28911ZE"
 };
 
 // Initialize Firebase

@@ -75,15 +75,18 @@ const ProjectsListing = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Query without orderBy so it never depends on a composite index
+    // (which may not exist yet on a fresh project). Sort client-side instead.
     const q = query(
       collection(db, 'projects'),
-      where('status', 'in', ['active', 'lead_recruitment', 'setup']),
-      orderBy('createdAt', 'desc')
+      where('status', 'in', ['active', 'lead_recruitment', 'setup'])
     );
     const unsub = onSnapshot(q, (snap) => {
       const list = snap.docs.map(d => ({ id: d.id, ...d.data() }))
         // Rejected projects are dead — never show them on the board.
-        .filter(p => p.reviewStatus !== 'rejected');
+        .filter(p => p.reviewStatus !== 'rejected')
+        // Newest first, sorted in JS (handles missing createdAt gracefully).
+        .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
       setProjects(list);
       setFilteredProjects(list);
       setLoading(false);

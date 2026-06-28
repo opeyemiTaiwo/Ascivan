@@ -347,7 +347,7 @@ const ProjectCompletion = () => {
               userId: userSnap.docs[0].id,
               type: 'project_completed',
               message: badgeAwarded
-                ? `🎉 "${project.projectTitle || project.title}" is complete! You earned a ${badgeCategories[ev.badgeCategory]?.name || ev.badgeCategory} badge (${ev.badgeLevel}).`
+                ? `"${project.projectTitle || project.title}" is complete! You earned a ${badgeCategories[ev.badgeCategory]?.name || ev.badgeCategory} badge (${ev.badgeLevel}).`
                 : `"${project.projectTitle || project.title}" has been completed.`,
               projectId: projectId,
               projectTitle: project.projectTitle || project.title,

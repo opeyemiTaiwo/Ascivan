@@ -197,14 +197,14 @@ const ProofWall = () => {
             value={updateProject}
             onChange={e => setUpdateProject(e.target.value)}
             placeholder="Which project is this about?"
-            className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+            className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none"
           />
           <textarea
             value={updateText}
             onChange={e => setUpdateText(e.target.value)}
-            placeholder="Share a real update on the work — progress, a milestone, what you need next."
+            placeholder="Share a real update on the work: progress, a milestone, what you need next."
             rows={3}
-            className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none resize-none"
+            className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none resize-none"
           />
           <div className="flex justify-end gap-2">
             <button onClick={() => setShowCompose(false)} className="text-gray-500 text-sm font-semibold px-3 py-1.5">Cancel</button>
@@ -264,13 +264,13 @@ const ProofWall = () => {
                         value={editProject}
                         onChange={e => setEditProject(e.target.value)}
                         placeholder="Project name"
-                        className="w-full bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none"
+                        className="w-full bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none"
                       />
                       <textarea
                         value={editText}
                         onChange={e => setEditText(e.target.value)}
                         rows={2}
-                        className="w-full bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none resize-none"
+                        className="w-full bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none resize-none"
                       />
                       <div className="flex gap-2">
                         <button onClick={() => saveEdit(a)} className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg">Save</button>

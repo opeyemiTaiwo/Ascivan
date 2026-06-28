@@ -356,6 +356,15 @@ const ProjectCompletion = () => {
               isRead: false,
               createdAt: serverTimestamp(),
             });
+            // Push the member: badge earned (or project completed).
+            sendPush({
+              recipientUid: userSnap.docs[0].id,
+              title: badgeAwarded ? 'Badge earned' : 'Project completed',
+              body: badgeAwarded
+                ? `You earned a ${badgeCategories[ev.badgeCategory]?.name || ev.badgeCategory} badge (${ev.badgeLevel}) for "${project.projectTitle || project.title}".`
+                : `"${project.projectTitle || project.title}" has been completed.`,
+              link: '/project-vault',
+            });
           }
         } catch (notifErr) { console.error('Member completion notification error:', notifErr); }
       }

@@ -16,6 +16,7 @@ import { getRandomTemplate, TEMPLATE_COUNT } from '../../utils/projectTemplates'
 import { seedDummyActivity, deleteDummyActivity, countDummyActivity } from '../../utils/activityFeed';
 import { REVIEW_STATUS, approveProjectReview, requestChanges, rejectProjectReview, getProjectMemberEmails } from '../../utils/projectReview';
 import { clearAllTestData } from '../../utils/adminDataReset';
+import { sendPush } from '../../utils/pushNotifications';
 
 const fmtDate = (ts) => {
   try {
@@ -112,11 +113,26 @@ const AdminPanel = () => {
 
   useEffect(() => { if (tab === 'reviews' && isAdmin) loadReviews(); }, [tab, isAdmin, loadReviews]);
 
+  // Collect owner + approved member uids for a project (for push notifications).
+  const getProjectRecipientUids = async (project) => {
+    const uids = new Set();
+    if (project.submitterId) uids.add(project.submitterId);
+    (project.members || []).forEach(m => { if (m) uids.add(m); });
+    return Array.from(uids);
+  };
+
   const doApprove = async (project) => {
     setActingId(project.id);
     try {
       const emails = await getProjectMemberEmails(project.id);
       await approveProjectReview(project, currentUser, emails);
+      const title = project.projectTitle || project.title || 'Your project';
+      sendPush({
+        recipientUids: await getProjectRecipientUids(project),
+        title: 'Project approved',
+        body: `"${title}" was approved by Loomiqe. Badges can now be assigned.`,
+        link: `/projects/${project.id}`,
+      });
       toast.success('Approved. Owner and team notified.');
       setReviewProjects(prev => prev.filter(p => p.id !== project.id));
     } catch (e) { toast.error('Approve failed: ' + e.message); }
@@ -130,6 +146,13 @@ const AdminPanel = () => {
     try {
       const emails = await getProjectMemberEmails(project.id);
       await requestChanges(project, currentUser, fb, emails);
+      const title = project.projectTitle || project.title || 'Your project';
+      sendPush({
+        recipientUids: await getProjectRecipientUids(project),
+        title: 'Changes requested',
+        body: `"${title}" needs changes before approval. Reviewer note: ${fb}`,
+        link: `/projects/${project.id}/complete`,
+      });
       toast.success('Sent back for changes. Owner notified.');
       setReviewProjects(prev => prev.filter(p => p.id !== project.id));
     } catch (e) { toast.error('Failed: ' + e.message); }
@@ -143,6 +166,13 @@ const AdminPanel = () => {
     try {
       const emails = await getProjectMemberEmails(project.id);
       await rejectProjectReview(project, currentUser, fb, emails);
+      const title = project.projectTitle || project.title || 'Your project';
+      sendPush({
+        recipientUids: await getProjectRecipientUids(project),
+        title: 'Project not approved',
+        body: `"${title}" was not approved. No badges will be assigned for this project.`,
+        link: `/projects/${project.id}`,
+      });
       toast.success('Rejected. Owner and team notified.');
       setReviewProjects(prev => prev.filter(p => p.id !== project.id));
     } catch (e) { toast.error('Reject failed: ' + e.message); }

@@ -143,8 +143,8 @@ const DashboardOverview = () => {
                   {ongoingProjects.map(project => (
                     <div key={project.id} className="flex items-center justify-between p-3 border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => navigate(`/projects/${project.id}`)}>
                       <div className="min-w-0 flex-1">
-                        <p className="text-gray-900 text-sm font-medium truncate">{project.title || 'Untitled Project'}</p>
-                        <p className="text-gray-400 text-xs mt-0.5">{project.category || 'General'}</p>
+                        <p className="text-gray-900 text-sm font-medium truncate">{project.projectTitle || project.title || 'Untitled Project'}</p>
+                        <p className="text-gray-400 text-xs mt-0.5">{project.industryTrack || project.category || 'General'}</p>
                       </div>
                       <span className="text-xs font-medium px-2 py-1 bg-blue-50 text-blue-700 rounded-md flex-shrink-0 ml-3">Active</span>
                     </div>
@@ -166,8 +166,8 @@ const DashboardOverview = () => {
                   {completedProjects.map(project => (
                     <div key={project.id} className="flex items-center justify-between p-3 border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => navigate(`/projects/${project.id}`)}>
                       <div className="min-w-0 flex-1">
-                        <p className="text-gray-900 text-sm font-medium truncate">{project.title || 'Untitled Project'}</p>
-                        <p className="text-gray-400 text-xs mt-0.5">{project.category || 'General'}</p>
+                        <p className="text-gray-900 text-sm font-medium truncate">{project.projectTitle || project.title || 'Untitled Project'}</p>
+                        <p className="text-gray-400 text-xs mt-0.5">{project.industryTrack || project.category || 'General'}</p>
                       </div>
                       <span className="text-xs font-medium px-2 py-1 bg-blue-50 text-blue-700 rounded-md flex-shrink-0 ml-3">Completed</span>
                     </div>

@@ -487,7 +487,7 @@ const ProjectDetail = () => {
                         return <p className="text-red-600 text-xs mt-2 leading-relaxed">{elig.reason}</p>;
                       })()}
                       {(project.teamRoles || []).some(r => !checkRoleEligibility(memberProfile, r).eligible) && (
-                        <p className="text-gray-400 text-xs mt-2">Locked roles require a higher badge level in that track. Start with open roles to earn badges and unlock them.</p>
+                        <p className="text-gray-400 text-xs mt-2">This role needs a higher badge. Apply to open roles first to earn it.</p>
                       )}
                     </div>
                     <div>

@@ -167,6 +167,14 @@ const ProjectSubmission = () => {
       if (!r.skills.trim()) errors.push(`Skills required for "${r.role}" role`);
       if (!r.count || r.count < 1) errors.push(`Number of people for "${r.role}" must be at least 1`);
     }
+    // At least one open role (Beginner / Any Level) so newcomers always have a way in.
+    const hasOpenRole = validRoles.some(r => {
+      const lvl = (r.experienceLevel || 'any-level').toLowerCase();
+      return lvl === 'any-level' || lvl === 'beginner' || lvl === '';
+    });
+    if (validRoles.length > 0 && !hasOpenRole) {
+      errors.push('Add at least one Beginner or Any Level role so newcomers can join.');
+    }
 
     return errors;
   };
@@ -395,7 +403,7 @@ const ProjectSubmission = () => {
                 </div>
                 <p className="text-gray-500 text-xs -mt-2">Set an experience level per role. Intermediate and Advanced roles can only be filled by members who've earned the matching badge level in that track — keeping your team realistic and your project outcomes protected. Use Beginner or Any Level for roles open to newcomers.</p>
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                  <p className="text-gray-700 text-xs"><strong>Note:</strong> add or remove roles so the team matches exactly what your project needs. You decide how many people and which roles are required.</p>
+                  <p className="text-gray-700 text-xs"><strong>Note:</strong> add or remove roles to fit your project. Keep at least one Beginner or Any Level role so newcomers can join.</p>
                 </div>
 
                 {teamRoles.map((role, index) => (

@@ -11,6 +11,7 @@ import {
   writeBatch,
   updateDoc,
   arrayRemove,
+  arrayUnion,
   increment
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
@@ -341,6 +342,56 @@ export const deleteAllUserContent = async (userId, userEmail) => {
     } catch (error) {
       console.error('Error deleting applications:', error);
       summary.errors.push(`Applications: ${error.message}`);
+    }
+
+    // ─────────────────────────────────────────────
+    // 10.5 HANDLE PROJECTS (owned + member)
+    //  - Owned & not completed/rejected → mark cancelled with a reason.
+    //  - Member of any project → remove from members + leave a note.
+    //  Completed/rejected projects are left intact so the team keeps their proof.
+    // ─────────────────────────────────────────────
+    try {
+      let cancelled = 0, leftTeams = 0;
+
+      // (a) Projects this user OWNS.
+      const ownedSnap = await getDocs(query(collection(db, 'projects'), where('submitterId', '==', userId)));
+      for (const pDoc of ownedSnap.docs) {
+        const data = pDoc.data();
+        const isCompleted = data.status === 'completed';
+        const isRejected = data.reviewStatus === 'rejected';
+        if (!isCompleted && !isRejected) {
+          await updateDoc(pDoc.ref, {
+            status: 'cancelled',
+            cancelledReason: 'lead_deleted',
+            cancelledAt: new Date(),
+            applicationsOpen: false,
+          });
+          cancelled++;
+        }
+      }
+
+      // (b) Projects this user is a MEMBER of (remove from roster + note).
+      const memberSnap = await getDocs(query(collection(db, 'projects'), where('members', 'array-contains', userId)));
+      for (const pDoc of memberSnap.docs) {
+        // Don't bother if this is their own already-cancelled project.
+        if (pDoc.data().submitterId === userId) continue;
+        await updateDoc(pDoc.ref, {
+          members: arrayRemove(userId),
+          teamUpdates: arrayUnion({
+            type: 'member_left',
+            message: 'A team member left the platform and was removed from the team.',
+            at: new Date().toISOString(),
+          }),
+        });
+        leftTeams++;
+      }
+
+      summary.projectsCancelled = cancelled;
+      summary.projectsLeft = leftTeams;
+      console.log(`Projects: cancelled ${cancelled} owned, left ${leftTeams} teams`);
+    } catch (error) {
+      console.error('Error handling projects:', error);
+      summary.errors.push(`Projects: ${error.message}`);
     }
 
     // ─────────────────────────────────────────────

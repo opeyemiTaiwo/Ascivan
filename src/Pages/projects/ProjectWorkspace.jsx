@@ -294,6 +294,13 @@ const ProjectWorkspace = () => {
     </div>
   );
 
+  if (project.status === 'cancelled') return (
+    <div className="max-w-2xl mx-auto text-center py-20 px-4">
+      <h2 className="text-xl font-bold text-red-600 mb-2">This project was closed</h2>
+      <p className="text-gray-500 text-sm">This project was closed because the project lead deleted their account. No badges or certificates can be awarded for it.</p>
+    </div>
+  );
+
   return (
     <div className="max-w-4xl mx-auto">
       <button onClick={() => navigate(`/projects/${projectId}`)} className="text-gray-500 hover:text-gray-900 text-sm mb-4 flex items-center gap-1">

@@ -96,8 +96,8 @@ const Messages = () => {
 
         const snap = await getDocs(query(collection(db, 'users'), limit(500)));
         const profiles = snap.docs
-          .map(d => ({ uid: d.id, ...d.data() }))
-          .filter(u => (u.uid || u.id) !== currentUser.uid);
+          .map(d => ({ ...d.data(), uid: d.id }))
+          .filter(u => u.uid !== currentUser.uid);
         setFollowedUsers(profiles);
       } catch (e) {
         console.error('Error loading users:', e);
@@ -179,6 +179,7 @@ const Messages = () => {
   };
 
   const openConversation = async (targetUid) => {
+    if (!targetUid) { toast.error('Could not start chat: missing user.'); return; }
     if (!currentUser || targetUid === currentUser.uid) return;
     try {
       const convId  = getConversationId(currentUser.uid, targetUid);
@@ -225,6 +226,7 @@ const Messages = () => {
       setTimeout(() => inputRef.current?.focus(), 100);
     } catch (err) {
       console.error('Error opening conversation:', err);
+      toast.error('Could not start chat: ' + (err?.message || 'unknown error'));
     }
   };
 

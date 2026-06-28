@@ -134,7 +134,7 @@ body{font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:0 auto;backgr
 .sn{font-size:22px;font-weight:bold;color:#EA580C}.sl{font-size:9px;color:#666;text-transform:uppercase;letter-spacing:.04em}
 .it{padding:12px;margin-bottom:8px;border-radius:8px;border-left:4px solid #F97316;background:#fff8f5}
 .it h3{margin:0 0 4px;font-size:13px;color:#111827}.it p{margin:0;font-size:12px;color:#666}
-.btn{display:block;padding:12px;border-radius:8px;text-decoration:none;text-align:center;font-weight:600;font-size:13px;margin:6px 0;color:#fff;background:linear-gradient(135deg,#F97316,#EA580C)}
+.btn{display:block;padding:12px;border-radius:8px;text-decoration:none;text-align:center;font-weight:600;font-size:13px;margin:6px 0;color:#ffffff !important;background:linear-gradient(135deg,#F97316,#EA580C)}
 .btn.blue{background:linear-gradient(135deg,#3B82F6,#2563EB)}
 .ft{background:#1f2937;color:#9ca3af;padding:18px;text-align:center;font-size:11px}.ft a{color:#F97316;text-decoration:none}
 </style></head><body><div class="c">
@@ -152,7 +152,7 @@ body{font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:0 auto;backgr
 ${user.unreadMessages > 0 ? `<div class="it" style="border-left-color:#3B82F6;background:#eff6ff"><p>You have <b>${user.unreadMessages} unread message${user.unreadMessages>1?'s':''}</b> waiting.</p></div>` : ''}
 ${user.badges.length > 0 ? `<div class="it" style="border-left-color:#22C55E;background:#f0fdf4"><p>You earned <b>${user.badges.length} badge${user.badges.length>1?'s':''}</b> this week. Well done.</p></div>` : ''}
 ${totalActivity === 0 ? `<p style="color:#666;font-size:12px;text-align:center">A quiet week. Join a project or share a Proof Wall update to get going.</p>` : ''}
-<a href="${SITE}/notifications" class="btn">View all activity</a>
+<a href="${SITE}/notifications" class="btn" style="color:#ffffff">View all activity</a>
 </div>
 
 <div class="sc"><h2>Platform This Week</h2>
@@ -167,19 +167,21 @@ ${projects.slice(0,5).map(p => `<div class="it">
 <h3>${p.projectTitle || 'Project'}</h3>
 <p>${(p.projectDescription || '').substring(0, 90)}${(p.projectDescription||'').length > 90 ? '...' : ''}</p>
 </div>`).join('')}
-<a href="${SITE}/projects" class="btn">Browse projects</a></div>` : ''}
+<a href="${SITE}/projects" class="btn" style="color:#ffffff">Browse projects</a></div>` : ''}
 
 ${jobs.length > 0 ? `<div class="sc"><h2>New Jobs</h2>
 ${jobs.slice(0,4).map(j => `<div class="it">
 <h3>${j.title || 'Job'}</h3>
 <p>${j.companyName || ''}${j.location ? ' · ' + j.location : ''}</p>
 </div>`).join('')}
-<a href="${SITE}/jobs" class="btn">View all jobs</a></div>` : ''}
+<a href="${SITE}/jobs" class="btn" style="color:#ffffff">View all jobs</a></div>` : ''}
 
 <div class="sc"><h2>Quick Links</h2>
-<a href="${SITE}/proof-wall" class="btn">Proof Wall</a>
-<a href="${SITE}/messages" class="btn blue">Messages</a>
-<a href="${SITE}/talent-board" class="btn">Talent Board</a></div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;border-spacing:6px"><tr>
+<td width="33%" align="center" style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:14px 4px"><a href="${SITE}/proof-wall" style="color:#EA580C;text-decoration:none;font-weight:600;font-size:12px">Proof Wall</a></td>
+<td width="33%" align="center" style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:14px 4px"><a href="${SITE}/messages" style="color:#EA580C;text-decoration:none;font-weight:600;font-size:12px">Messages</a></td>
+<td width="33%" align="center" style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:14px 4px"><a href="${SITE}/talent-board" style="color:#EA580C;text-decoration:none;font-weight:600;font-size:12px">Talent Board</a></td>
+</tr></table></div>
 
 </div>
 <div class="ft"><p><b>Loomiqe</b></p><p><a href="${SITE}/proof-wall">Proof Wall</a> · <a href="${SITE}/projects">Projects</a> · <a href="${SITE}/settings">Email settings</a></p>

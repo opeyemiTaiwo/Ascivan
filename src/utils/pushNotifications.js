@@ -59,7 +59,7 @@ export async function enablePushForCurrentUser({ interactive = false } = {}) {
     await updateDoc(doc(db, 'users', user.uid), {
       fcmTokens: arrayUnion(token),
     });
-    if (interactive) toast.success('Notifications enabled on this device.');
+    if (interactive) { toast.success('Notifications enabled on this device.'); playNotificationSound(); }
     return true;
   } catch (e) {
     console.error('enablePush failed:', e);
@@ -68,14 +68,43 @@ export async function enablePushForCurrentUser({ interactive = false } = {}) {
   }
 }
 
-// Foreground messages (site open + focused) — show a toast since the OS
-// notification is suppressed while the tab is focused.
+// Play a short notification "ding" using the Web Audio API (no sound file needed).
+// Browsers require a prior user interaction before audio can play; since the user
+// clicked "Enable notifications", that requirement is satisfied in practice.
+export function playNotificationSound() {
+  try {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    const ctx = new Ctx();
+    const now = ctx.currentTime;
+    // Two quick tones for a pleasant chime.
+    [880, 1320].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      const start = now + i * 0.12;
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(0.25, start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.28);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(start);
+      osc.stop(start + 0.3);
+    });
+    setTimeout(() => { try { ctx.close(); } catch (e) {} }, 800);
+  } catch (e) { /* ignore */ }
+}
+
+// Foreground messages (site open + focused) — show a toast AND play a sound,
+// since the OS notification is suppressed while the tab is focused.
 export function listenForForegroundPush() {
   if (!messaging) return;
   try {
     onMessage(messaging, (payload) => {
       const title = payload.notification?.title || 'Loomiqe';
       const body = payload.notification?.body || '';
+      playNotificationSound();
       toast.info(`${title}${body ? ': ' + body : ''}`);
     });
   } catch (e) { /* ignore */ }

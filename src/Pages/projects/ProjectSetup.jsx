@@ -31,6 +31,7 @@ const ProjectSetup = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [authorized, setAuthorized] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState({ projectTitle: '', projectDescription: '', projectGoals: '', industryTrack: 'technology', startDate: '', endDate: '', submissionUrl: '', projectLink: '' });
   const [roles, setRoles] = useState([]);
 
@@ -42,17 +43,21 @@ const ProjectSetup = () => {
         if (!snap.exists()) { toast.error('Project not found'); navigate('/projects', { replace: true }); return; }
         const data = snap.data();
 
-        // Only the confirmed lead can set up the project
+        // Only the confirmed lead can set up / edit the project
         if (data.submitterId !== currentUser.uid) {
-          toast.error('Only the project lead can set this up.');
+          toast.error('Only the project lead can edit this.');
           navigate(`/projects/${projectId}`, { replace: true });
           return;
         }
-        if (data.status === 'active') {
-          // Already opened — go manage it
+        // Rejected projects are terminal and cannot be edited.
+        if (data.reviewStatus === 'rejected') {
+          toast.error('This project was rejected and can no longer be edited.');
           navigate(`/projects/${projectId}`, { replace: true });
           return;
         }
+        // Whether this project is already published (editing) vs first-time setup.
+        const alreadyActive = data.status === 'active';
+        setIsEditing(alreadyActive);
 
         setForm({
           projectTitle: data.projectTitle || '',
@@ -64,9 +69,11 @@ const ProjectSetup = () => {
           submissionUrl: data.resources?.submissionUrl || '',
           projectLink: data.projectLink || '',
         });
-        // Pre-fill roles from the generator's proposal
-        const proposed = Array.isArray(data.proposedRoles) ? data.proposedRoles : [];
-        setRoles(proposed.length ? proposed.map(r => ({
+        // Pre-fill roles: use live teamRoles if published, else the generator's proposal.
+        const sourceRoles = alreadyActive && Array.isArray(data.teamRoles) && data.teamRoles.length
+          ? data.teamRoles
+          : (Array.isArray(data.proposedRoles) ? data.proposedRoles : []);
+        setRoles(sourceRoles.length ? sourceRoles.map(r => ({
           role: roleOptions.includes(r.role) ? r.role : 'Developer',
           skills: r.skills || '',
           count: r.count || 1,
@@ -100,6 +107,11 @@ const ProjectSetup = () => {
     if (!form.projectLink.trim()) { toast.error('A project link (full description doc) is required'); return; }
     const valid = roles.filter(r => r.role && (parseInt(r.count, 10) || 0) > 0);
     if (valid.length === 0) { toast.error('Add at least one team role'); return; }
+    const hasOpenRole = valid.some(r => {
+      const lvl = (r.experienceLevel || 'any-level').toLowerCase();
+      return lvl === 'any-level' || lvl === 'beginner' || lvl === '';
+    });
+    if (!hasOpenRole) { toast.error('Add at least one Beginner or Any Level role so newcomers can join.'); return; }
 
     setSaving(true);
     try {
@@ -125,14 +137,15 @@ const ProjectSetup = () => {
         teamRoles,
         maxTeamSize,
         status: 'active',
-        openedAt: serverTimestamp(),
+        // Only stamp openedAt on first open; keep the original on later edits.
+        ...(isEditing ? {} : { openedAt: serverTimestamp() }),
         updatedAt: serverTimestamp(),
       });
-      toast.success('Project is now open for applications!');
+      toast.success(isEditing ? 'Project updated.' : 'Project is now open for applications!');
       navigate(`/projects/${projectId}`);
     } catch (e) {
       console.error(e);
-      toast.error('Could not open the project.');
+      toast.error(isEditing ? 'Could not save changes.' : 'Could not open the project.');
     }
     setSaving(false);
   };
@@ -172,8 +185,8 @@ const ProjectSetup = () => {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">Set up your project</h1>
-      <p className="text-gray-500 text-sm mb-6">You're the lead. Review this project carefully and modify it so you fully understand what you're leading. Refine the idea, set the start and end dates, add the submission and full-description links, decide what roles your team needs (add at least one role), then open it for others to apply. You manage the project — team members fill the building roles below.</p>
+      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">{isEditing ? 'Edit your project' : 'Set up your project'}</h1>
+      <p className="text-gray-500 text-sm mb-6">{isEditing ? "You're the lead. Update the project details, goals, dates, links, and roles below. Changes apply immediately. Keep at least one Beginner or Any Level role so newcomers can join." : "You're the lead. Review this project carefully and modify it so you fully understand what you're leading. Refine the idea, set the start and end dates, add the submission and full-description links, decide what roles your team needs (add at least one role), then open it for others to apply. You manage the project, and team members fill the building roles below."}</p>
 
       <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-6 space-y-5">
         <div>
@@ -213,9 +226,9 @@ const ProjectSetup = () => {
         </div>
 
         <div>
-          <label className={labelClass}>Project link — full description <span className="text-red-500">*</span></label>
+          <label className={labelClass}>Project link (full description) <span className="text-red-500">*</span></label>
           <input type="url" value={form.projectLink} onChange={e => setForm(p => ({ ...p, projectLink: e.target.value }))} className={inputClass} placeholder="https://docs.google.com/... (a doc, slides, etc. fully describing the project)" />
-          <p className="text-gray-400 text-xs mt-1">A full description of the project — Google Doc, a .docx, a slide deck, etc. So everyone understands what is being built.</p>
+          <p className="text-gray-400 text-xs mt-1">A full description of the project: Google Doc, a .docx, a slide deck, etc. So everyone understands what is being built.</p>
         </div>
       </div>
 
@@ -226,7 +239,7 @@ const ProjectSetup = () => {
         </div>
         <p className="text-gray-500 text-xs -mt-2">Intermediate and Advanced roles can only be filled by members who've earned the matching badge level in that track. Use Beginner or Any Level for roles open to newcomers.</p>
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-          <p className="text-gray-700 text-xs"><strong>Note:</strong> these roles are defaults suggested for this project. As the lead, please review them and <strong>add or remove roles</strong> so the team matches what your project actually needs.</p>
+          <p className="text-gray-700 text-xs"><strong>Note:</strong> these roles are defaults. As the lead, add or remove them to fit your project. Keep at least one Beginner or Any Level role so newcomers can join.</p>
         </div>
 
         {roles.map((r, i) => (
@@ -252,7 +265,7 @@ const ProjectSetup = () => {
 
       <div className="flex gap-3 mt-6">
         <button onClick={handleOpen} disabled={saving} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-6 py-3 rounded-lg transition-all disabled:opacity-50">
-          {saving ? 'Opening…' : 'Open for Applications'}
+          {saving ? (isEditing ? 'Saving…' : 'Opening…') : (isEditing ? 'Save changes' : 'Open for Applications')}
         </button>
         <button onClick={handleSaveExit} disabled={saving} className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-sm px-5 py-3 rounded-lg transition-all">
           Save & Exit

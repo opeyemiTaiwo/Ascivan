@@ -313,6 +313,11 @@ const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove, onTo
           Workspace
         </Link>
         {!isCompleted && (
+          <Link to={`/projects/${project.id}/setup`} className="px-4 py-2 min-h-[40px] bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold rounded-lg text-xs transition-all flex items-center">
+            Edit Project
+          </Link>
+        )}
+        {!isCompleted && (
           <Link to={`/projects/${project.id}/complete`} className="px-4 py-2 min-h-[40px] bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-xs transition-all flex items-center">
             {project.reviewStatus === 'approved' ? 'Assign Badges'
               : project.reviewStatus === 'submitted' ? 'Review Pending'

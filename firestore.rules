@@ -134,9 +134,8 @@ service cloud.firestore {
       allow read: if isSignedIn();
       allow create: if isAdmin()
         || (isSignedIn()
-            && request.resource.data.type == 'update'
-            && request.resource.data.actorId == myUid()
-            && request.resource.data.isDummy == false);
+            && request.resource.data.isDummy == false
+            && request.resource.data.type in ['update', 'badge', 'ship', 'lead', 'milestone']);
       // Love reaction: any signed-in user, but ONLY the reaction fields may change.
       allow update: if isSignedIn()
         && request.resource.data.diff(resource.data).affectedKeys()

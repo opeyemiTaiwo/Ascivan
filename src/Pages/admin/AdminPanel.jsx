@@ -318,7 +318,7 @@ const AdminPanel = () => {
     if (!draft) return;
     setPublishing(true);
     try {
-      await addDoc(collection(db, 'projects'), {
+      const newRef = await addDoc(collection(db, 'projects'), {
         projectTitle: draft.projectTitle,
         projectDescription: draft.projectDescription,
         projectGoals: draft.projectGoals || null,
@@ -340,6 +340,17 @@ const AdminPanel = () => {
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
+      // Proof Wall: log a "needs a lead" event so it shows under that filter.
+      try {
+        const { logActivity: logProof } = await import('../../utils/activityFeed');
+        await logProof({
+          type: 'lead',
+          actorName: 'Ascivan',
+          projectId: newRef.id,
+          projectTitle: draft.projectTitle,
+          meta: 'Open to anyone, apply to lead',
+        });
+      } catch (e) { console.log('Proof log skipped:', e.message); }
       toast.success('Published in lead recruitment.');
       setDraft(null);
       loadData();

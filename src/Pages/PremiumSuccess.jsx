@@ -84,7 +84,7 @@ const PremiumSuccess = () => {
             </svg>
           </div>
           <h2 className="text-xl font-bold text-gray-900 mb-2">Payment received</h2>
-          <p className="text-gray-500 text-sm mb-6">Your payment is being processed. Premium features will activate shortly. If not active within a few minutes, please contact <a href="mailto:premium@loomiqe.com" className="text-blue-600 hover:underline">premium@loomiqe.com</a>.</p>
+          <p className="text-gray-500 text-sm mb-6">Your payment is being processed. Premium features will activate shortly. If not active within a few minutes, please contact <a href="mailto:info.ascivan@gmail.com" className="text-blue-600 hover:underline">info.ascivan@gmail.com</a>.</p>
           <button onClick={() => navigate('/dashboard')} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-6 py-2.5 rounded-lg transition-all">
             Go to Dashboard
           </button>
@@ -93,7 +93,7 @@ const PremiumSuccess = () => {
 
       {status === 'error' && (
         <div>
-          <p className="text-red-600 font-semibold mb-4">Something went wrong. Please contact <a href="mailto:premium@loomiqe.com" className="underline">premium@loomiqe.com</a>.</p>
+          <p className="text-red-600 font-semibold mb-4">Something went wrong. Please contact <a href="mailto:info.ascivan@gmail.com" className="underline">info.ascivan@gmail.com</a>.</p>
           <button onClick={() => navigate('/dashboard')} className="bg-blue-600 text-white font-semibold text-sm px-6 py-2.5 rounded-lg">Go to Dashboard</button>
         </div>
       )}

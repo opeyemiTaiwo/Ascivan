@@ -69,7 +69,7 @@ const ProjectCompletion = () => {
     try {
       const memberEmails = await getProjectMemberEmails(projectId);
       await submitProjectForReview({ ...project, id: projectId }, currentUser, submissionUrl);
-      toast.success('Submitted to Loomiqe for review. You will be notified once it is reviewed.');
+      toast.success('Submitted to Ascivan for review. You will be notified once it is reviewed.');
       // Push to admins (non-blocking).
       try {
         const adminSnap = await getDocs(query(collection(db, 'users'), where('role', '==', 'admin')));
@@ -290,7 +290,7 @@ const ProjectCompletion = () => {
           contribution: 'excellent',
           notes: 'Project owner — completed project successfully',
           awardedBy: 'system',
-          awardedByName: 'Loomiqe System',
+          awardedByName: 'Ascivan System',
           awardedAt: serverTimestamp(),
           isOwnerBadge: true,
         });
@@ -443,7 +443,7 @@ const ProjectCompletion = () => {
                 ) : isUnderReview ? (
                   <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 text-center">
                     <h2 className="text-lg font-bold text-blue-700 mb-1">Submitted for review</h2>
-                    <p className="text-gray-600 text-sm">Your project is with the Loomiqe team. You will be notified once it is reviewed. Badges can be assigned only after approval.</p>
+                    <p className="text-gray-600 text-sm">Your project is with the Ascivan team. You will be notified once it is reviewed. Badges can be assigned only after approval.</p>
                     <p className="text-gray-400 text-xs mt-3">Submission link: <a href={project.reviewSubmissionUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{project.reviewSubmissionUrl}</a></p>
                   </div>
                 ) : (
@@ -456,7 +456,7 @@ const ProjectCompletion = () => {
                       </div>
                     )}
                     <p className="text-gray-600 text-sm mb-3">
-                      Before badges can be assigned, your project must be reviewed and approved by Loomiqe. We review the <strong>submission link</strong> from your Resources tab (a folder containing all your team's work, the team members, and your final solutions) along with your <strong>workspace</strong>, which is included automatically.
+                      Before badges can be assigned, your project must be reviewed and approved by Ascivan. We review the <strong>submission link</strong> from your Resources tab (a folder containing all your team's work, the team members, and your final solutions) along with your <strong>workspace</strong>, which is included automatically.
                     </p>
                     <div className="text-xs text-gray-500 mb-4 space-y-1">
                       <p>Submission link: {project?.resources?.submissionUrl
@@ -484,7 +484,7 @@ const ProjectCompletion = () => {
 
             {isApproved && step !== 4 && (
               <div className="mb-6 bg-green-50 border border-green-200 rounded-xl p-4 text-center">
-                <p className="text-green-700 font-bold text-sm">Approved by Loomiqe — you can now assign badges to your team.</p>
+                <p className="text-green-700 font-bold text-sm">Approved by Ascivan — you can now assign badges to your team.</p>
               </div>
             )}
 

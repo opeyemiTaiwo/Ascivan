@@ -15,7 +15,7 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getMessaging, isSupported as messagingIsSupported } from "firebase/messaging";
 
-// Your web app's Firebase configuration for Loomiqe
+// Your web app's Firebase configuration for Ascivan
 const firebaseConfig = {
   apiKey: "AIzaSyAWytpAg0Lb7nw5sndNu5t1YAij_uRqqXs",
   authDomain: "loomiq-8c3e9.firebaseapp.com",

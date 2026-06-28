@@ -460,14 +460,14 @@ function getProjectSubmittedAdminEmail(projectData) {
                 <p><strong>Type:</strong> ${projectData.pricingType === 'paid' ? 'Paid' : 'Free'}</p>
                 <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
               </div>
-              <div style="text-align: center;"><a href="https://loomiqe.com/admin" class="button">Review in Admin Dashboard</a></div>
+              <div style="text-align: center;"><a href="https://ascivan.com/admin" class="button">Review in Admin Dashboard</a></div>
             </div>
-            <div class="footer"><p>Loomiqe Admin Notifications</p></div>
+            <div class="footer"><p>Ascivan Admin Notifications</p></div>
           </div>
         </body>
       </html>
     `,
-    text: `New Project Submitted: ${projectTitle}\nBy: ${submitterName} (${submitterEmail})\nReview: https://loomiqe.com/admin`
+    text: `New Project Submitted: ${projectTitle}\nBy: ${submitterName} (${submitterEmail})\nReview: https://ascivan.com/admin`
   };
 }
 
@@ -496,7 +496,7 @@ function getProjectApprovedEmail(projectData) {
             <div class="header"><h1>Project Approved!</h1></div>
             <div class="content">
               <h2>Congratulations, ${contactName}!</h2>
-              <p>Your project <strong>"${projectTitle}"</strong> has been approved and is now live on Loomiqe. Team members can now discover and apply to join your project.</p>
+              <p>Your project <strong>"${projectTitle}"</strong> has been approved and is now live on Ascivan. Team members can now discover and apply to join your project.</p>
               <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
                 <h3 style="color: #22C55E; margin-top: 0;">What's Next?</h3>
                 <ul>
@@ -505,25 +505,25 @@ function getProjectApprovedEmail(projectData) {
                   <li>Complete the project to award TechTalent Badges</li>
                 </ul>
               </div>
-              <div style="text-align: center;"><a href="https://loomiqe.com/projects/my-projects" class="button">Manage Your Project</a></div>
+              <div style="text-align: center;"><a href="https://ascivan.com/projects/my-projects" class="button">Manage Your Project</a></div>
             </div>
-            <div class="footer"><p>Loomiqe - Build Together, Grow Together</p></div>
+            <div class="footer"><p>Ascivan - Build Together, Grow Together</p></div>
           </div>
         </body>
       </html>
     `,
-    text: `Project Approved: ${projectTitle}\nYour project is now live on Loomiqe!\nManage it: https://loomiqe.com/projects/my-projects`
+    text: `Project Approved: ${projectTitle}\nYour project is now live on Ascivan!\nManage it: https://ascivan.com/projects/my-projects`
   };
 }
 
 function getMentionEmail(notificationData, mentionedUser, mentioner, postData) {
   const mentionerName = mentioner.displayName || mentioner.firstName || mentioner.email || 'Someone';
   const mentionedName = mentionedUser.displayName || mentionedUser.firstName || 'there';
-  const postUrl = `https://loomiqe.com/community/post/${notificationData.postId || ''}`;
+  const postUrl = `https://ascivan.com/community/post/${notificationData.postId || ''}`;
 
   return {
     to: mentionedUser.email,
-    subject: `${mentionerName} mentioned you on Loomiqe`,
+    subject: `${mentionerName} mentioned you on Ascivan`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -541,16 +541,16 @@ function getMentionEmail(notificationData, mentionedUser, mentioner, postData) {
             <div class="header"><h1>You Were Mentioned!</h1></div>
             <div class="content">
               <h2>Hey ${mentionedName}!</h2>
-              <p><strong>${mentionerName}</strong> mentioned you in a ${notificationData.type === 'reply_mention' ? 'reply' : 'post'} on Loomiqe.</p>
+              <p><strong>${mentionerName}</strong> mentioned you in a ${notificationData.type === 'reply_mention' ? 'reply' : 'post'} on Ascivan.</p>
               ${postData?.content ? `<div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #3B82F6; margin: 20px 0; color: #374151;">${postData.content.substring(0, 200)}${postData.content.length > 200 ? '...' : ''}</div>` : ''}
               <div style="text-align: center;"><a href="${postUrl}" class="button">View Post</a></div>
             </div>
-            <div class="footer"><p>Loomiqe Community</p></div>
+            <div class="footer"><p>Ascivan Community</p></div>
           </div>
         </body>
       </html>
     `,
-    text: `${mentionerName} mentioned you on Loomiqe. View: ${postUrl}`
+    text: `${mentionerName} mentioned you on Ascivan. View: ${postUrl}`
   };
 }
 
@@ -577,7 +577,7 @@ function getNewApplicationToOwnerEmail(body) {
             <div class="header"><h1>New Application Received!</h1></div>
             <div class="content">
               <h2>Hi ${projectOwnerName || 'there'}!</h2>
-              <p>Someone has applied to join your project on Loomiqe.</p>
+              <p>Someone has applied to join your project on Ascivan.</p>
               <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
                 <h3 style="color: #8B5CF6; margin-top: 0;">Application Details</h3>
                 <p><strong>Project:</strong> ${projectTitle}</p>
@@ -586,14 +586,14 @@ function getNewApplicationToOwnerEmail(body) {
                 ${skills ? `<p><strong>Skills:</strong> ${skills}</p>` : ''}
                 ${message ? `<p><strong>Message:</strong> ${message}</p>` : ''}
               </div>
-              <div style="text-align: center;"><a href="https://loomiqe.com/projects/my-projects" class="button">Review Application</a></div>
+              <div style="text-align: center;"><a href="https://ascivan.com/projects/my-projects" class="button">Review Application</a></div>
             </div>
-            <div class="footer"><p>Loomiqe - Build Together, Grow Together</p></div>
+            <div class="footer"><p>Ascivan - Build Together, Grow Together</p></div>
           </div>
         </body>
       </html>
     `,
-    text: `New application for "${projectTitle}" from ${applicantName} (${applicantEmail}). Role: ${role}. Review: https://loomiqe.com/projects/my-projects`
+    text: `New application for "${projectTitle}" from ${applicantName} (${applicantEmail}). Role: ${role}. Review: https://ascivan.com/projects/my-projects`
   };
 }
 

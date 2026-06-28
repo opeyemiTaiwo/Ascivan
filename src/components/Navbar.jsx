@@ -83,7 +83,7 @@ const Navbar = () => {
           <div className="flex items-center justify-between h-16 sm:h-20">
 
             <Link to="/" className="flex-shrink-0 group flex items-center gap-2">
-              <img src="/Images/512X512.png" alt="Loomiqe" className="h-14 w-14 sm:h-16 sm:w-16" />
+              <img src="/Images/512X512.png" alt="Ascivan" className="h-14 w-14 sm:h-16 sm:w-16" />
             </Link>
 
             <div className="hidden lg:flex items-center space-x-1 xl:space-x-2">

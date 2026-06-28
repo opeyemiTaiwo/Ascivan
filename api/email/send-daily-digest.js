@@ -1,5 +1,5 @@
 // =================================================================
-// api/email/send-daily-digest.js — Loomiqe Daily Digest
+// api/email/send-daily-digest.js — Ascivan Daily Digest
 // Cron: weekdays 9 AM — includes platform updates + per-user engagement
 // =================================================================
 
@@ -25,7 +25,7 @@ if (!admin.apps.length) {
 }
 
 const db = admin.firestore();
-const SITE = 'https://loomiqe.com';
+const SITE = 'https://ascivan.com';
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -42,7 +42,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    console.log('🌅 Starting Loomiqe daily digest...');
+    console.log('🌅 Starting Ascivan daily digest...');
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -134,7 +134,7 @@ body{font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#f5f5
 .btn{display:block;padding:12px;border-radius:8px;text-decoration:none;text-align:center;font-weight:600;font-size:13px;margin:6px 0;color:#fff;background:linear-gradient(135deg,#F97316,#EA580C)}
 .ft{background:#1f2937;color:#9ca3af;padding:18px;text-align:center;font-size:11px}.ft a{color:#F97316;text-decoration:none}
 </style></head><body><div class="c">
-<div class="hd"><h1>🌅 Your Daily Update</h1><p>Hi ${name}! Here's what happened on Loomiqe</p>
+<div class="hd"><h1>🌅 Your Daily Update</h1><p>Hi ${name}! Here's what happened on Ascivan</p>
 <div style="margin-top:8px;font-size:11px;opacity:.8">${new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}</div></div>
 <div class="ct">
 
@@ -178,7 +178,7 @@ ${financePosts.slice(0,2).map(f=>`<div class="it" style="border-left-color:#22C5
 
 ${!hasEng&&!hasPlatform?`<div style="text-align:center;padding:24px;background:#f9fafb;border-radius:10px;margin:16px 0">
 <div style="font-size:36px;margin-bottom:10px">🌟</div>
-<h3 style="color:#333;margin:0 0 6px;font-size:15px">Quiet day on Loomiqe</h3>
+<h3 style="color:#333;margin:0 0 6px;font-size:15px">Quiet day on Ascivan</h3>
 <p style="color:#666;font-size:12px;margin:0">A perfect time to explore or connect with the community!</p></div>`:''}
 
 <div class="sc"><h2>⚡ Quick Links</h2>
@@ -186,8 +186,8 @@ ${!hasEng&&!hasPlatform?`<div style="text-align:center;padding:24px;background:#
 <a href="${SITE}/messages" class="btn" style="background:linear-gradient(135deg,#3B82F6,#2563EB)">Messages</a></div>
 
 </div>
-<div class="ft"><p><b>Loomiqe</b></p><p><a href="${SITE}/dashboard">Dashboard</a> · <a href="${SITE}/community">Community</a></p>
-<p style="margin-top:6px">Daily digest · ${new Date().getFullYear()} Loomiqe</p></div>
+<div class="ft"><p><b>Ascivan</b></p><p><a href="${SITE}/dashboard">Dashboard</a> · <a href="${SITE}/community">Community</a></p>
+<p style="margin-top:6px">Daily digest · ${new Date().getFullYear()} Ascivan</p></div>
 </div></body></html>`;
     };
 
@@ -197,9 +197,9 @@ ${!hasEng&&!hasPlatform?`<div style="text-align:center;padding:24px;background:#
       try {
         const eng = user.mentions.length + user.likes.length + user.reposts.length + user.follows.length + user.unreadMessages;
         const subj = eng > 0
-          ? `🔔 ${eng} new activities — Loomiqe Daily ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})}`
-          : `🌅 Loomiqe Daily Update — ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})}`;
-        await transporter.sendMail({ from: { name: 'Loomiqe', address: process.env.EMAIL_USER }, to: user.email, subject: subj, html: generateEmail(user) });
+          ? `🔔 ${eng} new activities — Ascivan Daily ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})}`
+          : `🌅 Ascivan Daily Update — ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})}`;
+        await transporter.sendMail({ from: { name: 'Ascivan', address: process.env.EMAIL_USER }, to: user.email, subject: subj, html: generateEmail(user) });
         successful++;
       } catch (err) { console.error(`❌ ${user.email}:`, err.message); failed++; }
     }

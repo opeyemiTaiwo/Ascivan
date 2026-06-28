@@ -1,5 +1,5 @@
 // =================================================================
-// api/email/send-weekly-digest.js — Loomiqe Weekly Digest
+// api/email/send-weekly-digest.js — Ascivan Weekly Digest
 // Cron: Sundays 9 AM. A clean, professional weekly summary.
 // =================================================================
 
@@ -25,7 +25,7 @@ if (!admin.apps.length) {
 }
 
 const db = admin.firestore();
-const SITE = 'https://loomiqe.com';
+const SITE = 'https://ascivan.com';
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -42,7 +42,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    console.log('Starting Loomiqe weekly digest...');
+    console.log('Starting Ascivan weekly digest...');
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -66,7 +66,7 @@ module.exports = async function handler(req, res) {
       } catch (e) { return 0; }
     };
 
-    // Fetch this week's platform content (only what Loomiqe actually has).
+    // Fetch this week's platform content (only what Ascivan actually has).
     const [projects, jobs] = await Promise.all([
       safeFetch('projects', 'createdAt', sevenDaysAgo),
       safeFetch('hub_posts', 'createdAt', sevenDaysAgo),
@@ -92,7 +92,7 @@ module.exports = async function handler(req, res) {
     }
     console.log(`${users.length} weekly subscribers`);
 
-    // Per-user weekly activity — only Loomiqe's real notification types.
+    // Per-user weekly activity — only Ascivan's real notification types.
     for (const user of users) {
       try {
         const notifSnap = await db.collection('notifications')
@@ -138,7 +138,7 @@ body{font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:0 auto;backgr
 .btn.blue{background:linear-gradient(135deg,#3B82F6,#2563EB)}
 .ft{background:#1f2937;color:#9ca3af;padding:18px;text-align:center;font-size:11px}.ft a{color:#F97316;text-decoration:none}
 </style></head><body><div class="c">
-<div class="hd"><h1>Your Weekly Recap</h1><p>Hi ${name}, here is your week on Loomiqe</p>
+<div class="hd"><h1>Your Weekly Recap</h1><p>Hi ${name}, here is your week on Ascivan</p>
 <div style="margin-top:8px;font-size:11px;opacity:.85">${weekStart} to ${weekEnd}</div></div>
 <div class="ct">
 
@@ -184,8 +184,8 @@ ${jobs.slice(0,4).map(j => `<div class="it">
 </tr></table></div>
 
 </div>
-<div class="ft"><p><b>Loomiqe</b></p><p><a href="${SITE}/proof-wall">Proof Wall</a> · <a href="${SITE}/projects">Projects</a> · <a href="${SITE}/settings">Email settings</a></p>
-<p style="margin-top:6px">Weekly digest · ${new Date().getFullYear()} Loomiqe</p></div>
+<div class="ft"><p><b>Ascivan</b></p><p><a href="${SITE}/proof-wall">Proof Wall</a> · <a href="${SITE}/projects">Projects</a> · <a href="${SITE}/settings">Email settings</a></p>
+<p style="margin-top:6px">Weekly digest · ${new Date().getFullYear()} Ascivan</p></div>
 </div></body></html>`;
     };
 
@@ -196,9 +196,9 @@ ${jobs.slice(0,4).map(j => `<div class="it">
         const eng = user.applications.length + user.approvals.length + user.badges.length + user.unreadMessages;
         const range = `${subDays(new Date(),7).toLocaleDateString('en-US',{month:'short',day:'numeric'})} to ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})}`;
         const subj = eng > 0
-          ? `Your Loomiqe week: ${eng} update${eng>1?'s':''} (${range})`
-          : `Your Loomiqe weekly recap (${range})`;
-        await transporter.sendMail({ from: { name: 'Loomiqe', address: process.env.EMAIL_USER }, to: user.email, subject: subj, html: generateEmail(user) });
+          ? `Your Ascivan week: ${eng} update${eng>1?'s':''} (${range})`
+          : `Your Ascivan weekly recap (${range})`;
+        await transporter.sendMail({ from: { name: 'Ascivan', address: process.env.EMAIL_USER }, to: user.email, subject: subj, html: generateEmail(user) });
         successful++;
       } catch (err) { console.error(`${user.email}:`, err.message); failed++; }
     }

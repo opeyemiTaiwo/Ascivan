@@ -1,4 +1,4 @@
-// src/Pages/community/SubmitPost.jsx - Loomiqe Submit Post (Complete - Responsive)
+// src/Pages/community/SubmitPost.jsx - Ascivan Submit Post (Complete - Responsive)
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -35,7 +35,7 @@ import { TaggedUsersSmall } from '../../components/community/UserComponents';
 import LinkInsertModal from '../../components/community/LinkInsertModal';
 
 /**
- * Loomiqe - Submit Post Page
+ * Ascivan - Submit Post Page
  * Create new community posts with images, links, and mentions
  * Uses Vercel Blob for image storage
  * FULLY RESPONSIVE for mobile, tablet, and desktop
@@ -460,7 +460,7 @@ const SubmitPost = () => {
             <Link to="/community" className="flex items-center space-x-2 sm:space-x-3 group">
               <img 
                 src="/Images/512X512.png" 
-                alt="Loomiqe" 
+                alt="Ascivan" 
                 className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg"
               />
               <div>

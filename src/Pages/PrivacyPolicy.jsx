@@ -12,13 +12,13 @@ const PrivacyPolicy = () => {
     { title: '8. Data Storage and Security', content: 'Your data is stored securely using Firebase (Google Cloud) infrastructure with encrypted connections and secure authentication. We implement industry-standard security measures. However, no method of internet transmission is 100% secure, and we cannot guarantee absolute security.' },
     { title: '9. Information Sharing', content: 'We do not sell your personal information to third parties. Your profile information is visible to authenticated members as described above. We may share anonymized, aggregated data for analytical purposes. We may share user information with law enforcement if required by law.' },
     { title: '10. Fraud Prevention', content: 'All user information, including profile data, project history, payment confirmation records, dispute history, and activity logs, may be used to investigate reports of fraud, misconduct, non-payment, or Terms of Service violations.' },
-    { title: '11. Cookies and Tracking', content: 'Loomiqe uses essential cookies for authentication and session management. We may use analytics tools to understand Platform usage. We do not use tracking cookies for advertising.' },
-    { title: '12. Third-Party Services', content: 'Loomiqe integrates with Google Authentication and Firebase. These services have their own privacy policies. We encourage you to review them.' },
+    { title: '11. Cookies and Tracking', content: 'Ascivan uses essential cookies for authentication and session management. We may use analytics tools to understand Platform usage. We do not use tracking cookies for advertising.' },
+    { title: '12. Third-Party Services', content: 'Ascivan integrates with Google Authentication and Firebase. These services have their own privacy policies. We encourage you to review them.' },
     { title: '13. Your Rights', content: 'You have the right to: access, update, or delete your personal information through Settings; control your email visibility; delete your account; and opt out of non-essential communications. To exercise these rights, visit Settings or contact Support.' },
     { title: '14. Data Retention', content: 'We retain your information for as long as your account is active. If you delete your account, your personal data will be removed within a reasonable timeframe. We may retain anonymized data and project/dispute records as required by law.' },
-    { title: '15. Children\'s Privacy', content: 'Loomiqe is not intended for users under 18. We do not knowingly collect information from children under 18.' },
+    { title: '15. Children\'s Privacy', content: 'Ascivan is not intended for users under 18. We do not knowingly collect information from children under 18.' },
     { title: '16. Changes to This Policy', content: 'We may update this Privacy Policy from time to time. Continued use after changes are posted constitutes acceptance.' },
-    { title: '17. Contact Us', content: 'Questions about this Privacy Policy? Contact us at support@loomiq.app or through our Support page.' },
+    { title: '17. Contact Us', content: 'Questions about this Privacy Policy? Contact us at info.ascivan@gmail.com or through our Support page.' },
   ];
 
   return (

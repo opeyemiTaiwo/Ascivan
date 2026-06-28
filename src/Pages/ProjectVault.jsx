@@ -139,7 +139,7 @@ const ProjectVault = () => {
             <div className="bg-white rounded-2xl max-w-lg w-full shadow-xl overflow-hidden" onClick={e => e.stopPropagation()}>
               <div id="certificate-content" className="p-8 text-center bg-white">
                 <div className="border-2 border-blue-200 rounded-xl p-8">
-                  <img src="/Images/512X512.png" alt="Loomiqe" className="w-16 h-16 mx-auto mb-3" />
+                  <img src="/Images/512X512.png" alt="Ascivan" className="w-16 h-16 mx-auto mb-3" />
                   <p className="text-blue-600 text-xs font-semibold uppercase tracking-widest mb-6">Certificate of Completion</p>
                   <p className="text-gray-500 text-sm mb-1">This certifies that</p>
                   <p className="text-gray-900 text-2xl font-bold mb-1">{currentUser?.displayName || 'Member'}</p>
@@ -156,7 +156,7 @@ const ProjectVault = () => {
                     <p className="text-gray-500 text-xs mt-1">Team size: {viewingCert.teamSize} members</p>
                   )}
                   <p className="text-gray-400 text-xs mt-4">Completed: {viewingCert.completedAt}</p>
-                  <p className="text-gray-300 text-[10px] mt-2">loomiqe.com</p>
+                  <p className="text-gray-300 text-[10px] mt-2">ascivan.com</p>
                 </div>
               </div>
               <div className="px-8 pb-6 space-y-3">
@@ -183,7 +183,7 @@ const ProjectVault = () => {
                         .site{color:#d1d5db;font-size:10px;margin-top:8px}
                         </style></head><body>
                         <div class="border">
-                        <img src="${window.location.origin}/Images/512X512.png" alt="Loomiqe" />
+                        <img src="${window.location.origin}/Images/512X512.png" alt="Ascivan" />
                         <div class="subtitle">Certificate of Completion</div>
                         <div class="label">This certifies that</div>
                         <div class="name">${currentUser?.displayName || 'Member'}</div>
@@ -194,7 +194,7 @@ const ProjectVault = () => {
                         ${viewingCert.badgeName ? `<div class="meta">Badge earned: ${viewingCert.badgeName} (${viewingCert.badgeLevel})</div>` : ''}
                         ${viewingCert.isOwner && viewingCert.teamSize > 0 ? `<div class="meta">Team size: ${viewingCert.teamSize} members</div>` : ''}
                         <div class="meta">Completed: ${viewingCert.completedAt}</div>
-                        <div class="site">loomiqe.com</div>
+                        <div class="site">ascivan.com</div>
                         </div></body></html>
                       `);
                       printWindow.document.close();

@@ -124,7 +124,7 @@ export function listenForForegroundPush() {
   if (!messaging) return;
   try {
     onMessage(messaging, (payload) => {
-      const title = payload.notification?.title || 'Loomiqe';
+      const title = payload.notification?.title || 'Ascivan';
       const body = payload.notification?.body || '';
       playNotificationSound();
       toast.info(`${title}${body ? ': ' + body : ''}`);

@@ -242,7 +242,7 @@ const DashboardOverview = () => {
                 </button>
               )}
               {isPremiumUser && (
-                <p className="text-gray-500 text-xs mt-2">Priority support: <a href="mailto:premium@loomiqe.com" className="text-blue-600 hover:underline">premium@loomiqe.com</a></p>
+                <p className="text-gray-500 text-xs mt-2">Priority support: <a href="mailto:info.ascivan@gmail.com" className="text-blue-600 hover:underline">info.ascivan@gmail.com</a></p>
               )}
             </div>
 

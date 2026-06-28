@@ -1,9 +1,9 @@
-// src/components/community/ImageGallery.jsx - Loomiqe Image Gallery - FULLY RESPONSIVE
+// src/components/community/ImageGallery.jsx - Ascivan Image Gallery - FULLY RESPONSIVE
 
 import React, { useState, useEffect } from 'react';
 
 /**
- * Image Gallery Component for Loomiqe
+ * Image Gallery Component for Ascivan
  * Displays up to 4 images in a grid, with lightbox for full-size viewing
  * NO VIDEO SUPPORT - Images only
  * Fully responsive for all screen sizes

@@ -1,4 +1,4 @@
-// src/components/community/MentionTextarea.jsx - Loomiqe Mention System - FULLY RESPONSIVE
+// src/components/community/MentionTextarea.jsx - Ascivan Mention System - FULLY RESPONSIVE
 
 import React, { useState, useRef } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -7,7 +7,7 @@ import LinkInsertModal from './LinkInsertModal';
 
 /**
  * Enhanced Textarea with @mention autocomplete and link insertion
- * Loomiqe Community
+ * Ascivan Community
  * Fully responsive for all screen sizes
  */
 const MentionTextarea = ({ 

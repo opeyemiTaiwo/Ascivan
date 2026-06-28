@@ -380,7 +380,7 @@ export const CompanyInfoSidebar = ({ isMobile = false }) => {
         <div className="text-center px-4 py-5">
           <img 
             src="/Images/512X512.png" 
-            alt="Loomiqe Logo" 
+            alt="Ascivan Logo" 
             className="w-12 h-12 mx-auto mb-2 rounded-xl"
           />
           <p className="text-gray-500 text-xs mt-1 leading-relaxed">

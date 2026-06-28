@@ -78,7 +78,7 @@ const AccountTypeSelection = () => {
             <p className="text-blue-600 uppercase tracking-widest text-xs font-semibold mb-3">Getting Started</p>
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
               How will you use{' '}
-              <span className="text-blue-600">Loomiqe</span>?
+              <span className="text-blue-600">Ascivan</span>?
             </h1>
             <p className="text-gray-500 text-sm sm:text-base px-4">
               Choose your account type. This helps us personalize your experience.

@@ -114,7 +114,7 @@ const LandingPage = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16 sm:h-20">
           <Link to="/" className="flex items-center gap-2 flex-shrink-0">
-            <img src="/Images/512X512.png" alt="Loomiqe" className="w-14 h-14 sm:w-16 sm:h-16" />
+            <img src="/Images/512X512.png" alt="Ascivan" className="w-14 h-14 sm:w-16 sm:h-16" />
           </Link>
           <div className="hidden sm:flex items-center gap-6">
             <Link to="/about" className="text-gray-600 hover:text-gray-900 text-sm font-medium transition-colors">About</Link>
@@ -169,7 +169,7 @@ const LandingPage = () => {
           </h1>
 
           <p id="hero-desc" data-animate className={`fade-up delay-2 text-gray-600 text-lg sm:text-xl max-w-2xl mx-auto mb-10 font-normal leading-relaxed ${isVisible('hero-desc') ? 'visible' : ''}`}>
-            Loomiqe is where you build real experience, earn verified badges, and get discovered, wherever you are. Ship real products with real teams, earn credentials that prove your skills, and get found by recruiters for remote and onsite roles.
+            Ascivan is where you build real experience, earn verified badges, and get discovered, wherever you are. Ship real products with real teams, earn credentials that prove your skills, and get found by recruiters for remote and onsite roles.
           </p>
 
           <div id="hero-cta" data-animate className={`fade-up delay-3 flex flex-col sm:flex-row items-center justify-center gap-4 ${isVisible('hero-cta') ? 'visible' : ''}`}>
@@ -214,7 +214,7 @@ const LandingPage = () => {
           <p className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-3">Everything You Need</p>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-800 text-gray-900 mb-4">Accelerate Your Tech Career</h2>
           <p className="text-gray-500 max-w-xl mx-auto text-base">
-            From real collaborative projects to verified credentials and recruiter visibility, Loomiqe gives you everything you need to prove your skills and get hired.
+            From real collaborative projects to verified credentials and recruiter visibility, Ascivan gives you everything you need to prove your skills and get hired.
           </p>
         </div>
 
@@ -278,7 +278,7 @@ const LandingPage = () => {
       <section className="py-16 border-y border-gray-200 bg-gray-50">
         <div id="quote" data-animate className={`fade-up max-w-3xl mx-auto px-4 sm:px-6 text-center ${isVisible('quote') ? 'visible' : ''}`}>
           <p className="text-gray-900 text-xl sm:text-2xl font-normal leading-relaxed mb-6">
-            "Loomiqe is everything we wished existed when we started our tech careers. One place to find projects, earn credentials, and connect with people who are building real things."
+            "Ascivan is everything we wished existed when we started our tech careers. One place to find projects, earn credentials, and connect with people who are building real things."
           </p>
           <div className="flex items-center justify-center gap-3">
             <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm">TA</div>
@@ -302,7 +302,7 @@ const LandingPage = () => {
             disabled={isLoading}
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg px-10 py-4 rounded-lg transition-all disabled:opacity-60 w-full sm:w-auto"
           >
-            {isLoading ? 'Signing in...' : 'Join Loomiqe'}
+            {isLoading ? 'Signing in...' : 'Join Ascivan'}
           </button>
           <p className="mt-4 text-gray-400 text-sm">Sign in with your Google account. Takes 10 seconds.</p>
         </div>
@@ -313,7 +313,7 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center">
-              <img src="/Images/512X512.png" alt="Loomiqe" className="w-12 h-12 sm:w-14 sm:h-14" />
+              <img src="/Images/512X512.png" alt="Ascivan" className="w-12 h-12 sm:w-14 sm:h-14" />
             </div>
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-gray-500 text-sm">
               <Link to="/about" className="hover:text-blue-600 transition-colors font-medium">About</Link>
@@ -321,7 +321,7 @@ const LandingPage = () => {
               <Link to="/privacy" className="hover:text-blue-600 transition-colors font-medium">Privacy</Link>
               <Link to="/support" className="hover:text-blue-600 transition-colors font-medium">Support</Link>
             </div>
-            <p className="text-gray-400 text-xs">{new Date().getFullYear()} Loomiqe. All rights reserved.</p>
+            <p className="text-gray-400 text-xs">{new Date().getFullYear()} Ascivan. All rights reserved.</p>
           </div>
         </div>
       </footer>

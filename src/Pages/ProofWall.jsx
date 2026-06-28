@@ -188,7 +188,7 @@ const ProofWall = () => {
           Share a project update
         </button>
       </div>
-      <p className="text-gray-500 text-sm mb-5">Verified milestones from across Loomiqe. Earned, not posted.</p>
+      <p className="text-gray-500 text-sm mb-5">Verified milestones from across Ascivan. Earned, not posted.</p>
 
       {/* Composer (work-focused, not personal) */}
       {showCompose && (

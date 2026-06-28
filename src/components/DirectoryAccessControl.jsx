@@ -196,7 +196,7 @@ const DirectoryAccessControl = () => {
             <div className="flex items-center group cursor-pointer" onClick={() => window.location.href = '/'}>
               <img 
                 src="/Images/512X512.png" 
-                alt="Loomiqe Logo" 
+                alt="Ascivan Logo" 
                 className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 transform flex-shrink-0"
               />
             </div>

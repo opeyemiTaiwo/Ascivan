@@ -1,4 +1,4 @@
-// src/utils/communityHelpers.js - Loomiqe Utility Functions (Updated for Vercel Blob with Server-Side API)
+// src/utils/communityHelpers.js - Ascivan Utility Functions (Updated for Vercel Blob with Server-Side API)
 
 import {
   deleteImageFromBlob,

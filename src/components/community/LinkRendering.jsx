@@ -1,4 +1,4 @@
-// src/components/community/LinkRendering.jsx - Loomiqe Link Components - FULLY RESPONSIVE
+// src/components/community/LinkRendering.jsx - Ascivan Link Components - FULLY RESPONSIVE
 
 import React from 'react';
 

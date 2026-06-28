@@ -1,5 +1,5 @@
 /* public/firebase-messaging-sw.js
-   Handles background push notifications for Loomiqe.
+   Handles background push notifications for Ascivan.
    Uses the compat builds because service workers can't use ES modules everywhere. */
 
 importScripts('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
@@ -18,7 +18,7 @@ const messaging = firebase.messaging();
 
 // Background messages (site closed or tab not focused).
 messaging.onBackgroundMessage((payload) => {
-  const title = payload.notification?.title || 'Loomiqe';
+  const title = payload.notification?.title || 'Ascivan';
   const options = {
     body: payload.notification?.body || '',
     icon: '/Images/512X512.png',

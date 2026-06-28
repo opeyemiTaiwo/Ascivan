@@ -8,7 +8,7 @@ const Footer = ({ dark = false }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center">
-            <img src="/Images/512X512.png" alt="Loomiqe" className="w-10 h-10 sm:w-12 sm:h-12" />
+            <img src="/Images/512X512.png" alt="Ascivan" className="w-10 h-10 sm:w-12 sm:h-12" />
           </div>
           <div className={`flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm ${dark ? 'text-gray-500' : 'text-gray-500'}`}>
             <Link to="/about" className={`${dark ? 'hover:text-white' : 'hover:text-blue-600'} transition-colors font-medium`}>About</Link>
@@ -16,7 +16,7 @@ const Footer = ({ dark = false }) => {
             <Link to="/privacy" className={`${dark ? 'hover:text-white' : 'hover:text-blue-600'} transition-colors font-medium`}>Privacy</Link>
             <Link to="/support" className={`${dark ? 'hover:text-white' : 'hover:text-blue-600'} transition-colors font-medium`}>Support</Link>
           </div>
-          <p className={`text-xs ${dark ? 'text-gray-600' : 'text-gray-400'}`}>{new Date().getFullYear()} Loomiqe. All rights reserved.</p>
+          <p className={`text-xs ${dark ? 'text-gray-600' : 'text-gray-400'}`}>{new Date().getFullYear()} Ascivan. All rights reserved.</p>
         </div>
       </div>
     </footer>

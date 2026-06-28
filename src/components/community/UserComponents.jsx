@@ -1,11 +1,11 @@
-// src/components/community/UserComponents.jsx - Loomiqe User Interaction Components - FULLY RESPONSIVE
+// src/components/community/UserComponents.jsx - Ascivan User Interaction Components - FULLY RESPONSIVE
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { showWarningMessage } from '../../utils/errorHandler';
 
 /**
- * Enhanced Clickable User Name Component for Loomiqe
+ * Enhanced Clickable User Name Component for Ascivan
  * Fully responsive for all screen sizes
  */
 export const EnhancedClickableUserName = ({ user, className = "", children, showTitle = true }) => {
@@ -33,7 +33,7 @@ export const EnhancedClickableUserName = ({ user, className = "", children, show
 
   const displayName = user?.firstName && user?.lastName 
     ? `${user.firstName} ${user.lastName}`
-    : user?.displayName || user?.name || 'Loomiqe Member';
+    : user?.displayName || user?.name || 'Ascivan Member';
 
   return (
     <button
@@ -80,7 +80,7 @@ export const TaggedUsers = ({ taggedUsers = [], onRemoveTag }) => {
             <svg className="w-3 h-3 xs:w-4 xs:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
             </svg>
-            Tagged Loomiqe Members ({taggedUsers.length}):
+            Tagged Ascivan Members ({taggedUsers.length}):
           </h4>
           <button
             type="button"

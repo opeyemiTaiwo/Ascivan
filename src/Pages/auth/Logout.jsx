@@ -83,7 +83,7 @@ const Logout = () => {
                 <svg className="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
               </div>
               <h1 className="text-2xl font-bold text-gray-900 mb-1">See you soon</h1>
-              <p className="text-gray-500 text-sm mb-6">You've been signed out of Loomiqe.</p>
+              <p className="text-gray-500 text-sm mb-6">You've been signed out of Ascivan.</p>
 
               {/* Redirect note */}
               {countdown > 0 && (

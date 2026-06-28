@@ -235,7 +235,7 @@ const Settings = () => {
           <div className="space-y-6">
             <div className="bg-white border border-gray-200 rounded-xl p-6">
               <h3 className="text-gray-900 font-bold text-base mb-2">Push Notifications</h3>
-              <p className="text-gray-500 text-sm mb-4">Get notified on this device about new messages, project applications, and approvals, even when Loomiqe isn't open. On iPhone, add Loomiqe to your Home Screen first (Share, then Add to Home Screen).</p>
+              <p className="text-gray-500 text-sm mb-4">Get notified on this device about new messages, project applications, and approvals, even when Ascivan isn't open. On iPhone, add Ascivan to your Home Screen first (Share, then Add to Home Screen).</p>
               <button
                 onClick={async () => { await enablePushForCurrentUser({ interactive: true }); }}
                 className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg transition-all"
@@ -246,7 +246,7 @@ const Settings = () => {
 
             <div className="bg-white border border-gray-200 rounded-xl p-6">
               <h3 className="text-gray-900 font-bold text-base mb-2">Email Updates</h3>
-              <p className="text-gray-500 text-sm mb-4">Get a weekly email recap of your activity and what's new on Loomiqe: new projects, jobs, your badges, and unread messages. Sent every Sunday.</p>
+              <p className="text-gray-500 text-sm mb-4">Get a weekly email recap of your activity and what's new on Ascivan: new projects, jobs, your badges, and unread messages. Sent every Sunday.</p>
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -370,7 +370,7 @@ const MembershipTab = ({ profileData, navigate }) => {
           <FeatureItem color="orange" label="Verified Company Badge" detail="A verified badge shown on your company profile and listings." />
           <FeatureItem color="orange" label="Unlimited talent messages" detail="Contact unlimited new talents, with no monthly cap." />
           <FeatureItem color="orange" label="Unlimited job posts" detail="Post unlimited job openings on the job board." />
-          <FeatureItem color="orange" label="Priority support" detail="Get faster responses and dedicated assistance from the Loomiqe team." />
+          <FeatureItem color="orange" label="Priority support" detail="Get faster responses and dedicated assistance from the Ascivan team." />
         </ul>
         <p className="text-gray-400 text-xs mb-4 leading-relaxed">Premium helps talent get discovered faster, and lets companies hire with confidence as verified, traceable organizations.</p>
         {(profileData?.membershipPlan === 'Premium' || profileData?.role === 'admin') ? (

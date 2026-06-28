@@ -56,7 +56,7 @@ const SimpleChatbot = () => {
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       const timer = setTimeout(() => {
-        addBotMessage("Hi! Welcome to Loomiqe. I'm your AI assistant here to help you navigate projects, career tools, badges, and community resources as a tech professional. What's your first name?");
+        addBotMessage("Hi! Welcome to Ascivan. I'm your AI assistant here to help you navigate projects, career tools, badges, and community resources as a tech professional. What's your first name?");
       }, 500);
       return () => clearTimeout(timer);
     }
@@ -96,7 +96,7 @@ const SimpleChatbot = () => {
         setStep(4);
       } else if (type.includes('career') || type.includes('tech') || type.includes('job')) {
         // Jobs/career branch
-        addBotMessage("Great news! Loomiqe helps tech professionals find projects, jobs, career tools, and connect with a supportive community — all in one place.");
+        addBotMessage("Great news! Ascivan helps tech professionals find projects, jobs, career tools, and connect with a supportive community — all in one place.");
         safeTimeout(() => {
           addBotMessage("Check out our Projects section to find collaborative work, or explore Jobs for career opportunities.");
         }, 1500);
@@ -346,7 +346,7 @@ const SimpleChatbot = () => {
                     🤖
                   </div>
                   <div>
-                    <h3 className="font-bold text-base sm:text-lg md:text-xl">Loomiqe Assistant</h3>
+                    <h3 className="font-bold text-base sm:text-lg md:text-xl">Ascivan Assistant</h3>
                     <p className="text-sm text-gray-900/80">Collecting your info — our team follows up personally</p>
                   </div>
                 </div>

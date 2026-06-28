@@ -149,20 +149,20 @@ const SERVICES = [
 
 const FAQs = [
   {
-    question: "What does Loomiqe do?",
-    answer: "Loomiqe builds cutting-edge technology solutions for businesses. We transform web and mobile applications into intelligent systems using AI, automation, and data-driven architecture. We also run a platform where people build real-world experience through collaborative projects and get discovered by recruiters — explore it from our homepage."
+    question: "What does Ascivan do?",
+    answer: "Ascivan builds cutting-edge technology solutions for businesses. We transform web and mobile applications into intelligent systems using AI, automation, and data-driven architecture. We also run a platform where people build real-world experience through collaborative projects and get discovered by recruiters — explore it from our homepage."
   },
   {
-    question: "How is Loomiqe different from other development companies?",
+    question: "How is Ascivan different from other development companies?",
     answer: "We don't just build websites — we design intelligent systems that automate, analyze, and evolve. Every engagement starts with strategy, and our solutions are built to scale with your business."
   },
   {
     question: "How does your consultation and project process work?",
-    answer: "We start every engagement with a consultation fee. This covers your discovery session, initial scoping, and a custom proposal outlining our services, how we operate, project timelines, and transparent pricing. If you move forward and build with us, the fee is credited toward your project — it's part of your investment, not an extra charge. If you choose not to proceed, the consultation fee is non-refundable. For full details on our process, refund policy, pricing structure, and intellectual property terms, please review our Terms of Service at loomiq.com/solutions/terms."
+    answer: "We start every engagement with a consultation fee. This covers your discovery session, initial scoping, and a custom proposal outlining our services, how we operate, project timelines, and transparent pricing. If you move forward and build with us, the fee is credited toward your project — it's part of your investment, not an extra charge. If you choose not to proceed, the consultation fee is non-refundable. For full details on our process, refund policy, pricing structure, and intellectual property terms, please review our Terms of Service at ascivan.com/solutions/terms."
   },
   {
     question: "Is the consultation fee refundable?",
-    answer: "The consultation fee is strictly non-refundable. It compensates our team for the dedicated time and expertise invested in your discovery session and custom proposal preparation. However, if you choose to build with us, this fee is applied as a credit toward your total project cost. We encourage you to read our full Terms of Service at loomiq.com/solutions/terms before proceeding, so you have complete clarity on our policies."
+    answer: "The consultation fee is strictly non-refundable. It compensates our team for the dedicated time and expertise invested in your discovery session and custom proposal preparation. However, if you choose to build with us, this fee is applied as a credit toward your total project cost. We encourage you to read our full Terms of Service at ascivan.com/solutions/terms before proceeding, so you have complete clarity on our policies."
   },
   {
     question: "Can you integrate AI into my existing platform?",
@@ -190,11 +190,11 @@ const FAQs = [
   },
   {
     question: "Do you provide ongoing support?",
-    answer: "Absolutely. Our commitment extends beyond launch. We provide reliable ongoing support, maintenance, optimization, and updates to ensure your intelligent systems continue to perform and evolve as your business grows. Support terms are outlined in your individual Project Agreement — for more details, see our Terms of Service at loomiq.com/solutions/terms."
+    answer: "Absolutely. Our commitment extends beyond launch. We provide reliable ongoing support, maintenance, optimization, and updates to ensure your intelligent systems continue to perform and evolve as your business grows. Support terms are outlined in your individual Project Agreement — for more details, see our Terms of Service at ascivan.com/solutions/terms."
   },
   {
     question: "Where can I review your full policies, pricing structure, and legal terms?",
-    answer: "All of our engagement policies — including the consultation fee structure, refund terms, how we price projects, intellectual property ownership, and our full operating process — are documented in our Terms of Service. We strongly encourage every prospective client to read it before starting a consultation. You can access it at loomiq.com/solutions/terms or by clicking the Terms of Service link in the footer of this page."
+    answer: "All of our engagement policies — including the consultation fee structure, refund terms, how we price projects, intellectual property ownership, and our full operating process — are documented in our Terms of Service. We strongly encourage every prospective client to read it before starting a consultation. You can access it at ascivan.com/solutions/terms or by clicking the Terms of Service link in the footer of this page."
   }
 ];
 
@@ -381,7 +381,7 @@ const CareerHome = () => {
             </h2>
             <p className="text-gray-600 text-base sm:text-lg md:text-xl leading-relaxed"
                style={{ fontFamily: '"Inter", sans-serif' }}>
-              Loomiqe is a digital innovation organization that builds cutting-edge technology solutions for businesses and empowers the next generation of tech professionals. We combine software engineering, strategy, and emerging technologies to build scalable solutions for growth.
+              Ascivan is a digital innovation organization that builds cutting-edge technology solutions for businesses and empowers the next generation of tech professionals. We combine software engineering, strategy, and emerging technologies to build scalable solutions for growth.
             </p>
           </div>
         </section>
@@ -531,7 +531,7 @@ const CareerHome = () => {
                   </div>
                   <div className="flex flex-col items-center justify-center min-w-[120px] sm:min-w-[180px] md:min-w-[240px]">
                     <div className="text-blue-400 text-sm sm:text-base font-bold mb-1 tracking-wider">STUDENT PLATFORM</div>
-                    <div className="text-white text-base sm:text-lg md:text-xl font-bold text-center">Loomiqe Careers</div>
+                    <div className="text-white text-base sm:text-lg md:text-xl font-bold text-center">Ascivan Careers</div>
                   </div>
                 </div>
               ))}
@@ -688,28 +688,18 @@ const CareerHome = () => {
           <div className="border-t border-white/10 pt-6 sm:pt-8">
             <div className="flex flex-col space-y-5">
               <div className="text-center">
-                <p className="text-blue-400 font-bold text-base sm:text-lg" style={{ fontFamily: '"Inter", sans-serif' }}>Loomiqe</p>
+                <p className="text-blue-400 font-bold text-base sm:text-lg" style={{ fontFamily: '"Inter", sans-serif' }}>Ascivan</p>
                 <p className="text-gray-400 text-sm sm:text-base" style={{ fontFamily: '"Inter", sans-serif' }}>Building Intelligent Digital Systems &bull; Empowering Tech Professionals</p>
               </div>
               <div className="flex justify-center items-center gap-4 sm:gap-6">
-                <a href="https://www.instagram.com/loomiq/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <a href="https://www.instagram.com/ascivanhq/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                   <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-blue-500 via-blue-400 to-blue-600 flex items-center justify-center">
                     <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/></svg>
                   </div>
                 </a>
-                <a href="https://www.facebook.com/loomiqinc/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg>
-                  </div>
-                </a>
-                <a href="https://www.linkedin.com/company/loomiq/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                <a href="https://www.linkedin.com/company/ascivan/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                   <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
                     <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg>
-                  </div>
-                </a>
-                <a href="https://www.youtube.com/@loomiqinc" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-orange-600 to-orange-500 flex items-center justify-center">
-                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
                   </div>
                 </a>
               </div>
@@ -721,7 +711,7 @@ const CareerHome = () => {
                 <a href="/" className="text-gray-600 hover:text-blue-400 text-base transition-colors font-medium">Student Platform</a>
               </div>
               <div className="text-center">
-                <p className="text-gray-600 text-sm sm:text-base">© {new Date().getFullYear()} Loomiqe. All rights reserved.</p>
+                <p className="text-gray-600 text-sm sm:text-base">© {new Date().getFullYear()} Ascivan. All rights reserved.</p>
                 <p className="text-gray-500 text-sm mt-1">Your Digital Intelligence Partner</p>
               </div>
             </div>

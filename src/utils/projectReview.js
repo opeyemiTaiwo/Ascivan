@@ -26,7 +26,7 @@ export const REVIEW_STATUS = {
 
 // Build the canonical workspace URL for a project (auto-included in submissions).
 export const buildWorkspaceUrl = (projectId) =>
-  `${typeof window !== 'undefined' ? window.location.origin : 'https://loomiqe.com'}/projects/${projectId}/workspace`;
+  `${typeof window !== 'undefined' ? window.location.origin : 'https://ascivan.com'}/projects/${projectId}/workspace`;
 
 // Notify a single user (by email) via the notifications collection.
 const notifyByEmail = async (email, payload) => {
@@ -137,7 +137,7 @@ export const approveProjectReview = async (project, admin, memberEmails = []) =>
     type: 'project_review_approved',
     projectId,
     projectTitle: title,
-    message: `"${title}" has been approved by Loomiqe! Your project lead will now assign badges.`,
+    message: `"${title}" has been approved by Ascivan! Your project lead will now assign badges.`,
   });
 };
 
@@ -162,7 +162,7 @@ export const rejectProjectReview = async (project, admin, feedback, memberEmails
     type: 'project_review_rejected',
     projectId,
     projectTitle: title,
-    message: `"${title}" was not approved by Loomiqe. No badges will be assigned for this project.`,
+    message: `"${title}" was not approved by Ascivan. No badges will be assigned for this project.`,
   });
 };
 

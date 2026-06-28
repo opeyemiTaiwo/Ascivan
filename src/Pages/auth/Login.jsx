@@ -70,7 +70,7 @@ const Login = () => {
               <p className="text-blue-600 uppercase tracking-widest text-xs font-semibold mb-3">Secure Access</p>
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">
                 Welcome to{' '}
-                <span className="text-blue-600">Loomiqe</span>
+                <span className="text-blue-600">Ascivan</span>
               </h1>
               <p className="text-gray-500 text-sm sm:text-base font-normal px-2 mb-3">
                 Proof over pedigree. Build real experience, earn verified badges, and get discovered, wherever you are.

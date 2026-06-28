@@ -54,14 +54,14 @@ const PrivacyPolicy = () => {
       {/* ── Header ── */}
       <header style={{ position: 'sticky', top: 0, zIndex: 100, background: 'rgba(3,7,18,0.93)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto', padding: '10px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-          {/* Real Loomiqe logo */}
+          {/* Real Ascivan logo */}
           <Link to="/solutions" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
             <img
               src="/Images/512X512.png"
-              alt="Loomiqe Logo"
+              alt="Ascivan Logo"
               style={{ width: 38, height: 38, borderRadius: 9, objectFit: 'contain', display: 'block' }}
             />
-            <span style={{ color: '#fff', fontFamily: "'Georgia',serif", fontWeight: 700, fontSize: 15, letterSpacing: '-0.3px', whiteSpace: 'nowrap' }}>Loomiqe</span>
+            <span style={{ color: '#fff', fontFamily: "'Georgia',serif", fontWeight: 700, fontSize: 15, letterSpacing: '-0.3px', whiteSpace: 'nowrap' }}>Ascivan</span>
           </Link>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -133,14 +133,14 @@ const PrivacyPolicy = () => {
           {/* Intro callout */}
           <div style={{ background: 'linear-gradient(135deg,rgba(99,102,241,0.08),rgba(34,197,94,0.06))', border: '1px solid rgba(99,102,241,0.22)', borderRadius: 14, padding: '20px 22px', marginBottom: 44 }}>
             <p style={{ color: '#e0e7ff', fontFamily: 'system-ui,sans-serif', fontSize: 15, lineHeight: 1.8, margin: 0 }}>
-              At <strong style={{ color: '#818cf8' }}>Loomiqe</strong>, your privacy matters deeply to us. This Privacy Policy explains how we collect, use, protect, and share your information when you interact with our website (<strong style={{ color: '#22c55e' }}>loomiq.com</strong>) or any of our services. By using our platform, you agree to the practices described in this policy.
+              At <strong style={{ color: '#818cf8' }}>Ascivan</strong>, your privacy matters deeply to us. This Privacy Policy explains how we collect, use, protect, and share your information when you interact with our website (<strong style={{ color: '#22c55e' }}>ascivan.com</strong>) or any of our services. By using our platform, you agree to the practices described in this policy.
             </p>
           </div>
 
           {/* ─── 01 Overview ─── */}
           <PPSection id="overview" number="01" title="Overview" icon="🏢">
-            <p>Loomiqe is a digital innovation organization specializing in the design, development, and transformation of web and mobile applications using intelligent and cutting-edge technologies — including Artificial Intelligence (AI), machine learning, predictive analytics, and automation systems.</p>
-            <p>This policy applies to all visitors, clients, and users of <strong style={{ color: '#22c55e' }}>loomiq.com</strong>. We are committed to handling your data responsibly, transparently, and in alignment with applicable privacy laws.</p>
+            <p>Ascivan is a digital innovation organization specializing in the design, development, and transformation of web and mobile applications using intelligent and cutting-edge technologies — including Artificial Intelligence (AI), machine learning, predictive analytics, and automation systems.</p>
+            <p>This policy applies to all visitors, clients, and users of <strong style={{ color: '#22c55e' }}>ascivan.com</strong>. We are committed to handling your data responsibly, transparently, and in alignment with applicable privacy laws.</p>
           </PPSection>
 
           {/* ─── 02 Information We Collect ─── */}
@@ -208,13 +208,13 @@ const PrivacyPolicy = () => {
           {/* ─── 04 Sharing ─── */}
           <PPSection id="sharing" number="04" title="Sharing & Disclosure" icon="🔗">
             <PPCallout color="#ef4444" icon="🔒" title="We Do Not Sell Your Data">
-              Loomiqe does not sell, rent, or trade your personal information to third parties for their marketing purposes. Period.
+              Ascivan does not sell, rent, or trade your personal information to third parties for their marketing purposes. Period.
             </PPCallout>
             <Subsection title="Service Providers & Partners">
               <p>We work with trusted third-party providers who assist in delivering our services — including payment processors, cloud hosting providers, email tools, analytics platforms, and AI service providers. All partners are contractually required to handle your data securely.</p>
             </Subsection>
             <Subsection title="Within Our Organization">
-              <p>Your information may be accessed by Loomiqe team members — project managers, developers, and support staff — who need it to deliver services to you.</p>
+              <p>Your information may be accessed by Ascivan team members — project managers, developers, and support staff — who need it to deliver services to you.</p>
             </Subsection>
             <Subsection title="Legal Requirements">
               <p>We may disclose your information if required to do so by law, court order, or in response to valid requests from government or law enforcement authorities. We will notify you of such requests where legally permitted.</p>
@@ -256,7 +256,7 @@ const PrivacyPolicy = () => {
 
           {/* ─── 07 Your Rights ─── */}
           <PPSection id="rights" number="07" title="Your Rights & Choices" icon="⚖️" highlight>
-            <p>Depending on your location, you may have certain rights regarding your personal data. Loomiqe respects and honors these rights:</p>
+            <p>Depending on your location, you may have certain rights regarding your personal data. Ascivan respects and honors these rights:</p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(100%,230px),1fr))', gap: 12, marginTop: 18, marginBottom: 22 }}>
               {[
                 { icon: '👁️', title: 'Right to Access',      desc: 'Request a copy of the personal data we hold about you.' },
@@ -278,7 +278,7 @@ const PrivacyPolicy = () => {
 
           {/* ─── 08 Security ─── */}
           <PPSection id="security" number="08" title="Security" icon="🛡️">
-            <p>Protecting your personal information is a priority at Loomiqe. We implement industry-standard security measures to safeguard your data, including:</p>
+            <p>Protecting your personal information is a priority at Ascivan. We implement industry-standard security measures to safeguard your data, including:</p>
             <ul>
               <li>Encrypted data transmission using SSL/TLS protocols</li>
               <li>Secure access controls and authentication for internal systems</li>
@@ -293,13 +293,13 @@ const PrivacyPolicy = () => {
 
           {/* ─── 09 Children ─── */}
           <PPSection id="children" number="09" title="Children's Privacy" icon="👶">
-            <p>Loomiqe's services are not directed to individuals under the age of 13, and we do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us immediately and we will take prompt steps to delete that information.</p>
+            <p>Ascivan's services are not directed to individuals under the age of 13, and we do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us immediately and we will take prompt steps to delete that information.</p>
           </PPSection>
 
           {/* ─── 10 Third-Party ─── */}
           <PPSection id="third-party" number="10" title="Third-Party Links & Platforms" icon="🔗">
-            <p>Our website may contain links to third-party websites, social media platforms, and external resources including LinkedIn, Instagram, Facebook, and YouTube. This Privacy Policy applies only to Loomiqe's owned platform and does not govern the privacy practices of any third-party site.</p>
-            <p>We encourage you to review the privacy policies of any third-party platforms you visit through links on our website. Loomiqe is not responsible for the privacy practices or content of external sites.</p>
+            <p>Our website may contain links to third-party websites, social media platforms, and external resources including LinkedIn, Instagram, Facebook, and YouTube. This Privacy Policy applies only to Ascivan's owned platform and does not govern the privacy practices of any third-party site.</p>
+            <p>We encourage you to review the privacy policies of any third-party platforms you visit through links on our website. Ascivan is not responsible for the privacy practices or content of external sites.</p>
           </PPSection>
 
           {/* ─── 11 Changes ─── */}
@@ -327,7 +327,7 @@ const PrivacyPolicy = () => {
               </Link>
             </div>
             <p style={{ color: '#9ca3af', fontFamily: 'system-ui,sans-serif', fontSize: 14 }}>
-              We take all privacy inquiries seriously and will respond within a reasonable timeframe. By using Loomiqe's platform, you acknowledge that you have read and understood this Privacy Policy.
+              We take all privacy inquiries seriously and will respond within a reasonable timeframe. By using Ascivan's platform, you acknowledge that you have read and understood this Privacy Policy.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 24 }}>
               <Link to="/solutions/terms" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.3)', borderRadius: 10, padding: '10px 16px', textDecoration: 'none', color: '#818cf8', fontFamily: 'system-ui,sans-serif', fontSize: 14, fontWeight: 600 }}>
@@ -342,7 +342,7 @@ const PrivacyPolicy = () => {
           {/* Footer */}
           <div style={{ marginTop: 56, paddingTop: 28, borderTop: '1px solid rgba(255,255,255,0.07)', textAlign: 'center' }}>
             <p style={{ color: '#4b5563', fontFamily: 'system-ui,sans-serif', fontSize: 13 }}>
-              © {new Date().getFullYear()} Loomiqe. All rights reserved.&nbsp;·&nbsp;
+              © {new Date().getFullYear()} Ascivan. All rights reserved.&nbsp;·&nbsp;
               <Link to="/solutions" style={{ color: '#22c55e', textDecoration: 'none' }}>Home</Link>&nbsp;·&nbsp;
               <Link to="/solutions/terms" style={{ color: '#818cf8', textDecoration: 'none' }}>Terms of Service</Link>
             </p>

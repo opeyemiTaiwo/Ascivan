@@ -26,7 +26,7 @@ const About = () => {
       <nav className="border-b border-gray-200 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-1">
-            <img src="/Images/512X512.png" alt="Loomiqe" className="w-10 h-10" />
+            <img src="/Images/512X512.png" alt="Ascivan" className="w-10 h-10" />
           </Link>
           <div className="flex items-center gap-4">
             <Link to="/support" className="text-gray-600 hover:text-gray-900 text-sm font-medium">Support</Link>
@@ -40,17 +40,17 @@ const About = () => {
         {/* Hero */}
         <section className="text-center mb-16">
           <div className="mb-4 inline-block px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-blue-600 font-semibold text-sm">About Loomiqe <span className="text-gray-400 font-normal">(pronounced "loo-meek")</span></p>
+            <p className="text-blue-600 font-semibold text-sm">About Ascivan <span className="text-gray-400 font-normal">(pronounced "loo-meek")</span></p>
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
             Proof over{' '}
             <span className="text-blue-600">pedigree</span>
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Loomiqe is where you build real experience, earn verified badges, and get discovered, wherever you are. Collaborate on real products from start to finish, earn credentials that prove your skills, and get found by recruiters, no matter your background or location.
+            Ascivan is where you build real experience, earn verified badges, and get discovered, wherever you are. Collaborate on real products from start to finish, earn credentials that prove your skills, and get found by recruiters, no matter your background or location.
           </p>
           <p className="text-gray-400 text-sm mt-3">
-            Loomiqe is pronounced <span className="text-gray-600 font-medium">"loo-meek."</span>
+            Ascivan is pronounced <span className="text-gray-600 font-medium">"loo-meek."</span>
           </p>
         </section>
 
@@ -62,7 +62,7 @@ const About = () => {
               Talent is everywhere, but the chance to prove it is not. Many capable people have the skills but no easy way to gain real, verifiable work experience that recruiters trust. Degrees, coursework, and competitions build ability; they rarely produce the one thing employers look for: proof that you've shipped a real product, with a team, from start to finish. We believe in proof over pedigree, that what you can build matters more than where you came from, what you studied, or where you are.
             </p>
             <p className="text-gray-600 leading-relaxed">
-              Loomiqe closes that gap. We simulate real-world experience — collaborative teams building products end to end — so you earn verified credentials and a portfolio of genuine work, then become visible to recruiters hiring for remote and onsite roles. No matter where you are in the world, your work speaks for you.
+              Ascivan closes that gap. We simulate real-world experience — collaborative teams building products end to end — so you earn verified credentials and a portfolio of genuine work, then become visible to recruiters hiring for remote and onsite roles. No matter where you are in the world, your work speaks for you.
             </p>
           </div>
         </section>
@@ -133,7 +133,7 @@ const About = () => {
               </div>
               <div>
                 <h3 className="text-gray-900 font-semibold text-base mb-2">Premium — $200/year or $20/month</h3>
-                <p className="text-gray-500 text-sm">Everything in Basic plus priority Talent Board ranking (premium members seen first), unlimited candidate messages, unlimited job posts, a verified company badge, and priority support at premium@loomiqe.com.</p>
+                <p className="text-gray-500 text-sm">Everything in Basic plus priority Talent Board ranking (premium members seen first), unlimited candidate messages, unlimited job posts, a verified company badge, and priority support at info.ascivan@gmail.com.</p>
               </div>
             </div>
           </div>
@@ -150,7 +150,7 @@ const About = () => {
               <div>
                 <h3 className="text-gray-900 font-bold text-lg">Opeyemi Adeniran</h3>
                 <p className="text-gray-500 text-sm mt-1">
-                  PhD candidate in Computer and Electrical Systems Engineering (AI focus) at Morgan State University. Building Loomiqe to give every tech professional — from first-time coders to senior architects, a place to grow through real work.
+                  PhD candidate in Computer and Electrical Systems Engineering (AI focus) at Morgan State University. Building Ascivan to give every tech professional — from first-time coders to senior architects, a place to grow through real work.
                 </p>
               </div>
             </div>
@@ -162,7 +162,7 @@ const About = () => {
           <p className="text-gray-500 mb-4">Ready to start building your tech career?</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link to="/login" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-all">
-              Join Loomiqe
+              Join Ascivan
             </Link>
             <button onClick={() => navigate('/support')} className="border border-gray-300 text-gray-700 font-medium px-6 py-3 rounded-lg hover:bg-gray-50 transition-all">
               Contact Support
@@ -179,7 +179,7 @@ const About = () => {
             <Link to="/privacy" className="hover:text-blue-600">Privacy</Link>
             <Link to="/support" className="hover:text-blue-600">Support</Link>
           </div>
-          <p className="text-gray-400 text-xs">{new Date().getFullYear()} Loomiqe. All rights reserved.</p>
+          <p className="text-gray-400 text-xs">{new Date().getFullYear()} Ascivan. All rights reserved.</p>
         </div>
       </footer>
     </div>

@@ -130,7 +130,7 @@ const AdminPanel = () => {
       sendPush({
         recipientUids: await getProjectRecipientUids(project),
         title: 'Project approved',
-        body: `"${title}" was approved by Loomiqe. Badges can now be assigned.`,
+        body: `"${title}" was approved by Ascivan. Badges can now be assigned.`,
         link: `/projects/${project.id}`,
       });
       toast.success('Approved. Owner and team notified.');
@@ -333,7 +333,7 @@ const AdminPanel = () => {
         leadConfirmed: false,
         submitterId: null,
         submitterEmail: null,
-        submitterName: 'Loomiqe (Auto-generated)',
+        submitterName: 'Ascivan (Auto-generated)',
         isCompanyPost: false,
         viewCount: 0,
         applicationCount: 0,
@@ -381,7 +381,7 @@ const AdminPanel = () => {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
       <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">Admin Dashboard</h1>
-      <p className="text-gray-500 text-sm mb-6">Manage projects, users, and content across Loomiqe.</p>
+      <p className="text-gray-500 text-sm mb-6">Manage projects, users, and content across Ascivan.</p>
 
       {/* Tabs */}
       <div className="flex flex-wrap gap-2 mb-6 border-b border-gray-200">

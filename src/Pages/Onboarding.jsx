@@ -200,7 +200,7 @@ const Onboarding = () => {
         updateData.githubUrl = formData.githubUrl.trim() || null;
       }
       await updateDoc(doc(db, 'users', currentUser.uid), updateData);
-      toast.success('Welcome to Loomiqe!');
+      toast.success('Welcome to Ascivan!');
       navigate('/dashboard', { replace: true });
     } catch (error) {
       console.error('Error saving onboarding:', error);
@@ -407,7 +407,7 @@ const Onboarding = () => {
         return (
           <div className="space-y-5">
             <div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 mb-1">What will you use Loomiqe for?</h2>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 mb-1">What will you use Ascivan for?</h2>
               <p className="text-gray-500 text-sm">Select all that apply.</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -433,8 +433,8 @@ const Onboarding = () => {
   return (
     <div className="min-h-screen overflow-x-hidden flex flex-col items-center justify-center px-4 py-8 sm:py-12 bg-white">
       <div className="flex items-center gap-2 mb-8">
-        <img src="/Images/512X512.png" alt="Loomiqe" className="w-8 h-8" onError={e => e.target.style.display='none'} />
-        <span className="text-gray-900 font-extrabold text-xl sm:text-2xl">Loomiqe</span>
+        <img src="/Images/512X512.png" alt="Ascivan" className="w-8 h-8" onError={e => e.target.style.display='none'} />
+        <span className="text-gray-900 font-extrabold text-xl sm:text-2xl">Ascivan</span>
       </div>
 
       <div className="mb-4">
@@ -481,7 +481,7 @@ const Onboarding = () => {
         ))}
       </div>
 
-      <p className="text-gray-400 text-xs mt-4">{new Date().getFullYear()} Loomiqe. All rights reserved.</p>
+      <p className="text-gray-400 text-xs mt-4">{new Date().getFullYear()} Ascivan. All rights reserved.</p>
     </div>
   );
 };

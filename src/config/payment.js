@@ -22,7 +22,7 @@ export const PAYMENT_CONFIG = {
   // PAYPAL_WEBHOOK_ID=xxxxx
 
   // Success redirect URL (Stripe/PayPal will redirect here after payment)
-  successUrl: 'https://loomiqe.com/premium-success',
+  successUrl: 'https://ascivan.com/premium-success',
 
   pricing: {
     yearly: 200,

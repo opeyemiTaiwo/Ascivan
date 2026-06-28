@@ -445,7 +445,7 @@ const CommunityPosts = () => {
         uid: id,
         firstName: '',
         lastName: '',
-        displayName: 'Loomiqe Member',
+        displayName: 'Ascivan Member',
         photoURL: null,
         initials: 'TM',
         profile: {}
@@ -1073,7 +1073,7 @@ const CommunityPosts = () => {
         <div className="min-h-screen bg-white flex items-center justify-center px-3 xs:px-4">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 xs:h-14 xs:w-14 sm:h-16 sm:w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p className="text-gray-400 text-sm xs:text-base">Loading Loomiqe Community...</p>
+            <p className="text-gray-400 text-sm xs:text-base">Loading Ascivan Community...</p>
           </div>
         </div>
       </>

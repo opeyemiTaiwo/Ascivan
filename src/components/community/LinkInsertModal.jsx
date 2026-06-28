@@ -1,9 +1,9 @@
-// src/components/community/LinkInsertModal.jsx - Loomiqe Link Insertion - FULLY RESPONSIVE
+// src/components/community/LinkInsertModal.jsx - Ascivan Link Insertion - FULLY RESPONSIVE
 
 import React, { useState } from 'react';
 
 /**
- * Link Insert Modal Component for Loomiqe
+ * Link Insert Modal Component for Ascivan
  * Allows users to insert markdown-formatted links into posts
  * Fully responsive for all screen sizes
  */

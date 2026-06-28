@@ -1,4 +1,4 @@
-// src/components/community/ReactionComponents.jsx - Loomiqe Reactions - FULLY RESPONSIVE
+// src/components/community/ReactionComponents.jsx - Ascivan Reactions - FULLY RESPONSIVE
 
 import React, { useState, useEffect } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -59,7 +59,7 @@ export const ReactionAvatars = ({ postId, userIds = [], reactionCount, onClick }
           uid: id,
           firstName: '',
           lastName: '',
-          displayName: 'Loomiqe Member',
+          displayName: 'Ascivan Member',
           photoURL: null,
           initials: 'TM',
           profile: {}
@@ -119,7 +119,7 @@ export const ReactionAvatars = ({ postId, userIds = [], reactionCount, onClick }
                 <div className="truncate">
                   {user.firstName && user.lastName 
                     ? `${user.firstName} ${user.lastName}`
-                    : user.displayName || 'Loomiqe Member'
+                    : user.displayName || 'Ascivan Member'
                   }
                 </div>
                 {user.profile?.title && (
@@ -242,7 +242,7 @@ export const ReactionsModal = ({ isOpen, onClose, postId, reactions, reactionCou
                     <p className="font-medium text-gray-900 truncate text-sm xs:text-base">
                       {user.firstName && user.lastName 
                         ? `${user.firstName} ${user.lastName}`
-                        : user.displayName || 'Loomiqe Member'
+                        : user.displayName || 'Ascivan Member'
                       }
                     </p>
                     {user.profile?.title && (
@@ -265,7 +265,7 @@ export const ReactionsModal = ({ isOpen, onClose, postId, reactions, reactionCou
         {/* Footer */}
         <div className="p-3 xs:p-3.5 sm:p-4 border-t border-blue-600/10 bg-gray-100">
           <p className="text-gray-400 text-[10px] xs:text-xs text-center">
-            Loomiqe Community
+            Ascivan Community
           </p>
         </div>
       </div>

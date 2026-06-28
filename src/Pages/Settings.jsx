@@ -288,7 +288,7 @@ const Settings = () => {
                   <p className="text-red-700 text-sm font-medium">This will permanently delete all your posts, badges, projects, and profile data.</p>
                   <div>
                     <label className="block text-red-600 text-xs font-semibold mb-1">Type DELETE to confirm:</label>
-                    <input type="text" value={deleteText} onChange={e => setDeleteText(e.target.value)} placeholder="DELETE" className="w-full border border-red-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-red-500" />
+                    <input type="text" value={deleteText} onChange={e => setDeleteText(e.target.value)} placeholder="DELETE" className="w-full border border-red-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 bg-white focus:outline-none focus:border-red-500" />
                   </div>
                   <div className="flex gap-2">
                     <button onClick={() => { setShowDeleteConfirm(false); setDeleteText(''); }} className="px-4 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50">Cancel</button>

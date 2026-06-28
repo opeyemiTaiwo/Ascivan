@@ -113,7 +113,7 @@ service cloud.firestore {
 
     // conversations + messages (participants only)
     match /conversations/{convId} {
-      allow read: if isSignedIn() && myUid() in resource.data.participants;
+      allow read: if isSignedIn() && (resource == null || myUid() in resource.data.participants);
       allow create: if isSignedIn() && myUid() in request.resource.data.participants;
       allow update: if isSignedIn() && myUid() in resource.data.participants;
       allow delete: if isAdmin();

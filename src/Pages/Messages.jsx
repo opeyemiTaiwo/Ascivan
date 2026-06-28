@@ -182,12 +182,16 @@ const Messages = () => {
     if (!targetUid) { toast.error('Could not start chat: missing user.'); return; }
     if (!currentUser || targetUid === currentUser.uid) return;
     try {
+      console.log('[chat] start', { me: currentUser.uid, target: targetUid });
       const convId  = getConversationId(currentUser.uid, targetUid);
       const convRef = doc(db, 'conversations', convId);
+      console.log('[chat] convId', convId);
       const convSnap = await getDoc(convRef);
+      console.log('[chat] read conv ok, exists=', convSnap.exists());
 
       // Fetch the target's profile up front (also used for the cap check)
       const otherSnap = await getDoc(doc(db, 'users', targetUid));
+      console.log('[chat] read target user ok, exists=', otherSnap.exists());
       const otherUser = otherSnap.exists() ? { uid: targetUid, ...otherSnap.data() } : { uid: targetUid };
 
       if (!convSnap.exists()) {
@@ -195,7 +199,9 @@ const Messages = () => {
         // enforce the monthly cap. Talent and Premium recruiters are never blocked.
         const targetIsTalent = otherUser.isCompany !== true;
         if (myData && targetIsTalent) {
+          console.log('[chat] checking outreach status…');
           const status = await getOutreachStatus(myData, currentUser.uid);
+          console.log('[chat] outreach status', status);
           if (status.limited) {
             toast.error(
               `You've reached your limit of ${FREE_RECRUITER_OUTREACH_LIMIT} new contacts this month. Upgrade to Premium for unlimited recruiter outreach.`
@@ -205,6 +211,7 @@ const Messages = () => {
           }
         }
 
+        console.log('[chat] creating conversation doc…');
         await setDoc(convRef, {
           participants:  [currentUser.uid, targetUid],
           lastMessage:   '',
@@ -212,10 +219,12 @@ const Messages = () => {
           createdAt:     serverTimestamp(),
           unreadBy:      { [currentUser.uid]: 0, [targetUid]: 0 },
         });
+        console.log('[chat] conversation created ok');
 
         // Record the outreach (no-op unless free recruiter → talent)
         if (otherUser.isCompany !== true) {
           await recordOutreach(myData, currentUser.uid);
+          console.log('[chat] recordOutreach done');
         }
       }
 
@@ -225,7 +234,7 @@ const Messages = () => {
       setMobileView('chat');
       setTimeout(() => inputRef.current?.focus(), 100);
     } catch (err) {
-      console.error('Error opening conversation:', err);
+      console.error('Error opening conversation:', err, 'code=', err?.code);
       toast.error('Could not start chat: ' + (err?.message || 'unknown error'));
     }
   };

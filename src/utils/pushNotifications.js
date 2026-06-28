@@ -12,11 +12,29 @@ import { toast } from 'react-toastify';
 // Stored as an env var so it isn't hard-coded; falls back to empty (no push).
 const VAPID_KEY = process.env.REACT_APP_FIREBASE_VAPID_KEY || '';
 
-// Register the service worker (once).
+// Register the service worker and wait until it is ACTIVE (required before getToken).
 async function registerSW() {
   if (!('serviceWorker' in navigator)) return null;
   try {
-    return await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+    const reg = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+
+    // If already active, we're done.
+    if (reg.active) return reg;
+
+    // Otherwise wait for the installing/waiting worker to reach "activated".
+    const worker = reg.installing || reg.waiting;
+    if (worker) {
+      await new Promise((resolve) => {
+        const done = () => { if (worker.state === 'activated') resolve(); };
+        worker.addEventListener('statechange', done);
+        // Safety timeout so we never hang forever.
+        setTimeout(resolve, 6000);
+        done();
+      });
+    }
+    // Belt-and-suspenders: also wait for the registration to be ready.
+    try { await navigator.serviceWorker.ready; } catch (e) { /* ignore */ }
+    return reg;
   } catch (e) {
     console.warn('SW registration failed:', e?.message);
     return null;
@@ -50,6 +68,10 @@ export async function enablePushForCurrentUser({ interactive = false } = {}) {
     }
 
     const registration = await registerSW();
+    // Wait until the service worker is fully active — getToken can fail if it isn't.
+    if (registration) {
+      try { await navigator.serviceWorker.ready; } catch (e) { /* ignore */ }
+    }
     const token = await getToken(messaging, {
       vapidKey: VAPID_KEY,
       serviceWorkerRegistration: registration || undefined,
@@ -63,7 +85,7 @@ export async function enablePushForCurrentUser({ interactive = false } = {}) {
     return true;
   } catch (e) {
     console.error('enablePush failed:', e);
-    if (interactive) toast.error('Could not enable notifications.');
+    if (interactive) toast.error('Could not enable notifications: ' + (e?.message || e?.code || 'unknown error'));
     return false;
   }
 }

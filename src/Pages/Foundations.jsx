@@ -32,25 +32,33 @@ const Foundations = () => {
   const [myRatings, setMyRatings] = useState({}); // {contributionId: stars}
 
   useEffect(() => {
-    if (!currentUser) return;
+    if (!currentUser) { setLoading(false); return; }
+    let active = true;
     (async () => {
+      // Always set SOME content first so the page renders even if the user
+      // fetch or community query fails (e.g. rules not yet published).
       try {
         const snap = await getDoc(doc(db, 'users', currentUser.uid));
         const data = snap.exists() ? snap.data() : {};
+        if (!active) return;
         setUserData(data);
         const trackId = data.primarySkillTrack || 'notsure';
         setTrack(trackId);
         setContent(foundationsForTrack(trackId));
         const prog = (data.foundationsProgress && data.foundationsProgress[trackId]) || {};
         setCompleted(prog);
-        // Load approved community lessons for this track.
         try {
           const items = await getApprovedForTrack(trackId);
-          setCommunity(items);
-        } catch (_) {}
-      } catch (e) { console.error(e); }
-      setLoading(false);
+          if (active) setCommunity(items);
+        } catch (_) { /* community optional; ignore */ }
+      } catch (e) {
+        console.error('Foundations load error:', e);
+        // Fall back to the discovery checklist so the page is never blank.
+        if (active) { setTrack('notsure'); setContent(foundationsForTrack('notsure')); }
+      }
+      if (active) setLoading(false);
     })();
+    return () => { active = false; };
   }, [currentUser]);
 
   const requiredItems = content?.items.filter(it => !it.optional) || [];

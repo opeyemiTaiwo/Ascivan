@@ -9,10 +9,6 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
-// Badge levels in ascending order (from ProjectCompletion).
-const LEVEL_ORDER = ['Novice', 'Associate', 'Advanced', 'Expert'];
-const meetsAssociate = (level) => LEVEL_ORDER.indexOf(level) >= LEVEL_ORDER.indexOf('Associate');
-
 // Map a track id (techdev) to the badge category used on badges (TechDev / legacy techmo).
 // Badges store `category` like 'TechDev'; tracks use ids like 'techdev'. Normalise.
 const trackToCategory = (trackId) => {
@@ -24,29 +20,46 @@ const trackToCategory = (trackId) => {
   return [trackId, `Tech${base}`, `Tech${base.charAt(0).toUpperCase()}${base.slice(1)}`];
 };
 
+// Count how many badges a user has earned in a given category (case-insensitive,
+// matching on category/id/title against the track's known forms).
+const countBadgesForTrack = (userData, trackId) => {
+  if (!userData || !Array.isArray(userData.badges)) return 0;
+  const forms = (trackToCategory(trackId) || []).map(s => s.toLowerCase());
+  return userData.badges.filter(b => {
+    const cat = (b.category || b.id || '').toString().toLowerCase();
+    const title = (b.title || '').toString().toLowerCase();
+    return forms.includes(cat) || forms.includes(title);
+  }).length;
+};
+
+// Derive level from count (matches ProjectCompletion: Novice 1, Associate 2-5,
+// Advanced 6-10, Expert 11+). Associate+ means 2+ badges in that track.
+const levelFromCount = (n) => n >= 11 ? 'Expert' : n >= 6 ? 'Advanced' : n >= 2 ? 'Associate' : n >= 1 ? 'Novice' : null;
+
+// Public: the user's current level in a track, derived from badge count.
+export const levelForTrack = (userData, trackId) => levelFromCount(countBadgesForTrack(userData, trackId));
+
 // Which tracks is this user eligible to contribute to? Returns array of track ids.
-// `userData` is the user doc (has `badges` array with {category, level}).
+// Eligible = Associate+ (2+ badges) in a track. Derived from COUNT, not the frozen
+// per-badge level (which never upgrades after award).
 export const eligibleTracks = (userData) => {
   if (!userData || !Array.isArray(userData.badges)) return [];
   const eligible = new Set();
+  // Collect all distinct categories present on the user's badges.
+  const cats = new Set();
   userData.badges.forEach(b => {
-    if (b && b.level && meetsAssociate(b.level)) {
-      // Store the category in a normalised lowercase track id.
-      const cat = (b.category || b.id || '').toString();
-      eligible.add(cat);
-    }
+    const c = (b.category || b.id || '').toString();
+    if (c) cats.add(c);
+  });
+  cats.forEach(cat => {
+    if (countBadgesForTrack(userData, cat) >= 2) eligible.add(cat);
   });
   return Array.from(eligible);
 };
 
-// Is the user eligible for a specific track?
+// Is the user eligible for a specific track? (Associate+ = 2+ badges in it.)
 export const isEligibleForTrack = (userData, trackId) => {
-  if (!userData || !Array.isArray(userData.badges)) return false;
-  const forms = (trackToCategory(trackId) || []).map(s => s.toLowerCase());
-  return userData.badges.some(b =>
-    b && b.level && meetsAssociate(b.level) &&
-    forms.includes((b.category || b.id || '').toString().toLowerCase())
-  );
+  return countBadgesForTrack(userData, trackId) >= 2;
 };
 
 // Submit a new contribution (status: pending).

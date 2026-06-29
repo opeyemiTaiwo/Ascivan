@@ -11,7 +11,7 @@ import { doc, getDoc, updateDoc, setDoc, addDoc, collection, serverTimestamp } f
 import { db } from '../firebase/config';
 import { foundationsForTrack } from '../utils/foundationsContent';
 import {
-  isEligibleForTrack, submitContribution, getApprovedForTrack, rateContribution,
+  isEligibleForTrack, submitContribution, getApprovedForTrack, rateContribution, levelForTrack,
 } from '../utils/foundationsContributions';
 import { toast } from 'react-toastify';
 
@@ -95,7 +95,8 @@ const Foundations = () => {
     setSubmitting(true);
     try {
       // Find the author's badge level for this track (for display).
-      const badge = (userData?.badges || []).find(b => (b.category || b.id || '').toString().toLowerCase().includes((track || '').replace(/^tech/i, '').toLowerCase()));
+      // Author's current level in this track, derived live from their badge count.
+      const authorLevel = levelForTrack(userData, track);
       await submitContribution({
         trackId: track,
         title: cForm.title,
@@ -103,7 +104,7 @@ const Foundations = () => {
         description: cForm.description,
         authorId: currentUser.uid,
         authorName: userData?.displayName || 'A member',
-        authorBadgeLevel: badge?.level || null,
+        authorBadgeLevel: authorLevel,
       });
       toast.success('Submitted for review. We\'ll notify you once it\'s approved.');
       setCForm({ title: '', url: '', description: '' });

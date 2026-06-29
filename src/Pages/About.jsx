@@ -40,7 +40,7 @@ const About = () => {
         {/* Hero */}
         <section className="text-center mb-16">
           <div className="mb-4 inline-block px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-blue-600 font-semibold text-sm">About Ascivan <span className="text-gray-400 font-normal">(pronounced "loo-meek")</span></p>
+            <p className="text-blue-600 font-semibold text-sm">About Ascivan</p>
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
             Proof over{' '}
@@ -48,9 +48,6 @@ const About = () => {
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             Ascivan is where you build real experience, earn verified badges, and get discovered, wherever you are. Collaborate on real products from start to finish, earn credentials that prove your skills, and get found by recruiters, no matter your background or location.
-          </p>
-          <p className="text-gray-400 text-sm mt-3">
-            Ascivan is pronounced <span className="text-gray-600 font-medium">"loo-meek."</span>
           </p>
         </section>
 

@@ -188,6 +188,25 @@ service cloud.firestore {
     match /directory_access/{id} { allow read, write: if isSignedIn(); }
 
     match /ai_career_content/{id} { allow read: if isSignedIn(); allow write: if isAdmin(); }
+
+    // Community Foundations lessons: anyone signed in can read & submit; authors edit
+    // their own; admins moderate. Ratings subcollection: one per user.
+    match /foundationsContributions/{id} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.authorId == myUid();
+      // Authors/admins can edit content; any signed-in user may update only the
+      // rating aggregate fields (so learners can rate without owning the doc).
+      allow update: if isSignedIn() && (
+        resource.data.authorId == myUid() || isAdmin() ||
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['ratingSum', 'ratingCount'])
+      );
+      allow delete: if isAdmin();
+      match /ratings/{uid} {
+        allow read: if isSignedIn();
+        allow write: if isSignedIn() && uid == myUid();
+      }
+    }
+
     match /career_analyses/{id} { allow read, write: if isSignedIn(); }
     match /client_projects/{id} { allow read, write: if isSignedIn(); }
 

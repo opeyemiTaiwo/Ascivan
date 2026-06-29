@@ -17,6 +17,7 @@ import { seedDummyActivity, deleteDummyActivity, countDummyActivity } from '../.
 import { REVIEW_STATUS, approveProjectReview, requestChanges, rejectProjectReview, getProjectMemberEmails } from '../../utils/projectReview';
 import { clearAllTestData } from '../../utils/adminDataReset';
 import { batchGenerateProjects } from '../../utils/batchGenerateProjects';
+import { getReviewQueue, reviewContribution } from '../../utils/foundationsContributions';
 import { sendPush } from '../../utils/pushNotifications';
 
 const fmtDate = (ts) => {
@@ -66,6 +67,36 @@ const AdminPanel = () => {
   const [clearing, setClearing] = useState(false);
   const [batchCount, setBatchCount] = useState(24);
   const [batchRunning, setBatchRunning] = useState(false);
+  const [fQueue, setFQueue] = useState([]);
+  const [fLoading, setFLoading] = useState(false);
+
+  const loadFQueue = useCallback(async () => {
+    setFLoading(true);
+    try { setFQueue(await getReviewQueue()); } catch (_) {}
+    setFLoading(false);
+  }, []);
+
+  const handleReview = async (id, action) => {
+    let note = '';
+    if (action === 'changes') {
+      note = window.prompt('What needs to change? (the contributor can revise and resubmit)') || '';
+      if (!note) return;
+    }
+    if (action === 'reject' && !window.confirm('Reject this contribution? The author cannot resubmit a rejected item.')) return;
+    try {
+      await reviewContribution(id, action, note);
+      // Notify the author of the outcome.
+      const item = fQueue.find(q => q.id === id);
+      if (item?.authorId) {
+        const msg = action === 'approve' ? `Your Foundations lesson "${item.title}" was approved and is now live.`
+          : action === 'changes' ? `Your Foundations lesson "${item.title}" needs changes: ${note}`
+          : `Your Foundations lesson "${item.title}" was not accepted.`;
+        try { await addDoc(collection(db, 'notifications'), { userId: item.authorId, type: action === 'approve' ? 'contribution_approved' : 'contribution_review', message: msg, isRead: false, createdAt: serverTimestamp() }); } catch (_) {}
+      }
+      toast.success(action === 'approve' ? 'Approved and published.' : action === 'changes' ? 'Sent back for changes.' : 'Rejected.');
+      loadFQueue();
+    } catch (e) { toast.error('Action failed: ' + e.message); }
+  };
 
   const runBatchGenerate = async () => {
     const n = parseInt(batchCount, 10) || 24;
@@ -129,6 +160,7 @@ const AdminPanel = () => {
   }, []);
 
   useEffect(() => { if (tab === 'reviews' && isAdmin) loadReviews(); }, [tab, isAdmin, loadReviews]);
+  useEffect(() => { if (tab === 'foundations' && isAdmin) loadFQueue(); }, [tab, isAdmin, loadFQueue]);
 
   // Collect owner + approved member uids for a project (for push notifications).
   const getProjectRecipientUids = async (project) => {
@@ -393,6 +425,7 @@ const AdminPanel = () => {
     ['projects', 'Projects'],
     ['users', 'Users'],
     ['generate', 'Generate'],
+    ['foundations', 'Foundations'],
     ['seed', 'Seed'],
     ['moderation', 'Moderation'],
     ['danger', 'Danger Zone'],
@@ -598,6 +631,36 @@ const AdminPanel = () => {
       )}
 
       {/* GENERATE */}
+      {!loadingData && tab === 'foundations' && (
+        <div>
+          <h2 className="text-lg font-bold text-gray-900 mb-1">Foundations contributions</h2>
+          <p className="text-gray-500 text-sm mb-4">Review community-submitted lessons. Approve to publish, request changes (author can resubmit), or reject.</p>
+          {fLoading ? <p className="text-gray-400 text-sm">Loading…</p> : fQueue.length === 0 ? (
+            <p className="text-gray-400 text-sm">No pending contributions.</p>
+          ) : (
+            <div className="space-y-3">
+              {fQueue.map(c => (
+                <div key={c.id} className="bg-white border border-gray-200 rounded-xl p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="font-bold text-gray-900 text-sm">{c.title}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">By {c.authorName}{c.authorBadgeLevel ? ` · ${c.authorBadgeLevel}` : ''} · track: {c.trackId}</p>
+                      <p className="text-sm text-gray-600 mt-1">{c.description}</p>
+                      <a href={c.url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 break-all">{c.url}</a>
+                    </div>
+                  </div>
+                  <div className="flex gap-2 mt-3">
+                    <button onClick={() => handleReview(c.id, 'approve')} className="bg-green-600 hover:bg-green-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg">Approve</button>
+                    <button onClick={() => handleReview(c.id, 'changes')} className="bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg">Request changes</button>
+                    <button onClick={() => handleReview(c.id, 'reject')} className="bg-red-600 hover:bg-red-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg">Reject</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {!loadingData && tab === 'generate' && (
         <div>
           {/* Batch generator — top up the board with varied starter projects in one click */}

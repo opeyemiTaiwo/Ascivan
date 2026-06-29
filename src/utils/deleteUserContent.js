@@ -395,6 +395,23 @@ export const deleteAllUserContent = async (userId, userEmail) => {
     }
 
     // ─────────────────────────────────────────────
+    // 10b. PRESERVE FOUNDATIONS CONTRIBUTIONS (do NOT delete)
+    // Published community lessons remain part of Ascivan's Foundations, credited to
+    // the author. We keep the content but mark it so the UI degrades gracefully
+    // (name stays as plain credit, profile link is no longer rendered).
+    // ─────────────────────────────────────────────
+    try {
+      const contribSnap = await getDocs(query(collection(db, 'foundationsContributions'), where('authorId', '==', userId)));
+      for (const c of contribSnap.docs) {
+        await updateDoc(c.ref, { authorLeft: true });
+      }
+      console.log(`✅ Preserved ${contribSnap.size} Foundations contributions (author left)`);
+    } catch (error) {
+      console.error('Error preserving contributions:', error);
+      summary.errors.push(`Contributions: ${error.message}`);
+    }
+
+    // ─────────────────────────────────────────────
     // 11. DELETE USER DOCUMENT FROM 'users' COLLECTION
     // ─────────────────────────────────────────────
     try {

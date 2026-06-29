@@ -43,6 +43,7 @@ const MyWorkspaces = lazy(() => import('./Pages/projects/MyWorkspaces'));
 const TalentBoard = lazy(() => import('./Pages/TalentBoard'));
 const Jobs = lazy(() => import('./Pages/Jobs'));
 const ProofWall = lazy(() => import('./Pages/ProofWall'));
+const Foundations = lazy(() => import('./Pages/Foundations'));
 const PostJobs = lazy(() => import('./Pages/PostJobs'));
 const ProjectVault = lazy(() => import('./Pages/ProjectVault'));
 const Settings = lazy(() => import('./Pages/Settings'));
@@ -136,6 +137,7 @@ function App() {
 
                 <Route path="/community" element={<Navigate to="/proof-wall" replace />} />
                 <Route path="/proof-wall" element={<SidebarRoute><ProofWall /></SidebarRoute>} />
+                <Route path="/foundations" element={<SidebarRoute><Foundations /></SidebarRoute>} />
                 <Route path="/community/submit" element={<Navigate to="/proof-wall" replace />} />
                 <Route path="/community/post/:postId" element={<Navigate to="/proof-wall" replace />} />
                 <Route path="/post/:postId" element={<SidebarRoute><SinglePost /></SidebarRoute>} />

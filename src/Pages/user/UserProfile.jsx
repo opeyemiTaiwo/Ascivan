@@ -26,6 +26,7 @@ const UserProfile = () => {
   const userParam = userEmail ? decodeURIComponent(userEmail).trim() : '';
 
   const [profile, setProfile] = useState(null);
+  const [teaching, setTeaching] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [completedCount, setCompletedCount] = useState(0);
@@ -76,6 +77,14 @@ const UserProfile = () => {
 
         if (userData) {
           setProfile(userData);
+          // Load the member's community teaching rating (if any).
+          try {
+            const { getAuthorTeachingRating } = await import('../../utils/foundationsContributions');
+            if (userData.uid) {
+              const t = await getAuthorTeachingRating(userData.uid);
+              if (t.lessons > 0) setTeaching(t);
+            }
+          } catch (_) {}
 
           // Fetch completed projects count
           try {
@@ -239,6 +248,12 @@ const UserProfile = () => {
                 <p className="text-xl font-bold text-gray-900">{completedCount}</p>
                 <p className="text-gray-500 text-xs">Certificates</p>
               </div>
+              {teaching && (
+                <div className="bg-orange-50 border border-orange-200 rounded-lg px-4 py-3 text-center">
+                  <p className="text-xl font-bold text-orange-600">★ {teaching.avg ? teaching.avg.toFixed(1) : '-'}</p>
+                  <p className="text-gray-500 text-xs">Teaching{teaching.count ? ` (${teaching.count})` : ''}</p>
+                </div>
+              )}
               {profile.primarySkillTrack && (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 text-center">
                   <p className="text-sm font-semibold text-blue-700">{skillTrackLabels[profile.primarySkillTrack] || profile.primarySkillTrack}</p>

@@ -98,6 +98,18 @@ const DashboardOverview = () => {
       <div className="max-w-6xl mx-auto">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Dashboard Overview</h1>
 
+        {/* Cold-start: nudge unfinished Foundations first (learn, then projects). */}
+        {!loading && !profileData?.isCompany && ongoingProjects.length === 0 && completedProjects.length === 0 &&
+          !(profileData?.foundationsComplete && profileData.foundationsComplete[profileData?.primarySkillTrack]) && (
+          <div className="bg-gradient-to-br from-blue-50 to-orange-50 border border-blue-200 rounded-xl p-6 mb-6">
+            <h2 className="text-lg font-bold text-gray-900 mb-1">Start with your Foundations</h2>
+            <p className="text-gray-600 text-sm mb-4">Before you join a project, complete a short set of foundational lessons for your track. It only takes a little while, and then you'll be ready to contribute.</p>
+            <button onClick={() => navigate('/foundations')} className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-all">
+              Go to Foundations
+            </button>
+          </div>
+        )}
+
         {/* Cold-start: show "find your first project" only if the user has joined none yet. */}
         {!loading && ongoingProjects.length === 0 && completedProjects.length === 0 && !profileData?.isCompany && (
           <FindFirstProject profile={profileData} />

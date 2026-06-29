@@ -68,6 +68,7 @@ const AppLayout = ({ children }) => {
 
   const navItems = [
     { path: '/dashboard', label: 'Home' },
+    { path: '/foundations', label: 'Foundations' },
     { path: '/proof-wall', label: 'Proof Wall' },
     { path: '/projects', label: 'Projects' },
     { path: '/jobs', label: 'Jobs' },

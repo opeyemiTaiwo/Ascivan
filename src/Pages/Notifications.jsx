@@ -15,9 +15,12 @@ const NotificationsPage = () => {
 
   useEffect(() => {
     if (!currentUser) { navigate('/login'); return; }
-    const q = query(collection(db, 'notifications'), where('userId', '==', currentUser.uid), orderBy('createdAt', 'desc'));
+    const q = query(collection(db, 'notifications'), where('userId', '==', currentUser.uid));
     const unsub = onSnapshot(q, (snap) => {
-      setNotifications(snap.docs.map(d => ({ id: d.id, ...d.data(), createdAt: d.data().createdAt?.toDate?.() || new Date() })));
+      const list = snap.docs
+        .map(d => ({ id: d.id, ...d.data(), createdAt: d.data().createdAt?.toDate?.() || new Date() }))
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+      setNotifications(list);
       setLoading(false);
     });
     return unsub;

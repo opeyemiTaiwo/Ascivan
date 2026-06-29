@@ -29,8 +29,7 @@ const NotificationBell = () => {
 
     const notificationsQuery = query(
       collection(db, 'notifications'),
-      where('userId', '==', currentUser.uid),
-      orderBy('createdAt', 'desc')
+      where('userId', '==', currentUser.uid)
     );
 
     const unsubscribe = onSnapshot(notificationsQuery, (snapshot) => {
@@ -38,7 +37,8 @@ const NotificationBell = () => {
         id: doc.id,
         ...doc.data(),
         createdAt: doc.data().createdAt?.toDate ? doc.data().createdAt.toDate() : new Date()
-      }));
+      }))
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
       setNotifications(notificationsData);
       setUnreadCount(notificationsData.filter(n => !n.isRead).length);

@@ -45,12 +45,11 @@ const MyJobPosts = () => {
   useEffect(() => {
     if (!currentUser) return;
 
+    // Single where() so no composite index is needed (fresh projects lack them).
+    // Exclude 'deleted' and sort client-side.
     const postsQuery = query(
       collection(db, 'hub_posts'),
-      where('posterId', '==', currentUser.uid),
-      where('status', '!=', 'deleted'),
-      orderBy('status'),
-      orderBy('createdAt', 'desc')
+      where('posterId', '==', currentUser.uid)
     );
 
     const unsubscribe = onSnapshot(postsQuery, (snapshot) => {
@@ -59,8 +58,10 @@ const MyJobPosts = () => {
         ...doc.data(),
         createdAt: doc.data().createdAt?.toDate(),
         expiresAt: doc.data().expiresAt?.toDate()
-      }));
-      
+      }))
+      .filter(p => p.status !== 'deleted')
+      .sort((a, b) => (b.createdAt?.getTime?.() || 0) - (a.createdAt?.getTime?.() || 0));
+
       setMyPosts(posts);
       setLoading(false);
     }, (error) => {

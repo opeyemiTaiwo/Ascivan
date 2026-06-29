@@ -65,8 +65,7 @@ const AdminDashboard = () => {
     
     const completionsQuery = query(
       collection(db, 'project_completion_requests'),
-      where('status', '==', 'pending_admin_approval'),
-      orderBy('submittedForApprovalAt', 'desc')
+      where('status', '==', 'pending_admin_approval')
     );
     
     const unsubscribe = onSnapshot(completionsQuery, async (snapshot) => {
@@ -85,11 +84,10 @@ const AdminDashboard = () => {
           
           const membersQuery = query(
             collection(db, 'group_members'),
-            where('groupId', '==', completionData.groupId),
-            where('status', '==', 'active')
+            where('groupId', '==', completionData.groupId)
           );
           const membersSnapshot = await getDocs(membersQuery);
-          completionData.teamSize = membersSnapshot.docs.length;
+          completionData.teamSize = membersSnapshot.docs.filter(d => d.data().status === 'active').length;
           
         } catch (error) {
           console.error('Error fetching completion details:', error);

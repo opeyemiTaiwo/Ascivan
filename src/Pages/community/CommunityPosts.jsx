@@ -218,14 +218,12 @@ const CommunityPosts = () => {
           q = query(
             collection(db, 'posts'),
             where('authorId', '==', currentUser.uid),
-            orderBy('createdAt', 'desc'),
             limit(POSTS_PER_PAGE)
           );
         } else if (viewMode === 'mentions' && currentUser) {
           q = query(
             collection(db, 'posts'),
             where('taggedUserIds', 'array-contains', currentUser.uid),
-            orderBy('createdAt', 'desc'),
             limit(POSTS_PER_PAGE)
           );
         } else {
@@ -243,7 +241,9 @@ const CommunityPosts = () => {
             createdAt: doc.data().createdAt?.toDate ? doc.data().createdAt.toDate() : new Date(doc.data().createdAt || Date.now()),
             updatedAt: doc.data().updatedAt?.toDate ? doc.data().updatedAt.toDate() : null,
             authorId: doc.data().authorId
-          }));
+          }))
+          // Sort newest-first client-side (filtered views drop orderBy to avoid index need).
+          .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
           
           setPosts(postsData);
           setLastDoc(snapshot.docs[snapshot.docs.length - 1]);
@@ -283,7 +283,14 @@ const CommunityPosts = () => {
     try {
       await safeFirestoreOperation(async () => {
         let q;
-        
+
+        // Filtered views (myPosts/mentions) drop orderBy to avoid composite indexes,
+        // so cursor pagination doesn't apply — they show the first page only.
+        if ((viewMode === 'myPosts' || viewMode === 'mentions')) {
+          setHasMore(false);
+          return;
+        }
+
         if (viewMode === 'myPosts' && currentUser) {
           q = query(
             collection(db, 'posts'),

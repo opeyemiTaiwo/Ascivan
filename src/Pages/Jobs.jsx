@@ -43,10 +43,11 @@ const Jobs = () => {
   useEffect(() => {
     if (authLoading || !currentUser) return;
 
+    // No orderBy in the query so it never depends on a composite index
+    // (which may not exist yet on a fresh project). Sort client-side instead.
     const q = query(
       collection(db, 'hub_posts'),
-      where('status', 'in', ['active', 'closed']),
-      orderBy('createdAt', 'desc')
+      where('status', 'in', ['active', 'closed'])
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -62,7 +63,9 @@ const Jobs = () => {
         const isJob = !p.category || p.category === 'job';
         const notExpired = !p.expiresAt || new Date() < p.expiresAt;
         return isJob && notExpired;
-      });
+      })
+      // Newest first, sorted in JS (handles missing createdAt gracefully).
+      .sort((a, b) => (b.createdAt?.getTime?.() || 0) - (a.createdAt?.getTime?.() || 0));
 
       setPosts(data);
       setFilteredPosts(data);

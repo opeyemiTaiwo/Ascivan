@@ -113,8 +113,7 @@ const Messages = () => {
     if (!currentUser) return;
     const q = query(
       collection(db, 'conversations'),
-      where('participants', 'array-contains', currentUser.uid),
-      orderBy('lastMessageAt', 'desc')
+      where('participants', 'array-contains', currentUser.uid)
     );
     const unsub = onSnapshot(q, async (snap) => {
       try {
@@ -131,6 +130,8 @@ const Messages = () => {
             return { id: d.id, ...data, otherUser: userCacheRef.current[otherId] };
           })
         );
+        // Sort newest-first client-side (avoids needing a composite index).
+        convs.sort((a, b) => (b.lastMessageAt?.seconds || 0) - (a.lastMessageAt?.seconds || 0));
         setConversations(convs);
         const counts = {};
         convs.forEach(c => {

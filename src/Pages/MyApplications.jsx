@@ -34,13 +34,13 @@ const MyApplications = () => {
 
     const appQuery = query(
       collection(db, 'applications'),
-      where('userId', '==', currentUser.uid),
-      orderBy('submittedAt', 'desc')
+      where('userId', '==', currentUser.uid)
     );
 
     const unsub = onSnapshot(appQuery,
       (snap) => {
-        const apps = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const apps = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+          .sort((a, b) => (b.submittedAt?.seconds || 0) - (a.submittedAt?.seconds || 0));
         setApplications(apps);
         setLoading(false);
       },

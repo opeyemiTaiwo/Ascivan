@@ -28,61 +28,37 @@ const ProjectVault = () => {
     if (!currentUser) return;
     const fetchProjects = async () => {
       try {
-        const allCompleted = new Map();
         const allDisputed = [];
 
-        // Completed projects where user is a member
+        // Fetch ALL projects the user is involved in with just two single-field
+        // queries (no composite index needed), then categorize client-side.
+        const involved = new Map();
         try {
-          const memberQ = query(collection(db, 'projects'), where('members', 'array-contains', currentUser.uid), where('status', '==', 'completed'));
-          const memberSnap = await getDocs(memberQ);
-          memberSnap.docs.forEach(d => allCompleted.set(d.id, { id: d.id, ...d.data(), isOwner: false }));
-        } catch (e) { console.log('Member completed query:', e.message); }
+          const memberSnap = await getDocs(query(collection(db, 'projects'), where('members', 'array-contains', currentUser.uid)));
+          memberSnap.docs.forEach(d => involved.set(d.id, { id: d.id, ...d.data(), isOwner: false }));
+        } catch (e) { console.log('Member projects query:', e.message); }
+        try {
+          const ownerSnap = await getDocs(query(collection(db, 'projects'), where('submitterId', '==', currentUser.uid)));
+          ownerSnap.docs.forEach(d => involved.set(d.id, { id: d.id, ...d.data(), isOwner: true }));
+        } catch (e) { console.log('Owner projects query:', e.message); }
 
-        // Completed projects where user is the owner
-        try {
-          const ownerQ = query(collection(db, 'projects'), where('submitterId', '==', currentUser.uid), where('status', '==', 'completed'));
-          const ownerSnap = await getDocs(ownerQ);
-          ownerSnap.docs.forEach(d => allCompleted.set(d.id, { id: d.id, ...d.data(), isOwner: true }));
-        } catch (e) { console.log('Owner completed query:', e.message); }
+        const all = Array.from(involved.values());
 
-        const completed = Array.from(allCompleted.values());
-
-        // Rejected projects — show here too, marked rejected, with no certificate.
-        const allRejected = new Map();
-        try {
-          const rMemberQ = query(collection(db, 'projects'), where('members', 'array-contains', currentUser.uid), where('reviewStatus', '==', 'rejected'));
-          const rMemberSnap = await getDocs(rMemberQ);
-          rMemberSnap.docs.forEach(d => allRejected.set(d.id, { id: d.id, ...d.data(), isOwner: false, isRejected: true }));
-        } catch (e) { console.log('Member rejected query:', e.message); }
-        try {
-          const rOwnerQ = query(collection(db, 'projects'), where('submitterId', '==', currentUser.uid), where('reviewStatus', '==', 'rejected'));
-          const rOwnerSnap = await getDocs(rOwnerQ);
-          rOwnerSnap.docs.forEach(d => allRejected.set(d.id, { id: d.id, ...d.data(), isOwner: true, isRejected: true }));
-        } catch (e) { console.log('Owner rejected query:', e.message); }
-        allRejected.forEach(v => completed.push(v));
+        // Completed + rejected go on the "completed" wall.
+        const completed = all
+          .filter(p => p.status === 'completed' || p.reviewStatus === 'rejected')
+          .map(p => p.reviewStatus === 'rejected' ? { ...p, isRejected: true } : p);
 
         completed.sort((a, b) => (b.completedAt?.toDate?.() || 0) - (a.completedAt?.toDate?.() || 0));
         setCompletedProjects(completed);
 
-        // Disputed projects — member
-        try {
-          const dMemberQ = query(collection(db, 'projects'), where('members', 'array-contains', currentUser.uid), where('status', '==', 'awaiting_payment_confirmation'));
-          const dMemberSnap = await getDocs(dMemberQ);
-          dMemberSnap.docs.forEach(d => {
-            const data = { id: d.id, ...d.data() };
-            if (Object.values(data.paymentConfirmations || {}).some(c => c.status === 'disputed')) allDisputed.push(data);
-          });
-        } catch (e) {}
-
-        // Disputed projects — owner
-        try {
-          const dOwnerQ = query(collection(db, 'projects'), where('submitterId', '==', currentUser.uid), where('status', '==', 'awaiting_payment_confirmation'));
-          const dOwnerSnap = await getDocs(dOwnerQ);
-          dOwnerSnap.docs.forEach(d => {
-            const data = { id: d.id, ...d.data(), isOwner: true };
-            if (Object.values(data.paymentConfirmations || {}).some(c => c.status === 'disputed') && !allDisputed.find(p => p.id === d.id)) allDisputed.push(data);
-          });
-        } catch (e) {}
+        // Disputed projects (awaiting payment confirmation with a disputed entry).
+        all.filter(p => p.status === 'awaiting_payment_confirmation').forEach(data => {
+          if (Object.values(data.paymentConfirmations || {}).some(c => c.status === 'disputed')
+              && !allDisputed.find(p => p.id === data.id)) {
+            allDisputed.push(data);
+          }
+        });
 
         setDisputedProjects(allDisputed);
       } catch (e) { console.error('Error fetching projects:', e); }

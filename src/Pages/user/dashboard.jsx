@@ -42,34 +42,34 @@ const DashboardOverview = () => {
           setStats(prev => ({ ...prev, badgesEarned: (data.badges || []).length }));
         }
 
-        // Fetch ongoing projects
+        // Fetch ongoing projects (single where to avoid composite index; filter+sort in JS)
         try {
           const projectsQ = query(
             collection(db, 'projects'),
-            where('members', 'array-contains', currentUser.uid),
-            where('status', '==', 'active'),
-            orderBy('createdAt', 'desc'),
-            limit(5)
+            where('members', 'array-contains', currentUser.uid)
           );
           const projectsSnap = await getDocs(projectsQ);
-          const projects = projectsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+          const projects = projectsSnap.docs.map(d => ({ id: d.id, ...d.data() }))
+            .filter(p => p.status === 'active')
+            .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
+            .slice(0, 5);
           setOngoingProjects(projects);
           setStats(prev => ({ ...prev, ongoingProjects: projects.length }));
         } catch (e) {
-          console.log('Projects query needs index, skipping:', e.message);
+          console.log('Projects query skipped:', e.message);
         }
 
-        // Fetch completed projects count
+        // Fetch completed projects (single where; filter in JS)
         try {
           const completedQ = query(
             collection(db, 'projects'),
-            where('members', 'array-contains', currentUser.uid),
-            where('status', '==', 'completed')
+            where('members', 'array-contains', currentUser.uid)
           );
           const completedSnap = await getDocs(completedQ);
-          const completedList = completedSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+          const completedList = completedSnap.docs.map(d => ({ id: d.id, ...d.data() }))
+            .filter(p => p.status === 'completed');
           setCompletedProjects(completedList.slice(0, 5));
-          setStats(prev => ({ ...prev, projectsCompleted: completedSnap.size }));
+          setStats(prev => ({ ...prev, projectsCompleted: completedList.length }));
         } catch (e) {
           console.log('Completed projects query skipped:', e.message);
         }

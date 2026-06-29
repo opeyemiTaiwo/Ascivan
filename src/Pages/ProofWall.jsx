@@ -370,8 +370,34 @@ const ProofWall = () => {
                       </div>
                     </div>
                   ) : (
-                    a.type === 'update' && a.text && (
-                      <div className="text-sm text-gray-600 mt-1.5 leading-relaxed">{a.text}</div>
+                    a.type === 'update' && (
+                      <div className="mt-1.5">
+                        {a.text && <div className="text-sm text-gray-600 leading-relaxed">{a.text}</div>}
+
+                        {/* @mentions */}
+                        {Array.isArray(a.mentions) && a.mentions.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 mt-2">
+                            {a.mentions.map((m, i) => (
+                              <span key={m.uid || i} className="text-xs font-medium px-2 py-0.5 bg-blue-50 text-blue-600 rounded-full">@{m.name}</span>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* image */}
+                        {a.imageUrl && (
+                          <a href={a.imageUrl} target="_blank" rel="noopener noreferrer" className="block mt-2">
+                            <img src={a.imageUrl} alt="update" className="max-h-72 rounded-lg border border-gray-200 object-cover" loading="lazy" />
+                          </a>
+                        )}
+
+                        {/* link */}
+                        {a.link && (
+                          <a href={a.link} target="_blank" rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 mt-2 text-sm font-medium text-blue-600 hover:text-blue-700 break-all">
+                            {a.link}
+                          </a>
+                        )}
+                      </div>
                     )
                   )}
 

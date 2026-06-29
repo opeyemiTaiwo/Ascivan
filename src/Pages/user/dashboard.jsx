@@ -42,6 +42,14 @@ const DashboardOverview = () => {
           setMembershipPlan(data.membershipPlan || 'Free');
           setUserRole(data.role || 'member');
           setStats(prev => ({ ...prev, badgesEarned: (data.badges || []).length }));
+          // Completed-project count: distinct projects where this user earned a badge.
+          // This is reliable even if the user isn't in a project's members array.
+          const completedFromBadges = new Set(
+            (data.badges || []).map(b => b.projectId).filter(Boolean)
+          );
+          if (completedFromBadges.size > 0) {
+            setStats(prev => ({ ...prev, projectsCompleted: completedFromBadges.size }));
+          }
         }
 
         // Fetch ongoing projects (single where to avoid composite index; filter+sort in JS)
@@ -71,7 +79,8 @@ const DashboardOverview = () => {
           const completedList = completedSnap.docs.map(d => ({ id: d.id, ...d.data() }))
             .filter(p => p.status === 'completed');
           setCompletedProjects(completedList.slice(0, 5));
-          setStats(prev => ({ ...prev, projectsCompleted: completedList.length }));
+          // Use the larger of: projects-query count, or badge-derived count (set above).
+          setStats(prev => ({ ...prev, projectsCompleted: Math.max(prev.projectsCompleted || 0, completedList.length) }));
         } catch (e) {
           console.log('Completed projects query skipped:', e.message);
         }
@@ -228,7 +237,19 @@ const DashboardOverview = () => {
               {/* All 6 Badges */}
               <div className="space-y-3">
                 {badgeData.map((badge) => {
-                  const earned = profileData?.badges?.find(b => b.id === badge.id || b.title === badge.title);
+                  // Match all earned badges in this category (robust: id / title / category, case-insensitive).
+                  const key = (s) => (s || '').toString().toLowerCase();
+                  const matches = (profileData?.badges || []).filter(b =>
+                    key(b.id) === key(badge.id) ||
+                    key(b.title) === key(badge.title) ||
+                    key(b.category) === key(badge.title) ||
+                    key(b.category) === key(badge.id)
+                  );
+                  const earned = matches.length > 0;
+                  // Level is derived LIVE from how many badges earned in this track,
+                  // so it advances as more are earned (Novice 1, Associate 2-5, Advanced 6-10, Expert 11+).
+                  const count = matches.length;
+                  const level = count >= 11 ? 'Expert' : count >= 6 ? 'Advanced' : count >= 2 ? 'Associate' : 'Novice';
                   return (
                     <div key={badge.id} className={`flex items-center gap-3 p-3 rounded-lg border ${earned ? 'border-blue-200 bg-blue-50/30' : 'border-gray-100 bg-gray-50/50'}`}>
                       <img src={badge.image} alt={badge.title} className={`w-10 h-10 flex-shrink-0 ${earned ? '' : 'opacity-40 grayscale'}`} />
@@ -236,7 +257,7 @@ const DashboardOverview = () => {
                         <div className="flex items-center gap-2">
                           <p className={`text-sm font-semibold ${earned ? 'text-gray-900' : 'text-gray-400'}`}>{badge.title}</p>
                           {earned && (
-                            <span className="text-[10px] font-medium px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded-full">{earned.level || 'Novice'}</span>
+                            <span className="text-[10px] font-medium px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded-full">{level}{count > 1 ? ` · ${count}` : ''}</span>
                           )}
                         </div>
                         <p className={`text-xs ${earned ? 'text-gray-600' : 'text-gray-400'}`}>{badge.label}</p>

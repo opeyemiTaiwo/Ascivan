@@ -171,7 +171,7 @@ const ProjectSetup = () => {
         proposedRoles: teamRoles, // keep draft in proposedRoles until opened
         updatedAt: serverTimestamp(),
       });
-      toast.success('Progress saved. Open it when you\u2019re ready.');
+      toast.success('Progress saved. Open it when you\'re ready.');
       navigate(`/projects/${projectId}`);
     } catch (e) {
       console.error(e);

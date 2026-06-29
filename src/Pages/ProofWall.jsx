@@ -124,7 +124,7 @@ const ProofWall = () => {
   };
 
   const saveEdit = async (a) => {
-    if (!editText.trim()) { toast.error('Update can\u2019t be empty.'); return; }
+    if (!editText.trim()) { toast.error('Update can\'t be empty.'); return; }
     try {
       await editUpdate(a.id, editText.trim(), editProject.trim());
       setItems(prev => prev.map(x => x.id === a.id ? { ...x, text: editText.trim(), projectTitle: editProject.trim() } : x));

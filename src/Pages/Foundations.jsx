@@ -4,8 +4,8 @@
 // finite items, a visible finish line, and a hard CTA to a project at the end.
 // Learners open a course in a new tab, then return and mark it complete.
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { doc, getDoc, updateDoc, setDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase/config';
@@ -18,6 +18,8 @@ import { toast } from 'react-toastify';
 const Foundations = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const contributeRef = useRef(null);
   const [track, setTrack] = useState(null);
   const [content, setContent] = useState(null);
   const [completed, setCompleted] = useState({});
@@ -60,6 +62,19 @@ const Foundations = () => {
     })();
     return () => { active = false; };
   }, [currentUser]);
+
+  // If arriving from the dashboard "Contribute" button (?contribute=1), open the
+  // form and scroll to it once content + eligibility are known.
+  useEffect(() => {
+    if (loading) return;
+    const params = new URLSearchParams(location.search);
+    if (params.get('contribute') === '1' && isEligibleForTrack(userData, track)) {
+      setShowContribute(true);
+      setTimeout(() => {
+        contributeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 200);
+    }
+  }, [loading, location.search, userData, track]);
 
   const requiredItems = content?.items.filter(it => !it.optional) || [];
   const doneCount = requiredItems.filter(it => completed[it.id]).length;
@@ -173,14 +188,14 @@ const Foundations = () => {
             <div key={it.id} className={`p-4 rounded-xl border transition-all ${isDone ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-white'}`}>
               <div className="flex items-start gap-3">
                 <span className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${isDone ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-500'}`}>
-                  {isDone ? '\u2713' : idx + 1}
+                  {isDone ? '✓' : idx + 1}
                 </span>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <h3 className="text-sm font-bold text-gray-900">{it.title}</h3>
                     {it.optional && <span className="text-xs font-medium px-2 py-0.5 bg-gray-100 text-gray-500 rounded-full">Optional</span>}
                   </div>
-                  <p className="text-xs text-gray-500 mt-0.5">{it.provider} \u00b7 {it.duration}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{it.provider} · {it.duration}</p>
                   <div className="flex flex-wrap items-center gap-2 mt-3">
                     <a href={it.url} target="_blank" rel="noopener noreferrer"
                       onClick={() => setOpened(p => ({ ...p, [it.id]: true }))}
@@ -203,7 +218,7 @@ const Foundations = () => {
 
       {/* From the community: lessons created by Associate+ badge-holders in this track. */}
       {(community.length > 0 || eligible) && (
-        <div className="mt-8">
+        <div className="mt-8" ref={contributeRef}>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-base font-bold text-blue-600">From the community</h2>
             {eligible && (

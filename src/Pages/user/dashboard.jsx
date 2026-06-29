@@ -8,6 +8,7 @@ import { db } from '../../firebase/config';
 import { PremiumBadge } from '../../components/PremiumBadge';
 import FindFirstProject from '../../components/FindFirstProject';
 import DiscoverTrack from '../../components/DiscoverTrack';
+import { eligibleTracks } from '../../utils/foundationsContributions';
 
 const badgeData = [
   { id: 'techmo', title: 'TechPO', image: '/Images/TechMO.png', label: 'Product / Project Owner' },
@@ -151,6 +152,21 @@ const DashboardOverview = () => {
             <p className="text-gray-400 text-xs mt-1">{stats.badgesEarned > 0 ? 'Recruiters can find you' : 'Earn a badge to get listed'}</p>
           </div>
         </div>
+
+        {/* Invite eligible members (Associate+ in a track) to contribute to Foundations. */}
+        {!loading && !profileData?.isCompany && eligibleTracks(profileData).length > 0 && (
+          <div className="bg-gradient-to-br from-blue-50 to-orange-50 border border-blue-200 rounded-xl p-6 mb-6">
+            <div className="flex items-start justify-between gap-4 flex-wrap">
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-bold text-gray-900 mb-1">Teach what you've mastered</h3>
+                <p className="text-gray-600 text-sm">You've earned an Associate badge, so you can contribute a lesson to Foundations. Help newcomers learn, build your brand, and boost your Talent Board ranking as learners rate your teaching.</p>
+              </div>
+              <button onClick={() => navigate('/foundations')} className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-all flex-shrink-0">
+                Contribute a lesson
+              </button>
+            </div>
+          </div>
+        )}
 
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

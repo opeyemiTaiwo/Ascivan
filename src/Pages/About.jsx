@@ -119,23 +119,6 @@ const About = () => {
           </div>
         </section>
 
-        {/* Membership */}
-        <section className="mb-12">
-          <div className="bg-gray-50 rounded-xl border border-gray-200 p-6 sm:p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Membership</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <h3 className="text-gray-900 font-semibold text-base mb-2">Free (Basic)</h3>
-                <p className="text-gray-500 text-sm">Unlimited collaborative projects, all 6 badge tracks, a Talent Board listing for recruiters, messaging (unlimited for talent), and project workspaces. Recruiter accounts can post up to 2 jobs and contact up to 5 new candidates per month.</p>
-              </div>
-              <div>
-                <h3 className="text-gray-900 font-semibold text-base mb-2">Premium - $200/year or $20/month</h3>
-                <p className="text-gray-500 text-sm">Everything in Basic plus priority Talent Board ranking (premium members seen first), unlimited candidate messages, unlimited job posts, a verified company badge, and priority support at info.ascivan@gmail.com.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* CTA */}
         <section className="text-center">
           <p className="text-gray-500 mb-4">Ready to start building your tech career?</p>

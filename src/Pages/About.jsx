@@ -12,11 +12,11 @@ const About = () => {
   const navigate = useNavigate();
 
   const badges = [
-    { name: 'TechMO', img: TechMO, label: 'Project Management' },
+    { name: 'TechPO', img: TechMO, label: 'Product / Project Owner' },
     { name: 'TechQA', img: TechQA, label: 'Quality Assurance' },
     { name: 'TechDev', img: TechDev, label: 'Development' },
-    { name: 'TechLeads', img: TechLeads, label: 'Leadership' },
-    { name: 'TechArchs', img: TechArchs, label: 'Architecture' },
+    { name: 'TechLeads', img: TechLeads, label: 'Non-Technical Roles' },
+    { name: 'TechArchs', img: TechArchs, label: 'Low/No-Code Developer' },
     { name: 'TechGuard', img: TechGuard, label: 'Cybersecurity' },
   ];
 

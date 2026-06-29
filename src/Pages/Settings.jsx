@@ -11,8 +11,8 @@ import { enablePushForCurrentUser } from '../utils/pushNotifications';
 import { toast } from 'react-toastify';
 
 const skillTrackOpts = [
-  { id: 'TechDev', label: 'Development' }, { id: 'TechQA', label: 'Quality Assurance' }, { id: 'TechMO', label: 'Project Management' },
-  { id: 'TechArchs', label: 'Architecture' }, { id: 'TechLeads', label: 'Leadership' }, { id: 'TechGuard', label: 'Cybersecurity' },
+  { id: 'TechDev', label: 'Development' }, { id: 'TechQA', label: 'Quality Assurance' }, { id: 'TechPO', label: 'Product / Project Owner' },
+  { id: 'TechArchs', label: 'Low/No-Code Developer' }, { id: 'TechLeads', label: 'Non-Technical Roles' }, { id: 'TechGuard', label: 'Cybersecurity' },
 ];
 
 const Settings = () => {
@@ -24,6 +24,7 @@ const Settings = () => {
   const [saving, setSaving] = useState(false);
   const [profileData, setProfileData] = useState(null);
   const [weeklyDigest, setWeeklyDigest] = useState(false);
+  const [reminders, setReminders] = useState(true);
   const [form, setForm] = useState({
     displayName: '', specialization: '', experienceLevel: '', primarySkillTrack: '',
     country: '', city: '', state: '', portfolioUrl: '', linkedinUrl: '', githubUrl: '', emailPublic: false,
@@ -43,6 +44,7 @@ const Settings = () => {
           const data = snap.data();
           setProfileData(data);
           setWeeklyDigest(data.emailPreferences?.weeklyDigest === true);
+          setReminders(data.emailPreferences?.reminders !== false);
           setForm({
             displayName: data.displayName || '',
             specialization: data.specialization || '',
@@ -281,6 +283,29 @@ const Settings = () => {
                 />
                 <span className="text-sm text-gray-700">Send me the weekly digest email</span>
               </label>
+
+              <div className="border-t border-gray-100 mt-4 pt-4">
+                <p className="text-gray-500 text-sm mb-3">Get a personalized reminder only when you have something to pick up: a project you're leading, a team waiting for you, or work you paused. You'll only hear from us when there's something to continue, never just noise.</p>
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={reminders}
+                    onChange={async (e) => {
+                      const next = e.target.checked;
+                      setReminders(next);
+                      try {
+                        await updateDoc(doc(db, 'users', currentUser.uid), { 'emailPreferences.reminders': next });
+                        toast.success(next ? 'Reminders turned on.' : 'Reminders turned off.');
+                      } catch (err) {
+                        setReminders(!next);
+                        toast.error('Could not update preference.');
+                      }
+                    }}
+                    className="w-4 h-4"
+                  />
+                  <span className="text-sm text-gray-700">Remind me to pick up where I left off</span>
+                </label>
+              </div>
             </div>
 
             <div className="bg-white border border-gray-200 rounded-xl p-6">
@@ -357,7 +382,7 @@ const MembershipTab = ({ profileData, navigate }) => {
         <p className="text-gray-500 text-sm mb-4">Everything you need to start building your tech career through real project experience.</p>
         <ul className="space-y-1 mb-6">
           <FeatureItem label="Unlimited collaborative projects" detail="Create or join as many real product-build projects as you want, in any tech field, work with real teams and earn verified badges. No caps, no fees, ever." />
-          <FeatureItem label="All 6 TechTalent Badge tracks" detail="Earn badges across all tracks: TechDev, TechQA, TechMO, TechLeads, TechArchs, and TechGuard." />
+          <FeatureItem label="All 6 TechTalent Badge tracks" detail="Earn badges across all tracks: TechDev, TechQA, TechPO, TechLeads, TechArchs, and TechGuard." />
           <FeatureItem label="Community, messaging, and workspace" detail="Share work on the Proof Wall, message other members, and collaborate in project workspaces. Messaging is unlimited for talent." />
           <FeatureItem label="Certificates on project completion" detail="Receive a certificate for every project you complete, documenting your role and contributions." />
           <FeatureItem label="Post up to 2 jobs / month" detail="Free recruiter accounts can post up to 2 job openings per month on the job board. Upgrade to Premium for unlimited posts." />

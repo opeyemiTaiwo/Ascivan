@@ -10,11 +10,11 @@ import FollowButton from '../../components/community/FollowButton';
 import { PremiumBadge } from '../../components/PremiumBadge';
 
 const badgeData = [
-  { id: 'techmo', title: 'TechMO', image: '/Images/TechMO.png', label: 'Project Management' },
+  { id: 'techmo', title: 'TechPO', image: '/Images/TechMO.png', label: 'Product / Project Owner' },
   { id: 'techqa', title: 'TechQA', image: '/Images/TechQA.png', label: 'Quality Assurance' },
   { id: 'techdev', title: 'TechDev', image: '/Images/TechDev.png', label: 'Development' },
-  { id: 'techleads', title: 'TechLeads', image: '/Images/TechLeads.png', label: 'Leadership' },
-  { id: 'techarchs', title: 'TechArchs', image: '/Images/TechArchs.png', label: 'Architecture' },
+  { id: 'techleads', title: 'TechLeads', image: '/Images/TechLeads.png', label: 'Non-Technical Roles' },
+  { id: 'techarchs', title: 'TechArchs', image: '/Images/TechArchs.png', label: 'Low/No-Code Developer' },
   { id: 'techguard', title: 'TechGuard', image: '/Images/TechGuard.png', label: 'Cybersecurity' },
 ];
 
@@ -153,7 +153,7 @@ const UserProfile = () => {
   const initials = getInitials(displayName, profile.email);
   const userBadges = profile.badges || [];
   const skillTrackLabels = {
-    'TechDev': 'Development', 'TechQA': 'Quality Assurance', 'TechMO': 'Project Management',
+    'TechDev': 'Development', 'TechQA': 'Quality Assurance', 'TechPO': 'Product / Project Owner', 'TechMO': 'Product / Project Owner',
     'TechArchs': 'Architecture', 'TechLeads': 'Leadership', 'TechGuard': 'Cybersecurity'
   };
 

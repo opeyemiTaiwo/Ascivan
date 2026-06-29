@@ -32,7 +32,7 @@ const Onboarding = () => {
   const [formData, setFormData] = useState({
     displayName: '',
     experienceLevel: '', // 'beginner' | 'intermediate' | 'advanced' | 'expert'
-    primarySkillTrack: '', // TechMO, TechQA, TechDev, TechLeads, TechArchs, TechGuard
+    primarySkillTrack: '', // TechPO, TechQA, TechDev, TechLeads, TechArchs, TechGuard
     specialization: '',
     yearsOfExperience: '',
     country: '',
@@ -59,8 +59,8 @@ const Onboarding = () => {
   const skillTracks = [
     { id: 'TechDev', label: 'Development', desc: 'Frontend, backend, mobile, full-stack' },
     { id: 'TechQA', label: 'Quality Assurance', desc: 'Testing, code reviews, quality control' },
-    { id: 'TechMO', label: 'Project Management', desc: 'Timelines, deliverables, stakeholders' },
-    { id: 'TechArchs', label: 'Architecture', desc: 'System design, scalability, infrastructure' },
+    { id: 'TechPO', label: 'Product / Project Owner', desc: 'Own product vision, requirements, and backlog' },
+    { id: 'TechArchs', label: 'Low/No-Code Developer', desc: 'Build with low-code and no-code platforms' },
     { id: 'TechLeads', label: 'Leadership', desc: 'Team management, mentoring, decisions' },
     { id: 'TechGuard', label: 'Cybersecurity', desc: 'Security, compliance, resilience' },
   ];
@@ -143,6 +143,8 @@ const Onboarding = () => {
       if (step === 1 && !formData.experienceLevel) { toast.error('Please select your experience level'); return; }
       if (step === 2) {
         if (!formData.displayName.trim()) { toast.error('Please enter your name'); return; }
+        if (!formData.primarySkillTrack) { toast.error('Please select your primary skill track'); return; }
+        if (!formData.specialization.trim()) { toast.error('Please list your specialization or main skills'); return; }
         if (!formData.linkedinUrl.trim()) { toast.error('Please enter your LinkedIn URL'); return; }
       }
       if (step === 3 && !formData.country.trim()) { toast.error('Please enter your current country'); return; }
@@ -194,6 +196,9 @@ const Onboarding = () => {
         updateData.experienceLevel = formData.experienceLevel || null;
         updateData.primarySkillTrack = formData.primarySkillTrack || null;
         updateData.specialization = formData.specialization.trim() || null;
+        // Normalized skills array (from the comma-separated specialization) for project matching.
+        updateData.skills = formData.specialization
+          .split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
         updateData.yearsOfExperience = formData.yearsOfExperience || null;
         updateData.portfolioUrl = formData.portfolioUrl.trim() || null;
         updateData.linkedinUrl = formData.linkedinUrl.trim() || null;
@@ -256,15 +261,17 @@ const Onboarding = () => {
               <input type="text" value={formData.displayName} onChange={e => setFormData(p => ({ ...p, displayName: e.target.value }))} className={inputClass} placeholder="Enter your full name" autoFocus />
             </div>
             <div>
-              <label className={labelClass}>Primary Skill Track</label>
+              <label className={labelClass}>Primary Skill Track *</label>
               <select value={formData.primarySkillTrack} onChange={e => setFormData(p => ({ ...p, primarySkillTrack: e.target.value }))} className={inputClass}>
-                <option value="">Select a track (optional)</option>
+                <option value="">Select your track</option>
                 {skillTracks.map(t => <option key={t.id} value={t.id}>{t.label} - {t.desc}</option>)}
               </select>
+              <p className="text-xs text-gray-500 mt-1">We use this to match you with projects that fit your skills.</p>
             </div>
             <div>
-              <label className={labelClass}>Specialization</label>
+              <label className={labelClass}>Specialization *</label>
               <input type="text" value={formData.specialization} onChange={e => setFormData(p => ({ ...p, specialization: e.target.value }))} className={inputClass} placeholder="e.g., React, Python, AWS, DevOps" />
+              <p className="text-xs text-gray-500 mt-1">List your main skills or tools, separated by commas.</p>
             </div>
             <div>
               <label className={labelClass}>LinkedIn URL *</label>

@@ -16,6 +16,7 @@ import { getRandomTemplate, TEMPLATE_COUNT } from '../../utils/projectTemplates'
 import { seedDummyActivity, deleteDummyActivity, countDummyActivity } from '../../utils/activityFeed';
 import { REVIEW_STATUS, approveProjectReview, requestChanges, rejectProjectReview, getProjectMemberEmails } from '../../utils/projectReview';
 import { clearAllTestData } from '../../utils/adminDataReset';
+import { batchGenerateProjects } from '../../utils/batchGenerateProjects';
 import { sendPush } from '../../utils/pushNotifications';
 
 const fmtDate = (ts) => {
@@ -63,6 +64,22 @@ const AdminPanel = () => {
 
   // --- Danger Zone: clear test data ---
   const [clearing, setClearing] = useState(false);
+  const [batchCount, setBatchCount] = useState(24);
+  const [batchRunning, setBatchRunning] = useState(false);
+
+  const runBatchGenerate = async () => {
+    const n = parseInt(batchCount, 10) || 24;
+    if (!window.confirm(`Publish ${n} starter projects to the board? They will be open for lead recruitment.`)) return;
+    setBatchRunning(true);
+    try {
+      const { created, errors } = await batchGenerateProjects(n);
+      if (created > 0) toast.success(`Published ${created} project${created !== 1 ? 's' : ''}${errors ? ` (${errors} failed)` : ''}.`);
+      else toast.error('No projects were created. Check your permissions and rules.');
+    } catch (e) {
+      toast.error('Batch generation failed: ' + e.message);
+    }
+    setBatchRunning(false);
+  };
   const [clearConfirm, setClearConfirm] = useState('');
   const [alsoResetUsers, setAlsoResetUsers] = useState(true);
   const [clearProgress, setClearProgress] = useState('');
@@ -583,7 +600,26 @@ const AdminPanel = () => {
       {/* GENERATE */}
       {!loadingData && tab === 'generate' && (
         <div>
-          <p className="text-gray-500 text-sm mb-4">Publish a software or AI project (no physical prototypes) into lead recruitment - anyone can apply to lead, then the confirmed lead refines it and opens the team.</p>
+          {/* Batch generator — top up the board with varied starter projects in one click */}
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-6">
+            <h2 className="text-base font-bold text-gray-900 mb-1">Batch generate starter projects</h2>
+            <p className="text-gray-600 text-sm mb-4">Instantly populate the board with a varied set of beginner-friendly projects across different tracks, so new members always have something to join. Each opens for lead recruitment.</p>
+            <div className="flex flex-wrap items-center gap-3">
+              <label className="text-sm text-gray-700 font-medium">How many:</label>
+              <select value={batchCount} onChange={e => setBatchCount(parseInt(e.target.value, 10))}
+                className="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none">
+                <option value={12}>12 projects</option>
+                <option value={24}>24 projects</option>
+                <option value={30}>30 projects</option>
+              </select>
+              <button onClick={runBatchGenerate} disabled={batchRunning}
+                className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-all">
+                {batchRunning ? 'Publishing…' : `Generate ${batchCount} projects`}
+              </button>
+            </div>
+          </div>
+
+          <p className="text-gray-500 text-sm mb-4">Or publish a single software or AI project (no physical prototypes) into lead recruitment - anyone can apply to lead, then the confirmed lead refines it and opens the team.</p>
 
           {/* Source toggle */}
           <div className="flex items-center gap-3 mb-4 p-3 bg-gray-50 border border-gray-200 rounded-xl">

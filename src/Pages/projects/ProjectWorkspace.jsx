@@ -68,7 +68,11 @@ const ProjectWorkspace = () => {
       setLoading(false);
     };
     fetchProject();
-  }, [projectId]);
+    // Record that this user is active on this project (for re-engagement reminders).
+    if (currentUser?.uid) {
+      import('../../utils/activityStamp').then(({ stampActivity }) => stampActivity(currentUser.uid, projectId));
+    }
+  }, [projectId, currentUser]);
 
   // Fetch team members
   useEffect(() => {

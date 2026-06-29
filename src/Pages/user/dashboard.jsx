@@ -6,13 +6,15 @@ import { useAuth } from '../../context/AuthContext';
 import { doc, getDoc, collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { PremiumBadge } from '../../components/PremiumBadge';
+import FindFirstProject from '../../components/FindFirstProject';
+import DiscoverTrack from '../../components/DiscoverTrack';
 
 const badgeData = [
-  { id: 'techmo', title: 'TechMO', image: '/Images/TechMO.png', label: 'Project Management' },
+  { id: 'techmo', title: 'TechPO', image: '/Images/TechMO.png', label: 'Product / Project Owner' },
   { id: 'techqa', title: 'TechQA', image: '/Images/TechQA.png', label: 'Quality Assurance' },
   { id: 'techdev', title: 'TechDev', image: '/Images/TechDev.png', label: 'Development' },
-  { id: 'techleads', title: 'TechLeads', image: '/Images/TechLeads.png', label: 'Leadership' },
-  { id: 'techarchs', title: 'TechArchs', image: '/Images/TechArchs.png', label: 'Architecture' },
+  { id: 'techleads', title: 'TechLeads', image: '/Images/TechLeads.png', label: 'Non-Technical Roles' },
+  { id: 'techarchs', title: 'TechArchs', image: '/Images/TechArchs.png', label: 'Low/No-Code Developer' },
   { id: 'techguard', title: 'TechGuard', image: '/Images/TechGuard.png', label: 'Cybersecurity' },
 ];
 
@@ -95,6 +97,18 @@ const DashboardOverview = () => {
     
       <div className="max-w-6xl mx-auto">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Dashboard Overview</h1>
+
+        {/* Cold-start: show "find your first project" only if the user has joined none yet. */}
+        {!loading && ongoingProjects.length === 0 && completedProjects.length === 0 && !profileData?.isCompany && (
+          <FindFirstProject profile={profileData} />
+        )}
+
+        {/* Help users who haven't settled on a track (new to tech or unsure) discover one. */}
+        {!loading && !profileData?.isCompany && !profileData?.primarySkillTrack && ongoingProjects.length === 0 && completedProjects.length === 0 && (
+          <div className="mb-6">
+            <DiscoverTrack />
+          </div>
+        )}
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">

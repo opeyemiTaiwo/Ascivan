@@ -14,7 +14,7 @@ import { REVIEW_STATUS, submitProjectForReview, getProjectMemberEmails } from '.
 import { sendPush } from '../../utils/pushNotifications';
 
 const badgeCategories = {
-  'mentorship': { id: 'techmo', name: 'TechMO (Mentor)', color: 'from-blue-500 to-blue-600' },
+  'mentorship': { id: 'techmo', name: 'TechPO (Mentor)', color: 'from-blue-500 to-blue-600' },
   'quality-assurance': { id: 'techqa', name: 'TechQA (QA Tester)', color: 'from-blue-500 to-blue-600' },
   'development': { id: 'techdev', name: 'TechDev (Developer)', color: 'from-blue-500 to-blue-600' },
   'leadership': { id: 'techleads', name: 'TechLeads (Leader)', color: 'from-blue-500 to-blue-600' },

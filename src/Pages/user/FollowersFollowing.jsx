@@ -74,7 +74,7 @@ const FollowersFollowing = () => {
 
   const badgeCategories = {
     'mentorship': { 
-      name: 'TechMO',
+      name: 'TechPO',
       color: 'text-orange-500', 
       bgColor: 'from-orange-500/20 to-orange-600/20',
       skills: ['Mentorship', 'Leadership', 'Technical Coaching', 'Team Development']

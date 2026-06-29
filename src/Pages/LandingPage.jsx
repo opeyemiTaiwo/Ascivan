@@ -67,11 +67,11 @@ const LandingPage = () => {
   ];
 
   const badges = [
-    { name: 'TechMO', img: TechMO, label: 'Project Management', desc: 'Manage deliverables, timelines, and stakeholder communication across complex projects.' },
+    { name: 'TechPO', img: TechMO, label: 'Product / Project Owner', desc: 'Own the product vision, requirements, and backlog, and steer projects to completion.' },
     { name: 'TechQA', img: TechQA, label: 'Quality Assurance', desc: 'Ensure code quality through systematic testing, reviews, and quality control practices.' },
     { name: 'TechDev', img: TechDev, label: 'Development', desc: 'Build and ship software across frontend, backend, mobile, and full-stack disciplines.' },
-    { name: 'TechLeads', img: TechLeads, label: 'Leadership', desc: 'Lead engineering teams, mentor contributors, and drive technical decisions at scale.' },
-    { name: 'TechArchs', img: TechArchs, label: 'Architecture', desc: 'Design scalable systems, define technical blueprints, and guide infrastructure decisions.' },
+    { name: 'TechLeads', img: TechLeads, label: 'Non-Technical Roles', desc: 'Lead delivery and fill non-coding roles like management, writing, and research.' },
+    { name: 'TechArchs', img: TechArchs, label: 'Low/No-Code Developer', desc: 'Build working products on low-code and no-code platforms.' },
     { name: 'TechGuard', img: TechGuard, label: 'Cybersecurity', desc: 'Protect systems, enforce security protocols, and build resilient infrastructure defenses.' },
   ];
 

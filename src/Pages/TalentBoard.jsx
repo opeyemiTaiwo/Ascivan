@@ -11,9 +11,9 @@ const badgeOptions = [
   { id: '', label: 'All Tracks' },
   { id: 'TechDev', label: 'Development' },
   { id: 'TechQA', label: 'Quality Assurance' },
-  { id: 'TechMO', label: 'Project Management' },
-  { id: 'TechArchs', label: 'Architecture' },
-  { id: 'TechLeads', label: 'Leadership' },
+  { id: 'TechPO', label: 'Product / Project Owner' },
+  { id: 'TechArchs', label: 'Low/No-Code Developer' },
+  { id: 'TechLeads', label: 'Non-Technical Roles' },
   { id: 'TechGuard', label: 'Cybersecurity' },
 ];
 

@@ -1,10 +1,10 @@
 // =================================================================
-// api/email/send-daily-digest.js — Ascivan Daily Digest
-// Cron: weekdays 9 AM — includes platform updates + per-user engagement
+// api/email/send-daily-digest.js — Ascivan "Pick up where you left off"
+// Daily check. Sends ONLY to users who have something in-progress or stalled,
+// so nobody is bombarded. No pending items = no email that day.
 // =================================================================
 
 const nodemailer = require('nodemailer');
-const { subDays } = require('date-fns');
 const admin = require('firebase-admin');
 
 if (!admin.apps.length) {
@@ -19,13 +19,20 @@ if (!admin.apps.length) {
       projectId: process.env.FIREBASE_PROJECT_ID || 'ascivan-5b4f4',
     });
   } catch (err) {
-    console.error('❌ Firebase Admin init failed:', err.message);
+    console.error('Firebase Admin init failed:', err.message);
     throw err;
   }
 }
 
 const db = admin.firestore();
 const SITE = 'https://ascivan.com';
+const QUIET_DAYS = 3; // "went quiet" threshold
+
+const tsToDate = (t) => {
+  try { return t?.toDate ? t.toDate() : (t?._seconds ? new Date(t._seconds * 1000) : null); }
+  catch { return null; }
+};
+const daysSince = (d) => d ? Math.floor((Date.now() - d.getTime()) / 86400000) : 999;
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -42,176 +49,142 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    console.log('🌅 Starting Ascivan daily digest...');
-
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASSWORD },
     });
     await transporter.verify();
 
-    const oneDayAgo = subDays(new Date(), 1);
-    const sevenDaysAgo = subDays(new Date(), 7);
+    // Pull all projects once and index by id.
+    const projectsSnap = await db.collection('projects').get();
+    const projects = {};
+    projectsSnap.docs.forEach(d => { projects[d.id] = { id: d.id, ...d.data() }; });
 
-    // Helper: safe collection fetch
-    const safeFetch = async (col, dateField, since, lim = 10) => {
-      try {
-        const snap = await db.collection(col).where(dateField, '>=', since).orderBy(dateField, 'desc').limit(lim).get();
-        return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      } catch (e) { console.warn(`⚠️ ${col}:`, e.message); return []; }
-    };
+    // Pull all users (opted in or no preference set defaults to receiving reminders).
+    const usersSnap = await db.collection('users').get();
 
-    // Fetch platform content in parallel
-    const [projects, jobs, housingPosts, financePosts, communityPosts] = await Promise.all([
-      safeFetch('projects', 'createdAt', sevenDaysAgo),
-      safeFetch('hub_posts', 'createdAt', oneDayAgo),
-      safeFetch('housing_posts', 'createdAt', oneDayAgo),
-      safeFetch('banking_posts', 'createdAt', oneDayAgo),
-      safeFetch('posts', 'createdAt', oneDayAgo),
-    ]);
+    let sent = 0, skipped = 0, failed = 0;
 
-    console.log(`📊 ${projects.length} projects, ${jobs.length} jobs, ${housingPosts.length} housing, ${financePosts.length} finance, ${communityPosts.length} posts`);
+    for (const uDoc of usersSnap.docs) {
+      const user = { uid: uDoc.id, ...uDoc.data() };
+      if (!user.email || !user.email.includes('@')) { skipped++; continue; }
+      // Respect opt-out (default ON unless explicitly disabled).
+      if (user.emailPreferences && user.emailPreferences.reminders === false) { skipped++; continue; }
+      if (user.isCompany) { skipped++; continue; }
 
-    // Get subscribed users
-    const usersSnap = await db.collection('users').where('emailPreferences.dailyDigest', '==', true).get();
-    const users = usersSnap.docs
-      .map(d => ({ uid: d.id, email: d.data().email, displayName: d.data().displayName }))
-      .filter(u => u.email?.includes('@'));
+      const items = []; // each: { headline, detail, link }
 
-    if (users.length === 0) {
-      return res.json({ success: true, message: 'No subscribers' });
-    }
-    console.log(`👥 ${users.length} subscribers`);
+      // Gather the projects this user is involved in.
+      const involved = Object.values(projects).filter(p =>
+        (p.members || []).includes(user.uid) ||
+        p.submitterId === user.uid
+      );
 
-    // Per-user engagement data
-    for (const user of users) {
-      try {
-        const notifSnap = await db.collection('notifications')
-          .where('userId', '==', user.uid)
-          .where('createdAt', '>=', oneDayAgo)
-          .orderBy('createdAt', 'desc').limit(30).get();
-        const notifs = notifSnap.docs.map(d => d.data());
+      for (const p of involved) {
+        const title = p.projectTitle || p.title || 'your project';
+        const link = `${SITE}/projects/${p.id}`;
 
-        user.mentions = notifs.filter(n => n.type === 'reply_mention' || n.type === 'repost_mention');
-        user.likes = notifs.filter(n => n.type === 'like');
-        user.reposts = notifs.filter(n => n.type === 'repost');
-        user.follows = notifs.filter(n => n.type === 'follow');
-        user.badges = notifs.filter(n => n.type === 'badge_awarded');
+        // STATE 1: stepped up to lead but stalled at setup (never opened the team).
+        if (p.submitterId === user.uid && p.status === 'setup') {
+          items.push({
+            headline: `Finish setting up "${title}"`,
+            detail: 'You stepped up to lead this project but haven\'t opened it to the team yet. Set the roles and start recruiting.',
+            link: `${SITE}/projects/${p.id}/setup`,
+          });
+          continue;
+        }
 
-        const convSnap = await db.collection('conversations')
-          .where('participants', 'array-contains', user.uid).get();
-        user.unreadMessages = 0;
-        convSnap.docs.forEach(d => { user.unreadMessages += (d.data().unreadBy?.[user.uid] || 0); });
-      } catch (e) {
-        console.warn(`⚠️ Engagement for ${user.email}:`, e.message);
-        user.mentions = []; user.likes = []; user.reposts = [];
-        user.follows = []; user.badges = []; user.unreadMessages = 0;
+        // STATE 2: approved member who has never been active on this project.
+        const isMember = (p.members || []).includes(user.uid);
+        const projActivity = tsToDate(user.projectActivity?.[p.id]);
+        if (isMember && p.status === 'active' && !projActivity) {
+          items.push({
+            headline: `Your team on "${title}" is waiting`,
+            detail: 'You were approved but haven\'t opened the workspace yet. Jump in and meet your team.',
+            link: `${SITE}/projects/${p.id}/workspace`,
+          });
+          continue;
+        }
+
+        // STATE 3: active member who went quiet for a few days.
+        if (isMember && p.status === 'active' && projActivity && daysSince(projActivity) >= QUIET_DAYS) {
+          items.push({
+            headline: `Pick up where you left off on "${title}"`,
+            detail: `It's been ${daysSince(projActivity)} days. Your team is counting on your part.`,
+            link: `${SITE}/projects/${p.id}/workspace`,
+          });
+        }
       }
-    }
 
-    // ── Email template ───────────────────────────────────────────
-    const generateEmail = (user) => {
-      const name = user.displayName || user.email.split('@')[0];
-      const eng = user.mentions.length + user.likes.length + user.reposts.length + user.follows.length;
-      const hasEng = eng > 0 || user.unreadMessages > 0 || user.badges.length > 0;
-      const hasPlatform = projects.length + jobs.length + communityPosts.length + housingPosts.length + financePosts.length > 0;
-
-      return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<style>
-body{font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#f5f5f5;line-height:1.6}
-.c{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.1)}
-.hd{background:linear-gradient(135deg,#F97316,#EA580C);color:#fff;padding:28px;text-align:center}
-.hd h1{margin:0;font-size:22px}.hd p{margin:8px 0 0;font-size:13px;opacity:.9}
-.ct{padding:24px}
-.sc{margin-bottom:24px}.sc h2{color:#F97316;font-size:16px;border-bottom:2px solid #F97316;padding-bottom:6px;margin-bottom:14px}
-.sts{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
-.st{flex:1;min-width:60px;text-align:center;background:#fff8f5;padding:10px 4px;border-radius:8px}
-.sn{font-size:20px;font-weight:bold;color:#F97316}.sl{font-size:9px;color:#666;text-transform:uppercase}
-.it{padding:12px;margin-bottom:8px;border-radius:8px;border-left:4px solid #F97316;background:#fff8f5}
-.it h3{margin:0 0 4px;font-size:13px;color:#333}.it p{margin:0;font-size:12px;color:#666}
-.eg{padding:12px;margin-bottom:8px;border-radius:8px;border-left:4px solid #22C55E;background:#f0fdf4}
-.mg{padding:12px;margin-bottom:8px;border-radius:8px;border-left:4px solid #3B82F6;background:#eff6ff}
-.btn{display:block;padding:12px;border-radius:8px;text-decoration:none;text-align:center;font-weight:600;font-size:13px;margin:6px 0;color:#fff;background:linear-gradient(135deg,#F97316,#EA580C)}
-.ft{background:#1f2937;color:#9ca3af;padding:18px;text-align:center;font-size:11px}.ft a{color:#F97316;text-decoration:none}
-</style></head><body><div class="c">
-<div class="hd"><h1>🌅 Your Daily Update</h1><p>Hi ${name}! Here's what happened on Ascivan</p>
-<div style="margin-top:8px;font-size:11px;opacity:.8">${new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}</div></div>
-<div class="ct">
-
-${hasEng ? `<div class="sc"><h2>🔔 Your Activity</h2>
-<div class="sts">
-<div class="st"><div class="sn">${user.mentions.length}</div><div class="sl">Mentions</div></div>
-<div class="st"><div class="sn">${user.likes.length}</div><div class="sl">Likes</div></div>
-<div class="st"><div class="sn">${user.reposts.length}</div><div class="sl">Reposts</div></div>
-<div class="st"><div class="sn">${user.follows.length}</div><div class="sl">Followers</div></div>
-<div class="st"><div class="sn">${user.unreadMessages}</div><div class="sl">Messages</div></div>
-</div>
-${user.mentions.slice(0,3).map(m=>`<div class="eg"><p>💬 <b>${m.mentionedByName||'Someone'}</b> mentioned you</p></div>`).join('')}
-${user.follows.length>0?`<div class="eg"><p>👥 <b>${user.follows.length}</b> new follower${user.follows.length>1?'s':''}</p></div>`:''}
-${user.likes.length>0?`<div class="eg"><p>❤️ Your posts got <b>${user.likes.length} like${user.likes.length>1?'s':''}</b></p></div>`:''}
-${user.reposts.length>0?`<div class="eg"><p>🔄 Your posts were reposted <b>${user.reposts.length} time${user.reposts.length>1?'s':''}</b></p></div>`:''}
-${user.unreadMessages>0?`<div class="mg"><p>✉️ <b>${user.unreadMessages} unread message${user.unreadMessages>1?'s':''}</b></p></div>`:''}
-${user.badges.length>0?`<div class="eg" style="border-left-color:#EAB308"><p>🏆 You earned <b>${user.badges.length} badge${user.badges.length>1?'s':''}</b>!</p></div>`:''}
-<a href="${SITE}/notifications" class="btn" style="background:linear-gradient(135deg,#22C55E,#16A34A)">View All Activity</a>
-</div>`:''}
-
-${projects.length>0?`<div class="sc"><h2>🚀 New Projects</h2>
-${projects.slice(0,3).map(p=>`<div class="it"><h3>${p.projectTitle||'Project'}</h3><p>${(p.projectDescription||'').substring(0,100)}${(p.projectDescription||'').length>100?'...':''}</p></div>`).join('')}
-${projects.length>3?`<p style="color:#666;font-size:11px;text-align:center">+ ${projects.length-3} more</p>`:''}
-<a href="${SITE}/projects" class="btn">Browse Projects</a></div>`:''}
-
-${jobs.length>0?`<div class="sc"><h2>💼 New Jobs</h2>
-${jobs.slice(0,3).map(j=>`<div class="it"><h3>${j.title||'Job'}</h3><p>${j.companyName||''} ${j.location?'• '+j.location:''}</p></div>`).join('')}
-<a href="${SITE}/jobs" class="btn">View Jobs</a></div>`:''}
-
-${communityPosts.length>0?`<div class="sc"><h2>💬 Community</h2>
-${communityPosts.slice(0,3).map(p=>`<div class="it" style="border-left-color:#8B5CF6"><h3>${p.authorName||'Someone'} posted</h3><p>${(p.content||'').substring(0,80)}...</p></div>`).join('')}
-<a href="${SITE}/community" class="btn" style="background:linear-gradient(135deg,#8B5CF6,#7C3AED)">View Community</a></div>`:''}
-
-${housingPosts.length>0?`<div class="sc"><h2>🏠 Housing</h2>
-${housingPosts.slice(0,2).map(h=>`<div class="it" style="border-left-color:#3B82F6"><h3>${h.title||'Listing'}</h3><p>${h.city||''}</p></div>`).join('')}
-<a href="${SITE}/housing" class="btn" style="background:linear-gradient(135deg,#3B82F6,#2563EB)">Browse Housing</a></div>`:''}
-
-${financePosts.length>0?`<div class="sc"><h2>💰 Finance</h2>
-${financePosts.slice(0,2).map(f=>`<div class="it" style="border-left-color:#22C55E"><h3>${f.title||'Resource'}</h3><p>${f.category||f.serviceType||''}</p></div>`).join('')}
-<a href="${SITE}/finance" class="btn" style="background:linear-gradient(135deg,#22C55E,#16A34A)">View Resources</a></div>`:''}
-
-${!hasEng&&!hasPlatform?`<div style="text-align:center;padding:24px;background:#f9fafb;border-radius:10px;margin:16px 0">
-<div style="font-size:36px;margin-bottom:10px">🌟</div>
-<h3 style="color:#333;margin:0 0 6px;font-size:15px">Quiet day on Ascivan</h3>
-<p style="color:#666;font-size:12px;margin:0">A perfect time to explore or connect with the community!</p></div>`:''}
-
-<div class="sc"><h2>⚡ Quick Links</h2>
-<a href="${SITE}/dashboard" class="btn">Dashboard</a>
-<a href="${SITE}/messages" class="btn" style="background:linear-gradient(135deg,#3B82F6,#2563EB)">Messages</a></div>
-
-</div>
-<div class="ft"><p><b>Ascivan</b></p><p><a href="${SITE}/dashboard">Dashboard</a> · <a href="${SITE}/community">Community</a></p>
-<p style="margin-top:6px">Daily digest · ${new Date().getFullYear()} Ascivan</p></div>
-</div></body></html>`;
-    };
-
-    // Send emails
-    let successful = 0, failed = 0;
-    for (const user of users) {
+      // STATE 4: applied to lead a project that still needs a lead (their application is pending action).
       try {
-        const eng = user.mentions.length + user.likes.length + user.reposts.length + user.follows.length + user.unreadMessages;
-        const subj = eng > 0
-          ? `🔔 ${eng} new activities — Ascivan Daily ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})}`
-          : `🌅 Ascivan Daily Update — ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})}`;
-        await transporter.sendMail({ from: { name: 'Ascivan', address: process.env.EMAIL_USER }, to: user.email, subject: subj, html: generateEmail(user) });
-        successful++;
-      } catch (err) { console.error(`❌ ${user.email}:`, err.message); failed++; }
+        const apps = await db.collection('project_applications')
+          .where('applicantUid', '==', user.uid).get();
+        apps.docs.forEach(a => {
+          const app = a.data();
+          const p = projects[app.projectId];
+          if (p && p.status === 'lead_recruitment' && !p.leadConfirmed && /lead/i.test(app.role || '')) {
+            const title = p.projectTitle || p.title || 'a project';
+            // Only if not already added.
+            if (!items.some(i => i.link.includes(p.id))) {
+              items.push({
+                headline: `You applied to lead "${title}"`,
+                detail: 'This project still needs a lead. If you\'re ready, confirm and set up your team.',
+                link: `${SITE}/projects/${p.id}`,
+              });
+            }
+          }
+        });
+      } catch (_) { /* non-blocking */ }
+
+      // CRITICAL: nothing pending = no email.
+      if (items.length === 0) { skipped++; continue; }
+
+      const name = user.displayName || user.email.split('@')[0];
+      const html = renderEmail(name, items);
+      try {
+        await transporter.sendMail({
+          from: { name: 'Ascivan', address: process.env.EMAIL_USER },
+          to: user.email,
+          subject: items.length === 1 ? items[0].headline : `You have ${items.length} things to pick up on Ascivan`,
+          html,
+        });
+        sent++;
+      } catch (e) { console.error(`${user.email}:`, e.message); failed++; }
     }
+
     transporter.close();
+    try { await db.collection('email_logs').add({ type: 'daily_reminder', timestamp: new Date(), stats: { sent, skipped, failed } }); } catch (_) {}
 
-    try { await db.collection('email_logs').add({ type: 'daily_digest', timestamp: new Date(), stats: { recipients: users.length, successful, failed } }); } catch (_) {}
-
-    console.log(`🎉 Daily digest: ${successful} sent, ${failed} failed`);
-    return res.json({ success: true, stats: { recipients: users.length, successful, failed } });
-
+    return res.json({ success: true, stats: { sent, skipped, failed } });
   } catch (error) {
-    console.error('💥 Daily digest error:', error);
+    console.error('Daily reminder error:', error);
     return res.status(500).json({ success: false, error: error.message });
   }
 };
+
+function renderEmail(name, items) {
+  const rows = items.map(it => `
+    <div style="border-left:4px solid #F97316;background:#fff8f5;border-radius:8px;padding:14px;margin-bottom:10px">
+      <p style="margin:0 0 4px;font-size:14px;font-weight:bold;color:#2563EB">${it.headline}</p>
+      <p style="margin:0 0 10px;font-size:13px;color:#111827">${it.detail}</p>
+      <a href="${it.link}" style="display:inline-block;background:linear-gradient(135deg,#F97316,#EA580C);color:#ffffff;text-decoration:none;font-weight:600;font-size:13px;padding:8px 16px;border-radius:6px">Continue</a>
+    </div>`).join('');
+
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+  <body style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;background:#ffffff;color:#111827">
+  <div style="background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e5e7eb">
+    <div style="background:linear-gradient(135deg,#F97316,#EA580C);color:#fff;padding:24px;text-align:center">
+      <h1 style="margin:0;font-size:19px">Pick up where you left off</h1>
+      <p style="margin:8px 0 0;font-size:13px;opacity:.95">Hi ${name}, here's what's waiting for you on Ascivan</p>
+    </div>
+    <div style="padding:22px">
+      ${rows}
+      <p style="text-align:center;margin-top:16px"><a href="${SITE}/dashboard" style="color:#2563EB;text-decoration:none;font-size:12px;font-weight:600">Go to your dashboard</a></p>
+    </div>
+    <div style="background:#1f2937;color:#d1d5db;padding:16px;text-align:center;font-size:11px">
+      <p style="margin:0"><b>Ascivan</b> · Ascend. Achieve. Advance.</p>
+      <p style="margin:6px 0 0"><a href="${SITE}/settings" style="color:#F97316;text-decoration:none">Manage email settings</a></p>
+    </div>
+  </div></body></html>`;
+}

@@ -242,6 +242,21 @@ const Settings = () => {
               >
                 Enable notifications on this device
               </button>
+
+              <details className="mt-4 group">
+                <summary className="text-sm text-blue-600 font-medium cursor-pointer select-none list-none">
+                  Notifications blocked? Here's how to turn them back on (Chrome)
+                </summary>
+                <ol className="mt-3 ml-1 space-y-1.5 text-sm text-gray-700 list-decimal list-inside">
+                  <li>Click the three dots (top right) and choose <span className="font-medium text-gray-900">Settings</span>.</li>
+                  <li>Click <span className="font-medium text-gray-900">Privacy &amp; Security</span> on the left menu.</li>
+                  <li>Click <span className="font-medium text-gray-900">Third-party cookies</span>.</li>
+                  <li>Scroll to the Permissions section and open <span className="font-medium text-gray-900">See all sites data and permissions</span>.</li>
+                  <li>Search for <span className="font-medium text-gray-900">Ascivan</span>, click the arrow next to it, and enable the Notifications permission.</li>
+                  <li>Come back here and click <span className="font-medium text-gray-900">Enable notifications on this device</span> again.</li>
+                </ol>
+                <p className="mt-2 ml-1 text-xs text-gray-500">On other browsers, look for the site settings or padlock icon next to the address bar, then set Notifications to Allow.</p>
+              </details>
             </div>
 
             <div className="bg-white border border-gray-200 rounded-xl p-6">

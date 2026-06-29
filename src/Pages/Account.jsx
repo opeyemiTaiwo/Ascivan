@@ -1,4 +1,4 @@
-// src/Pages/Account.jsx — Account overview: projects joined, projects owned, badges earned
+// src/Pages/Account.jsx - Account overview: projects joined, projects owned, badges earned
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';

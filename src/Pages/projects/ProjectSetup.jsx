@@ -1,7 +1,7 @@
 // src/Pages/projects/ProjectSetup.jsx
 // The confirmed lead refines the auto-generated project (title, description, goals,
 // industry, and team roles) and then opens it for applications. Only the project's
-// confirmed lead (owner) can access this. The lead's role is Project Lead only —
+// confirmed lead (owner) can access this. The lead's role is Project Lead only -
 // they manage; others build. Opening flips status from 'setup' to 'active'.
 
 import React, { useState, useEffect } from 'react';
@@ -17,7 +17,7 @@ const industryTracks = [
   'agriculture', 'manufacturing', 'legal', 'nonprofit', 'travel', 'sports',
   'food', 'fashion', 'construction', 'marketing',
 ];
-// Contributor roles only — the lead is the lead; they don't take a building role.
+// Contributor roles only - the lead is the lead; they don't take a building role.
 const roleOptions = ['Developer', 'Designer', 'QA Tester', 'Mentor', 'Security Specialist', 'Data Analyst', 'Content Writer'];
 const experienceLevels = ['any-level', 'beginner', 'intermediate', 'advanced'];
 

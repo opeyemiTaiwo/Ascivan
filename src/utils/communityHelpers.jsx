@@ -142,7 +142,7 @@ export const uploadImageToStorage = async (file, folder = 'posts') => {
     const validationError = validateImageFile(file);
     if (validationError) throw new Error(validationError);
 
-    // Compress before upload — converts to JPEG under 1MB
+    // Compress before upload - converts to JPEG under 1MB
     const { base64: base64Data, contentType: compressedType } = await compressImageForUpload(file);
 
     const uniqueFilename = generateUniqueFilename(file.name).replace(/\.[^.]+$/, '.jpg');

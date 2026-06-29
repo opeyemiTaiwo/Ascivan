@@ -47,7 +47,7 @@ const compareNames = (idName, profileName) => {
   const overlap = idParts.filter((t) => profParts.includes(t));
   if (overlap.length >= 2) return { match: true, confidence: 'partial', details: `${overlap.length} name parts match (possible reorder)` };
 
-  // Single token match — too weak to count
+  // Single token match - too weak to count
   if (overlap.length === 1) {
     return { match: false, confidence: 'none', details: `Only "${overlap[0]}" matches between your ID and profile name` };
   }
@@ -148,7 +148,7 @@ const NameMatchIndicator = ({ idName, profileName }) => {
 // ═════════════════════════════════════════════════════════════════════
 // MAIN COMPONENT
 // ═════════════════════════════════════════════════════════════════════
-// NEW prop: profileData — the user's dashboard profile object
+// NEW prop: profileData - the user's dashboard profile object
 //   Expected shape: { displayName, university, city, state, ... }
 //   When provided, the component cross-verifies the ID name against it.
 
@@ -176,23 +176,23 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
 
   // ── Cross-verification logic (runs on every relevant change) ──────
   const mismatches = useMemo(() => {
-    if (!profileData) return []; // no profile to compare — skip verification
+    if (!profileData) return []; // no profile to compare - skip verification
     const issues = [];
 
-    // 1. Name check — compare ID name against profile displayName
+    // 1. Name check - compare ID name against profile displayName
     if (idForm.fullName.trim() && profileData.displayName) {
       const result = compareNames(idForm.fullName, profileData.displayName);
       if (!result.match) {
         issues.push({
           field: 'fullName',
-          severity: 'error', // blocking — names MUST match
+          severity: 'error', // blocking - names MUST match
           message: `The name on your ID "${idForm.fullName.trim()}" does not match your profile name "${profileData.displayName}". ${result.details}.`,
         });
       } else if (result.confidence === 'partial') {
         issues.push({
           field: 'fullName',
           severity: 'warning', // non-blocking but flagged for review
-          message: `${result.details}. Profile: "${profileData.displayName}" — ID: "${idForm.fullName.trim()}". Please confirm this is correct.`,
+          message: `${result.details}. Profile: "${profileData.displayName}" - ID: "${idForm.fullName.trim()}". Please confirm this is correct.`,
         });
       }
     }
@@ -211,7 +211,7 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
 
   const hasBlockingMismatch = mismatches.some((m) => m.severity === 'error');
 
-  // Compress image using Canvas API — targets ~300KB max
+  // Compress image using Canvas API - targets ~300KB max
   const compressImage = (file) => {
     return new Promise((resolve) => {
       const reader = new FileReader();
@@ -289,7 +289,7 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
     if (!idForm.expiryDate) { alert('Please enter the expiry date'); return; }
     if (isExpired()) { alert('This ID has expired. Please use a valid, non-expired document.'); return; }
 
-    // Cross-verification gate — block if name mismatch is severe
+    // Cross-verification gate - block if name mismatch is severe
     if (hasBlockingMismatch) {
       alert('Your ID details do not match your profile. Please correct the name on your ID or update your profile name before verifying.');
       return;
@@ -303,8 +303,8 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
     const verificationStatus = nameResult.match && nameResult.confidence === 'high'
       ? 'verified'
       : nameResult.match && nameResult.confidence === 'partial'
-        ? 'pending_review'  // partial match — admin can review
-        : 'verified';       // no profile data to compare — default verified
+        ? 'pending_review'  // partial match - admin can review
+        : 'verified';       // no profile data to compare - default verified
 
     onSave({
       idType: idForm.idType,
@@ -443,7 +443,7 @@ const IdVerification = ({ initialData, onSave, saving = false, inputClass, label
         <p className="text-gray-600 text-[10px] mt-2">Regardless of this setting, your ID information is always securely saved in our database.</p>
       </div>
 
-      {/* Save — disabled when blocking mismatches exist */}
+      {/* Save - disabled when blocking mismatches exist */}
       <button type="button" onClick={handleSubmit} disabled={saving || hasBlockingMismatch}
         className={`w-full py-3 min-h-[44px] font-bold rounded-xl text-sm transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${
           hasBlockingMismatch

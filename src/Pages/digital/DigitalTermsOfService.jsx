@@ -50,7 +50,7 @@ const TermsOfService = () => {
       {/* ── Header ── */}
       <header style={{ position: 'sticky', top: 0, zIndex: 100, background: 'rgba(3,7,18,0.93)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto', padding: '10px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-          {/* Logo — uses the actual Ascivan logo image */}
+          {/* Logo - uses the actual Ascivan logo image */}
           <Link to="/solutions" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
             <img
               src="/Images/512X512.png"
@@ -94,7 +94,7 @@ const TermsOfService = () => {
       {/* ── Page layout ── */}
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '40px 16px 80px', display: 'flex', gap: 0, alignItems: 'flex-start' }} className="tos-page-layout">
 
-        {/* Sidebar TOC — desktop only */}
+        {/* Sidebar TOC - desktop only */}
         <aside className="tos-toc" style={{ position: 'sticky', top: 80, width: 200, flexShrink: 0, display: 'none' }}>
           <p style={{ fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#6b7280', marginBottom: 14, fontFamily: 'system-ui,sans-serif' }}>Contents</p>
           {sections.map(s => (
@@ -135,7 +135,7 @@ const TermsOfService = () => {
 
           {/* ─── 01 Overview ─── */}
           <TosSection id="overview" number="01" title="Overview" icon="🏢">
-            <p>Ascivan is a digital innovation organization specializing in the design, development, and transformation of web and mobile applications using intelligent and cutting-edge technologies — including Artificial Intelligence (AI), machine learning, predictive analytics, and automation systems.</p>
+            <p>Ascivan is a digital innovation organization specializing in the design, development, and transformation of web and mobile applications using intelligent and cutting-edge technologies - including Artificial Intelligence (AI), machine learning, predictive analytics, and automation systems.</p>
             <p>These Terms govern all engagements between Ascivan and any individual, business, or organization ("Client") seeking our services.</p>
           </TosSection>
 
@@ -163,13 +163,13 @@ const TermsOfService = () => {
             </Subsection>
 
             <Subsection title="Consultation Fee as Project Credit">
-              <TosCallout color="#6366f1" icon="✅" title="Good News — Your Fee Counts!">
-                If you choose to move forward and engage Ascivan to build or transform your web or mobile application following the consultation, the <strong>$100 consultation fee will be applied as a credit toward your total project payment</strong>. You will not pay this amount twice — it becomes part of your project investment.
+              <TosCallout color="#6366f1" icon="✅" title="Good News - Your Fee Counts!">
+                If you choose to move forward and engage Ascivan to build or transform your web or mobile application following the consultation, the <strong>$100 consultation fee will be applied as a credit toward your total project payment</strong>. You will not pay this amount twice - it becomes part of your project investment.
               </TosCallout>
             </Subsection>
 
             <Subsection title="Non-Refundable Policy">
-              <TosCallout color="#ef4444" icon="⚠️" title="Important — Please Read">
+              <TosCallout color="#ef4444" icon="⚠️" title="Important - Please Read">
                 The consultation fee of $100 is <strong>strictly non-refundable under all circumstances</strong>, including but not limited to:
                 <ul style={{ marginTop: 10 }}>
                   <li>The Client decides not to proceed with any project after the consultation</li>
@@ -183,10 +183,10 @@ const TermsOfService = () => {
           </TosSection>
 
           {/* ─── 03 Process ─── */}
-          <TosSection id="process" number="03" title="Our Process — What Happens After Consultation" icon="🔄">
+          <TosSection id="process" number="03" title="Our Process - What Happens After Consultation" icon="🔄">
             <p>Upon receipt and confirmation of the consultation fee, our team will follow this structured engagement process:</p>
             <ProcessStep step={1} color="#22c55e" title="Consultation & Discovery">
-              We conduct your discovery session — reviewing your goals, business model, existing platforms, and desired intelligent capabilities.
+              We conduct your discovery session - reviewing your goals, business model, existing platforms, and desired intelligent capabilities.
             </ProcessStep>
             <ProcessStep step={2} color="#6366f1" title="Custom Service Proposal Delivery">
               We deliver a comprehensive written proposal including: recommended solution and services, how Ascivan operates, estimated project timeline and key milestones, transparent pricing breakdown, and technology stack and AI approach.
@@ -216,7 +216,7 @@ const TermsOfService = () => {
               </ul>
             </Subsection>
             <Subsection title="Pricing Transparency">
-              <p>Full pricing will be provided in the custom proposal delivered after your consultation. Ascivan is committed to transparency — you will receive a clear, itemized breakdown before any project commitment is made.</p>
+              <p>Full pricing will be provided in the custom proposal delivered after your consultation. Ascivan is committed to transparency - you will receive a clear, itemized breakdown before any project commitment is made.</p>
             </Subsection>
             <Subsection title="Payment Structure">
               <p>Project payments are typically structured in milestone-based installments, which will be clearly defined in your Project Agreement. Specific payment schedules and terms will be agreed upon in writing before project commencement.</p>
@@ -235,7 +235,7 @@ const TermsOfService = () => {
                 <li><strong>Consultation Fee as Credit:</strong> Applied toward project cost if Client proceeds with Ascivan</li>
               </ul>
             </TosCallout>
-            <Subsection title="Consultation Fee — Non-Refundable">
+            <Subsection title="Consultation Fee - Non-Refundable">
               <p>The $100 consultation fee compensates Ascivan for the time, expertise, and resources dedicated to your discovery session and custom proposal preparation. This fee is non-refundable regardless of whether the Client proceeds with a project.</p>
             </Subsection>
             <Subsection title="Project Payment Refunds">
@@ -263,7 +263,7 @@ const TermsOfService = () => {
           <TosSection id="liability" number="07" title="Limitation of Liability" icon="🛡️">
             <p>To the maximum extent permitted by applicable law, Ascivan shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from or related to the use of our services, including but not limited to loss of revenue, data, goodwill, or business opportunities.</p>
             <p>Ascivan's total liability arising from any engagement shall not exceed the total amount paid by the Client for the specific service giving rise to the claim.</p>
-            <p>Ascivan makes no warranties — express or implied — beyond those explicitly stated in a signed Project Agreement.</p>
+            <p>Ascivan makes no warranties - express or implied - beyond those explicitly stated in a signed Project Agreement.</p>
           </TosSection>
 
           {/* ─── 08 Contact ─── */}
@@ -274,7 +274,7 @@ const TermsOfService = () => {
                 💬 Chat with us directly on our homepage
               </p>
               <p style={{ margin: '0 0 18px 0', color: '#d1d5db', fontFamily: 'system-ui,sans-serif', fontSize: 14, lineHeight: 1.75 }}>
-                The fastest way to get answers is through the <strong style={{ color: '#f9fafb' }}>AI chat on our home page</strong>. Head back to the homepage and use the chat to ask us anything — our team reviews every conversation.
+                The fastest way to get answers is through the <strong style={{ color: '#f9fafb' }}>AI chat on our home page</strong>. Head back to the homepage and use the chat to ask us anything - our team reviews every conversation.
               </p>
               <Link to="/solutions" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'linear-gradient(135deg,#22c55e,#6366f1)', borderRadius: 10, padding: '11px 20px', textDecoration: 'none', color: '#fff', fontFamily: 'system-ui,sans-serif', fontSize: 14, fontWeight: 700, boxShadow: '0 4px 20px rgba(34,197,94,0.3)' }}>
                 🏠 Go to Homepage & Chat with Us
@@ -334,7 +334,7 @@ const TermsOfService = () => {
           li { margin-bottom: 6px; }
         }
 
-        /* Section body indent — only on wider screens */
+        /* Section body indent - only on wider screens */
         .tos-section-body { padding-left: 0; }
         @media (min-width: 600px) { .tos-section-body { padding-left: 54px; } }
       `}</style>

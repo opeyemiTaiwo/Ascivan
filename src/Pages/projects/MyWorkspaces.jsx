@@ -1,4 +1,4 @@
-// src/Pages/projects/MyWorkspaces.jsx — List of member's active project workspaces
+// src/Pages/projects/MyWorkspaces.jsx - List of member's active project workspaces
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';

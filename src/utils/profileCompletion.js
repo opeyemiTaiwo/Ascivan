@@ -26,7 +26,7 @@ const nonEmpty = (v) => typeof v === 'string' && v.trim().length > 0;
 // Returns { complete: boolean, missing: string[] }.
 // Pass the user's Firestore user-doc data.
 //
-// We intentionally gate on the ESSENTIAL fields only — the ones truly needed to
+// We intentionally gate on the ESSENTIAL fields only - the ones truly needed to
 // participate (a name, plus the account-type's core identifier). Country and
 // LinkedIn are encouraged but should not block someone from applying or posting,
 // which previously caused valid, onboarded users to be stuck on "complete your profile".

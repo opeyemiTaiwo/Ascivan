@@ -1,5 +1,5 @@
 // src/utils/activityFeed.js
-// Powers the "Proof Wall" — a feed of verified achievements + limited work updates.
+// Powers the "Proof Wall" - a feed of verified achievements + limited work updates.
 //
 // Real events (badge earned, project shipped, lead confirmed, milestone) are written
 // by logActivity() from the moments they happen. Dummy seed events (for launch, so the

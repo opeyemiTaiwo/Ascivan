@@ -1,4 +1,4 @@
-// src/Pages/projects/ProjectWorkspace.jsx — Workspace with Forum + Resources
+// src/Pages/projects/ProjectWorkspace.jsx - Workspace with Forum + Resources
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -224,7 +224,7 @@ const ProjectWorkspace = () => {
 
   // Resource handlers
   const handleSaveResources = async () => {
-    // Submission link is mandatory for the project lead — it's how work gets verified.
+    // Submission link is mandatory for the project lead - it's how work gets verified.
     if (!resources.submissionUrl || !resources.submissionUrl.trim()) {
       toast.error('A project submission link is required. Add a GitHub repo (or another platform) so your work can be reviewed and verified.');
       return;
@@ -307,7 +307,7 @@ const ProjectWorkspace = () => {
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
         Back to Project
       </button>
-      <h1 className="text-2xl font-bold text-gray-900 mb-1">{project.projectTitle || project.title} — Workspace</h1>
+      <h1 className="text-2xl font-bold text-gray-900 mb-1">{project.projectTitle || project.title} - Workspace</h1>
 
       {/* Tabs */}
       <div className="flex gap-1 mb-6 border-b border-gray-200">
@@ -496,7 +496,7 @@ const ProjectWorkspace = () => {
             )}
           </div>
 
-          {/* Edit resources — owner only */}
+          {/* Edit resources - owner only */}
           {isOwner && (
             <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4">
               <h3 className="text-base font-bold text-gray-900">Edit Resources</h3>

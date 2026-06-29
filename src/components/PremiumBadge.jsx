@@ -1,4 +1,4 @@
-// src/components/PremiumBadge.jsx — Orange premium badge for premium members
+// src/components/PremiumBadge.jsx - Orange premium badge for premium members
 import React from 'react';
 
 export const PremiumBadge = ({ size = 'sm' }) => {

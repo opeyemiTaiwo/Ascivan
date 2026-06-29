@@ -1,4 +1,4 @@
-// src/Pages/ProjectVault.jsx — Completed projects with certificates
+// src/Pages/ProjectVault.jsx - Completed projects with certificates
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 
@@ -235,7 +235,7 @@ const ProjectVault = () => {
                             <div className="mt-2 space-y-1.5">
                               {project.disputeHistory.map((h, i) => (
                                 <div key={i} className="flex items-center justify-between text-xs p-2 bg-gray-50 rounded">
-                                  <span className="text-gray-700">{h.memberName} — <span className={h.action === 'disputed' ? 'text-red-600 font-semibold' : h.action === 'confirmed' ? 'text-blue-600 font-semibold' : 'text-gray-600 font-semibold'}>{h.action}</span></span>
+                                  <span className="text-gray-700">{h.memberName} - <span className={h.action === 'disputed' ? 'text-red-600 font-semibold' : h.action === 'confirmed' ? 'text-blue-600 font-semibold' : 'text-gray-600 font-semibold'}>{h.action}</span></span>
                                   <span className="text-gray-400">{new Date(h.timestamp).toLocaleDateString()}</span>
                                 </div>
                               ))}
@@ -296,7 +296,7 @@ const ProjectVault = () => {
                           <div className="mt-2 space-y-1.5">
                             {project.disputeHistory.map((h, i) => (
                               <div key={i} className="flex items-center justify-between text-xs p-2 bg-gray-50 rounded">
-                                <span className="text-gray-700">{h.memberName} — <span className={h.action === 'disputed' ? 'text-red-600 font-semibold' : h.action === 'confirmed' ? 'text-blue-600 font-semibold' : 'text-gray-600 font-semibold'}>{h.action}</span></span>
+                                <span className="text-gray-700">{h.memberName} - <span className={h.action === 'disputed' ? 'text-red-600 font-semibold' : h.action === 'confirmed' ? 'text-blue-600 font-semibold' : 'text-gray-600 font-semibold'}>{h.action}</span></span>
                                 <span className="text-gray-400">{new Date(h.timestamp).toLocaleDateString()}</span>
                               </div>
                             ))}
@@ -316,7 +316,7 @@ const ProjectVault = () => {
                               <div key={i} className="flex items-start justify-between text-xs p-2 bg-gray-50 rounded gap-2">
                                 <div className="min-w-0 flex-1">
                                   <span className="text-gray-900 font-medium">{log.actorName}</span>
-                                  <span className="text-gray-500"> — {log.description}</span>
+                                  <span className="text-gray-500"> - {log.description}</span>
                                 </div>
                                 <span className="text-gray-400 flex-shrink-0 whitespace-nowrap">{new Date(log.timestamp).toLocaleDateString()}</span>
                               </div>

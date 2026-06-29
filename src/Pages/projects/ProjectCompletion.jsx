@@ -288,7 +288,7 @@ const ProjectCompletion = () => {
           projectId: projectId,
           projectTitle: project.projectTitle || project.title,
           contribution: 'excellent',
-          notes: 'Project owner — completed project successfully',
+          notes: 'Project owner - completed project successfully',
           awardedBy: 'system',
           awardedByName: 'Ascivan System',
           awardedAt: serverTimestamp(),
@@ -461,7 +461,7 @@ const ProjectCompletion = () => {
                     <div className="text-xs text-gray-500 mb-4 space-y-1">
                       <p>Submission link: {project?.resources?.submissionUrl
                         ? <a href={project.resources.submissionUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{project.resources.submissionUrl}</a>
-                        : <span className="text-red-500">Not set — add it on the workspace Resources tab.</span>}</p>
+                        : <span className="text-red-500">Not set - add it on the workspace Resources tab.</span>}</p>
                       <p>You can update the link on the Resources tab and re-submit at any time.</p>
                     </div>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-3">
@@ -484,7 +484,7 @@ const ProjectCompletion = () => {
 
             {isApproved && step !== 4 && (
               <div className="mb-6 bg-green-50 border border-green-200 rounded-xl p-4 text-center">
-                <p className="text-green-700 font-bold text-sm">Approved by Ascivan — you can now assign badges to your team.</p>
+                <p className="text-green-700 font-bold text-sm">Approved by Ascivan - you can now assign badges to your team.</p>
               </div>
             )}
 

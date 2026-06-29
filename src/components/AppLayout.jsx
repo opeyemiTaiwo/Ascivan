@@ -1,4 +1,4 @@
-// src/components/AppLayout.jsx — Left sidebar layout for logged-in pages
+// src/components/AppLayout.jsx - Left sidebar layout for logged-in pages
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -153,7 +153,7 @@ const AppLayout = ({ children }) => {
 
       {/* Main content */}
       <div className="flex-1 min-w-0 flex flex-col">
-        {/* Top bar — sticky, responsive */}
+        {/* Top bar - sticky, responsive */}
         <header className="sticky top-0 z-30 h-16 sm:h-[72px] flex items-center justify-between px-2 sm:px-4 border-b border-gray-200 bg-white lg:px-6">
           <div className="flex items-center gap-2">
             {!hideSidebar && (

@@ -50,7 +50,7 @@ const LandingPage = () => {
   const features = [
     {
       title: 'Real-World Projects',
-      desc: 'Join or post collaborative tech projects and build real products with real teams, from start to finish — the kind of hands-on experience employers actually look for.',
+      desc: 'Join or post collaborative tech projects and build real products with real teams, from start to finish - the kind of hands-on experience employers actually look for.',
     },
     {
       title: 'TechTalent Badges',
@@ -84,8 +84,8 @@ const LandingPage = () => {
 
   const steps = [
     { num: '01', title: 'Create Your Profile', desc: 'Sign in with Google, choose your skill track, and set your experience level. Ready in under a minute.' },
-    { num: '02', title: 'Build Real Products', desc: 'Join or post collaborative projects and ship real products with a team, start to finish — gaining experience that counts.' },
-    { num: '03', title: 'Earn Badges & Get Discovered', desc: 'Complete projects to earn TechTalent Badges and a verified portfolio — then get found by recruiters hiring for remote and onsite roles.' },
+    { num: '02', title: 'Build Real Products', desc: 'Join or post collaborative projects and ship real products with a team, start to finish - gaining experience that counts.' },
+    { num: '03', title: 'Earn Badges & Get Discovered', desc: 'Complete projects to earn TechTalent Badges and a verified portfolio - then get found by recruiters hiring for remote and onsite roles.' },
   ];
 
   return (
@@ -295,7 +295,7 @@ const LandingPage = () => {
         <div id="cta" data-animate className={`fade-up max-w-2xl mx-auto px-4 sm:px-6 text-center ${isVisible('cta') ? 'visible' : ''}`}>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-800 text-gray-900 leading-tight mb-6">Your career starts here.</h2>
           <p className="text-gray-500 text-lg mb-10 leading-relaxed">
-            Build real experience, earn verified badges, and get discovered by recruiters — through real product work, wherever you are in the world.
+            Build real experience, earn verified badges, and get discovered by recruiters - through real product work, wherever you are in the world.
           </p>
           <button
             onClick={handleSignIn}

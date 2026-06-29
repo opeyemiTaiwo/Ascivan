@@ -259,7 +259,7 @@ const Onboarding = () => {
               <label className={labelClass}>Primary Skill Track</label>
               <select value={formData.primarySkillTrack} onChange={e => setFormData(p => ({ ...p, primarySkillTrack: e.target.value }))} className={inputClass}>
                 <option value="">Select a track (optional)</option>
-                {skillTracks.map(t => <option key={t.id} value={t.id}>{t.label} — {t.desc}</option>)}
+                {skillTracks.map(t => <option key={t.id} value={t.id}>{t.label} - {t.desc}</option>)}
               </select>
             </div>
             <div>

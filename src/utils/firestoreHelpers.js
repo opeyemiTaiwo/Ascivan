@@ -1,4 +1,4 @@
-// src/utils/firestoreHelpers.js — Helpers for Firestore operations
+// src/utils/firestoreHelpers.js - Helpers for Firestore operations
 
 // Sanitize email for use as Firestore map key (dots are not allowed in field paths)
 export const sanitizeEmailKey = (email) => {

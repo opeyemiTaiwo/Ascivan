@@ -1,4 +1,4 @@
-// src/config/payment.js — Payment configuration
+// src/config/payment.js - Payment configuration
 // Replace these URLs with your actual Stripe/PayPal payment links when ready
 
 export const PAYMENT_CONFIG = {

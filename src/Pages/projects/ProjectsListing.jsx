@@ -83,7 +83,7 @@ const ProjectsListing = () => {
     );
     const unsub = onSnapshot(q, (snap) => {
       const list = snap.docs.map(d => ({ id: d.id, ...d.data() }))
-        // Rejected projects are dead — never show them on the board.
+        // Rejected projects are dead - never show them on the board.
         .filter(p => p.reviewStatus !== 'rejected')
         // Newest first, sorted in JS (handles missing createdAt gracefully).
         .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));

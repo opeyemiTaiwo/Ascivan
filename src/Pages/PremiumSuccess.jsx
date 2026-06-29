@@ -1,4 +1,4 @@
-// src/Pages/PremiumSuccess.jsx — Post-payment success page
+// src/Pages/PremiumSuccess.jsx - Post-payment success page
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';

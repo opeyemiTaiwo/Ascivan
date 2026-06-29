@@ -253,7 +253,7 @@ const UserProfile = () => {
         {userBadges.length > 0 && (
           <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
             <h3 className="text-lg font-bold text-gray-900 mb-1">Badges Earned</h3>
-            <p className="text-gray-400 text-xs mb-4">Each badge shows the level reached and the contribution rating given by the project owner — verified proof of real collaborative work.</p>
+            <p className="text-gray-400 text-xs mb-4">Each badge shows the level reached and the contribution rating given by the project owner - verified proof of real collaborative work.</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {userBadges.map((badge, i) => {
                 const bd = badgeData.find(b => b.id === badge.id || b.title === badge.title || b.id === badge.id?.toLowerCase());

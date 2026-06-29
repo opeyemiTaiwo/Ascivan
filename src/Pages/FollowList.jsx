@@ -1,4 +1,4 @@
-// src/Pages/FollowList.jsx — View Following and Followers
+// src/Pages/FollowList.jsx - View Following and Followers
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';

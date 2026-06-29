@@ -285,7 +285,7 @@ const CommunityPosts = () => {
         let q;
 
         // Filtered views (myPosts/mentions) drop orderBy to avoid composite indexes,
-        // so cursor pagination doesn't apply — they show the first page only.
+        // so cursor pagination doesn't apply - they show the first page only.
         if ((viewMode === 'myPosts' || viewMode === 'mentions')) {
           setHasMore(false);
           return;
@@ -1095,7 +1095,7 @@ const CommunityPosts = () => {
         <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 py-4 xs:py-6 sm:py-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6">
 
-            {/* Left Sidebar — desktop only */}
+            {/* Left Sidebar - desktop only */}
             <aside className="hidden lg:block lg:col-span-3">
               <UserQuickLinksSidebar currentUser={currentUser} onNavigate={handleNavigation} />
             </aside>

@@ -102,7 +102,7 @@ export const followUser = async (currentUser, targetUserId, targetUserData = nul
     
     // Auto-create current user doc if missing (new Google sign-in users)
     if (!currentUserDoc.exists()) {
-      console.warn('⚠️ Current user doc missing — creating it now');
+      console.warn('⚠️ Current user doc missing - creating it now');
       await setDoc(currentUserRef, {
         uid: currentUser.uid,
         email: currentUser.email || '',

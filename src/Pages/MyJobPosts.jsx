@@ -241,7 +241,7 @@ const MyJobPosts = () => {
             <section className="mb-6 xs:mb-7 sm:mb-8">
               <div className="bg-gradient-to-br from-black/40 via-gray-900/40 to-black/40 rounded-xl xs:rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/20">
                 
-                {/* Category Filter — centered */}
+                {/* Category Filter - centered */}
                 <div className="mb-4 xs:mb-5 sm:mb-6 text-center">
                   <h3 className="text-white font-semibold mb-2 xs:mb-3 text-sm xs:text-base">Filter by Category</h3>
                   <div className="flex flex-wrap justify-center gap-2">
@@ -261,7 +261,7 @@ const MyJobPosts = () => {
                   </div>
                 </div>
 
-                {/* Sort — centered dropdown */}
+                {/* Sort - centered dropdown */}
                 <div className="text-center">
                   <h3 className="text-white font-semibold mb-2 xs:mb-3 text-sm xs:text-base">Sort By</h3>
                   <div className="flex justify-center">

@@ -1,4 +1,4 @@
-// src/Pages/Settings.jsx — Edit profile, reset password, delete account, membership
+// src/Pages/Settings.jsx - Edit profile, reset password, delete account, membership
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, useSearchParams } from 'react-router-dom';

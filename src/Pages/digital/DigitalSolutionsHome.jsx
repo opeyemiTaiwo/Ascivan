@@ -150,15 +150,15 @@ const SERVICES = [
 const FAQs = [
   {
     question: "What does Ascivan do?",
-    answer: "Ascivan builds cutting-edge technology solutions for businesses. We transform web and mobile applications into intelligent systems using AI, automation, and data-driven architecture. We also run a platform where people build real-world experience through collaborative projects and get discovered by recruiters — explore it from our homepage."
+    answer: "Ascivan builds cutting-edge technology solutions for businesses. We transform web and mobile applications into intelligent systems using AI, automation, and data-driven architecture. We also run a platform where people build real-world experience through collaborative projects and get discovered by recruiters - explore it from our homepage."
   },
   {
     question: "How is Ascivan different from other development companies?",
-    answer: "We don't just build websites — we design intelligent systems that automate, analyze, and evolve. Every engagement starts with strategy, and our solutions are built to scale with your business."
+    answer: "We don't just build websites - we design intelligent systems that automate, analyze, and evolve. Every engagement starts with strategy, and our solutions are built to scale with your business."
   },
   {
     question: "How does your consultation and project process work?",
-    answer: "We start every engagement with a consultation fee. This covers your discovery session, initial scoping, and a custom proposal outlining our services, how we operate, project timelines, and transparent pricing. If you move forward and build with us, the fee is credited toward your project — it's part of your investment, not an extra charge. If you choose not to proceed, the consultation fee is non-refundable. For full details on our process, refund policy, pricing structure, and intellectual property terms, please review our Terms of Service at ascivan.com/solutions/terms."
+    answer: "We start every engagement with a consultation fee. This covers your discovery session, initial scoping, and a custom proposal outlining our services, how we operate, project timelines, and transparent pricing. If you move forward and build with us, the fee is credited toward your project - it's part of your investment, not an extra charge. If you choose not to proceed, the consultation fee is non-refundable. For full details on our process, refund policy, pricing structure, and intellectual property terms, please review our Terms of Service at ascivan.com/solutions/terms."
   },
   {
     question: "Is the consultation fee refundable?",
@@ -166,7 +166,7 @@ const FAQs = [
   },
   {
     question: "Can you integrate AI into my existing platform?",
-    answer: "Absolutely. One of our core services is AI Integration and Digital Transformation. We upgrade existing web and mobile platforms with AI capabilities including chatbots, recommendation engines, predictive analytics, workflow automation, and custom AI APIs — without rebuilding from scratch."
+    answer: "Absolutely. One of our core services is AI Integration and Digital Transformation. We upgrade existing web and mobile platforms with AI capabilities including chatbots, recommendation engines, predictive analytics, workflow automation, and custom AI APIs - without rebuilding from scratch."
   },
   {
     question: "Do you build mobile applications?",
@@ -190,11 +190,11 @@ const FAQs = [
   },
   {
     question: "Do you provide ongoing support?",
-    answer: "Absolutely. Our commitment extends beyond launch. We provide reliable ongoing support, maintenance, optimization, and updates to ensure your intelligent systems continue to perform and evolve as your business grows. Support terms are outlined in your individual Project Agreement — for more details, see our Terms of Service at ascivan.com/solutions/terms."
+    answer: "Absolutely. Our commitment extends beyond launch. We provide reliable ongoing support, maintenance, optimization, and updates to ensure your intelligent systems continue to perform and evolve as your business grows. Support terms are outlined in your individual Project Agreement - for more details, see our Terms of Service at ascivan.com/solutions/terms."
   },
   {
     question: "Where can I review your full policies, pricing structure, and legal terms?",
-    answer: "All of our engagement policies — including the consultation fee structure, refund terms, how we price projects, intellectual property ownership, and our full operating process — are documented in our Terms of Service. We strongly encourage every prospective client to read it before starting a consultation. You can access it at ascivan.com/solutions/terms or by clicking the Terms of Service link in the footer of this page."
+    answer: "All of our engagement policies - including the consultation fee structure, refund terms, how we price projects, intellectual property ownership, and our full operating process - are documented in our Terms of Service. We strongly encourage every prospective client to read it before starting a consultation. You can access it at ascivan.com/solutions/terms or by clicking the Terms of Service link in the footer of this page."
   }
 ];
 
@@ -216,7 +216,7 @@ const OUTCOMES = [
   "Sustainable competitive advantage"
 ];
 
-// Career features removed — career content lives on the main careers platform
+// Career features removed - career content lives on the main careers platform
 
 // Lazy loading image component
 const LazyImage = ({ src, alt, className }) => {
@@ -261,7 +261,7 @@ const CareerHome = () => {
 
   // FIX: Use ref + requestAnimationFrame for mouse tracking.
   // Old code called setState on every mousemove (100s of times/sec), causing full re-renders.
-  // Now we write directly to DOM via ref — zero re-renders.
+  // Now we write directly to DOM via ref - zero re-renders.
   const overlayRef = useRef(null);
   const rafId = useRef(null);
 
@@ -305,7 +305,7 @@ const CareerHome = () => {
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden flex flex-col relative bg-gradient-to-b from-black via-gray-900 to-black">
-      {/* Animated background overlay — ref-based, no re-renders */}
+      {/* Animated background overlay - ref-based, no re-renders */}
       <div
         ref={overlayRef}
         className="fixed inset-0 opacity-30 pointer-events-none"
@@ -425,7 +425,7 @@ const CareerHome = () => {
             </h2>
             <p className="text-gray-700 text-base sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
                style={{ fontFamily: '"Inter", sans-serif' }}>
-              End-to-end AI-powered solutions — from strategy to implementation to ongoing optimization
+              End-to-end AI-powered solutions - from strategy to implementation to ongoing optimization
             </p>
           </div>
 
@@ -574,7 +574,7 @@ const CareerHome = () => {
                     Consultation Fee
                   </h3>
                   <p className="text-gray-600 text-sm sm:text-base leading-relaxed flex-grow" style={{ fontFamily: '"Inter", sans-serif' }}>
-                    We begin every engagement with a paid consultation. This fee is <span className="text-blue-400 font-semibold">credited toward your project</span> if you choose to build with us — so your investment starts working immediately.
+                    We begin every engagement with a paid consultation. This fee is <span className="text-blue-400 font-semibold">credited toward your project</span> if you choose to build with us - so your investment starts working immediately.
                   </p>
                 </div>
                 {/* Connector arrow */}
@@ -589,7 +589,7 @@ const CareerHome = () => {
                     Custom Proposal Delivered
                   </h3>
                   <p className="text-gray-600 text-sm sm:text-base leading-relaxed flex-grow" style={{ fontFamily: '"Inter", sans-serif' }}>
-                    After your consultation, we deliver a tailored proposal — covering our full services, how we operate, project timeline, and transparent pricing based on exactly what you want to build.
+                    After your consultation, we deliver a tailored proposal - covering our full services, how we operate, project timeline, and transparent pricing based on exactly what you want to build.
                   </p>
                 </div>
                 <div className="hidden md:flex absolute -right-3 top-1/2 -translate-y-1/2 z-10 w-6 h-6 items-center justify-center text-orange-400 text-xl font-bold">›</div>
@@ -603,7 +603,7 @@ const CareerHome = () => {
                     Build & Transform Together
                   </h3>
                   <p className="text-gray-600 text-sm sm:text-base leading-relaxed flex-grow" style={{ fontFamily: '"Inter", sans-serif' }}>
-                    If you move forward, we kick off your project with a dedicated team. If you don't, the consultation fee is non-refundable — it compensates for the expertise and time invested in your discovery session.
+                    If you move forward, we kick off your project with a dedicated team. If you don't, the consultation fee is non-refundable - it compensates for the expertise and time invested in your discovery session.
                   </p>
                 </div>
               </div>
@@ -617,7 +617,7 @@ const CareerHome = () => {
                   Transparency is one of our core values.
                 </p>
                 <p className="text-gray-400 text-sm sm:text-base" style={{ fontFamily: '"Inter", sans-serif' }}>
-                  Read our full Terms of Service — including refund policies, pricing structure, IP ownership, and more.
+                  Read our full Terms of Service - including refund policies, pricing structure, IP ownership, and more.
                 </p>
               </div>
               <a href="/solutions/terms"

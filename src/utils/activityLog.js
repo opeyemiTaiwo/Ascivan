@@ -1,4 +1,4 @@
-// src/utils/activityLog.js — Centralized activity logging for projects
+// src/utils/activityLog.js - Centralized activity logging for projects
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../firebase/config';
 

@@ -57,7 +57,7 @@ export const getOutreachStatus = async (currentUserData, currentUid) => {
   if (isPremiumRecruiter(currentUserData)) {
     return { limited: false, remaining: Infinity, isRecruiter: true, premium: true };
   }
-  // Free recruiter — read this month's counter.
+  // Free recruiter - read this month's counter.
   let used = 0;
   try {
     const ref = doc(db, 'outreach', `${currentUid}_${periodKey()}`);

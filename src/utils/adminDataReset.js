@@ -1,7 +1,7 @@
 // src/utils/adminDataReset.js
 // DANGER: utilities for wiping TEST DATA during platform testing.
 // These delete documents only. They do NOT touch Firestore rules, indexes,
-// collection definitions, or app code — so all functionality stays intact.
+// collection definitions, or app code - so all functionality stays intact.
 // User ACCOUNTS are preserved (deleting them would break Firebase Auth login);
 // an option is provided to reset each user's badge/certificate fields so the
 // platform reads clean.
@@ -13,14 +13,14 @@ import {
 
 // Top-level collections that hold test CONTENT (safe to wipe).
 const CONTENT_COLLECTIONS = [
-  'projects',               // (also has forum subcollection — handled below)
+  'projects',               // (also has forum subcollection - handled below)
   'project_applications',
   'project_completion_requests',
   'applications',
   'activity',
-  'posts',                  // (also has replies subcollection — handled below)
+  'posts',                  // (also has replies subcollection - handled below)
   'post_replies',
-  'conversations',          // (also has messages subcollection — handled below)
+  'conversations',          // (also has messages subcollection - handled below)
   'hub_posts',
   'notifications',
   'admin_notifications',
@@ -114,7 +114,7 @@ const resetUserBadges = async (onProgress) => {
     await batch.commit();
     reset += snap.size;
     if (onProgress) onProgress('users (badges reset)', reset);
-    // users aren't deleted, so the page won't shrink — stop after one full pass.
+    // users aren't deleted, so the page won't shrink - stop after one full pass.
     if (reset === lastCount || snap.size < 200) break;
     lastCount = reset;
     break; // single pass is enough since we update in place

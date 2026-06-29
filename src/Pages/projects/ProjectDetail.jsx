@@ -113,7 +113,7 @@ const ProjectDetail = () => {
 
             const member = memberByArray || approvedApp || data.submitterId === currentUser.uid || data.submitterEmail === currentUser.email;
             setIsMember(member);
-            // "Applied" should only show while genuinely pending — not once approved.
+            // "Applied" should only show while genuinely pending - not once approved.
             setHasApplied(pendingApp && !member);
             setWasRejected(rejectedApp && !member);
           }
@@ -129,7 +129,7 @@ const ProjectDetail = () => {
   const handleApplyToLead = async () => {
     if (!currentUser) { navigate('/login'); return; }
 
-    // A complete profile is still required, but there is NO badge gate to lead —
+    // A complete profile is still required, but there is NO badge gate to lead -
     // leading is itself a skill-building path open to anyone.
     const profileStatus = checkProfileComplete(memberProfile);
     if (!profileStatus.complete) {
@@ -403,12 +403,12 @@ const ProjectDetail = () => {
               </div>
             )}
 
-            {/* Lead Recruitment — only the lead opening is available */}
+            {/* Lead Recruitment - only the lead opening is available */}
             {project.status === 'lead_recruitment' && (
               <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 sm:p-8">
                 <h2 className="text-lg font-bold text-gray-900 mb-1">This project needs a lead</h2>
                 <p className="text-gray-600 text-sm mb-3">
-                  No one is leading this project yet. Apply to lead it — as the lead, you'll shape the idea, decide which roles and how many people the team needs, then open it up for others to join. Leading is its own skill path and earns a Leadership badge on completion. No badge is required to apply.
+                  No one is leading this project yet. Apply to lead it - as the lead, you'll shape the idea, decide which roles and how many people the team needs, then open it up for others to join. Leading is its own skill path and earns a Leadership badge on completion. No badge is required to apply.
                 </p>
                 <p className="text-gray-500 text-xs mb-4">
                   New to how roles work? <a href="/about#how-it-works" className="text-blue-600 underline">Learn about roles on Ascivan</a>.
@@ -432,7 +432,7 @@ const ProjectDetail = () => {
               </div>
             )}
 
-            {/* Setup in progress — lead is configuring the team */}
+            {/* Setup in progress - lead is configuring the team */}
             {project.status === 'setup' && !isOwner && (
               <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-8 text-center">
                 <p className="text-gray-900 font-semibold text-sm mb-1">A lead is setting up this project</p>
@@ -440,7 +440,7 @@ const ProjectDetail = () => {
               </div>
             )}
 
-            {/* Apply Section — only once the lead has opened the project */}
+            {/* Apply Section - only once the lead has opened the project */}
             {project.status === 'active' && !isOwner && currentUser && (
               <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-8">
                 {memberProfile && !checkProfileComplete(memberProfile).complete ? (
@@ -502,7 +502,7 @@ const ProjectDetail = () => {
                           const full = cap > 0 && filled >= cap;
                           return (
                             <option key={i} value={r.role} disabled={!elig.eligible}>
-                              {r.role} · {lvl} ({filled}/{cap} filled{full ? ', full' : ''}){!elig.eligible ? ' — Locked' : ''}
+                              {r.role} · {lvl} ({filled}/{cap} filled{full ? ', full' : ''}){!elig.eligible ? ' - Locked' : ''}
                             </option>
                           );
                         })}
@@ -581,7 +581,7 @@ const ProjectDetail = () => {
               </div>
             )}
 
-            {/* Member workspace access — only when the apply card above isn't already showing the approved state */}
+            {/* Member workspace access - only when the apply card above isn't already showing the approved state */}
             {isMember && !isOwner && project.status !== 'active' && (
               <div className="bg-green-50 border border-green-200 rounded-xl p-5">
                 <p className="text-green-700 font-semibold text-sm mb-1">You have been approved!</p>

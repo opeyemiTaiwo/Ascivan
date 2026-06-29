@@ -1,12 +1,12 @@
 // src/utils/projectTemplates.js
-// A free, built-in library of software/AI starter projects — no API, no cost.
+// A free, built-in library of software/AI starter projects - no API, no cost.
 // Each template matches the shape returned by generateProject() so the admin
 // "Generate" flow can publish either an AI-generated project OR a template.
 //
 // Rules followed by every template (same as the AI prompt):
 //  - Any-tech or AI-based, buildable as SOFTWARE or a SIMULATION only.
 //  - No physical prototypes/hardware. Hardware ideas are framed as software/simulation.
-//  - Roles are contributor roles only (NO Project Lead — leadership is separate).
+//  - Roles are contributor roles only (NO Project Lead - leadership is separate).
 //  - experienceLevel is one of: any-level | beginner | intermediate | advanced.
 
 const R = (role, skills, count, experienceLevel, description = '') => ({
@@ -61,7 +61,7 @@ export const PROJECT_TEMPLATES = [
   {
     projectTitle: 'Telemedicine Appointment Simulator',
     industryTrack: 'healthcare',
-    projectDescription: 'A simulated telehealth booking and virtual-waiting-room app: patients pick a provider, book a slot, and join a mock video room. A software simulation — no real medical devices or data.',
+    projectDescription: 'A simulated telehealth booking and virtual-waiting-room app: patients pick a provider, book a slot, and join a mock video room. A software simulation - no real medical devices or data.',
     projectGoals: 'Complete a simulated booking from provider selection to a mock consult room.',
     proposedRoles: [
       R('Developer', 'React, scheduling logic', 2, 'intermediate', 'Build booking and the simulated waiting room.'),
@@ -115,7 +115,7 @@ export const PROJECT_TEMPLATES = [
   {
     projectTitle: 'Cybersecurity Phishing-Awareness Trainer',
     industryTrack: 'cybersecurity',
-    projectDescription: 'An interactive training app that shows simulated phishing emails and teaches users to spot red flags, tracking their score over time. A safe simulation — no real attacks.',
+    projectDescription: 'An interactive training app that shows simulated phishing emails and teaches users to spot red flags, tracking their score over time. A safe simulation - no real attacks.',
     projectGoals: 'Run a user through simulated phishing examples and report what they missed.',
     proposedRoles: [
       R('Developer', 'Frontend, scoring logic', 2, 'any-level', 'Build the simulation and scoring.'),
@@ -158,7 +158,7 @@ export const PROJECT_TEMPLATES = [
   {
     projectTitle: 'Smart-City Traffic Flow Simulation',
     industryTrack: 'transportation',
-    projectDescription: 'A browser-based simulation of traffic at an intersection where users adjust signal timing and watch the effect on congestion. A pure software simulation — no sensors or hardware.',
+    projectDescription: 'A browser-based simulation of traffic at an intersection where users adjust signal timing and watch the effect on congestion. A pure software simulation - no sensors or hardware.',
     projectGoals: 'Simulate an intersection and show how signal timing changes congestion.',
     proposedRoles: [
       R('Developer', 'Canvas/animation, simulation logic', 2, 'intermediate', 'Build the simulation engine and controls.'),
@@ -297,7 +297,7 @@ export const PROJECT_TEMPLATES = [
   {
     projectTitle: 'Digital Twin: Warehouse Robot Simulation',
     industryTrack: 'manufacturing',
-    projectDescription: 'A browser simulation of robots moving items through a warehouse, where users tweak routes and see efficiency. A software digital twin — no physical robots.',
+    projectDescription: 'A browser simulation of robots moving items through a warehouse, where users tweak routes and see efficiency. A software digital twin - no physical robots.',
     projectGoals: 'Simulate item-picking routes and report efficiency changes.',
     proposedRoles: [
       R('Developer', 'Simulation, animation', 2, 'intermediate', 'Build the warehouse simulation.'),

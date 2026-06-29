@@ -354,7 +354,7 @@ const PostJobs = () => {
                         }`}
                       >
                         <div className="text-gray-900 text-sm font-semibold">Work authorization not required</div>
-                        <div className="text-gray-500 text-xs mt-0.5">Not a factor — e.g. quick freelance or remote work.</div>
+                        <div className="text-gray-500 text-xs mt-0.5">Not a factor - e.g. quick freelance or remote work.</div>
                       </button>
                     </div>
                   </div>

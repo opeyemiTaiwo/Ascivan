@@ -77,7 +77,7 @@ const ProjectSubmission = () => {
     // Pricing
   });
 
-  // Team roles — dynamic list, payment per role when paid
+  // Team roles - dynamic list, payment per role when paid
   const [teamRoles, setTeamRoles] = useState([
     { role: '', customRole: '', skills: '', count: 1, experienceLevel: 'any-level', description: '', detailsLink: '' }
   ]);
@@ -389,9 +389,9 @@ const ProjectSubmission = () => {
                   <p className="text-gray-400 text-xs mt-1">A GitHub repo is recommended (free). This is where the team's work lives and what gets reviewed.</p>
                 </div>
                 <div>
-                  <label className={labelClass}>Project Link — Full Description *</label>
+                  <label className={labelClass}>Project Link - Full Description *</label>
                   <input type="url" name="projectLink" value={formData.projectLink} onChange={handleInputChange} className={inputClass} placeholder="https://docs.google.com/... (a doc, slides, etc. describing the project)" />
-                  <p className="text-gray-400 text-xs mt-1">A full description of the project — Google Doc, a .docx, a slide deck, etc.</p>
+                  <p className="text-gray-400 text-xs mt-1">A full description of the project - Google Doc, a .docx, a slide deck, etc.</p>
                 </div>
               </div>
 
@@ -401,7 +401,7 @@ const ProjectSubmission = () => {
                   <h2 className="text-lg font-bold text-gray-900">Team Roles</h2>
                   <span className="text-gray-400 text-xs">Total team: {totalTeamSize} {totalTeamSize === 1 ? 'person' : 'people'}</span>
                 </div>
-                <p className="text-gray-500 text-xs -mt-2">Set an experience level per role. Intermediate and Advanced roles can only be filled by members who've earned the matching badge level in that track — keeping your team realistic and your project outcomes protected. Use Beginner or Any Level for roles open to newcomers.</p>
+                <p className="text-gray-500 text-xs -mt-2">Set an experience level per role. Intermediate and Advanced roles can only be filled by members who've earned the matching badge level in that track - keeping your team realistic and your project outcomes protected. Use Beginner or Any Level for roles open to newcomers.</p>
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                   <p className="text-gray-700 text-xs"><strong>Note:</strong> add or remove roles to fit your project. Keep at least one Beginner or Any Level role so newcomers can join.</p>
                 </div>

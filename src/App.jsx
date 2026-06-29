@@ -118,7 +118,7 @@ function App() {
           <div className="w-full min-h-screen overflow-x-hidden">
             <Suspense fallback={<PageLoader />}>
               <Routes>
-                {/* Public — no sidebar */}
+                {/* Public - no sidebar */}
                 <Route path="/" element={<HomeRoute />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/logout" element={<Logout />} />
@@ -126,11 +126,11 @@ function App() {
                 <Route path="/terms" element={<div className="min-h-screen bg-white"><div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16"><TermsOfService /></div></div>} />
                 <Route path="/privacy" element={<div className="min-h-screen bg-white"><div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16"><PrivacyPolicy /></div></div>} />
 
-                {/* Auth flow — no sidebar */}
+                {/* Auth flow - no sidebar */}
                 <Route path="/account-type" element={<BasicProtectedRoute skipOnboardingCheck={true}><AccountTypeSelection /></BasicProtectedRoute>} />
                 <Route path="/onboarding" element={<BasicProtectedRoute skipOnboardingCheck={true}><Onboarding /></BasicProtectedRoute>} />
 
-                {/* App pages — all wrapped in sidebar layout */}
+                {/* App pages - all wrapped in sidebar layout */}
                 <Route path="/dashboard" element={<SidebarRoute><UserDashboard /></SidebarRoute>} />
                 <Route path="/admin" element={<SidebarRoute><AdminPanel /></SidebarRoute>} />
 

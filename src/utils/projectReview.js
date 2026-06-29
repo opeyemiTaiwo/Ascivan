@@ -125,7 +125,7 @@ export const approveProjectReview = async (project, admin, memberEmails = []) =>
   });
 
   const title = project.projectTitle || project.title || 'your project';
-  // Owner — can now assign badges
+  // Owner - can now assign badges
   await notifyByEmail(project.reviewSubmittedBy || project.submitterEmail, {
     type: 'project_review_approved',
     projectId,

@@ -1,4 +1,4 @@
-// src/Pages/TalentBoard.jsx — Discover and recruit verified talent
+// src/Pages/TalentBoard.jsx - Discover and recruit verified talent
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';

@@ -1,4 +1,4 @@
-// src/Pages/user/dashboard.jsx — Dashboard Overview
+// src/Pages/user/dashboard.jsx - Dashboard Overview
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -112,7 +112,7 @@ const DashboardOverview = () => {
           </div>
           <div className="bg-white border border-gray-200 rounded-xl p-5">
             <p className="text-gray-500 text-sm mb-1">Talent Board</p>
-            <p className="text-3xl font-bold text-gray-900">{stats.badgesEarned > 0 ? 'Listed' : '—'}</p>
+            <p className="text-3xl font-bold text-gray-900">{stats.badgesEarned > 0 ? 'Listed' : '-'}</p>
             <p className="text-gray-400 text-xs mt-1">{stats.badgesEarned > 0 ? 'Recruiters can find you' : 'Earn a badge to get listed'}</p>
           </div>
         </div>
@@ -246,7 +246,7 @@ const DashboardOverview = () => {
               )}
             </div>
 
-            {/* Talent Board — Premium only */}
+            {/* Talent Board - Premium only */}
             {isPremiumUser && (
               <div className="bg-orange-50 border border-orange-200 rounded-xl p-6">
                 <h3 className="text-base font-bold text-gray-900 mb-1 flex items-center gap-2">

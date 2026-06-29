@@ -98,7 +98,7 @@ const PrivacyPolicy = () => {
       {/* ── Page layout ── */}
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '40px 16px 80px', display: 'flex', gap: 0, alignItems: 'flex-start' }} className="pp-page-layout">
 
-        {/* Sidebar TOC — desktop only */}
+        {/* Sidebar TOC - desktop only */}
         <aside className="pp-toc" style={{ position: 'sticky', top: 80, width: 200, flexShrink: 0, display: 'none' }}>
           <p style={{ fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#6b7280', marginBottom: 14, fontFamily: 'system-ui,sans-serif' }}>Contents</p>
           {sections.map(s => (
@@ -139,7 +139,7 @@ const PrivacyPolicy = () => {
 
           {/* ─── 01 Overview ─── */}
           <PPSection id="overview" number="01" title="Overview" icon="🏢">
-            <p>Ascivan is a digital innovation organization specializing in the design, development, and transformation of web and mobile applications using intelligent and cutting-edge technologies — including Artificial Intelligence (AI), machine learning, predictive analytics, and automation systems.</p>
+            <p>Ascivan is a digital innovation organization specializing in the design, development, and transformation of web and mobile applications using intelligent and cutting-edge technologies - including Artificial Intelligence (AI), machine learning, predictive analytics, and automation systems.</p>
             <p>This policy applies to all visitors, clients, and users of <strong style={{ color: '#22c55e' }}>ascivan.com</strong>. We are committed to handling your data responsibly, transparently, and in alignment with applicable privacy laws.</p>
           </PPSection>
 
@@ -211,10 +211,10 @@ const PrivacyPolicy = () => {
               Ascivan does not sell, rent, or trade your personal information to third parties for their marketing purposes. Period.
             </PPCallout>
             <Subsection title="Service Providers & Partners">
-              <p>We work with trusted third-party providers who assist in delivering our services — including payment processors, cloud hosting providers, email tools, analytics platforms, and AI service providers. All partners are contractually required to handle your data securely.</p>
+              <p>We work with trusted third-party providers who assist in delivering our services - including payment processors, cloud hosting providers, email tools, analytics platforms, and AI service providers. All partners are contractually required to handle your data securely.</p>
             </Subsection>
             <Subsection title="Within Our Organization">
-              <p>Your information may be accessed by Ascivan team members — project managers, developers, and support staff — who need it to deliver services to you.</p>
+              <p>Your information may be accessed by Ascivan team members - project managers, developers, and support staff - who need it to deliver services to you.</p>
             </Subsection>
             <Subsection title="Legal Requirements">
               <p>We may disclose your information if required to do so by law, court order, or in response to valid requests from government or law enforcement authorities. We will notify you of such requests where legally permitted.</p>
@@ -284,7 +284,7 @@ const PrivacyPolicy = () => {
               <li>Secure access controls and authentication for internal systems</li>
               <li>Regular security assessments and vulnerability monitoring</li>
               <li>Limited employee access to personal data on a need-to-know basis</li>
-              <li>Secure third-party payment processing — we do not store full payment card details</li>
+              <li>Secure third-party payment processing - we do not store full payment card details</li>
             </ul>
             <PPCallout color="#f59e0b" icon="⚠️" title="Important Notice">
               While we take extensive precautions, no method of transmission over the internet or electronic storage is 100% secure. We cannot guarantee absolute security but commit to promptly notifying affected users in the event of a data breach where required by law.
@@ -320,7 +320,7 @@ const PrivacyPolicy = () => {
                 💬 Chat with us directly on our homepage
               </p>
               <p style={{ margin: '0 0 18px 0', color: '#d1d5db', fontFamily: 'system-ui,sans-serif', fontSize: 14, lineHeight: 1.75 }}>
-                The fastest way to reach us is through the <strong style={{ color: '#f9fafb' }}>AI chat on our home page</strong>. Head back to the homepage and use the chat to send us your question — our team reviews every conversation.
+                The fastest way to reach us is through the <strong style={{ color: '#f9fafb' }}>AI chat on our home page</strong>. Head back to the homepage and use the chat to send us your question - our team reviews every conversation.
               </p>
               <Link to="/solutions" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'linear-gradient(135deg,#6366f1,#22c55e)', borderRadius: 10, padding: '11px 20px', textDecoration: 'none', color: '#fff', fontFamily: 'system-ui,sans-serif', fontSize: 14, fontWeight: 700, boxShadow: '0 4px 20px rgba(99,102,241,0.3)' }}>
                 🏠 Go to Homepage & Chat with Us

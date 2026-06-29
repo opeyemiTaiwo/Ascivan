@@ -68,7 +68,7 @@ export async function enablePushForCurrentUser({ interactive = false } = {}) {
     }
 
     const registration = await registerSW();
-    // Wait until the service worker is fully active — getToken can fail if it isn't.
+    // Wait until the service worker is fully active - getToken can fail if it isn't.
     if (registration) {
       try { await navigator.serviceWorker.ready; } catch (e) { /* ignore */ }
     }
@@ -118,7 +118,7 @@ export function playNotificationSound() {
   } catch (e) { /* ignore */ }
 }
 
-// Foreground messages (site open + focused) — show a toast AND play a sound,
+// Foreground messages (site open + focused) - show a toast AND play a sound,
 // since the OS notification is suppressed while the tab is focused.
 export function listenForForegroundPush() {
   if (!messaging) return;

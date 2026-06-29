@@ -59,7 +59,7 @@ const About = () => {
               Talent is everywhere, but the chance to prove it is not. Many capable people have the skills but no easy way to gain real, verifiable work experience that recruiters trust. Degrees, coursework, and competitions build ability; they rarely produce the one thing employers look for: proof that you've shipped a real product, with a team, from start to finish. We believe in proof over pedigree, that what you can build matters more than where you came from, what you studied, or where you are.
             </p>
             <p className="text-gray-600 leading-relaxed">
-              Ascivan closes that gap. We simulate real-world experience — collaborative teams building products end to end — so you earn verified credentials and a portfolio of genuine work, then become visible to recruiters hiring for remote and onsite roles. No matter where you are in the world, your work speaks for you.
+              Ascivan closes that gap. We simulate real-world experience - collaborative teams building products end to end - so you earn verified credentials and a portfolio of genuine work, then become visible to recruiters hiring for remote and onsite roles. No matter where you are in the world, your work speaks for you.
             </p>
           </div>
         </section>
@@ -69,12 +69,12 @@ const About = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">What We Offer</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
-              { title: 'Real-World Projects', desc: 'Join or post collaborative projects and build real products with real teams across development, QA, architecture, security, and more — from start to finish.' },
+              { title: 'Real-World Projects', desc: 'Join or post collaborative projects and build real products with real teams across development, QA, architecture, security, and more - from start to finish.' },
               { title: 'TechTalent Badges', desc: 'Earn verified credentials across 6 skill tracks with 4 progression levels each. Badges are awarded based on your role and contribution in completed projects.' },
               { title: 'Talent Board', desc: 'Every member with verified work is listed for recruiters and companies to discover. Your badges, project history, and verified profile do the talking.' },
-              { title: 'Project Workspaces', desc: 'Every project gets a dedicated workspace with a discussion forum, resource sharing, and team directory — all logged for accountability.' },
+              { title: 'Project Workspaces', desc: 'Every project gets a dedicated workspace with a discussion forum, resource sharing, and team directory - all logged for accountability.' },
               { title: 'Community & Messaging', desc: 'Post updates, follow professionals, and message anyone on the platform. Build a network through collaboration, not just connections.' },
-              { title: 'Verified by Contribution', desc: 'Project owners evaluate each member, and badges record the role and contribution level — so the proof on your profile is honest and trusted by recruiters.' },
+              { title: 'Verified by Contribution', desc: 'Project owners evaluate each member, and badges record the role and contribution level - so the proof on your profile is honest and trusted by recruiters.' },
             ].map((item, i) => (
               <div key={i} className="bg-white rounded-xl border border-gray-200 p-5">
                 <h3 className="text-gray-900 font-bold text-lg mb-2">{item.title}</h3>
@@ -129,26 +129,8 @@ const About = () => {
                 <p className="text-gray-500 text-sm">Unlimited collaborative projects, all 6 badge tracks, a Talent Board listing for recruiters, messaging (unlimited for talent), and project workspaces. Recruiter accounts can post up to 2 jobs and contact up to 5 new candidates per month.</p>
               </div>
               <div>
-                <h3 className="text-gray-900 font-semibold text-base mb-2">Premium — $200/year or $20/month</h3>
+                <h3 className="text-gray-900 font-semibold text-base mb-2">Premium - $200/year or $20/month</h3>
                 <p className="text-gray-500 text-sm">Everything in Basic plus priority Talent Board ranking (premium members seen first), unlimited candidate messages, unlimited job posts, a verified company badge, and priority support at info.ascivan@gmail.com.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Founder */}
-        <section className="mb-12">
-          <div className="bg-gray-50 rounded-xl border border-gray-200 p-6 sm:p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Founded By</h2>
-            <div className="flex flex-col sm:flex-row items-start gap-4">
-              <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
-                <span className="text-2xl text-white font-bold">OA</span>
-              </div>
-              <div>
-                <h3 className="text-gray-900 font-bold text-lg">Opeyemi Adeniran</h3>
-                <p className="text-gray-500 text-sm mt-1">
-                  PhD candidate in Computer and Electrical Systems Engineering (AI focus) at Morgan State University. Building Ascivan to give every tech professional — from first-time coders to senior architects, a place to grow through real work.
-                </p>
               </div>
             </div>
           </div>

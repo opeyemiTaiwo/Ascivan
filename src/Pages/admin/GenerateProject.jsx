@@ -1,4 +1,4 @@
-// src/Pages/admin/GenerateProject.jsx — Admin: auto-generate software/AI projects
+// src/Pages/admin/GenerateProject.jsx - Admin: auto-generate software/AI projects
 // Generated projects start in the `lead_recruitment` state: only "Apply to lead"
 // is open. Once a lead is confirmed they refine the content and open the rest of
 // the roles for the team.
@@ -42,7 +42,7 @@ const GenerateProject = () => {
       // Free, instant: use the built-in template library
       const result = getRandomTemplate();
       setDraft(result);
-      toast.success('Project loaded — review and publish.');
+      toast.success('Project loaded - review and publish.');
     } catch (e) {
       console.error(e);
       toast.error('Could not load a project. Try again.');
@@ -60,7 +60,7 @@ const GenerateProject = () => {
         projectGoals: draft.projectGoals || null,
         industryTrack: draft.industryTrack,
         timeline: 'flexible',
-        // Roles the generator proposed — become editable by the confirmed lead
+        // Roles the generator proposed - become editable by the confirmed lead
         proposedRoles: draft.proposedRoles,
         // No team roles are open yet; only the lead opening is available
         teamRoles: [],
@@ -70,7 +70,7 @@ const GenerateProject = () => {
         isActive: true,
         isGenerated: true,
         leadConfirmed: false,
-        // No human owner yet — the confirmed lead becomes the owner
+        // No human owner yet - the confirmed lead becomes the owner
         submitterId: null,
         submitterEmail: null,
         submitterName: 'Ascivan (Auto-generated)',
@@ -109,7 +109,7 @@ const GenerateProject = () => {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
       <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Generate Project</h1>
-      <p className="text-gray-500 text-sm mb-6">Auto-generate a software or AI project (no physical prototypes). It publishes in lead recruitment — anyone can apply to lead, and the confirmed lead refines it and opens the team.</p>
+      <p className="text-gray-500 text-sm mb-6">Auto-generate a software or AI project (no physical prototypes). It publishes in lead recruitment - anyone can apply to lead, and the confirmed lead refines it and opens the team.</p>
 
       <button onClick={handleGenerate} disabled={generating}
         className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-6 py-2.5 rounded-lg transition-all disabled:opacity-50">

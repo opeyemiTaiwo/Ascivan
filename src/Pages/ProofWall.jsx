@@ -1,5 +1,5 @@
 // src/Pages/ProofWall.jsx
-// The Proof Wall — a feed of verified achievements (not social posts).
+// The Proof Wall - a feed of verified achievements (not social posts).
 // Reads system-generated events + limited work updates from the `activity` collection.
 // Members can share a work-focused project update; everything else is auto-generated proof.
 

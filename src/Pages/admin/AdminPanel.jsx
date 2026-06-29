@@ -1,4 +1,4 @@
-// src/Pages/admin/AdminPanel.jsx — Platform admin dashboard (admin-only)
+// src/Pages/admin/AdminPanel.jsx - Platform admin dashboard (admin-only)
 // Tabs: Overview (stats) · Projects · Users · Generate · Moderation
 // Gated by users/{uid}.role === 'admin'.
 
@@ -21,8 +21,8 @@ import { sendPush } from '../../utils/pushNotifications';
 const fmtDate = (ts) => {
   try {
     const d = ts?.toDate ? ts.toDate() : (ts ? new Date(ts) : null);
-    return d ? d.toLocaleDateString() : '—';
-  } catch { return '—'; }
+    return d ? d.toLocaleDateString() : '-';
+  } catch { return '-'; }
 };
 
 const statusStyle = {
@@ -99,7 +99,7 @@ const AdminPanel = () => {
   const loadReviews = useCallback(async () => {
     setLoadingReviews(true);
     try {
-      // Projects awaiting review (submitted) — fetched separately so admins see the queue.
+      // Projects awaiting review (submitted) - fetched separately so admins see the queue.
       const snap = await getDocs(query(collection(db, 'projects'), where('reviewStatus', '==', REVIEW_STATUS.SUBMITTED)));
       const rows = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       rows.sort((a, b) => (b.reviewSubmittedAt?.seconds || 0) - (a.reviewSubmittedAt?.seconds || 0));
@@ -301,11 +301,11 @@ const AdminPanel = () => {
       if (useAI) {
         // AI generation (requires a funded Anthropic API key on the server)
         setDraft(await generateProject());
-        toast.success('Generated with AI — review and publish.');
+        toast.success('Generated with AI - review and publish.');
       } else {
         // Free, instant: pick from the built-in template library
         setDraft(getRandomTemplate());
-        toast.success('Loaded a project — review and publish.');
+        toast.success('Loaded a project - review and publish.');
       }
     } catch (e) {
       console.error(e);
@@ -412,7 +412,7 @@ const AdminPanel = () => {
           <div className="bg-red-50 border-2 border-red-200 rounded-xl p-5">
             <h2 className="text-lg font-bold text-red-700 mb-1">Clear all test data</h2>
             <p className="text-gray-600 text-sm mb-3">
-              Permanently deletes all projects, applications, the Proof Wall feed, posts, messages, notifications, jobs, badges, and certificates. <strong>User accounts are kept</strong> so people can still log in. All platform functionality stays intact — only the data is wiped. This cannot be undone.
+              Permanently deletes all projects, applications, the Proof Wall feed, posts, messages, notifications, jobs, badges, and certificates. <strong>User accounts are kept</strong> so people can still log in. All platform functionality stays intact - only the data is wiped. This cannot be undone.
             </p>
 
             <label className="flex items-center gap-2 mb-3 text-sm text-gray-700">
@@ -583,7 +583,7 @@ const AdminPanel = () => {
       {/* GENERATE */}
       {!loadingData && tab === 'generate' && (
         <div>
-          <p className="text-gray-500 text-sm mb-4">Publish a software or AI project (no physical prototypes) into lead recruitment — anyone can apply to lead, then the confirmed lead refines it and opens the team.</p>
+          <p className="text-gray-500 text-sm mb-4">Publish a software or AI project (no physical prototypes) into lead recruitment - anyone can apply to lead, then the confirmed lead refines it and opens the team.</p>
 
           {/* Source toggle */}
           <div className="flex items-center gap-3 mb-4 p-3 bg-gray-50 border border-gray-200 rounded-xl">
@@ -595,7 +595,7 @@ const AdminPanel = () => {
             <span className="text-xs text-gray-400">
               {useAI
                 ? 'Writes a fresh project via Claude (needs Anthropic API credits).'
-                : `Free — picks from ${TEMPLATE_COUNT} built-in project templates. No cost.`}
+                : `Free - picks from ${TEMPLATE_COUNT} built-in project templates. No cost.`}
             </span>
           </div>
 

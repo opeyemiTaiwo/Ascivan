@@ -86,7 +86,7 @@ const Messages = () => {
     if (!currentUser) navigate('/login');
   }, [currentUser, navigate]);
 
-  // Load users you can message — anyone on the platform (follow is no longer required).
+  // Load users you can message - anyone on the platform (follow is no longer required).
   useEffect(() => {
     if (!currentUser) return;
     (async () => {
@@ -146,7 +146,7 @@ const Messages = () => {
     return () => unsub();
   }, [currentUser]);
 
-  // URL param ?with=uid or ?to=uid — auto-open conversation
+  // URL param ?with=uid or ?to=uid - auto-open conversation
   useEffect(() => {
     const targetUid = searchParams.get('with') || searchParams.get('to');
     if (targetUid && !loading) openConversation(targetUid);
@@ -509,7 +509,7 @@ const Messages = () => {
                   </div>
                 </>
               ) : (
-                /* Empty state — desktop only */
+                /* Empty state - desktop only */
                 <div className="flex-col flex-1 items-center justify-center text-center p-10 bg-gray-50 hidden md:flex">
                   <div className="w-20 h-20 mb-4 bg-blue-50 rounded-full flex items-center justify-center">
                     <svg className="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -96,7 +96,7 @@ const SimpleChatbot = () => {
         setStep(4);
       } else if (type.includes('career') || type.includes('tech') || type.includes('job')) {
         // Jobs/career branch
-        addBotMessage("Great news! Ascivan helps tech professionals find projects, jobs, career tools, and connect with a supportive community — all in one place.");
+        addBotMessage("Great news! Ascivan helps tech professionals find projects, jobs, career tools, and connect with a supportive community - all in one place.");
         safeTimeout(() => {
           addBotMessage("Check out our Projects section to find collaborative work, or explore Jobs for career opportunities.");
         }, 1500);
@@ -151,9 +151,9 @@ const SimpleChatbot = () => {
         addBotOptions(
           `Perfect, ${formData.firstName}! How can we help you today?`,
           [
-            "🏢 Business Solutions — Build or transform my product",
-            "🚀 Career Guidance — Transition into or grow in tech",
-            "💬 General Inquiry — Something else"
+            "🏢 Business Solutions - Build or transform my product",
+            "🚀 Career Guidance - Transition into or grow in tech",
+            "💬 General Inquiry - Something else"
           ]
         );
         setStep(3);
@@ -293,7 +293,7 @@ const SimpleChatbot = () => {
 
               <p className="text-base text-gray-400 max-w-xl mx-auto leading-relaxed mb-8" 
                  style={{ fontFamily: '"Inter", sans-serif' }}>
-                This assistant collects your information — our human team handles everything from there.
+                This assistant collects your information - our human team handles everything from there.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
@@ -347,7 +347,7 @@ const SimpleChatbot = () => {
                   </div>
                   <div>
                     <h3 className="font-bold text-base sm:text-lg md:text-xl">Ascivan Assistant</h3>
-                    <p className="text-sm text-gray-900/80">Collecting your info — our team follows up personally</p>
+                    <p className="text-sm text-gray-900/80">Collecting your info - our team follows up personally</p>
                   </div>
                 </div>
                 <button 

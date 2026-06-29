@@ -33,6 +33,9 @@ export const logActivity = async (event) => {
       projectTitle: event.projectTitle || null,
       badgeName: event.badgeName || null,
       text: event.text || null,               // for 'update' posts
+      imageUrl: event.imageUrl || null,       // optional image on an update
+      link: event.link || null,               // optional link on an update
+      mentions: event.mentions || [],         // [{uid, name}] mentioned team members
       meta: event.meta || null,               // small extra string e.g. "3 completed projects"
       isDummy: false,
       createdAt: serverTimestamp(),

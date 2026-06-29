@@ -14,7 +14,7 @@ const FindFirstProject = ({ profile }) => {
   useEffect(() => {
     let active = true;
     (async () => {
-      const results = await matchProjects(profile || {}, 4);
+      const results = await matchProjects(profile || {}, 3);
       if (active) { setMatches(results); setLoading(false); }
     })();
     return () => { active = false; };

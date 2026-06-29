@@ -6,9 +6,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { getActivity, logActivity, ACTIVITY_TYPES, toggleCelebrate, editUpdate, deleteActivityItem } from '../utils/activityFeed';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
+import { uploadImageToBlob, validateImageFile } from '../utils/blobStorage';
+import { MentionTextarea } from '../components/MentionTextarea';
 
 const fmtAgo = (ts) => {
   try {
@@ -73,6 +75,10 @@ const ProofWall = () => {
   const [showCompose, setShowCompose] = useState(false);
   const [updateText, setUpdateText] = useState('');
   const [updateProject, setUpdateProject] = useState('');
+  const [updateLink, setUpdateLink] = useState('');
+  const [updateImage, setUpdateImage] = useState(null); // {file, preview}
+  const [updateMentions, setUpdateMentions] = useState([]); // [{uid, name}]
+  const [uploadingImg, setUploadingImg] = useState(false);
   const [posting, setPosting] = useState(false);
 
   // Inline edit state
@@ -158,21 +164,71 @@ const ProofWall = () => {
     }
     setPosting(true);
     try {
+      // Upload image if one was attached (same Vercel Blob flow as the workspace).
+      let imageUrl = null;
+      if (updateImage) {
+        setUploadingImg(true);
+        const result = await uploadImageToBlob(updateImage.file, 'proof-update');
+        imageUrl = result?.url || result || null;
+        setUploadingImg(false);
+      }
+
       await logActivity({
         type: 'update',
         actorId: currentUser.uid,
         actorName: myData?.displayName || 'A member',
         projectTitle: updateProject.trim(),
         text: updateText.trim(),
+        link: updateLink.trim() || null,
+        imageUrl,
+        mentions: updateMentions,
       });
+
+      // Notification to the author so it shows under "My Posts".
+      try {
+        await addDoc(collection(db, 'notifications'), {
+          userId: currentUser.uid,
+          type: 'my_post',
+          message: `You shared an update on "${updateProject.trim()}".`,
+          isRead: false,
+          createdAt: serverTimestamp(),
+        });
+      } catch (_) {}
+
+      // Notification to each mentioned teammate so it shows under "Mentions".
+      for (const m of updateMentions) {
+        if (!m.uid || m.uid === currentUser.uid) continue;
+        try {
+          await addDoc(collection(db, 'notifications'), {
+            userId: m.uid,
+            type: 'mention',
+            message: `${myData?.displayName || 'A member'} mentioned you in an update on "${updateProject.trim()}".`,
+            mentionedByName: myData?.displayName || 'A member',
+            mentionedByPhoto: myData?.photoURL || null,
+            isRead: false,
+            createdAt: serverTimestamp(),
+          });
+        } catch (_) {}
+      }
+
       toast.success('Update shared.');
-      setUpdateText(''); setUpdateProject(''); setShowCompose(false);
+      setUpdateText(''); setUpdateProject(''); setUpdateLink('');
+      setUpdateImage(null); setUpdateMentions([]); setShowCompose(false);
       load(filter);
     } catch (e) {
       console.error(e);
       toast.error('Could not share your update.');
+      setUploadingImg(false);
     }
     setPosting(false);
+  };
+
+  const handleUpdateImageSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const v = validateImageFile(file);
+    if (v && v.valid === false) { toast.error(v.error || 'Invalid image.'); return; }
+    setUpdateImage({ file, preview: URL.createObjectURL(file) });
   };
 
   return (
@@ -199,17 +255,53 @@ const ProofWall = () => {
             placeholder="Which project is this about?"
             className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none"
           />
-          <textarea
+          <MentionTextarea
             value={updateText}
-            onChange={e => setUpdateText(e.target.value)}
-            placeholder="Share a real update on the work: progress, a milestone, what you need next."
+            onChange={setUpdateText}
+            onMentionSelect={(user) => {
+              const uid = user.uid || user.id;
+              const name = user.displayName || user.name || user.email;
+              setUpdateMentions(prev => prev.some(m => m.uid === uid) ? prev : [...prev, { uid, name }]);
+            }}
+            placeholder="Share a real update on the work. Type @ to mention a team member."
             rows={3}
             className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none resize-none"
           />
+
+          {updateMentions.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {updateMentions.map(m => (
+                <span key={m.uid} className="text-xs font-medium px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full flex items-center gap-1">
+                  @{m.name}
+                  <button onClick={() => setUpdateMentions(prev => prev.filter(x => x.uid !== m.uid))} className="text-blue-400 hover:text-blue-700">×</button>
+                </span>
+              ))}
+            </div>
+          )}
+
+          <input
+            value={updateLink}
+            onChange={e => setUpdateLink(e.target.value)}
+            placeholder="Add a link (optional)"
+            className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none"
+          />
+
+          {updateImage ? (
+            <div className="relative inline-block">
+              <img src={updateImage.preview} alt="preview" className="max-h-40 rounded-lg border border-gray-200" />
+              <button onClick={() => setUpdateImage(null)} className="absolute top-1 right-1 bg-black/60 text-white rounded-full w-6 h-6 text-sm">×</button>
+            </div>
+          ) : (
+            <label className="inline-flex items-center gap-2 text-sm text-blue-600 font-medium cursor-pointer">
+              <input type="file" accept="image/*" onChange={handleUpdateImageSelect} className="hidden" />
+              + Add an image
+            </label>
+          )}
+
           <div className="flex justify-end gap-2">
-            <button onClick={() => setShowCompose(false)} className="text-gray-500 text-sm font-semibold px-3 py-1.5">Cancel</button>
-            <button onClick={handlePostUpdate} disabled={posting} className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-1.5 rounded-lg disabled:opacity-50">
-              {posting ? 'Sharing…' : 'Share update'}
+            <button onClick={() => { setShowCompose(false); setUpdateImage(null); setUpdateMentions([]); setUpdateLink(''); }} className="text-gray-500 text-sm font-semibold px-3 py-1.5">Cancel</button>
+            <button onClick={handlePostUpdate} disabled={posting || uploadingImg} className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-1.5 rounded-lg disabled:opacity-50">
+              {uploadingImg ? 'Uploading…' : posting ? 'Sharing…' : 'Share update'}
             </button>
           </div>
         </div>

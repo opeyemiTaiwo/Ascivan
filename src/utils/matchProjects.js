@@ -64,6 +64,16 @@ const scoreProject = (project, profile) => {
   const created = project.createdAt?.seconds || 0;
   score += Math.min((created / 1e10), 5);
 
+  // 5) Track-aware project-type fit (prevents dead-ends for newcomers):
+  //    - TechLeads people want projects that NEED a lead (something to step into).
+  //    - Everyone else wants active projects that already HAVE a lead and open roles to join.
+  const isLeadTrack = norm(profile.primarySkillTrack) === 'techleads';
+  const needsLead = project.status === 'lead_recruitment' && !project.leadConfirmed;
+  const hasLeadActive = project.status === 'active' && (project.leadConfirmed || project.submitterId);
+  if (isLeadTrack && needsLead) { score += 25; reasons.push('Needs a lead - step up'); }
+  else if (!isLeadTrack && hasLeadActive) { score += 20; reasons.push('Open to join'); }
+  else if (!isLeadTrack && needsLead) { score += 5; } // still shippable, lower priority
+
   return { score, reasons };
 };
 

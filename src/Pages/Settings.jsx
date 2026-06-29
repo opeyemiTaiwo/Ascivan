@@ -27,6 +27,7 @@ const Settings = () => {
   const [reminders, setReminders] = useState(true);
   const [form, setForm] = useState({
     displayName: '', specialization: '', experienceLevel: '', primarySkillTrack: '',
+    highestEducation: '', skills: '',
     country: '', city: '', state: '', portfolioUrl: '', linkedinUrl: '', githubUrl: '', emailPublic: false,
   });
 
@@ -48,6 +49,8 @@ const Settings = () => {
           setForm({
             displayName: data.displayName || '',
             specialization: data.specialization || '',
+            highestEducation: data.highestEducation || '',
+            skills: data.skillsText || (Array.isArray(data.skills) ? data.skills.join(', ') : ''),
             experienceLevel: data.experienceLevel || '',
             primarySkillTrack: data.primarySkillTrack || '',
             country: data.country || '',
@@ -82,6 +85,9 @@ const Settings = () => {
       await updateDoc(doc(db, 'users', currentUser.uid), {
         displayName: form.displayName.trim(),
         specialization: form.specialization.trim() || null,
+        highestEducation: form.highestEducation || null,
+        skillsText: form.skills.trim() || null,
+        skills: form.skills.split(',').map(s => s.trim().toLowerCase()).filter(Boolean),
         experienceLevel: form.experienceLevel || null,
         primarySkillTrack: form.primarySkillTrack || null,
         country: form.country.trim(),
@@ -169,8 +175,23 @@ const Settings = () => {
               </select>
             </div>
             <div>
-              <label className={labelCls}>Specialization</label>
-              <input type="text" value={form.specialization} onChange={e => setForm(p => ({ ...p, specialization: e.target.value }))} className={inputCls} placeholder="e.g., React, Python, AWS" />
+              <label className={labelCls}>Highest Level of Education</label>
+              <select value={form.highestEducation} onChange={e => setForm(p => ({ ...p, highestEducation: e.target.value }))} className={inputCls}>
+                <option value="">Select your education level</option>
+                <option value="high_school">High School</option>
+                <option value="undergrad">Undergraduate</option>
+                <option value="masters">Master's</option>
+                <option value="phd">PhD</option>
+              </select>
+            </div>
+            <div>
+              <label className={labelCls}>Course of Study</label>
+              <input type="text" value={form.specialization} onChange={e => setForm(p => ({ ...p, specialization: e.target.value }))} className={inputCls} placeholder="e.g., Computer Science, Chemistry, Business" />
+              <p className="text-xs text-gray-500 mt-1">Your field of study, or area of concentration if in high school.</p>
+            </div>
+            <div>
+              <label className={labelCls}>Courses, Certifications & Skills</label>
+              <input type="text" value={form.skills} onChange={e => setForm(p => ({ ...p, skills: e.target.value }))} className={inputCls} placeholder="e.g., Python, AWS Certified, CS50, React" />
             </div>
             <div>
               <label className={labelCls}>Experience Level{!profileData?.isCompany ? ' *' : ''}</label>

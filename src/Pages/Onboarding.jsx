@@ -32,8 +32,10 @@ const Onboarding = () => {
   const [formData, setFormData] = useState({
     displayName: '',
     experienceLevel: '', // 'beginner' | 'intermediate' | 'advanced' | 'expert'
-    primarySkillTrack: '', // TechPO, TechQA, TechDev, TechLeads, TechArchs, TechGuard
+    primarySkillTrack: '', // TechPO, TechQA, TechDev, TechLeads, TechArchs, TechGuard, others, notsure
+    highestEducation: '', // high_school | undergrad | masters | phd
     specialization: '',
+    skills: '',
     yearsOfExperience: '',
     country: '',
     city: '',
@@ -57,12 +59,21 @@ const Onboarding = () => {
   ];
 
   const skillTracks = [
-    { id: 'TechDev', label: 'Development', desc: 'Frontend, backend, mobile, full-stack' },
-    { id: 'TechQA', label: 'Quality Assurance', desc: 'Testing, code reviews, quality control' },
-    { id: 'TechPO', label: 'Product / Project Owner', desc: 'Own product vision, requirements, and backlog' },
+    { id: 'TechDev', label: 'Coding Developer', desc: 'Frontend, backend, mobile, full-stack' },
     { id: 'TechArchs', label: 'Low/No-Code Developer', desc: 'Build with low-code and no-code platforms' },
-    { id: 'TechLeads', label: 'Leadership', desc: 'Team management, mentoring, decisions' },
-    { id: 'TechGuard', label: 'Cybersecurity', desc: 'Security, compliance, resilience' },
+    { id: 'TechQA', label: 'Quality Tester', desc: 'Testing, reviews, quality control' },
+    { id: 'TechGuard', label: 'Network & Cybersecurity', desc: 'Security, cloud, DevOps' },
+    { id: 'TechPO', label: 'Product / Project Owner', desc: 'Own product vision, requirements, and backlog' },
+    { id: 'TechLeads', label: 'Non-Technical Roles', desc: 'Management, writing, research, coordination' },
+    { id: 'others', label: 'Others', desc: 'A tech role not listed here' },
+    { id: 'notsure', label: 'Not sure yet', desc: "Help me discover the right track" },
+  ];
+
+  const educationLevels = [
+    { id: 'high_school', label: 'High School' },
+    { id: 'undergrad', label: 'Undergraduate' },
+    { id: 'masters', label: "Master's" },
+    { id: 'phd', label: 'PhD' },
   ];
 
   const individualInterests = [
@@ -137,18 +148,19 @@ const Onboarding = () => {
         if (!isBusinessEmail(formData.companyEmail)) { toast.error('Please use a business email (not Gmail, Yahoo, Outlook, etc.)'); return; }
       }
       if (step === 3 && !formData.country.trim()) { toast.error('Please enter your current country'); return; }
-      if (step === 4 && formData.interests.length === 0) { toast.error('Please select at least one interest'); return; }
+      // interests optional now: shown on profile, editable later
     } else {
       // Individual: step 1=experience level, 2=name/profile/links, 3=location, 4=interests
       if (step === 1 && !formData.experienceLevel) { toast.error('Please select your experience level'); return; }
       if (step === 2) {
         if (!formData.displayName.trim()) { toast.error('Please enter your name'); return; }
-        if (!formData.primarySkillTrack) { toast.error('Please select your primary skill track'); return; }
-        if (!formData.specialization.trim()) { toast.error('Please list your specialization or main skills'); return; }
-        if (!formData.linkedinUrl.trim()) { toast.error('Please enter your LinkedIn URL'); return; }
+        if (!formData.primarySkillTrack) { toast.error('Please select your track'); return; }
+        if (!formData.highestEducation) { toast.error('Please select your highest level of education'); return; }
+        if (!formData.specialization.trim()) { toast.error('Please enter your course of study or area of concentration'); return; }
+        if (!formData.skills.trim()) { toast.error('Please list your courses, certifications, or skills'); return; }
       }
       if (step === 3 && !formData.country.trim()) { toast.error('Please enter your current country'); return; }
-      if (step === 4 && formData.interests.length === 0) { toast.error('Please select at least one interest'); return; }
+      // interests optional now: shown on profile, editable later
     }
     setStep(s => s + 1);
   };
@@ -195,10 +207,12 @@ const Onboarding = () => {
       } else {
         updateData.experienceLevel = formData.experienceLevel || null;
         updateData.primarySkillTrack = formData.primarySkillTrack || null;
+        updateData.highestEducation = formData.highestEducation || null;
         updateData.specialization = formData.specialization.trim() || null;
-        // Normalized skills array (from the comma-separated specialization) for project matching.
-        updateData.skills = formData.specialization
+        // Normalized skills array (from courses/certs/skills) for project matching.
+        updateData.skills = formData.skills
           .split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+        updateData.skillsText = formData.skills.trim() || null;
         updateData.yearsOfExperience = formData.yearsOfExperience || null;
         updateData.portfolioUrl = formData.portfolioUrl.trim() || null;
         updateData.linkedinUrl = formData.linkedinUrl.trim() || null;
@@ -261,20 +275,33 @@ const Onboarding = () => {
               <input type="text" value={formData.displayName} onChange={e => setFormData(p => ({ ...p, displayName: e.target.value }))} className={inputClass} placeholder="Enter your full name" autoFocus />
             </div>
             <div>
-              <label className={labelClass}>Primary Skill Track *</label>
+              <label className={labelClass}>Your Track *</label>
               <select value={formData.primarySkillTrack} onChange={e => setFormData(p => ({ ...p, primarySkillTrack: e.target.value }))} className={inputClass}>
                 <option value="">Select your track</option>
                 {skillTracks.map(t => <option key={t.id} value={t.id}>{t.label} - {t.desc}</option>)}
               </select>
-              <p className="text-xs text-gray-500 mt-1">We use this to match you with projects that fit your skills.</p>
+              <p className="text-xs text-gray-500 mt-1">We use this to match you with projects that fit you. Not sure? Pick "Not sure yet" and we'll help you discover one.</p>
             </div>
             <div>
-              <label className={labelClass}>Specialization *</label>
-              <input type="text" value={formData.specialization} onChange={e => setFormData(p => ({ ...p, specialization: e.target.value }))} className={inputClass} placeholder="e.g., React, Python, AWS, DevOps" />
-              <p className="text-xs text-gray-500 mt-1">List your main skills or tools, separated by commas.</p>
+              <label className={labelClass}>Highest Level of Education *</label>
+              <select value={formData.highestEducation} onChange={e => setFormData(p => ({ ...p, highestEducation: e.target.value }))} className={inputClass}>
+                <option value="">Select your education level</option>
+                {educationLevels.map(e => <option key={e.id} value={e.id}>{e.label}</option>)}
+              </select>
+              <p className="text-xs text-gray-500 mt-1">This helps us guide you to the right tech track.</p>
             </div>
             <div>
-              <label className={labelClass}>LinkedIn URL *</label>
+              <label className={labelClass}>Course of Study *</label>
+              <input type="text" value={formData.specialization} onChange={e => setFormData(p => ({ ...p, specialization: e.target.value }))} className={inputClass} placeholder="e.g., Computer Science, Chemistry, Business" />
+              <p className="text-xs text-gray-500 mt-1">Your field of study. If you're in high school, your area of concentration.</p>
+            </div>
+            <div>
+              <label className={labelClass}>Courses, Certifications & Skills *</label>
+              <input type="text" value={formData.skills} onChange={e => setFormData(p => ({ ...p, skills: e.target.value }))} className={inputClass} placeholder="e.g., Python, AWS Certified, CS50, React" />
+              <p className="text-xs text-gray-500 mt-1">Any courses or certifications you've taken, and skills you have. Separate with commas.</p>
+            </div>
+            <div>
+              <label className={labelClass}>LinkedIn URL</label>
               <input type="url" value={formData.linkedinUrl} onChange={e => setFormData(p => ({ ...p, linkedinUrl: e.target.value }))} className={inputClass} placeholder="https://linkedin.com/in/your-profile" />
             </div>
             <div>

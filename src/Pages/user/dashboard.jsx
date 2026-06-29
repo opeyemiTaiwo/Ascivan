@@ -161,7 +161,7 @@ const DashboardOverview = () => {
                 <h3 className="text-lg font-bold text-gray-900 mb-1">Teach what you've mastered</h3>
                 <p className="text-gray-600 text-sm">You've earned an Associate badge, so you can contribute a lesson to Foundations. Help newcomers learn, build your brand, and boost your Talent Board ranking as learners rate your teaching.</p>
               </div>
-              <button onClick={() => navigate('/foundations')} className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-all flex-shrink-0">
+              <button onClick={() => navigate('/foundations?contribute=1')} className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-all flex-shrink-0">
                 Contribute a lesson
               </button>
             </div>

@@ -7,10 +7,15 @@
   "display": "standalone",
   "orientation": "portrait-primary",
   "theme_color": "#F97316",
-  "background_color": "#000000",
+  "background_color": "#FFFFFF",
   "lang": "en-US",
   "dir": "ltr",
-  "categories": ["business", "education", "productivity", "social"],
+  "categories": [
+    "business",
+    "education",
+    "productivity",
+    "social"
+  ],
   "icons": [
     {
       "src": "/Images/512X512.png",

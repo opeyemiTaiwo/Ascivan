@@ -52,6 +52,7 @@ const ProjectDetail = () => {
   const navigate = useNavigate();
 
   const [project, setProject] = useState(null);
+  const [roleFill, setRoleFill] = useState({});
   const [loading, setLoading] = useState(true);
   const [hasApplied, setHasApplied] = useState(false);
   const [wasRejected, setWasRejected] = useState(false);
@@ -79,6 +80,20 @@ const ProjectDetail = () => {
         if (snap.exists()) {
           const data = { id: snap.id, ...snap.data() };
           setProject(data);
+          // Count approved members per role (for the "X of N filled" soft-cap display).
+          try {
+            const approvedSnap = await getDocs(query(
+              collection(db, 'project_applications'),
+              where('projectId', '==', projectId),
+              where('status', '==', 'approved')
+            ));
+            const fill = {};
+            approvedSnap.docs.forEach(d => {
+              const r = d.data().role;
+              if (r) fill[r] = (fill[r] || 0) + 1;
+            });
+            setRoleFill(fill);
+          } catch (e) { /* non-blocking */ }
           if (currentUser) {
             setIsOwner(data.submitterId === currentUser.uid || data.submitterEmail === currentUser.email);
             const membersList = data.members || [];
@@ -371,7 +386,16 @@ const ProjectDetail = () => {
                         {role.experienceLevel && role.experienceLevel !== 'any-level' && (
                           <span className="text-blue-500 text-xs font-bold capitalize">{role.experienceLevel}</span>
                         )}
-                        <span className="text-gray-400 text-xs font-bold">{role.count} {role.count === 1 ? 'person' : 'people'}</span>
+                        {(() => {
+                          const filled = roleFill[role.role] || 0;
+                          const cap = parseInt(role.count, 10) || 0;
+                          const isFull = cap > 0 && filled >= cap;
+                          return (
+                            <span className={`text-xs font-bold ${isFull ? 'text-green-600' : 'text-gray-400'}`}>
+                              {filled} of {cap} filled{isFull ? ' · Full' : ''}
+                            </span>
+                          );
+                        })()}
                       </div>
                     </div>
                   ))}
@@ -473,9 +497,12 @@ const ProjectDetail = () => {
                           const lvl = (r.experienceLevel && r.experienceLevel !== 'any-level')
                             ? r.experienceLevel.charAt(0).toUpperCase() + r.experienceLevel.slice(1)
                             : 'Any Level';
+                          const filled = roleFill[r.role] || 0;
+                          const cap = parseInt(r.count, 10) || 0;
+                          const full = cap > 0 && filled >= cap;
                           return (
                             <option key={i} value={r.role} disabled={!elig.eligible}>
-                              {r.role} · {lvl} ({r.count} {r.count === 1 ? 'spot' : 'spots'}){!elig.eligible ? ' — Locked' : ''}
+                              {r.role} · {lvl} ({filled}/{cap} filled{full ? ', full' : ''}){!elig.eligible ? ' — Locked' : ''}
                             </option>
                           );
                         })}

@@ -69,6 +69,19 @@ const ProjectOwnerDashboard = () => {
 
   const approveApplication = async (project, app) => {
     try {
+      // Soft cap: how many are already approved for this same role vs the role's target count.
+      const roleName = app.role;
+      const roleDef = (project.teamRoles || []).find(r => r.role === roleName);
+      const cap = roleDef ? (parseInt(roleDef.count, 10) || 0) : 0;
+      const approvedForRole = (project.applications || [])
+        .filter(a => a.status === 'approved' && a.role === roleName).length;
+      if (cap > 0 && approvedForRole >= cap) {
+        const ok = window.confirm(
+          `The "${roleName}" role is already full (${approvedForRole} of ${cap} filled). Approve this person anyway and grow the team beyond the planned size?`
+        );
+        if (!ok) return;
+      }
+
       await updateDoc(doc(db, 'project_applications', app.id), {
         status: 'approved', approvedAt: serverTimestamp(), approvedBy: currentUser.email,
       });

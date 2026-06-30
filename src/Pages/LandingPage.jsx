@@ -281,7 +281,6 @@ const LandingPage = () => {
             <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm">TA</div>
             <div className="text-left">
               <div className="text-gray-900 text-sm font-semibold">Temitope A.</div>
-              <div className="text-gray-500 text-xs">Computer and Electrical Engineering, Morgan State University</div>
             </div>
           </div>
         </div>

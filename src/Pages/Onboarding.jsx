@@ -166,6 +166,11 @@ const Onboarding = () => {
   };
 
   const handleBack = () => {
+    if (step === 1) {
+      // Allow changing account type before onboarding is complete.
+      navigate('/account-type');
+      return;
+    }
     setStep(s => s - 1);
   };
 
@@ -493,9 +498,11 @@ const Onboarding = () => {
 
           {isCompany ? renderCompanyStep() : renderIndividualStep()}
 
-          <div className={`flex mt-8 gap-3 ${step > 1 ? 'justify-between' : 'justify-end'}`}>
-            {step > 1 && (
+          <div className="flex mt-8 gap-3 justify-between">
+            {step > 1 ? (
               <button onClick={handleBack} className="px-5 py-2.5 min-h-[44px] bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl text-sm transition-all">Back</button>
+            ) : (
+              <button onClick={handleBack} className="px-5 py-2.5 min-h-[44px] text-gray-500 hover:text-gray-700 font-semibold rounded-xl text-sm transition-all" title="Choose a different account type">← Change account type</button>
             )}
             {step < TOTAL_STEPS ? (
               <button onClick={handleNext} className="px-8 py-2.5 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-sm transition-all">Next</button>

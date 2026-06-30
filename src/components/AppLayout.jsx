@@ -16,6 +16,7 @@ const AppLayout = ({ children }) => {
   const [unreadAccount, setUnreadAccount] = useState(0);
   const [userPlan, setUserPlan] = useState('Free');
   const [userRole, setUserRole] = useState('member');
+  const [isCompany, setIsCompany] = useState(false);
 
   // Fetch user plan/role
   useEffect(() => {
@@ -25,6 +26,7 @@ const AppLayout = ({ children }) => {
         const data = snap.data();
         setUserPlan(data.membershipPlan || 'Free');
         setUserRole(data.role || 'member');
+        setIsCompany(!!data.isCompany);
       }
     }).catch(() => {});
   }, [currentUser]);
@@ -66,6 +68,10 @@ const AppLayout = ({ children }) => {
 
   const isPremiumOrAdmin = userPlan === 'Premium' || userRole === 'admin';
 
+  // Company accounts cannot join/build projects, so they don't get the
+  // contributor-only sections (Foundations, Projects, Workspace, Project Vault).
+  const companyHiddenPaths = ['/foundations', '/projects', '/my-workspaces', '/project-vault'];
+
   const navItems = [
     { path: '/dashboard', label: 'Home' },
     { path: '/foundations', label: 'Foundations' },
@@ -80,7 +86,7 @@ const AppLayout = ({ children }) => {
     ...(userRole === 'admin' ? [
       { path: '/admin', label: 'Admin' },
     ] : []),
-  ];
+  ].filter(item => !(isCompany && companyHiddenPaths.includes(item.path)));
 
   const isActive = (path) => {
     if (path === '/proof-wall') return location.pathname === '/proof-wall';

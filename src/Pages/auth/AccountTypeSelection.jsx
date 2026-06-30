@@ -24,13 +24,15 @@ const AccountTypeSelection = () => {
         const snap = await getDoc(doc(db, 'users', currentUser.uid));
         if (snap.exists()) {
           const data = snap.data();
-          if (data.accountType) {
-            if (!data.onboardingComplete) {
-              navigate('/onboarding', { replace: true });
-            } else {
-              navigate('/dashboard', { replace: true });
-            }
+          // Once onboarding is complete, account type is locked - send them on.
+          if (data.onboardingComplete) {
+            navigate('/dashboard', { replace: true });
             return;
+          }
+          // If they already picked a type but haven't finished onboarding, pre-select
+          // it but still let them change it here (they may have chosen by mistake).
+          if (data.accountType) {
+            setSelected(data.accountType);
           }
         }
       } catch (e) {

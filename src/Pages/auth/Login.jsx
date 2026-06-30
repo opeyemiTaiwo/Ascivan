@@ -7,10 +7,14 @@ import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 
 const Login = () => {
-  const { currentUser, signInWithGoogle } = useAuth();
+  const { currentUser, signInWithGoogle, signInWithEmail, signUpWithEmail, resetPassword } = useAuth();
   const [error, setError] = useState('');
+  const [info, setInfo] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [authMethod, setAuthMethod] = useState('');
+  const [mode, setMode] = useState('signin'); // 'signin' | 'signup' | 'reset'
+  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [emailLoading, setEmailLoading] = useState(false);
   const navigate = useNavigate();
 
   const isSafariMobile = isSafariMobileDevice();
@@ -22,6 +26,38 @@ const Login = () => {
       navigate('/account-type');
     }
   }, [currentUser, navigate]);
+
+  const handleEmailAuth = async (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    setError(''); setInfo('');
+    if (mode === 'reset') {
+      if (!form.email) { setError('Enter your email to reset your password.'); return; }
+      try {
+        setEmailLoading(true);
+        await resetPassword(form.email);
+        setInfo('Password reset email sent. Check your inbox (and spam).');
+        setMode('signin');
+      } catch (err) {
+        setError(getAuthErrorMessage(err));
+      } finally { setEmailLoading(false); }
+      return;
+    }
+    if (!form.email || !form.password) { setError('Email and password are required.'); return; }
+    if (mode === 'signup' && form.password.length < 6) { setError('Password must be at least 6 characters.'); return; }
+    if (mode === 'signup' && !form.name.trim()) { setError('Please enter your name.'); return; }
+    try {
+      setEmailLoading(true);
+      if (mode === 'signup') {
+        await signUpWithEmail(form.email, form.password, form.name.trim());
+        setInfo('Account created. We sent a verification email to confirm your address.');
+      } else {
+        await signInWithEmail(form.email, form.password);
+      }
+      // currentUser effect handles navigation.
+    } catch (err) {
+      setError(getAuthErrorMessage(err));
+    } finally { setEmailLoading(false); }
+  };
 
   const handleGoogleSignIn = async () => {
     try {
@@ -101,6 +137,13 @@ const Login = () => {
               </div>
             )}
 
+            {/* Info / success */}
+            {info && (
+              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl mb-5 text-sm">
+                {info}
+              </div>
+            )}
+
             {/* Mobile info */}
             {hasStorageIssues && !error && (
               <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-xl mb-5">
@@ -157,6 +200,63 @@ const Login = () => {
                     </p>
                   </div>
                 </div>
+              </div>
+
+              {/* Divider */}
+              <div className="flex items-center gap-3 py-1">
+                <div className="h-px bg-gray-200 flex-1" />
+                <span className="text-xs text-gray-400 font-medium">or use email</span>
+                <div className="h-px bg-gray-200 flex-1" />
+              </div>
+
+              {/* Email / password form */}
+              <form onSubmit={handleEmailAuth} className="space-y-3 text-left">
+                {mode === 'signup' && (
+                  <input
+                    type="text" value={form.name}
+                    onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
+                    placeholder="Your name"
+                    className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-900 focus:border-blue-500 focus:outline-none"
+                  />
+                )}
+                <input
+                  type="email" value={form.email}
+                  onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
+                  placeholder="Email address"
+                  className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-900 focus:border-blue-500 focus:outline-none"
+                />
+                {mode !== 'reset' && (
+                  <input
+                    type="password" value={form.password}
+                    onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
+                    placeholder={mode === 'signup' ? 'Create a password (6+ characters)' : 'Password'}
+                    className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-900 focus:border-blue-500 focus:outline-none"
+                  />
+                )}
+                <button
+                  type="submit" disabled={emailLoading}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-xl font-bold text-sm sm:text-base disabled:opacity-50 transition-all"
+                >
+                  {emailLoading ? 'Please wait…' : mode === 'signup' ? 'Create account' : mode === 'reset' ? 'Send reset email' : 'Sign in'}
+                </button>
+              </form>
+
+              {/* Mode toggles */}
+              <div className="flex items-center justify-between text-xs">
+                {mode === 'signin' ? (
+                  <>
+                    <button onClick={() => { setMode('signup'); setError(''); setInfo(''); }} className="text-blue-600 font-semibold hover:underline">
+                      Create an account
+                    </button>
+                    <button onClick={() => { setMode('reset'); setError(''); setInfo(''); }} className="text-gray-500 hover:underline">
+                      Forgot password?
+                    </button>
+                  </>
+                ) : (
+                  <button onClick={() => { setMode('signin'); setError(''); setInfo(''); }} className="text-blue-600 font-semibold hover:underline">
+                    ← Back to sign in
+                  </button>
+                )}
               </div>
             </div>
 

@@ -193,6 +193,24 @@ export const getAuthErrorMessage = (error) => {
     
     case 'auth/invalid-credential':
       return "Invalid credentials. Please try signing in again.";
+
+    case 'auth/wrong-password':
+      return "Incorrect password. Try again, or use 'Forgot password?'.";
+
+    case 'auth/user-not-found':
+      return "No account found with that email. Try creating an account.";
+
+    case 'auth/email-already-in-use':
+      return "An account with this email already exists. Try signing in instead.";
+
+    case 'auth/weak-password':
+      return "Password is too weak. Use at least 6 characters.";
+
+    case 'auth/invalid-email':
+      return "That email address doesn't look valid. Please check it.";
+
+    case 'auth/missing-password':
+      return "Please enter your password.";
     
     case 'auth/account-exists-with-different-credential':
       return "An account already exists with this email using a different sign-in method. Please try signing in with that method.";

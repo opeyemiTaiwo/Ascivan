@@ -17,6 +17,32 @@ const BADGE_IMAGES = {
 };
 const getBadgeImage = (category) => BADGE_IMAGES[category] || null;
 
+// Track aliases so we can count badges per track regardless of how category is stored.
+const TRACK_ALIASES = {
+  development: ['development', 'techdev', 'developer'],
+  'quality-assurance': ['quality-assurance', 'techqa', 'quality', 'qa'],
+  security: ['security', 'techguard', 'cybersecurity', 'network'],
+  leadership: ['leadership', 'techleads', 'leader', 'non-technical'],
+  design: ['design', 'techarchs', 'architecture', 'low-code', 'no-code'],
+  mentorship: ['mentorship', 'techpo', 'techmo', 'product', 'project-owner'],
+};
+
+// Count a user's badges in the same track as `category`, then derive the live tier.
+// This matches how the profile/dashboard show level (by count, not frozen value).
+const deriveLevel = (badges, category) => {
+  const cat = (category || '').toString().toLowerCase();
+  // Find which alias group this category belongs to.
+  let aliases = [cat];
+  for (const [, group] of Object.entries(TRACK_ALIASES)) {
+    if (group.includes(cat)) { aliases = group; break; }
+  }
+  const count = (badges || []).filter(b => {
+    const fields = [b.category, b.id, b.title, b.badgeCategory].map(x => (x || '').toString().toLowerCase());
+    return aliases.some(a => fields.some(f => f === a || f.includes(a)));
+  }).length;
+  return count >= 11 ? 'Expert' : count >= 6 ? 'Advanced' : count >= 2 ? 'Associate' : count >= 1 ? 'Novice' : 'Novice';
+};
+
 // Tier ring color for the printed certificate (matches TierBadge: steel/bronze/silver/gold).
 const tierRingCss = (level) => {
   const k = (level || '').toString().toLowerCase();
@@ -28,6 +54,7 @@ const tierRingCss = (level) => {
 
 const ProjectVault = () => {
   const { currentUser } = useAuth();
+  const [userBadges, setUserBadges] = useState([]);
   const [completedProjects, setCompletedProjects] = useState([]);
   const [disputedProjects, setDisputedProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,6 +65,13 @@ const ProjectVault = () => {
     if (!currentUser) return;
     const fetchProjects = async () => {
       try {
+        // Load the user's badges so we can derive certificate tier by COUNT
+        // (same as the profile/dashboard), not the frozen badgeLevel.
+        try {
+          const { doc, getDoc } = await import('firebase/firestore');
+          const uSnap = await getDoc(doc(db, 'users', currentUser.uid));
+          if (uSnap.exists()) setUserBadges(uSnap.data().badges || []);
+        } catch (_) {}
         const allDisputed = [];
 
         // Fetch ALL projects the user is involved in with just two single-field
@@ -134,11 +168,11 @@ const ProjectVault = () => {
                   <p className="text-gray-600 text-sm mb-1">as <span className="font-semibold">{viewingCert.role}</span></p>
                   {getBadgeImage(viewingCert.badgeCategory) && (
                     <div className="flex justify-center mt-3 mb-1">
-                      <TierBadge image={getBadgeImage(viewingCert.badgeCategory)} alt="Badge earned" level={viewingCert.badgeLevel || 'Novice'} size={72} showLabel={true} />
+                      <TierBadge image={getBadgeImage(viewingCert.badgeCategory)} alt="Badge earned" level={deriveLevel(userBadges, viewingCert.badgeCategory)} size={72} showLabel={true} />
                     </div>
                   )}
                   {viewingCert.badgeName && (
-                    <p className="text-gray-500 text-xs mt-2">Badge earned: {viewingCert.badgeName} ({viewingCert.badgeLevel})</p>
+                    <p className="text-gray-500 text-xs mt-2">Badge earned: {viewingCert.badgeName} ({deriveLevel(userBadges, viewingCert.badgeCategory)})</p>
                   )}
                   {viewingCert.isOwner && viewingCert.teamSize > 0 && (
                     <p className="text-gray-500 text-xs mt-1">Team size: {viewingCert.teamSize} members</p>
@@ -178,8 +212,8 @@ const ProjectVault = () => {
                         <div class="label">has successfully completed the project</div>
                         <div class="project">"${viewingCert.projectTitle}"</div>
                         <div class="role">as <strong>${viewingCert.role}</strong></div>
-                        ${getBadgeImage(viewingCert.badgeCategory) ? `<div style="margin:12px auto 4px;width:96px;height:96px;border-radius:9999px;background:${tierRingCss(viewingCert.badgeLevel)};display:flex;align-items:center;justify-content:center;padding:6px;box-sizing:border-box"><div style="width:84px;height:84px;border-radius:9999px;background:#fff;display:flex;align-items:center;justify-content:center"><img src="${window.location.origin}${getBadgeImage(viewingCert.badgeCategory)}" alt="Badge" style="width:70px;height:70px;object-fit:contain" /></div></div>` : ''}
-                        ${viewingCert.badgeName ? `<div class="meta">Badge earned: ${viewingCert.badgeName} (${viewingCert.badgeLevel})</div>` : ''}
+                        ${getBadgeImage(viewingCert.badgeCategory) ? `<div style="margin:12px auto 4px;width:96px;height:96px;border-radius:9999px;background:${tierRingCss(deriveLevel(userBadges, viewingCert.badgeCategory))};display:flex;align-items:center;justify-content:center;padding:6px;box-sizing:border-box"><div style="width:84px;height:84px;border-radius:9999px;background:#fff;display:flex;align-items:center;justify-content:center"><img src="${window.location.origin}${getBadgeImage(viewingCert.badgeCategory)}" alt="Badge" style="width:70px;height:70px;object-fit:contain" /></div></div>` : ''}
+                        ${viewingCert.badgeName ? `<div class="meta">Badge earned: ${viewingCert.badgeName} (${deriveLevel(userBadges, viewingCert.badgeCategory)})</div>` : ''}
                         ${viewingCert.isOwner && viewingCert.teamSize > 0 ? `<div class="meta">Team size: ${viewingCert.teamSize} members</div>` : ''}
                         <div class="meta">Completed: ${viewingCert.completedAt}</div>
                         <div class="site">ascivan.com</div>

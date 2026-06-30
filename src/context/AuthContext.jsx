@@ -4,7 +4,12 @@ import {
   GoogleAuthProvider, 
   signInWithPopup, 
   signOut, 
-  onAuthStateChanged 
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  sendEmailVerification,
+  updateProfile
 } from "firebase/auth";
 import { 
   doc, 
@@ -130,6 +135,66 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Shared: create the Firestore user doc for a brand-new account (same shape as
+  // Google sign-up) so email/password users get identical setup.
+  const createUserDocIfNew = async (user, displayNameOverride) => {
+    if (!user) return;
+    const userDocRef = doc(db, 'users', user.uid);
+    const userDoc = await getDoc(userDocRef);
+    if (!userDoc.exists()) {
+      await setDoc(userDocRef, {
+        uid: user.uid,
+        email: user.email,
+        displayName: displayNameOverride || user.displayName || user.email?.split('@')[0] || 'User',
+        photoURL: user.photoURL || null,
+        createdAt: serverTimestamp(),
+        lastLogin: serverTimestamp(),
+        emailPreferences: {
+          dailyDigest: true, weeklyDigest: true, notifications: true,
+          projectUpdates: true, communityUpdates: true, marketing: false,
+          announcements: true, lastUpdated: new Date()
+        },
+        profileComplete: false,
+        onboardingComplete: false,
+        role: 'user',
+        preferences: { theme: 'dark', language: 'en' }
+      });
+    } else {
+      await updateDoc(userDocRef, { lastLogin: serverTimestamp() });
+    }
+  };
+
+  // Sign up with email + password. Creates the account, sets display name, sends a
+  // verification email, and creates the user doc.
+  const signUpWithEmail = async (email, password, displayName) => {
+    const result = await createUserWithEmailAndPassword(auth, email, password);
+    const user = result.user;
+    if (displayName) {
+      try { await updateProfile(user, { displayName }); } catch (_) {}
+    }
+    await createUserDocIfNew(user, displayName);
+    try { await sendEmailVerification(user); } catch (_) {}
+    return result;
+  };
+
+  // Log in with email + password.
+  const signInWithEmail = async (email, password) => {
+    const result = await signInWithEmailAndPassword(auth, email, password);
+    // Make sure a doc exists (covers accounts created before this flow).
+    await createUserDocIfNew(result.user);
+    return result;
+  };
+
+  // Send a password reset email.
+  const resetPassword = async (email) => {
+    return sendPasswordResetEmail(auth, email);
+  };
+
+  // Re-send the verification email to the signed-in user.
+  const resendVerification = async () => {
+    if (auth.currentUser) return sendEmailVerification(auth.currentUser);
+  };
+
   // Sign out function
   const logout = async () => {
     try {
@@ -211,10 +276,14 @@ export const AuthProvider = ({ children }) => {
   const value = {
     currentUser,
     signInWithGoogle,
+    signUpWithEmail,
+    signInWithEmail,
+    resetPassword,
+    resendVerification,
     logout,
     getUserData,
     updateEmailPreferences,
-    autoSubscribeToDigests // 🔥 NEW: Add auto-subscribe function
+    autoSubscribeToDigests
   };
 
   return (

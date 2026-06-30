@@ -178,6 +178,29 @@ export const getMyContributions = async (authorId) => {
     .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
 };
 
+// Fetch ALL contributions (any status) for the admin management view.
+export const getAllContributions = async () => {
+  const snap = await getDocs(collection(db, 'foundationsContributions'));
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }))
+    .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+};
+
+// Admin edits a contribution's content directly (title / url / description).
+export const adminEditContribution = async (id, { title, url, description }) => {
+  return updateDoc(doc(db, 'foundationsContributions', id), {
+    ...(title !== undefined ? { title: title.trim() } : {}),
+    ...(url !== undefined ? { url: url.trim() } : {}),
+    ...(description !== undefined ? { description: description.trim() } : {}),
+    updatedAt: serverTimestamp(),
+  });
+};
+
+// Admin removes a contribution entirely.
+export const adminDeleteContribution = async (id) => {
+  const { deleteDoc } = await import('firebase/firestore');
+  return deleteDoc(doc(db, 'foundationsContributions', id));
+};
+
 // Fetch pending+changes items for admin review.
 export const getReviewQueue = async () => {
   const snap = await getDocs(collection(db, 'foundationsContributions'));

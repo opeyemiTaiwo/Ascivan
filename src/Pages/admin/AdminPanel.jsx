@@ -17,7 +17,7 @@ import { seedDummyActivity, deleteDummyActivity, countDummyActivity } from '../.
 import { REVIEW_STATUS, approveProjectReview, requestChanges, rejectProjectReview, getProjectMemberEmails } from '../../utils/projectReview';
 import { clearAllTestData } from '../../utils/adminDataReset';
 import { batchGenerateProjects } from '../../utils/batchGenerateProjects';
-import { getReviewQueue, reviewContribution } from '../../utils/foundationsContributions';
+import { getReviewQueue, reviewContribution, getAllContributions, adminEditContribution, adminDeleteContribution } from '../../utils/foundationsContributions';
 import { sendPush } from '../../utils/pushNotifications';
 
 const fmtDate = (ts) => {
@@ -69,12 +69,39 @@ const AdminPanel = () => {
   const [batchRunning, setBatchRunning] = useState(false);
   const [fQueue, setFQueue] = useState([]);
   const [fLoading, setFLoading] = useState(false);
+  const [fAll, setFAll] = useState([]);
+  const [fEditing, setFEditing] = useState(null); // contribution id being edited
+  const [fEditForm, setFEditForm] = useState({ title: '', url: '', description: '' });
 
   const loadFQueue = useCallback(async () => {
     setFLoading(true);
     try { setFQueue(await getReviewQueue()); } catch (_) {}
+    try { setFAll(await getAllContributions()); } catch (_) {}
     setFLoading(false);
   }, []);
+
+  const startEdit = (c) => {
+    setFEditing(c.id);
+    setFEditForm({ title: c.title || '', url: c.url || '', description: c.description || '' });
+  };
+
+  const saveEdit = async (id) => {
+    try {
+      await adminEditContribution(id, fEditForm);
+      toast.success('Lesson updated.');
+      setFEditing(null);
+      loadFQueue();
+    } catch (e) { toast.error('Update failed: ' + e.message); }
+  };
+
+  const removeContribution = async (id) => {
+    if (!window.confirm('Permanently remove this lesson? This cannot be undone.')) return;
+    try {
+      await adminDeleteContribution(id);
+      toast.success('Lesson removed.');
+      loadFQueue();
+    } catch (e) { toast.error('Remove failed: ' + e.message); }
+  };
 
   const handleReview = async (id, action) => {
     let note = '';
@@ -656,6 +683,56 @@ const AdminPanel = () => {
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+
+          {/* All contributions: full management - edit or remove any lesson, any status. */}
+          <h3 className="text-base font-bold text-gray-900 mt-8 mb-1">All community lessons</h3>
+          <p className="text-gray-500 text-sm mb-3">Every contribution, any status. Edit details or remove any lesson.</p>
+          {fLoading ? <p className="text-gray-400 text-sm">Loading…</p> : fAll.length === 0 ? (
+            <p className="text-gray-400 text-sm">No contributions yet.</p>
+          ) : (
+            <div className="space-y-3">
+              {fAll.map(c => {
+                const statusColor = c.status === 'approved' ? 'bg-green-100 text-green-700'
+                  : c.status === 'pending' ? 'bg-amber-100 text-amber-700'
+                  : c.status === 'changes_requested' ? 'bg-blue-100 text-blue-700'
+                  : 'bg-red-100 text-red-700';
+                return (
+                  <div key={c.id} className="bg-white border border-gray-200 rounded-xl p-4">
+                    {fEditing === c.id ? (
+                      <div className="space-y-2">
+                        <input value={fEditForm.title} onChange={e => setFEditForm(p => ({ ...p, title: e.target.value }))} placeholder="Title" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+                        <input value={fEditForm.url} onChange={e => setFEditForm(p => ({ ...p, url: e.target.value }))} placeholder="Link" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+                        <textarea value={fEditForm.description} onChange={e => setFEditForm(p => ({ ...p, description: e.target.value }))} placeholder="Description" rows={2} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm resize-none" />
+                        <div className="flex gap-2">
+                          <button onClick={() => saveEdit(c.id)} className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg">Save</button>
+                          <button onClick={() => setFEditing(null)} className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold px-3 py-1.5 rounded-lg">Cancel</button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <p className="font-bold text-gray-900 text-sm">{c.title}</p>
+                              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${statusColor}`}>{c.status}</span>
+                            </div>
+                            <p className="text-xs text-gray-500 mt-0.5">By {c.authorName}{c.authorBadgeLevel ? ` · ${c.authorBadgeLevel}` : ''}{c.authorLeft ? ' · former member' : ''} · track: {c.trackId}{c.ratingCount ? ` · ★ ${(c.ratingSum / c.ratingCount).toFixed(1)} (${c.ratingCount})` : ''}</p>
+                            <p className="text-sm text-gray-600 mt-1">{c.description}</p>
+                            <a href={c.url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 break-all">{c.url}</a>
+                          </div>
+                        </div>
+                        <div className="flex gap-2 mt-3">
+                          <button onClick={() => startEdit(c)} className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold px-3 py-1.5 rounded-lg">Edit</button>
+                          {c.status !== 'approved' && <button onClick={() => handleReview(c.id, 'approve')} className="bg-green-600 hover:bg-green-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg">Approve</button>}
+                          <button onClick={() => removeContribution(c.id)} className="bg-red-600 hover:bg-red-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg">Remove</button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>

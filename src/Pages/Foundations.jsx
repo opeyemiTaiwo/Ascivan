@@ -28,6 +28,8 @@ const Foundations = () => {
   const [completed, setCompleted] = useState({});
   const [opened, setOpened] = useState({});
   const [expanded, setExpanded] = useState({});
+  const [activeIdx, setActiveIdx] = useState(0); // current topic in the lesson player
+  const [showContents, setShowContents] = useState(false);
   const [loading, setLoading] = useState(true);
   const [celebrated, setCelebrated] = useState(false);
   const [userData, setUserData] = useState(null);
@@ -58,7 +60,11 @@ const Foundations = () => {
         fromBadges.forEach(t => { if (t && !ordered.includes(t)) ordered.push(t); });
         if (profileTrack && !ordered.includes(profileTrack)) ordered.push(profileTrack);
         // Only keep tracks that have a Foundations checklist; fall back to notsure.
-        const valid = ordered.filter(t => FOUNDATIONS[t]);
+        let valid = ordered.filter(t => FOUNDATIONS[t]);
+        // Admins see EVERY track's courses (for review/management), not just their own.
+        if (data.role === 'admin') {
+          valid = Object.keys(FOUNDATIONS).filter(t => t !== 'notsure' && t !== 'universal');
+        }
         const tabs = valid.length ? valid : ['notsure'];
         if (active) setAllTracks(tabs);
 
@@ -108,6 +114,13 @@ const Foundations = () => {
         [`foundationsProgress.${track}`]: next,
       }, { merge: true });
     } catch (e) { console.error('save progress failed', e); }
+    // Auto-advance to the next lesson for a smooth flow.
+    setActiveIdx(i => {
+      const topics = (lessonsForTrack(track)?.topics || []);
+      const ni = Math.min(topics.length - 1, i + 1);
+      if (ni !== i) window.scrollTo({ top: 0, behavior: 'smooth' });
+      return ni;
+    });
   }, [completed, track, currentUser]);
 
   useEffect(() => {
@@ -137,6 +150,7 @@ const Foundations = () => {
     setContent(foundationsForTrack(trackId));
     setShowContribute(false);
     setExpanded({});
+    setActiveIdx(0);
     setCelebrated(false);
     const prog = (userData?.foundationsProgress && userData.foundationsProgress[trackId]) || {};
     setCompleted(prog);
@@ -235,49 +249,84 @@ const Foundations = () => {
         </div>
       )}
 
-      <div className="space-y-3">
-        {lessons.topics.map((topic, idx) => {
-          const isDone = !!completed[topic.id];
-          const isOpen = !!expanded[topic.id];
-          return (
-            <div key={topic.id} className={`rounded-xl border transition-all ${isDone ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-white'}`}>
-              <button onClick={() => setExpanded(p => ({ ...p, [topic.id]: !p[topic.id] }))} className="w-full text-left p-4 flex items-start gap-3">
-                <span className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${isDone ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-500'}`}>
-                  {isDone ? '✓' : idx + 1}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="text-sm font-bold text-gray-900">{topic.title}</h3>
-                    {topic.optional && <span className="text-xs font-medium px-2 py-0.5 bg-gray-100 text-gray-500 rounded-full">Optional</span>}
-                  </div>
-                  <p className="text-xs text-gray-500 mt-0.5">{topic.summary}</p>
-                </div>
-                <span className={`flex-shrink-0 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}>▾</span>
-              </button>
+      {/* Contents: jump to any topic. Compact, collapsible on mobile. */}
+      <div className="bg-white border border-gray-200 rounded-xl mb-4 overflow-hidden">
+        <button onClick={() => setShowContents(s => !s)} className="w-full flex items-center justify-between px-4 py-3 text-left">
+          <span className="text-sm font-bold text-gray-900">Contents · {lessons.topics.length} lessons</span>
+          <span className={`text-gray-400 transition-transform ${showContents ? 'rotate-180' : ''}`}>▾</span>
+        </button>
+        {showContents && (
+          <div className="border-t border-gray-100 max-h-72 overflow-y-auto">
+            {lessons.topics.map((t, i) => {
+              const done = !!completed[t.id];
+              return (
+                <button key={t.id} onClick={() => { setActiveIdx(i); setShowContents(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  className={`w-full text-left px-4 py-2.5 flex items-center gap-3 border-b border-gray-50 last:border-0 ${i === activeIdx ? 'bg-blue-50' : 'hover:bg-gray-50'}`}>
+                  <span className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold ${done ? 'bg-green-500 text-white' : i === activeIdx ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-500'}`}>
+                    {done ? '✓' : i + 1}
+                  </span>
+                  <span className={`text-sm ${i === activeIdx ? 'font-bold text-blue-700' : 'text-gray-700'}`}>{t.title}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </div>
 
-              {isOpen && (
-                <div className="px-4 pb-4 pl-14 space-y-4">
-                  {topic.subtopics.map((sub, si) => (
-                    <div key={si}>
-                      <h4 className="text-sm font-semibold text-gray-900 mb-1">{sub.heading}</h4>
-                      <p className="text-sm text-gray-600 leading-relaxed">{sub.body}</p>
-                      {sub.diagram && (
-                        <div className="mt-2 bg-gray-50 border border-gray-100 rounded-lg p-2" dangerouslySetInnerHTML={{ __html: sub.diagram }} />
-                      )}
-                    </div>
-                  ))}
-                  {!isDone && (
-                    <button onClick={() => markComplete(topic.id)} className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-all">
-                      Mark complete
-                    </button>
+      {/* The active lesson (one topic at a time). */}
+      {(() => {
+        const topic = lessons.topics[activeIdx];
+        if (!topic) return null;
+        const isDone = !!completed[topic.id];
+        const isLast = activeIdx === lessons.topics.length - 1;
+        const isFirst = activeIdx === 0;
+        return (
+          <div className={`rounded-xl border ${isDone ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-white'} p-5`}>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xs font-semibold text-gray-400">Lesson {activeIdx + 1} of {lessons.topics.length}</span>
+              {topic.optional && <span className="text-xs font-medium px-2 py-0.5 bg-gray-100 text-gray-500 rounded-full">Optional</span>}
+              {isDone && <span className="text-xs font-semibold text-green-600 ml-auto">✓ Completed</span>}
+            </div>
+            <h2 className="text-lg font-bold text-gray-900 mb-1">{topic.title}</h2>
+            <p className="text-sm text-gray-500 mb-4">{topic.summary}</p>
+
+            <div className="space-y-4">
+              {topic.subtopics.map((sub, si) => (
+                <div key={si}>
+                  <h4 className="text-sm font-semibold text-gray-900 mb-1">{sub.heading}</h4>
+                  <p className="text-sm text-gray-600 leading-relaxed">{sub.body}</p>
+                  {sub.diagram && (
+                    <div className="mt-2 bg-gray-50 border border-gray-100 rounded-lg p-2" dangerouslySetInnerHTML={{ __html: sub.diagram }} />
                   )}
-                  {isDone && <p className="text-xs font-semibold text-green-600">✓ Completed</p>}
                 </div>
+              ))}
+            </div>
+
+            {!isDone && (
+              <button onClick={() => markComplete(topic.id)} className="mt-5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all">
+                Mark complete
+              </button>
+            )}
+
+            {/* Next / Previous navigation */}
+            <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
+              <button onClick={() => { setActiveIdx(i => Math.max(0, i - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                disabled={isFirst}
+                className={`text-sm font-semibold px-4 py-2 rounded-lg transition-all ${isFirst ? 'text-gray-300 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100'}`}>
+                ← Previous
+              </button>
+              {!isLast ? (
+                <button onClick={() => { setActiveIdx(i => Math.min(lessons.topics.length - 1, i + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-all">
+                  Next lesson →
+                </button>
+              ) : (
+                <span className="text-xs text-gray-400">Last lesson</span>
               )}
             </div>
-          );
-        })}
-      </div>
+          </div>
+        );
+      })()}
 
       {/* From the community: lessons created by Associate+ badge-holders in this track. */}
       {(community.length > 0 || eligible) && (

@@ -160,6 +160,14 @@ const Foundations = () => {
       <p className="text-blue-600 text-sm font-semibold mb-1">{content.label}</p>
       <p className="text-gray-500 text-sm mb-5">{content.intro}</p>
 
+      {/* TEMP DIAGNOSTIC — remove after debugging eligibility */}
+      <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-3 mb-4 text-xs text-gray-800 break-all">
+        <p><strong>DEBUG</strong> — track: <code>{JSON.stringify(track)}</code></p>
+        <p>eligible: <code>{JSON.stringify(eligible)}</code> · badges count: <code>{(userData?.badges || []).length}</code></p>
+        <p>badges raw: <code>{JSON.stringify((userData?.badges || []).map(b => ({ category: b.category, id: b.id, title: b.title, badgeCategory: b.badgeCategory, level: b.level })))}</code></p>
+        <p>role: <code>{JSON.stringify(userData?.role)}</code> · primarySkillTrack: <code>{JSON.stringify(userData?.primarySkillTrack)}</code></p>
+      </div>
+
       <div className="bg-white border border-gray-200 rounded-xl p-4 mb-6">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-semibold text-gray-900">{doneCount} of {total} complete</span>

@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '../firebase/config';
+import TierBadge from '../components/TierBadge';
 
 // Map a badge category (stored on evaluations) to its badge image in /public/Images.
 const BADGE_IMAGES = {
@@ -15,6 +16,15 @@ const BADGE_IMAGES = {
   security: '/Images/TechGuard.png',
 };
 const getBadgeImage = (category) => BADGE_IMAGES[category] || null;
+
+// Tier ring color for the printed certificate (matches TierBadge: steel/bronze/silver/gold).
+const tierRingCss = (level) => {
+  const k = (level || '').toString().toLowerCase();
+  if (k.startsWith('expert')) return 'linear-gradient(135deg,#fcd34d,#d97706)';
+  if (k.startsWith('advanc')) return 'linear-gradient(135deg,#e5e7eb,#9ca3af)';
+  if (k.startsWith('assoc')) return 'linear-gradient(135deg,#d8975a,#a55b2e)';
+  return 'linear-gradient(135deg,#9ca3af,#6b7280)';
+};
 
 const ProjectVault = () => {
   const { currentUser } = useAuth();
@@ -123,7 +133,9 @@ const ProjectVault = () => {
                   <p className="text-blue-600 text-lg font-bold mb-1">"{viewingCert.projectTitle}"</p>
                   <p className="text-gray-600 text-sm mb-1">as <span className="font-semibold">{viewingCert.role}</span></p>
                   {getBadgeImage(viewingCert.badgeCategory) && (
-                    <img src={getBadgeImage(viewingCert.badgeCategory)} alt="Badge earned" className="w-20 h-20 mx-auto mt-3 mb-1 object-contain" />
+                    <div className="flex justify-center mt-3 mb-1">
+                      <TierBadge image={getBadgeImage(viewingCert.badgeCategory)} alt="Badge earned" level={viewingCert.badgeLevel || 'Novice'} size={72} showLabel={true} />
+                    </div>
                   )}
                   {viewingCert.badgeName && (
                     <p className="text-gray-500 text-xs mt-2">Badge earned: {viewingCert.badgeName} ({viewingCert.badgeLevel})</p>
@@ -166,7 +178,7 @@ const ProjectVault = () => {
                         <div class="label">has successfully completed the project</div>
                         <div class="project">"${viewingCert.projectTitle}"</div>
                         <div class="role">as <strong>${viewingCert.role}</strong></div>
-                        ${getBadgeImage(viewingCert.badgeCategory) ? `<div><img src="${window.location.origin}${getBadgeImage(viewingCert.badgeCategory)}" alt="Badge" style="width:80px;height:80px;margin:12px auto 4px;display:block;object-fit:contain" /></div>` : ''}
+                        ${getBadgeImage(viewingCert.badgeCategory) ? `<div style="margin:12px auto 4px;width:96px;height:96px;border-radius:9999px;background:${tierRingCss(viewingCert.badgeLevel)};display:flex;align-items:center;justify-content:center;padding:6px;box-sizing:border-box"><div style="width:84px;height:84px;border-radius:9999px;background:#fff;display:flex;align-items:center;justify-content:center"><img src="${window.location.origin}${getBadgeImage(viewingCert.badgeCategory)}" alt="Badge" style="width:70px;height:70px;object-fit:contain" /></div></div>` : ''}
                         ${viewingCert.badgeName ? `<div class="meta">Badge earned: ${viewingCert.badgeName} (${viewingCert.badgeLevel})</div>` : ''}
                         ${viewingCert.isOwner && viewingCert.teamSize > 0 ? `<div class="meta">Team size: ${viewingCert.teamSize} members</div>` : ''}
                         <div class="meta">Completed: ${viewingCert.completedAt}</div>

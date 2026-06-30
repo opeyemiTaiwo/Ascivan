@@ -9,6 +9,7 @@ import { PremiumBadge } from '../../components/PremiumBadge';
 import FindFirstProject from '../../components/FindFirstProject';
 import DiscoverTrack from '../../components/DiscoverTrack';
 import { eligibleTracks } from '../../utils/foundationsContributions';
+import TierBadge from '../../components/TierBadge';
 
 const badgeData = [
   { id: 'techmo', title: 'TechPO', image: '/Images/TechMO.png', label: 'Product / Project Owner' },
@@ -268,7 +269,7 @@ const DashboardOverview = () => {
                   const level = count >= 11 ? 'Expert' : count >= 6 ? 'Advanced' : count >= 2 ? 'Associate' : 'Novice';
                   return (
                     <div key={badge.id} className={`flex items-center gap-3 p-3 rounded-lg border ${earned ? 'border-blue-200 bg-blue-50/30' : 'border-gray-100 bg-gray-50/50'}`}>
-                      <img src={badge.image} alt={badge.title} className={`w-10 h-10 flex-shrink-0 ${earned ? '' : 'opacity-40 grayscale'}`} />
+                      <TierBadge image={badge.image} alt={badge.title} level={level} size={40} earned={!!earned} showLabel={!!earned} />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           <p className={`text-sm font-semibold ${earned ? 'text-gray-900' : 'text-gray-400'}`}>{badge.title}</p>

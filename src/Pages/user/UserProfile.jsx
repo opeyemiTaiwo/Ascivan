@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../../components/Navbar';
+import TierBadge from '../../components/TierBadge';
 import { collection, query, where, limit, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import FollowButton from '../../components/community/FollowButton';
@@ -279,7 +280,9 @@ const UserProfile = () => {
                 }[badge.contribution] || 'bg-gray-100 text-gray-600';
                 return (
                   <div key={i} className="text-center p-3 bg-gray-50 rounded-lg border border-gray-100">
-                    <img src={bd?.image || '/Images/TechDev.png'} alt={badge.title || badge.id} className="w-10 h-10 mx-auto mb-1" />
+                    <div className="flex justify-center mb-1">
+                      <TierBadge image={bd?.image || '/Images/TechDev.png'} alt={badge.title || badge.id} level={badge.level || 'Novice'} size={40} showLabel={false} />
+                    </div>
                     <p className="text-xs text-gray-900 font-medium">{bd?.label || badge.title || badge.id}</p>
                     <p className="text-xs text-gray-400">{badge.level || 'Novice'}</p>
                     {badge.contribution && (

@@ -44,9 +44,51 @@ const countBadgesForTrack = (userData, trackId) => {
   }).length;
 };
 
-// Derive level from count (matches ProjectCompletion: Novice 1, Associate 2-5,
-// Advanced 6-10, Expert 11+). Associate+ means 2+ badges in that track.
+// Derive level from count (Novice 1, Associate 2-5, Advanced 6-10, Expert 11+).
 const levelFromCount = (n) => n >= 11 ? 'Expert' : n >= 6 ? 'Advanced' : n >= 2 ? 'Associate' : n >= 1 ? 'Novice' : null;
+
+// Canonical track id + display label for each track key.
+const TRACK_INFO = {
+  techdev:   { id: 'TechDev',   label: 'Coding Developer' },
+  techarchs: { id: 'TechArchs', label: 'Low/No-Code Developer' },
+  techqa:    { id: 'TechQA',    label: 'Quality Tester' },
+  techguard: { id: 'TechGuard', label: 'Network & Cybersecurity' },
+  techpo:    { id: 'TechPO',    label: 'Product / Project Owner' },
+  techleads: { id: 'TechLeads', label: 'Non-Technical Roles' },
+};
+
+// Which canonical track key does a single badge belong to? Checks all its fields.
+const badgeToTrackKey = (badge) => {
+  const fields = [badge.category, badge.id, badge.title, badge.badgeCategory]
+    .map(x => (x || '').toString().toLowerCase());
+  for (const [key, aliases] of Object.entries(TRACK_ALIASES)) {
+    if (fields.some(fld => fld === key || aliases.some(a => fld === a || fld.includes(a)))) return key;
+  }
+  return null;
+};
+
+// All distinct track keys the user has ANY badge in (1+), as canonical track ids.
+export const badgeTrackIds = (userData) => {
+  if (!userData || !Array.isArray(userData.badges)) return [];
+  const keys = new Set();
+  userData.badges.forEach(b => { const k = badgeToTrackKey(b); if (k) keys.add(k); });
+  return Array.from(keys).map(k => TRACK_INFO[k]?.id).filter(Boolean);
+};
+
+// Which tracks is this user eligible to contribute to? Returns [{id, label, count, level}].
+// Eligible = Associate+ (2+ badges) in that track. Works regardless of profile track.
+export const eligibleTrackList = (userData) => {
+  if (!userData || !Array.isArray(userData.badges)) return [];
+  const counts = {};
+  userData.badges.forEach(b => {
+    const key = badgeToTrackKey(b);
+    if (key) counts[key] = (counts[key] || 0) + 1;
+  });
+  return Object.entries(counts)
+    .filter(([, n]) => n >= 2)
+    .map(([key, n]) => ({ ...TRACK_INFO[key], count: n, level: levelFromCount(n) }))
+    .filter(t => t.id);
+};
 
 // Public: the user's current level in a track, derived from badge count.
 export const levelForTrack = (userData, trackId) => levelFromCount(countBadgesForTrack(userData, trackId));

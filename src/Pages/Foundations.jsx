@@ -9,10 +9,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { doc, getDoc, updateDoc, setDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase/config';
-import { foundationsForTrack } from '../utils/foundationsContent';
 import {
-  isEligibleForTrack, submitContribution, getApprovedForTrack, rateContribution, levelForTrack,
+  isEligibleForTrack, submitContribution, getApprovedForTrack, rateContribution, levelForTrack, eligibleTrackList, badgeTrackIds,
 } from '../utils/foundationsContributions';
+import { foundationsForTrack, FOUNDATIONS } from '../utils/foundationsContent';
 import { toast } from 'react-toastify';
 
 const Foundations = () => {
@@ -21,6 +21,7 @@ const Foundations = () => {
   const location = useLocation();
   const contributeRef = useRef(null);
   const [track, setTrack] = useState(null);
+  const [allTracks, setAllTracks] = useState([]); // every track to show as a tab
   const [content, setContent] = useState(null);
   const [completed, setCompleted] = useState({});
   const [opened, setOpened] = useState({});
@@ -30,6 +31,7 @@ const Foundations = () => {
   const [community, setCommunity] = useState([]);
   const [showContribute, setShowContribute] = useState(false);
   const [cForm, setCForm] = useState({ title: '', url: '', description: '' });
+  const [cTrack, setCTrack] = useState(''); // which eligible track the lesson is for
   const [submitting, setSubmitting] = useState(false);
   const [myRatings, setMyRatings] = useState({}); // {contributionId: stars}
 
@@ -44,7 +46,20 @@ const Foundations = () => {
         const data = snap.exists() ? snap.data() : {};
         if (!active) return;
         setUserData(data);
-        const trackId = data.primarySkillTrack || 'notsure';
+        // Build the full set of tracks to show: every track they hold a badge in,
+        // PLUS their profile track. This reflects who they've actually become, not
+        // just their initial pick. Dedupe, keep only ones we have content for.
+        const fromBadges = badgeTrackIds(data); // e.g. ['TechLeads']
+        const profileTrack = data.primarySkillTrack;
+        const ordered = [];
+        fromBadges.forEach(t => { if (t && !ordered.includes(t)) ordered.push(t); });
+        if (profileTrack && !ordered.includes(profileTrack)) ordered.push(profileTrack);
+        // Only keep tracks that have a Foundations checklist; fall back to notsure.
+        const valid = ordered.filter(t => FOUNDATIONS[t]);
+        const tabs = valid.length ? valid : ['notsure'];
+        if (active) setAllTracks(tabs);
+
+        const trackId = tabs[0];
         setTrack(trackId);
         setContent(foundationsForTrack(trackId));
         const prog = (data.foundationsProgress && data.foundationsProgress[trackId]) || {};
@@ -68,7 +83,7 @@ const Foundations = () => {
   useEffect(() => {
     if (loading) return;
     const params = new URLSearchParams(location.search);
-    if (params.get('contribute') === '1' && isEligibleForTrack(userData, track)) {
+    if (params.get('contribute') === '1' && eligibleTrackList(userData).length > 0) {
       setShowContribute(true);
       setTimeout(() => {
         contributeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -108,20 +123,36 @@ const Foundations = () => {
     })();
   }, [allDone, celebrated, currentUser, track]);
 
-  const eligible = isEligibleForTrack(userData, track);
+  // The tracks this member can contribute to (any track they hold an Associate+ badge in).
+  const myEligibleTracks = eligibleTrackList(userData);
+  const eligible = myEligibleTracks.length > 0;
+
+  const switchTrack = async (trackId) => {
+    if (trackId === track) return;
+    setTrack(trackId);
+    setContent(foundationsForTrack(trackId));
+    setShowContribute(false);
+    const prog = (userData?.foundationsProgress && userData.foundationsProgress[trackId]) || {};
+    setCompleted(prog);
+    setCommunity([]);
+    try {
+      const items = await getApprovedForTrack(trackId);
+      setCommunity(items);
+    } catch (_) {}
+  };
 
   const handleContribute = async () => {
+    const chosenTrack = cTrack || (myEligibleTracks[0] && myEligibleTracks[0].id);
     if (!cForm.title.trim() || !cForm.url.trim() || !cForm.description.trim()) {
       toast.error('Add a title, a link to your content, and a short description.');
       return;
     }
+    if (!chosenTrack) { toast.error('Select which track this lesson is for.'); return; }
     setSubmitting(true);
     try {
-      // Find the author's badge level for this track (for display).
-      // Author's current level in this track, derived live from their badge count.
-      const authorLevel = levelForTrack(userData, track);
+      const authorLevel = levelForTrack(userData, chosenTrack);
       await submitContribution({
-        trackId: track,
+        trackId: chosenTrack,
         title: cForm.title,
         url: cForm.url,
         description: cForm.description,
@@ -157,16 +188,26 @@ const Foundations = () => {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
       <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">Foundations</h1>
+
+      {/* Track tabs: all the tracks this member has badges in, plus their profile track. */}
+      {allTracks.length > 1 && (
+        <div className="flex flex-wrap gap-2 mb-4">
+          {allTracks.map(t => (
+            <button
+              key={t}
+              onClick={() => switchTrack(t)}
+              className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-all ${
+                t === track ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-600 border-gray-300 hover:border-blue-400'
+              }`}
+            >
+              {FOUNDATIONS[t]?.label || t}
+            </button>
+          ))}
+        </div>
+      )}
+
       <p className="text-blue-600 text-sm font-semibold mb-1">{content.label}</p>
       <p className="text-gray-500 text-sm mb-5">{content.intro}</p>
-
-      {/* TEMP DIAGNOSTIC — remove after debugging eligibility */}
-      <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-3 mb-4 text-xs text-gray-800 break-all">
-        <p><strong>DEBUG</strong> — track: <code>{JSON.stringify(track)}</code></p>
-        <p>eligible: <code>{JSON.stringify(eligible)}</code> · badges count: <code>{(userData?.badges || []).length}</code></p>
-        <p>badges raw: <code>{JSON.stringify((userData?.badges || []).map(b => ({ category: b.category, id: b.id, title: b.title, badgeCategory: b.badgeCategory, level: b.level })))}</code></p>
-        <p>role: <code>{JSON.stringify(userData?.role)}</code> · primarySkillTrack: <code>{JSON.stringify(userData?.primarySkillTrack)}</code></p>
-      </div>
 
       <div className="bg-white border border-gray-200 rounded-xl p-4 mb-6">
         <div className="flex items-center justify-between mb-2">
@@ -236,13 +277,20 @@ const Foundations = () => {
             )}
           </div>
 
-          {eligible && !showContribute && community.length === 0 && (
-            <p className="text-sm text-gray-500 mb-3">You've earned your badge in this track. Be the first to contribute a lesson and help newcomers.</p>
+          {eligible && !showContribute && (
+            <p className="text-sm text-gray-500 mb-3">You're an {myEligibleTracks.map(t => `${t.level} in ${t.id}`).join(', ')}. You can contribute a lesson to {myEligibleTracks.length > 1 ? 'those tracks' : `the ${myEligibleTracks[0].id} track`} to help newcomers and boost your ranking.</p>
           )}
 
           {eligible && showContribute && (
             <div className="bg-white border border-gray-200 rounded-xl p-4 mb-4 space-y-3">
               <p className="text-xs text-gray-500">Share <strong>your own original</strong> lesson (a video, article, or guide you created). Link to where it lives, we don't host files. It'll be reviewed before going live.</p>
+              {myEligibleTracks.length > 1 ? (
+                <select value={cTrack || myEligibleTracks[0].id} onChange={e => setCTrack(e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900">
+                  {myEligibleTracks.map(t => <option key={t.id} value={t.id}>{t.id} - {t.label} ({t.level})</option>)}
+                </select>
+              ) : (
+                <p className="text-xs text-blue-600 font-medium">Contributing to: {myEligibleTracks[0]?.id} - {myEligibleTracks[0]?.label} ({myEligibleTracks[0]?.level})</p>
+              )}
               <input value={cForm.title} onChange={e => setCForm(p => ({ ...p, title: e.target.value }))} placeholder="Lesson title" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900" />
               <input value={cForm.url} onChange={e => setCForm(p => ({ ...p, url: e.target.value }))} placeholder="Link to your content (YouTube, blog, doc...)" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900" />
               <textarea value={cForm.description} onChange={e => setCForm(p => ({ ...p, description: e.target.value }))} placeholder="What does it teach? (1-2 sentences)" rows={2} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 resize-none" />

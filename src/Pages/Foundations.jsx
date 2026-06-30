@@ -309,10 +309,16 @@ const Foundations = () => {
               const mine = myRatings[c.id] || 0;
               return (
                 <div key={c.id} className="p-4 rounded-xl border border-gray-200 bg-white">
-                  <a href={c.url} target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-gray-900 hover:text-blue-600">{c.title}</a>
+                  <h4 className="text-sm font-bold text-gray-900">{c.title}</h4>
                   <p className="text-xs text-gray-500 mt-0.5">By {c.authorName}{c.authorBadgeLevel ? ` · ${c.authorBadgeLevel}` : ''}{c.authorLeft ? ' · former member' : ''}</p>
                   <p className="text-sm text-gray-600 mt-1">{c.description}</p>
-                  <div className="flex items-center gap-3 mt-2">
+                  <div className="mt-3">
+                    <a href={c.url} target="_blank" rel="noopener noreferrer"
+                      className="inline-block bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-all">
+                      Open lesson
+                    </a>
+                  </div>
+                  <div className="flex items-center gap-3 mt-3">
                     <div className="flex items-center gap-0.5">
                       {[1,2,3,4,5].map(s => (
                         <button key={s} onClick={() => handleRate(c.id, s)} className="text-base leading-none" title={`Rate ${s}`}>

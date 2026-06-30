@@ -294,9 +294,18 @@ const Foundations = () => {
               {topic.subtopics.map((sub, si) => (
                 <div key={si}>
                   <h4 className="text-sm font-semibold text-gray-900 mb-1">{sub.heading}</h4>
-                  <p className="text-sm text-gray-600 leading-relaxed">{sub.body}</p>
+                  {sub.body && <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{sub.body}</p>}
+                  {sub.code && (
+                    <pre className="mt-2 bg-gray-900 text-gray-100 rounded-lg p-3 text-xs overflow-x-auto leading-relaxed"><code>{sub.code}</code></pre>
+                  )}
                   {sub.diagram && (
                     <div className="mt-2 bg-gray-50 border border-gray-100 rounded-lg p-2" dangerouslySetInnerHTML={{ __html: sub.diagram }} />
+                  )}
+                  {sub.tip && (
+                    <div className="mt-2 bg-blue-50 border border-blue-100 rounded-lg p-3 text-xs text-blue-800"><strong>Tip:</strong> {sub.tip}</div>
+                  )}
+                  {sub.exercise && (
+                    <div className="mt-2 bg-orange-50 border border-orange-200 rounded-lg p-3 text-xs text-orange-900"><strong>Try this:</strong> {sub.exercise}</div>
                   )}
                 </div>
               ))}

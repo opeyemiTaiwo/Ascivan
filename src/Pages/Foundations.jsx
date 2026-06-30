@@ -222,11 +222,15 @@ const Foundations = () => {
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-base font-bold text-blue-600">From the community</h2>
             {eligible && (
-              <button onClick={() => setShowContribute(s => !s)} className="text-sm font-semibold text-blue-600 hover:text-blue-700">
+              <button onClick={() => setShowContribute(s => !s)} className="text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-lg">
                 {showContribute ? 'Cancel' : '+ Contribute a lesson'}
               </button>
             )}
           </div>
+
+          {eligible && !showContribute && community.length === 0 && (
+            <p className="text-sm text-gray-500 mb-3">You've earned your badge in this track. Be the first to contribute a lesson and help newcomers.</p>
+          )}
 
           {eligible && showContribute && (
             <div className="bg-white border border-gray-200 rounded-xl p-4 mb-4 space-y-3">

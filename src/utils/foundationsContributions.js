@@ -9,26 +9,38 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
-// Map a track id (techdev) to the badge category used on badges (TechDev / legacy techmo).
-// Badges store `category` like 'TechDev'; tracks use ids like 'techdev'. Normalise.
-const trackToCategory = (trackId) => {
-  if (!trackId) return null;
-  const t = trackId.toLowerCase();
-  if (t === 'techmo' || t === 'techpo') return ['TechMO', 'TechPO', 'techmo'];
-  // Match case-insensitively against common forms.
-  const base = trackId.replace(/^tech/i, '');
-  return [trackId, `Tech${base}`, `Tech${base.charAt(0).toUpperCase()}${base.slice(1)}`];
+// Map a track id to ALL the values a stored badge might use for it. Badges store
+// category as a raw key like 'development' and id like 'techdev', so we match broadly.
+const TRACK_ALIASES = {
+  techdev:    ['techdev', 'development', 'tech dev', 'developer'],
+  techarchs:  ['techarchs', 'design', 'architecture', 'low-code', 'no-code'],
+  techqa:     ['techqa', 'quality-assurance', 'quality', 'qa'],
+  techguard:  ['techguard', 'security', 'cybersecurity', 'network'],
+  techpo:     ['techpo', 'techmo', 'mentorship', 'product', 'project-owner', 'po'],
+  techleads:  ['techleads', 'leadership', 'leader', 'non-technical'],
 };
 
-// Count how many badges a user has earned in a given category (case-insensitive,
-// matching on category/id/title against the track's known forms).
+const trackToCategory = (trackId) => {
+  if (!trackId) return [];
+  const t = trackId.toString().toLowerCase();
+  // Find the canonical track key whose alias list this trackId belongs to.
+  for (const [key, aliases] of Object.entries(TRACK_ALIASES)) {
+    if (key === t || aliases.includes(t)) return [key, ...aliases];
+  }
+  return [t];
+};
+
+// Count how many badges a user has earned in a given track. Matches against the
+// badge's category, id, AND title (any of them), case-insensitively, because the
+// app stores these inconsistently (category='development', id='techdev', etc.).
 const countBadgesForTrack = (userData, trackId) => {
   if (!userData || !Array.isArray(userData.badges)) return 0;
-  const forms = (trackToCategory(trackId) || []).map(s => s.toLowerCase());
+  const forms = trackToCategory(trackId);
   return userData.badges.filter(b => {
-    const cat = (b.category || b.id || '').toString().toLowerCase();
-    const title = (b.title || '').toString().toLowerCase();
-    return forms.includes(cat) || forms.includes(title);
+    const fields = [b.category, b.id, b.title, b.badgeCategory]
+      .map(x => (x || '').toString().toLowerCase());
+    // Match if any badge field equals or contains any of the track's forms.
+    return forms.some(f => fields.some(fld => fld === f || fld.includes(f)));
   }).length;
 };
 

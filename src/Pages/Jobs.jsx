@@ -328,21 +328,13 @@ const Jobs = () => {
             {filteredPosts.length === 0 ? (
               <div className="text-center py-16">
                 <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                  {posts.length === 0 ? 'No jobs posted yet' : 'No jobs match your filters'}
+                  {posts.length === 0 ? (isCompany ? 'No jobs posted yet' : 'No jobs available yet') : 'No jobs match your filters'}
                 </h3>
                 <p className="text-gray-500 mb-8">
-                  {posts.length === 0 ? 'Be the first to post a job!' : 'Try adjusting your filters.'}
+                  {posts.length === 0 ? 'Check back soon for new opportunities.' : 'Try adjusting your filters.'}
                 </p>
-                {hasActiveFilters
-                  ? <button onClick={clearAll} className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-all mr-3">Clear Filters</button>
-                  : null}
-                {isCompany && (
-                  <button
-                    onClick={() => navigate('/jobs/post')}
-                    className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all"
-                  >
-                    Post a Job
-                  </button>
+                {hasActiveFilters && (
+                  <button onClick={clearAll} className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-all">Clear Filters</button>
                 )}
               </div>
             ) : (

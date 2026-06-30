@@ -140,7 +140,9 @@ const Foundations = () => {
         await addDoc(collection(db, 'notifications'), {
           userId: currentUser.uid,
           type: 'foundations_complete',
-          message: 'You completed your Foundations. You\'re ready to join your first project.',
+          message: track === 'company'
+            ? 'You finished the Badges & Ratings guide. You can now read member profiles with confidence.'
+            : 'You completed your Foundations. You\'re ready to join your first project.',
           isRead: false,
           createdAt: serverTimestamp(),
         });
@@ -259,7 +261,7 @@ const Foundations = () => {
         </div>
       </div>
 
-      {allDone && (
+      {allDone && track !== 'company' && (
         <div className="bg-gradient-to-br from-blue-50 to-orange-50 border border-blue-200 rounded-xl p-6 text-center mb-6">
           <h2 className="text-xl font-bold text-gray-900 mb-1">You're ready.</h2>
           <p className="text-gray-600 text-sm mb-4">You've completed your Foundations. Now put it to work on a real project and start earning your badge.</p>
@@ -301,56 +303,63 @@ const Foundations = () => {
         const isLast = activeIdx === lessons.topics.length - 1;
         const isFirst = activeIdx === 0;
         return (
-          <div className={`rounded-xl border ${isDone ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-white'} p-5`}>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs font-semibold text-gray-400">Lesson {activeIdx + 1} of {lessons.topics.length}</span>
+          <div className={`rounded-2xl border ${isDone ? 'border-green-200 bg-green-50/40' : 'border-gray-200 bg-white'} p-6 sm:p-8 shadow-sm`}>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-xs font-bold uppercase tracking-wider text-blue-500">Lesson {activeIdx + 1} of {lessons.topics.length}</span>
               {topic.optional && <span className="text-xs font-medium px-2 py-0.5 bg-gray-100 text-gray-500 rounded-full">Optional</span>}
-              {isDone && <span className="text-xs font-semibold text-green-600 ml-auto">✓ Completed</span>}
+              {isDone && <span className="text-xs font-semibold text-green-600 ml-auto flex items-center gap-1"><svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>Completed</span>}
             </div>
-            <h2 className="text-lg font-bold text-gray-900 mb-1">{topic.title}</h2>
-            <p className="text-sm text-gray-500 mb-4">{topic.summary}</p>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2 leading-tight tracking-tight">{topic.title}</h2>
+            <p className="text-base text-gray-500 mb-6 leading-relaxed border-l-4 border-blue-100 pl-4">{topic.summary}</p>
 
-            <div className="space-y-4">
+            <div className="space-y-7">
               {topic.subtopics.map((sub, si) => (
                 <div key={si}>
-                  <h4 className="text-sm font-semibold text-gray-900 mb-1">{sub.heading}</h4>
-                  {sub.body && <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{sub.body}</p>}
+                  <h4 className="text-base font-bold text-gray-900 mb-1.5">{sub.heading}</h4>
+                  {sub.body && <p className="text-[15px] text-gray-700 leading-7 whitespace-pre-line">{sub.body}</p>}
                   {sub.code && (
-                    <pre className="mt-2 bg-gray-900 text-gray-100 rounded-lg p-3 text-xs overflow-x-auto leading-relaxed"><code>{sub.code}</code></pre>
+                    <pre className="mt-3 bg-gray-900 text-gray-100 rounded-xl p-4 text-[13px] overflow-x-auto leading-relaxed shadow-sm"><code>{sub.code}</code></pre>
                   )}
                   {sub.diagram && (
-                    <div className="mt-2 bg-gray-50 border border-gray-100 rounded-lg p-2" dangerouslySetInnerHTML={{ __html: sub.diagram }} />
+                    <div className="mt-3 bg-gray-50 border border-gray-100 rounded-xl p-3" dangerouslySetInnerHTML={{ __html: sub.diagram }} />
                   )}
                   {sub.tip && (
-                    <div className="mt-2 bg-blue-50 border border-blue-100 rounded-lg p-3 text-xs text-blue-800"><strong>Tip:</strong> {sub.tip}</div>
+                    <div className="mt-3 bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-900 leading-relaxed flex gap-2.5">
+                      <svg className="w-4 h-4 flex-shrink-0 mt-0.5 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" /></svg>
+                      <span><strong className="font-semibold">Tip:</strong> {sub.tip}</span>
+                    </div>
                   )}
                   {sub.exercise && (
-                    <div className="mt-2 bg-orange-50 border border-orange-200 rounded-lg p-3 text-xs text-orange-900"><strong>Try this:</strong> {sub.exercise}</div>
+                    <div className="mt-3 bg-orange-50 border border-orange-200 rounded-xl p-4 text-sm text-orange-900 leading-relaxed flex gap-2.5">
+                      <svg className="w-4 h-4 flex-shrink-0 mt-0.5 text-orange-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
+                      <span><strong className="font-semibold">Try this:</strong> {sub.exercise}</span>
+                    </div>
                   )}
                 </div>
               ))}
             </div>
 
             {!isDone && (
-              <button onClick={() => markComplete(topic.id)} className="mt-5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all">
+              <button onClick={() => markComplete(topic.id)} className="mt-7 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all inline-flex items-center gap-2 shadow-sm">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
                 Mark complete
               </button>
             )}
 
             {/* Next / Previous navigation */}
-            <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
+            <div className="flex items-center justify-between mt-8 pt-5 border-t border-gray-100">
               <button onClick={() => { setActiveIdx(i => Math.max(0, i - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                 disabled={isFirst}
-                className={`text-sm font-semibold px-4 py-2 rounded-lg transition-all ${isFirst ? 'text-gray-300 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100'}`}>
+                className={`text-sm font-semibold px-4 py-2.5 rounded-xl transition-all ${isFirst ? 'text-gray-300 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100'}`}>
                 ← Previous
               </button>
               {!isLast ? (
                 <button onClick={() => { setActiveIdx(i => Math.min(lessons.topics.length - 1, i + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-all">
+                  className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-6 py-2.5 rounded-xl transition-all shadow-sm">
                   Next lesson →
                 </button>
               ) : (
-                <span className="text-xs text-gray-400">Last lesson</span>
+                <span className="text-xs text-gray-400 font-medium">Last lesson</span>
               )}
             </div>
           </div>

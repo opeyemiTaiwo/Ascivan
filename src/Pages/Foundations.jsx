@@ -64,7 +64,12 @@ const Foundations = () => {
         let valid = ordered.filter(t => FOUNDATIONS[t]);
         // Admins see EVERY track's courses (for review/management), not just their own.
         if (data.role === 'admin') {
-          valid = Object.keys(FOUNDATIONS).filter(t => t !== 'notsure' && t !== 'universal');
+          valid = Object.keys(FOUNDATIONS).filter(t => t !== 'notsure' && t !== 'universal' && t !== 'company');
+        }
+        // Companies don't take skill tracks - they get a short course on how the
+        // badge and rating system works, so they can read member profiles.
+        if (data.isCompany) {
+          valid = ['company'];
         }
         const tabs = valid.length ? valid : ['notsure'];
         if (active) setAllTracks(tabs);

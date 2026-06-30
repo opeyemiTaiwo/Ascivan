@@ -14,6 +14,12 @@
 // Keys match the track ids from roleTaxonomy.js (plus 'universal' and 'notsure').
 
 export const FOUNDATIONS = {
+  company: {
+    label: 'Understanding Badges & Ratings',
+    intro: 'A short guide for companies: how members prove their skills, so you can read profiles and hire with confidence.',
+    items: [],
+  },
+
   universal: {
     label: 'Start Here',
     intro: 'A few essentials everyone on Ascivan should know before joining a project.',

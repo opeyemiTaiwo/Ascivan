@@ -413,6 +413,45 @@ export const LESSONS = {
   },
 
   // ============================ UNIVERSAL / NOT SURE ============================
+  company: {
+    label: 'Understanding Badges & Ratings',
+    intro: 'A short guide for companies: how Ascivan members prove their skills, so you can read profiles and hire with confidence.',
+    topics: [
+      {
+        id: 'co-why-badges',
+        title: 'How members prove their skills',
+        summary: 'Why a badge on Ascivan means more than a line on a CV.',
+        subtopics: [
+          { heading: 'What you will learn', body: 'How to read a member\'s badges and ratings so you can quickly judge who is a strong fit for your team or job, and what each signal actually means.' },
+          { heading: 'Proof over pedigree', body: 'Ascivan is built on a simple idea: people prove their skills by doing real, collaborative project work, not just by listing credentials. Every badge a member holds was earned by completing an actual project in a team and having that work reviewed. So a badge is evidence of demonstrated ability, not a certificate from a course they watched.' },
+          { heading: 'The six skill tracks', body: 'Members specialise in one or more of six tracks: TechDev (coding developers), TechArchs (low/no-code builders), TechQA (quality testers), TechGuard (security, cloud, DevOps), TechPO (product/project owners), and TechLeads (non-technical roles like coordination, writing, analysis). A member\'s badges tell you which kinds of work they have actually done.' },
+        ],
+      },
+      {
+        id: 'co-badge-levels',
+        title: 'Badge levels and what they mean',
+        summary: 'Novice to Expert, with the exact counts and colour tags.',
+        subtopics: [
+          { heading: 'Levels are earned by doing', body: 'Within each track, a member\'s level rises as they complete more projects in that track. The level is always live - it reflects how many badges they currently hold, not a one-time award. So a higher level means more proven, completed work.' },
+          { heading: 'The four levels, with counts and colours', body: 'Novice: 1 badge in the track, shown with a steel/grey ring. Associate: 2 to 5 badges, bronze ring. Advanced: 6 to 10 badges, silver ring. Expert: 11 or more badges, gold ring. So when you see a gold ring on a member\'s badge, they have completed 11+ real projects in that track - a strong, proven specialist.' },
+          { heading: 'Reading the colour at a glance', body: 'The ring colour is your fastest signal: grey (just starting), bronze (solid, a few projects in), silver (experienced), gold (expert, heavily proven). The same colours mean the same thing across every track, so a gold TechDev and a gold TechLeads are both top-tier in their area.' },
+          { heading: 'How to use this when hiring', body: 'Match the track to your need (coding role - look for TechDev; QA role - TechQA; project leadership - TechPO or TechLeads), then use the level to gauge depth. An Associate is a capable contributor; an Advanced or Expert has a substantial track record you can trust for more senior work.' },
+        ],
+      },
+      {
+        id: 'co-ratings',
+        title: 'The community rating system',
+        summary: 'How teaching ratings and Top Talent surface strong members.',
+        subtopics: [
+          { heading: 'Members can teach, and get rated', body: 'Once a member reaches Associate level (2+ badges) in a track, they can contribute original lessons to the community Foundations courses. Learners rate those lessons with stars (1 to 5), and the member\'s average teaching rating appears on their profile. A high teaching rating signals someone who not only does the work but can explain and lead - valuable for senior and mentoring roles.' },
+          { heading: 'Top Talent on your Proof Wall', body: 'On your Proof Wall you have a Top Talent view that surfaces members who recently earned badges or hold high community teaching ratings, each linking straight to their profile. It is a fast way to discover people who are actively proving themselves right now.' },
+          { heading: 'Verified members and companies', body: 'A Premium (verified) badge - the orange PRO mark - means a member or company has been verified by Ascivan. As a company, holding a verified badge tells applicants you are a trustworthy, accountable organisation, which helps you attract better talent. Likewise, you can give extra trust to verified members.' },
+          { heading: 'Putting it together', body: 'A strong candidate profile usually shows: badges in the track you need, a level that matches the seniority you want, and ideally a good teaching rating for roles needing communication or leadership. Use the Talent Board to search by track and badges, and Top Talent to spot rising members. Badges show what they have done; ratings show how well they share it.' },
+        ],
+      },
+    ],
+  },
+
   notsure: {
     label: 'Discover Your Track',
     intro: 'New to tech? Get oriented with the basics, then explore which track fits you.',

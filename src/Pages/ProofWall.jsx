@@ -63,8 +63,13 @@ const FILTERS = [
   { id: 'update', label: 'Updates' },
 ];
 
-// Company accounts only see Updates (no lead recruitment or open-project applications).
-const filtersFor = (isCompany) => isCompany ? FILTERS.filter(f => f.id === 'update') : FILTERS;
+// Companies see Updates plus a "Top Talent" discovery tab (recent badge earners and
+// highly-rated community teachers). Individuals get the contributor tabs.
+const COMPANY_FILTERS = [
+  { id: 'update', label: 'Updates' },
+  { id: 'talent', label: 'Top Talent' },
+];
+const filtersFor = (isCompany) => isCompany ? COMPANY_FILTERS : FILTERS;
 
 const ProofWall = () => {
   const { currentUser } = useAuth();
@@ -174,6 +179,77 @@ const ProofWall = () => {
         if (active) setOpenProjects([]);
       } finally {
         if (active) setLoadingOpen(false);
+      }
+    })();
+    return () => { active = false; };
+  }, [filter, myData]);
+
+  // Top Talent (companies): members who recently earned badges or are highly rated
+  // for teaching community Foundations. Each links to their profile.
+  const [talent, setTalent] = useState([]);
+  const [loadingTalent, setLoadingTalent] = useState(false);
+
+  useEffect(() => {
+    if (filter !== 'talent' || !myData?.isCompany) return;
+    let active = true;
+    (async () => {
+      setLoadingTalent(true);
+      try {
+        const { collection: col, getDocs, query: q, where, limit: lim } = await import('firebase/firestore');
+
+        // 1) Recent badge earners from the activity feed.
+        const badgeSnap = await getDocs(q(col(db, 'activity'), where('type', '==', 'badge'), lim(50)));
+        const badgeByUser = new Map();
+        badgeSnap.docs.forEach(d => {
+          const a = d.data();
+          if (a.actorId && !badgeByUser.has(a.actorId)) {
+            badgeByUser.set(a.actorId, { uid: a.actorId, name: a.actorName, badgeName: a.badgeName, reason: 'badge', createdAt: a.createdAt });
+          }
+        });
+
+        // 2) Highly-rated community teachers.
+        const contribSnap = await getDocs(q(col(db, 'foundationsContributions'), where('status', '==', 'approved'), lim(100)));
+        const teachByUser = new Map();
+        contribSnap.docs.forEach(d => {
+          const c = d.data();
+          const avg = c.ratingCount ? c.ratingSum / c.ratingCount : 0;
+          if (c.authorId && c.ratingCount > 0) {
+            const prev = teachByUser.get(c.authorId);
+            if (!prev || avg > prev.avg) {
+              teachByUser.set(c.authorId, { uid: c.authorId, name: c.authorName, avg, ratingCount: c.ratingCount, reason: 'teaching' });
+            }
+          }
+        });
+
+        // Merge unique users, resolve email + photo for profile links.
+        const uids = new Set([...badgeByUser.keys(), ...teachByUser.keys()]);
+        const cards = [];
+        for (const uid of uids) {
+          let email = null, photoURL = null, displayName = null;
+          try {
+            const { doc: dref, getDoc } = await import('firebase/firestore');
+            const us = await getDoc(dref(db, 'users', uid));
+            if (us.exists()) { const u = us.data(); email = u.email; photoURL = u.photoURL; displayName = u.displayName; }
+          } catch (_) {}
+          const b = badgeByUser.get(uid);
+          const t = teachByUser.get(uid);
+          cards.push({
+            uid, email,
+            name: displayName || b?.name || t?.name || 'Member',
+            photoURL,
+            badgeName: b?.badgeName || null,
+            teachingAvg: t?.avg || null,
+            teachingCount: t?.ratingCount || null,
+          });
+        }
+        // Sort: teaching-rated first (by avg), then badge earners.
+        cards.sort((a, b) => (b.teachingAvg || 0) - (a.teachingAvg || 0));
+        if (active) setTalent(cards.slice(0, 30));
+      } catch (e) {
+        console.error('load talent failed', e);
+        if (active) setTalent([]);
+      } finally {
+        if (active) setLoadingTalent(false);
       }
     })();
     return () => { active = false; };
@@ -367,7 +443,46 @@ const ProofWall = () => {
       </div>
 
       {/* Wall */}
-      {filter === 'open' && !myData?.isCompany ? (
+      {filter === 'talent' && myData?.isCompany ? (
+        loadingTalent ? (
+          <div className="flex justify-center py-16"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>
+        ) : talent.length === 0 ? (
+          <div className="text-center py-16">
+            <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <svg className="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4z" /></svg>
+            </div>
+            <p className="text-gray-900 font-semibold">No talent to show yet</p>
+            <p className="text-gray-500 text-sm mt-1">Members who earn badges or get top ratings for teaching will appear here.</p>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2.5">
+            {talent.map(m => (
+              <div key={m.uid} className="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-3.5">
+                {m.photoURL ? (
+                  <img src={m.photoURL} alt={m.name} className="w-12 h-12 rounded-full object-cover border border-gray-200 flex-shrink-0" />
+                ) : (
+                  <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold flex-shrink-0">{(m.name || 'M').charAt(0).toUpperCase()}</div>
+                )}
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-sm font-bold text-gray-900 truncate">{m.name}</h3>
+                  <div className="flex flex-wrap gap-1.5 mt-1">
+                    {m.badgeName && <span className="text-xs font-medium px-2 py-0.5 bg-amber-50 text-amber-700 rounded-full">🏅 {m.badgeName}</span>}
+                    {m.teachingAvg ? <span className="text-xs font-medium px-2 py-0.5 bg-orange-50 text-orange-700 rounded-full">★ {m.teachingAvg.toFixed(1)} teaching{m.teachingCount ? ` (${m.teachingCount})` : ''}</span> : null}
+                  </div>
+                </div>
+                {m.email && (
+                  <button
+                    onClick={() => navigate(`/profile/${m.email}`)}
+                    className="flex-shrink-0 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-all"
+                  >
+                    View profile →
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        )
+      ) : filter === 'open' && !myData?.isCompany ? (
         loadingOpen ? (
           <div className="flex justify-center py-16"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>
         ) : openProjects.length === 0 ? (

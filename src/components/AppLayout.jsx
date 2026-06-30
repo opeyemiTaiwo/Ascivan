@@ -17,6 +17,7 @@ const AppLayout = ({ children }) => {
   const [userPlan, setUserPlan] = useState('Free');
   const [userRole, setUserRole] = useState('member');
   const [isCompany, setIsCompany] = useState(false);
+  const [projectsOpen, setProjectsOpen] = useState(false);
 
   // Fetch user plan/role
   useEffect(() => {
@@ -68,31 +69,41 @@ const AppLayout = ({ children }) => {
 
   const isPremiumOrAdmin = userPlan === 'Premium' || userRole === 'admin';
 
-  // Company accounts cannot join/build projects, so they don't get the
-  // contributor-only sections (Foundations, Projects, Workspace, Project Vault).
-  const companyHiddenPaths = ['/foundations', '/projects', '/my-workspaces', '/project-vault'];
+  // For individuals, group project-related sections under one "Projects" menu to
+  // reduce clutter. Companies don't get these contributor-only sections at all.
+  const projectChildren = [
+    { path: '/projects', label: 'All Projects' },
+    { path: '/foundations', label: 'Foundations' },
+    { path: '/my-workspaces', label: 'Workspace' },
+    { path: '/project-vault', label: 'Project Vault' },
+  ];
 
   const navItems = [
     { path: '/dashboard', label: 'Home' },
-    { path: '/foundations', label: 'Foundations' },
+    ...(!isCompany ? [{ label: 'Projects', isGroup: true, children: projectChildren }] : []),
     { path: '/proof-wall', label: 'Proof Wall' },
-    { path: '/projects', label: 'Projects' },
     { path: '/jobs', label: 'Jobs' },
-    { path: '/my-workspaces', label: 'Workspace' },
     { path: '/talent-board', label: 'Talent Board' },
-    { path: '/project-vault', label: 'Project Vault' },
     { path: '/support', label: 'Support' },
     { path: '/settings', label: 'Settings' },
     ...(userRole === 'admin' ? [
       { path: '/admin', label: 'Admin' },
     ] : []),
-  ].filter(item => !(isCompany && companyHiddenPaths.includes(item.path)));
+  ];
 
   const isActive = (path) => {
     if (path === '/proof-wall') return location.pathname === '/proof-wall';
     if (path === '/dashboard') return location.pathname === '/dashboard';
     return location.pathname === path || location.pathname.startsWith(path + '/');
   };
+
+  // Keep the Projects group open whenever the user is on one of its pages.
+  const projectPaths = ['/projects', '/foundations', '/my-workspaces', '/project-vault'];
+  useEffect(() => {
+    if (projectPaths.some(p => location.pathname === p || location.pathname.startsWith(p + '/'))) {
+      setProjectsOpen(true);
+    }
+  }, [location.pathname]);
 
   const hideSidebar = location.pathname === '/community' || location.pathname.startsWith('/community/');
 
@@ -111,24 +122,59 @@ const AppLayout = ({ children }) => {
 
         {/* Nav */}
         <nav className="flex-1 py-6 px-3 space-y-3 overflow-y-auto">
-          {navItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`flex items-center justify-between px-3 py-3 rounded-lg text-sm font-medium transition-all ${
-                isActive(item.path)
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-              }`}
-            >
-              <span>{item.label}</span>
-              {item.badge > 0 && (
-                <span className="bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-                  {item.badge > 9 ? '9+' : item.badge}
-                </span>
-              )}
-            </Link>
-          ))}
+          {navItems.map((item) => {
+            // Expandable group (e.g. Projects with sub-items)
+            if (item.isGroup) {
+              const anyChildActive = item.children.some(c => isActive(c.path));
+              return (
+                <div key={item.label}>
+                  <button
+                    onClick={() => setProjectsOpen(o => !o)}
+                    className={`w-full flex items-center justify-between px-3 py-3 rounded-lg text-sm font-medium transition-all ${
+                      anyChildActive && !projectsOpen ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                    <svg className={`w-4 h-4 transition-transform ${projectsOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  </button>
+                  {projectsOpen && (
+                    <div className="mt-1 ml-3 pl-2 border-l border-gray-200 space-y-1">
+                      {item.children.map(child => (
+                        <Link
+                          key={child.path}
+                          to={child.path}
+                          className={`block px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                            isActive(child.path) ? 'bg-blue-600 text-white' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                          }`}
+                        >
+                          {child.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            }
+            // Normal single link
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`flex items-center justify-between px-3 py-3 rounded-lg text-sm font-medium transition-all ${
+                  isActive(item.path)
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                }`}
+              >
+                <span>{item.label}</span>
+                {item.badge > 0 && (
+                  <span className="bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                    {item.badge > 9 ? '9+' : item.badge}
+                  </span>
+                )}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* User + Logout */}

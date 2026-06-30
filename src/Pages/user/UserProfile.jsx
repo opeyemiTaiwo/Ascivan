@@ -267,21 +267,25 @@ const UserProfile = () => {
 
             {/* Stats Row */}
             <div className="flex gap-4 mt-5">
-              <div className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-center">
-                <p className="text-xl font-bold text-gray-900">{userBadges.length}</p>
-                <p className="text-gray-500 text-xs">Badges</p>
-              </div>
-              <div className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-center">
-                <p className="text-xl font-bold text-gray-900">{completedCount}</p>
-                <p className="text-gray-500 text-xs">Certificates</p>
-              </div>
-              {teaching && (
+              {!profile.isCompany && (
+                <>
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-center">
+                    <p className="text-xl font-bold text-gray-900">{userBadges.length}</p>
+                    <p className="text-gray-500 text-xs">Badges</p>
+                  </div>
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-center">
+                    <p className="text-xl font-bold text-gray-900">{completedCount}</p>
+                    <p className="text-gray-500 text-xs">Certificates</p>
+                  </div>
+                </>
+              )}
+              {!profile.isCompany && teaching && (
                 <div className="bg-orange-50 border border-orange-200 rounded-lg px-4 py-3 text-center">
                   <p className="text-xl font-bold text-orange-600">★ {teaching.avg ? teaching.avg.toFixed(1) : '-'}</p>
                   <p className="text-gray-500 text-xs">Teaching{teaching.count ? ` (${teaching.count})` : ''}</p>
                 </div>
               )}
-              {profile.primarySkillTrack && (
+              {!profile.isCompany && profile.primarySkillTrack && (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 text-center">
                   <p className="text-sm font-semibold text-blue-700">{skillTrackLabels[profile.primarySkillTrack] || profile.primarySkillTrack}</p>
                   <p className="text-blue-500 text-xs">Skill Track</p>
@@ -292,7 +296,7 @@ const UserProfile = () => {
         </div>
 
         {/* Badges Section */}
-        {userBadges.length > 0 && (
+        {!profile.isCompany && userBadges.length > 0 && (
           <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
             <h3 className="text-lg font-bold text-gray-900 mb-1">Badges Earned</h3>
             <p className="text-gray-400 text-xs mb-4">Each badge shows the level reached and the contribution rating given by the project owner - verified proof of real collaborative work.</p>

@@ -35,6 +35,7 @@ const Foundations = () => {
   const [userData, setUserData] = useState(null);
   const [community, setCommunity] = useState([]);
   const [showContribute, setShowContribute] = useState(false);
+  const [workspaceContributor, setWorkspaceContributor] = useState(false);
   const [cForm, setCForm] = useState({ title: '', url: '', description: '' });
   const [cTrack, setCTrack] = useState(''); // which eligible track the lesson is for
   const [submitting, setSubmitting] = useState(false);
@@ -88,11 +89,14 @@ const Foundations = () => {
   }, [currentUser]);
 
   // If arriving from the dashboard "Contribute" button (?contribute=1), open the
-  // form and scroll to it once content + eligibility are known.
+  // form and scroll to it. When coming from a workspace (?fromWorkspace=1), project
+  // collaborators can contribute even without an Associate badge.
   useEffect(() => {
     if (loading) return;
     const params = new URLSearchParams(location.search);
-    if (params.get('contribute') === '1' && eligibleTrackList(userData).length > 0) {
+    const fromWs = params.get('fromWorkspace') === '1';
+    if (fromWs) setWorkspaceContributor(true);
+    if (params.get('contribute') === '1' && (fromWs || eligibleTrackList(userData).length > 0)) {
       setShowContribute(true);
       setTimeout(() => {
         contributeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -140,8 +144,19 @@ const Foundations = () => {
     })();
   }, [allDone, celebrated, currentUser, track]);
 
-  // The tracks this member can contribute to (any track they hold an Associate+ badge in).
-  const myEligibleTracks = eligibleTrackList(userData);
+  // The tracks this member can contribute to. Normally any track they hold an
+  // Associate+ badge in. Workspace collaborators can contribute to any track,
+  // even without a badge (they teach what they did on their project).
+  const badgeEligibleTracks = eligibleTrackList(userData);
+  const ALL_TRACK_OPTIONS = [
+    { id: 'TechDev', label: 'TechDev (Development)' },
+    { id: 'TechArchs', label: 'TechArchs (Low/No-Code)' },
+    { id: 'TechQA', label: 'TechQA (Quality Assurance)' },
+    { id: 'TechGuard', label: 'TechGuard (Security)' },
+    { id: 'TechPO', label: 'TechPO (Product/Project Owner)' },
+    { id: 'TechLeads', label: 'TechLeads (Non-Technical)' },
+  ];
+  const myEligibleTracks = workspaceContributor ? ALL_TRACK_OPTIONS : badgeEligibleTracks;
   const eligible = myEligibleTracks.length > 0;
 
   const switchTrack = async (trackId) => {
@@ -350,7 +365,9 @@ const Foundations = () => {
           </div>
 
           {eligible && !showContribute && (
-            <p className="text-sm text-gray-500 mb-3">You're an {myEligibleTracks.map(t => `${t.level} in ${t.id}`).join(', ')}. You can contribute a lesson to {myEligibleTracks.length > 1 ? 'those tracks' : `the ${myEligibleTracks[0].id} track`} to help newcomers and boost your ranking.</p>
+            <p className="text-sm text-gray-500 mb-3">{workspaceContributor
+              ? 'As a project collaborator you can contribute a lesson to any track to help newcomers and get rated. No badge needed.'
+              : `You're an ${myEligibleTracks.map(t => `${t.level} in ${t.id}`).join(', ')}. You can contribute a lesson to ${myEligibleTracks.length > 1 ? 'those tracks' : `the ${myEligibleTracks[0].id} track`} to help newcomers and boost your ranking.`}</p>
           )}
 
           {eligible && showContribute && (
@@ -358,10 +375,10 @@ const Foundations = () => {
               <p className="text-xs text-gray-500">Share <strong>your own original</strong> lesson. Paste a <strong>YouTube or Vimeo link</strong> and it plays right here inside Foundations; other links (blog, doc) open in a new tab. We don't host files. It'll be reviewed before going live.</p>
               {myEligibleTracks.length > 1 ? (
                 <select value={cTrack || myEligibleTracks[0].id} onChange={e => setCTrack(e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900">
-                  {myEligibleTracks.map(t => <option key={t.id} value={t.id}>{t.id} - {t.label} ({t.level})</option>)}
+                  {myEligibleTracks.map(t => <option key={t.id} value={t.id}>{t.id} - {t.label}{t.level ? ` (${t.level})` : ''}</option>)}
                 </select>
               ) : (
-                <p className="text-xs text-blue-600 font-medium">Contributing to: {myEligibleTracks[0]?.id} - {myEligibleTracks[0]?.label} ({myEligibleTracks[0]?.level})</p>
+                <p className="text-xs text-blue-600 font-medium">Contributing to: {myEligibleTracks[0]?.id} - {myEligibleTracks[0]?.label}{myEligibleTracks[0]?.level ? ` (${myEligibleTracks[0].level})` : ''}</p>
               )}
               <input value={cForm.title} onChange={e => setCForm(p => ({ ...p, title: e.target.value }))} placeholder="Lesson title" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900" />
               <input value={cForm.url} onChange={e => setCForm(p => ({ ...p, url: e.target.value }))} placeholder="Link to your content (YouTube, blog, doc...)" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900" />

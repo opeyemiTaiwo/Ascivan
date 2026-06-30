@@ -127,6 +127,12 @@ const ProjectWorkspace = () => {
 
   const isOwner = project?.submitterId === currentUser?.uid || project?.submitterEmail === currentUser?.email;
 
+  // A collaborator = the lead (owner) or an approved team member, not a pending applicant.
+  const isCollaborator = isOwner || teamMembers.some(m =>
+    (m.applicantUid === currentUser?.uid || m.applicantEmail === currentUser?.email)
+    && (m.status === 'approved' || m.status === 'accepted' || m.isOwner)
+  );
+
   // Forum handlers
   const handleImageSelect = (e) => {
     const file = e.target.files?.[0];
@@ -471,6 +477,24 @@ const ProjectWorkspace = () => {
       {/* Resources */}
       {activeTab === 'resources' && (
         <div className="space-y-4">
+          {/* Contribute a community lesson (collaborators only, no badge required) */}
+          {isCollaborator && (
+            <div className="bg-gradient-to-br from-blue-50 to-orange-50 border border-blue-200 rounded-xl p-5">
+              <div className="flex items-start justify-between gap-4 flex-wrap">
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-base font-bold text-gray-900 mb-1">Teach what your team learned</h3>
+                  <p className="text-gray-600 text-sm">Did you run or organise a training for the team? Share it as a community lesson and get rated by learners - no badge needed when you contribute from a project workspace. The organiser who uploads is credited.</p>
+                </div>
+                <button
+                  onClick={() => navigate('/foundations?contribute=1&fromWorkspace=1')}
+                  className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-all flex-shrink-0"
+                >
+                  Contribute a lesson
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Display resources */}
           <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4">
             <h3 className="text-base font-bold text-gray-900">Project Resources</h3>

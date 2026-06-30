@@ -30,6 +30,8 @@ const DashboardOverview = () => {
   const [loading, setLoading] = useState(true);
   const [membershipPlan, setMembershipPlan] = useState('Free');
   const [userRole, setUserRole] = useState('member');
+  const [companyStats, setCompanyStats] = useState({ jobsPosted: 0, totalApplied: 0, totalViews: 0 });
+  const [companyJobs, setCompanyJobs] = useState([]);
   const isPremiumUser = membershipPlan === 'Premium' || userRole === 'admin';
 
   useEffect(() => {
@@ -94,6 +96,27 @@ const DashboardOverview = () => {
     fetchData();
   }, [currentUser]);
 
+  // Company dashboard: load their job posts, applicant clicks, and views.
+  useEffect(() => {
+    if (!currentUser || !profileData?.isCompany) return;
+    let active = true;
+    (async () => {
+      try {
+        const { collection: col, getDocs, query: q, where } = await import('firebase/firestore');
+        const snap = await getDocs(q(col(db, 'hub_posts'), where('posterId', '==', currentUser.uid)));
+        const jobs = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+          .filter(j => j.status !== 'deleted');
+        const totalApplied = jobs.reduce((s, j) => s + (j.clickCount || 0), 0);
+        const totalViews = jobs.reduce((s, j) => s + (j.viewCount || 0), 0);
+        if (active) {
+          setCompanyJobs(jobs);
+          setCompanyStats({ jobsPosted: jobs.length, totalApplied, totalViews });
+        }
+      } catch (e) { console.error('load company stats failed', e); }
+    })();
+    return () => { active = false; };
+  }, [currentUser, profileData]);
+
   if (loading) {
     return (
       
@@ -134,25 +157,43 @@ const DashboardOverview = () => {
         )}
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <p className="text-gray-500 text-sm mb-1">Projects Completed</p>
-            <p className="text-3xl font-bold text-gray-900">{stats.projectsCompleted}</p>
+        {profileData?.isCompany ? (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            <div className="bg-white border border-gray-200 rounded-xl p-5">
+              <p className="text-gray-500 text-sm mb-1">Jobs Posted</p>
+              <p className="text-3xl font-bold text-gray-900">{companyStats.jobsPosted}</p>
+            </div>
+            <div className="bg-white border border-gray-200 rounded-xl p-5">
+              <p className="text-gray-500 text-sm mb-1">People Applied</p>
+              <p className="text-3xl font-bold text-gray-900">{companyStats.totalApplied}</p>
+              <p className="text-gray-400 text-xs mt-1">Clicked the apply button</p>
+            </div>
+            <div className="bg-white border border-gray-200 rounded-xl p-5">
+              <p className="text-gray-500 text-sm mb-1">Total Views</p>
+              <p className="text-3xl font-bold text-gray-900">{companyStats.totalViews}</p>
+            </div>
           </div>
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <p className="text-gray-500 text-sm mb-1">Ongoing Projects</p>
-            <p className="text-3xl font-bold text-gray-900">{stats.ongoingProjects}</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div className="bg-white border border-gray-200 rounded-xl p-5">
+              <p className="text-gray-500 text-sm mb-1">Projects Completed</p>
+              <p className="text-3xl font-bold text-gray-900">{stats.projectsCompleted}</p>
+            </div>
+            <div className="bg-white border border-gray-200 rounded-xl p-5">
+              <p className="text-gray-500 text-sm mb-1">Ongoing Projects</p>
+              <p className="text-3xl font-bold text-gray-900">{stats.ongoingProjects}</p>
+            </div>
+            <div className="bg-white border border-gray-200 rounded-xl p-5">
+              <p className="text-gray-500 text-sm mb-1">Badges Earned</p>
+              <p className="text-3xl font-bold text-gray-900">{stats.badgesEarned}</p>
+            </div>
+            <div className="bg-white border border-gray-200 rounded-xl p-5">
+              <p className="text-gray-500 text-sm mb-1">Talent Board</p>
+              <p className="text-3xl font-bold text-gray-900">{stats.badgesEarned > 0 ? 'Listed' : '-'}</p>
+              <p className="text-gray-400 text-xs mt-1">{stats.badgesEarned > 0 ? 'Recruiters can find you' : 'Earn a badge to get listed'}</p>
+            </div>
           </div>
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <p className="text-gray-500 text-sm mb-1">Badges Earned</p>
-            <p className="text-3xl font-bold text-gray-900">{stats.badgesEarned}</p>
-          </div>
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <p className="text-gray-500 text-sm mb-1">Talent Board</p>
-            <p className="text-3xl font-bold text-gray-900">{stats.badgesEarned > 0 ? 'Listed' : '-'}</p>
-            <p className="text-gray-400 text-xs mt-1">{stats.badgesEarned > 0 ? 'Recruiters can find you' : 'Earn a badge to get listed'}</p>
-          </div>
-        </div>
+        )}
 
         {/* Invite eligible members (Associate+ in a track) to contribute to Foundations. */}
         {!loading && !profileData?.isCompany && eligibleTracks(profileData).length > 0 && (
@@ -173,6 +214,39 @@ const DashboardOverview = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left column */}
           <div className="lg:col-span-2 space-y-6">
+            {profileData?.isCompany ? (
+              <div className="bg-white border border-gray-200 rounded-xl p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-bold text-gray-900">Your Job Posts</h3>
+                  <Link to="/jobs" className="text-blue-600 text-sm font-medium hover:underline">Manage</Link>
+                </div>
+                {companyJobs.length === 0 ? (
+                  <p className="text-gray-400 text-sm">No jobs posted yet. Post a job to start reaching talent.</p>
+                ) : (
+                  <div className="space-y-3">
+                    {companyJobs.map(job => (
+                      <div key={job.id} className="flex items-center justify-between p-3 border border-gray-100 rounded-lg">
+                        <div className="min-w-0 flex-1">
+                          <p className="text-gray-900 text-sm font-medium truncate">{job.title || job.jobTitle || 'Untitled job'}</p>
+                          <p className="text-gray-400 text-xs mt-0.5">{job.jobType || job.type || 'Job'}</p>
+                        </div>
+                        <div className="flex gap-4 flex-shrink-0 ml-3 text-center">
+                          <div>
+                            <p className="text-sm font-bold text-gray-900">{job.clickCount || 0}</p>
+                            <p className="text-gray-400 text-[11px]">applied</p>
+                          </div>
+                          <div>
+                            <p className="text-sm font-bold text-gray-900">{job.viewCount || 0}</p>
+                            <p className="text-gray-400 text-[11px]">views</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+            <>
             {/* Join a Project CTA */}
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
               <h3 className="text-lg font-bold text-gray-900 mb-2">Join a project</h3>
@@ -227,11 +301,14 @@ const DashboardOverview = () => {
                 </div>
               )}
             </div>
+            </>
+            )}
           </div>
 
           {/* Right column */}
           <div className="space-y-6">
             {/* Your Badges */}
+            {!profileData?.isCompany && (
             <div className="bg-white border border-gray-200 rounded-xl p-6">
               <h3 className="text-lg font-bold text-gray-900 mb-1">Your Badges</h3>
               <p className="text-gray-500 text-xs mb-4">Earn badges by completing projects in each track.</p>
@@ -291,6 +368,7 @@ const DashboardOverview = () => {
                 })}
               </div>
             </div>
+            )}
 
             {/* Plan */}
             <div className="bg-white border border-gray-200 rounded-xl p-6">
@@ -317,7 +395,7 @@ const DashboardOverview = () => {
                   Talent Board
                   <PremiumBadge size="sm" />
                 </h3>
-                <p className="text-gray-600 text-xs mb-3">You're visible to recruiters and companies on the Talent Board.</p>
+                <p className="text-gray-600 text-xs mb-3">{profileData?.isCompany ? 'Browse verified talent and find people for your team.' : "You're visible to recruiters and companies on the Talent Board."}</p>
                 <Link to="/talent-board" className="text-blue-600 text-sm font-medium hover:underline">View Talent Board</Link>
               </div>
             )}

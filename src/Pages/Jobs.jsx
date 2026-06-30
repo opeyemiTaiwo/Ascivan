@@ -72,7 +72,9 @@ const Jobs = () => {
       }).filter(p => {
         const isJob = !p.category || p.category === 'job';
         const notExpired = !p.expiresAt || new Date() < p.expiresAt;
-        return isJob && notExpired;
+        // Companies don't browse other companies' jobs - they only see their own.
+        const visibleToMe = !isCompany || p.posterId === currentUser?.uid || p.userId === currentUser?.uid;
+        return isJob && notExpired && visibleToMe;
       })
       // Newest first, sorted in JS (handles missing createdAt gracefully).
       .sort((a, b) => (b.createdAt?.getTime?.() || 0) - (a.createdAt?.getTime?.() || 0));
@@ -86,7 +88,7 @@ const Jobs = () => {
     });
 
     return unsubscribe;
-  }, [currentUser, authLoading]);
+  }, [currentUser, authLoading, isCompany]);
 
   useEffect(() => {
     let filtered = [...posts];

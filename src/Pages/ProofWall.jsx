@@ -243,22 +243,14 @@ const ProofWall = () => {
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-1">
+      <div className="mb-4">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Proof Wall</h1>
-        <button
-          onClick={() => setShowCompose(v => !v)}
-          className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-          {myData?.isCompany ? 'Share a company update' : 'Share a project update'}
-        </button>
+        {!myData?.isCompany && (
+          <p className="text-blue-600 text-xs mt-2 bg-blue-50 border border-blue-100 rounded-lg px-3 py-2">
+            <strong>Tip:</strong> Share updates so recruiters see your progress. Link your <strong>final result</strong> (live site or demo), not your workspace.
+          </p>
+        )}
       </div>
-      <p className="text-gray-500 text-sm mb-1">Verified milestones from across Ascivan. Earned, not posted.</p>
-      {!myData?.isCompany && (
-        <p className="text-blue-600 text-xs mb-5 bg-blue-50 border border-blue-100 rounded-lg px-3 py-2">
-          <strong>Tip:</strong> Sharing project updates matters - it's how recruiters see your work progress. When you share, link your <strong>final result</strong> (the live site, demo, or published work), not your project workspace, since the workspace is only visible to you.
-        </p>
-      )}
 
       {/* Composer (work-focused, not personal) */}
       {showCompose && (
@@ -321,19 +313,28 @@ const ProofWall = () => {
         </div>
       )}
 
-      {/* Filters */}
-      <div className="flex gap-2 mb-5 overflow-x-auto scrollbar-hide pb-1">
-        {filtersFor(myData?.isCompany).map(f => (
-          <button
-            key={f.id}
-            onClick={() => setFilter(f.id)}
-            className={`flex-shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full transition-all ${
-              filter === f.id ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-          >
-            {f.label}
-          </button>
-        ))}
+      {/* Filters + share, in one modern row */}
+      <div className="flex items-center gap-2 mb-5">
+        <div className="flex gap-1.5 overflow-x-auto scrollbar-hide flex-1">
+          {filtersFor(myData?.isCompany).map(f => (
+            <button
+              key={f.id}
+              onClick={() => setFilter(f.id)}
+              className={`flex-shrink-0 text-xs font-semibold px-3.5 py-2 rounded-full transition-all ${
+                filter === f.id ? 'bg-blue-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={() => setShowCompose(v => !v)}
+          className="flex-shrink-0 flex items-center gap-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold px-3.5 py-2 rounded-full transition-all shadow-sm"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
+          {myData?.isCompany ? 'Company update' : 'Project update'}
+        </button>
       </div>
 
       {/* Wall */}

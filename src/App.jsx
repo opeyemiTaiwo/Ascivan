@@ -10,6 +10,7 @@ import AppShell from './components/AppShell';
 
 // Critical path - keep eager
 import Login from './Pages/auth/Login';
+import ResetPassword from './Pages/auth/ResetPassword';
 import Logout from './Pages/auth/Logout';
 import AccountTypeSelection from './Pages/auth/AccountTypeSelection';
 import LandingPage from './Pages/LandingPage';
@@ -122,6 +123,7 @@ function App() {
                 {/* Public - no sidebar */}
                 <Route path="/" element={<HomeRoute />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/terms" element={<div className="min-h-screen bg-white"><div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16"><TermsOfService /></div></div>} />

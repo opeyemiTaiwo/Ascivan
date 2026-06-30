@@ -483,7 +483,7 @@ const ProjectWorkspace = () => {
               <div className="flex items-start justify-between gap-4 flex-wrap">
                 <div className="flex-1 min-w-0">
                   <h3 className="text-base font-bold text-gray-900 mb-1">Teach what your team learned</h3>
-                  <p className="text-gray-600 text-sm">Did you run or organise a training for the team? Share it as a community lesson and get rated by learners - no badge needed when you contribute from a project workspace. The organiser who uploads is credited.</p>
+                  <p className="text-gray-600 text-sm">Did you run or organise a training for the team? Share it as a community lesson and get rated by learners.</p>
                 </div>
                 <button
                   onClick={() => navigate('/foundations?contribute=1&fromWorkspace=1')}

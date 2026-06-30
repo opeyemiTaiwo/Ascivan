@@ -9,6 +9,8 @@ import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
   sendEmailVerification,
+  confirmPasswordReset,
+  verifyPasswordResetCode,
   updateProfile
 } from "firebase/auth";
 import { 
@@ -190,6 +192,16 @@ export const AuthProvider = ({ children }) => {
     return sendPasswordResetEmail(auth, email);
   };
 
+  // Verify a reset code (from the email link) and return the associated email.
+  const verifyResetCode = async (oobCode) => {
+    return verifyPasswordResetCode(auth, oobCode);
+  };
+
+  // Complete the reset with a new password.
+  const confirmReset = async (oobCode, newPassword) => {
+    return confirmPasswordReset(auth, oobCode, newPassword);
+  };
+
   // Re-send the verification email to the signed-in user.
   const resendVerification = async () => {
     if (auth.currentUser) return sendEmailVerification(auth.currentUser);
@@ -279,6 +291,8 @@ export const AuthProvider = ({ children }) => {
     signUpWithEmail,
     signInWithEmail,
     resetPassword,
+    verifyResetCode,
+    confirmReset,
     resendVerification,
     logout,
     getUserData,

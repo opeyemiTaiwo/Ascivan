@@ -45,7 +45,7 @@ const Login = () => {
       try {
         setEmailLoading(true);
         await resetPassword(form.email);
-        setInfo('Password reset email sent. Check your inbox (and spam).');
+        setInfo('Reset link sent. If you don\'t see it, check your spam folder.');
         setMode('signin');
       } catch (err) {
         setError(getAuthErrorMessage(err));

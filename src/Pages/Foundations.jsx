@@ -372,7 +372,7 @@ const Foundations = () => {
 
           {eligible && showContribute && (
             <div className="bg-white border border-gray-200 rounded-xl p-4 mb-4 space-y-3">
-              <p className="text-xs text-gray-500">Share <strong>your own original</strong> lesson. Paste a <strong>YouTube or Vimeo link</strong> and it plays right here inside Foundations; other links (blog, doc) open in a new tab. We don't host files. It'll be reviewed before going live.</p>
+              <p className="text-xs text-gray-500">Teach. Help others. Get rated.</p>
               {myEligibleTracks.length > 1 ? (
                 <select value={cTrack || myEligibleTracks[0].id} onChange={e => setCTrack(e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900">
                   {myEligibleTracks.map(t => <option key={t.id} value={t.id}>{t.id} - {t.label}{t.level ? ` (${t.level})` : ''}</option>)}

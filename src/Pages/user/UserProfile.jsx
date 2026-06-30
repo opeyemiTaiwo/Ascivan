@@ -19,6 +19,32 @@ const badgeData = [
   { id: 'techguard', title: 'TechGuard', image: '/Images/TechGuard.png', label: 'Cybersecurity' },
 ];
 
+// Track aliases so we can count badges per track regardless of how category/id is stored.
+const TRACK_ALIASES = {
+  development: ['development', 'techdev', 'developer'],
+  'quality-assurance': ['quality-assurance', 'techqa', 'quality', 'qa'],
+  security: ['security', 'techguard', 'cybersecurity', 'network'],
+  leadership: ['leadership', 'techleads', 'leader', 'non-technical'],
+  design: ['design', 'techarchs', 'architecture', 'low-code', 'no-code'],
+  mentorship: ['mentorship', 'techpo', 'techmo', 'product', 'project-owner'],
+};
+
+// Derive a badge's tier LIVE from how many badges the user holds in the same track
+// (matches dashboard + certificate). This replaces the unreliable frozen badge.level.
+const deriveBadgeLevel = (allBadges, badge) => {
+  const fieldsOf = (b) => [b.category, b.id, b.title, b.badgeCategory].map(x => (x || '').toString().toLowerCase());
+  const mine = fieldsOf(badge);
+  let aliases = mine;
+  for (const [, group] of Object.entries(TRACK_ALIASES)) {
+    if (group.some(a => mine.some(f => f === a || f.includes(a)))) { aliases = group; break; }
+  }
+  const count = (allBadges || []).filter(b => {
+    const f = fieldsOf(b);
+    return aliases.some(a => f.some(fl => fl === a || fl.includes(a)));
+  }).length;
+  return count >= 11 ? 'Expert' : count >= 6 ? 'Advanced' : count >= 2 ? 'Associate' : 'Novice';
+};
+
 const UserProfile = () => {
   const { userEmail } = useParams();
   const { currentUser } = useAuth();
@@ -278,13 +304,16 @@ const UserProfile = () => {
                   good: 'bg-blue-100 text-blue-700',
                   fair: 'bg-amber-100 text-amber-700',
                 }[badge.contribution] || 'bg-gray-100 text-gray-600';
+                // Tier is derived from how many badges this user has in this track
+                // (live), so it matches the dashboard/certificate - not the frozen level.
+                const trackLevel = deriveBadgeLevel(userBadges, badge);
                 return (
                   <div key={i} className="text-center p-3 bg-gray-50 rounded-lg border border-gray-100">
                     <div className="flex justify-center mb-1">
-                      <TierBadge image={bd?.image || '/Images/TechDev.png'} alt={badge.title || badge.id} level={badge.level || 'Novice'} size={40} showLabel={false} />
+                      <TierBadge image={bd?.image || '/Images/TechDev.png'} alt={badge.title || badge.id} level={trackLevel} size={40} showLabel={false} />
                     </div>
                     <p className="text-xs text-gray-900 font-medium">{bd?.label || badge.title || badge.id}</p>
-                    <p className="text-xs text-gray-400">{badge.level || 'Novice'}</p>
+                    <p className="text-xs text-gray-400">{trackLevel}</p>
                     {badge.contribution && (
                       <span className={`inline-block mt-1 text-[10px] font-semibold px-2 py-0.5 rounded-full capitalize ${contribStyle}`}>
                         {badge.contribution}

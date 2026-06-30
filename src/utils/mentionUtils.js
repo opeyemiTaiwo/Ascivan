@@ -37,78 +37,31 @@ export const formatUserForMention = (user) => {
   return `@${handle}`;
 };
 
-// Search users function - searches by professional names and email
-export const searchUsers = async (query) => {
+// Search users function - searches by name and email, client-side for reliability
+// (no composite indexes needed, case-insensitive). `term` is the typed query.
+export const searchUsers = async (term) => {
   try {
-    if (!query || query.trim() === '') {
-      // Return recent users or popular users when no query
-      const recentUsersQuery = query(
-        collection(db, 'users'),
-        orderBy('lastActive', 'desc'),
-        limit(5)
-      );
-      const snapshot = await getDocs(recentUsersQuery);
-      return snapshot.docs.map(doc => ({
-        uid: doc.id,
-        ...doc.data()
-      }));
+    // Fetch a pool of users once, then filter/sort in JS.
+    const snapshot = await getDocs(query(collection(db, 'users'), limit(200)));
+    let users = snapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
+
+    const t = (term || '').toLowerCase().trim();
+
+    if (!t) {
+      // No query yet (just typed "@"): show a few recent/any users.
+      return users.slice(0, 5);
     }
 
-    const searchTerm = query.toLowerCase().trim();
-    const users = [];
-    
-    // Search by firstName
-    const firstNameQuery = query(
-      collection(db, 'users'),
-      where('firstName', '>=', searchTerm),
-      where('firstName', '<=', searchTerm + '\uf8ff'),
-      limit(10)
-    );
-    
-    // Search by lastName  
-    const lastNameQuery = query(
-      collection(db, 'users'),
-      where('lastName', '>=', searchTerm),
-      where('lastName', '<=', searchTerm + '\uf8ff'),
-      limit(10)
-    );
-    
-    // Search by displayName
-    const displayNameQuery = query(
-      collection(db, 'users'),
-      where('displayName', '>=', searchTerm),
-      where('displayName', '<=', searchTerm + '\uf8ff'),
-      limit(10)
-    );
-    
-    // Search by email
-    const emailQuery = query(
-      collection(db, 'users'),
-      where('email', '>=', searchTerm),
-      where('email', '<=', searchTerm + '\uf8ff'),
-      limit(10)
-    );
-
-    // Execute all queries
-    const [firstNameSnapshot, lastNameSnapshot, displayNameSnapshot, emailSnapshot] = await Promise.all([
-      getDocs(firstNameQuery),
-      getDocs(lastNameQuery), 
-      getDocs(displayNameQuery),
-      getDocs(emailQuery)
-    ]);
-
-    // Combine results and remove duplicates
-    const userMap = new Map();
-    
-    [firstNameSnapshot, lastNameSnapshot, displayNameSnapshot, emailSnapshot].forEach(snapshot => {
-      snapshot.docs.forEach(doc => {
-        const userData = { uid: doc.id, ...doc.data() };
-        userMap.set(doc.id, userData);
-      });
+    // Match across displayName, firstName, lastName, and email, case-insensitively.
+    const matches = users.filter(u => {
+      const fields = [
+        u.displayName, u.firstName, u.lastName, u.email,
+        `${u.firstName || ''} ${u.lastName || ''}`,
+      ].map(x => (x || '').toString().toLowerCase());
+      return fields.some(f => f.includes(t));
     });
 
-    return Array.from(userMap.values()).slice(0, 10);
-    
+    return matches.slice(0, 10);
   } catch (error) {
     console.error('Error searching users:', error);
     return [];

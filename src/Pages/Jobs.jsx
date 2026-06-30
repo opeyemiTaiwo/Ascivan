@@ -331,7 +331,7 @@ const Jobs = () => {
                   {posts.length === 0 ? (isCompany ? 'No jobs posted yet' : 'No jobs available yet') : 'No jobs match your filters'}
                 </h3>
                 <p className="text-gray-500 mb-8">
-                  {posts.length === 0 ? 'Check back soon for new opportunities.' : 'Try adjusting your filters.'}
+                  {posts.length === 0 ? (isCompany ? '' : 'Check back soon for new opportunities.') : 'Try adjusting your filters.'}
                 </p>
                 {hasActiveFilters && (
                   <button onClick={clearAll} className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-all">Clear Filters</button>

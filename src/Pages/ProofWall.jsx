@@ -59,10 +59,11 @@ const renderHeadline = (a) => {
 
 const FILTERS = [
   { id: 'lead', label: 'Needs a lead' },
+  { id: 'open', label: 'Open projects' },
   { id: 'update', label: 'Updates' },
 ];
 
-// Company accounts only see Updates (no lead recruitment).
+// Company accounts only see Updates (no lead recruitment or open-project applications).
 const filtersFor = (isCompany) => isCompany ? FILTERS.filter(f => f.id === 'update') : FILTERS;
 
 const ProofWall = () => {
@@ -149,6 +150,34 @@ const ProofWall = () => {
     setItems(await getActivity(50, f || null));
     setLoading(false);
   }, []);
+
+  // Open projects: have a lead (status 'active') and are still accepting collaborator
+  // applications (applicationsOpen !== false). Queried live so closed ones drop off.
+  const [openProjects, setOpenProjects] = useState([]);
+  const [loadingOpen, setLoadingOpen] = useState(false);
+
+  useEffect(() => {
+    if (filter !== 'open' || myData?.isCompany) return;
+    let active = true;
+    (async () => {
+      setLoadingOpen(true);
+      try {
+        const { collection: col, getDocs, query: q, where } = await import('firebase/firestore');
+        // Avoid composite-index needs: filter by status only, then refine in JS.
+        const snap = await getDocs(q(col(db, 'projects'), where('status', '==', 'active')));
+        const list = snap.docs
+          .map(d => ({ id: d.id, ...d.data() }))
+          .filter(p => p.applicationsOpen !== false);
+        if (active) setOpenProjects(list);
+      } catch (e) {
+        console.error('load open projects failed', e);
+        if (active) setOpenProjects([]);
+      } finally {
+        if (active) setLoadingOpen(false);
+      }
+    })();
+    return () => { active = false; };
+  }, [filter, myData]);
 
   // Companies don't see contributor-proof activity (badges, ships, lead recruitment).
   // They still see everyone's project updates and general activity.
@@ -338,7 +367,42 @@ const ProofWall = () => {
       </div>
 
       {/* Wall */}
-      {loading ? (
+      {filter === 'open' && !myData?.isCompany ? (
+        loadingOpen ? (
+          <div className="flex justify-center py-16"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>
+        ) : openProjects.length === 0 ? (
+          <div className="text-center py-16">
+            <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <svg className="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <p className="text-gray-900 font-semibold">No open projects right now</p>
+            <p className="text-gray-500 text-sm mt-1">When a project has a lead and is accepting collaborators, it shows up here to apply.</p>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2.5">
+            {openProjects.map(p => (
+              <div key={p.id} className="bg-white border border-gray-200 rounded-xl p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <h3 className="text-sm font-bold text-gray-900">{p.projectTitle || p.title || 'Untitled project'}</h3>
+                    {p.track && <span className="inline-block mt-1 text-xs font-medium px-2 py-0.5 bg-blue-50 text-blue-600 rounded-full">{p.track}</span>}
+                  </div>
+                  <span className="flex-shrink-0 text-xs font-semibold px-2.5 py-1 bg-green-50 text-green-700 rounded-full border border-green-200">Accepting collaborators</span>
+                </div>
+                {(p.description || p.summary) && (
+                  <p className="text-sm text-gray-600 mt-2 line-clamp-2">{p.description || p.summary}</p>
+                )}
+                <button
+                  onClick={() => navigate(`/projects/${p.id}`)}
+                  className="mt-3 inline-flex items-center gap-1 bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-all"
+                >
+                  View &amp; apply to join →
+                </button>
+              </div>
+            ))}
+          </div>
+        )
+      ) : loading ? (
         <div className="flex justify-center py-16"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>
       ) : visibleItems.length === 0 ? (
         <div className="text-center py-16">

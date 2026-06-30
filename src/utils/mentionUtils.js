@@ -37,13 +37,27 @@ export const formatUserForMention = (user) => {
   return `@${handle}`;
 };
 
+// Cache the user pool so we don't re-read 200 docs on every keystroke.
+// Refreshes at most once per minute.
+let _userCache = null;
+let _userCacheAt = 0;
+const USER_CACHE_MS = 60 * 1000;
+
+const getUserPool = async () => {
+  const now = Date.now();
+  if (_userCache && (now - _userCacheAt) < USER_CACHE_MS) return _userCache;
+  const snapshot = await getDocs(query(collection(db, 'users'), limit(200)));
+  _userCache = snapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
+  _userCacheAt = now;
+  return _userCache;
+};
+
 // Search users function - searches by name and email, client-side for reliability
 // (no composite indexes needed, case-insensitive). `term` is the typed query.
 export const searchUsers = async (term) => {
   try {
-    // Fetch a pool of users once, then filter/sort in JS.
-    const snapshot = await getDocs(query(collection(db, 'users'), limit(200)));
-    let users = snapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
+    // Use the cached pool (one read per minute), then filter/sort in JS.
+    const users = await getUserPool();
 
     const t = (term || '').toLowerCase().trim();
 

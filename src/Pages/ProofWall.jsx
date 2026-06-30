@@ -221,27 +221,26 @@ const ProofWall = () => {
           }
         });
 
-        // Merge unique users, resolve email + photo for profile links.
-        const uids = new Set([...badgeByUser.keys(), ...teachByUser.keys()]);
-        const cards = [];
-        for (const uid of uids) {
+        // Merge unique users, resolve email + photo for profile links (in parallel).
+        const uids = [...new Set([...badgeByUser.keys(), ...teachByUser.keys()])];
+        const { doc: dref, getDoc } = await import('firebase/firestore');
+        const cards = await Promise.all(uids.map(async (uid) => {
           let email = null, photoURL = null, displayName = null;
           try {
-            const { doc: dref, getDoc } = await import('firebase/firestore');
             const us = await getDoc(dref(db, 'users', uid));
             if (us.exists()) { const u = us.data(); email = u.email; photoURL = u.photoURL; displayName = u.displayName; }
           } catch (_) {}
           const b = badgeByUser.get(uid);
           const t = teachByUser.get(uid);
-          cards.push({
+          return {
             uid, email,
             name: displayName || b?.name || t?.name || 'Member',
             photoURL,
             badgeName: b?.badgeName || null,
             teachingAvg: t?.avg || null,
             teachingCount: t?.ratingCount || null,
-          });
-        }
+          };
+        }));
         // Sort: teaching-rated first (by avg), then badge earners.
         cards.sort((a, b) => (b.teachingAvg || 0) - (a.teachingAvg || 0));
         if (active) setTalent(cards.slice(0, 30));

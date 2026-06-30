@@ -137,11 +137,67 @@ module.exports = async function handler(req, res) {
         });
       } catch (_) { /* non-blocking */ }
 
-      // CRITICAL: nothing pending = no email.
+      // CRITICAL: nothing pending = no email... UNLESS the user is idle and we
+      // want to gently encourage them to join a project in their track. To avoid
+      // spamming, this nudge is throttled (at most once every few days per user).
+      if (items.length === 0) {
+        const NUDGE_COOLDOWN_DAYS = 4;
+        const lastNudge = tsToDate(user.lastJoinNudge);
+        const cooledDown = !lastNudge || daysSince(lastNudge) >= NUDGE_COOLDOWN_DAYS;
+
+        // Is the user currently idle? (no active project they're a member/lead of)
+        const hasActiveWork = involved.some(p =>
+          (p.status === 'active' || p.status === 'setup' || p.status === 'lead_recruitment')
+          && ((p.members || []).includes(user.uid) || p.submitterId === user.uid)
+        );
+
+        if (cooledDown && !hasActiveWork) {
+          // Find open projects in the user's track to recommend.
+          const userTrack = (user.primarySkillTrack || '').toString().toLowerCase();
+          const openInTrack = Object.values(projects).filter(p => {
+            const open = p.status === 'lead_recruitment' || p.status === 'active' || p.status === 'open';
+            if (!open) return false;
+            // Not already involved.
+            if ((p.members || []).includes(user.uid) || p.submitterId === user.uid) return false;
+            // Match track if we know it; otherwise any open project is fine.
+            if (!userTrack) return true;
+            const pTrack = (p.track || p.primaryTrack || p.category || '').toString().toLowerCase();
+            return !pTrack || pTrack.includes(userTrack) || userTrack.includes(pTrack);
+          }).slice(0, 3);
+
+          // Has the user ever completed a project? (shapes the wording)
+          const hasCompleted = involved.some(p => p.status === 'completed')
+            || (Array.isArray(user.badges) && user.badges.length > 0);
+
+          if (openInTrack.length > 0) {
+            const trackLabel = user.primarySkillTrack || 'your track';
+            const headline = hasCompleted
+              ? `Ready for your next project, ${ (user.displayName || '').split(' ')[0] || 'there'}?`
+              : 'Join your first project and start earning badges';
+            const detail = hasCompleted
+              ? `Great work finishing your last project. Keep your momentum going - here are open ${trackLabel} projects looking for people like you.`
+              : `You're all set up. The fastest way to grow and earn your first badge is to join a real project. Here are open ${trackLabel} projects you can join now.`;
+            items.push({
+              headline,
+              detail,
+              link: `${SITE}/projects`,
+              suggestions: openInTrack.map(p => ({
+                title: p.projectTitle || p.title || 'Open project',
+                link: `${SITE}/projects/${p.id}`,
+              })),
+            });
+            // Stamp the nudge so we don't repeat it tomorrow.
+            try { await db.collection('users').doc(user.uid).update({ lastJoinNudge: new Date() }); } catch (_) {}
+          }
+        }
+      }
+
+      // Still nothing? No email.
       if (items.length === 0) { skipped++; continue; }
 
       const name = user.displayName || user.email.split('@')[0];
-      const html = renderEmail(name, items);
+      const isNudgeOnly = items.length === 1 && !!items[0].suggestions;
+      const html = renderEmail(name, items, isNudgeOnly);
       try {
         await transporter.sendMail({
           from: { name: 'Ascivan', address: process.env.EMAIL_USER },
@@ -163,20 +219,29 @@ module.exports = async function handler(req, res) {
   }
 };
 
-function renderEmail(name, items) {
-  const rows = items.map(it => `
+function renderEmail(name, items, isNudgeOnly) {
+  const rows = items.map(it => {
+    const suggestionsHtml = (it.suggestions && it.suggestions.length)
+      ? `<div style="margin:6px 0 12px">${it.suggestions.map(s =>
+          `<a href="${s.link}" style="display:block;background:#ffffff;border:1px solid #e5e7eb;border-radius:6px;padding:9px 12px;margin-bottom:6px;text-decoration:none;color:#2563EB;font-size:13px;font-weight:600">${s.title} &rarr;</a>`
+        ).join('')}</div>`
+      : '';
+    const btnLabel = it.suggestions ? 'Browse all projects' : 'Continue';
+    return `
     <div style="border-left:4px solid #F97316;background:#fff8f5;border-radius:8px;padding:14px;margin-bottom:10px">
       <p style="margin:0 0 4px;font-size:14px;font-weight:bold;color:#2563EB">${it.headline}</p>
       <p style="margin:0 0 10px;font-size:13px;color:#111827">${it.detail}</p>
-      <a href="${it.link}" style="display:inline-block;background:linear-gradient(135deg,#F97316,#EA580C);color:#ffffff;text-decoration:none;font-weight:600;font-size:13px;padding:8px 16px;border-radius:6px">Continue</a>
-    </div>`).join('');
+      ${suggestionsHtml}
+      <a href="${it.link}" style="display:inline-block;background:linear-gradient(135deg,#F97316,#EA580C);color:#ffffff;text-decoration:none;font-weight:600;font-size:13px;padding:8px 16px;border-radius:6px">${btnLabel}</a>
+    </div>`;
+  }).join('');
 
   return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
   <body style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;background:#ffffff;color:#111827">
   <div style="background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e5e7eb">
     <div style="background:linear-gradient(135deg,#F97316,#EA580C);color:#fff;padding:24px;text-align:center">
-      <h1 style="margin:0;font-size:19px">Pick up where you left off</h1>
-      <p style="margin:8px 0 0;font-size:13px;opacity:.95">Hi ${name}, here's what's waiting for you on Ascivan</p>
+      <h1 style="margin:0;font-size:19px">${isNudgeOnly ? 'There\'s a project waiting for you' : 'Pick up where you left off'}</h1>
+      <p style="margin:8px 0 0;font-size:13px;opacity:.95">Hi ${name}, ${isNudgeOnly ? 'here are projects in your track to jump into' : 'here\'s what\'s waiting for you on Ascivan'}</p>
     </div>
     <div style="padding:22px">
       ${rows}

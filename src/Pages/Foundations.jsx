@@ -14,6 +14,7 @@ import {
 } from '../utils/foundationsContributions';
 import { foundationsForTrack, FOUNDATIONS } from '../utils/foundationsContent';
 import { lessonsForTrack } from '../utils/foundationsLessons';
+import { getVideoEmbed } from '../utils/videoEmbed';
 import { toast } from 'react-toastify';
 
 const Foundations = () => {
@@ -296,7 +297,7 @@ const Foundations = () => {
 
           {eligible && showContribute && (
             <div className="bg-white border border-gray-200 rounded-xl p-4 mb-4 space-y-3">
-              <p className="text-xs text-gray-500">Share <strong>your own original</strong> lesson (a video, article, or guide you created). Link to where it lives, we don't host files. It'll be reviewed before going live.</p>
+              <p className="text-xs text-gray-500">Share <strong>your own original</strong> lesson. Paste a <strong>YouTube or Vimeo link</strong> and it plays right here inside Foundations; other links (blog, doc) open in a new tab. We don't host files. It'll be reviewed before going live.</p>
               {myEligibleTracks.length > 1 ? (
                 <select value={cTrack || myEligibleTracks[0].id} onChange={e => setCTrack(e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900">
                   {myEligibleTracks.map(t => <option key={t.id} value={t.id}>{t.id} - {t.label} ({t.level})</option>)}
@@ -325,12 +326,35 @@ const Foundations = () => {
                   <h4 className="text-sm font-bold text-gray-900">{c.title}</h4>
                   <p className="text-xs text-gray-500 mt-0.5">By {c.authorName}{c.authorBadgeLevel ? ` · ${c.authorBadgeLevel}` : ''}{c.authorLeft ? ' · former member' : ''}</p>
                   <p className="text-sm text-gray-600 mt-1">{c.description}</p>
-                  <div className="mt-3">
-                    <a href={c.url} target="_blank" rel="noopener noreferrer"
-                      className="inline-block bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-all">
-                      Open lesson
-                    </a>
-                  </div>
+                  {(() => {
+                    const vid = getVideoEmbed(c.url);
+                    if (vid) {
+                      return (
+                        <div className="mt-3">
+                          <div className="relative w-full rounded-lg overflow-hidden border border-gray-200" style={{ paddingTop: '56.25%' }}>
+                            <iframe
+                              src={vid.embedUrl}
+                              title={c.title}
+                              className="absolute top-0 left-0 w-full h-full"
+                              frameBorder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              loading="lazy"
+                            />
+                          </div>
+                          <p className="text-xs text-gray-400 mt-1">Video by {c.authorName} · plays via {vid.provider}</p>
+                        </div>
+                      );
+                    }
+                    return (
+                      <div className="mt-3">
+                        <a href={c.url} target="_blank" rel="noopener noreferrer"
+                          className="inline-block bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-all">
+                          Open lesson
+                        </a>
+                      </div>
+                    );
+                  })()}
                   <div className="flex items-center gap-3 mt-3">
                     <div className="flex items-center gap-0.5">
                       {[1,2,3,4,5].map(s => (

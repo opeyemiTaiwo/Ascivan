@@ -4,6 +4,7 @@
 // Members can share a work-focused project update; everything else is auto-generated proof.
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getActivity, logActivity, ACTIVITY_TYPES, toggleCelebrate, editUpdate, deleteActivityItem } from '../utils/activityFeed';
 import { doc, getDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore';
@@ -57,18 +58,19 @@ const renderHeadline = (a) => {
 };
 
 const FILTERS = [
-  { id: '', label: 'All activity' },
-  { id: 'badge', label: 'Badges earned' },
-  { id: 'ship', label: 'Projects shipped' },
   { id: 'lead', label: 'Needs a lead' },
   { id: 'update', label: 'Updates' },
 ];
 
+// Company accounts only see Updates (no lead recruitment).
+const filtersFor = (isCompany) => isCompany ? FILTERS.filter(f => f.id === 'update') : FILTERS;
+
 const ProofWall = () => {
   const { currentUser } = useAuth();
+  const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState('update');
   const [myData, setMyData] = useState(null);
 
   // Share-update composer
@@ -147,6 +149,13 @@ const ProofWall = () => {
     setItems(await getActivity(50, f || null));
     setLoading(false);
   }, []);
+
+  // Companies don't see contributor-proof activity (badges, ships, lead recruitment).
+  // They still see everyone's project updates and general activity.
+  const companyHiddenTypes = ['badge', 'ship', 'lead'];
+  const visibleItems = myData?.isCompany
+    ? items.filter(a => !companyHiddenTypes.includes(a.type))
+    : items;
 
   useEffect(() => { load(filter); }, [filter, load]);
 
@@ -241,10 +250,15 @@ const ProofWall = () => {
           className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-          Share a project update
+          {myData?.isCompany ? 'Share a company update' : 'Share a project update'}
         </button>
       </div>
-      <p className="text-gray-500 text-sm mb-5">Verified milestones from across Ascivan. Earned, not posted.</p>
+      <p className="text-gray-500 text-sm mb-1">Verified milestones from across Ascivan. Earned, not posted.</p>
+      {!myData?.isCompany && (
+        <p className="text-blue-600 text-xs mb-5 bg-blue-50 border border-blue-100 rounded-lg px-3 py-2">
+          <strong>Tip:</strong> Sharing project updates matters - it's how recruiters see your work progress. When you share, link your <strong>final result</strong> (the live site, demo, or published work), not your project workspace, since the workspace is only visible to you.
+        </p>
+      )}
 
       {/* Composer (work-focused, not personal) */}
       {showCompose && (
@@ -252,7 +266,7 @@ const ProofWall = () => {
           <input
             value={updateProject}
             onChange={e => setUpdateProject(e.target.value)}
-            placeholder="Which project is this about?"
+            placeholder={myData?.isCompany ? 'What is this update about?' : 'Which project is this about?'}
             className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none"
           />
           <MentionTextarea
@@ -263,7 +277,7 @@ const ProofWall = () => {
               const name = user.displayName || user.name || user.email;
               setUpdateMentions(prev => prev.some(m => m.uid === uid) ? prev : [...prev, { uid, name }]);
             }}
-            placeholder="Share a real update on the work. Type @ to mention a team member."
+            placeholder={myData?.isCompany ? 'Share a company update. Type @ to mention someone.' : 'Share a real update on the work. Type @ to mention a team member.'}
             rows={3}
             className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none resize-none"
           />
@@ -282,7 +296,7 @@ const ProofWall = () => {
           <input
             value={updateLink}
             onChange={e => setUpdateLink(e.target.value)}
-            placeholder="Add a link (optional)"
+            placeholder={myData?.isCompany ? 'Add a link (optional)' : 'Link your final result - live site, demo, or published work (optional)'}
             className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none"
           />
 
@@ -309,7 +323,7 @@ const ProofWall = () => {
 
       {/* Filters */}
       <div className="flex gap-2 mb-5 overflow-x-auto scrollbar-hide pb-1">
-        {FILTERS.map(f => (
+        {filtersFor(myData?.isCompany).map(f => (
           <button
             key={f.id}
             onClick={() => setFilter(f.id)}
@@ -325,17 +339,17 @@ const ProofWall = () => {
       {/* Wall */}
       {loading ? (
         <div className="flex justify-center py-16"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>
-      ) : items.length === 0 ? (
+      ) : visibleItems.length === 0 ? (
         <div className="text-center py-16">
           <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
             <svg className="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
           </div>
           <p className="text-gray-900 font-semibold">Nothing here yet</p>
-          <p className="text-gray-500 text-sm mt-1">Earn a badge, ship a project, or lead one, and it shows up here as proof.</p>
+          <p className="text-gray-500 text-sm mt-1">{myData?.isCompany ? 'Updates from across Ascivan will show up here.' : 'Share a project update, and it shows up here as proof of your work.'}</p>
         </div>
       ) : (
         <div className="flex flex-col gap-2.5">
-          {items.map(a => {
+          {visibleItems.map(a => {
             const st = typeStyle[a.type] || typeStyle.update;
             const celebrated = uid && (a.celebratedBy || []).includes(uid);
             const count = a.celebrateCount || 0;
@@ -399,6 +413,16 @@ const ProofWall = () => {
                         )}
                       </div>
                     )
+                  )}
+
+                  {/* Needs-a-lead items are clickable: go to the project to apply. */}
+                  {a.type === 'lead' && !myData?.isCompany && (
+                    <button
+                      onClick={() => navigate(a.projectId ? `/projects/${a.projectId}` : '/projects')}
+                      className="inline-flex items-center gap-1 mt-2 bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-all"
+                    >
+                      View &amp; apply to lead →
+                    </button>
                   )}
 
                   <div className="text-xs text-gray-400 mt-1.5">

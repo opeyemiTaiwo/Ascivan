@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { collection, query, where, orderBy, onSnapshot, updateDoc, doc, deleteDoc, getDocs } from 'firebase/firestore';
+import { collection, query, where, orderBy, onSnapshot, updateDoc, doc, deleteDoc, getDocs, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
 const NotificationsPage = () => {
@@ -12,6 +12,14 @@ const NotificationsPage = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
   const [processing, setProcessing] = useState(false);
+  const [isCompany, setIsCompany] = useState(false);
+
+  useEffect(() => {
+    if (!currentUser) return;
+    getDoc(doc(db, 'users', currentUser.uid))
+      .then(s => { if (s.exists()) setIsCompany(!!s.data().isCompany); })
+      .catch(() => {});
+  }, [currentUser]);
 
   useEffect(() => {
     if (!currentUser) { navigate('/login'); return; }
@@ -81,7 +89,7 @@ const NotificationsPage = () => {
   const tabs = [
     { key: 'all', label: 'All', count: notifications.length },
     { key: 'unread', label: 'Unread', count: notifications.filter(n => !n.isRead).length },
-    { key: 'projects', label: 'Projects', count: notifications.filter(n => projectTypes.includes(n.type)).length },
+    ...(!isCompany ? [{ key: 'projects', label: 'Projects', count: notifications.filter(n => projectTypes.includes(n.type)).length }] : []),
     { key: 'myposts', label: 'My Posts', count: notifications.filter(n => n.type === 'my_post' || n.type?.includes('like') || n.type?.includes('repost') || n.type?.includes('comment')).length },
     { key: 'mentions', label: 'Mentions', count: notifications.filter(n => n.type?.includes('mention')).length },
   ];

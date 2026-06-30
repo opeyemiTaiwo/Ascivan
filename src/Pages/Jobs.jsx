@@ -23,6 +23,16 @@ const Jobs = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('newest');
   const [loading, setLoading] = useState(true);
+  const [isCompany, setIsCompany] = useState(false);
+
+  useEffect(() => {
+    if (!currentUser) return;
+    import('firebase/firestore').then(({ doc, getDoc }) => {
+      getDoc(doc(db, 'users', currentUser.uid))
+        .then(s => { if (s.exists()) setIsCompany(!!s.data().isCompany); })
+        .catch(() => {});
+    });
+  }, [currentUser]);
 
   const jobTypes = [
     { id: 'all',        label: 'All Jobs' },
@@ -223,12 +233,14 @@ const Jobs = () => {
           <section className="mb-10 text-center">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-3 sm:mb-4">Jobs</h1>
             <p className="text-gray-600 text-sm sm:text-base md:text-lg mb-5 sm:mb-6">Full-time · Part-time · Contract · Freelance · Internship · Virtual/Online</p>
-            <button
-              onClick={() => navigate('/jobs/post')}
-              className="px-6 py-3 min-h-[44px] bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all shadow-lg"
-            >
-              Post a Job
-            </button>
+            {isCompany && (
+              <button
+                onClick={() => navigate('/jobs/post')}
+                className="px-6 py-3 min-h-[44px] bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all shadow-lg"
+              >
+                Post a Job
+              </button>
+            )}
           </section>
 
           {/* Job Type Pills */}
@@ -322,12 +334,14 @@ const Jobs = () => {
                 {hasActiveFilters
                   ? <button onClick={clearAll} className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-all mr-3">Clear Filters</button>
                   : null}
-                <button
-                  onClick={() => navigate('/jobs/post')}
-                  className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all"
-                >
-                  Post a Job
-                </button>
+                {isCompany && (
+                  <button
+                    onClick={() => navigate('/jobs/post')}
+                    className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all"
+                  >
+                    Post a Job
+                  </button>
+                )}
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">

@@ -6,6 +6,16 @@ import { getAuthErrorMessage, isSafariMobileDevice, isAndroidMobileDevice, hasPo
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 
+// Require a reasonably strong password: 8+ chars, at least one number, one symbol,
+// and one letter. Returns an error string if invalid, or '' if it passes.
+const validatePasswordStrength = (pw) => {
+  if (!pw || pw.length < 8) return 'Password must be at least 8 characters long.';
+  if (!/[a-zA-Z]/.test(pw)) return 'Password must include at least one letter.';
+  if (!/[0-9]/.test(pw)) return 'Password must include at least one number.';
+  if (!/[^a-zA-Z0-9]/.test(pw)) return 'Password must include at least one symbol (e.g. ! @ # $ %).';
+  return '';
+};
+
 const Login = () => {
   const { currentUser, signInWithGoogle, signInWithEmail, signUpWithEmail, resetPassword } = useAuth();
   const [error, setError] = useState('');
@@ -43,7 +53,10 @@ const Login = () => {
       return;
     }
     if (!form.email || !form.password) { setError('Email and password are required.'); return; }
-    if (mode === 'signup' && form.password.length < 6) { setError('Password must be at least 6 characters.'); return; }
+    if (mode === 'signup') {
+      const pwError = validatePasswordStrength(form.password);
+      if (pwError) { setError(pwError); return; }
+    }
     if (mode === 'signup' && !form.name.trim()) { setError('Please enter your name.'); return; }
     try {
       setEmailLoading(true);
@@ -229,9 +242,23 @@ const Login = () => {
                   <input
                     type="password" value={form.password}
                     onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
-                    placeholder={mode === 'signup' ? 'Create a password (6+ characters)' : 'Password'}
+                    placeholder={mode === 'signup' ? 'Create a strong password' : 'Password'}
                     className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-900 focus:border-blue-500 focus:outline-none"
                   />
+                )}
+                {mode === 'signup' && (
+                  <ul className="text-[11px] space-y-0.5 -mt-1">
+                    {[
+                      ['8+ characters', form.password.length >= 8],
+                      ['A letter', /[a-zA-Z]/.test(form.password)],
+                      ['A number', /[0-9]/.test(form.password)],
+                      ['A symbol (! @ # $ ...)', /[^a-zA-Z0-9]/.test(form.password)],
+                    ].map(([label, ok]) => (
+                      <li key={label} className={ok ? 'text-green-600' : 'text-gray-400'}>
+                        {ok ? '✓' : '○'} {label}
+                      </li>
+                    ))}
+                  </ul>
                 )}
                 <button
                   type="submit" disabled={emailLoading}

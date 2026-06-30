@@ -13,6 +13,7 @@ import {
   isEligibleForTrack, submitContribution, getApprovedForTrack, rateContribution, levelForTrack, eligibleTrackList, badgeTrackIds,
 } from '../utils/foundationsContributions';
 import { foundationsForTrack, FOUNDATIONS } from '../utils/foundationsContent';
+import { lessonsForTrack } from '../utils/foundationsLessons';
 import { toast } from 'react-toastify';
 
 const Foundations = () => {
@@ -25,6 +26,7 @@ const Foundations = () => {
   const [content, setContent] = useState(null);
   const [completed, setCompleted] = useState({});
   const [opened, setOpened] = useState({});
+  const [expanded, setExpanded] = useState({});
   const [loading, setLoading] = useState(true);
   const [celebrated, setCelebrated] = useState(false);
   const [userData, setUserData] = useState(null);
@@ -91,8 +93,9 @@ const Foundations = () => {
     }
   }, [loading, location.search, userData, track]);
 
-  const requiredItems = content?.items.filter(it => !it.optional) || [];
-  const doneCount = requiredItems.filter(it => completed[it.id]).length;
+  const lessons = lessonsForTrack(track);
+  const requiredItems = (lessons?.topics || []).filter(t => !t.optional);
+  const doneCount = requiredItems.filter(t => completed[t.id]).length;
   const total = requiredItems.length;
   const allDone = total > 0 && doneCount === total;
 
@@ -101,7 +104,7 @@ const Foundations = () => {
     setCompleted(next);
     try {
       await setDoc(doc(db, 'users', currentUser.uid), {
-        foundationsProgress: { [track]: next },
+        [`foundationsProgress.${track}`]: next,
       }, { merge: true });
     } catch (e) { console.error('save progress failed', e); }
   }, [completed, track, currentUser]);
@@ -132,6 +135,8 @@ const Foundations = () => {
     setTrack(trackId);
     setContent(foundationsForTrack(trackId));
     setShowContribute(false);
+    setExpanded({});
+    setCelebrated(false);
     const prog = (userData?.foundationsProgress && userData.foundationsProgress[trackId]) || {};
     setCompleted(prog);
     setCommunity([]);
@@ -183,7 +188,7 @@ const Foundations = () => {
   if (loading) {
     return <div className="max-w-3xl mx-auto px-4 py-10"><div className="h-6 w-48 bg-gray-100 rounded animate-pulse" /></div>;
   }
-  if (!content) return null;
+  if (!lessons) return null;
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
@@ -206,8 +211,8 @@ const Foundations = () => {
         </div>
       )}
 
-      <p className="text-blue-600 text-sm font-semibold mb-1">{content.label}</p>
-      <p className="text-gray-500 text-sm mb-5">{content.intro}</p>
+      <p className="text-blue-600 text-sm font-semibold mb-1">{lessons.label}</p>
+      <p className="text-gray-500 text-sm mb-5">{lessons.intro}</p>
 
       <div className="bg-white border border-gray-200 rounded-xl p-4 mb-6">
         <div className="flex items-center justify-between mb-2">
@@ -230,36 +235,44 @@ const Foundations = () => {
       )}
 
       <div className="space-y-3">
-        {content.items.map((it, idx) => {
-          const isDone = !!completed[it.id];
-          const wasOpened = !!opened[it.id];
+        {lessons.topics.map((topic, idx) => {
+          const isDone = !!completed[topic.id];
+          const isOpen = !!expanded[topic.id];
           return (
-            <div key={it.id} className={`p-4 rounded-xl border transition-all ${isDone ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-white'}`}>
-              <div className="flex items-start gap-3">
+            <div key={topic.id} className={`rounded-xl border transition-all ${isDone ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-white'}`}>
+              <button onClick={() => setExpanded(p => ({ ...p, [topic.id]: !p[topic.id] }))} className="w-full text-left p-4 flex items-start gap-3">
                 <span className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${isDone ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-500'}`}>
                   {isDone ? '✓' : idx + 1}
                 </span>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="text-sm font-bold text-gray-900">{it.title}</h3>
-                    {it.optional && <span className="text-xs font-medium px-2 py-0.5 bg-gray-100 text-gray-500 rounded-full">Optional</span>}
+                    <h3 className="text-sm font-bold text-gray-900">{topic.title}</h3>
+                    {topic.optional && <span className="text-xs font-medium px-2 py-0.5 bg-gray-100 text-gray-500 rounded-full">Optional</span>}
                   </div>
-                  <p className="text-xs text-gray-500 mt-0.5">{it.provider} · {it.duration}</p>
-                  <div className="flex flex-wrap items-center gap-2 mt-3">
-                    <a href={it.url} target="_blank" rel="noopener noreferrer"
-                      onClick={() => setOpened(p => ({ ...p, [it.id]: true }))}
-                      className="inline-block bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-all">
-                      {isDone ? 'Revisit course' : 'Start course'}
-                    </a>
-                    {!isDone && (
-                      <button onClick={() => markComplete(it.id)}
-                        className={`text-xs font-semibold px-4 py-2 rounded-lg transition-all ${wasOpened ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
-                        Mark complete
-                      </button>
-                    )}
-                  </div>
+                  <p className="text-xs text-gray-500 mt-0.5">{topic.summary}</p>
                 </div>
-              </div>
+                <span className={`flex-shrink-0 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}>▾</span>
+              </button>
+
+              {isOpen && (
+                <div className="px-4 pb-4 pl-14 space-y-4">
+                  {topic.subtopics.map((sub, si) => (
+                    <div key={si}>
+                      <h4 className="text-sm font-semibold text-gray-900 mb-1">{sub.heading}</h4>
+                      <p className="text-sm text-gray-600 leading-relaxed">{sub.body}</p>
+                      {sub.diagram && (
+                        <div className="mt-2 bg-gray-50 border border-gray-100 rounded-lg p-2" dangerouslySetInnerHTML={{ __html: sub.diagram }} />
+                      )}
+                    </div>
+                  ))}
+                  {!isDone && (
+                    <button onClick={() => markComplete(topic.id)} className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-all">
+                      Mark complete
+                    </button>
+                  )}
+                  {isDone && <p className="text-xs font-semibold text-green-600">✓ Completed</p>}
+                </div>
+              )}
             </div>
           );
         })}

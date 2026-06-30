@@ -11,7 +11,7 @@ import TechArchs from '../Images/TechArchs.png';
 import TechGuard from '../Images/TechGuard.png';
 
 const LandingPage = () => {
-  const { currentUser, signInWithGoogle } = useAuth();
+  const { currentUser } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [visibleSections, setVisibleSections] = useState(new Set());
@@ -36,13 +36,10 @@ const LandingPage = () => {
     return () => observer.disconnect();
   }, []);
 
-  const handleSignIn = async () => {
-    try {
-      setIsLoading(true);
-      await signInWithGoogle();
-    } catch (e) {
-      setIsLoading(false);
-    }
+  const handleSignIn = () => {
+    // Send people to the login page, which offers BOTH Google and email/password,
+    // instead of triggering Google directly.
+    navigate('/login');
   };
 
   const isVisible = (id) => visibleSections.has(id);
@@ -83,7 +80,7 @@ const LandingPage = () => {
   ];
 
   const steps = [
-    { num: '01', title: 'Create Your Profile', desc: 'Sign in with Google, choose your skill track, and set your experience level. Ready in under a minute.' },
+    { num: '01', title: 'Create Your Profile', desc: 'Sign in with Google or email, choose your skill track, and set your experience level. Ready in under a minute.' },
     { num: '02', title: 'Build Real Products', desc: 'Join or post collaborative projects and ship real products with a team, start to finish - gaining experience that counts.' },
     { num: '03', title: 'Earn Badges & Get Discovered', desc: 'Complete projects to earn TechTalent Badges and a verified portfolio - then get found by recruiters hiring for remote and onsite roles.' },
   ];
@@ -178,7 +175,7 @@ const LandingPage = () => {
               disabled={isLoading}
               className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold text-base px-8 py-4 rounded-lg transition-all disabled:opacity-60"
             >
-              {isLoading ? 'Signing in...' : 'Join Free with Google'}
+              {isLoading ? 'Signing in...' : 'Join Free'}
             </button>
             <Link
               to="/about"
@@ -189,7 +186,7 @@ const LandingPage = () => {
           </div>
 
           <p id="hero-sub" data-animate className={`fade-up delay-4 mt-4 text-gray-400 text-sm ${isVisible('hero-sub') ? 'visible' : ''}`}>
-            No credit card required. Sign in with your Google account.
+            No credit card required. Sign in with Google or email.
           </p>
         </div>
       </section>
@@ -304,7 +301,7 @@ const LandingPage = () => {
           >
             {isLoading ? 'Signing in...' : 'Join Ascivan'}
           </button>
-          <p className="mt-4 text-gray-400 text-sm">Sign in with your Google account. Takes 10 seconds.</p>
+          <p className="mt-4 text-gray-400 text-sm">Sign in with Google or email. Takes seconds.</p>
         </div>
       </section>
 

@@ -607,7 +607,7 @@ const ProjectWorkspace = () => {
         </svg>
         <div>
           <p className="text-gray-900 text-sm font-semibold mb-0.5">Keep all project conversations here</p>
-          <p className="text-gray-600 text-xs leading-relaxed">Use the Discussion tab for all project communications. In case of any payment dispute, conversations logged here serve as your record and can be reviewed by admins.</p>
+          <p className="text-gray-600 text-xs leading-relaxed">Use the Discussion tab for all project communications. Conversations logged here serve as your record and can be reviewed by admins if any issue comes up.</p>
         </div>
       </div>
     </div>

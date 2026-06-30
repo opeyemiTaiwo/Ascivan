@@ -92,7 +92,7 @@ const MyWorkspaces = () => {
                     <span className="text-[10px] font-semibold bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Owner</span>
                   )}
                   <span className={`text-xs font-medium px-2 py-0.5 rounded-md ${project.status === 'active' ? 'bg-blue-50 text-blue-700' : 'bg-orange-50 text-orange-700'}`}>
-                    {project.status === 'active' ? 'Active' : 'Awaiting Payment'}
+                    {project.status === 'active' ? 'Active' : 'Completing'}
                   </span>
                   <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

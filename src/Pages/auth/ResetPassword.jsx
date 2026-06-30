@@ -74,8 +74,9 @@ const ResetPassword = () => {
                 <svg className="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
               </div>
               <p className="text-gray-900 font-semibold mb-1">Password updated</p>
-              <p className="text-gray-500 text-sm mb-6">You can now sign in with your new password.</p>
-              <button onClick={() => navigate('/login')} className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold text-sm transition-all">Go to sign in</button>
+              <p className="text-gray-500 text-sm mb-6">Your password has been changed successfully.</p>
+              <button onClick={() => navigate('/login')} className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold text-sm transition-all">Sign in now</button>
+              <p className="text-gray-500 text-sm mt-4">You can now sign in with your new password. <button onClick={() => navigate('/login')} className="text-blue-600 font-semibold hover:underline">Sign in here</button></p>
             </div>
           ) : !validCode ? (
             <div className="text-center py-4">

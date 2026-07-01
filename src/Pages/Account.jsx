@@ -113,8 +113,8 @@ const Account = () => {
         ) : (
           <div className="space-y-2">
             {memberProjects.map(p => (
-              <div key={p.id} onClick={() => navigate(`/projects/${p.id}`)} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100 cursor-pointer hover:bg-gray-100 transition-all">
-                <p className="text-gray-900 text-sm font-medium">{p.title}</p>
+              <div key={p.id} onClick={() => navigate(`/projects/${p.id}`)} className="flex items-center justify-between gap-2 min-w-0 p-3 bg-gray-50 rounded-lg border border-gray-100 cursor-pointer hover:bg-gray-100 transition-all">
+                <p className="text-gray-900 text-sm font-medium truncate min-w-0">{p.title}</p>
                 <span className={`text-xs font-semibold px-2.5 py-1 rounded-full text-gray-900 ${p.status === 'completed' ? 'bg-blue-100' : (p.status === 'rejected' || p.status === 'cancelled') ? 'bg-red-100' : 'bg-amber-100'}`}>
                   {p.status === 'completed' ? 'Completed' : p.status === 'rejected' ? 'Rejected' : p.status === 'cancelled' ? 'Closed' : 'Active'}
                 </span>
@@ -137,9 +137,9 @@ const Account = () => {
         ) : (
           <div className="space-y-2">
             {ownerProjects.map(p => (
-              <div key={p.id} onClick={() => navigate(`/projects/${p.id}`)} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100 cursor-pointer hover:bg-gray-100 transition-all">
+              <div key={p.id} onClick={() => navigate(`/projects/${p.id}`)} className="flex items-center justify-between gap-2 min-w-0 p-3 bg-gray-50 rounded-lg border border-gray-100 cursor-pointer hover:bg-gray-100 transition-all">
                 <div>
-                  <p className="text-gray-900 text-sm font-medium">{p.title}</p>
+                  <p className="text-gray-900 text-sm font-medium truncate min-w-0">{p.title}</p>
                   <p className="text-gray-400 text-xs">{p.memberCount} {p.memberCount === 1 ? 'member' : 'members'}</p>
                 </div>
                 <span className={`text-xs font-semibold px-2.5 py-1 rounded-full text-gray-900 ${p.status === 'completed' ? 'bg-blue-100' : (p.status === 'rejected' || p.status === 'cancelled') ? 'bg-red-100' : 'bg-amber-100'}`}>

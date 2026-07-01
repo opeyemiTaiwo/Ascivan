@@ -22,6 +22,8 @@ const Foundations = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const contributeRef = useRef(null);
+  const lessonTopRef = useRef(null);
+  const skipFirstScrollRef = useRef(true);
   const [track, setTrack] = useState(null);
   const [allTracks, setAllTracks] = useState([]); // every track to show as a tab
   const [content, setContent] = useState(null);
@@ -45,6 +47,14 @@ const Foundations = () => {
   // Whenever the learner moves to a different topic (via next/prev lesson or the
   // contents list), jump back to its first subtopic page.
   useEffect(() => { setSubIdx(0); }, [activeIdx]);
+
+  // Bring the lesson content to a consistent spot (just below the sticky header)
+  // whenever the page or topic changes, so paging never jumps the window up/down
+  // by an amount that depends on how long the previous page was.
+  useEffect(() => {
+    if (skipFirstScrollRef.current) { skipFirstScrollRef.current = false; return; }
+    lessonTopRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [activeIdx, subIdx]);
 
   useEffect(() => {
     if (!currentUser) { setLoading(false); return; }
@@ -132,7 +142,6 @@ const Foundations = () => {
     setActiveIdx(i => {
       const topics = (lessonsForTrack(track)?.topics || []);
       const ni = Math.min(topics.length - 1, i + 1);
-      if (ni !== i) window.scrollTo({ top: 0, behavior: 'smooth' });
       return ni;
     });
   }, [completed, track, currentUser]);
@@ -287,7 +296,7 @@ const Foundations = () => {
             {lessons.topics.map((t, i) => {
               const done = !!completed[t.id];
               return (
-                <button key={t.id} onClick={() => { setActiveIdx(i); setShowContents(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                <button key={t.id} onClick={() => { setActiveIdx(i); setShowContents(false); }}
                   className={`w-full text-left px-4 py-2.5 flex items-center gap-3 border-b border-gray-50 last:border-0 ${i === activeIdx ? 'bg-blue-50' : 'hover:bg-gray-50'}`}>
                   <span className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold ${done ? 'bg-green-500 text-white' : i === activeIdx ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-500'}`}>
                     {done ? '✓' : i + 1}
@@ -316,12 +325,10 @@ const Foundations = () => {
         const goNext = () => {
           if (!atLastSub) setSubIdx(s => s + 1);
           else if (!isLast) setActiveIdx(i => Math.min(lessons.topics.length - 1, i + 1));
-          window.scrollTo({ top: 0, behavior: 'smooth' });
         };
         const goPrev = () => {
           if (!atFirstSub) setSubIdx(s => Math.max(0, s - 1));
           else if (!isFirst) setActiveIdx(i => Math.max(0, i - 1));
-          window.scrollTo({ top: 0, behavior: 'smooth' });
         };
         return (
           <div className={`rounded-2xl border ${isDone ? 'border-green-200 bg-green-50/40' : 'border-gray-200 bg-white'} p-6 sm:p-8 shadow-sm`}>
@@ -334,11 +341,11 @@ const Foundations = () => {
             <p className="text-base text-gray-500 mb-6 leading-relaxed border-l-4 border-blue-100 pl-4">{topic.summary}</p>
 
             {/* One subtopic per page. Step indicator shows progress within the lesson. */}
-            <div className="flex items-center gap-2 mb-4">
+            <div ref={lessonTopRef} className="flex items-center gap-2 mb-4 scroll-mt-24">
               <span className="text-xs font-semibold text-gray-400">Step {safeSub + 1} of {subs.length}</span>
               <div className="flex-1 flex gap-1">
                 {subs.map((_, di) => (
-                  <button key={di} onClick={() => { setSubIdx(di); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  <button key={di} onClick={() => setSubIdx(di)}
                     aria-label={`Go to step ${di + 1}`}
                     className={`h-1.5 flex-1 rounded-full transition-all ${di === safeSub ? 'bg-blue-600' : di < safeSub ? 'bg-blue-200' : 'bg-gray-200'}`} />
                 ))}

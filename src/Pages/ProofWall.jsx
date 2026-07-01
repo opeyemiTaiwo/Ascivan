@@ -58,9 +58,9 @@ const renderHeadline = (a) => {
 };
 
 const FILTERS = [
+  { id: 'update', label: 'Updates' },
   { id: 'lead', label: 'Needs a lead' },
   { id: 'open', label: 'Open projects' },
-  { id: 'update', label: 'Updates' },
 ];
 
 // Companies see Updates plus a "Top Talent" discovery tab (recent badge earners and
@@ -419,7 +419,7 @@ const ProofWall = () => {
 
       {/* Filters + share, in one modern row */}
       <div className="flex items-center gap-2 mb-5">
-        <div className="flex gap-1.5 overflow-x-auto scrollbar-hide flex-1">
+        <div className="flex flex-wrap gap-1.5 flex-1">
           {filtersFor(myData?.isCompany).map(f => (
             <button
               key={f.id}
@@ -527,7 +527,7 @@ const ProofWall = () => {
           <p className="text-gray-500 text-sm mt-1">{myData?.isCompany ? 'Updates from across Ascivan will show up here.' : 'Share a project update, and it shows up here as proof of your work.'}</p>
         </div>
       ) : (
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-col gap-2.5 -mx-4 sm:mx-0">
           {visibleItems.map(a => {
             const st = typeStyle[a.type] || typeStyle.update;
             const celebrated = uid && (a.celebratedBy || []).includes(uid);
@@ -535,12 +535,16 @@ const ProofWall = () => {
             const isMine = uid && a.actorId === uid && a.type === 'update';
             const isEditing = editingId === a.id;
             return (
-              <div key={a.id} className="flex gap-3.5 items-start bg-white border border-gray-200 rounded-xl p-3.5 sm:p-4">
-                <div className={`w-10 h-10 ${st.shape} ${st.bg} flex items-center justify-center flex-shrink-0`}>
-                  <svg className={`w-5 h-5 ${st.fg}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={st.icon} /></svg>
+              <div key={a.id} className="bg-white border-y sm:border border-gray-200 sm:rounded-xl p-4">
+                {/* Header: icon + headline, side by side */}
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 ${st.shape} ${st.bg} flex items-center justify-center flex-shrink-0`}>
+                    <svg className={`w-5 h-5 ${st.fg}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={st.icon} /></svg>
+                  </div>
+                  <div className="min-w-0 flex-1 text-sm sm:text-[15px] text-gray-900 leading-snug">{renderHeadline(a)}</div>
                 </div>
-                <div className="min-w-0 flex-1">
-                  <div className="text-sm sm:text-[15px] text-gray-900 leading-relaxed">{renderHeadline(a)}</div>
+                {/* Body: full card width, below the header */}
+                <div className="mt-3">
 
                   {/* Inline edit mode (own updates only) */}
                   {isEditing ? (
@@ -579,7 +583,7 @@ const ProofWall = () => {
                         {/* image */}
                         {a.imageUrl && (
                           <a href={a.imageUrl} target="_blank" rel="noopener noreferrer" className="block mt-2">
-                            <img src={a.imageUrl} alt="update" className="max-h-72 rounded-lg border border-gray-200 object-cover" loading="lazy" />
+                            <img src={a.imageUrl} alt="update" className="w-full max-h-72 rounded-lg border border-gray-200 object-cover" loading="lazy" />
                           </a>
                         )}
 

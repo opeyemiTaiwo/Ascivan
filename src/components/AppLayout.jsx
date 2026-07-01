@@ -92,6 +92,28 @@ const AppLayout = ({ children }) => {
     ] : []),
   ];
 
+  // Primary tabs for the mobile bottom navigation bar (phones/handheld only).
+  // Capped at five for easy thumb reach; everything else lives behind "More",
+  // which opens the full sidebar drawer.
+  const HOME_ICON = 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6';
+  const JOBS_ICON = 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z';
+  const MORE_ICON = 'M4 6h16M4 12h16M4 18h16';
+  const mobileTabs = isCompany
+    ? [
+        { path: '/dashboard', label: 'Home', icon: HOME_ICON },
+        { path: '/foundations', label: 'Foundation', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
+        { path: '/jobs', label: 'Jobs', icon: JOBS_ICON },
+        { path: '/talent-board', label: 'Talent', icon: 'M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4z' },
+        { type: 'more', label: 'More', icon: MORE_ICON },
+      ]
+    : [
+        { path: '/dashboard', label: 'Home', icon: HOME_ICON },
+        { path: '/foundations', label: 'Foundations', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.247m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.247' },
+        { path: '/projects', label: 'Projects', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10' },
+        { path: '/jobs', label: 'Jobs', icon: JOBS_ICON },
+        { type: 'more', label: 'More', icon: MORE_ICON },
+      ];
+
   const isActive = (path) => {
     if (path === '/proof-wall') return location.pathname === '/proof-wall';
     if (path === '/dashboard') return location.pathname === '/dashboard';
@@ -288,10 +310,39 @@ const AppLayout = ({ children }) => {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8 overflow-y-auto">
           {children}
         </main>
       </div>
+
+      {/* Mobile bottom navigation - phones/handheld only. Big, evenly spaced,
+          thumb-friendly tabs. Hidden on desktop (sidebar takes over) and while
+          the drawer is open. Respects the iOS home-indicator safe area. */}
+      {!hideSidebar && (
+        <nav className={`lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-gray-200 ${sidebarOpen ? 'hidden' : 'flex'} items-stretch justify-around pb-[env(safe-area-inset-bottom)] shadow-[0_-1px_8px_rgba(0,0,0,0.04)]`}>
+          {mobileTabs.map((tab) => {
+            const active = tab.path ? isActive(tab.path) : false;
+            const cls = `flex-1 flex flex-col items-center justify-center gap-1 py-2.5 min-h-[60px] active:bg-gray-50 transition-colors ${active ? 'text-blue-600' : 'text-gray-500'}`;
+            const inner = (
+              <>
+                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 2.2 : 1.9} d={tab.icon} />
+                </svg>
+                <span className="text-[11px] font-semibold leading-none">{tab.label}</span>
+              </>
+            );
+            return tab.type === 'more' ? (
+              <button key="more" onClick={() => setSidebarOpen(true)} className={cls} aria-label="More menu">
+                {inner}
+              </button>
+            ) : (
+              <Link key={tab.path} to={tab.path} className={cls}>
+                {inner}
+              </Link>
+            );
+          })}
+        </nav>
+      )}
     </div>
   );
 };

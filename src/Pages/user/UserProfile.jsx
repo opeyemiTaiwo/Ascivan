@@ -266,7 +266,7 @@ const UserProfile = () => {
             )}
 
             {/* Stats Row */}
-            <div className="flex gap-4 mt-5">
+            <div className="flex flex-wrap gap-3 mt-5">
               {!profile.isCompany && (
                 <>
                   <div className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-center">

@@ -29,6 +29,7 @@ const Foundations = () => {
   const [opened, setOpened] = useState({});
   const [expanded, setExpanded] = useState({});
   const [activeIdx, setActiveIdx] = useState(0); // current topic in the lesson player
+  const [subIdx, setSubIdx] = useState(0); // current subtopic (page) within the active topic
   const [showContents, setShowContents] = useState(false);
   const [loading, setLoading] = useState(true);
   const [celebrated, setCelebrated] = useState(false);
@@ -40,6 +41,10 @@ const Foundations = () => {
   const [cTrack, setCTrack] = useState(''); // which eligible track the lesson is for
   const [submitting, setSubmitting] = useState(false);
   const [myRatings, setMyRatings] = useState({}); // {contributionId: stars}
+
+  // Whenever the learner moves to a different topic (via next/prev lesson or the
+  // contents list), jump back to its first subtopic page.
+  useEffect(() => { setSubIdx(0); }, [activeIdx]);
 
   useEffect(() => {
     if (!currentUser) { setLoading(false); return; }
@@ -302,6 +307,22 @@ const Foundations = () => {
         const isDone = !!completed[topic.id];
         const isLast = activeIdx === lessons.topics.length - 1;
         const isFirst = activeIdx === 0;
+        const subs = topic.subtopics;
+        const safeSub = Math.min(subIdx, subs.length - 1); // guard against stale index
+        const sub = subs[safeSub];
+        const atFirstSub = safeSub === 0;
+        const atLastSub = safeSub === subs.length - 1;
+        const prevDisabled = atFirstSub && isFirst;
+        const goNext = () => {
+          if (!atLastSub) setSubIdx(s => s + 1);
+          else if (!isLast) setActiveIdx(i => Math.min(lessons.topics.length - 1, i + 1));
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+        const goPrev = () => {
+          if (!atFirstSub) setSubIdx(s => Math.max(0, s - 1));
+          else if (!isFirst) setActiveIdx(i => Math.max(0, i - 1));
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
         return (
           <div className={`rounded-2xl border ${isDone ? 'border-green-200 bg-green-50/40' : 'border-gray-200 bg-white'} p-6 sm:p-8 shadow-sm`}>
             <div className="flex items-center gap-2 mb-3">
@@ -312,54 +333,67 @@ const Foundations = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-2 leading-tight tracking-tight">{topic.title}</h2>
             <p className="text-base text-gray-500 mb-6 leading-relaxed border-l-4 border-blue-100 pl-4">{topic.summary}</p>
 
-            <div className="space-y-7">
-              {topic.subtopics.map((sub, si) => (
-                <div key={si}>
-                  <h4 className="text-base font-bold text-gray-900 mb-1.5">{sub.heading}</h4>
-                  {sub.body && <p className="text-[15px] text-gray-700 leading-7 whitespace-pre-line">{sub.body}</p>}
-                  {sub.code && (
-                    <pre className="mt-3 bg-gray-900 text-gray-100 rounded-xl p-4 text-[13px] overflow-x-auto leading-relaxed shadow-sm"><code>{sub.code}</code></pre>
-                  )}
-                  {sub.diagram && (
-                    <div className="mt-3 bg-gray-50 border border-gray-100 rounded-xl p-3" dangerouslySetInnerHTML={{ __html: sub.diagram }} />
-                  )}
-                  {sub.tip && (
-                    <div className="mt-3 bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-900 leading-relaxed flex gap-2.5">
-                      <svg className="w-4 h-4 flex-shrink-0 mt-0.5 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" /></svg>
-                      <span><strong className="font-semibold">Tip:</strong> {sub.tip}</span>
-                    </div>
-                  )}
-                  {sub.exercise && (
-                    <div className="mt-3 bg-orange-50 border border-orange-200 rounded-xl p-4 text-sm text-orange-900 leading-relaxed flex gap-2.5">
-                      <svg className="w-4 h-4 flex-shrink-0 mt-0.5 text-orange-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
-                      <span><strong className="font-semibold">Try this:</strong> {sub.exercise}</span>
-                    </div>
-                  )}
-                </div>
-              ))}
+            {/* One subtopic per page. Step indicator shows progress within the lesson. */}
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-xs font-semibold text-gray-400">Step {safeSub + 1} of {subs.length}</span>
+              <div className="flex-1 flex gap-1">
+                {subs.map((_, di) => (
+                  <button key={di} onClick={() => { setSubIdx(di); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                    aria-label={`Go to step ${di + 1}`}
+                    className={`h-1.5 flex-1 rounded-full transition-all ${di === safeSub ? 'bg-blue-600' : di < safeSub ? 'bg-blue-200' : 'bg-gray-200'}`} />
+                ))}
+              </div>
             </div>
 
-            {!isDone && (
+            <div key={safeSub} className="min-h-[140px]">
+              <h4 className="text-base font-bold text-gray-900 mb-1.5">{sub.heading}</h4>
+              {sub.body && <p className="text-[15px] text-gray-700 leading-7 whitespace-pre-line">{sub.body}</p>}
+              {sub.code && (
+                <pre className="mt-3 bg-gray-900 text-gray-100 rounded-xl p-4 text-[13px] overflow-x-auto leading-relaxed shadow-sm"><code>{sub.code}</code></pre>
+              )}
+              {sub.diagram && (
+                <div className="mt-3 bg-gray-50 border border-gray-100 rounded-xl p-3" dangerouslySetInnerHTML={{ __html: sub.diagram }} />
+              )}
+              {sub.tip && (
+                <div className="mt-3 bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-900 leading-relaxed flex gap-2.5">
+                  <svg className="w-4 h-4 flex-shrink-0 mt-0.5 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" /></svg>
+                  <span><strong className="font-semibold">Tip:</strong> {sub.tip}</span>
+                </div>
+              )}
+              {sub.exercise && (
+                <div className="mt-3 bg-orange-50 border border-orange-200 rounded-xl p-4 text-sm text-orange-900 leading-relaxed flex gap-2.5">
+                  <svg className="w-4 h-4 flex-shrink-0 mt-0.5 text-orange-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
+                  <span><strong className="font-semibold">Try this:</strong> {sub.exercise}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Mark complete appears once the learner reaches the final step of the lesson. */}
+            {!isDone && atLastSub && (
               <button onClick={() => markComplete(topic.id)} className="mt-7 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all inline-flex items-center gap-2 shadow-sm">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
                 Mark complete
               </button>
             )}
 
-            {/* Next / Previous navigation */}
+            {/* Pager: steps within a lesson, rolling over to the next/previous lesson at the edges. */}
             <div className="flex items-center justify-between mt-8 pt-5 border-t border-gray-100">
-              <button onClick={() => { setActiveIdx(i => Math.max(0, i - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                disabled={isFirst}
-                className={`text-sm font-semibold px-4 py-2.5 rounded-xl transition-all ${isFirst ? 'text-gray-300 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100'}`}>
+              <button onClick={goPrev} disabled={prevDisabled}
+                className={`text-sm font-semibold px-4 py-2.5 rounded-xl transition-all ${prevDisabled ? 'text-gray-300 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100'}`}>
                 ← Previous
               </button>
-              {!isLast ? (
-                <button onClick={() => { setActiveIdx(i => Math.min(lessons.topics.length - 1, i + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+              {!atLastSub ? (
+                <button onClick={goNext}
+                  className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-6 py-2.5 rounded-xl transition-all shadow-sm">
+                  Next →
+                </button>
+              ) : !isLast ? (
+                <button onClick={goNext}
                   className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-6 py-2.5 rounded-xl transition-all shadow-sm">
                   Next lesson →
                 </button>
               ) : (
-                <span className="text-xs text-gray-400 font-medium">Last lesson</span>
+                <span className="text-xs text-gray-400 font-medium">Last step</span>
               )}
             </div>
           </div>

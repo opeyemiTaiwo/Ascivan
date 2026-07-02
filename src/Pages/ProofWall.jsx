@@ -75,6 +75,7 @@ const ProofWall = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
+  const [posterInfo, setPosterInfo] = useState({}); // actorId -> { photoURL, email, name }
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('update');
   const [myData, setMyData] = useState(null);
@@ -262,6 +263,31 @@ const ProofWall = () => {
     : items;
 
   useEffect(() => { load(filter); }, [filter, load]);
+
+  // Resolve the poster's avatar + email (for the profile link) once per user.
+  useEffect(() => {
+    const ids = [...new Set(items.map(a => a.actorId).filter(Boolean))].filter(id => !posterInfo[id]);
+    if (ids.length === 0) return;
+    let cancelled = false;
+    (async () => {
+      const entries = await Promise.all(ids.map(async (uid) => {
+        try {
+          const us = await getDoc(doc(db, 'users', uid));
+          if (us.exists()) {
+            const u = us.data();
+            return [uid, { photoURL: u.photoURL || null, email: u.email || null, name: u.displayName || null }];
+          }
+        } catch (_) {}
+        return [uid, { photoURL: null, email: null, name: null }];
+      }));
+      if (!cancelled) setPosterInfo(prev => {
+        const next = { ...prev };
+        entries.forEach(([k, v]) => { next[k] = v; });
+        return next;
+      });
+    })();
+    return () => { cancelled = true; };
+  }, [items]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!currentUser) return;
@@ -538,9 +564,28 @@ const ProofWall = () => {
               <div key={a.id} className="bg-white border border-gray-200 rounded-xl p-4">
                 {/* Header: icon + headline, side by side */}
                 <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 ${st.shape} ${st.bg} flex items-center justify-center flex-shrink-0`}>
-                    <svg className={`w-5 h-5 ${st.fg}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={st.icon} /></svg>
-                  </div>
+                  {a.actorId ? (() => {
+                    const p = posterInfo[a.actorId] || {};
+                    const initial = (a.actorName || 'M').trim().charAt(0).toUpperCase();
+                    return (
+                      <button
+                        type="button"
+                        onClick={() => p.email && navigate(`/profile/${p.email}`)}
+                        className={`w-10 h-10 rounded-full flex-shrink-0 overflow-hidden ${p.email ? 'cursor-pointer hover:ring-2 hover:ring-blue-200 transition-all' : 'cursor-default'}`}
+                        aria-label={p.email ? `View ${a.actorName || 'member'}'s profile` : undefined}
+                      >
+                        {p.photoURL ? (
+                          <img src={p.photoURL} alt={a.actorName || 'member'} className="w-10 h-10 rounded-full object-cover border border-gray-200" />
+                        ) : (
+                          <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">{initial}</div>
+                        )}
+                      </button>
+                    );
+                  })() : (
+                    <div className={`w-10 h-10 ${st.shape} ${st.bg} flex items-center justify-center flex-shrink-0`}>
+                      <svg className={`w-5 h-5 ${st.fg}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={st.icon} /></svg>
+                    </div>
+                  )}
                   <div className="min-w-0 flex-1 text-sm sm:text-[15px] text-gray-900 leading-snug">{renderHeadline(a)}</div>
                 </div>
                 {/* Body: full card width, below the header */}

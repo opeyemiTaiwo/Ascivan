@@ -1,5 +1,5 @@
 // src/Pages/Notifications.jsx - Clean white design
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { collection, query, where, orderBy, onSnapshot, updateDoc, doc, deleteDoc, getDocs, getDoc } from 'firebase/firestore';
@@ -13,6 +13,7 @@ const NotificationsPage = () => {
   const [filter, setFilter] = useState('all');
   const [processing, setProcessing] = useState(false);
   const [isCompany, setIsCompany] = useState(false);
+  const autoMarkedRef = useRef(false);
 
   useEffect(() => {
     if (!currentUser) return;
@@ -33,6 +34,16 @@ const NotificationsPage = () => {
     });
     return unsub;
   }, [currentUser, navigate]);
+
+  // Once the notifications have loaded and been shown, mark any unread ones as
+  // read (once per visit) so the bell badge clears after the user has seen them.
+  useEffect(() => {
+    if (autoMarkedRef.current || loading) return;
+    const unread = notifications.filter(n => !n.isRead);
+    if (unread.length === 0) return;
+    autoMarkedRef.current = true;
+    unread.forEach(n => { updateDoc(doc(db, 'notifications', n.id), { isRead: true }).catch(() => {}); });
+  }, [loading, notifications]);
 
   const markAsRead = async (id) => {
     try { await updateDoc(doc(db, 'notifications', id), { isRead: true }); } catch (e) { console.error(e); }

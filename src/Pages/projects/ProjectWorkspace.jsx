@@ -292,6 +292,30 @@ const ProjectWorkspace = () => {
     );
   };
 
+  // Aggregate everyone who reacted (across all emojis) and show their avatars.
+  const renderReactorSummary = (post) => {
+    const reactions = post?.reactions || {};
+    const info = post?.reactorInfo || {};
+    const uids = [...new Set(Object.values(reactions).flat())].filter(Boolean);
+    if (uids.length === 0) return null;
+    return (
+      <div className="flex items-center gap-1.5 mt-2">
+        <div className="flex -space-x-1.5">
+          {uids.slice(0, 6).map(uid => {
+            const meta = info[uid] || {};
+            const name = meta.name || uidNameMap[uid] || 'Someone';
+            return meta.photo ? (
+              <img key={uid} src={meta.photo} alt={name} title={name} className="w-5 h-5 rounded-full object-cover border border-white" />
+            ) : (
+              <span key={uid} title={name} className="w-5 h-5 rounded-full bg-blue-500 text-white text-[9px] font-bold flex items-center justify-center border border-white">{(name || '?').charAt(0).toUpperCase()}</span>
+            );
+          })}
+        </div>
+        <span className="text-gray-500 text-[11px]">{uids.length === 1 ? '1 reaction' : `${uids.length} reactions`}</span>
+      </div>
+    );
+  };
+
   const inputCls = "w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none";
 
   if (loading) return <div className="flex items-center justify-center py-20"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div></div>;
@@ -338,19 +362,25 @@ const ProjectWorkspace = () => {
             )}
             {topPosts.map(post => (
               <div key={post.id} className="bg-white border border-gray-200 rounded-xl p-4">
-                {/* Post header */}
-                <div className="flex items-start gap-3">
-                  {post.authorPhoto ? (
-                    <img src={post.authorPhoto} alt="" className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">{(post.authorName || 'U')[0].toUpperCase()}</div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
+                {/* Header: avatar + name, side by side */}
+                <div className="flex items-center gap-3">
+                  <a href={`/profile/${encodeURIComponent(post.authorEmail || '')}`} className="flex-shrink-0">
+                    {post.authorPhoto ? (
+                      <img src={post.authorPhoto} alt={post.authorName} className="w-10 h-10 rounded-full object-cover border border-gray-200" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-bold">{(post.authorName || 'U')[0].toUpperCase()}</div>
+                    )}
+                  </a>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <a href={`/profile/${encodeURIComponent(post.authorEmail || '')}`} className="text-gray-900 text-sm font-semibold hover:text-blue-600 hover:underline">{post.authorName}</a>
                       <span className="text-gray-400 text-xs">{formatTime(post.createdAt)}</span>
                       {post.editedAt && <span className="text-gray-400 text-[10px] italic">edited</span>}
                     </div>
+                  </div>
+                </div>
+                {/* Body: full width, below the header */}
+                <div className="mt-3">
                     {/* Content */}
                     {editingPost === post.id ? (
                       <div className="mt-2 space-y-2">
@@ -363,8 +393,8 @@ const ProjectWorkspace = () => {
                     ) : (
                       <>
                         <p className="text-gray-700 text-sm mt-1 whitespace-pre-wrap">{post.text}</p>
-                        {post.imageUrl && <img src={post.imageUrl} alt="attachment" className="mt-2 max-h-72 rounded-lg border border-gray-200" />}
-                        {post.link && <a href={post.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-xs hover:underline mt-1 block truncate">{post.link}</a>}
+                        {post.imageUrl && <img src={post.imageUrl} alt="attachment" className="w-full max-h-96 object-cover mt-3 rounded-lg border border-gray-200" />}
+                        {post.link && <a href={post.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-xs hover:underline mt-2 block truncate">{post.link}</a>}
                       </>
                     )}
                     {/* Reactions */}
@@ -400,6 +430,7 @@ const ProjectWorkspace = () => {
                         </>
                       )}
                     </div>
+                    {renderReactorSummary(post)}
                     {/* Replies */}
                     {getReplies(post.id).length > 0 && (
                       <div className="mt-3 pl-4 border-l-2 border-gray-100 space-y-3">
@@ -443,7 +474,6 @@ const ProjectWorkspace = () => {
                         <button onClick={() => handleReply(post.id)} className="bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-lg flex-shrink-0">Reply</button>
                       </div>
                     )}
-                  </div>
                 </div>
               </div>
             ))}

@@ -251,11 +251,7 @@ const PostJobs = () => {
   }
 
   return (
-    <>
-      <Navbar />
-      <div className="min-h-screen overflow-x-hidden pt-20 sm:pt-24">
-        <main className="pb-16 sm:pb-20 md:pb-24">
-          <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 md:py-10 max-w-3xl">
+    <div className="max-w-6xl mx-auto">
 
             {/* Header */}
             <section className="text-center mb-10">
@@ -455,14 +451,10 @@ const PostJobs = () => {
 
               </form>
             </div>
-          </div>
-        </main>
-
         <style jsx>{`
           select option { background-color: #111; color: white; }
         `}</style>
       </div>
-    </>
   );
 };
 

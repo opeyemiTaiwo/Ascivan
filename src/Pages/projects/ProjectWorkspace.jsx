@@ -40,6 +40,7 @@ const ProjectWorkspace = () => {
   const [editText, setEditText] = useState('');
   const messagesEndRef = useRef(null);
   const [showReactors, setShowReactors] = useState(null); // 'postId-emoji' key
+  const [lightbox, setLightbox] = useState(null); // full-size image URL when an image is tapped
 
   // Resource state
   const [resources, setResources] = useState({ submissionUrl: '', meetingUrl: '', detailsUrl: '', notes: '' });
@@ -393,7 +394,7 @@ const ProjectWorkspace = () => {
                     ) : (
                       <>
                         <p className="text-gray-700 text-sm mt-1 whitespace-pre-wrap">{post.text}</p>
-                        {post.imageUrl && <img src={post.imageUrl} alt="attachment" className="w-full max-h-96 object-cover mt-3 rounded-lg border border-gray-200" />}
+                        {post.imageUrl && <img src={post.imageUrl} alt="attachment" onClick={() => setLightbox(post.imageUrl)} className="w-full max-h-96 object-cover mt-3 rounded-lg border border-gray-200 cursor-zoom-in hover:opacity-95 transition-opacity" />}
                         {post.link && <a href={post.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-xs hover:underline mt-2 block truncate">{post.link}</a>}
                       </>
                     )}
@@ -640,6 +641,16 @@ const ProjectWorkspace = () => {
           <p className="text-gray-600 text-xs leading-relaxed">Use the Discussion tab for all project communications. Conversations logged here serve as your record and can be reviewed by admins if any issue comes up.</p>
         </div>
       </div>
+
+      {/* Image lightbox - tap an attachment to view it full size */}
+      {lightbox && (
+        <div onClick={() => setLightbox(null)} className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 cursor-zoom-out">
+          <img src={lightbox} alt="attachment" className="max-w-full max-h-full rounded-lg object-contain" onClick={e => e.stopPropagation()} />
+          <button onClick={() => setLightbox(null)} className="absolute top-4 right-4 text-white/80 hover:text-white bg-black/40 rounded-full w-10 h-10 flex items-center justify-center" aria-label="Close">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+      )}
     </div>
   );
 };

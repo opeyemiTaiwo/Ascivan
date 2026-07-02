@@ -302,7 +302,7 @@ const AppLayout = ({ children }) => {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8 overflow-y-auto">
+        <main className="flex-1 px-0 pt-4 pb-24 sm:px-6 sm:pt-6 lg:px-8 lg:pt-8 lg:pb-8 overflow-y-auto">
           {children}
         </main>
       </div>

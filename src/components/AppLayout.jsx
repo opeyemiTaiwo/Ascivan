@@ -143,7 +143,7 @@ const AppLayout = ({ children }) => {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
+        <nav className="flex-1 py-4 px-3 space-y-2 overflow-y-auto">
           {navItems.map((item) => {
             // Expandable group (e.g. Projects with sub-items)
             if (item.isGroup) {

@@ -193,9 +193,9 @@ const ProjectVault = () => {
                       const printWindow = window.open('', '_blank');
                       printWindow.document.write(`
                         <html><head><title>Certificate - ${viewingCert.projectTitle}</title>
-                        <style>@page{size:A4 portrait;margin:0}*{box-sizing:border-box}html,body{margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
-                        .page{width:210mm;height:297mm;padding:14mm;margin:0 auto;display:flex}
-                        .border{flex:1;border:3px solid #bfdbfe;border-radius:16px;padding:24mm 18mm;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+                        <style>@page{size:A4 portrait;margin:0}*{box-sizing:border-box}html,body{margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+                        .page{width:210mm;height:296mm;padding:14mm;margin:0;display:flex;overflow:hidden;page-break-after:avoid;break-after:avoid;page-break-inside:avoid;break-inside:avoid}
+                        .border{flex:1;border:3px solid #bfdbfe;border-radius:16px;padding:24mm 18mm;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden}
                         img.logo{width:90px;height:90px;margin-bottom:20px}
                         .subtitle{color:#2563eb;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:4px;margin-bottom:32px}
                         .label{color:#6b7280;font-size:16px;margin:6px 0}

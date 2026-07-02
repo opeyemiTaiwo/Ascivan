@@ -248,18 +248,6 @@ const AppLayout = ({ children }) => {
           </div>
           <div className="flex-1 min-w-0" />
           <div className="flex items-stretch justify-around gap-1 pr-2 sm:pr-12 lg:pr-16 max-w-full flex-1">
-            {/* Account - desktop only; on mobile this lives in the bottom nav */}
-            <Link to="/account" className={`relative flex-1 flex flex-col items-center justify-center gap-1 py-2.5 min-h-[60px] rounded-lg hover:bg-gray-100 transition-colors ${location.pathname === '/account' ? 'text-blue-600' : 'text-gray-500'}`}>
-              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-              </svg>
-              <span className="hidden lg:block text-[11px] font-semibold leading-none">Account</span>
-              {unreadAccount > 0 && (
-                <span className="absolute top-1.5 right-[20%] bg-red-500 text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold leading-none">
-                  {unreadAccount > 9 ? '9+' : unreadAccount}
-                </span>
-              )}
-            </Link>
             {/* Messaging */}
             <Link to="/messages" className={`relative flex-1 flex flex-col items-center justify-center gap-1 py-2.5 min-h-[60px] rounded-lg hover:bg-gray-100 transition-colors ${location.pathname === '/messages' ? 'text-blue-600' : 'text-gray-500'}`}>
               <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -367,6 +367,10 @@ const Jobs = () => {
                           </div>
                           {isOwnPost && (
                             <div className="flex gap-1 flex-shrink-0">
+                              <button onClick={() => navigate(`/jobs/${post.id}/edit`)}
+                                className="text-blue-500 hover:text-blue-600 px-2 py-1 text-xs font-semibold min-h-[44px] flex items-center">
+                                Edit
+                              </button>
                               <button onClick={() => handleMarkClosed(post.id, post.status)}
                                 className={`${isClosed ? 'text-blue-400' : 'text-orange-500'} px-2 py-1 text-xs font-semibold hover:opacity-75 min-h-[44px] flex items-center`}>
                                 {isClosed ? 'Reopen' : 'Close'}

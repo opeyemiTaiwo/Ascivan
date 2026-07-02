@@ -306,7 +306,7 @@ const ProjectDetail = () => {
       
       <div className="min-h-screen overflow-x-hidden " style={{ backgroundColor: '#ffffff' }}>
         <main className="pb-16 sm:pb-20">
-          <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-4xl">
+          <div className="max-w-6xl mx-auto">
 
             {/* Back */}
             <Link to="/projects" className="inline-flex items-center text-gray-400 hover:text-gray-900 text-sm font-semibold mb-6 transition-colors">

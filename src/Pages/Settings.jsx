@@ -15,6 +15,11 @@ const skillTrackOpts = [
   { id: 'TechArchs', label: 'Low/No-Code Developer' }, { id: 'TechLeads', label: 'Non-Technical Roles' }, { id: 'TechGuard', label: 'Cybersecurity' },
 ];
 
+// Browser/OS detection so the "notifications blocked" help matches the device.
+const _UA = typeof navigator !== 'undefined' ? navigator.userAgent : '';
+const IS_IOS = /iPhone|iPad|iPod/i.test(_UA);
+const IS_SAFARI = /^((?!chrome|android|crios|fxios|edg).)*safari/i.test(_UA);
+
 const Settings = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
@@ -268,17 +273,30 @@ const Settings = () => {
 
               <details className="mt-4 group">
                 <summary className="text-sm text-blue-600 font-medium cursor-pointer select-none list-none">
-                  Notifications blocked? Here's how to turn them back on (Chrome)
+                  Notifications not working? Here's how to turn them on
                 </summary>
-                <ol className="mt-3 ml-1 space-y-1.5 text-sm text-gray-700 list-decimal list-inside">
-                  <li>Click the three dots (top right) and choose <span className="font-medium text-gray-900">Settings</span>.</li>
-                  <li>Click <span className="font-medium text-gray-900">Privacy &amp; Security</span> on the left menu.</li>
-                  <li>Click <span className="font-medium text-gray-900">Third-party cookies</span>.</li>
-                  <li>Scroll to the Permissions section and open <span className="font-medium text-gray-900">See all sites data and permissions</span>.</li>
-                  <li>Search for <span className="font-medium text-gray-900">Ascivan</span>, click the arrow next to it, and enable the Notifications permission.</li>
-                  <li>Come back here and click <span className="font-medium text-gray-900">Enable notifications on this device</span> again.</li>
-                </ol>
-                <p className="mt-2 ml-1 text-xs text-gray-500">On other browsers, look for the site settings or padlock icon next to the address bar, then set Notifications to Allow.</p>
+                {IS_IOS ? (
+                  <ol className="mt-3 ml-1 space-y-1.5 text-sm text-gray-700 list-decimal list-inside">
+                    <li>In Safari, tap the <span className="font-medium text-gray-900">Share</span> button (the square with an arrow).</li>
+                    <li>Choose <span className="font-medium text-gray-900">Add to Home Screen</span>, then tap Add.</li>
+                    <li>Close Safari and open <span className="font-medium text-gray-900">Ascivan from the new Home Screen icon</span> (this step is required - notifications don't work in the Safari tab).</li>
+                    <li>Go to Settings here and tap <span className="font-medium text-gray-900">Enable notifications on this device</span>, then tap Allow.</li>
+                  </ol>
+                ) : IS_SAFARI ? (
+                  <ol className="mt-3 ml-1 space-y-1.5 text-sm text-gray-700 list-decimal list-inside">
+                    <li>Open the <span className="font-medium text-gray-900">Safari</span> menu and choose <span className="font-medium text-gray-900">Settings</span>.</li>
+                    <li>Go to the <span className="font-medium text-gray-900">Websites</span> tab, then select <span className="font-medium text-gray-900">Notifications</span> in the sidebar.</li>
+                    <li>Find <span className="font-medium text-gray-900">ascivan.com</span> in the list and set it to <span className="font-medium text-gray-900">Allow</span>.</li>
+                    <li>Come back here and click <span className="font-medium text-gray-900">Enable notifications on this device</span> again.</li>
+                  </ol>
+                ) : (
+                  <ol className="mt-3 ml-1 space-y-1.5 text-sm text-gray-700 list-decimal list-inside">
+                    <li>Click the padlock (or site-settings) icon next to the address bar.</li>
+                    <li>Find <span className="font-medium text-gray-900">Notifications</span> and set it to <span className="font-medium text-gray-900">Allow</span>.</li>
+                    <li>Come back here and click <span className="font-medium text-gray-900">Enable notifications on this device</span> again.</li>
+                  </ol>
+                )}
+                <p className="mt-2 ml-1 text-xs text-gray-500">Push notifications need a secure connection and, on iPhone/iPad, the app added to your Home Screen (iOS 16.4 or later).</p>
               </details>
             </div>
 

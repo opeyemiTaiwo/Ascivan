@@ -345,7 +345,7 @@ const ProofWall = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-4">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Proof Wall</h1>

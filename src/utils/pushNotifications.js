@@ -45,9 +45,23 @@ async function registerSW() {
 // Call this after login, or from a "Enable notifications" button.
 export async function enablePushForCurrentUser({ interactive = false } = {}) {
   try {
-    const supported = await isSupported().catch(() => false);
+    // Environment detection for accurate, actionable messaging.
+    const ua = navigator.userAgent || '';
+    const isIOS = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isStandalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+
+    // On iOS, the Notification + Push APIs don't exist in a normal Safari tab -
+    // they only appear once the site is installed to the Home Screen (iOS 16.4+).
+    const hasPushApis = typeof Notification !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window;
+    const supported = hasPushApis && await isSupported().catch(() => false);
     if (!supported || !messaging) {
-      if (interactive) toast.info('Push notifications are not supported in this browser.');
+      if (interactive) {
+        if (isIOS && !isStandalone) {
+          toast.info('On iPhone/iPad: tap Share → Add to Home Screen, then open Ascivan from the Home Screen icon and enable notifications from there.');
+        } else {
+          toast.info('Push notifications aren\u2019t supported in this browser. Try Chrome or Edge, or on iPhone add Ascivan to your Home Screen.');
+        }
+      }
       return false;
     }
     if (!VAPID_KEY) {

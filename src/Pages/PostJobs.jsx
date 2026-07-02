@@ -1,7 +1,7 @@
 // src/Pages/PostJobs.jsx - Post a Job
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
 import { collection, addDoc, serverTimestamp, doc, updateDoc, getDoc } from 'firebase/firestore';
@@ -12,6 +12,8 @@ import usePosterName from '../hooks/usePosterName';
 
 const PostJobs = () => {
   const navigate = useNavigate();
+  const { jobId } = useParams();
+  const isEditing = !!jobId;
   const { currentUser, loading: authLoading } = useAuth();
 
   const [formData, setFormData] = useState({
@@ -73,6 +75,40 @@ const PostJobs = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser, profilePosterName, profileIsCompany]);
+
+  // Edit mode: load the existing job and prefill the form (only the owner may edit).
+  useEffect(() => {
+    if (!jobId || !currentUser) return;
+    (async () => {
+      try {
+        const snap = await getDoc(doc(db, 'hub_posts', jobId));
+        if (!snap.exists()) { toast.error('That job post no longer exists.'); navigate('/jobs'); return; }
+        const j = snap.data();
+        if (j.posterId !== currentUser.uid) { toast.error('You can only edit your own job posts.'); navigate('/jobs'); return; }
+        setFormData(prev => ({
+          ...prev,
+          title: j.title || '',
+          description: j.description || '',
+          externalLink: j.externalLink || '',
+          companyName: j.companyName || '',
+          posterName: j.posterName || '',
+          posterEmail: j.posterEmail || '',
+          posterPhone: j.posterPhone || '',
+          tags: Array.isArray(j.tags) ? j.tags.join(', ') : (j.tags || ''),
+          requirements: j.requirements || '',
+          jobType: j.jobType || '',
+          salaryRange: j.salaryRange || '',
+          location: j.location || '',
+          workAuth: j.workAuth || '',
+          expirationOption: j.expirationOption || '30',
+        }));
+      } catch (e) {
+        console.error('Could not load job for editing:', e);
+        toast.error('Could not load this job.');
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jobId, currentUser]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -147,6 +183,41 @@ const PostJobs = () => {
     if (errors.length > 0) {
       toast.error(`Please fix: ${errors[0]}`);
       setIsSubmitting(false);
+      return;
+    }
+
+    // Edit mode: update the existing post in place (doesn't count against the
+    // monthly job-post quota).
+    if (isEditing) {
+      try {
+        const expirationDate = calculateExpirationDate();
+        await updateDoc(doc(db, 'hub_posts', jobId), {
+          jobType: formData.jobType,
+          title: formData.title.trim(),
+          description: formData.description.trim(),
+          externalLink: formData.externalLink.trim(),
+          companyName: formData.companyName.trim() || null,
+          salaryRange: formData.salaryRange.trim() || null,
+          location: formData.location.trim() || null,
+          workAuth: formData.workAuth,
+          workAuthProvided: formData.workAuth === 'provided',
+          posterName: formData.posterName.trim(),
+          posterEmail: formData.posterEmail.trim(),
+          posterPhone: formData.posterPhone.trim() || null,
+          tags: formData.tags.trim() ? formData.tags.trim().split(',').map(t => t.trim()) : [],
+          requirements: formData.requirements.trim() || null,
+          expiresAt: expirationDate,
+          expirationOption: formData.expirationOption,
+          updatedAt: serverTimestamp(),
+        });
+        toast.success('Job updated successfully!');
+        setTimeout(() => navigate('/jobs'), 1200);
+      } catch (error) {
+        console.error('Error updating job post:', error);
+        toast.error('Error updating job: ' + error.message);
+      } finally {
+        setIsSubmitting(false);
+      }
       return;
     }
 
@@ -256,9 +327,9 @@ const PostJobs = () => {
             {/* Header */}
             <section className="text-center mb-10">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-2 sm:mb-3">
-                Post a <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Job</span>
+                {isEditing ? 'Edit your ' : 'Post a '}<span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Job</span>
               </h1>
-              <p className="text-gray-600 text-base">Reach a global pool of verified tech talent ready for remote and onsite roles</p>
+              <p className="text-gray-600 text-base">{isEditing ? 'Update the details of your job listing and save your changes.' : 'Reach a global pool of verified tech talent ready for remote and onsite roles'}</p>
             </section>
 
             {/* Form */}
@@ -442,9 +513,9 @@ const PostJobs = () => {
                     {isSubmitting ? (
                       <span className="flex items-center gap-3">
                         <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>
-                        Posting...
+                        {isEditing ? 'Saving...' : 'Posting...'}
                       </span>
-                    ) : 'Post Job'}
+                    ) : (isEditing ? 'Save Changes' : 'Post Job')}
                   </button>
                   <p className="text-gray-400 text-xs mt-3">* Required fields. Your listing will be visible immediately.</p>
                 </div>

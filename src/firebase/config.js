@@ -18,7 +18,7 @@ import { getMessaging, isSupported as messagingIsSupported } from "firebase/mess
 // Your web app's Firebase configuration for Ascivan
 const firebaseConfig = {
   apiKey: "AIzaSyBx_q4j-3uQlOxLmRkg1hQ4ZQHUfDU8CfM",
-  authDomain: "ascivan-5b4f4.firebaseapp.com",
+  authDomain: "ascivan.com",
   projectId: "ascivan-5b4f4",
   storageBucket: "ascivan-5b4f4.firebasestorage.app",
   messagingSenderId: "237454613250",

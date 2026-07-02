@@ -181,6 +181,7 @@ function App() {
                 <Route path="/payment" element={<Navigate to="/dashboard" replace />} />
                 <Route path="/jobs" element={<SidebarRoute><Jobs /></SidebarRoute>} />
                 <Route path="/jobs/post" element={<SidebarRoute><PostJobs /></SidebarRoute>} />
+                <Route path="/jobs/:jobId/edit" element={<SidebarRoute><PostJobs /></SidebarRoute>} />
                 <Route path="/housing" element={<Navigate to="/dashboard" replace />} />
                 <Route path="/finance" element={<Navigate to="/dashboard" replace />} />
                 <Route path="/banking" element={<Navigate to="/dashboard" replace />} />

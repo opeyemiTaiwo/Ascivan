@@ -237,12 +237,12 @@ const Foundations = () => {
   };
 
   if (loading) {
-    return <div className="max-w-3xl mx-auto px-4 py-10"><div className="h-6 w-48 bg-gray-100 rounded animate-pulse" /></div>;
+    return <div className="max-w-6xl mx-auto"><div className="h-6 w-48 bg-gray-100 rounded animate-pulse" /></div>;
   }
   if (!lessons) return null;
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+    <div className="max-w-6xl mx-auto">
       <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">Foundations</h1>
 
       {/* Track tabs: all the tracks this member has badges in, plus their profile track. */}

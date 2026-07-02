@@ -59,7 +59,7 @@ const MyWorkspaces = () => {
   if (loading) return <div className="flex items-center justify-center py-20"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div></div>;
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">My Workspaces</h1>
       <p className="text-gray-500 text-sm mb-6">Your active and approved project workspaces.</p>
 

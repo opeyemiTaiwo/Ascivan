@@ -11,6 +11,7 @@
   },
   "routes": [
     { "handle": "filesystem" },
+    { "src": "/__/auth/(.*)", "dest": "https://ascivan-5b4f4.firebaseapp.com/__/auth/$1" },
     { "src": "/(.*)", "dest": "/index.html" }
   ],
   "crons": [

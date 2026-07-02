@@ -418,7 +418,7 @@ const ProofWall = () => {
       )}
 
       {/* Filters + share, in one modern row */}
-      <div className="flex items-center gap-2 mb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-5">
         <div className="flex flex-wrap gap-1.5 flex-1">
           {filtersFor(myData?.isCompany).map(f => (
             <button
@@ -434,7 +434,7 @@ const ProofWall = () => {
         </div>
         <button
           onClick={() => setShowCompose(v => !v)}
-          className="flex-shrink-0 flex items-center gap-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold px-3.5 py-2 rounded-full transition-all shadow-sm"
+          className="flex-shrink-0 flex items-center justify-center gap-1.5 w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold px-3.5 py-2.5 sm:py-2 rounded-full transition-all shadow-sm"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
           {myData?.isCompany ? 'Company update' : 'Project update'}
@@ -527,7 +527,7 @@ const ProofWall = () => {
           <p className="text-gray-500 text-sm mt-1">{myData?.isCompany ? 'Updates from across Ascivan will show up here.' : 'Share a project update, and it shows up here as proof of your work.'}</p>
         </div>
       ) : (
-        <div className="flex flex-col gap-2.5 -mx-4 sm:mx-0">
+        <div className="flex flex-col gap-2.5">
           {visibleItems.map(a => {
             const st = typeStyle[a.type] || typeStyle.update;
             const celebrated = uid && (a.celebratedBy || []).includes(uid);
@@ -535,7 +535,7 @@ const ProofWall = () => {
             const isMine = uid && a.actorId === uid && a.type === 'update';
             const isEditing = editingId === a.id;
             return (
-              <div key={a.id} className="bg-white border-y sm:border border-gray-200 sm:rounded-xl p-4">
+              <div key={a.id} className="bg-white border border-gray-200 rounded-xl p-4">
                 {/* Header: icon + headline, side by side */}
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 ${st.shape} ${st.bg} flex items-center justify-center flex-shrink-0`}>

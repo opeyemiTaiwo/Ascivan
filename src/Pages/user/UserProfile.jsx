@@ -195,7 +195,7 @@ const UserProfile = () => {
 
   return (
     <div className="min-h-screen bg-white pb-12">
-      <div className="container mx-auto px-4 sm:px-6 max-w-3xl py-6">
+      <div className="max-w-6xl mx-auto">
 
         {/* Back */}
         <button onClick={() => navigate(-1)} className="flex items-center gap-1.5 text-gray-500 hover:text-gray-900 text-sm mb-6 transition-colors">

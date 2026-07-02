@@ -7,7 +7,6 @@ import {
   onAuthStateChanged,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  sendPasswordResetEmail,
   sendEmailVerification,
   confirmPasswordReset,
   verifyPasswordResetCode,
@@ -189,7 +188,18 @@ export const AuthProvider = ({ children }) => {
 
   // Send a password reset email.
   const resetPassword = async (email) => {
-    return sendPasswordResetEmail(auth, email);
+    // Send our own branded reset email (links to /reset-password on ascivan.com)
+    // instead of Firebase's default firebaseapp.com page.
+    const res = await fetch('/api/auth/send-reset', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data.error || 'Could not send the reset email. Please try again.');
+    }
+    return true;
   };
 
   // Verify a reset code (from the email link) and return the associated email.

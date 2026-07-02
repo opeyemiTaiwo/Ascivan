@@ -226,10 +226,7 @@ const Jobs = () => {
   if (!currentUser) return null;
 
   return (
-    <>
-      <Navbar />
-      <div className="min-h-screen overflow-x-hidden pt-20 sm:pt-24">
-        <div className="container mx-auto px-4 sm:px-6 max-w-7xl py-6 sm:py-8 md:py-10">
+    <div className="max-w-6xl mx-auto">
 
           {/* Hero */}
           <section className="mb-10 text-center">
@@ -460,10 +457,8 @@ const Jobs = () => {
               </div>
             )}
           </section>
-        </div>
         <style jsx>{`select option { background-color: #111; color: white; }`}</style>
       </div>
-    </>
   );
 };
 

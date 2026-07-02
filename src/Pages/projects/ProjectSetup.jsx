@@ -184,7 +184,7 @@ const ProjectSetup = () => {
   if (!authorized) return null;
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+    <div className="max-w-6xl mx-auto">
       <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">{isEditing ? 'Edit your project' : 'Set up your project'}</h1>
       <p className="text-gray-500 text-sm mb-6">{isEditing ? "You're the lead. Update the project details, goals, dates, links, and roles below. Changes apply immediately. Keep at least one Beginner or Any Level role so newcomers can join." : "You're the lead. Review this project carefully and modify it so you fully understand what you're leading. Refine the idea, set the start and end dates, add the submission and full-description links, decide what roles your team needs (add at least one role), then open it for others to apply. You manage the project, and team members fill the building roles below."}</p>
 

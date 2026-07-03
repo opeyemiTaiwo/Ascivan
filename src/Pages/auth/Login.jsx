@@ -122,7 +122,7 @@ const Login = () => {
                 <span className="text-blue-600">Ascivan</span>
               </h1>
               <p className="text-gray-500 text-sm sm:text-base font-normal px-2 mb-3">
-                Proof over pedigree. Build real experience, earn verified badges, and get discovered, wherever you are.
+                Turn your skills into proof. Build real experience, earn verified badges, and get discovered, wherever you are.
               </p>
               <div className="h-0.5 w-16 bg-blue-600 mx-auto rounded-full mt-4"></div>
             </div>

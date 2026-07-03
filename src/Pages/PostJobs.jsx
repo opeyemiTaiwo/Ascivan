@@ -26,7 +26,9 @@ const PostJobs = () => {
     posterPhone: '',
     tags: '',
     requirements: '',
+    category: 'job',
     jobType: '',
+    deadline: '',
     salaryRange: '',
     location: '',
     workAuth: '', // required: 'provided' or 'required' (candidate must have own)
@@ -46,6 +48,14 @@ const PostJobs = () => {
     { id: 'freelance', label: 'Freelance', description: 'Project-based freelance work' },
     { id: 'internship', label: 'Internship', description: 'Internship opportunity' },
     { id: 'remote', label: 'Virtual / Online', description: 'Fully remote, work from anywhere' },
+  ];
+
+  const categories = [
+    { id: 'job',         label: 'Job',         description: 'A paid role, full or part-time' },
+    { id: 'freelance',   label: 'Freelance',   description: 'Project-based or contract work' },
+    { id: 'scholarship', label: 'Scholarship', description: 'Funding to study or train' },
+    { id: 'grant',       label: 'Grant',       description: 'Funding for research or a project' },
+    { id: 'partnership', label: 'Partnership', description: 'Co-founder, partner, or team-up' },
   ];
 
   const expirationOptions = [
@@ -96,7 +106,9 @@ const PostJobs = () => {
           posterPhone: j.posterPhone || '',
           tags: Array.isArray(j.tags) ? j.tags.join(', ') : (j.tags || ''),
           requirements: j.requirements || '',
+          category: j.category || 'job',
           jobType: j.jobType || '',
+          deadline: j.deadline || '',
           salaryRange: j.salaryRange || '',
           location: j.location || '',
           workAuth: j.workAuth || '',
@@ -148,7 +160,7 @@ const PostJobs = () => {
 
   const validateForm = () => {
     const errors = [];
-    if (!formData.jobType) errors.push('Job type is required');
+    if ((formData.category === 'job' || formData.category === 'freelance') && !formData.jobType) errors.push('Job type is required');
     if (!formData.workAuth) errors.push('Please indicate whether work authorization is provided');
     if (!formData.title.trim()) errors.push('Job title is required');
     if (!formData.description.trim()) errors.push('Description is required');
@@ -195,7 +207,9 @@ const PostJobs = () => {
       try {
         const expirationDate = calculateExpirationDate();
         await updateDoc(doc(db, 'hub_posts', jobId), {
+          category: formData.category,
           jobType: formData.jobType,
+          deadline: formData.deadline || null,
           title: formData.title.trim(),
           description: formData.description.trim(),
           externalLink: formData.externalLink.trim(),
@@ -248,7 +262,9 @@ const PostJobs = () => {
 
       await addDoc(collection(db, 'hub_posts'), {
         category: 'job',
+        category: formData.category,
         jobType: formData.jobType,
+        deadline: formData.deadline || null,
         title: formData.title.trim(),
         description: formData.description.trim(),
         externalLink: formData.externalLink.trim(),
@@ -330,7 +346,7 @@ const PostJobs = () => {
             {/* Header */}
             <section className="text-center mb-10">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-2 sm:mb-3">
-                {isEditing ? 'Edit your ' : 'Post a '}<span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Job</span>
+                {isEditing ? 'Edit your ' : 'Post an '}<span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Opportunity</span>
               </h1>
               <p className="text-gray-600 text-base">{isEditing ? 'Update the details of your job listing and save your changes.' : 'Reach a global pool of verified tech talent ready for remote and onsite roles'}</p>
             </section>
@@ -339,7 +355,30 @@ const PostJobs = () => {
             <div className="bg-white rounded-xl sm:rounded-2xl border border-gray-300 p-4 sm:p-6 md:p-8">
               <form onSubmit={handleSubmit} className="space-y-8">
 
-                {/* Job Type */}
+                {/* Category */}
+                <div>
+                  <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Category *</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {categories.map(cat => (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, category: cat.id }))}
+                        className={`p-4 rounded-xl border-2 text-left ${
+                          formData.category === cat.id
+                            ? 'border-orange-400 bg-orange-500/20'
+                            : 'border-gray-300 bg-white hover:bg-gray-50'
+                        }`}
+                      >
+                        <div className="text-gray-900 font-bold mb-1 text-sm">{cat.label}</div>
+                        <div className="text-gray-500 text-xs">{cat.description}</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Job Type - only for jobs and freelance */}
+                {(formData.category === 'job' || formData.category === 'freelance') && (
                 <div>
                   <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Job Type *</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -360,6 +399,15 @@ const PostJobs = () => {
                     ))}
                   </div>
                 </div>
+                )}
+
+                {/* Application deadline - for scholarships, grants, partnerships */}
+                {(formData.category === 'scholarship' || formData.category === 'grant' || formData.category === 'partnership') && (
+                  <div>
+                    <label className={labelClass}>Application deadline (optional)</label>
+                    <input type="date" name="deadline" value={formData.deadline} onChange={handleInputChange} className={inputClass} />
+                  </div>
+                )}
 
                 {/* Basic Info */}
                 <div className="space-y-5">
@@ -518,7 +566,7 @@ const PostJobs = () => {
                         <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>
                         {isEditing ? 'Saving...' : 'Posting...'}
                       </span>
-                    ) : (isEditing ? 'Save Changes' : 'Post Job')}
+                    ) : (isEditing ? 'Save Changes' : 'Post Opportunity')}
                   </button>
                   <p className="text-gray-400 text-xs mt-3">* Required fields. Your listing will be visible immediately.</p>
                 </div>

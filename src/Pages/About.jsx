@@ -42,9 +42,10 @@ const About = () => {
           <div className="mb-4 inline-block px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg">
             <p className="text-blue-600 font-semibold text-sm">About Ascivan</p>
           </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
-            Proof over{' '}
-            <span className="text-blue-600">pedigree</span>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4">
+            <span className="text-blue-600">Ascend</span>{' '}
+            <span className="text-orange-500">Achieve</span>{' '}
+            <span className="text-gray-900">Advance</span>
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             Ascivan is where you build real experience, earn verified badges, and get discovered, wherever you are. Collaborate on real products from start to finish, earn credentials that prove your skills, and get found by recruiters, no matter your background or location.
@@ -56,7 +57,7 @@ const About = () => {
           <div className="bg-gray-50 rounded-xl border border-gray-200 p-6 sm:p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h2>
             <p className="text-gray-600 leading-relaxed mb-4">
-              Talent is everywhere, but the chance to prove it is not. Many capable people have the skills but no easy way to gain real, verifiable work experience that recruiters trust. Degrees, coursework, and competitions build ability; they rarely produce the one thing employers look for: proof that you've shipped a real product, with a team, from start to finish. We believe in proof over pedigree, that what you can build matters more than where you came from, what you studied, or where you are.
+              Talent is everywhere, but the chance to prove it is not. Many capable people have the skills but no easy way to gain real, verifiable work experience that recruiters trust. Degrees, coursework, and competitions build ability; they rarely produce the one thing employers look for: proof that you've shipped a real product, with a team, from start to finish. Ascivan exists to close that gap, turning your ability into verified proof of real work, so what you can build is what gets you seen, whoever you are and wherever you're from.
             </p>
             <p className="text-gray-600 leading-relaxed">
               Ascivan closes that gap. We simulate real-world experience - collaborative teams building products end to end - so you earn verified credentials and a portfolio of genuine work, then become visible to recruiters hiring for remote and onsite roles. No matter where you are in the world, your work speaks for you.

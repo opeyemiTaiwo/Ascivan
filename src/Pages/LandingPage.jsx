@@ -166,7 +166,7 @@ const LandingPage = () => {
           </h1>
 
           <p id="hero-desc" data-animate className={`fade-up delay-2 text-gray-600 text-lg sm:text-xl max-w-2xl mx-auto mb-10 font-normal leading-relaxed ${isVisible('hero-desc') ? 'visible' : ''}`}>
-            Ascivan is where you build real experience, earn verified badges, and get discovered, wherever you are. Ship real products with real teams, earn credentials that prove your skills, and get found by recruiters for remote and onsite roles.
+            Build real products with real teams. Earn verified proof of your skills and a network of builders you've actually shipped with, and open doors wherever you want to go: a new job, your own venture, grad school, and beyond.
           </p>
 
           <div id="hero-cta" data-animate className={`fade-up delay-3 flex flex-col sm:flex-row items-center justify-center gap-4 ${isVisible('hero-cta') ? 'visible' : ''}`}>
@@ -203,6 +203,15 @@ const LandingPage = () => {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* WHY ASCIVAN - the thesis */}
+      <section className="py-16 sm:py-20 max-w-3xl mx-auto px-4 sm:px-6 text-center">
+        <p className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-4">Why Ascivan</p>
+        <p className="text-gray-800 text-lg sm:text-2xl leading-relaxed">
+          The world has moved from knowing to doing. Information is saturated and instant; what's rare is the chance to apply it on real work, with a real team, from start to finish. That is the gap Ascivan was built to close, turning knowledge into applied experience with a verified record of what you actually did.
+        </p>
+        <p className="mt-5 font-bold text-lg sm:text-xl"><span className="text-blue-600">Ascend</span>. <span className="text-orange-500">Achieve</span>. <span className="text-gray-900">Advance</span>.</p>
       </section>
 
       {/* FEATURES */}

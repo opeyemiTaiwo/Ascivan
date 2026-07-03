@@ -101,6 +101,9 @@ const PostJobs = () => {
           location: j.location || '',
           workAuth: j.workAuth || '',
           expirationOption: j.expirationOption || '30',
+          customExpirationDate: (j.expirationOption === 'custom' && j.expiresAt && typeof j.expiresAt.toDate === 'function')
+            ? j.expiresAt.toDate().toISOString().slice(0, 10)
+            : '',
         }));
       } catch (e) {
         console.error('Could not load job for editing:', e);

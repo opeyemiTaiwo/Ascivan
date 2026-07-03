@@ -1,4 +1,3 @@
-// src/Pages/About.jsx
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
@@ -49,7 +48,7 @@ const About = () => {
             <span className="text-gray-900">Advance</span>
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Ascivan is where you turn ability into proof by doing real work. Collaborate on real products from start to finish, earn verified badges, and build a network of fellow builders, so you can open doors in every direction: a job, your own venture, or the next step in your career, no matter your background or location.
+            Ascivan is where you turn ability into proof by doing real work. Collaborate on real products from start to finish, earn verified badges, and build a network of fellow builders, gaining applied skills you can prove, whoever you are and wherever you're from.
           </p>
         </section>
 
@@ -77,45 +76,9 @@ const About = () => {
                 <span className="text-gray-900 font-extrabold">3</span>
               </div>
               <h3 className="text-gray-900 font-bold text-lg mb-2">Advance</h3>
-              <p className="text-gray-500 text-sm">Turn proof into momentum. Your verified work and the people you built it with open doors in every direction: a new job, your own venture, freelance clients, a co-founder, or the next step in your career. Advance on your own terms.</p>
+              <p className="text-gray-500 text-sm">Turn proof into momentum. The applied skills, verified work, and network you build here are yours, and they keep opening what comes next. Advance on your own terms.</p>
             </div>
           </div>
-        </section>
-
-        {/* Who is Ascivan for */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Who is Ascivan for?</h2>
-          <p className="text-gray-500 text-sm mb-6 max-w-2xl">However you define moving forward, it starts the same way here: real work, real proof.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-white rounded-xl border border-gray-200 p-5">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-9 h-9 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-                </div>
-                <h3 className="font-bold text-gray-900">Career growth</h3>
-              </div>
-              <p className="text-gray-500 text-sm">Anyone looking for a job, changing roles, or discovering their path in tech.</p>
-            </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-5">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-9 h-9 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4z" /></svg>
-                </div>
-                <h3 className="font-bold text-gray-900">Building a business</h3>
-              </div>
-              <p className="text-gray-500 text-sm">Anyone looking for a co-founder, a business partner, or a team to build with.</p>
-            </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-5">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-9 h-9 rounded-lg bg-violet-50 border border-violet-100 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                </div>
-                <h3 className="font-bold text-gray-900">Extra income</h3>
-              </div>
-              <p className="text-gray-500 text-sm">Anyone wanting freelance work and paid opportunities on the side.</p>
-            </div>
-          </div>
-          <p className="text-gray-600 text-sm mt-6 font-medium">Wherever you're headed, your proven work opens the door.</p>
         </section>
 
         {/* Mission */}
@@ -123,10 +86,10 @@ const About = () => {
           <div className="bg-gray-50 rounded-xl border border-gray-200 p-6 sm:p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h2>
             <p className="text-gray-600 leading-relaxed mb-4">
-              Talent is everywhere, but the chance to prove it is not. Many capable people have the skills but no easy way to gain real, verifiable work experience. Degrees, coursework, and competitions build ability; they rarely produce the one thing that opens doors: proof that you've shipped a real product, with a team, from start to finish. Ascivan closes that gap. We turn knowledge into applied experience, real teams building products end to end, so you earn verified proof, a portfolio of genuine work, and a network of people you've actually built with. And it opens doors in every direction: a job, your own venture, freelance clients, and the next step in your career. No matter where you are in the world, your work speaks for you.
+              Talent is everywhere, but the chance to prove it is not. Many capable people have the skills but no easy way to gain real, verifiable work experience. Degrees, coursework, and competitions build ability; they rarely produce the one thing that proves it: evidence that you've shipped a real product, with a team, from start to finish. Ascivan closes that gap. We turn knowledge into applied experience, real teams building products end to end, so you gain applied skills, verified proof, and a network of people you've actually built with. Skills you own, proof that travels with you, wherever you choose to take them. No matter where you are in the world, your work speaks for you.
             </p>
             <p className="text-gray-600 leading-relaxed">
-              Ascivan closes that gap. We simulate real-world experience - collaborative teams building products end to end - so you earn verified credentials and a portfolio of genuine work, then become visible to recruiters hiring for remote and onsite roles. No matter where you are in the world, your work speaks for you.
+              Ascivan closes that gap. We simulate real-world experience, collaborative teams building products end to end, so you gain applied skills, verified credentials, and a portfolio of genuine work. No matter where you are in the world, your work speaks for you.
             </p>
           </div>
         </section>
@@ -138,10 +101,10 @@ const About = () => {
             {[
               { title: 'Real-World Projects', desc: 'Join or post collaborative projects and build real products with real teams across development, QA, architecture, security, and more - from start to finish.' },
               { title: 'TechTalent Badges', desc: 'Earn verified credentials across 6 skill tracks with 4 progression levels each. Badges are awarded based on your role and contribution in completed projects.' },
-              { title: 'Talent Board', desc: 'Every member with verified work is listed for recruiters and companies to discover. Your badges, project history, and verified profile do the talking.' },
+              { title: 'Talent Board', desc: 'Your verified work builds a public profile, badges, project history, and clear proof of what you build, all doing the talking for you.' },
               { title: 'Project Workspaces', desc: 'Every project gets a dedicated workspace with a discussion forum, resource sharing, and team directory - all logged for accountability.' },
               { title: 'Community & Messaging', desc: 'Post updates, follow professionals, and message anyone on the platform. Build a network through collaboration, not just connections.' },
-              { title: 'Verified by Contribution', desc: 'Project owners evaluate each member, and badges record the role and contribution level - so the proof on your profile is honest and trusted by recruiters.' },
+              { title: 'Verified by Contribution', desc: 'Project owners evaluate each member, and badges record the role and contribution level - so the proof on your profile is honest and verified.' },
             ].map((item, i) => (
               <div key={i} className="bg-white rounded-xl border border-gray-200 p-5">
                 <h3 className="text-gray-900 font-bold text-lg mb-2">{item.title}</h3>
@@ -173,7 +136,7 @@ const About = () => {
               { num: '1', title: 'Sign up and build your profile', desc: 'Sign in with Google, pick your skill track, and set your experience level. Takes under a minute.' },
               { num: '2', title: 'Join or post a project', desc: 'Browse open projects and apply with your portfolio and LinkedIn. Or post your own project and build a team.' },
               { num: '3', title: 'Collaborate in workspaces', desc: 'Once approved, access the project workspace. Discuss in the forum, share resources, and coordinate with your team.' },
-              { num: '4', title: 'Complete and earn badges', desc: 'When the project is done, the owner evaluates the team. Badges are awarded based on your role and contribution, building a verified portfolio recruiters can trust.' },
+              { num: '4', title: 'Complete and earn badges', desc: 'When the project is done, the owner evaluates the team. Badges are awarded based on your role and contribution, building a verified portfolio of proven work.' },
             ].map((step, i) => (
               <div key={i} className="flex gap-4 items-start">
                 <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold flex-shrink-0">{step.num}</div>

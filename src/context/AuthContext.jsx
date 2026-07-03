@@ -32,6 +32,7 @@ export const AuthProvider = ({ children }) => {
   // Enhanced sign in with Google - includes auto email preferences setup
   const signInWithGoogle = async () => {
     const googleProvider = new GoogleAuthProvider();
+    googleProvider.setCustomParameters({ prompt: 'select_account' });
     
     try {
       // Use popup method (works across all browsers and privacy modes)

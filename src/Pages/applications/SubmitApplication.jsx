@@ -547,7 +547,7 @@ const SubmitApplication = () => {
               <div className="flex items-center">
                 <span className="text-gray-600 text-xs xs:text-sm font-medium"
                       style={{textShadow: '1px 1px 2px rgba(0,0,0,0.8)'}}>
-                  Proof over pedigree. Build real experience, earn verified badges, get discovered.
+                  Turn your skills into proof. Build real experience, earn verified badges, get discovered.
                 </span>
               </div>
             </div>

@@ -1,9 +1,7 @@
 <!-- order: 4 -->
 # Internal Tools Builder (Retool and Airtable): Hands-On Project Tutorials
 
-This document turns every project in the Internal Tools Builder Foundations Course into a step-by-step, hands-on tutorial. Instead of learning a term and then doing a project, you learn each term at the moment you need it, while building the thing. Every step explains what you are doing, what the term means, how to actually do it, and why it matters.
-
-Follow the projects in order. Each one hands off a skill or artifact to the next, ending in the Final Capstone: a real internal tool a team could use to run part of their work.
+This course turns each project into a step-by-step, hands-on build. You learn each idea at the moment you need it, while building the thing, and every project hands its result to the next one, ending in a real internal tool a team could use to run part of their work. Follow the projects in order.
 
 ---
 
@@ -11,41 +9,29 @@ Follow the projects in order. Each one hands off a skill or artifact to the next
 
 **Goal:** Create a structured, relational database that will power the tools you build later.
 
-### Why This Project Matters
+**Step 1: Create your Airtable account and a base.**
+Go to airtable.com, sign up, and create a new base named `operations`. A base is a single database for a project, and this one gives every later tool a real place to read and write data.
 
-Internal tools are only as good as the data behind them. Airtable gives you a real, relational database with a friendly interface, and getting the data right first makes every tool afterwards straightforward.
-
-**Step 1: Create a free Airtable account and a base.**
-Go to airtable.com, sign up, and create a new base named `operations`.
-*Why:* A base is a single database for a project. Starting one now gives every later tool a real place to read and write data.
-
-**Step 2: Learn what a table is.**
-Learn: a **table** holds one kind of record, like Customers or Orders. A base can have several tables.
-*Why:* Splitting data into clear tables is the foundation of a database that stays organised as it grows.
+**Step 2: Understand tables.**
+A table holds one kind of record, like Customers or Orders, and a base can have several tables. Splitting data into clear tables is the foundation of a database that stays organised as it grows.
 
 **Step 3: Create your first table and fields.**
-Create a `Customers` table with fields: name (text), email (email), status (single select), and created (date).
-*Why:* Choosing correct field types (email, select, date) lets Airtable validate and filter data automatically later.
+Create a `Customers` table with fields for name (text), email (email), status (single select), and created (date). Correct field types let Airtable validate and filter your data automatically later.
 
-**Step 4: Learn what a linked record is.**
-Learn: a **linked record** connects a row in one table to a row in another, like an Order linked to a Customer.
-*Why:* Links are what make a database relational. They stop you from copying the same customer details into every order.
+**Step 4: Understand linked records.**
+A linked record connects a row in one table to a row in another, like an Order linked to a Customer. Links are what make a database relational, so you never copy the same customer details into every order.
 
-**Step 5: Create a linked `Orders` table.**
-Create an `Orders` table with fields: order number, amount (currency), status, and a link to `Customers`.
-*Why:* Modelling orders that reference customers is the classic relational pattern behind almost every internal tool.
+**Step 5: Create a linked Orders table.**
+Create an `Orders` table with fields for order number, amount (currency), status, and a link to `Customers`. Orders that reference customers is the classic pattern behind almost every internal tool.
 
-**Step 6: Learn what a view is.**
-Learn: a **view** is a saved way of looking at a table: filtered, sorted, or grouped, without changing the data.
-*Why:* Views let one table serve many needs (all orders, open orders, orders this week) without duplicating anything.
+**Step 6: Understand views.**
+A view is a saved way of looking at a table (filtered, sorted, or grouped) without changing the data. Views let one table serve many needs without duplicating anything.
 
 **Step 7: Create useful views.**
-Create views: "Open orders" (filtered by status), "This month" (filtered by date), grouped by customer.
-*Why:* Well-designed views are often half the value of an internal tool, giving each team member exactly the slice they need.
+Create an "Open orders" view filtered by status, a "This month" view filtered by date, and one grouped by customer. Well-chosen views are often half the value of an internal tool.
 
 **Step 8: Add sample data.**
-Add several customers and orders with realistic, varied values.
-*Why:* Realistic sample data lets you build and test tools against something that behaves like production.
+Add several customers and orders with realistic, varied values, so you can build and test tools against something that behaves like production.
 
 ### Final Project Structure
 ```text
@@ -75,41 +61,29 @@ operations (Airtable base)
 
 **Goal:** Make your database do work for you with formulas, rollups, and automations.
 
-### Why This Project Matters
-
-A database that only stores data makes people do the math. Formulas and automations turn Airtable from a spreadsheet into a system that calculates, updates, and reacts on its own.
-
-**Step 1: Learn what a formula field is.**
-Learn: a **formula field** calculates its value from other fields, like combining first and last name, or flagging overdue orders.
-*Why:* Formulas remove manual calculation and keep derived values always correct and up to date.
+**Step 1: Understand formula fields.**
+A formula field calculates its value from other fields, like combining first and last name, or flagging overdue orders. Formulas remove manual calculation and keep derived values always correct.
 
 **Step 2: Add a formula field.**
-In `Orders`, add a formula field `is_overdue` that is true when the status is open and the date is old.
-*Why:* Computed flags like this power the filters and alerts your tools will rely on.
+In `Orders`, add a formula field `is_overdue` that is true when the status is open and the date is old. Computed flags like this power the filters and alerts your tools rely on.
 
-**Step 3: Learn what a rollup is.**
-Learn: a **rollup** summarises linked records, like totalling all orders for a customer.
-*Why:* Rollups turn relationships into insight (lifetime value, order counts) without any manual tallying.
+**Step 3: Understand rollups.**
+A rollup summarises linked records, such as totalling all orders for a customer. Rollups turn relationships into insight without any manual tallying.
 
 **Step 4: Add a rollup to Customers.**
-In `Customers`, add a rollup `total_spent` that sums the amount of all linked orders.
-*Why:* A per-customer total is exactly the kind of at-a-glance metric an internal tool should surface.
+In `Customers`, add a rollup `total_spent` that sums the amount of all linked orders. A per-customer total is exactly the kind of at-a-glance metric a tool should surface.
 
-**Step 5: Learn what an Airtable automation is.**
-Learn: an **automation** runs actions when something happens in the base, like sending an email when status changes.
-*Why:* In-base automation handles routine reactions so team members do not have to remember to do them.
+**Step 5: Understand Airtable automations.**
+An automation runs actions when something happens in the base, like sending an email when a status changes. It handles routine reactions so team members do not have to remember to.
 
 **Step 6: Build a status-change automation.**
-Create an automation: when an order's status becomes `shipped`, send the customer an email.
-*Why:* Automatic customer updates are a common, high-value feature that would otherwise be manual and easily forgotten.
+Create an automation so that when an order's status becomes `shipped`, the customer gets an email. Automatic customer updates are a high-value feature that is otherwise easy to forget.
 
-**Step 7: Learn about data integrity.**
-Learn: **data integrity** means keeping data accurate and consistent, using required fields and validation.
-*Why:* Tools built on inconsistent data produce wrong answers. Protecting integrity at the source prevents that.
+**Step 7: Understand data integrity.**
+Data integrity means keeping data accurate and consistent, using required fields and validation. Tools built on inconsistent data produce wrong answers.
 
 **Step 8: Add integrity safeguards.**
-Make key fields required and use single-select options to prevent typos in status values.
-*Why:* Constraining input at entry is far cheaper than cleaning bad data after it spreads through your tools.
+Make key fields required and use single-select options to prevent typos in status values. Constraining input at entry is far cheaper than cleaning bad data later.
 
 ### Final Project Structure
 ```text
@@ -140,41 +114,29 @@ Automated base
 
 **Goal:** Build a custom interface in Retool that reads from and writes to your Airtable data.
 
-### Why This Project Matters
-
-Airtable is great for the team that owns the data, but a purpose-built app is clearer and safer for everyone else. Retool lets you build that app fast, connected to real data.
-
 **Step 1: Create a free Retool account.**
-Go to retool.com and sign up. Retool builds internal apps by dragging components onto a canvas.
-*Why:* Retool is the leading internal-tools platform, so these skills map directly to real jobs.
+Go to retool.com and sign up. Retool builds internal apps by dragging components onto a canvas and is the leading internal-tools platform, so these skills map directly to real jobs.
 
-**Step 2: Learn what a resource is.**
-Learn: a **resource** is a connection to a data source, like your Airtable base or a database.
-*Why:* Every Retool app reads and writes through resources. Connecting one is the first real step of any tool.
+**Step 2: Understand resources.**
+A resource is a connection to a data source, like your Airtable base or a database. Every Retool app reads and writes through resources.
 
 **Step 3: Connect Airtable as a resource.**
-Add an Airtable resource using your API key and base, so Retool can reach your data.
-*Why:* This link is what makes the tool live. Without it, you are only designing an empty shell.
+Add an Airtable resource using your API key and base, so Retool can reach your data. Without this link, you are only designing an empty shell.
 
-**Step 4: Learn what a query is.**
-Learn: a **query** fetches or changes data through a resource, like "get all open orders".
-*Why:* Queries are how a Retool app talks to your data. Most of building a tool is writing the right queries.
+**Step 4: Understand queries.**
+A query fetches or changes data through a resource, such as getting all open orders. Most of building a tool is writing the right queries.
 
 **Step 5: Build a query and a table.**
-Create a query that reads `Orders`, then drag a Table component and bind it to that query.
-*Why:* A live table of real orders is the backbone of most internal tools and an immediate, visible result.
+Create a query that reads `Orders`, then drag a Table component and bind it to that query. A live table of real orders is the backbone of most internal tools.
 
-**Step 6: Learn what a component is.**
-Learn: a **component** is a UI element like a table, button, form, or text, arranged on the canvas.
-*Why:* Components are how you assemble an interface. Knowing the main ones lets you build almost any tool layout.
+**Step 6: Understand components.**
+A component is a UI element like a table, button, form, or text, arranged on the canvas. Knowing the main ones lets you build almost any tool layout.
 
 **Step 7: Add a detail panel.**
-Add text and image components that show details of the row selected in the table.
-*Why:* A master-detail layout (list plus selected details) is the most common and useful internal-tool pattern.
+Add text and image components that show details of the row selected in the table. A master-detail layout (a list plus the selected item's details) is the most common internal-tool pattern.
 
-**Step 8: Learn about binding data with references.**
-Learn: **binding** connects a component to data using a reference like `{{ table1.selectedRow }}`.
-*Why:* Binding is the core Retool skill. It is how every component shows the right, live data.
+**Step 8: Bind data with references.**
+Binding connects a component to data using a reference like `{{ table1.selectedRow }}`. This is the core Retool skill, and it is how every component shows the right, live data.
 
 ### Final Project Structure
 ```text
@@ -205,41 +167,29 @@ Retool app 1
 
 **Goal:** Let users create, edit, and update records from your Retool app, safely.
 
-### Why This Project Matters
-
-A read-only tool only shows problems; it cannot fix them. Write actions let a team actually do their work in the tool, which is the whole point of building it.
-
-**Step 1: Learn what a mutating query is.**
-Learn: a **mutating query** changes data (create, update, delete), unlike a read query that only fetches.
-*Why:* Knowing the difference matters because mutating queries need more care: they change real records.
+**Step 1: Understand mutating queries.**
+A mutating query changes data (create, update, delete), unlike a read query that only fetches. Mutating queries need more care because they change real records.
 
 **Step 2: Build a form to edit a record.**
-Add a Form with inputs bound to the selected order's fields (status, amount, notes).
-*Why:* An edit form is the most common write feature, letting users correct and update records in place.
+Add a Form with inputs bound to the selected order's fields (status, amount, notes). An edit form is the most common write feature, letting users correct records in place.
 
 **Step 3: Create an update query.**
-Create a query that updates the selected order with the form's values, triggered by a Save button.
-*Why:* This connects the form to the database, turning user input into a real change in your Airtable data.
+Create a query that updates the selected order with the form's values, triggered by a Save button. This turns user input into a real change in your Airtable data.
 
-**Step 4: Learn about triggering queries on events.**
-Learn: queries can run on **events**, like a button click or a successful save.
-*Why:* Event-driven queries are how tools respond to users. Wiring the Save button to the update query is the pattern.
+**Step 4: Trigger queries on events.**
+Queries can run on events, like a button click or a successful save. Wiring the Save button to the update query is how a tool responds to users.
 
-**Step 5: Add success and failure handling.**
-Set the query to show a success message and refresh the table on success, and an error message on failure.
-*Why:* Clear feedback tells users their change worked, and a refresh keeps the tool showing current data.
+**Step 5: Handle success and failure.**
+Set the query to show a success message and refresh the table on success, and an error message on failure. Clear feedback tells users their change worked and keeps the tool showing current data.
 
 **Step 6: Build a create-record form.**
-Add a second form and query to create a brand new order.
-*Why:* Creating records rounds out the tool so a team can run the whole workflow, not just edit existing data.
+Add a second form and query to create a brand new order, so a team can run the whole workflow rather than only editing existing data.
 
-**Step 7: Learn about confirmation on destructive actions.**
-Learn: a **confirmation** step asks the user to confirm before an irreversible action like delete.
-*Why:* Deletes and bulk changes are dangerous. Confirmation prevents costly mistakes and is expected in professional tools.
+**Step 7: Understand confirmation on destructive actions.**
+A confirmation step asks the user to confirm before an irreversible action like delete. Deletes and bulk changes are dangerous, and confirmation prevents costly mistakes.
 
 **Step 8: Add a guarded delete.**
-Add a delete button with a confirmation dialog before the delete query runs.
-*Why:* Guarding destructive actions is a habit that protects real business data from a single misclick.
+Add a delete button with a confirmation dialog before the delete query runs. Guarding destructive actions protects real business data from a single misclick.
 
 ### Final Project Structure
 ```text
@@ -270,41 +220,29 @@ Write actions
 
 **Goal:** Control who can see and do what, so the tool is safe to share across a team.
 
-### Why This Project Matters
+**Step 1: Understand roles and permissions.**
+A role is a group of users, like admin or viewer, and permissions decide what each role can do. Roles let you set access once per group instead of per person.
 
-Not everyone should be able to delete records or see sensitive data. Access control is what makes an internal tool safe to hand to a whole team instead of just its builder.
-
-**Step 1: Learn what roles and permissions are.**
-Learn: a **role** is a group of users (like admin or viewer); **permissions** decide what each role can do.
-*Why:* Roles let you set access once per group instead of per person, which scales as a team grows.
-
-**Step 2: Learn about user identity in Retool.**
-Learn: Retool knows the **current user** and their role, which you can reference in the app.
-*Why:* Referencing the current user is how a single app can behave differently for admins and everyone else.
+**Step 2: Understand user identity in Retool.**
+Retool knows the current user and their role, which you can reference in the app. This is how one app can behave differently for admins and everyone else.
 
 **Step 3: Hide admin controls from non-admins.**
-Set the delete button and sensitive fields to be visible only when the current user is an admin.
-*Why:* Hiding dangerous controls from most users prevents accidents and keeps the interface simple for them.
+Set the delete button and sensitive fields to be visible only when the current user is an admin. Hiding dangerous controls from most users prevents accidents and keeps their view simple.
 
-**Step 4: Learn the difference between hiding and enforcing.**
-Learn: hiding a control in the UI is not the same as blocking the action at the data layer.
-*Why:* A truly safe tool restricts what each role can do at the source, not just what they can see.
+**Step 4: Understand hiding versus enforcing.**
+Hiding a control in the UI is not the same as blocking the action at the data layer. A truly safe tool restricts what each role can do at the source, not just what they can see.
 
 **Step 5: Restrict queries by role.**
-Configure permissions so only admins can run destructive or sensitive queries.
-*Why:* Enforcing limits on the queries themselves is what actually protects data, beyond just a hidden button.
+Configure permissions so only admins can run destructive or sensitive queries. Enforcing limits on the queries themselves is what actually protects data.
 
 **Step 6: Build a role-aware view.**
-Show a manager summary to admins and a simpler task list to regular users, in the same app.
-*Why:* One app that adapts to each role is cleaner and cheaper to maintain than separate tools per group.
+Show a manager summary to admins and a simpler task list to regular users, in the same app. One app that adapts to each role is cheaper to maintain than separate tools.
 
-**Step 7: Learn about audit trails.**
-Learn: an **audit trail** records who changed what and when.
-*Why:* When something goes wrong in a shared tool, an audit trail is how you find out what happened and by whom.
+**Step 7: Understand audit trails.**
+An audit trail records who changed what and when. When something goes wrong in a shared tool, it is how you find out what happened and by whom.
 
 **Step 8: Add basic logging of changes.**
-Log key actions (who updated or deleted an order, and when) to an Airtable log table.
-*Why:* A simple change log gives you accountability and makes the tool trustworthy for a whole team.
+Log key actions, such as who updated or deleted an order and when, to an Airtable log table. A simple change log gives you accountability and makes the tool trustworthy for a team.
 
 ### Final Project Structure
 ```text
@@ -336,41 +274,29 @@ Access control
 
 **Goal:** Turn a working tool into a polished, deployed product the team actually adopts.
 
-### Why This Project Matters
-
-A tool nobody understands or trusts goes unused. Polish, deployment, and onboarding are what turn a build into something a team relies on every day.
-
-**Step 1: Learn about layout and usability.**
-Learn: good **layout** groups related controls, guides the eye, and reduces clicks to complete a task.
-*Why:* A cluttered tool slows people down and gets abandoned. Clear layout is what makes a tool feel effortless.
+**Step 1: Understand layout and usability.**
+Good layout groups related controls, guides the eye, and reduces the clicks needed to finish a task. A cluttered tool slows people down and gets abandoned.
 
 **Step 2: Organise the interface.**
-Group the app into clear sections or tabs (for example, Orders, Customers, Reports).
-*Why:* Sectioning matches how people think about their work and keeps a growing tool navigable.
+Group the app into clear sections or tabs, such as Orders, Customers, and Reports. Sectioning matches how people think about their work and keeps a growing tool navigable.
 
 **Step 3: Add helpful states.**
-Add empty states, loading indicators, and clear labels throughout.
-*Why:* These small touches remove confusion and make the tool feel finished and trustworthy.
+Add empty states, loading indicators, and clear labels throughout. These small touches remove confusion and make the tool feel finished.
 
-**Step 4: Learn about environments.**
-Learn: many teams keep a **staging** environment for testing and a **production** one for real use.
-*Why:* Separating test from live means you can improve the tool without risking the data the team depends on.
+**Step 4: Understand environments.**
+Many teams keep a staging environment for testing and a production one for real use. Separating them means you can improve the tool without risking the data the team depends on.
 
 **Step 5: Deploy and share the app.**
-Publish the app and share it with the intended users, respecting their roles.
-*Why:* Deployment is the moment the tool becomes real for the team. Sharing by role keeps access correct from day one.
+Publish the app and share it with the intended users, respecting their roles. Sharing by role keeps access correct from day one.
 
 **Step 6: Write user documentation.**
-Create a short guide: what the tool does, how to do each common task, and who to ask for help.
-*Why:* Documentation lowers the barrier to adoption and cuts the support questions you would otherwise field yourself.
+Create a short guide covering what the tool does, how to do each common task, and who to ask for help. Documentation lowers the barrier to adoption and cuts support questions.
 
 **Step 7: Run an onboarding walkthrough.**
-Walk the team through the tool with a real task each person will do.
-*Why:* People adopt a tool far faster when they have done a real task in it once, with guidance.
+Walk the team through the tool with a real task each person will do. People adopt a tool far faster once they have done a real task in it with guidance.
 
 **Step 8: Gather feedback and iterate once.**
-Collect the team's first reactions and make one round of improvements.
-*Why:* The first week of real use reveals the highest-value fixes. Acting on them is what turns a tool into a habit.
+Collect the team's first reactions and make one round of improvements. The first week of real use reveals the highest-value fixes.
 
 ### Final Project Structure
 ```text
@@ -403,37 +329,26 @@ Deployed tool
 
 **Goal:** Combine every project into one internal tool that runs a real team process. This is an integration exercise, not new material.
 
-### Why This Project Matters
-
-This is the tool you show employers, and the kind of build companies hire internal-tools specialists for. It proves you can take a messy process and give a team a safe, custom system to run it.
-
 **Step 1: Choose a real team process.**
-Pick one: order management, applicant tracking, inventory, support ticket handling, or content approvals.
-*Why:* A recognisable process makes your capstone instantly understandable and clearly valuable to an employer.
+Pick one: order management, applicant tracking, inventory, support ticket handling, or content approvals. A recognisable process makes your capstone instantly understandable to an employer.
 
-**Step 2: Design the database (Projects 1 and 2 skills).**
-Model the tables, links, formulas, and automations the process needs.
-*Why:* A clean, computed database is the foundation the whole tool stands on.
+**Step 2: Design the database.**
+Using your Project 1 and 2 skills, model the tables, links, formulas, and automations the process needs. A clean, computed database is the foundation the whole tool stands on.
 
-**Step 3: Build the core app (Projects 3 and 4 skills).**
-Build the Retool interface with live data, master-detail views, and full create, edit, and delete.
-*Why:* This is the working tool the team will use to run the process day to day.
+**Step 3: Build the core app.**
+Using your Project 3 and 4 skills, build the Retool interface with live data, master-detail views, and full create, edit, and delete.
 
-**Step 4: Add access control (Project 5 skills).**
-Add roles, enforced permissions, role-aware views, and audit logging.
-*Why:* Access control is what makes the tool safe to give to a whole team rather than one person.
+**Step 4: Add access control.**
+Using your Project 5 skills, add roles, enforced permissions, role-aware views, and audit logging, so the tool is safe for a whole team.
 
-**Step 5: Polish and deploy (Project 6 skills).**
-Organise the layout, add helpful states, deploy, and document it.
-*Why:* Polish and deployment are what turn a build into a tool the team actually adopts.
+**Step 5: Polish and deploy.**
+Using your Project 6 skills, organise the layout, add helpful states, deploy, and document it.
 
 **Step 6: Onboard and gather results.**
-Onboard the intended users and note the time or errors the tool saves.
-*Why:* Real adoption and a concrete result are the most convincing proof of your work.
+Onboard the intended users and note the time or errors the tool saves. Real adoption and a concrete result are the most convincing proof of your work.
 
 **Step 7: Write the capstone summary.**
-Summarise the process, the data model, the features, the roles, and the impact, with screenshots.
-*Why:* This summary is what you hand an employer to prove the tool is real, complete, and yours.
+Summarise the process, the data model, the features, the roles, and the impact, with screenshots. This is what you hand an employer to prove the tool is real and yours.
 
 ### Final Project Structure
 ```text

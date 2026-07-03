@@ -49,19 +49,8 @@ const About = () => {
             <span className="text-gray-900">Advance</span>
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Ascivan is where you turn ability into proof by doing real work. Collaborate on real products from start to finish, earn verified badges, and build a network of fellow builders, so you can open doors in every direction: a job, your own venture, grad school, grants, or the next step in your career, no matter your background or location.
+            Ascivan is where you turn ability into proof by doing real work. Collaborate on real products from start to finish, earn verified badges, and build a network of fellow builders, so you can open doors in every direction: a job, your own venture, or the next step in your career, no matter your background or location.
           </p>
-        </section>
-
-        {/* Why Ascivan - the thesis */}
-        <section className="mb-12">
-          <div className="bg-gradient-to-br from-blue-50 to-orange-50 border border-gray-200 rounded-2xl p-6 sm:p-8">
-            <p className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-3">Why Ascivan</p>
-            <p className="text-gray-800 text-lg sm:text-xl leading-relaxed">
-              The world has moved from knowing to doing. Information is saturated and instant; what's rare is the chance to apply it on real work, with a real team, from start to finish. That is the gap Ascivan was built to close, turning knowledge into applied experience with a verified record of what you actually did.
-            </p>
-            <p className="mt-4 font-bold"><span className="text-blue-600">Ascend</span>. <span className="text-orange-500">Achieve</span>. <span className="text-gray-900">Advance</span>.</p>
-          </div>
         </section>
 
         {/* The path: Ascend, Achieve, Advance */}
@@ -88,7 +77,7 @@ const About = () => {
                 <span className="text-gray-900 font-extrabold">3</span>
               </div>
               <h3 className="text-gray-900 font-bold text-lg mb-2">Advance</h3>
-              <p className="text-gray-500 text-sm">Turn proof into momentum. Your verified work and the people you built it with open doors in every direction: a new job, your own venture, freelance clients, a co-founder, or a stronger case for grad school, grants, and the next step in your career. Advance on your own terms.</p>
+              <p className="text-gray-500 text-sm">Turn proof into momentum. Your verified work and the people you built it with open doors in every direction: a new job, your own venture, freelance clients, a co-founder, or the next step in your career. Advance on your own terms.</p>
             </div>
           </div>
         </section>
@@ -106,15 +95,6 @@ const About = () => {
                 <h3 className="font-bold text-gray-900">Career growth</h3>
               </div>
               <p className="text-gray-500 text-sm">Anyone looking for a job, changing roles, or discovering their path in tech.</p>
-            </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-5">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-9 h-9 rounded-lg bg-orange-50 border border-orange-100 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /></svg>
-                </div>
-                <h3 className="font-bold text-gray-900">Academic advancement</h3>
-              </div>
-              <p className="text-gray-500 text-sm">Anyone aiming for a master's or PhD, applying to grad schools, or seeking grants and funding to study further, at home or abroad.</p>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-5">
               <div className="flex items-center gap-3 mb-2">
@@ -143,7 +123,7 @@ const About = () => {
           <div className="bg-gray-50 rounded-xl border border-gray-200 p-6 sm:p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h2>
             <p className="text-gray-600 leading-relaxed mb-4">
-              Talent is everywhere, but the chance to prove it is not. Many capable people have the skills but no easy way to gain real, verifiable work experience. Degrees, coursework, and competitions build ability; they rarely produce the one thing that opens doors: proof that you've shipped a real product, with a team, from start to finish. Ascivan closes that gap. We turn knowledge into applied experience, real teams building products end to end, so you earn verified proof, a portfolio of genuine work, and a network of people you've actually built with. And it opens doors in every direction: a job, your own venture, freelance clients, grad school, grants, and the next step in your career. No matter where you are in the world, your work speaks for you.
+              Talent is everywhere, but the chance to prove it is not. Many capable people have the skills but no easy way to gain real, verifiable work experience. Degrees, coursework, and competitions build ability; they rarely produce the one thing that opens doors: proof that you've shipped a real product, with a team, from start to finish. Ascivan closes that gap. We turn knowledge into applied experience, real teams building products end to end, so you earn verified proof, a portfolio of genuine work, and a network of people you've actually built with. And it opens doors in every direction: a job, your own venture, freelance clients, and the next step in your career. No matter where you are in the world, your work speaks for you.
             </p>
             <p className="text-gray-600 leading-relaxed">
               Ascivan closes that gap. We simulate real-world experience - collaborative teams building products end to end - so you earn verified credentials and a portfolio of genuine work, then become visible to recruiters hiring for remote and onsite roles. No matter where you are in the world, your work speaks for you.

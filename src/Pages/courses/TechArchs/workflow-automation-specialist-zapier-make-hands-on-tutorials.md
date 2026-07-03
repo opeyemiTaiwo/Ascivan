@@ -1,9 +1,7 @@
 <!-- order: 3 -->
 # Workflow Automation Specialist (Zapier and Make): Hands-On Project Tutorials
 
-This document turns every project in the Workflow Automation Specialist Foundations Course into a step-by-step, hands-on tutorial. Instead of learning a term and then doing a project, you learn each term at the moment you need it, while building the thing. Every step explains what you are doing, what the term means, how to actually do it, and why it matters.
-
-Follow the projects in order. Each one hands off a skill or artifact to the next, ending in the Final Capstone: a multi-step automation that runs a real process by itself.
+This course turns each project into a step-by-step, hands-on build. You learn each idea at the moment you need it, while building the thing, and every project hands its result to the next one, ending in a multi-step automation that runs a real process by itself. Follow the projects in order.
 
 ---
 
@@ -11,41 +9,29 @@ Follow the projects in order. Each one hands off a skill or artifact to the next
 
 **Goal:** Connect two apps so that an action in one automatically triggers an action in the other.
 
-### Why This Project Matters
-
-Automation removes the repetitive copy-paste work that fills people's days. Your first working automation teaches the core loop that every later, more complex build is made of.
-
 **Step 1: Create a free Zapier account.**
-Go to zapier.com and sign up. Zapier connects apps without code.
-*Why:* Zapier is the most widely used automation tool, so skills here transfer directly to real jobs and freelance work.
+Go to zapier.com and sign up. Zapier connects apps without code and is the most widely used automation tool, so skills here transfer straight to real work.
 
-**Step 2: Learn what a trigger is.**
-Learn: a **trigger** is the event that starts an automation, like "a new row is added to a spreadsheet".
-*Why:* Every automation begins with a trigger. Choosing the right trigger is the difference between an automation that fires when you want and one that never fires or fires constantly.
+**Step 2: Understand triggers.**
+A trigger is the event that starts an automation, such as a new row being added to a spreadsheet. Every automation begins with one, and choosing the right trigger decides when your automation runs.
 
-**Step 3: Learn what a Zap is.**
-Learn: a **Zap** is one automated workflow: a trigger plus one or more actions.
-*Why:* Thinking in Zaps (this happens, so do that) is the core mental model of all automation, whatever the tool.
+**Step 3: Understand Zaps.**
+A Zap is one automated workflow: a trigger plus one or more actions. Thinking in Zaps (this happens, so do that) is the core idea behind all automation.
 
 **Step 4: Pick a trigger app and event.**
-Create a Zap. Choose Google Sheets as the trigger app and "New Spreadsheet Row" as the event.
-*Why:* A spreadsheet is the easiest place to see automation work, because you can add rows yourself to test it instantly.
+Create a Zap, choose Google Sheets as the trigger app, and select "New Spreadsheet Row" as the event. A spreadsheet is the easiest place to see automation work, because you can add rows yourself to test it.
 
-**Step 5: Learn what an action is.**
-Learn: an **action** is what the automation does when the trigger fires, like "send an email" or "post a message".
-*Why:* Actions are the payoff. A trigger with no action does nothing; the action is the work you are saving a human from doing.
+**Step 5: Understand actions.**
+An action is what the automation does when the trigger fires, such as sending an email or posting a message. A trigger with no action does nothing; the action is the work you are saving a person from doing.
 
 **Step 6: Add an action.**
-Add an action step: Gmail, "Send Email". Set the recipient, subject, and body.
-*Why:* Sending a notification on a new row is one of the most common real automations, so it is worth building well.
+Add an action step: Gmail, "Send Email", and set the recipient, subject, and body. Sending a notification on a new row is one of the most common real automations.
 
-**Step 7: Learn about mapping data between steps.**
-Learn: **mapping** passes data from the trigger into the action, like putting the new row's name into the email.
-*Why:* Mapping is what makes an automation smart rather than generic. It carries the specific details through the workflow.
+**Step 7: Map data between steps.**
+Mapping passes data from the trigger into the action, such as putting the new row's name into the email. It is what makes an automation carry the specific details through the workflow.
 
 **Step 8: Test and turn on the Zap.**
-Use the built-in test, then add a real row and confirm the email arrives. Turn the Zap on.
-*Why:* Testing before turning it on prevents a broken automation from running silently. An automation you have not tested is a liability, not an asset.
+Use the built-in test, then add a real row and confirm the email arrives, and turn the Zap on. Testing before turning it on stops a broken automation from running silently.
 
 ### Final Project Structure
 ```text
@@ -75,41 +61,29 @@ Zap 1
 
 **Goal:** Make an automation smart enough to decide, so it acts only when it should and differently in different cases.
 
-### Why This Project Matters
-
-Real processes have conditions: notify the sales team only for big orders, route urgent tickets differently. Logic is what separates a toy automation from one a business can rely on.
-
-**Step 1: Learn what a filter is.**
-Learn: a **filter** stops a Zap from continuing unless a condition is met, like "only if the amount is over 100".
-*Why:* Without filters, automations act on everything, including cases they should ignore. Filters give an automation judgment.
+**Step 1: Understand filters.**
+A filter stops a Zap from continuing unless a condition is met, such as only if the amount is over 100. Without filters, an automation acts on everything, including cases it should ignore.
 
 **Step 2: Add a filter to your Zap.**
-Add a Filter step after the trigger: only continue if a field (like `status`) equals `new`.
-*Why:* This teaches the exact place logic lives, between the trigger and the action, and how a stopped Zap simply does nothing quietly.
+Add a Filter step after the trigger: only continue if a field like `status` equals `new`. When the condition is not met, the Zap simply stops quietly.
 
-**Step 3: Learn what a path is.**
-Learn: a **path** splits a Zap into branches that each run different actions based on conditions.
-*Why:* Paths turn one automation into a decision tree, which is how you handle "if A do this, if B do that" in a single workflow.
+**Step 3: Understand paths.**
+A path splits a Zap into branches that each run different actions based on conditions. Paths turn one automation into a decision tree.
 
 **Step 4: Build a two-branch path.**
-Add Paths. Branch A: if `priority` is `high`, send an urgent Slack message. Branch B: if `priority` is `low`, add a row to a log sheet.
-*Why:* Routing by priority is a real, common need, and building it shows how one trigger can drive several different outcomes.
+Add Paths. In branch A, if `priority` is `high`, send an urgent Slack message; in branch B, if `priority` is `low`, add a row to a log sheet. One trigger now drives two different outcomes.
 
-**Step 5: Learn about formatting data.**
-Learn: a **formatter** transforms data between steps, like turning text to uppercase or reformatting a date.
-*Why:* Data rarely arrives in the exact shape the next app needs. Formatting is the quiet glue that keeps automations from breaking on messy input.
+**Step 5: Understand formatters.**
+A formatter transforms data between steps, such as turning text to uppercase or reformatting a date. Data rarely arrives in the exact shape the next app needs.
 
 **Step 6: Add a formatter step.**
-Add a Formatter to turn a date into a friendly format before it goes into a message.
-*Why:* Clean, readable output is what makes an automation feel professional rather than robotic.
+Add a Formatter to turn a date into a friendly format before it goes into a message. Clean output is what makes an automation feel professional rather than robotic.
 
-**Step 7: Learn about testing each branch.**
-Test each path branch separately using sample data that matches each condition.
-*Why:* A path that works for one branch can silently fail on another. Testing every branch is how you trust the whole thing.
+**Step 7: Test each branch.**
+Test each path branch separately using sample data that matches each condition. A path that works for one branch can silently fail on another.
 
 **Step 8: Document the logic.**
-Write out, in plain language, what each filter and branch does.
-*Why:* Logic you understood while building is easy to forget. A written description is what lets you or a client maintain it later.
+Write out, in plain language, what each filter and branch does. Logic you understood while building is easy to forget later.
 
 ### Final Project Structure
 ```text
@@ -142,41 +116,29 @@ Zap 2
 
 **Goal:** Rebuild and extend an automation in Make (formerly Integromat), a more visual and powerful tool, to see automation at a larger scale.
 
-### Why This Project Matters
-
-Zapier is fast for simple flows; Make is stronger for complex, visual, multi-step processes. Knowing both makes you far more employable and lets you pick the right tool per job.
-
 **Step 1: Create a free Make account.**
-Go to make.com and sign up. Make shows automations as a visual diagram of connected modules.
-*Why:* Seeing a process as a diagram builds intuition for how data flows, which helps even when you go back to Zapier.
+Go to make.com and sign up. Make shows automations as a visual diagram of connected modules, which builds your intuition for how data flows.
 
-**Step 2: Learn what a scenario is.**
-Learn: a **scenario** is Make's name for an automation: a set of connected modules on a canvas.
-*Why:* Scenario is to Make what a Zap is to Zapier. Recognising the same concept under different names is a real automation skill.
+**Step 2: Understand scenarios.**
+A scenario is Make's name for an automation: a set of connected modules on a canvas. It is to Make what a Zap is to Zapier.
 
-**Step 3: Learn what a module is.**
-Learn: a **module** is one step in a scenario, like "watch for a new form response" or "create a record".
-*Why:* Modules are the building blocks. Dragging and connecting them is the core of building in Make.
+**Step 3: Understand modules.**
+A module is one step in a scenario, such as watching for a new form response or creating a record. Dragging and connecting modules is the core of building in Make.
 
 **Step 4: Build a form-to-database scenario.**
-Add a trigger module (a form tool or webhook), then a module to create a row in a Google Sheet or Airtable.
-*Why:* Capturing form submissions into a database is one of the most requested automations in real work.
+Add a trigger module (a form tool or webhook), then a module to create a row in a Google Sheet or Airtable. Capturing form submissions into a database is one of the most requested automations in real work.
 
-**Step 5: Learn about the data flow between modules.**
-Learn: in Make, each module passes its output to the next through mapped fields, shown as a connected line.
-*Why:* Visualising data moving down the chain makes complex multi-step logic far easier to reason about and debug.
+**Step 5: Understand the data flow between modules.**
+Each module passes its output to the next through mapped fields, shown as a connected line. Seeing the data move down the chain makes complex logic easier to reason about.
 
 **Step 6: Add a third step.**
-Add a module that posts a confirmation to Slack or sends an email after the record is created.
-*Why:* Chaining three or more steps is where automation starts replacing whole manual processes, not just single actions.
+Add a module that posts a confirmation to Slack or sends an email after the record is created. Chaining three or more steps is where automation starts replacing whole manual processes.
 
-**Step 7: Learn about error handling.**
-Learn: **error handling** decides what happens when a step fails, so one failure does not silently break everything.
-*Why:* Real automations hit failures (an app is down, data is missing). Handling errors is what makes an automation dependable in production.
+**Step 7: Understand error handling.**
+Error handling decides what happens when a step fails, so one failure does not silently break everything. Real automations hit failures when an app is down or data is missing.
 
 **Step 8: Add an error handler and test.**
-Add an error handler route to one module (for example, log the error), then run the scenario with test data.
-*Why:* Building error handling from the start is a professional habit that separates hobby automations from reliable ones.
+Add an error handler route to one module, for example to log the error, then run the scenario with test data. Building error handling from the start is what makes an automation dependable.
 
 ### Final Project Structure
 ```text
@@ -207,41 +169,29 @@ Make scenario
 
 **Goal:** Connect to apps that do not have a ready-made integration, using webhooks and simple API calls.
 
-### Why This Project Matters
+**Step 1: Understand APIs.**
+An API is a way for one app to talk to another over the internet using structured requests. Almost every modern app has one, which unlocks thousands of tools that have no drag-and-drop connector.
 
-Ready-made connectors cover common apps, but real jobs often need a tool that has no integration. Webhooks and APIs let you connect almost anything, which is the skill that makes you genuinely versatile.
-
-**Step 1: Learn what an API is.**
-Learn: an **API** is a way for one app to talk to another over the internet using structured requests.
-*Why:* Almost every modern app has an API. Understanding APIs at a basic level unlocks thousands of tools that have no drag-and-drop connector.
-
-**Step 2: Learn what a webhook is.**
-Learn: a **webhook** is a URL that an app calls to send data the instant something happens, rather than waiting to be asked.
-*Why:* Webhooks are the fastest, most flexible trigger. They let any app that can send a request start your automation.
+**Step 2: Understand webhooks.**
+A webhook is a URL that an app calls to send data the instant something happens, rather than waiting to be asked. It is the fastest, most flexible kind of trigger.
 
 **Step 3: Create a webhook trigger.**
-In Make or Zapier, create a Webhook trigger and copy its unique URL.
-*Why:* This URL is the doorway other apps use to reach your automation. Generating and using it is a core connective skill.
+In Make or Zapier, create a Webhook trigger and copy its unique URL. This URL is the doorway other apps use to reach your automation.
 
 **Step 4: Send test data to the webhook.**
-Use the app's settings (or a simple test tool) to send a sample request to your webhook URL.
-*Why:* Seeing your automation receive live data proves the connection works and shows you the shape of the incoming data.
+Use the app's settings, or a simple test tool, to send a sample request to your webhook URL. Seeing your automation receive live data proves the connection works and shows you the shape of the incoming data.
 
-**Step 5: Learn about JSON.**
-Learn: **JSON** is the common text format APIs use to send data, made of key and value pairs.
-*Why:* Almost all API data arrives as JSON. Being able to read it is what lets you find and map the fields you need.
+**Step 5: Understand JSON.**
+JSON is the common text format APIs use to send data, made of key and value pairs. Being able to read it is what lets you find and map the fields you need.
 
 **Step 6: Map the incoming JSON fields.**
-Map fields from the received JSON into a follow-up action, like creating a record.
-*Why:* Reading incoming data and routing it onward is the heart of connecting custom apps.
+Map fields from the received JSON into a follow-up action, such as creating a record. Reading incoming data and routing it onward is the heart of connecting custom apps.
 
-**Step 7: Learn about an API request action.**
-Learn: an **API request** module lets you call another app's API directly, sending data out, not just receiving it.
-*Why:* Outbound API calls let you push data into tools with no connector, completing two-way custom integration.
+**Step 7: Understand API requests.**
+An API request module lets you call another app's API directly, sending data out, not just receiving it. This lets you push data into tools that have no connector.
 
 **Step 8: Make an outbound API call and test.**
-Add an API request module that posts data to a service's API endpoint, then test the full flow.
-*Why:* A tested, two-way custom connection is the capability that lets you say yes to almost any automation request.
+Add an API request module that posts data to a service's API endpoint, then test the full flow. A tested, two-way custom connection is what lets you take on almost any automation request.
 
 ### Final Project Structure
 ```text
@@ -272,41 +222,29 @@ Custom integration
 
 **Goal:** Combine your skills into one automation that runs a complete, realistic business process.
 
-### Why This Project Matters
-
-Businesses do not want single Zaps; they want processes handled. This project builds the kind of end-to-end automation that companies pay for and that proves your value on a portfolio.
-
 **Step 1: Choose a real process.**
-Pick one: new-lead handling, order fulfilment, content publishing, or onboarding.
-*Why:* A recognisable business process makes your portfolio piece instantly understandable to an employer or client.
+Pick one: new-lead handling, order fulfilment, content publishing, or onboarding. A recognisable business process makes your portfolio piece instantly understandable.
 
 **Step 2: Map the process on paper first.**
-Write each step of the process as trigger, decisions, and actions before building.
-*Why:* Mapping first prevents you from getting lost mid-build. A clear plan is what keeps a complex automation coherent.
+Write each step of the process as a trigger, decisions, and actions before you build. A clear plan keeps a complex automation coherent.
 
 **Step 3: Build the trigger and intake.**
-Build the trigger (a form, an email, a new record) and capture the incoming data cleanly.
-*Why:* A reliable intake is the foundation. If data enters wrong, every later step inherits the problem.
+Build the trigger (a form, an email, a new record) and capture the incoming data cleanly. If data enters wrong, every later step inherits the problem.
 
 **Step 4: Add the decision logic.**
-Add filters and paths that route the item based on its details.
-*Why:* This is where your Project 2 logic skills make the process behave intelligently rather than uniformly.
+Add the filters and paths that route each item based on its details. This is where your Project 2 logic makes the process behave intelligently.
 
 **Step 5: Add the core actions.**
-Create records, send notifications, and update the systems the process touches.
-*Why:* These actions are the actual work being automated, the hours you are giving back to a real team.
+Create records, send notifications, and update the systems the process touches. These actions are the actual work being automated.
 
 **Step 6: Add a human-in-the-loop step.**
-Add a step that pauses for human approval on important actions (for example, a Slack approval).
-*Why:* Not everything should be fully automatic. Knowing when to keep a human in the loop is a mark of a thoughtful automation specialist.
+Add a step that pauses for human approval on important actions, such as a Slack approval. Knowing when to keep a person in the loop is a mark of a thoughtful automation specialist.
 
 **Step 7: Add logging and error handling.**
-Log each run to a sheet and handle failures gracefully.
-*Why:* Logs let you prove the automation ran and diagnose issues. Error handling keeps one failure from breaking the process.
+Log each run to a sheet and handle failures gracefully. Logs let you prove the automation ran and diagnose issues.
 
 **Step 8: Test the whole process with real cases.**
-Run several realistic cases through the full automation, including edge cases.
-*Why:* End-to-end testing with real scenarios is the only way to trust a process automation before it handles live work.
+Run several realistic cases through the full automation, including edge cases. End-to-end testing is the only way to trust a process before it handles live work.
 
 ### Final Project Structure
 ```text
@@ -339,41 +277,29 @@ Business process automation
 
 **Goal:** Make your automations reliable over time and document them so others can trust and maintain them.
 
-### Why This Project Matters
-
-Automations run unattended, so they fail unattended too. The professionals who get hired again are the ones whose automations keep working and who can hand them off cleanly.
-
-**Step 1: Learn about monitoring.**
-Learn: **monitoring** is watching whether your automations run successfully, using the tool's history or task logs.
-*Why:* An automation you never check can fail for weeks unnoticed. Monitoring is what keeps a quiet failure from becoming a big problem.
+**Step 1: Understand monitoring.**
+Monitoring is watching whether your automations run successfully, using the tool's history or task logs. An automation you never check can fail for weeks unnoticed.
 
 **Step 2: Review run history.**
-Open the task or run history in Zapier or Make and read through recent runs.
-*Why:* Run history tells you exactly what happened on each execution, which is your main tool for catching and diagnosing issues.
+Open the task or run history in Zapier or Make and read through recent runs. Run history tells you exactly what happened on each execution, which is your main tool for diagnosing issues.
 
 **Step 3: Add failure alerts.**
-Set up an alert (email or Slack) that fires when an automation errors.
-*Why:* Being told the moment something breaks, instead of discovering it later, is what makes an automation trustworthy in production.
+Set up an alert, by email or Slack, that fires when an automation errors. Being told the moment something breaks is what makes an automation trustworthy in production.
 
-**Step 4: Learn about rate limits and quotas.**
-Learn: a **rate limit** caps how many times you can call an app in a period; a **quota** caps your monthly task usage.
-*Why:* Automations that ignore limits fail at scale. Designing within limits keeps them running when volume grows.
+**Step 4: Understand rate limits and quotas.**
+A rate limit caps how many times you can call an app in a period, and a quota caps your monthly task usage. Designing within these keeps automations running as volume grows.
 
 **Step 5: Optimise for efficiency.**
-Reduce unnecessary steps and combine actions to use fewer tasks per run.
-*Why:* Efficient automations cost less and run faster, which matters when a client pays per task or per month.
+Reduce unnecessary steps and combine actions to use fewer tasks per run. Efficient automations cost less and run faster, which matters when a client pays per task.
 
-**Step 6: Learn about documentation for handoff.**
-Learn: **handoff documentation** explains what an automation does, how it is built, and how to fix common issues.
-*Why:* An undocumented automation is a black box that only you can maintain. Documentation is what lets a client or team own it.
+**Step 6: Understand handoff documentation.**
+Handoff documentation explains what an automation does, how it is built, and how to fix common issues. Without it, an automation is a black box only you can maintain.
 
 **Step 7: Write a handoff document.**
-Create a doc: the process, each Zap or scenario, the triggers, the logic, and a troubleshooting section.
-*Why:* This document is often the actual deliverable a client keeps. It is what turns your work into a lasting asset for them.
+Create a doc covering the process, each Zap or scenario, the triggers, the logic, and a troubleshooting section. This document is often the actual deliverable a client keeps.
 
 **Step 8: Do a walkthrough.**
-Record or write a short walkthrough of the automation for the person who will own it.
-*Why:* A walkthrough transfers understanding, not just files, which is what makes a handoff successful.
+Record or write a short walkthrough of the automation for the person who will own it. A walkthrough transfers understanding, not just files.
 
 ### Final Project Structure
 ```text
@@ -406,37 +332,26 @@ Reliability + handoff
 
 **Goal:** Combine every project into one automation suite that runs a real operation. This is an integration exercise, not new material.
 
-### Why This Project Matters
-
-This is the deliverable that wins automation work. It proves you can take a messy manual operation and turn it into a reliable, documented, self-running system, entirely without code.
-
 **Step 1: Choose a real operation.**
-Pick a real or realistic client operation: a small shop's order flow, a creator's content pipeline, a team's request intake.
-*Why:* A real operation gives your capstone genuine stakes and makes it far more persuasive than a generic demo.
+Pick a real or realistic client operation, such as a small shop's order flow, a creator's content pipeline, or a team's request intake. A real operation gives your capstone genuine stakes.
 
-**Step 2: Map the whole operation (Project 5 skills).**
-Diagram every trigger, decision, and action across the operation before building.
-*Why:* A full map keeps a multi-automation suite coherent and shows a client you understand their process.
+**Step 2: Map the whole operation.**
+Using your Project 5 skills, diagram every trigger, decision, and action across the operation before building.
 
-**Step 3: Build the core automations (Projects 1 to 3 skills).**
-Build the Zaps and scenarios that run each part, using triggers, filters, paths, and multi-step flows.
-*Why:* These are the working engine of the operation, the hours of manual work you are removing.
+**Step 3: Build the core automations.**
+Using your Project 1 to 3 skills, build the Zaps and scenarios that run each part, with triggers, filters, paths, and multi-step flows.
 
-**Step 4: Add custom integrations where needed (Project 4 skills).**
-Use webhooks and API calls to connect any tool without a ready-made connector.
-*Why:* Real operations almost always include one tool that needs a custom connection.
+**Step 4: Add custom integrations where needed.**
+Using your Project 4 skills, use webhooks and API calls to connect any tool without a ready-made connector. Real operations almost always include one.
 
-**Step 5: Add reliability (Project 6 skills).**
-Add monitoring, alerts, logging, and error handling across the suite.
-*Why:* A capstone that runs reliably is what proves you can deliver production automation, not just demos.
+**Step 5: Add reliability.**
+Using your Project 6 skills, add monitoring, alerts, logging, and error handling across the suite.
 
 **Step 6: Document and package the handoff.**
-Write the full handoff document and a walkthrough of the whole suite.
-*Why:* The documentation is what makes the operation ownable by the client and complete as a portfolio piece.
+Write the full handoff document and a walkthrough of the whole suite, so the client can own it.
 
 **Step 7: Write the capstone summary.**
-Summarise the operation, the before-and-after time saved, the automations built, and the results.
-*Why:* A clear before-and-after, with time saved, is the single most convincing thing you can show an employer or client.
+Summarise the operation, the before-and-after time saved, the automations built, and the results. A clear before-and-after is the most convincing thing you can show.
 
 ### Final Project Structure
 ```text

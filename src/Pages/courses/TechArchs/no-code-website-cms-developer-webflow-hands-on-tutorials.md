@@ -1,9 +1,7 @@
 <!-- order: 2 -->
 # No-Code Website and CMS Developer (Webflow): Hands-On Project Tutorials
 
-This document turns every project in the No-Code Website and CMS Developer Foundations Course into a step-by-step, hands-on tutorial. Instead of learning a term and then doing a project, you learn each term at the moment you need it, while building the thing. Every step explains what you are doing, what the term means, how to actually do it, and why it matters.
-
-Follow the projects in order. Each one hands off a skill or artifact to the next, ending in the Final Capstone: a live, content-managed website.
+This course turns each project into a step-by-step, hands-on build. You learn each idea at the moment you need it, while building the thing, and every project hands its result to the next one, ending in a live, content-managed website. Follow the projects in order.
 
 ---
 
@@ -11,41 +9,29 @@ Follow the projects in order. Each one hands off a skill or artifact to the next
 
 **Goal:** Build one clean, responsive page and understand the box model that all web layout relies on.
 
-### Why This Project Matters
+**Step 1: Create your Webflow account and a blank site.**
+Go to webflow.com, sign up, and create a new blank site named `portfolio-site`. Starting blank rather than from a template forces you to learn how layout actually works.
 
-Webflow gives you real web layout power without writing code, but only if you understand how web pages are structured. Learning the box model now means every layout you build later is deliberate, not trial and error.
+**Step 2: Understand the box model.**
+Every element on a page is a box with four layers: content, padding (space inside), a border, and margin (space outside). Almost every spacing problem in web design comes down to padding or margin.
 
-**Step 1: Create a free Webflow account and a blank site.**
-Go to webflow.com, sign up, and create a new blank site named `portfolio-site`.
-*Why:* Starting blank rather than from a template forces you to learn how layout actually works, which pays off on every future project.
-
-**Step 2: Learn what the box model is.**
-Learn: the **box model** means every element on a page is a box with content, padding (space inside), a border, and margin (space outside).
-*Why:* Almost every spacing problem in web design is really a padding or margin question. Understanding boxes is understanding layout.
-
-**Step 3: Learn what a div block is.**
-Learn: a **div block** is an empty container box you use to group and arrange other elements.
-*Why:* Structured pages are built from nested containers. Divs are the skeleton everything else hangs on.
+**Step 3: Understand div blocks.**
+A div block is an empty container box you use to group and arrange other elements. Structured pages are built from nested containers, and divs are the skeleton everything else hangs on.
 
 **Step 4: Add a section and a container.**
-Drag in a Section, then a Container inside it. Add a heading and a paragraph inside the container.
-*Why:* Section then container is the standard pattern for full-width backgrounds with centred, readable content. Reusing it keeps sites consistent.
+Drag in a Section, then a Container inside it, and add a heading and a paragraph inside the container. Section then container is the standard pattern for full-width backgrounds with centred, readable content.
 
-**Step 5: Learn what flexbox is.**
-Learn: **flexbox** is a layout mode that arranges child elements in a row or column and controls their spacing and alignment.
-*Why:* Flexbox is how modern layouts are built. Learning it once unlocks navbars, card rows, and centred content everywhere.
+**Step 5: Understand flexbox.**
+Flexbox is a layout mode that arranges child elements in a row or column and controls their spacing and alignment. Learning it once unlocks navbars, card rows, and centred content everywhere.
 
 **Step 6: Build a two-column layout with flexbox.**
-Set a div to Display: Flex, add two child divs, and use gap and alignment to space them evenly.
-*Why:* Two-column layouts are everywhere (text beside an image, feature grids). Doing it with flexbox makes it responsive by default.
+Set a div to Display: Flex, add two child divs, and use gap and alignment to space them evenly. Two-column layouts, like text beside an image, are everywhere, and flexbox makes them responsive by default.
 
-**Step 7: Learn about breakpoints.**
-Learn: a **breakpoint** is a screen width at which your design changes. Webflow has desktop, tablet, and mobile views you edit separately.
-*Why:* Editing per breakpoint is how you make one page look right on every device instead of only your monitor.
+**Step 7: Understand breakpoints.**
+A breakpoint is a screen width at which your design changes. Webflow has desktop, tablet, and mobile views that you edit separately, which is how you make one page look right on every device.
 
 **Step 8: Preview and check responsiveness.**
-Use the responsive preview to check tablet and mobile. Adjust the flex layout to stack columns on mobile.
-*Why:* Stacking columns on small screens is the single most common responsive fix. Practising it now makes every future page mobile-ready.
+Use the responsive preview to check tablet and mobile, then adjust the flex layout so the columns stack on mobile. Stacking columns on small screens is the single most common responsive fix.
 
 ### Final Project Structure
 ```text
@@ -77,41 +63,29 @@ portfolio-site (Webflow)
 
 **Goal:** Build a consistent visual system with reusable classes, so your whole site stays coherent.
 
-### Why This Project Matters
-
-Sites that restyle every element by hand become impossible to update. A reusable class system means you change a colour once and it updates everywhere, which is how professionals work.
-
-**Step 1: Learn what a class is.**
-Learn: a **class** is a named bundle of styles you apply to elements. Every element with that class shares those styles.
-*Why:* Classes are the difference between a site you can maintain and one you cannot. This is the core Webflow skill.
+**Step 1: Understand classes.**
+A class is a named bundle of styles you apply to elements, and every element with that class shares those styles. Classes are the difference between a site you can maintain and one you cannot.
 
 **Step 2: Create a base text style.**
-Style a paragraph (font, size, colour, line height) and give it the class `body-text`.
-*Why:* Defining text once and reusing it keeps typography consistent, which is most of what makes a site look designed.
+Style a paragraph (font, size, colour, line height) and give it the class `body-text`. Defining text once and reusing it keeps your typography consistent across the site.
 
-**Step 3: Learn about combo classes.**
-Learn: a **combo class** adds a variation on top of a base class, like `button` plus `button-large`.
-*Why:* Combo classes let you build variations without duplicating styles, keeping your system small and predictable.
+**Step 3: Understand combo classes.**
+A combo class adds a variation on top of a base class, like `button` plus `button-large`. It lets you build variations without duplicating styles.
 
 **Step 4: Build a button system.**
-Create a `button` class, then combo classes `button-primary` and `button-secondary` for colour variants.
-*Why:* Buttons appear all over a site. A button system means every button matches and updates together.
+Create a `button` class, then combo classes `button-primary` and `button-secondary` for colour variants. Now every button matches and updates together.
 
-**Step 5: Learn about global styles and color swatches.**
-Learn: a **color swatch** is a saved, named colour you reuse. Change the swatch and every element using it updates.
-*Why:* Named colours are how you rebrand a whole site in minutes instead of hunting down every element.
+**Step 5: Understand color swatches.**
+A color swatch is a saved, named colour you reuse, and changing the swatch updates every element that uses it. This is how you rebrand a whole site in minutes.
 
 **Step 6: Define your palette as swatches.**
-Save your brand colours as swatches (primary, secondary, text, background) and apply them via classes.
-*Why:* A defined palette applied through swatches is what keeps a site from looking like a patchwork of slightly different colours.
+Save your brand colours as swatches (primary, secondary, text, background) and apply them through your classes. A defined palette keeps a site from looking like a patchwork of slightly different colours.
 
 **Step 7: Build a reusable card component.**
-Create a card (image, heading, text, button) styled with your classes, and save it as a Component.
-*Why:* Components let you reuse a whole block and edit every copy at once, the same efficiency classes give to styles.
+Create a card (image, heading, text, button) styled with your classes, and save it as a Component. Components let you reuse a whole block and edit every copy at once.
 
 **Step 8: Document your style system.**
-List your classes, swatches, and components in a notes doc.
-*Why:* A written style system is what lets you (or a teammate) extend the site later without breaking its consistency.
+List your classes, swatches, and components in a notes doc. This is what lets you or a teammate extend the site later without breaking its consistency.
 
 ### Final Project Structure
 ```text
@@ -142,41 +116,29 @@ Style system
 
 **Goal:** Turn a single page into a real, navigable multi-page website.
 
-### Why This Project Matters
-
-Real websites are several linked pages sharing a consistent frame. This project builds the navigation and shared structure that makes a collection of pages feel like one site.
-
 **Step 1: Create additional pages.**
-Add pages: `About`, `Work`, and `Contact`.
-*Why:* Most sites are a small set of focused pages. Planning them up front keeps navigation simple and clear.
+Add pages for `About`, `Work`, and `Contact`. Most sites are a small set of focused pages, so planning them up front keeps navigation simple.
 
-**Step 2: Learn what a navbar is.**
-Learn: a **navbar** is the navigation bar, usually at the top, that links to your main pages.
-*Why:* The navbar is how users move around your site. A clear navbar is one of the strongest signals of a well-built site.
+**Step 2: Understand the navbar.**
+A navbar is the navigation bar, usually at the top, that links to your main pages. It is how users move around your site and one of the strongest signals of a well-built site.
 
 **Step 3: Build and style the navbar.**
-Add the Navbar element, set its links to your pages, and style it with your Project 2 classes.
-*Why:* Styling the navbar with your existing system keeps it consistent with the rest of the site automatically.
+Add the Navbar element, set its links to your pages, and style it with your Project 2 classes so it stays consistent with the rest of the site.
 
-**Step 4: Learn about the symbol or component for shared elements.**
-Learn: a shared **component** (formerly Symbol) appears on every page but is edited in one place.
-*Why:* A navbar and footer should be identical everywhere. Making them components means one edit updates every page.
+**Step 4: Understand shared components.**
+A shared component appears on every page but is edited in one place. A navbar and footer should be identical everywhere, so making them components means one edit updates every page.
 
 **Step 5: Make the navbar and footer components.**
-Convert your navbar and a footer into components and place them on every page.
-*Why:* This guarantees consistency and saves you from updating the same navbar four times.
+Convert your navbar and a footer into components and place them on every page. This guarantees consistency and saves you from updating the same navbar four times.
 
-**Step 6: Learn about the current-page state.**
-Learn: the **current** state styles the nav link for the page you are on, so users know where they are.
-*Why:* Showing the active page is a small touch that makes navigation feel intentional and professional.
+**Step 6: Show the current page.**
+The current state styles the nav link for the page you are on, so users always know where they are. It is a small touch that makes navigation feel intentional.
 
 **Step 7: Add responsive mobile navigation.**
-Configure the navbar's mobile menu (hamburger) and test it on mobile width.
-*Why:* Desktop navbars do not fit phones. A working mobile menu is essential, since most visits are on phones.
+Configure the navbar's mobile menu (the hamburger) and test it at mobile width. Desktop navbars do not fit phones, and most visits are on phones.
 
 **Step 8: Test all navigation.**
-Click through every link on every page, on desktop and mobile.
-*Why:* Broken links are the most noticeable flaw a visitor can hit. A quick full click-through catches them before users do.
+Click through every link on every page, on desktop and mobile. Broken links are the most noticeable flaw a visitor can hit, and a quick full click-through catches them.
 
 ### Final Project Structure
 ```text
@@ -207,41 +169,29 @@ Multi-page site
 
 **Goal:** Replace hand-built pages with a content management system that generates pages from data.
 
-### Why This Project Matters
+**Step 1: Understand what a CMS is.**
+A CMS (content management system) stores content as structured records and generates pages from a template. It separates content from design, so you design once and then add unlimited content without touching the layout.
 
-Hardcoding a blog post or project by hand does not scale. A CMS lets you (or a client) add content through a simple form, and the site builds the pages automatically. This is the skill that turns a website builder into a web developer.
+**Step 2: Understand collections.**
+A collection is a set of similar content items, like Blog Posts or Projects, each with defined fields. Choosing your collections is like choosing your data types: it defines the content your site can hold.
 
-**Step 1: Learn what a CMS is.**
-Learn: a **CMS** (content management system) stores content as structured records and generates pages from a template.
-*Why:* A CMS separates content from design. You design once, then add unlimited content without touching the layout.
-
-**Step 2: Learn what a CMS collection is.**
-Learn: a **collection** is a set of similar content items, like Blog Posts or Projects, each with defined fields.
-*Why:* Choosing your collections is like choosing your data types: it defines the content your site can hold.
-
-**Step 3: Create a `Projects` collection.**
-In the CMS, create a collection `Projects` with fields: name (text), summary (text), image, and slug.
-*Why:* These fields will feed both the list of projects and each project's own page, from one place.
+**Step 3: Create a Projects collection.**
+In the CMS, create a collection `Projects` with fields for name (text), summary (text), image, and slug. These fields will feed both the list of projects and each project's own page.
 
 **Step 4: Add a few collection items.**
-Add 3 sample projects with real content.
-*Why:* Sample content lets you build and test the templates, the same way sample records did in app building.
+Add three sample projects with real content, so you have something to build and test the templates against.
 
-**Step 5: Learn what a collection list is.**
-Learn: a **collection list** displays items from a collection, one block per item, like a repeating group for content.
-*Why:* This is how you build a blog index or portfolio grid that grows automatically as you add items.
+**Step 5: Understand collection lists.**
+A collection list displays items from a collection, one block per item, like a repeating group for content. This is how you build a blog index or portfolio grid that grows automatically.
 
 **Step 6: Build a project grid with a collection list.**
-On the Work page, add a Collection List bound to Projects, and design one card using the collection fields.
-*Why:* You design one card and every project appears in that style, no matter how many you add later.
+On the Work page, add a Collection List bound to Projects and design one card using the collection fields. You design one card and every project appears in that style.
 
-**Step 7: Learn what a collection page template is.**
-Learn: a **collection page** is a single template that generates one live page per item, using that item's fields.
-*Why:* This is the magic of a CMS: one template becomes hundreds of pages, each with its own content and URL.
+**Step 7: Understand collection page templates.**
+A collection page is a single template that generates one live page per item, using that item's fields. One template becomes as many pages as you have items, each with its own content and URL.
 
-**Step 8: Design the project detail template and link cards.**
-Design the Projects template page (name, image, summary), then link each card to its collection page.
-*Why:* Now every project has its own real page and URL, all from one template and the content you entered.
+**Step 8: Design the detail template and link the cards.**
+Design the Projects template page (name, image, summary), then link each card to its collection page. Now every project has its own real page and URL, all from one template.
 
 ### Final Project Structure
 ```text
@@ -272,41 +222,29 @@ CMS
 
 **Goal:** Bring the site to life with subtle motion and a contact form that actually delivers messages.
 
-### Why This Project Matters
-
-Interactions make a site feel modern, and a working form is often the whole point of a business site. Both are expected on professional sites and both are fully no-code in Webflow.
-
-**Step 1: Learn what an interaction is.**
-Learn: an **interaction** is an animation triggered by an event, like an element fading in when it scrolls into view.
-*Why:* Well-judged motion guides attention and signals quality. Overused, it distracts, so learning restraint is part of the skill.
+**Step 1: Understand interactions.**
+An interaction is an animation triggered by an event, like an element fading in as it scrolls into view. Well-judged motion guides attention and signals quality, while too much of it distracts, so restraint is part of the skill.
 
 **Step 2: Add a scroll-into-view animation.**
-Select your cards and add a "while scrolling into view" interaction that fades and moves them up slightly.
-*Why:* This is the most common, tasteful interaction on modern sites. It adds polish without hurting usability.
+Select your cards and add a "while scrolling into view" interaction that fades them in and moves them up slightly. This is the most common, tasteful interaction on modern sites.
 
 **Step 3: Add a hover interaction.**
-Add a hover state to buttons and cards (a slight lift or colour change).
-*Why:* Hover feedback tells users what is clickable, improving usability while adding a professional feel.
+Add a hover state to buttons and cards, such as a slight lift or colour change. Hover feedback tells users what is clickable.
 
-**Step 4: Learn what a form is on the web.**
-Learn: a **form** collects user input (name, email, message) and submits it somewhere, such as your email.
-*Why:* Forms are how visitors become leads or contacts. A site without a working form often fails at its main job.
+**Step 4: Understand web forms.**
+A form collects user input (name, email, message) and submits it somewhere, such as your email. On many business sites, the form is the whole point.
 
 **Step 5: Build the contact form.**
-On the Contact page, add a Form with name, email, and message fields and a submit button.
-*Why:* Matching fields to what you actually need keeps forms short, and short forms get completed far more often.
+On the Contact page, add a Form with name, email, and message fields and a submit button. Match the fields to what you actually need, since short forms get completed far more often.
 
 **Step 6: Add form validation.**
-Mark email and message as required and set the email field type so invalid emails are rejected.
-*Why:* Validation stops junk and incomplete submissions, saving you from chasing contacts you can never reach.
+Mark email and message as required and set the email field type so invalid emails are rejected. Validation stops junk and incomplete submissions.
 
-**Step 7: Learn about success and error states.**
-Learn: a **success state** confirms a submission worked; an **error state** tells the user something went wrong.
-*Why:* Without feedback, users resubmit or assume the form is broken. Clear states prevent both.
+**Step 7: Add success and error states.**
+A success state confirms a submission worked, and an error state tells the user something went wrong. Without feedback, users resubmit or assume the form is broken.
 
 **Step 8: Test the form end to end.**
-Publish, submit the form yourself, and confirm the message arrives and the success state shows.
-*Why:* A form that looks fine but never delivers is worse than none. Testing the full path is the only way to trust it.
+Publish, submit the form yourself, and confirm the message arrives and the success state shows. A form that looks fine but never delivers is worse than none.
 
 ### Final Project Structure
 ```text
@@ -338,41 +276,29 @@ Interactions + form
 
 **Goal:** Make the site fast, findable, and live on a real domain.
 
-### Why This Project Matters
-
-A beautiful site that is slow, invisible to search engines, or stuck on a builder subdomain is not finished. This project handles the production concerns that make a site truly professional.
-
-**Step 1: Learn what SEO settings are.**
-Learn: **SEO** (search engine optimization) settings, like page titles and meta descriptions, tell search engines what each page is about.
-*Why:* If people cannot find a site, its design does not matter. Basic SEO is the difference between a site that gets visited and one that does not.
+**Step 1: Understand SEO settings.**
+SEO (search engine optimization) settings, like page titles and meta descriptions, tell search engines what each page is about. If people cannot find a site, its design does not matter.
 
 **Step 2: Set titles and meta descriptions.**
-For each page and CMS template, write a clear title and description.
-*Why:* These are what show up in search results and link previews, so they directly affect whether people click.
+For each page and CMS template, write a clear title and description. These are what show up in search results and link previews, so they directly affect whether people click.
 
-**Step 3: Learn about alt text and accessibility.**
-Learn: **alt text** describes an image for screen readers and search engines. Accessibility means the site works for everyone.
-*Why:* Accessible sites reach more people and rank better. It is both the right thing to do and a professional standard.
+**Step 3: Understand accessibility and alt text.**
+Alt text describes an image for screen readers and search engines, and accessibility means the site works for everyone. Accessible sites reach more people and rank better.
 
 **Step 4: Add alt text and check contrast.**
-Add alt text to every meaningful image and confirm text has enough contrast against its background.
-*Why:* These two fixes cover the most common accessibility gaps and are quick to do once you know to look.
+Add alt text to every meaningful image and confirm text has enough contrast against its background. These two fixes cover the most common accessibility gaps.
 
 **Step 5: Optimize images and performance.**
-Compress large images and confirm the site loads quickly on the responsive preview.
-*Why:* Large images are the top cause of slow sites, and slow sites lose visitors within seconds.
+Compress large images and confirm the site loads quickly in the responsive preview. Large images are the top cause of slow sites, and slow sites lose visitors within seconds.
 
-**Step 6: Learn about publishing and staging.**
-Learn: **publishing** pushes your work to the live web. Webflow publishes to a staging subdomain and, once connected, to your custom domain.
-*Why:* Understanding staging versus custom domain lets you review the live build before pointing your real domain at it.
+**Step 6: Understand publishing and staging.**
+Publishing pushes your work to the live web. Webflow publishes to a staging subdomain and, once connected, to your custom domain, which lets you review the live build before pointing your real domain at it.
 
 **Step 7: Publish and connect a domain.**
-Publish to the staging URL, then connect a custom domain (or note the steps if you do not own one yet).
-*Why:* A custom domain is what makes a site look like a real business rather than a demo.
+Publish to the staging URL, then connect a custom domain, or note the steps if you do not own one yet. A custom domain is what makes a site look like a real business rather than a demo.
 
 **Step 8: Write a launch checklist and README.**
-Document the pages, CMS collections, SEO settings, and the live URL.
-*Why:* A launch record is what you hand a client or reviewer, and it is what you check the next time you update the site.
+Document the pages, CMS collections, SEO settings, and the live URL. This is what you hand a client, and what you check the next time you update the site.
 
 ### Final Project Structure
 ```text
@@ -404,37 +330,26 @@ Production
 
 **Goal:** Combine every project into one original, content-managed, published website. This is an integration exercise, not new material.
 
-### Why This Project Matters
-
-This is the site you show clients and employers. It proves you can take a website from a blank canvas to a styled, content-managed, optimized, live product, entirely without code.
-
 **Step 1: Choose a real subject.**
-Build for a real or realistic client: a local business, a portfolio, a small nonprofit, an event.
-*Why:* A site with a real purpose is far more convincing than a generic template, and it gives every design choice a reason.
+Build for a real or realistic client, such as a local business, a portfolio, a small nonprofit, or an event. A site with a real purpose is far more convincing than a generic template.
 
-**Step 2: Build the structure and style system (Projects 1 and 2).**
-Lay out the pages and define your classes, swatches, and components first.
-*Why:* A defined system up front keeps the whole build consistent and fast.
+**Step 2: Build the structure and style system.**
+Using your Project 1 and 2 skills, lay out the pages and define your classes, swatches, and components first. A defined system up front keeps the whole build consistent and fast.
 
-**Step 3: Build multi-page navigation (Project 3).**
-Create the pages and shared navbar and footer components.
-*Why:* A consistent frame is what makes the pages feel like one coherent site.
+**Step 3: Build multi-page navigation.**
+Using your Project 3 skills, create the pages and shared navbar and footer components so the pages feel like one coherent site.
 
-**Step 4: Add a CMS (Project 4).**
-Model at least one collection and generate its pages from a template.
-*Why:* A CMS is the skill that separates a page builder from a web developer, and it makes the site maintainable.
+**Step 4: Add a CMS.**
+Using your Project 4 skills, model at least one collection and generate its pages from a template. This is the skill that separates a page builder from a web developer.
 
-**Step 5: Add interactions and a form (Project 5).**
-Add tasteful motion and a working, validated contact form.
-*Why:* These are expected on professional sites and often the site's main goal.
+**Step 5: Add interactions and a form.**
+Using your Project 5 skills, add tasteful motion and a working, validated contact form.
 
-**Step 6: Optimize and publish (Project 6).**
-Handle SEO, accessibility, performance, and publish to a domain.
-*Why:* Production polish is what makes the site genuinely usable and findable.
+**Step 6: Optimize and publish.**
+Using your Project 6 skills, handle SEO, accessibility, and performance, then publish to a domain.
 
 **Step 7: Write the capstone document.**
-Combine the subject, sitemap, CMS model, interactions, and live URL with screenshots.
-*Why:* This is what you hand a client or employer to prove the site is real, complete, and yours.
+Combine the subject, sitemap, CMS model, interactions, and live URL with screenshots. This is what you hand a client or employer to prove the site is real and yours.
 
 ### Final Project Structure
 ```text

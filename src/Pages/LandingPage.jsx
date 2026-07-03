@@ -47,7 +47,7 @@ const LandingPage = () => {
   const features = [
     {
       title: 'Real-World Projects',
-      desc: 'Join or post collaborative tech projects and build real products with real teams, from start to finish - the kind of hands-on experience employers actually look for.',
+      desc: 'Join or post collaborative tech projects and build real products with real teams, from start to finish, the kind of hands-on experience that builds real skill.',
     },
     {
       title: 'TechTalent Badges',
@@ -55,7 +55,7 @@ const LandingPage = () => {
     },
     {
       title: 'Talent Board',
-      desc: 'Members with verified work are listed for recruiters and companies looking for proven talent. Your badges and project history speak for themselves.',
+      desc: 'Your verified work builds a portfolio that speaks for itself, badges, project history, and clear proof of what you can actually build.',
     },
     {
       title: 'Community & Workspace',
@@ -82,7 +82,7 @@ const LandingPage = () => {
   const steps = [
     { num: '01', title: 'Create Your Profile', desc: 'Sign in with Google or email, choose your skill track, and set your experience level. Ready in under a minute.' },
     { num: '02', title: 'Build Real Products', desc: 'Join or post collaborative projects and ship real products with a team, start to finish - gaining experience that counts.' },
-    { num: '03', title: 'Earn Badges & Get Discovered', desc: 'Complete projects to earn TechTalent Badges and a verified portfolio - then get found by recruiters hiring for remote and onsite roles.' },
+    { num: '03', title: 'Earn Badges & Build Your Portfolio', desc: 'Complete projects to earn TechTalent Badges and a verified portfolio, clear proof of the skills you build through real work.' },
   ];
 
   return (
@@ -166,7 +166,7 @@ const LandingPage = () => {
           </h1>
 
           <p id="hero-desc" data-animate className={`fade-up delay-2 text-gray-600 text-lg sm:text-xl max-w-2xl mx-auto mb-10 font-normal leading-relaxed ${isVisible('hero-desc') ? 'visible' : ''}`}>
-            Build real products with real teams. Earn verified proof of your skills and a network of builders you've actually shipped with, and open doors wherever you want to go: a new job, your own venture, and beyond.
+            Build real products with real teams. Gain applied skills and verified proof of what you can do, plus a network of builders you've actually shipped with. Your work speaks for itself.
           </p>
 
           <div id="hero-cta" data-animate className={`fade-up delay-3 flex flex-col sm:flex-row items-center justify-center gap-4 ${isVisible('hero-cta') ? 'visible' : ''}`}>
@@ -211,7 +211,7 @@ const LandingPage = () => {
           <p className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-3">Everything You Need</p>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-800 text-gray-900 mb-4">Accelerate Your Tech Career</h2>
           <p className="text-gray-500 max-w-xl mx-auto text-base">
-            From real collaborative projects to verified credentials and recruiter visibility, Ascivan gives you everything you need to prove your skills and get hired.
+            From real collaborative projects to verified credentials, Ascivan gives you everything you need to build and prove your skills.
           </p>
         </div>
 
@@ -292,7 +292,7 @@ const LandingPage = () => {
         <div id="cta" data-animate className={`fade-up max-w-2xl mx-auto px-4 sm:px-6 text-center ${isVisible('cta') ? 'visible' : ''}`}>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-800 text-gray-900 leading-tight mb-6">Your career starts here.</h2>
           <p className="text-gray-500 text-lg mb-10 leading-relaxed">
-            Build real experience, earn verified badges, and get discovered by recruiters - through real product work, wherever you are in the world.
+            Build real experience and earn verified badges through real product work, wherever you are in the world.
           </p>
           <button
             onClick={handleSignIn}

@@ -59,6 +59,7 @@ const AdminPanel = () => {
 
   // --- Reviews tab ---
   const [reviewProjects, setReviewProjects] = useState([]);
+  const [deletionReqs, setDeletionReqs] = useState([]);
   const [loadingReviews, setLoadingReviews] = useState(false);
   const [feedbackById, setFeedbackById] = useState({});
   const [actingId, setActingId] = useState(null);
@@ -187,6 +188,31 @@ const AdminPanel = () => {
   }, []);
 
   useEffect(() => { if (tab === 'reviews' && isAdmin) loadReviews(); }, [tab, isAdmin, loadReviews]);
+
+  useEffect(() => {
+    if (tab === 'deletions' && isAdmin) {
+      getDocs(collection(db, 'deletionRequests'))
+        .then(snap => setDeletionReqs(snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.status === 'pending')))
+        .catch(() => setDeletionReqs([]));
+    }
+  }, [tab, isAdmin]);
+
+  const approveDeletion = async (req) => {
+    if (!window.confirm(`Delete "${req.projectTitle}"? This permanently removes the project.`)) return;
+    try {
+      await deleteDoc(doc(db, 'projects', req.projectId));
+      await updateDoc(doc(db, 'deletionRequests', req.id), { status: 'approved', resolvedAt: new Date() });
+      setDeletionReqs(prev => prev.filter(r => r.id !== req.id));
+    } catch (e) { console.error('approveDeletion', e); alert('Could not delete the project.'); }
+  };
+
+  const declineDeletion = async (req) => {
+    try {
+      await updateDoc(doc(db, 'deletionRequests', req.id), { status: 'declined', resolvedAt: new Date() });
+      await updateDoc(doc(db, 'projects', req.projectId), { deletionRequested: false }).catch(() => {});
+      setDeletionReqs(prev => prev.filter(r => r.id !== req.id));
+    } catch (e) { console.error('declineDeletion', e); alert('Could not update the request.'); }
+  };
   useEffect(() => { if (tab === 'foundations' && isAdmin) loadFQueue(); }, [tab, isAdmin, loadFQueue]);
 
   // Collect owner + approved member uids for a project (for push notifications).
@@ -452,9 +478,10 @@ const AdminPanel = () => {
     ['projects', 'Projects'],
     ['users', 'Users'],
     ['generate', 'Generate'],
-    // ['foundations', 'Foundations'], // hidden from UI; panel/logic below is untouched
+    ['foundations', 'Foundations'],
     ['seed', 'Seed'],
     ['moderation', 'Moderation'],
+    ['deletions', 'Deletion Requests'],
     ['danger', 'Danger Zone'],
   ];
 
@@ -624,6 +651,27 @@ const AdminPanel = () => {
                 </span>
                 <button onClick={() => navigate(`/projects/${p.id}`)} className="text-blue-600 text-xs font-semibold">View</button>
                 <button onClick={() => deleteProject(p)} className="text-red-500 text-xs font-semibold">Delete</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {!loadingData && tab === 'deletions' && (
+        <div className="space-y-2">
+          {deletionReqs.length === 0 ? <p className="text-gray-400 text-sm">No pending deletion requests.</p> : deletionReqs.map(r => (
+            <div key={r.id} className="bg-white border border-gray-200 rounded-lg p-3">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-gray-900 text-sm font-medium truncate">{r.projectTitle || 'Untitled project'}</p>
+                  <p className="text-gray-400 text-xs">Requested by {r.ownerEmail || 'owner'}</p>
+                  <p className="text-gray-600 text-xs mt-1"><span className="font-semibold">Reason:</span> {r.reason || '(none)'}</p>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <button onClick={() => navigate(`/projects/${r.projectId}`)} className="text-blue-600 text-xs font-semibold">View</button>
+                  <button onClick={() => declineDeletion(r)} className="text-gray-500 text-xs font-semibold">Decline</button>
+                  <button onClick={() => approveDeletion(r)} className="text-red-500 text-xs font-semibold">Approve &amp; Delete</button>
+                </div>
               </div>
             </div>
           ))}

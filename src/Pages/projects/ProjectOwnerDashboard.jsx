@@ -195,6 +195,32 @@ const ProjectOwnerDashboard = () => {
     } catch (e) { toast.error('Error updating applications status'); }
   };
 
+  // Owners can't delete directly - they request deletion (admin approves).
+  // Only allowed while no members have joined; otherwise they must close/dispute.
+  const requestDeletion = async (project) => {
+    if ((project.approvedMembers?.length || 0) > 0) {
+      toast.error('This project has members. Close or dispute it instead of deleting.');
+      return;
+    }
+    const reason = window.prompt('Why do you want to delete this project? An admin will review your request.');
+    if (reason === null) return;
+    if (!reason.trim()) { toast.error('Please add a reason for the request.'); return; }
+    try {
+      await addDoc(collection(db, 'deletionRequests'), {
+        projectId: project.id,
+        projectTitle: project.projectTitle || project.title || '',
+        ownerId: currentUser.uid,
+        ownerEmail: currentUser.email,
+        reason: reason.trim(),
+        status: 'pending',
+        createdAt: serverTimestamp(),
+      });
+      await updateDoc(doc(db, 'projects', project.id), { deletionRequested: true });
+      setMyProjects(prev => prev.map(p => p.id === project.id ? { ...p, deletionRequested: true } : p));
+      toast.success('Deletion request sent. An admin will review it.');
+    } catch (e) { console.error('deletion request failed', e); toast.error('Could not send the request.'); }
+  };
+
   if (loading) {
     return (
       <>
@@ -252,6 +278,7 @@ const ProjectOwnerDashboard = () => {
                     onReject={rejectApplication}
                     onRemove={(app) => removeMember(project, app)}
                     onToggleApplications={toggleApplications}
+                    onRequestDeletion={() => requestDeletion(project)}
                   />
                 ))}
               </div>
@@ -263,7 +290,7 @@ const ProjectOwnerDashboard = () => {
   );
 };
 
-const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove, onToggleApplications }) => {
+const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove, onToggleApplications, onRequestDeletion }) => {
   const [showApps, setShowApps] = useState(false);
   const isRejected = project.reviewStatus === 'rejected';
   const isCompleted = project.status === 'completed' || isRejected;
@@ -343,6 +370,15 @@ const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove, onTo
           <button onClick={() => onToggleApplications(project)} className={`px-4 py-2 min-h-[40px] font-semibold rounded-lg text-xs transition-all ${project.applicationsOpen === false ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-orange-50 border border-orange-200 text-orange-700 hover:bg-orange-100'}`}>
             {project.applicationsOpen === false ? 'Open Applications' : 'Close Applications'}
           </button>
+        )}
+        {!isCompleted && (project.approvedMembers?.length || 0) === 0 && (
+          project.deletionRequested ? (
+            <span className="px-4 py-2 min-h-[40px] text-amber-600 text-xs font-semibold flex items-center">Deletion requested</span>
+          ) : (
+            <button onClick={onRequestDeletion} className="px-4 py-2 min-h-[40px] bg-white border border-red-200 text-red-600 hover:bg-red-50 font-semibold rounded-lg text-xs transition-all flex items-center">
+              Request deletion
+            </button>
+          )
         )}
         {!isCompleted && pendingApps.length > 0 && (
           <button onClick={() => setShowApps(!showApps)} className="px-4 py-2 min-h-[40px] bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-xs transition-all">

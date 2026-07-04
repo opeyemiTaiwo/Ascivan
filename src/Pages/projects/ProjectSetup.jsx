@@ -1,8 +1,15 @@
 // src/Pages/projects/ProjectSetup.jsx
-// The confirmed lead refines the auto-generated project (title, description, goals,
-// industry, and team roles) and then opens it for applications. Only the project's
-// confirmed lead (owner) can access this. The lead's role is Project Lead only -
-// they manage; others build. Opening flips status from 'setup' to 'active'.
+// The project owner (confirmed lead) refines a project (title, description, goals,
+// industry, dates, links, and team roles) and opens it for applications. Only the
+// owner can access this. Opening flips status from 'setup' to 'active'.
+//
+// This is the single EDIT page for BOTH free and paid projects (the owner
+// dashboard's "Edit Project" links here). It mirrors the creation form so nothing
+// is lost when editing, with two money-driven rules for PAID projects:
+//   - Existing (already-posted) roles and their amounts are LOCKED - they can't be
+//     edited, because talent may have applied under those exact terms.
+//   - The owner can still ADD new roles (each with its own pay-per-person amount).
+// FREE projects have no money attached, so every role stays fully editable.
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -10,6 +17,8 @@ import { useAuth } from '../../context/AuthContext';
 import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
+import { ROLE_TEMPLATES, EXPERIENCE_LEVELS } from '../../utils/projectRoles';
+import { formatMoney, computeTotalBudget } from '../../utils/paidProjects';
 
 const industryTracks = [
   'healthcare', 'finance', 'education', 'ecommerce', 'entertainment', 'government',
@@ -17,12 +26,33 @@ const industryTracks = [
   'agriculture', 'manufacturing', 'legal', 'nonprofit', 'travel', 'sports',
   'food', 'fashion', 'construction', 'marketing',
 ];
-// Contributor roles only - the lead is the lead; they don't take a building role.
-const roleOptions = ['Developer', 'Designer', 'QA Tester', 'Mentor', 'Security Specialist', 'Data Analyst', 'Content Writer'];
-const experienceLevels = ['any-level', 'beginner', 'intermediate', 'advanced'];
+const roleTemplates = ROLE_TEMPLATES;
+const experienceLevels = EXPERIENCE_LEVELS;
 
 const inputClass = "w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-900 text-sm focus:border-blue-500 focus:outline-none transition-all";
 const labelClass = "block text-gray-700 font-semibold mb-2 text-sm";
+
+// Turn a stored role into the editable shape the dropdown understands: known
+// templates keep their value; anything else becomes a custom "Other" entry.
+const toEditableRole = (r = {}, existing = false) => {
+  const known = roleTemplates.includes(r.role);
+  return {
+    role: known ? r.role : '__other__',
+    customRole: known ? '' : (r.role || ''),
+    skills: r.skills || '',
+    count: r.count || 1,
+    experienceLevel: experienceLevels.includes(r.experienceLevel) ? r.experienceLevel : 'any-level',
+    description: r.description || '',
+    detailsLink: r.detailsLink || '',
+    payAmount: r.payAmount != null && r.payAmount !== 0 ? String(r.payAmount) : '',
+    existing,
+  };
+};
+
+const emptyRole = () => ({
+  role: '', customRole: '', skills: '', count: 1, experienceLevel: 'any-level',
+  description: '', detailsLink: '', payAmount: '', existing: false,
+});
 
 const ProjectSetup = () => {
   const { projectId } = useParams();
@@ -32,6 +62,7 @@ const ProjectSetup = () => {
   const [saving, setSaving] = useState(false);
   const [authorized, setAuthorized] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isPaid, setIsPaid] = useState(false);
   const [form, setForm] = useState({ projectTitle: '', projectDescription: '', projectGoals: '', industryTrack: 'technology', startDate: '', endDate: '', submissionUrl: '', projectLink: '' });
   const [roles, setRoles] = useState([]);
 
@@ -43,7 +74,7 @@ const ProjectSetup = () => {
         if (!snap.exists()) { toast.error('Project not found'); navigate('/projects', { replace: true }); return; }
         const data = snap.data();
 
-        // Only the confirmed lead can set up / edit the project
+        // Only the confirmed lead / owner can set up / edit the project
         if (data.submitterId !== currentUser.uid) {
           toast.error('Only the project lead can edit this.');
           navigate(`/projects/${projectId}`, { replace: true });
@@ -58,6 +89,7 @@ const ProjectSetup = () => {
         // Whether this project is already published (editing) vs first-time setup.
         const alreadyActive = data.status === 'active';
         setIsEditing(alreadyActive);
+        setIsPaid(!!data.isPaid);
 
         setForm({
           projectTitle: data.projectTitle || '',
@@ -70,16 +102,14 @@ const ProjectSetup = () => {
           projectLink: data.projectLink || '',
         });
         // Pre-fill roles: use live teamRoles if published, else the generator's proposal.
-        const sourceRoles = alreadyActive && Array.isArray(data.teamRoles) && data.teamRoles.length
+        // Live teamRoles are "existing" (locked for paid); a fresh proposal is not.
+        const liveRoles = alreadyActive && Array.isArray(data.teamRoles) && data.teamRoles.length;
+        const sourceRoles = liveRoles
           ? data.teamRoles
           : (Array.isArray(data.proposedRoles) ? data.proposedRoles : []);
-        setRoles(sourceRoles.length ? sourceRoles.map(r => ({
-          role: roleOptions.includes(r.role) ? r.role : 'Developer',
-          skills: r.skills || '',
-          count: r.count || 1,
-          experienceLevel: experienceLevels.includes(r.experienceLevel) ? r.experienceLevel : 'any-level',
-          description: r.description || '',
-        })) : [{ role: 'Developer', skills: '', count: 1, experienceLevel: 'any-level', description: '' }]);
+        setRoles(sourceRoles.length
+          ? sourceRoles.map(r => toEditableRole(r, !!liveRoles))
+          : [emptyRole()]);
         setAuthorized(true);
       } catch (e) {
         console.error(e);
@@ -91,9 +121,38 @@ const ProjectSetup = () => {
     load();
   }, [currentUser, projectId, navigate]);
 
+  // A role is locked (read-only) only when the project is paid AND the role was
+  // already posted. New rows the owner adds this session stay editable.
+  const isLocked = (r) => isPaid && r.existing;
+
   const updateRole = (i, field, value) => setRoles(prev => prev.map((r, idx) => idx === i ? { ...r, [field]: value } : r));
-  const addRole = () => { if (roles.length < 8) setRoles(prev => [...prev, { role: 'Developer', skills: '', count: 1, experienceLevel: 'any-level', description: '' }]); };
+  const addRole = () => { if (roles.length < 12) setRoles(prev => [...prev, emptyRole()]); };
   const removeRole = (i) => setRoles(prev => prev.filter((_, idx) => idx !== i));
+
+  // Resolve the display/stored role name for a row (handles the custom "Other").
+  const resolveRoleName = (r) => isLocked(r)
+    ? (r.role || '')
+    : (r.role === '__other__' ? (r.customRole || '').trim() : (r.role || '').trim());
+
+  // Build the teamRoles array to persist, preserving pay for paid projects.
+  const buildTeamRoles = () => roles
+    .map(r => ({
+      role: resolveRoleName(r),
+      skills: (r.skills || '').trim(),
+      count: parseInt(r.count, 10) || 1,
+      experienceLevel: r.experienceLevel || 'any-level',
+      description: (r.description || '').trim(),
+      detailsLink: (r.detailsLink || '').trim(),
+      payAmount: isPaid ? (parseFloat(r.payAmount) || 0) : 0,
+    }))
+    .filter(r => r.role && r.count > 0);
+
+  // Validate that every NEW paid role has a pay-per-person amount.
+  const newPaidRoleMissingPay = () => isPaid && roles.some(r => {
+    if (isLocked(r)) return false;               // existing roles keep their amount
+    if (!resolveRoleName(r)) return false;        // blank rows are dropped, not flagged
+    return !(parseFloat(r.payAmount) > 0);
+  });
 
   const handleOpen = async () => {
     if (!form.projectTitle.trim()) { toast.error('Title is required'); return; }
@@ -105,24 +164,24 @@ const ProjectSetup = () => {
     }
     if (!form.submissionUrl.trim()) { toast.error('A project submission link is required'); return; }
     if (!form.projectLink.trim()) { toast.error('A project link (full description doc) is required'); return; }
-    const valid = roles.filter(r => r.role && (parseInt(r.count, 10) || 0) > 0);
+
+    const valid = buildTeamRoles();
     if (valid.length === 0) { toast.error('Add at least one team role'); return; }
-    const hasOpenRole = valid.some(r => {
-      const lvl = (r.experienceLevel || 'any-level').toLowerCase();
-      return lvl === 'any-level' || lvl === 'beginner' || lvl === '';
-    });
-    if (!hasOpenRole) { toast.error('Add at least one Beginner or Any Level role so newcomers can join.'); return; }
+
+    if (isPaid) {
+      if (newPaidRoleMissingPay()) { toast.error('Set a pay-per-person amount (greater than 0) for each new role.'); return; }
+    } else {
+      // Free projects must keep a newcomer-friendly role open.
+      const hasOpenRole = valid.some(r => {
+        const lvl = (r.experienceLevel || 'any-level').toLowerCase();
+        return lvl === 'any-level' || lvl === 'beginner' || lvl === '';
+      });
+      if (!hasOpenRole) { toast.error('Add at least one Beginner or Any Level role so newcomers can join.'); return; }
+    }
 
     setSaving(true);
     try {
-      const teamRoles = valid.map(r => ({
-        role: r.role,
-        skills: (r.skills || '').trim(),
-        count: parseInt(r.count, 10) || 1,
-        experienceLevel: r.experienceLevel || 'any-level',
-        description: (r.description || '').trim(),
-        detailsLink: '',
-      }));
+      const teamRoles = valid;
       const maxTeamSize = teamRoles.reduce((s, r) => s + r.count, 0);
 
       await updateDoc(doc(db, 'projects', projectId), {
@@ -136,6 +195,7 @@ const ProjectSetup = () => {
         resources: { ...(form.submissionUrl ? { submissionUrl: form.submissionUrl.trim() } : {}) },
         teamRoles,
         maxTeamSize,
+        ...(isPaid ? { totalBudget: computeTotalBudget(teamRoles) } : {}),
         status: 'active',
         // Only stamp openedAt on first open; keep the original on later edits.
         ...(isEditing ? {} : { openedAt: serverTimestamp() }),
@@ -151,18 +211,10 @@ const ProjectSetup = () => {
   };
 
   const handleSaveExit = async () => {
+    if (isPaid && newPaidRoleMissingPay()) { toast.error('Set a pay-per-person amount (greater than 0) for each new role.'); return; }
     setSaving(true);
     try {
-      const teamRoles = roles
-        .filter(r => r.role && (parseInt(r.count, 10) || 0) > 0)
-        .map(r => ({
-          role: r.role,
-          skills: (r.skills || '').trim(),
-          count: parseInt(r.count, 10) || 1,
-          experienceLevel: r.experienceLevel || 'any-level',
-          description: (r.description || '').trim(),
-          detailsLink: '',
-        }));
+      const teamRoles = buildTeamRoles();
       await updateDoc(doc(db, 'projects', projectId), {
         projectTitle: form.projectTitle.trim(),
         projectDescription: form.projectDescription.trim(),
@@ -186,7 +238,7 @@ const ProjectSetup = () => {
   return (
     <div className="max-w-6xl mx-auto">
       <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">{isEditing ? 'Edit your project' : 'Set up your project'}</h1>
-      <p className="text-gray-500 text-sm mb-6">{isEditing ? "You're the lead. Update the project details, goals, dates, links, and roles below. Changes apply immediately. Keep at least one Beginner or Any Level role so newcomers can join." : "You're the lead. Review this project carefully and modify it so you fully understand what you're leading. Refine the idea, set the start and end dates, add the submission and full-description links, decide what roles your team needs (add at least one role), then open it for others to apply. You manage the project, and team members fill the building roles below."}</p>
+      <p className="text-gray-500 text-sm mb-6">{isEditing ? "You're the lead. Update the project details, goals, dates, links, and roles below. Changes apply immediately." : "You're the lead. Review this project carefully and modify it so you fully understand what you're leading. Refine the idea, set the start and end dates, add the submission and full-description links, decide what roles your team needs (add at least one role), then open it for others to apply. You manage the project, and team members fill the building roles below."}</p>
 
       <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-6 space-y-5">
         <div>
@@ -237,30 +289,85 @@ const ProjectSetup = () => {
           <h2 className="text-lg font-bold text-gray-900">Team Roles</h2>
           <button onClick={addRole} className="text-blue-600 text-sm font-semibold">+ Add role</button>
         </div>
-        <p className="text-gray-500 text-xs -mt-2">Intermediate and Advanced roles can only be filled by members who've earned the matching badge level in that track. Use Beginner or Any Level for roles open to newcomers.</p>
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-          <p className="text-gray-700 text-xs"><strong>Note:</strong> these roles are defaults. As the lead, add or remove them to fit your project. Keep at least one Beginner or Any Level role so newcomers can join.</p>
-        </div>
 
-        {roles.map((r, i) => (
-          <div key={i} className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-400 text-xs font-semibold">Role {i + 1}</span>
-              {roles.length > 1 && <button onClick={() => removeRole(i)} className="text-red-500 text-xs font-semibold">Remove</button>}
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
-              <select value={r.role} onChange={e => updateRole(i, 'role', e.target.value)} className={inputClass + ' appearance-none'}>
-                {roleOptions.map(o => <option key={o} value={o}>{o}</option>)}
-              </select>
-              <select value={r.experienceLevel} onChange={e => updateRole(i, 'experienceLevel', e.target.value)} className={inputClass + ' appearance-none capitalize'}>
-                {experienceLevels.map(l => <option key={l} value={l}>{l === 'any-level' ? 'Any Level' : l.charAt(0).toUpperCase() + l.slice(1)}</option>)}
-              </select>
-              <input type="number" min="1" max="10" value={r.count} onChange={e => updateRole(i, 'count', e.target.value)} className={inputClass} placeholder="Count" />
-              <input type="text" value={r.skills} onChange={e => updateRole(i, 'skills', e.target.value)} className={inputClass} placeholder="Skills" />
-            </div>
-            <input type="text" value={r.description} onChange={e => updateRole(i, 'description', e.target.value)} className={inputClass} placeholder="What this role does (optional)" />
+        {isPaid ? (
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+            <p className="text-gray-700 text-xs"><strong>Paid project:</strong> roles you've already posted are locked, including their pay - talent may have applied under those exact terms. You can still <strong>add new roles</strong> below, each with its own pay-per-person amount.</p>
           </div>
-        ))}
+        ) : (
+          <>
+            <p className="text-gray-500 text-xs -mt-2">Intermediate and Advanced roles can only be filled by members who've earned the matching badge level in that track. Use Beginner or Any Level for roles open to newcomers.</p>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <p className="text-gray-700 text-xs"><strong>Note:</strong> add or remove roles to fit your project. Keep at least one Beginner or Any Level role so newcomers can join.</p>
+            </div>
+          </>
+        )}
+
+        {roles.map((r, i) => {
+          const locked = isLocked(r);
+          const roleName = resolveRoleName(r) || 'Role';
+          if (locked) {
+            // Locked (already-posted) paid role - read-only summary, no edits.
+            return (
+              <div key={i} className="bg-white border border-gray-200 rounded-xl p-4 opacity-90">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-gray-400 text-xs font-semibold">Role {i + 1}</span>
+                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700 bg-amber-100 border border-amber-200 rounded-full px-2 py-0.5">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                    Locked
+                  </span>
+                </div>
+                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                  <span className="text-gray-900 font-semibold text-sm">{roleName}</span>
+                  <span className="text-amber-700 font-bold text-sm">{formatMoney(Number(r.payAmount) || 0)} / person</span>
+                  <span className="text-gray-500 text-xs">{parseInt(r.count, 10) || 1} {(parseInt(r.count, 10) || 1) === 1 ? 'person' : 'people'}</span>
+                  <span className="text-gray-500 text-xs capitalize">{(r.experienceLevel || 'any-level') === 'any-level' ? 'Any Level' : r.experienceLevel}</span>
+                </div>
+                {r.skills && <p className="text-gray-500 text-xs mt-1">Skills: {r.skills}</p>}
+                {r.description && <p className="text-gray-500 text-xs mt-1">{r.description}</p>}
+              </div>
+            );
+          }
+          // Editable role (all free-project roles, and new paid roles)
+          return (
+            <div key={i} className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-400 text-xs font-semibold">Role {i + 1}{isPaid ? ' (new)' : ''}</span>
+                {roles.length > 1 && <button onClick={() => removeRole(i)} className="text-red-500 text-xs font-semibold">Remove</button>}
+              </div>
+              <div className={`grid grid-cols-1 gap-3 ${isPaid ? 'sm:grid-cols-5' : 'sm:grid-cols-4'}`}>
+                {r.role === '__other__' ? (
+                  <div className="flex gap-1">
+                    <input type="text" value={r.customRole || ''} onChange={e => updateRole(i, 'customRole', e.target.value)} className={inputClass} placeholder="Enter custom role" />
+                    <button type="button" onClick={() => { updateRole(i, 'role', ''); updateRole(i, 'customRole', ''); }} className="text-gray-400 hover:text-gray-600 text-xs px-2 flex-shrink-0">✕</button>
+                  </div>
+                ) : (
+                  <select value={r.role} onChange={e => updateRole(i, 'role', e.target.value)} className={inputClass + ' appearance-none'}>
+                    <option value="">Select role</option>
+                    {roleTemplates.map(o => <option key={o} value={o}>{o}</option>)}
+                    <option value="__other__">Other (type your own)</option>
+                  </select>
+                )}
+                <select value={r.experienceLevel} onChange={e => updateRole(i, 'experienceLevel', e.target.value)} className={inputClass + ' appearance-none capitalize'}>
+                  {experienceLevels.map(l => <option key={l} value={l}>{l === 'any-level' ? 'Any Level' : l.charAt(0).toUpperCase() + l.slice(1)}</option>)}
+                </select>
+                <input type="number" min="1" max="10" value={r.count} onChange={e => updateRole(i, 'count', e.target.value)} className={inputClass} placeholder="Count" />
+                <input type="text" value={r.skills} onChange={e => updateRole(i, 'skills', e.target.value)} className={inputClass} placeholder="Skills" />
+                {isPaid && (
+                  <input type="number" min="1" step="0.01" value={r.payAmount} onChange={e => updateRole(i, 'payAmount', e.target.value)} className={inputClass} placeholder="Pay / person ($)" />
+                )}
+              </div>
+              <input type="text" value={r.description} onChange={e => updateRole(i, 'description', e.target.value)} className={inputClass} placeholder="What this role does (optional)" />
+            </div>
+          );
+        })}
+
+        {isPaid && roles.some(r => !isLocked(r) && resolveRoleName(r) && parseFloat(r.payAmount) > 0) && (
+          <div className="flex items-center justify-between border-t border-gray-200 pt-3">
+            <span className="text-gray-500 text-xs font-semibold uppercase tracking-wide">Projected total budget</span>
+            <span className="text-amber-700 text-xl font-black">{formatMoney(computeTotalBudget(buildTeamRoles()))}</span>
+          </div>
+        )}
       </div>
 
       <div className="flex gap-3 mt-6">

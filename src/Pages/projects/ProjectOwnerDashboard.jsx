@@ -193,6 +193,54 @@ const ProjectOwnerDashboard = () => {
     } catch (e) { toast.error('Error rejecting: ' + e.message); }
   };
 
+  // Third option beside Approve/Reject: ask the applicant for more info
+  // (e.g. "Send me your portfolio"). The applicant can only reply with a link.
+  const requestApplicantInfo = async (project, app, message) => {
+    const msg = (message || '').trim();
+    if (!msg) { toast.error('Type a short message for the applicant.'); return; }
+    try {
+      await updateDoc(doc(db, 'project_applications', app.id), {
+        feedbackRequest: {
+          message: msg,
+          requestedBy: currentUser.email,
+          requestedAt: serverTimestamp(),
+        },
+        // Clear any previous reply so a fresh request can be answered again.
+        feedbackResponse: null,
+      });
+
+      // Reflect immediately in local state.
+      setMyProjects(prev => prev.map(p => {
+        const applications = (p.applications || []).map(a =>
+          a.id === app.id ? { ...a, feedbackRequest: { message: msg, requestedBy: currentUser.email }, feedbackResponse: null } : a
+        );
+        return { ...p, applications };
+      }));
+
+      // In-app notification to the applicant.
+      if (app.applicantUid) {
+        try {
+          await addDoc(collection(db, 'notifications'), {
+            userId: app.applicantUid,
+            type: 'application_feedback_request',
+            message: `The owner of "${project.projectTitle}" asked: "${msg}" - reply with a link from My Projects.`,
+            projectId: project.id,
+            isRead: false,
+            createdAt: serverTimestamp(),
+          });
+        } catch (_) {}
+        try {
+          await sendPush(app.applicantUid, {
+            title: 'Message about your application',
+            body: `"${project.projectTitle}": ${msg}`,
+          });
+        } catch (_) {}
+      }
+
+      toast.success('Message sent to the applicant.');
+    } catch (e) { toast.error('Could not send the request: ' + e.message); }
+  };
+
   const removeMember = async (project, app) => {
     if (!window.confirm(`Remove ${app.applicantName} from this project? This cannot be undone.`)) return;
     try {
@@ -292,6 +340,7 @@ const ProjectOwnerDashboard = () => {
                   <ProjectCard key={project.id} project={project} currentUser={currentUser}
                     onApprove={(app) => approveApplication(project, app)}
                     onReject={rejectApplication}
+                    onRequestInfo={(app, message) => requestApplicantInfo(project, app, message)}
                     onRemove={(app) => removeMember(project, app)}
                     onToggleApplications={toggleApplications}
                     onRequestDeletion={() => requestDeletion(project)}
@@ -307,8 +356,11 @@ const ProjectOwnerDashboard = () => {
   );
 };
 
-const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove, onToggleApplications, onRequestDeletion, onMarkAllPaid }) => {
+const ProjectCard = ({ project, currentUser, onApprove, onReject, onRequestInfo, onRemove, onToggleApplications, onRequestDeletion, onMarkAllPaid }) => {
   const [showApps, setShowApps] = useState(false);
+  // Which pending application has the "request info" composer open, and its text.
+  const [requestingFor, setRequestingFor] = useState(null);
+  const [requestText, setRequestText] = useState('');
   const isRejected = project.reviewStatus === 'rejected';
   const isCompleted = project.status === 'completed' || isRejected;
   const isAwaitingPayment = project.status === 'awaiting_payment_confirmation';
@@ -455,8 +507,56 @@ const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove, onTo
                   <button onClick={() => onReject(app)} className="px-3 py-1.5 min-h-[36px] bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-lg text-xs transition-all border border-red-200">
                     Reject
                   </button>
+                  <button
+                    onClick={() => {
+                      if (requestingFor === app.id) { setRequestingFor(null); return; }
+                      setRequestingFor(app.id);
+                      setRequestText(app.feedbackRequest?.message || 'Send me your portfolio.');
+                    }}
+                    className="px-3 py-1.5 min-h-[36px] bg-amber-50 hover:bg-amber-100 text-amber-700 font-bold rounded-lg text-xs transition-all border border-amber-200"
+                  >
+                    Request Info
+                  </button>
                 </div>
               </div>
+
+              {/* Earlier request + the applicant's link reply, if any */}
+              {app.feedbackRequest?.message && requestingFor !== app.id && (
+                <div className="mt-3 bg-amber-50 border border-amber-100 rounded-lg p-3">
+                  <p className="text-amber-800 text-xs"><span className="font-semibold">You asked:</span> "{app.feedbackRequest.message}"</p>
+                  {app.feedbackResponse?.url ? (
+                    <p className="text-xs mt-1.5">
+                      <span className="font-semibold text-gray-700">Applicant replied: </span>
+                      <a href={app.feedbackResponse.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-all">{app.feedbackResponse.url}</a>
+                    </p>
+                  ) : (
+                    <p className="text-gray-500 text-xs mt-1.5 italic">Waiting for the applicant's reply…</p>
+                  )}
+                </div>
+              )}
+
+              {/* Composer for the request */}
+              {requestingFor === app.id && (
+                <div className="mt-3 bg-white border border-amber-200 rounded-lg p-3 space-y-2">
+                  <p className="text-gray-600 text-xs">Ask the applicant for something specific. They'll be able to reply with a <span className="font-semibold">link only</span> (e.g. their portfolio).</p>
+                  <textarea
+                    value={requestText}
+                    onChange={e => setRequestText(e.target.value)}
+                    rows={2}
+                    placeholder='e.g. "Send me your portfolio."'
+                    className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none resize-none"
+                  />
+                  <div className="flex gap-2 justify-end">
+                    <button onClick={() => setRequestingFor(null)} className="text-gray-500 text-xs font-semibold px-3 py-1.5">Cancel</button>
+                    <button
+                      onClick={() => { onRequestInfo(app, requestText); setRequestingFor(null); }}
+                      className="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-4 py-1.5 rounded-lg transition-all"
+                    >
+                      Send request
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>

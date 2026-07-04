@@ -4,7 +4,9 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../firebase/config';
+import { updateProfile } from 'firebase/auth';
+import { db, auth } from '../firebase/config';
+import { uploadImageToBlob, validateImageFile } from '../utils/blobStorage';
 import { PAYMENT_CONFIG } from '../config/payment';
 import { deleteUserAccount } from '../utils/deleteUserContent';
 import { enablePushForCurrentUser } from '../utils/pushNotifications';
@@ -40,6 +42,32 @@ const Settings = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteText, setDeleteText] = useState('');
   const [deleting, setDeleting] = useState(false);
+
+  // Profile picture upload (works for every account - email/password sign-ups
+  // that have no picture yet, and Google sign-ins that want to change theirs).
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+
+  const handlePhotoSelect = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = ''; // allow re-selecting the same file
+    if (!file) return;
+    const v = validateImageFile(file);
+    if (v && v.valid === false) { toast.error(v.error || 'Invalid image.'); return; }
+    setUploadingPhoto(true);
+    try {
+      const result = await uploadImageToBlob(file, 'avatars');
+      const photoURL = result?.url || result || null;
+      if (!photoURL) throw new Error('Upload failed');
+      await updateDoc(doc(db, 'users', currentUser.uid), { photoURL });
+      // Keep the auth profile in sync so the new picture shows everywhere.
+      try { if (auth.currentUser) await updateProfile(auth.currentUser, { photoURL }); } catch (_) {}
+      setProfileData(prev => ({ ...(prev || {}), photoURL }));
+      toast.success('Profile picture updated');
+    } catch (err) {
+      toast.error('Could not upload your picture. Please try again.');
+    }
+    setUploadingPhoto(false);
+  };
 
   useEffect(() => {
     if (!currentUser) return;
@@ -168,6 +196,23 @@ const Settings = () => {
         {/* Edit Profile */}
         {activeTab === 'profile' && (
           <div className="bg-white border border-gray-200 rounded-xl p-6 space-y-5">
+            {/* Profile picture - available to all accounts */}
+            <div className="flex items-center gap-4 pb-2 border-b border-gray-100">
+              {(profileData?.photoURL || currentUser?.photoURL) ? (
+                <img src={profileData?.photoURL || currentUser?.photoURL} alt="Profile" className="w-16 h-16 rounded-full object-cover border border-gray-200" />
+              ) : (
+                <div className="w-16 h-16 rounded-full bg-blue-600 text-white flex items-center justify-center text-xl font-bold">
+                  {(form.displayName || profileData?.displayName || 'M').trim().charAt(0).toUpperCase()}
+                </div>
+              )}
+              <div>
+                <label className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold cursor-pointer transition-all ${uploadingPhoto ? 'bg-gray-100 text-gray-400 cursor-wait' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'}`}>
+                  <input type="file" accept="image/*" onChange={handlePhotoSelect} disabled={uploadingPhoto} className="hidden" />
+                  {uploadingPhoto ? 'Uploading…' : (profileData?.photoURL || currentUser?.photoURL) ? 'Change photo' : 'Upload a photo'}
+                </label>
+                <p className="text-xs text-gray-500 mt-1.5">JPG, PNG or WebP. Shown on your profile and posts.</p>
+              </div>
+            </div>
             <div>
               <label className={labelCls}>Full Name *</label>
               <input type="text" value={form.displayName} onChange={e => setForm(p => ({ ...p, displayName: e.target.value }))} className={inputCls} placeholder="Your full name" />

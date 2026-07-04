@@ -58,18 +58,24 @@ const renderHeadline = (a) => {
 };
 
 const FILTERS = [
+  { id: 'all', label: 'All Activity' },
   { id: 'update', label: 'Updates' },
   { id: 'lead', label: 'Needs a lead' },
   { id: 'open', label: 'Open projects' },
 ];
 
-// Companies see Updates plus a "Top Talent" discovery tab (recent badge earners and
-// highly-rated community teachers). Individuals get the contributor tabs.
+// Companies see All Activity, Updates plus a "Top Talent" discovery tab (recent badge
+// earners). Individuals get the contributor tabs.
 const COMPANY_FILTERS = [
+  { id: 'all', label: 'All Activity' },
   { id: 'update', label: 'Updates' },
   { id: 'talent', label: 'Top Talent' },
 ];
 const filtersFor = (isCompany) => isCompany ? COMPANY_FILTERS : FILTERS;
+
+// Filter ids that map directly to an activity `type` in the feed. Everything else
+// ('all', 'open', 'talent') loads the unfiltered feed and/or its own data source.
+const ACTIVITY_TYPE_FILTERS = ['update', 'lead', 'badge', 'ship', 'milestone'];
 
 const ProofWall = () => {
   const { currentUser } = useAuth();
@@ -78,7 +84,7 @@ const ProofWall = () => {
   const [posterInfo, setPosterInfo] = useState({}); // actorId -> { photoURL, email, name }
   const [loading, setLoading] = useState(true);
   const [lightbox, setLightbox] = useState(null); // full-size image URL when an image is tapped
-  const [filter, setFilter] = useState('update');
+  const [filter, setFilter] = useState('all');
   const [myData, setMyData] = useState(null);
 
   // Share-update composer
@@ -154,7 +160,9 @@ const ProofWall = () => {
 
   const load = useCallback(async (f) => {
     setLoading(true);
-    setItems(await getActivity(50, f || null));
+    // 'all' (and non-type tabs like 'open'/'talent') load the unfiltered feed.
+    const typeFilter = ACTIVITY_TYPE_FILTERS.includes(f) ? f : null;
+    setItems(await getActivity(50, typeFilter));
     setLoading(false);
   }, []);
 
@@ -164,7 +172,7 @@ const ProofWall = () => {
   const [loadingOpen, setLoadingOpen] = useState(false);
 
   useEffect(() => {
-    if (filter !== 'open' || myData?.isCompany) return;
+    if ((filter !== 'open' && filter !== 'all') || myData?.isCompany) return;
     let active = true;
     (async () => {
       setLoadingOpen(true);
@@ -192,7 +200,7 @@ const ProofWall = () => {
   const [loadingTalent, setLoadingTalent] = useState(false);
 
   useEffect(() => {
-    if (filter !== 'talent' || !myData?.isCompany) return;
+    if ((filter !== 'talent' && filter !== 'all') || !myData?.isCompany) return;
     let active = true;
     (async () => {
       setLoadingTalent(true);
@@ -373,7 +381,7 @@ const ProofWall = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="w-full max-w-3xl mx-auto">
       {/* Header */}
       <div className="mb-4">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Proof Wall</h1>
@@ -479,7 +487,7 @@ const ProofWall = () => {
               <svg className="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4z" /></svg>
             </div>
             <p className="text-gray-900 font-semibold">No talent to show yet</p>
-            <p className="text-gray-500 text-sm mt-1">Members who earn badges or get top ratings for teaching will appear here.</p>
+            <p className="text-gray-500 text-sm mt-1">Members who earn badges will appear here.</p>
           </div>
         ) : (
           <div className="flex flex-col gap-2.5">
@@ -544,7 +552,52 @@ const ProofWall = () => {
             ))}
           </div>
         )
-      ) : loading ? (
+      ) : (
+        <>
+          {/* All Activity extras: open projects (individuals) / top talent (companies) */}
+          {filter === 'all' && !myData?.isCompany && openProjects.length > 0 && (
+            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-3">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-blue-700 text-xs font-bold uppercase tracking-wide">Open projects</p>
+                <button onClick={() => setFilter('open')} className="text-blue-600 text-xs font-semibold hover:underline">View all →</button>
+              </div>
+              <div className="flex flex-col gap-2">
+                {openProjects.slice(0, 3).map(p => (
+                  <button key={p.id} onClick={() => navigate(`/projects/${p.id}`)} className="flex items-center justify-between gap-3 bg-white border border-gray-200 rounded-lg px-3 py-2 text-left hover:border-blue-300 transition-all">
+                    <span className="text-sm font-semibold text-gray-900 truncate">{p.projectTitle || p.title || 'Untitled project'}</span>
+                    <span className="flex-shrink-0 text-[10px] font-semibold px-2 py-0.5 bg-green-50 text-green-700 rounded-full border border-green-200">Accepting collaborators</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+          {filter === 'all' && myData?.isCompany && talent.length > 0 && (
+            <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 mb-3">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-amber-700 text-xs font-bold uppercase tracking-wide">Top talent</p>
+                <button onClick={() => setFilter('talent')} className="text-blue-600 text-xs font-semibold hover:underline">View all →</button>
+              </div>
+              <div className="flex flex-col gap-2">
+                {talent.slice(0, 3).map(m => (
+                  <div key={m.uid} className="flex items-center gap-3 bg-white border border-gray-200 rounded-lg px-3 py-2">
+                    {m.photoURL ? (
+                      <img src={m.photoURL} alt={m.name} className="w-8 h-8 rounded-full object-cover border border-gray-200 flex-shrink-0" />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold flex-shrink-0">{(m.name || 'M').charAt(0).toUpperCase()}</div>
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-semibold text-gray-900 truncate">{m.name}</p>
+                      {m.badgeName && <p className="text-[11px] text-amber-700 truncate">🏅 {m.badgeName}</p>}
+                    </div>
+                    {m.email && (
+                      <button onClick={() => navigate(`/profile/${m.email}`)} className="flex-shrink-0 text-blue-600 text-xs font-semibold hover:underline">Profile →</button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {loading ? (
         <div className="flex justify-center py-16"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>
       ) : visibleItems.length === 0 ? (
         <div className="text-center py-16">
@@ -627,9 +680,9 @@ const ProofWall = () => {
                           </div>
                         )}
 
-                        {/* image */}
+                        {/* image - shown in full (letterboxed) at a glance; click to open full size */}
                         {a.imageUrl && (
-                          <img src={a.imageUrl} alt="update" onClick={() => setLightbox(a.imageUrl)} className="w-full max-h-96 mt-3 rounded-lg border border-gray-200 object-cover cursor-zoom-in hover:opacity-95 transition-opacity" loading="lazy" />
+                          <img src={a.imageUrl} alt="update" onClick={() => setLightbox(a.imageUrl)} className="w-full max-h-96 mt-3 rounded-lg border border-gray-200 bg-gray-50 object-contain cursor-zoom-in hover:opacity-95 transition-opacity" loading="lazy" />
                         )}
 
                         {/* link */}
@@ -712,6 +765,8 @@ const ProofWall = () => {
             );
           })}
         </div>
+      )}
+        </>
       )}
 
       {/* Image lightbox - tap an image to view it full size */}

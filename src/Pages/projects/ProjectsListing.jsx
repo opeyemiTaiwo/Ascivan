@@ -73,7 +73,7 @@ const ProjectsListing = () => {
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filters, setFilters] = useState({ industryTrack: '', timeline: '' });
+  const [filters, setFilters] = useState({ industryTrack: '', timeline: '', payType: '' });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -111,12 +111,14 @@ const ProjectsListing = () => {
     }
     if (filters.industryTrack) result = result.filter(p => p.industryTrack === filters.industryTrack);
     if (filters.timeline) result = result.filter(p => p.timeline === filters.timeline);
+    if (filters.payType === 'paid') result = result.filter(p => !!p.isPaid);
+    if (filters.payType === 'free') result = result.filter(p => !p.isPaid);
     setFilteredProjects(result);
   }, [searchQuery, filters, projects]);
 
   const clearFilters = () => {
     setSearchQuery('');
-    setFilters({ industryTrack: '', timeline: '' });
+    setFilters({ industryTrack: '', timeline: '', payType: '' });
   };
 
   const selectClass = "bg-gray-100 border border-gray-200 rounded-xl px-3 py-2.5 min-h-[44px] text-gray-900 text-sm focus:border-blue-500 focus:outline-none transition-all appearance-none";
@@ -180,7 +182,12 @@ const ProjectsListing = () => {
                   <option value="6-months-plus">6+ Months</option>
                   <option value="flexible">Flexible</option>
                 </select>
-                {(searchQuery || filters.industryTrack || filters.timeline) && (
+                <select value={filters.payType} onChange={e => setFilters(p => ({ ...p, payType: e.target.value }))} className={selectClass}>
+                  <option value="">All Projects</option>
+                  <option value="paid">Paid Projects</option>
+                  <option value="free">Free (Collaborative) Projects</option>
+                </select>
+                {(searchQuery || filters.industryTrack || filters.timeline || filters.payType) && (
                   <button onClick={clearFilters} className="text-blue-600 hover:text-blue-500 text-xs font-semibold px-3 py-2 transition-colors">Clear All</button>
                 )}
               </div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { autoSetupFirebase } from '../../firebase/autoSetup';
+import { sanitizeErrorMessage } from '../../utils/sanitizeError';
 
 const DatabaseSetup = () => {
   const [setupStatus, setSetupStatus] = useState(null);
@@ -18,7 +19,7 @@ const DatabaseSetup = () => {
         setSetupStatus(`Failed: ${result.error}`);
       }
     } catch (error) {
-      setSetupStatus(`Error: ${error.message}`);
+      setSetupStatus(`Error: ${sanitizeErrorMessage(error.message)}`);
     } finally {
       setIsRunning(false);
     }
@@ -30,7 +31,7 @@ const DatabaseSetup = () => {
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8">Database Setup</h1>
         
         <div className="bg-gray-800 rounded-lg p-6 mb-6">
-          <h2 className="text-2xl font-semibold mb-4">Initialize Firebase Collections</h2>
+          <h2 className="text-2xl font-semibold mb-4">Initialize Database Collections</h2>
           <p className="text-gray-600 mb-6">
             This will create all 17 required collections with sample data:
           </p>

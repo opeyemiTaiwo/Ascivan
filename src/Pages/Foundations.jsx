@@ -66,7 +66,8 @@ const Foundations = () => {
         if (data.primarySkillTrack && !ordered.includes(data.primarySkillTrack)) ordered.push(data.primarySkillTrack);
 
         let valid = ordered.filter((t) => trackHasCourses(t));
-        if (data.role === 'admin') valid = tracksWithCourses();
+        // Admins and editors review/see every track that has courses.
+        if (data.role === 'admin' || data.role === 'editor') valid = tracksWithCourses();
         if (data.isCompany) valid = trackHasCourses('company') ? ['company'] : [];
         // Fallback so the page is never empty: browse whatever courses exist.
         const tabs = valid.length ? valid : tracksWithCourses();

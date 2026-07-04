@@ -415,7 +415,7 @@ const ProjectWorkspace = () => {
   );
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="w-full max-w-3xl mx-auto">
       <button onClick={() => navigate(`/projects/${projectId}`)} className="text-gray-500 hover:text-gray-900 text-sm mb-4 flex items-center gap-1">
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
         Back to Project
@@ -472,7 +472,7 @@ const ProjectWorkspace = () => {
                     ) : (
                       <>
                         <p className="text-gray-700 text-sm mt-1 whitespace-pre-wrap">{post.text}</p>
-                        {post.imageUrl && <img src={post.imageUrl} alt="attachment" onClick={() => setLightbox(post.imageUrl)} className="w-full max-h-96 object-cover mt-3 rounded-lg border border-gray-200 cursor-zoom-in hover:opacity-95 transition-opacity" />}
+                        {post.imageUrl && <img src={post.imageUrl} alt="attachment" onClick={() => setLightbox(post.imageUrl)} className="w-full max-h-96 object-contain bg-gray-50 mt-3 rounded-lg border border-gray-200 cursor-zoom-in hover:opacity-95 transition-opacity" />}
                         {post.link && <a href={post.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-xs hover:underline mt-2 block truncate">{post.link}</a>}
                       </>
                     )}

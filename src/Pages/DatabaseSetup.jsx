@@ -1,6 +1,7 @@
 // src/Pages/DatabaseSetup.jsx
 import React, { useState } from 'react';
 import { autoSetupFirebase } from '../firebase/autoSetup';
+import { sanitizeErrorMessage } from '../utils/sanitizeError';
 
 const DatabaseSetup = () => {
   const [loading, setLoading] = useState(false);
@@ -26,8 +27,8 @@ const DatabaseSetup = () => {
         alert('Setup completed with errors. Check the results below.');
       }
     } catch (err) {
-      setError(err.message);
-      alert('Setup failed: ' + err.message);
+      setError(sanitizeErrorMessage(err.message));
+      alert('Setup failed: ' + sanitizeErrorMessage(err.message));
     } finally {
       setLoading(false);
     }
@@ -35,7 +36,7 @@ const DatabaseSetup = () => {
 
   return (
     <div style={{ maxWidth: '800px', margin: '50px auto', padding: '20px' }}>
-      <h1>Firebase Database Setup</h1>
+      <h1>Ascivan Database Setup</h1>
       <p>This will create all 17 collections with sample data in your Firestore database.</p>
       
       <div style={{ background: '#fff3cd', padding: '15px', borderRadius: '5px', marginBottom: '20px' }}>

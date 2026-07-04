@@ -14,6 +14,7 @@ import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getMessaging, isSupported as messagingIsSupported } from "firebase/messaging";
+import { sanitizeErrorMessage, formatPasswordRequirementError } from "../utils/sanitizeError";
 
 // Your web app's Firebase configuration for Ascivan
 const firebaseConfig = {
@@ -158,9 +159,11 @@ const handleAuthRecovery = () => {
     });
 };
 
-// Utility function to get user-friendly error messages
+// Utility function to get user-friendly error messages.
+// NOTE: never surface vendor branding ("Firebase") or raw error codes to users -
+// everything falls through sanitizeErrorMessage as a final safety net.
 export const getAuthErrorMessage = (error) => {
-  if (typeof error === 'string') return error;
+  if (typeof error === 'string') return sanitizeErrorMessage(error);
   
   switch (error?.code) {
     case 'auth/missing-initial-state':
@@ -206,6 +209,9 @@ export const getAuthErrorMessage = (error) => {
     case 'auth/weak-password':
       return "Password is too weak. Use at least 6 characters.";
 
+    case 'auth/password-does-not-meet-requirements':
+      return formatPasswordRequirementError(error?.message);
+
     case 'auth/invalid-email':
       return "That email address doesn't look valid. Please check it.";
 
@@ -216,7 +222,9 @@ export const getAuthErrorMessage = (error) => {
       return "An account already exists with this email using a different sign-in method. Please try signing in with that method.";
     
     default:
-      return error?.message || "An unexpected error occurred. Please try again.";
+      return error?.message
+        ? sanitizeErrorMessage(error.message)
+        : "An unexpected error occurred. Please try again.";
   }
 };
 

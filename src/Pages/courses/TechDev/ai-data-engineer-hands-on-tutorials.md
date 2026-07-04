@@ -38,8 +38,13 @@ Estimate: how much data, and how often does new data arrive (once, daily, contin
 **Step 6: Note data quality risks.**
 List: what could be wrong with this data? (duplicates, missing fields, inconsistent formats, mislabeled examples)
 
-**Step 7: Draw the pipeline diagram.**
-Sketch five labeled boxes (Ingestion → Cleaning → Storage → Transformation → Serving) in a row, with arrows showing data flowing left to right.
+**Step 7: The pipeline.**
+Data flows through five stages, left to right:
+
+```mermaid
+flowchart LR
+    I["Ingestion"] --> C["Cleaning"] --> S["Storage"] --> T["Transformation"] --> SV["Serving"]
+```
 
 ### Final Project Structure
 ```text
@@ -188,8 +193,25 @@ CREATE TABLE tickets (
 ```
 `PRIMARY KEY` uniquely identifies each row; `NOT NULL` enforces that a field can't be left empty.
 
-**Step 7: Diagram the schema.**
-Sketch your tables as boxes with fields listed inside, and draw lines showing foreign key relationships.
+**Step 7: The schema.**
+Your tables and their foreign-key relationship look like this:
+
+```mermaid
+erDiagram
+    CUSTOMERS ||--o{ TICKETS : has
+    CUSTOMERS {
+        string id PK
+        string name
+    }
+    TICKETS {
+        string ticket_id PK
+        string text
+        datetime created_at
+        string label
+        string customer_id FK
+        string dataset_version
+    }
+```
 
 ### Final Project Structure
 ```text

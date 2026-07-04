@@ -411,10 +411,34 @@ const cleanCourseTitle = (title) =>
 // ============================ Course reader ============================
 const CourseReader = ({ course, done, showContents, setShowContents, onBack, onComplete, topRef }) => {
   const [rendered, setRendered] = useState({ html: '', toc: [] });
+  const proseRef = useRef(null);
 
   useEffect(() => {
     setRendered(renderCourse(course.markdown));
   }, [course]);
+
+  // Turn ```mermaid blocks into real flowcharts. Mermaid is loaded lazily so it
+  // only ships to learners who actually open a course with a diagram.
+  useEffect(() => {
+    const container = proseRef.current;
+    if (!container) return;
+    const nodes = Array.from(container.querySelectorAll('.course-mermaid[data-mermaid]'));
+    if (!nodes.length) return;
+    let cancelled = false;
+    import('mermaid').then(({ default: mermaid }) => {
+      if (cancelled) return;
+      mermaid.initialize({ startOnLoad: false, theme: 'neutral', securityLevel: 'strict', fontFamily: 'inherit' });
+      nodes.forEach((node, i) => {
+        const src = node.textContent || '';
+        node.removeAttribute('data-mermaid');
+        const id = `mmd-${course.slug}-${i}-${Math.random().toString(36).slice(2, 8)}`;
+        mermaid.render(id, src)
+          .then(({ svg }) => { if (!cancelled) node.innerHTML = svg; })
+          .catch(() => { if (!cancelled) node.textContent = src; });
+      });
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [rendered.html, course.slug]);
 
   const jumpTo = (id) => {
     setShowContents(false);
@@ -458,7 +482,7 @@ const CourseReader = ({ course, done, showContents, setShowContents, onBack, onC
 
       {/* Rendered course */}
       <div className="bg-white border border-gray-200 rounded-2xl p-6 sm:p-9 shadow-sm">
-        <div className="course-prose" dangerouslySetInnerHTML={{ __html: rendered.html }} />
+        <div ref={proseRef} className="course-prose" dangerouslySetInnerHTML={{ __html: rendered.html }} />
 
         <div className="mt-8 pt-6 border-t border-gray-100 flex flex-wrap items-center gap-3">
           {!done ? (
@@ -501,6 +525,8 @@ const COURSE_PROSE_CSS = `
 .course-prose table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:.9rem; }
 .course-prose th, .course-prose td { border:1px solid #e5e7eb; padding:.5rem .7rem; text-align:left; }
 .course-prose th { background:#f8fafc; font-weight:700; color:#111827; }
+.course-prose .course-mermaid { margin:1.25rem 0; padding:1rem; background:#f8fafc; border:1px solid #eef2f7; border-radius:.9rem; overflow-x:auto; text-align:center; }
+.course-prose .course-mermaid svg { max-width:100%; height:auto; }
 `;
 
 export default Foundations;

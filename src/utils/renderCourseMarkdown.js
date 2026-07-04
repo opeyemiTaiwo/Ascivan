@@ -21,6 +21,19 @@ export const renderCourse = (markdown) => {
   const seen = {};
   const renderer = new marked.Renderer();
 
+  const escapeHtml = (s) => (s || '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  // Route ```mermaid fenced blocks to a container the reader turns into a real
+  // flowchart. All other code blocks render normally.
+  renderer.code = (code, lang) => {
+    if ((lang || '').toLowerCase() === 'mermaid') {
+      return `<div class="course-mermaid" data-mermaid="1">${escapeHtml(code)}</div>`;
+    }
+    const cls = lang ? ` class="language-${lang}"` : '';
+    return `<pre><code${cls}>${escapeHtml(code)}</code></pre>`;
+  };
+
   renderer.heading = (text, level, raw) => {
     let id = slugify(raw);
     if (!id) id = `section-${toc.length + 1}`;

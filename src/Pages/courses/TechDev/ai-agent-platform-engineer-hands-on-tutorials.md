@@ -32,14 +32,39 @@ An **agent** is a single AI system that plans and takes actions toward a goal; a
 **Step 5: Consider multi-tenancy.**
 **multi-tenant** means the platform serves multiple separate users or teams, each of whose agents and data must stay isolated from the others.
 
-**Step 6: Sketch a request flow.**
-Draw: User submits a task → Orchestrator assigns it to an agent → Agent calls tools from the registry → Results return to the user, with monitoring observing the whole flow.
+**Step 6: The request flow.**
+A task moves through the platform like this, with monitoring watching every stage:
+
+```mermaid
+flowchart LR
+    U["User submits a task"] --> ORC["Orchestration layer"]
+    ORC --> AR["Agent runtime"]
+    AR --> TR["Tool registry"]
+    TR --> AR
+    AR --> R["Results return to user"]
+    MON["Monitoring"] -.->|observes| ORC
+    MON -.->|observes| AR
+```
 
 **Step 7: Note a security consideration.**
 Write one sentence: what's the worst thing an agent on this platform could do if given too much unchecked access, and how would you prevent it?
 
-**Step 8: Draw the final architecture diagram.**
-Combine Steps 4–6 into one labeled diagram showing all components and the request flow between them.
+**Step 8: The full platform architecture.**
+Here are all the components from Steps 4 to 6 in one picture, with the request flowing top to bottom and monitoring observing everything:
+
+```mermaid
+flowchart TB
+    U["User / team (tenant)"] --> ORC["Orchestration layer"]
+    ORC --> AR["Agent runtime"]
+    AR --> PERM["Permissions / sandboxing"]
+    PERM --> TR["Tool registry"]
+    TR --> AR
+    AR --> R["Results"]
+    R --> U
+    MON["Monitoring"] -.->|observes| ORC
+    MON -.->|observes| AR
+    MON -.->|observes| TR
+```
 
 ### Final Project Structure
 ```text

@@ -394,7 +394,13 @@ A **limited launch** (or beta) releases a feature to a small subset of users fir
 Using your Project 6 baseline scores, define the minimum quality bar the feature must hit before it launches even to a limited audience.
 
 **Step 4: Plan the rollout stages.**
-Sketch three stages: internal testing → limited beta → full launch, with rough criteria for moving between them.
+Roll the feature out in three stages, each gated by criteria before moving on:
+
+```mermaid
+flowchart LR
+    IT["Internal testing"] -->|meets quality bar| LB["Limited beta"]
+    LB -->|feedback positive| FL["Full launch"]
+```
 
 **Step 5: Identify who needs to be involved.**
 List roles: engineering (to build it), your Project 6 evaluation reviewer, and anyone who needs to sign off before wider release.

@@ -31,8 +31,15 @@ An **actuator** is anything that lets the robot physically act, motors driving w
 **Step 6: Identify the "think" component.**
 Note: where does processing happen, an onboard computer, or a connection to a more powerful remote system?
 
-**Step 7: Draw the sense-think-act diagram.**
-Sketch three labeled sections (Sense → Think → Act) with your specific sensors, processing, and actuators listed under each, and arrows showing the cycle repeating.
+**Step 7: The sense-think-act loop.**
+Your robot repeats this cycle continuously: sensors feed perception, perception drives the decision, the decision commands the actuators, and the changed environment is sensed again.
+
+```mermaid
+flowchart LR
+    S["Sense: cameras, LiDAR, encoders"] --> T["Think: process data and decide"]
+    T --> A["Act: motors, arm, gripper"]
+    A -->|environment changes| S
+```
 
 **Step 8: Note one safety consideration.**
 Write one sentence: what's the worst thing that could happen if this robot's "think" step made a bad decision, and what would prevent it?

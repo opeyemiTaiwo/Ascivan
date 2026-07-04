@@ -76,11 +76,24 @@ Based on your Project 1 brief, list the pieces the system will need: user-facing
 **Step 3: Understand standard architecture diagram conventions.**
 Boxes typically represent **components** (services, databases); arrows represent **data flow** or **requests**, usually labeled with direction and what's being sent.
 
-**Step 4: Draw the request flow.**
-Sketch: User → App → API → AI Model → Response back to User, in that order, left to right or top to bottom.
+**Step 4: The request flow.**
+The core path a request takes:
+
+```mermaid
+flowchart LR
+    U["User"] --> APP["App"] --> API["API"] --> AIM["AI Model"]
+    AIM --> RESP["Response"] --> U
+```
 
 **Step 5: Add the data layer.**
-Add a box for where data is stored (database, vector store) and draw arrows showing which components read from or write to it.
+Now show where data lives and which component reads and writes it:
+
+```mermaid
+flowchart LR
+    U["User"] --> APP["App"] --> API["API"] --> AIM["AI Model"]
+    AIM --> RESP["Response"] --> U
+    API <-->|read and write| DB[("Database / vector store")]
+```
 
 **Step 6: Add integration points.**
 Draw connections to any existing systems named in your Project 1 constraints (e.g., "existing ticketing system").
@@ -261,8 +274,18 @@ Match storage to data type: structured records → relational database; document
 **Step 6: Address compliance requirements from Project 1.**
 Revisit your Project 1 brief's constraints (e.g., data residency, industry regulations) and confirm your data layer design satisfies them.
 
-**Step 7: Diagram the data and infrastructure layer.**
-Draw storage components, network boundaries, and access control points as their own focused diagram.
+**Step 7: The data and infrastructure layer.**
+Storage sits behind a network boundary, reached only through an access-control point:
+
+```mermaid
+flowchart TB
+    U["User"] --> APP["App / API"]
+    APP --> AC["Access control"]
+    subgraph BOUNDARY["Network boundary"]
+        AC --> DB[("Database")]
+        AC --> VS[("Vector store")]
+    end
+```
 
 **Step 8: Write the data and infrastructure design doc.**
 ```bash

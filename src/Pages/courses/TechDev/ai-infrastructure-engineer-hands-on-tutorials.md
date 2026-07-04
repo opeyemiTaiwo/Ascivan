@@ -42,8 +42,20 @@ Learn the difference: **CPU** (general-purpose, cheap, fine for small/light mode
 **Step 8: Choose an orchestration approach.**
 **container** (a lightweight, self-contained package of your app plus everything it needs to run), **orchestrator** (a system, like Kubernetes, that starts, stops, and scales containers automatically).
 
-**Step 9: Draw the stack as a simple diagram.**
-Sketch six labeled boxes (Compute, Storage, Networking, Orchestration, Serving, Monitoring) stacked vertically, with arrows showing a request flowing in from the top and a prediction flowing back out. Save it as `stack_diagram.png` (or `.txt` if hand-drawn as ASCII) in your project folder.
+**Step 9: The infrastructure stack.**
+A request enters at the serving layer and a prediction flows back out, with every layer watched by monitoring:
+
+```mermaid
+flowchart TB
+    REQ(["Request in"]) --> SRV["Serving"]
+    SRV --> ORCH["Orchestration"]
+    ORCH --> CMP["Compute"]
+    CMP --> STOR["Storage"]
+    CMP --> NET["Networking"]
+    CMP --> PRED(["Prediction out"])
+    MON["Monitoring"] -.->|observes| SRV
+    MON -.->|observes| CMP
+```
 
 ### Final Project Structure
 ```text

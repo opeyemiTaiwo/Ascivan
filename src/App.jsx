@@ -21,6 +21,7 @@ import CommunityPosts from './Pages/community/CommunityPosts';
 // Lazy-load secondary pages
 const UserDashboard = lazy(() => import('./Pages/user/dashboard'));
 const UserProfile = lazy(() => import('./Pages/user/UserProfile'));
+const SearchPage = lazy(() => import('./Pages/SearchPage'));
 const FollowersFollowing = lazy(() => import('./Pages/user/FollowersFollowing'));
 const NotificationsPage = lazy(() => import('./Pages/Notifications'));
 const Messages = lazy(() => import('./Pages/Messages'));
@@ -141,6 +142,7 @@ function App() {
                 <Route path="/admin" element={<SidebarRoute><AdminPanel /></SidebarRoute>} />
 
                 <Route path="/community" element={<Navigate to="/proof-wall" replace />} />
+                <Route path="/search" element={<SidebarRoute><SearchPage /></SidebarRoute>} />
                 <Route path="/proof-wall" element={<SidebarRoute><ProofWall /></SidebarRoute>} />
                 <Route path="/foundations" element={<SidebarRoute><Foundations /></SidebarRoute>} />
                 <Route path="/community/submit" element={<Navigate to="/proof-wall" replace />} />

@@ -75,12 +75,12 @@ agent_platform_diagram_project/
 ```
 
 ### What You Learned
-✅ The difference between an agent and an agent platform
-✅ Core platform components (runtime, registry, orchestration, permissions, monitoring)
-✅ Multi-tenancy considerations
-✅ Diagramming a request flow through the platform
-✅ Baseline security thinking for agent platforms
-✅ Producing a complete architecture diagram
+- ✅ The difference between an agent and an agent platform
+- ✅ Core platform components (runtime, registry, orchestration, permissions, monitoring)
+- ✅ Multi-tenancy considerations
+- ✅ Diagramming a request flow through the platform
+- ✅ Baseline security thinking for agent platforms
+- ✅ Producing a complete architecture diagram
 
 ### Portfolio Project
 **AI Agent Platform Architecture Diagram**: Designed a labeled architecture diagram for a multi-tenant agent platform, covering runtime, tool registry, orchestration, permissions, and monitoring components.
@@ -192,12 +192,12 @@ tool_calling_project/
 ```
 
 ### What You Learned
-✅ Defining a tool with a clear input schema
-✅ Sending a request with tools available to the model
-✅ Parsing a model's tool call from the response
-✅ Executing the tool and capturing its result
-✅ Sending the tool result back for a final response
-✅ Testing both tool-triggering and non-triggering cases
+- ✅ Defining a tool with a clear input schema
+- ✅ Sending a request with tools available to the model
+- ✅ Parsing a model's tool call from the response
+- ✅ Executing the tool and capturing its result
+- ✅ Sending the tool result back for a final response
+- ✅ Testing both tool-triggering and non-triggering cases
 
 ### Portfolio Project
 **Basic Tool-Calling Script**: Implemented the full tool-calling round trip, from tool definition through model request, parsing, execution, and result round-trip, with tested positive and negative cases.
@@ -288,11 +288,11 @@ single_agent_project/
 ```
 
 ### What You Learned
-✅ The agent loop pattern (repeated act-observe-decide cycles)
-✅ Implementing a bounded agent loop with a step safety limit
-✅ Testing single-step vs. multi-step goal completion
-✅ Maintaining conversation memory across agent steps
-✅ Logging agent reasoning for debuggability
+- ✅ The agent loop pattern (repeated act-observe-decide cycles)
+- ✅ Implementing a bounded agent loop with a step safety limit
+- ✅ Testing single-step vs. multi-step goal completion
+- ✅ Maintaining conversation memory across agent steps
+- ✅ Logging agent reasoning for debuggability
 
 ### Portfolio Project
 **Single-Purpose AI Agent**: Built a bounded agent loop capable of multi-step tool use and reasoning toward a goal, with conversation memory and step-by-step logging.
@@ -389,12 +389,12 @@ tool_registry_project/
 ```
 
 ### What You Learned
-✅ Designing a tool registry data structure
-✅ Generating tool definitions dynamically from a registry
-✅ Decoupling agent logic from specific tool implementations
-✅ Adding new tools without modifying agent code
-✅ Supporting multiple agents sharing one registry
-✅ Documenting a platform component's interface
+- ✅ Designing a tool registry data structure
+- ✅ Generating tool definitions dynamically from a registry
+- ✅ Decoupling agent logic from specific tool implementations
+- ✅ Adding new tools without modifying agent code
+- ✅ Supporting multiple agents sharing one registry
+- ✅ Documenting a platform component's interface
 
 ### Portfolio Project
 **Multi-Tool Agent Registry**: Built a tool registry system decoupling agent logic from tool implementations, supporting dynamic tool addition and multiple agents sharing a common tool catalog.
@@ -481,12 +481,12 @@ queue_execution_project/
 ```
 
 ### What You Learned
-✅ Why task queues decouple submission from execution
-✅ Setting up Redis as a queue backing store
-✅ Enqueuing agent tasks non-blockingly
-✅ Running workers to process queued tasks
-✅ Checking job status and retrieving results
-✅ Verifying concurrent processing with multiple workers
+- ✅ Why task queues decouple submission from execution
+- ✅ Setting up Redis as a queue backing store
+- ✅ Enqueuing agent tasks non-blockingly
+- ✅ Running workers to process queued tasks
+- ✅ Checking job status and retrieving results
+- ✅ Verifying concurrent processing with multiple workers
 
 ### Portfolio Project
 **Queue-Based Agent Execution System**: Built a Redis/RQ-backed task queue for running agent tasks asynchronously, with job status tracking and verified concurrent execution across multiple workers.
@@ -560,12 +560,12 @@ agent_evaluation_project/
 ```
 
 ### What You Learned
-✅ Building a diverse agent test set (easy, hard, ambiguous, unsupported)
-✅ Defining measurable success criteria per test
-✅ Running and scoring a full evaluation suite
-✅ Testing hallucination handling specifically
-✅ Testing graceful failure recovery
-✅ Writing an evaluation report with reliability recommendations
+- ✅ Building a diverse agent test set (easy, hard, ambiguous, unsupported)
+- ✅ Defining measurable success criteria per test
+- ✅ Running and scoring a full evaluation suite
+- ✅ Testing hallucination handling specifically
+- ✅ Testing graceful failure recovery
+- ✅ Writing an evaluation report with reliability recommendations
 
 ### Portfolio Project
 **Agent Reliability Evaluation Suite**: Built a systematic evaluation suite testing agent correctness, hallucination handling, and failure recovery across diverse goal types, with a scored reliability report.
@@ -679,12 +679,12 @@ access_control_project/
 ```
 
 ### What You Learned
-✅ Defining permission levels for tools
-✅ Implementing least-privilege access checks
-✅ Testing both denied and allowed access cases
-✅ Building structured audit logging
-✅ Logging both successful and denied tool calls
-✅ Sandboxing risky tools for safe testing
+- ✅ Defining permission levels for tools
+- ✅ Implementing least-privilege access checks
+- ✅ Testing both denied and allowed access cases
+- ✅ Building structured audit logging
+- ✅ Logging both successful and denied tool calls
+- ✅ Sandboxing risky tools for safe testing
 
 ### Portfolio Project
 **Agent Platform Access Control & Audit System**: Implemented least-privilege permission enforcement and structured audit logging for a tool registry, including a sandbox mode for safely testing high-risk tool behavior.
@@ -746,11 +746,11 @@ capstone_project/
 ```
 
 ### What You Learned
-✅ Integrating tool registration, queuing, permissions, and monitoring into one platform
-✅ Running agents through a complete, queued, permissioned execution path
-✅ Testing multi-agent, multi-user isolation
-✅ Re-running a reliability evaluation against a fully integrated system
-✅ Documenting a complete agent platform for a real audience
+- ✅ Integrating tool registration, queuing, permissions, and monitoring into one platform
+- ✅ Running agents through a complete, queued, permissioned execution path
+- ✅ Testing multi-agent, multi-user isolation
+- ✅ Re-running a reliability evaluation against a fully integrated system
+- ✅ Documenting a complete agent platform for a real audience
 
 ### Portfolio Project
 **Multi-Agent Platform (Capstone)**: Built a complete agent platform combining a shared tool registry, queue-based task execution, permission-enforced access control, audit logging, and a reliability evaluation suite, tested across multiple simulated users.

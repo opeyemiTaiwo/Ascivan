@@ -43,11 +43,11 @@ Zap 1
 ```
 
 ### What You Learned
-✅ What triggers, actions, and Zaps are
-✅ Connecting two apps into one workflow
-✅ Mapping data from a trigger into an action
-✅ Testing an automation before enabling it
-✅ Turning a live automation on safely
+- ✅ What triggers, actions, and Zaps are
+- ✅ Connecting two apps into one workflow
+- ✅ Mapping data from a trigger into an action
+- ✅ Testing an automation before enabling it
+- ✅ Turning a live automation on safely
 
 ### Portfolio Project
 **First Working Automation**: Connected two apps into a tested, live automation that removes a manual step.
@@ -98,11 +98,11 @@ Zap 2
 ```
 
 ### What You Learned
-✅ What filters, paths, and formatters are
-✅ Making an automation act only when it should
-✅ Routing one trigger to different outcomes
-✅ Cleaning and reshaping data between steps
-✅ Testing and documenting branching logic
+- ✅ What filters, paths, and formatters are
+- ✅ Making an automation act only when it should
+- ✅ Routing one trigger to different outcomes
+- ✅ Cleaning and reshaping data between steps
+- ✅ Testing and documenting branching logic
 
 ### Portfolio Project
 **Conditional Automation**: Built an automation with filters, branching paths, and data formatting that routes work based on real conditions.
@@ -151,11 +151,11 @@ Make scenario
 ```
 
 ### What You Learned
-✅ What scenarios and modules are in Make
-✅ Building visual, multi-step automations
-✅ Mapping data flow across several steps
-✅ Capturing form data into a database
-✅ Adding error handling for reliability
+- ✅ What scenarios and modules are in Make
+- ✅ Building visual, multi-step automations
+- ✅ Mapping data flow across several steps
+- ✅ Capturing form data into a database
+- ✅ Adding error handling for reliability
 
 ### Portfolio Project
 **Multi-Step Make Scenario**: Built a visual, three-step automation with error handling that turns form submissions into records and confirmations.
@@ -204,11 +204,11 @@ Custom integration
 ```
 
 ### What You Learned
-✅ What APIs, webhooks, and JSON are
-✅ Receiving live data through a webhook
-✅ Reading and mapping JSON fields
-✅ Making outbound API calls to any service
-✅ Building two-way custom integrations
+- ✅ What APIs, webhooks, and JSON are
+- ✅ Receiving live data through a webhook
+- ✅ Reading and mapping JSON fields
+- ✅ Making outbound API calls to any service
+- ✅ Building two-way custom integrations
 
 ### Portfolio Project
 **Custom API Automation**: Connected apps with no ready-made integration using webhooks, JSON, and direct API calls.
@@ -259,11 +259,11 @@ Business process automation
 ```
 
 ### What You Learned
-✅ Mapping a real business process before building
-✅ Building reliable intake and decision logic
-✅ Combining actions into an end-to-end process
-✅ Adding human-in-the-loop approval where needed
-✅ Logging, error handling, and realistic testing
+- ✅ Mapping a real business process before building
+- ✅ Building reliable intake and decision logic
+- ✅ Combining actions into an end-to-end process
+- ✅ Adding human-in-the-loop approval where needed
+- ✅ Logging, error handling, and realistic testing
 
 ### Portfolio Project
 **End-to-End Process Automation**: Automated a complete, realistic business process with intake, logic, actions, approvals, logging, and error handling.
@@ -314,11 +314,11 @@ Reliability + handoff
 ```
 
 ### What You Learned
-✅ Monitoring automations and reading run history
-✅ Setting up failure alerts
-✅ Designing within rate limits and quotas
-✅ Optimising automations for cost and speed
-✅ Documenting and handing off automations
+- ✅ Monitoring automations and reading run history
+- ✅ Setting up failure alerts
+- ✅ Designing within rate limits and quotas
+- ✅ Optimising automations for cost and speed
+- ✅ Documenting and handing off automations
 
 ### Portfolio Project
 **Reliable, Documented Automation Suite**: Made automations reliable with monitoring and alerts, then documented and handed them off professionally.
@@ -366,11 +366,11 @@ capstone_operation
 ```
 
 ### What You Learned
-✅ Turning a real operation into an automation suite
-✅ Combining triggers, logic, multi-step flows, and custom integrations
-✅ Making a whole suite reliable and monitored
-✅ Documenting and handing off a complete operation
-✅ Shipping a persuasive, results-focused capstone
+- ✅ Turning a real operation into an automation suite
+- ✅ Combining triggers, logic, multi-step flows, and custom integrations
+- ✅ Making a whole suite reliable and monitored
+- ✅ Documenting and handing off a complete operation
+- ✅ Shipping a persuasive, results-focused capstone
 
 ### Portfolio Project
 **Complete Operation Automation (Capstone)**: Automated a full real-world operation with reliable, documented, custom-integrated workflows that replace hours of manual work.

@@ -42,11 +42,11 @@ task-tracker (Bubble app)
 ```
 
 ### What You Learned
-✅ Creating a Bubble app and understanding the editor tabs
-✅ What pages, elements, and containers are
-✅ Building inside a responsive layout instead of fixed positions
-✅ Previewing an app on a live URL
-✅ Keeping a simple map of your app's structure
+- ✅ Creating a Bubble app and understanding the editor tabs
+- ✅ What pages, elements, and containers are
+- ✅ Building inside a responsive layout instead of fixed positions
+- ✅ Previewing an app on a live URL
+- ✅ Keeping a simple map of your app's structure
 
 ### Portfolio Project
 **Bubble App Foundation**: Set up a live no-code web app with a responsive, container-based home page and a documented page structure.
@@ -99,11 +99,11 @@ Data model
 ```
 
 ### What You Learned
-✅ What data types, fields, and records are
-✅ Choosing correct field types (date, yes/no, text)
-✅ Designing a data model before building screens
-✅ Creating sample records to build and test against
-✅ Documenting a data model for yourself and others
+- ✅ What data types, fields, and records are
+- ✅ Choosing correct field types (date, yes/no, text)
+- ✅ Designing a data model before building screens
+- ✅ Creating sample records to build and test against
+- ✅ Documenting a data model for yourself and others
 
 ### Portfolio Project
 **App Data Model**: Designed and documented a real data structure with correctly typed fields, plus sample records to build against.
@@ -153,11 +153,11 @@ index (page)
 ```
 
 ### What You Learned
-✅ What repeating groups and data sources are
-✅ Binding screen elements to record fields (current cell)
-✅ Displaying multiple fields per row
-✅ Sorting a list by a field
-✅ Confirming a list is data-driven, not hardcoded
+- ✅ What repeating groups and data sources are
+- ✅ Binding screen elements to record fields (current cell)
+- ✅ Displaying multiple fields per row
+- ✅ Sorting a list by a field
+- ✅ Confirming a list is data-driven, not hardcoded
 
 ### Portfolio Project
 **Data-Driven List Screen**: Built a self-updating list that displays real records with multiple fields and a meaningful sort order.
@@ -207,11 +207,11 @@ Workflows
 ```
 
 ### What You Learned
-✅ What workflows, events, and actions are
-✅ Creating records from user input and mapping inputs to fields
-✅ Validating input before saving
-✅ Editing records with Make changes to a thing
-✅ Deleting records safely with confirmation
+- ✅ What workflows, events, and actions are
+- ✅ Creating records from user input and mapping inputs to fields
+- ✅ Validating input before saving
+- ✅ Editing records with Make changes to a thing
+- ✅ Deleting records safely with confirmation
 
 ### Portfolio Project
 **Interactive CRUD App**: Added create, complete, and delete features driven by user input, with validation and safe deletes.
@@ -260,11 +260,11 @@ Accounts + privacy
 ```
 
 ### What You Learned
-✅ Using Bubble's built-in User type
-✅ Building sign-up and log-in workflows
-✅ What Current User is and how to reference it
-✅ Linking records to their owner
-✅ Enforcing real privacy with database privacy rules
+- ✅ Using Bubble's built-in User type
+- ✅ Building sign-up and log-in workflows
+- ✅ What Current User is and how to reference it
+- ✅ Linking records to their owner
+- ✅ Enforcing real privacy with database privacy rules
 
 ### Portfolio Project
 **Multi-User App with Private Data**: Added accounts and per-user data isolation enforced by privacy rules, not just screen logic.
@@ -314,11 +314,11 @@ Published app
 ```
 
 ### What You Learned
-✅ Responsive testing and fixing layouts per width
-✅ Designing empty and loading states
-✅ Testing full user journeys in order
-✅ The difference between development and live versions
-✅ Deploying, documenting, and gathering feedback
+- ✅ Responsive testing and fixing layouts per width
+- ✅ Designing empty and loading states
+- ✅ Testing full user journeys in order
+- ✅ The difference between development and live versions
+- ✅ Deploying, documenting, and gathering feedback
 
 ### Portfolio Project
 **Published, Tested Web App**: Polished an app for all screen sizes, tested full user journeys, deployed it live, and documented it for a real audience.
@@ -366,11 +366,11 @@ capstone_app (Bubble)
 ```
 
 ### What You Learned
-✅ Turning an original idea into a designed data model
-✅ Building display, interactivity, accounts, and privacy end to end
-✅ Deploying a complete app to a live URL
-✅ Documenting an app for a real audience
-✅ Shipping a finished, original no-code product
+- ✅ Turning an original idea into a designed data model
+- ✅ Building display, interactivity, accounts, and privacy end to end
+- ✅ Deploying a complete app to a live URL
+- ✅ Documenting an app for a real audience
+- ✅ Shipping a finished, original no-code product
 
 ### Portfolio Project
 **Complete No-Code Web App (Capstone)**: Designed, built, secured, and published an original multi-user web app with a real data model, full CRUD, accounts, privacy rules, and a live deployment.

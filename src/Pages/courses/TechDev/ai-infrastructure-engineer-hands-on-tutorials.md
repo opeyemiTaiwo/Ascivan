@@ -66,13 +66,13 @@ infra_stack_project/
 ```
 
 ### What You Learned
-✅ Training vs. inference infrastructure
-✅ The six core layers of an AI infrastructure stack
-✅ Compute type tradeoffs (CPU vs. GPU vs. accelerator)
-✅ Storage concepts (object storage, model registry)
-✅ Networking concepts (API gateway, load balancer)
-✅ Orchestration concepts (container, orchestrator)
-✅ Turning requirements into an architecture diagram
+- ✅ Training vs. inference infrastructure
+- ✅ The six core layers of an AI infrastructure stack
+- ✅ Compute type tradeoffs (CPU vs. GPU vs. accelerator)
+- ✅ Storage concepts (object storage, model registry)
+- ✅ Networking concepts (API gateway, load balancer)
+- ✅ Orchestration concepts (container, orchestrator)
+- ✅ Turning requirements into an architecture diagram
 
 ### Portfolio Project
 **AI System Infrastructure Stack Map**: Translated a business requirement into a labeled, six-layer infrastructure architecture diagram covering compute, storage, networking, orchestration, serving, and monitoring.
@@ -268,14 +268,14 @@ monitoring_project/
 ```
 
 ### What You Learned
-✅ Terminal and shell fundamentals
-✅ Linux commands (`pwd`, `ls`, `mkdir`, `cd`, `ps`, `top`, `free`, `df`, `ss`)
-✅ Bash scripting and permissions (`chmod +x`)
-✅ CPU, memory, disk, process, network, and GPU monitoring
-✅ Threshold alerting
-✅ Live dashboards (`watch`)
-✅ Logging (`>>`)
-✅ Scheduling with cron
+- ✅ Terminal and shell fundamentals
+- ✅ Linux commands (`pwd`, `ls`, `mkdir`, `cd`, `ps`, `top`, `free`, `df`, `ss`)
+- ✅ Bash scripting and permissions (`chmod +x`)
+- ✅ CPU, memory, disk, process, network, and GPU monitoring
+- ✅ Threshold alerting
+- ✅ Live dashboards (`watch`)
+- ✅ Logging (`>>`)
+- ✅ Scheduling with cron
 
 ### Portfolio Project
 **Linux Resource Monitoring Toolkit**: Built a Linux monitoring toolkit using Bash scripting to monitor CPU, memory, disk, network, process, and GPU utilization, with live dashboard viewing, logging, and scheduled execution via cron.
@@ -353,13 +353,13 @@ cloud_deploy_project/
 ```
 
 ### What You Learned
-✅ IaaS and virtual machine fundamentals
-✅ Instance types and cost/performance tradeoffs
-✅ Security groups and firewall rules
-✅ SSH and key-pair authentication
-✅ Installing dependencies on a remote server
-✅ Running a service bound to all network interfaces
-✅ Verifying a deployment from outside the server
+- ✅ IaaS and virtual machine fundamentals
+- ✅ Instance types and cost/performance tradeoffs
+- ✅ Security groups and firewall rules
+- ✅ SSH and key-pair authentication
+- ✅ Installing dependencies on a remote server
+- ✅ Running a service bound to all network interfaces
+- ✅ Verifying a deployment from outside the server
 
 ### Portfolio Project
 **Cloud-Deployed Web Service**: Provisioned a cloud compute instance, configured network access and SSH authentication, and deployed a live FastAPI service reachable from the public internet.
@@ -439,12 +439,12 @@ container_project/
 ```
 
 ### What You Learned
-✅ Why containers exist vs. VMs
-✅ Writing a Dockerfile (base images, layers, instructions)
-✅ Building and tagging images
-✅ Running containers with port mapping
-✅ Pushing images to a container registry
-✅ Pulling and running images on a remote server
+- ✅ Why containers exist vs. VMs
+- ✅ Writing a Dockerfile (base images, layers, instructions)
+- ✅ Building and tagging images
+- ✅ Running containers with port mapping
+- ✅ Pushing images to a container registry
+- ✅ Pulling and running images on a remote server
 
 ### Portfolio Project
 **Containerized Service Deployment**: Packaged a Python API into a Docker container, published it to a container registry, and deployed the exact same image to a cloud server.
@@ -515,11 +515,11 @@ benchmark_project/
 ```
 
 ### What You Learned
-✅ Latency, throughput, and percentile metrics (P50/P95/P99)
-✅ Designing a fair, like-for-like hardware comparison
-✅ Writing a load-testing script
-✅ Calculating cost-per-request across configurations
-✅ Documenting benchmark results for future decisions
+- ✅ Latency, throughput, and percentile metrics (P50/P95/P99)
+- ✅ Designing a fair, like-for-like hardware comparison
+- ✅ Writing a load-testing script
+- ✅ Calculating cost-per-request across configurations
+- ✅ Documenting benchmark results for future decisions
 
 ### Portfolio Project
 **Inference Hardware Benchmark Report**: Designed and ran a load-testing script comparing latency, throughput, and cost-efficiency across CPU and GPU hardware configurations for a deployed model API.
@@ -586,13 +586,13 @@ autoscaling_api_project/
 ```
 
 ### What You Learned
-✅ Wrapping a model in a serving API
-✅ Orchestration, replicas, and resilience
-✅ Load balancing across replicas
-✅ Configuring autoscaling rules
-✅ Load testing to trigger and verify scaling
-✅ Watching scaling behavior in real time
-✅ Cost cleanup after testing
+- ✅ Wrapping a model in a serving API
+- ✅ Orchestration, replicas, and resilience
+- ✅ Load balancing across replicas
+- ✅ Configuring autoscaling rules
+- ✅ Load testing to trigger and verify scaling
+- ✅ Watching scaling behavior in real time
+- ✅ Cost cleanup after testing
 
 ### Portfolio Project
 **Autoscaling Model-Serving API**: Deployed a containerized model API behind a load balancer with autoscaling, and verified scale-up and scale-down behavior under simulated load.
@@ -660,13 +660,13 @@ monitoring_alerting_project/
 ```
 
 ### What You Learned
-✅ Choosing meaningful metrics (latency, error rate, resource usage, traffic)
-✅ Instrumenting an API to expose metrics
-✅ Collecting metrics with Prometheus
-✅ Visualizing metrics with Grafana
-✅ Writing alert rules with thresholds and time windows
-✅ Routing alerts to a notification channel
-✅ Testing alerts against a simulated failure
+- ✅ Choosing meaningful metrics (latency, error rate, resource usage, traffic)
+- ✅ Instrumenting an API to expose metrics
+- ✅ Collecting metrics with Prometheus
+- ✅ Visualizing metrics with Grafana
+- ✅ Writing alert rules with thresholds and time windows
+- ✅ Routing alerts to a notification channel
+- ✅ Testing alerts against a simulated failure
 
 ### Portfolio Project
 **Model Deployment Monitoring & Alerting System**: Instrumented a production API, built a Prometheus/Grafana monitoring dashboard, and configured and tested a working alert rule for error-rate spikes.
@@ -728,10 +728,10 @@ capstone_project/
 ```
 
 ### What You Learned
-✅ Integrating seven separate infrastructure projects into one system
-✅ Verifying an architecture map against a real, running deployment
-✅ End-to-end load testing across autoscaling, load balancing, and monitoring together
-✅ Writing infrastructure documentation for a non-technical or future audience
+- ✅ Integrating seven separate infrastructure projects into one system
+- ✅ Verifying an architecture map against a real, running deployment
+- ✅ End-to-end load testing across autoscaling, load balancing, and monitoring together
+- ✅ Writing infrastructure documentation for a non-technical or future audience
 
 ### Portfolio Project
 **End-to-End AI Infrastructure Platform**: Designed, built, and documented a complete AI infrastructure system: a containerized, autoscaling model-serving API behind a load balancer, with full monitoring and alerting, benchmarked under real load on cloud infrastructure.

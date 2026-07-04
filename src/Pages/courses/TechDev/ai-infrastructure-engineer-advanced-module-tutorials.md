@@ -86,12 +86,12 @@ pulumi_iac_project/
 ```
 
 ### What You Learned
-✅ What infrastructure as code solves that manual provisioning doesn't
-✅ Pulumi stacks as isolated, deployable environments
-✅ Defining cloud resources in Python
-✅ Previewing changes before applying them
-✅ Making incremental changes via diffs
-✅ Proving reproducibility through destroy/recreate
+- ✅ What infrastructure as code solves that manual provisioning doesn't
+- ✅ Pulumi stacks as isolated, deployable environments
+- ✅ Defining cloud resources in Python
+- ✅ Previewing changes before applying them
+- ✅ Making incremental changes via diffs
+- ✅ Proving reproducibility through destroy/recreate
 
 ### Portfolio Project
 **Infrastructure as Code with Pulumi** — Defined and deployed cloud compute infrastructure using Pulumi's Python SDK, with previewed changes, incremental diffs, and verified reproducibility via a full destroy/recreate cycle.
@@ -183,12 +183,12 @@ opentofu_project/
 ```
 
 ### What You Learned
-✅ Declarative vs. imperative infrastructure as code
-✅ Writing HCL configuration for cloud resources
-✅ The init/plan/apply OpenTofu workflow
-✅ State file management and its importance
-✅ Making and previewing incremental changes
-✅ Comparing Pulumi and OpenTofu firsthand
+- ✅ Declarative vs. imperative infrastructure as code
+- ✅ Writing HCL configuration for cloud resources
+- ✅ The init/plan/apply OpenTofu workflow
+- ✅ State file management and its importance
+- ✅ Making and previewing incremental changes
+- ✅ Comparing Pulumi and OpenTofu firsthand
 
 ### Portfolio Project
 **Infrastructure as Code with OpenTofu** — Provisioned cloud compute infrastructure using OpenTofu's declarative HCL configuration, with a documented comparison against an equivalent Pulumi implementation.
@@ -298,12 +298,12 @@ gpu_scheduling_project/
 ```
 
 ### What You Learned
-✅ Why GPU scheduling differs fundamentally from CPU autoscaling
-✅ Modeling a finite, shared GPU resource pool
-✅ Priority-based job queuing
-✅ Implementing an allocation scheduling loop
-✅ Releasing resources and re-triggering scheduling
-✅ Preventing starvation with priority aging
+- ✅ Why GPU scheduling differs fundamentally from CPU autoscaling
+- ✅ Modeling a finite, shared GPU resource pool
+- ✅ Priority-based job queuing
+- ✅ Implementing an allocation scheduling loop
+- ✅ Releasing resources and re-triggering scheduling
+- ✅ Preventing starvation with priority aging
 
 ### Portfolio Project
 **GPU Scheduling System for Multi-Tenant AI Infrastructure** — Built a priority-based GPU scheduler with resource pooling, allocation, release, and starvation prevention, tested under simulated multi-team contention.
@@ -423,12 +423,12 @@ iam_project/
 ```
 
 ### What You Learned
-✅ The identity → role → policy IAM model
-✅ Defining roles under least privilege
-✅ Implementing centralized permission checks
-✅ Wiring IAM into existing infrastructure tooling (GPU scheduler)
-✅ Issuing scoped, temporary credentials
-✅ Testing permission boundaries and audit logging IAM decisions
+- ✅ The identity → role → policy IAM model
+- ✅ Defining roles under least privilege
+- ✅ Implementing centralized permission checks
+- ✅ Wiring IAM into existing infrastructure tooling (GPU scheduler)
+- ✅ Issuing scoped, temporary credentials
+- ✅ Testing permission boundaries and audit logging IAM decisions
 
 ### Portfolio Project
 **Multi-Tenant IAM for AI Infrastructure** — Implemented role-based access control with least-privilege policies, temporary scoped credentials, and audit logging, integrated with a GPU scheduling system to enforce access at the resource level.

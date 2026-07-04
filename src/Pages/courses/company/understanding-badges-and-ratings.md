@@ -70,10 +70,10 @@ You now have every piece, and here is a reliable order for reading a profile:
 In under a minute you can move from a name to a grounded, evidence-based read on whether someone fits your project. When a profile fits, you can post a job or invite the member to a project directly, and the same badge system then records how they perform for you, which keeps the whole platform honest over time.
 
 ### What You Learned
-✅ Why proven work beats stated credentials on Ascivan
-✅ The six tracks and the work each one represents
-✅ How badge levels show depth within a track
-✅ How contribution quality and ratings reveal how someone works
-✅ A fast, reliable order for reading any member profile
+- ✅ Why proven work beats stated credentials on Ascivan
+- ✅ The six tracks and the work each one represents
+- ✅ How badge levels show depth within a track
+- ✅ How contribution quality and ratings reveal how someone works
+- ✅ A fast, reliable order for reading any member profile
 
 **Deliverable:** The ability to read any Ascivan profile and judge fit from evidence, so you can hire with confidence.

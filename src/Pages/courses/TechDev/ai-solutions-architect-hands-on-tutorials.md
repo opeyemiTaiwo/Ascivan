@@ -45,12 +45,12 @@ solutions_brief_project/
 ```
 
 ### What You Learned
-✅ Translating a business problem into a written brief
-✅ Identifying stakeholders and their constraints
-✅ Separating business goals from technical goals
-✅ Documenting budget, timeline, and compliance constraints
-✅ Proposing an initial technical direction
-✅ Assembling a one-page solutions brief
+- ✅ Translating a business problem into a written brief
+- ✅ Identifying stakeholders and their constraints
+- ✅ Separating business goals from technical goals
+- ✅ Documenting budget, timeline, and compliance constraints
+- ✅ Proposing an initial technical direction
+- ✅ Assembling a one-page solutions brief
 
 ### Portfolio Project
 **AI Solutions Brief**: Translated a business problem into a structured solutions brief covering stakeholders, measurable goals, constraints, and a proposed technical direction.
@@ -113,12 +113,12 @@ system_diagram_project/
 ```
 
 ### What You Learned
-✅ Identifying major system components from a business brief
-✅ Standard architecture diagram conventions
-✅ Diagramming the request/response flow
-✅ Representing the data layer visually
-✅ Showing integration with existing systems
-✅ Labeling for clarity and getting outside feedback
+- ✅ Identifying major system components from a business brief
+- ✅ Standard architecture diagram conventions
+- ✅ Diagramming the request/response flow
+- ✅ Representing the data layer visually
+- ✅ Showing integration with existing systems
+- ✅ Labeling for clarity and getting outside feedback
 
 ### Portfolio Project
 **AI Service System Diagram**: Translated a solutions brief into a labeled system architecture diagram showing request flow, data layer, and integration points with existing infrastructure.
@@ -175,12 +175,12 @@ model_comparison_project/
 ```
 
 ### What You Learned
-✅ Defining evaluation criteria before comparing options
-✅ Including a non-AI baseline in comparisons
-✅ Building a structured comparison matrix
-✅ The fine-tuning vs. prompting/RAG tradeoff
-✅ Estimating rough cost per option
-✅ Writing a justified recommendation
+- ✅ Defining evaluation criteria before comparing options
+- ✅ Including a non-AI baseline in comparisons
+- ✅ Building a structured comparison matrix
+- ✅ The fine-tuning vs. prompting/RAG tradeoff
+- ✅ Estimating rough cost per option
+- ✅ Writing a justified recommendation
 
 ### Portfolio Project
 **AI Model Selection Comparison**: Evaluated multiple AI approaches (including a non-AI baseline) against defined criteria, quality, latency, cost, privacy, integration, and produced a justified recommendation.
@@ -234,12 +234,12 @@ full_architecture_project/
 ```
 
 ### What You Learned
-✅ Common AI reference architecture patterns (RAG, agentic, simple API)
-✅ Choosing a pattern based on a documented model comparison
-✅ Adding integration patterns (API gateways, message queues)
-✅ Identifying likely scalability bottlenecks
-✅ Estimating full-system cost, not just model cost
-✅ Writing a complete architecture document
+- ✅ Common AI reference architecture patterns (RAG, agentic, simple API)
+- ✅ Choosing a pattern based on a documented model comparison
+- ✅ Adding integration patterns (API gateways, message queues)
+- ✅ Identifying likely scalability bottlenecks
+- ✅ Estimating full-system cost, not just model cost
+- ✅ Writing a complete architecture document
 
 ### Portfolio Project
 **End-to-End AI System Architecture**: Designed a complete AI system architecture using a chosen reference pattern (RAG/agentic/API), including integration design, scalability analysis, and full-system cost estimates.
@@ -302,12 +302,12 @@ data_infra_layer_project/
 ```
 
 ### What You Learned
-✅ Designing end-to-end data flow, including deletion/archival
-✅ Matching storage types to data types
-✅ Network segmentation and encryption fundamentals
-✅ Designing access control with least privilege
-✅ Mapping design decisions to compliance requirements
-✅ Producing a focused data and infrastructure design document
+- ✅ Designing end-to-end data flow, including deletion/archival
+- ✅ Matching storage types to data types
+- ✅ Network segmentation and encryption fundamentals
+- ✅ Designing access control with least privilege
+- ✅ Mapping design decisions to compliance requirements
+- ✅ Producing a focused data and infrastructure design document
 
 ### Portfolio Project
 **AI System Data & Infrastructure Design**: Designed the data flow, storage architecture, network security, and access control layer for an AI system, explicitly mapped to business compliance requirements.
@@ -360,12 +360,12 @@ governance_risk_project/
 ```
 
 ### What You Learned
-✅ Identifying risk categories relevant to AI systems
-✅ Assessing likelihood and severity for a specific system
-✅ Designing mitigations for high-priority risks
-✅ Writing an incident response plan
-✅ Addressing fairness, transparency, and accountability
-✅ Producing a complete governance and risk plan
+- ✅ Identifying risk categories relevant to AI systems
+- ✅ Assessing likelihood and severity for a specific system
+- ✅ Designing mitigations for high-priority risks
+- ✅ Writing an incident response plan
+- ✅ Addressing fairness, transparency, and accountability
+- ✅ Producing a complete governance and risk plan
 
 ### Portfolio Project
 **AI System Governance & Risk Plan**: Assessed data, model, operational, and reputational risks for a proposed AI system, designed mitigations, and wrote an incident response plan addressing responsible AI principles.
@@ -423,12 +423,12 @@ architecture_proposal_project/
 ```
 
 ### What You Learned
-✅ Structuring a proposal for a mixed technical/business audience
-✅ Leading with business impact before technical detail
-✅ Reusing validated prior work instead of creating from scratch
-✅ Anticipating and preparing for tough questions
-✅ Defining a clear, actionable ask
-✅ Practicing and delivering a live technical proposal
+- ✅ Structuring a proposal for a mixed technical/business audience
+- ✅ Leading with business impact before technical detail
+- ✅ Reusing validated prior work instead of creating from scratch
+- ✅ Anticipating and preparing for tough questions
+- ✅ Defining a clear, actionable ask
+- ✅ Practicing and delivering a live technical proposal
 
 ### Portfolio Project
 **AI Architecture Proposal Presentation**: Synthesized a full solutions architecture (business case, technical design, data/security, governance, and cost) into a stakeholder-ready presentation with a clear ask and prepared Q&A.
@@ -488,11 +488,11 @@ capstone_project/
 ```
 
 ### What You Learned
-✅ Carrying one business problem through the full architecture lifecycle
-✅ Integrating business, technical, data/security, and governance work into one story
-✅ Compiling a full cost estimate across every layer of a system
-✅ Writing a summary that communicates the whole project at a glance
-✅ Presenting architecture work the way a real stakeholder review would
+- ✅ Carrying one business problem through the full architecture lifecycle
+- ✅ Integrating business, technical, data/security, and governance work into one story
+- ✅ Compiling a full cost estimate across every layer of a system
+- ✅ Writing a summary that communicates the whole project at a glance
+- ✅ Presenting architecture work the way a real stakeholder review would
 
 ### Portfolio Project
 **Complete AI Solution Architecture (Capstone)**: Designed and documented an end-to-end AI solution architecture for a real business problem, including model selection, system design, data/security architecture, governance and risk planning, cost estimation, and a stakeholder-ready proposal.

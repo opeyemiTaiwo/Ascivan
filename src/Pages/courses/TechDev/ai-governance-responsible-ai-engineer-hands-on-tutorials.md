@@ -48,12 +48,12 @@ risk_overview_project/
 ```
 
 ### What You Learned
-✅ The four core AI risk categories
-✅ Assessing data privacy risk for a specific system
-✅ Assessing model risk for a specific system
-✅ Assessing operational risk for a specific system
-✅ Assessing reputational/societal risk
-✅ Ranking risks by likelihood and severity
+- ✅ The four core AI risk categories
+- ✅ Assessing data privacy risk for a specific system
+- ✅ Assessing model risk for a specific system
+- ✅ Assessing operational risk for a specific system
+- ✅ Assessing reputational/societal risk
+- ✅ Ranking risks by likelihood and severity
 
 ### Portfolio Project
 **AI System Risk Overview**: Conducted a structured risk assessment of an AI system across data privacy, model, operational, and reputational risk categories, with a ranked summary of top concerns.
@@ -159,12 +159,12 @@ output_logging_project/
 ```
 
 ### What You Learned
-✅ Making and logging model API calls
-✅ Structured logging with JSONL
-✅ Wiring logging into every call automatically
-✅ Building a log review tool
-✅ Filtering logs for specific patterns
-✅ Documenting a logging schema for future extension
+- ✅ Making and logging model API calls
+- ✅ Structured logging with JSONL
+- ✅ Wiring logging into every call automatically
+- ✅ Building a log review tool
+- ✅ Filtering logs for specific patterns
+- ✅ Documenting a logging schema for future extension
 
 ### Portfolio Project
 **Model Output Logging & Review Tool**: Built a structured logging system for AI model calls with a separate review tool supporting keyword filtering, forming the audit trail infrastructure for responsible AI evaluation.
@@ -241,12 +241,12 @@ dataset_fairness_audit_project/
 ```
 
 ### What You Learned
-✅ Checking group representation in a dataset
-✅ Comparing outcome rates across demographic groups
-✅ Identifying proxy variables for protected attributes
-✅ Visualizing disparities for stakeholder communication
-✅ Documenting findings with severity judgments
-✅ Recommending concrete mitigations
+- ✅ Checking group representation in a dataset
+- ✅ Comparing outcome rates across demographic groups
+- ✅ Identifying proxy variables for protected attributes
+- ✅ Visualizing disparities for stakeholder communication
+- ✅ Documenting findings with severity judgments
+- ✅ Recommending concrete mitigations
 
 ### Portfolio Project
 **Dataset Fairness Audit**: Audited a real-world dataset for representation imbalance, outcome disparities across demographic groups, and proxy variable risks, with visualized findings and mitigation recommendations.
@@ -320,12 +320,12 @@ bias_evaluation_project/
 ```
 
 ### What You Learned
-✅ Designing paired-prompt bias tests
-✅ Holding variables constant to isolate bias signals
-✅ Measuring tone, length, and word choice differences
-✅ Aggregating results across multiple test pairs
-✅ Testing bias along multiple dimensions
-✅ Writing a defensible bias evaluation report
+- ✅ Designing paired-prompt bias tests
+- ✅ Holding variables constant to isolate bias signals
+- ✅ Measuring tone, length, and word choice differences
+- ✅ Aggregating results across multiple test pairs
+- ✅ Testing bias along multiple dimensions
+- ✅ Writing a defensible bias evaluation report
 
 ### Portfolio Project
 **Model Output Bias Evaluation**: Designed and ran a paired-prompt bias test across multiple demographic dimensions, aggregating and scoring results to produce a defensible bias evaluation report.
@@ -404,12 +404,12 @@ red_teaming_project/
 ```
 
 ### What You Learned
-✅ Defining a system's intended boundaries explicitly
-✅ Prompt injection as a red-teaming technique
-✅ Role-play framing as a red-teaming technique
-✅ Incremental escalation testing
-✅ Scoring resilience beyond simple pass/fail
-✅ Writing a red-team report with actionable findings
+- ✅ Defining a system's intended boundaries explicitly
+- ✅ Prompt injection as a red-teaming technique
+- ✅ Role-play framing as a red-teaming technique
+- ✅ Incremental escalation testing
+- ✅ Scoring resilience beyond simple pass/fail
+- ✅ Writing a red-team report with actionable findings
 
 ### Portfolio Project
 **AI Chatbot Red-Team Assessment**: Conducted a systematic red-team evaluation of an AI system using prompt injection, role-play framing, and incremental escalation techniques, with a scored resilience assessment.
@@ -466,12 +466,12 @@ model_card_project/
 ```
 
 ### What You Learned
-✅ What a model card is and why it matters
-✅ Documenting intended use and scope boundaries
-✅ Summarizing dataset audit findings for a governance audience
-✅ Summarizing bias and red-team evaluation results
-✅ Writing an honest limitations section
-✅ Building an actionable governance checklist
+- ✅ What a model card is and why it matters
+- ✅ Documenting intended use and scope boundaries
+- ✅ Summarizing dataset audit findings for a governance audience
+- ✅ Summarizing bias and red-team evaluation results
+- ✅ Writing an honest limitations section
+- ✅ Building an actionable governance checklist
 
 ### Portfolio Project
 **AI Model Card & Governance Checklist**: Synthesized dataset audit, bias evaluation, and red-team findings into a standard model card documenting intended use, limitations, and evaluation results, plus an actionable pre-deployment governance checklist.
@@ -571,12 +571,12 @@ monitoring_dashboard_project/
 ```
 
 ### What You Learned
-✅ Selecting meaningful ongoing monitoring metrics
-✅ Extending a logging schema for flagging
-✅ Building a simple automated flagging rule
-✅ Building a basic monitoring dashboard
-✅ Tracking trends over time, not just point-in-time counts
-✅ Defining review thresholds that trigger real action
+- ✅ Selecting meaningful ongoing monitoring metrics
+- ✅ Extending a logging schema for flagging
+- ✅ Building a simple automated flagging rule
+- ✅ Building a basic monitoring dashboard
+- ✅ Tracking trends over time, not just point-in-time counts
+- ✅ Defining review thresholds that trigger real action
 
 ### Portfolio Project
 **AI System Monitoring Dashboard**: Built a Flask dashboard tracking flagged model outputs and trend data over time, with defined review thresholds connecting ongoing monitoring back to a governance process.
@@ -636,11 +636,11 @@ capstone_project/
 ```
 
 ### What You Learned
-✅ Carrying one AI system through the full responsible-AI audit lifecycle
-✅ Integrating risk assessment, data audit, bias testing, and red-teaming into one story
-✅ Synthesizing evidence into standard governance documentation
-✅ Designing ongoing monitoring tied to concrete action thresholds
-✅ Writing a summary that communicates a full audit at a glance
+- ✅ Carrying one AI system through the full responsible-AI audit lifecycle
+- ✅ Integrating risk assessment, data audit, bias testing, and red-teaming into one story
+- ✅ Synthesizing evidence into standard governance documentation
+- ✅ Designing ongoing monitoring tied to concrete action thresholds
+- ✅ Writing a summary that communicates a full audit at a glance
 
 ### Portfolio Project
 **Full Responsible-AI System Audit (Capstone)**: Conducted a complete responsible-AI audit of a sample system: risk assessment, dataset fairness audit, bias evaluation, red-team testing, model card documentation, and an ongoing monitoring plan with defined action thresholds.

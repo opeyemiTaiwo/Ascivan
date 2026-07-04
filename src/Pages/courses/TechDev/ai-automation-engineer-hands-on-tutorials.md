@@ -52,12 +52,12 @@ automation_opportunity_project/
 ```
 
 ### What You Learned
-✅ Evaluating workflows for automation fit
-✅ Mapping a workflow step by step, including small manual steps
-✅ Identifying triggers and outputs
-✅ Estimating time saved by automating
-✅ Identifying edge cases that require special handling
-✅ Writing an automation opportunity summary
+- ✅ Evaluating workflows for automation fit
+- ✅ Mapping a workflow step by step, including small manual steps
+- ✅ Identifying triggers and outputs
+- ✅ Estimating time saved by automating
+- ✅ Identifying edge cases that require special handling
+- ✅ Writing an automation opportunity summary
 
 ### Portfolio Project
 **Automation Opportunity Assessment**: Mapped a real repetitive workflow step by step, scored it for automation fit, and produced a time-savings estimate with documented edge cases.
@@ -137,12 +137,12 @@ scheduled_automation_project/
 ```
 
 ### What You Learned
-✅ Writing a minimal, testable automation script
-✅ Testing manually before scheduling
-✅ Adding error handling that logs failures
-✅ Scheduling a script with cron
-✅ Verifying scheduled execution without manual triggering
-✅ Documenting an automation for future maintainers
+- ✅ Writing a minimal, testable automation script
+- ✅ Testing manually before scheduling
+- ✅ Adding error handling that logs failures
+- ✅ Scheduling a script with cron
+- ✅ Verifying scheduled execution without manual triggering
+- ✅ Documenting an automation for future maintainers
 
 ### Portfolio Project
 **Scheduled Automation Script**: Built and scheduled a Python automation script with error handling and logging, verified to run reliably without manual intervention.
@@ -223,12 +223,12 @@ multistep_workflow_project/
 ```
 
 ### What You Learned
-✅ Breaking a workflow into discrete, testable steps
-✅ What webhooks are and why they matter for automation
-✅ Writing each step as an isolated function
-✅ Chaining steps into a sequential workflow
-✅ Adding per-step error handling
-✅ Testing with realistic multi-item and edge-case input
+- ✅ Breaking a workflow into discrete, testable steps
+- ✅ What webhooks are and why they matter for automation
+- ✅ Writing each step as an isolated function
+- ✅ Chaining steps into a sequential workflow
+- ✅ Adding per-step error handling
+- ✅ Testing with realistic multi-item and edge-case input
 
 ### Portfolio Project
 **Multi-Step Automated Workflow**: Built a chained, multi-step automation with isolated, testable functions and per-step error handling, tested against realistic and edge-case inputs.
@@ -316,12 +316,12 @@ ai_decision_step_project/
 ```
 
 ### What You Learned
-✅ Identifying where rule-based logic falls short
-✅ Designing narrow, single-purpose AI prompts
-✅ Implementing an LLM-based decision step
-✅ Producing structured, parseable AI output
-✅ Adding a safe fallback for AI call failures
-✅ Testing and documenting AI decision behavior
+- ✅ Identifying where rule-based logic falls short
+- ✅ Designing narrow, single-purpose AI prompts
+- ✅ Implementing an LLM-based decision step
+- ✅ Producing structured, parseable AI output
+- ✅ Adding a safe fallback for AI call failures
+- ✅ Testing and documenting AI decision behavior
 
 ### Portfolio Project
 **AI-Augmented Workflow Decision Step**: Added a narrowly-scoped LLM decision step into an existing rule-based workflow, with structured output parsing and a safe fallback for failures.
@@ -414,12 +414,12 @@ task_agent_project/
 ```
 
 ### What You Learned
-✅ What tool calling is and how it differs from plain text generation
-✅ Defining tools with clear, model-readable descriptions
-✅ Letting an LLM choose which tool to invoke
-✅ Parsing and executing a model's tool call
-✅ Testing an agent across varied scenarios
-✅ Adding human-in-the-loop confirmation for risky actions
+- ✅ What tool calling is and how it differs from plain text generation
+- ✅ Defining tools with clear, model-readable descriptions
+- ✅ Letting an LLM choose which tool to invoke
+- ✅ Parsing and executing a model's tool call
+- ✅ Testing an agent across varied scenarios
+- ✅ Adding human-in-the-loop confirmation for risky actions
 
 ### Portfolio Project
 **Task-Automation Agent**: Built an LLM-based agent that chooses and executes actions from a defined toolset based on situational input, with human-in-the-loop confirmation for high-risk actions.
@@ -516,12 +516,12 @@ monitoring_project/
 ```
 
 ### What You Learned
-✅ Structured logging vs. print statements
-✅ Logging key decision points for later reconstruction
-✅ Health checks for external dependencies
-✅ Retry logic for transient failures
-✅ Alerting after repeated failures
-✅ Testing error handling deliberately with induced failures
+- ✅ Structured logging vs. print statements
+- ✅ Logging key decision points for later reconstruction
+- ✅ Health checks for external dependencies
+- ✅ Retry logic for transient failures
+- ✅ Alerting after repeated failures
+- ✅ Testing error handling deliberately with induced failures
 
 ### Portfolio Project
 **Automation Monitoring & Error Handling**: Added structured logging, health checks, retry logic, and failure alerting to an existing AI-driven automation, validated through deliberate failure testing.
@@ -586,11 +586,11 @@ capstone_project/
 ```
 
 ### What You Learned
-✅ Connecting opportunity assessment, workflow design, AI decisions, and monitoring into one system
-✅ Scheduling a fully integrated, AI-augmented workflow
-✅ Verifying end-to-end behavior through a real test run
-✅ Reading and validating a complete log trail
-✅ Documenting an automation for a real audience
+- ✅ Connecting opportunity assessment, workflow design, AI decisions, and monitoring into one system
+- ✅ Scheduling a fully integrated, AI-augmented workflow
+- ✅ Verifying end-to-end behavior through a real test run
+- ✅ Reading and validating a complete log trail
+- ✅ Documenting an automation for a real audience
 
 ### Portfolio Project
 **End-to-End AI-Augmented Automation (Capstone)**: Built a complete automated workflow: identified from a real opportunity assessment, chaining multiple steps, incorporating an AI decision/agent step, and running reliably on a schedule with full monitoring and error handling.

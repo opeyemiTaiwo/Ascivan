@@ -49,12 +49,12 @@ multimodal_survey_project/
 ```
 
 ### What You Learned
-✅ The four core modalities and what "multimodal" precisely means
-✅ Model categories: VLMs, STT, TTS, image generation
-✅ Comparing models within each category
-✅ Input/output format requirements per model
-✅ Context window and size limits for multimodal models
-✅ Producing a reference comparison for future projects
+- ✅ The four core modalities and what "multimodal" precisely means
+- ✅ Model categories: VLMs, STT, TTS, image generation
+- ✅ Comparing models within each category
+- ✅ Input/output format requirements per model
+- ✅ Context window and size limits for multimodal models
+- ✅ Producing a reference comparison for future projects
 
 ### Portfolio Project
 **Multimodal Model Landscape Survey**: Researched and compared vision-language, speech, and image-generation models across cost, quality, format requirements, and size limits.
@@ -144,12 +144,12 @@ image_text_project/
 ```
 
 ### What You Learned
-✅ Loading and inspecting images with Pillow
-✅ Base64 encoding images for API requests
-✅ Building multimodal content arrays (image + text)
-✅ Testing across varied images and questions
-✅ Resizing images to respect size limits
-✅ Wrapping multimodal calls in a reusable function
+- ✅ Loading and inspecting images with Pillow
+- ✅ Base64 encoding images for API requests
+- ✅ Building multimodal content arrays (image + text)
+- ✅ Testing across varied images and questions
+- ✅ Resizing images to respect size limits
+- ✅ Wrapping multimodal calls in a reusable function
 
 ### Portfolio Project
 **Image + Text Processing Script**: Built a reusable Python function that sends images alongside text prompts to a vision-language model API, tested across varied images and questions.
@@ -235,12 +235,12 @@ feature_extraction_project/
 ```
 
 ### What You Learned
-✅ Representing images as numpy arrays
-✅ Extracting basic image features (color, brightness distribution)
-✅ Representing audio as a numeric time series
-✅ Generating and interpreting spectrograms
-✅ Extracting basic audio features (tempo)
-✅ Connecting hand-extracted features to model-internal processing
+- ✅ Representing images as numpy arrays
+- ✅ Extracting basic image features (color, brightness distribution)
+- ✅ Representing audio as a numeric time series
+- ✅ Generating and interpreting spectrograms
+- ✅ Extracting basic audio features (tempo)
+- ✅ Connecting hand-extracted features to model-internal processing
 
 ### Portfolio Project
 **Image & Audio Feature Extraction**: Extracted and visualized basic features from both image (color, brightness) and audio (spectrogram, tempo) data using Python, connecting the exercise to how multimodal models process raw input.
@@ -314,12 +314,12 @@ image_captioning_project/
 ```
 
 ### What You Learned
-✅ How vision transformers and text-image alignment enable captioning
-✅ Writing focused prompts for consistent caption generation
-✅ Testing across varied and challenging image types
-✅ Supporting multiple caption styles (concise, detailed, alt-text)
-✅ Manually evaluating caption accuracy and catching hallucinations
-✅ Batch-processing captions across multiple images
+- ✅ How vision transformers and text-image alignment enable captioning
+- ✅ Writing focused prompts for consistent caption generation
+- ✅ Testing across varied and challenging image types
+- ✅ Supporting multiple caption styles (concise, detailed, alt-text)
+- ✅ Manually evaluating caption accuracy and catching hallucinations
+- ✅ Batch-processing captions across multiple images
 
 ### Portfolio Project
 **Image Captioning Demo**: Built a multi-style image captioning tool (concise, detailed, alt-text) using a vision-language model, with manual quality evaluation across varied test images.
@@ -401,12 +401,12 @@ image_qa_app_project/
 ```
 
 ### What You Learned
-✅ Building a FastAPI endpoint that accepts image uploads
-✅ Combining image and text question input in one request
-✅ Adding speech-to-text for voice-based questions
-✅ Adding text-to-speech for spoken answers
-✅ Handling unsupported upload formats gracefully
-✅ Testing a full, multi-modality flow end-to-end
+- ✅ Building a FastAPI endpoint that accepts image uploads
+- ✅ Combining image and text question input in one request
+- ✅ Adding speech-to-text for voice-based questions
+- ✅ Adding text-to-speech for spoken answers
+- ✅ Handling unsupported upload formats gracefully
+- ✅ Testing a full, multi-modality flow end-to-end
 
 ### Portfolio Project
 **Visual Q&A Application**: Built a FastAPI application that answers user questions about uploaded images, extended with speech-to-text and text-to-speech for a fully voice-driven interaction.
@@ -488,12 +488,12 @@ multimodal_search_project/
 ```
 
 ### What You Learned
-✅ How multimodal embeddings enable cross-modality comparison
-✅ The caption-then-embed bridging technique
-✅ Storing mixed text/image content in one vector database
-✅ Using metadata to track content type for downstream display
-✅ Querying across both modalities with a single text query
-✅ Evaluating retrieval quality separately per modality
+- ✅ How multimodal embeddings enable cross-modality comparison
+- ✅ The caption-then-embed bridging technique
+- ✅ Storing mixed text/image content in one vector database
+- ✅ Using metadata to track content type for downstream display
+- ✅ Querying across both modalities with a single text query
+- ✅ Evaluating retrieval quality separately per modality
 
 ### Portfolio Project
 **Multimodal Document Search Tool**: Built a retrieval system combining text and image content in a single vector database using a caption-based embedding bridge, with retrieval quality evaluated across both modalities.
@@ -553,12 +553,12 @@ multimodal_evaluation_project/
 ```
 
 ### What You Learned
-✅ Building a diverse, realistic test set
-✅ Defining accuracy, relevance, and hallucination-rate metrics
-✅ Systematically scoring a multimodal system
-✅ Identifying categorized failure modes
-✅ Checking for bias across varied image content
-✅ Writing an actionable evaluation report
+- ✅ Building a diverse, realistic test set
+- ✅ Defining accuracy, relevance, and hallucination-rate metrics
+- ✅ Systematically scoring a multimodal system
+- ✅ Identifying categorized failure modes
+- ✅ Checking for bias across varied image content
+- ✅ Writing an actionable evaluation report
 
 ### Portfolio Project
 **Multimodal System Evaluation**: Built a diverse test set and evaluation rubric for a multimodal system, measuring accuracy, relevance, and hallucination rate, with a dedicated bias check across varied content.
@@ -626,11 +626,11 @@ capstone_project/
 ```
 
 ### What You Learned
-✅ Combining image, audio, and text handling into one flexible endpoint
-✅ Wiring in retrieval-augmented responses across modalities
-✅ Re-running evaluation against a fully integrated system
-✅ Identifying integration-specific failure modes
-✅ Documenting a complete multimodal assistant for a real audience
+- ✅ Combining image, audio, and text handling into one flexible endpoint
+- ✅ Wiring in retrieval-augmented responses across modalities
+- ✅ Re-running evaluation against a fully integrated system
+- ✅ Identifying integration-specific failure modes
+- ✅ Documenting a complete multimodal assistant for a real audience
 
 ### Portfolio Project
 **Multimodal AI Assistant (Capstone)**: Built a complete assistant accepting text, image, and audio input, combining vision-language understanding, speech processing, and multimodal document retrieval, with a full evaluation report.

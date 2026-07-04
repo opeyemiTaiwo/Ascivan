@@ -53,12 +53,12 @@ paper_reproduction_project/
 ```
 
 ### What You Learned
-✅ Reading a paper for structure before detail
-✅ Identifying one reproducible core claim
-✅ Paraphrasing a method in your own words
-✅ Identifying datasets and evaluation metrics
-✅ Writing a minimal reproduction script
-✅ Comparing your results against a paper's claims
+- ✅ Reading a paper for structure before detail
+- ✅ Identifying one reproducible core claim
+- ✅ Paraphrasing a method in your own words
+- ✅ Identifying datasets and evaluation metrics
+- ✅ Writing a minimal reproduction script
+- ✅ Comparing your results against a paper's claims
 
 ### Portfolio Project
 **Research Paper Reproduction**: Selected a published result, extracted its core method and evaluation approach, and reproduced it with a minimal working implementation.
@@ -126,12 +126,12 @@ data_exploration_project/
 ```
 
 ### What You Learned
-✅ Loading and inspecting data with pandas
-✅ Checking dataset shape and column types
-✅ Identifying and handling missing values
-✅ Visualizing distributions
-✅ Detecting class imbalance
-✅ Documenting exploratory findings
+- ✅ Loading and inspecting data with pandas
+- ✅ Checking dataset shape and column types
+- ✅ Identifying and handling missing values
+- ✅ Visualizing distributions
+- ✅ Detecting class imbalance
+- ✅ Documenting exploratory findings
 
 ### Portfolio Project
 **Exploratory Data Analysis Notebook**: Loaded, inspected, and visualized a dataset, identifying missing values, distribution shape, and class imbalance ahead of model development.
@@ -205,12 +205,12 @@ gradient_descent_project/
 ```
 
 ### What You Learned
-✅ Loss functions and what "minimizing" means
-✅ Gradients and the direction of steepest descent
-✅ Implementing mean squared error and its derivative by hand
-✅ Writing a gradient descent training loop
-✅ The effect of learning rate on convergence
-✅ Extending a single-parameter model to two parameters
+- ✅ Loss functions and what "minimizing" means
+- ✅ Gradients and the direction of steepest descent
+- ✅ Implementing mean squared error and its derivative by hand
+- ✅ Writing a gradient descent training loop
+- ✅ The effect of learning rate on convergence
+- ✅ Extending a single-parameter model to two parameters
 
 ### Portfolio Project
 **Gradient Descent from Scratch**: Implemented a loss function, its derivative, and a full gradient descent training loop from first principles, including a learning-rate sensitivity experiment.
@@ -284,12 +284,12 @@ baseline_model_project/
 ```
 
 ### What You Learned
-✅ Splitting data into train and test sets
-✅ Training a trivial baseline (dummy classifier)
-✅ Training a simple, real baseline (logistic regression)
-✅ Choosing evaluation metrics based on data characteristics
-✅ Understanding accuracy vs. F1 score
-✅ Documenting baseline results for future comparison
+- ✅ Splitting data into train and test sets
+- ✅ Training a trivial baseline (dummy classifier)
+- ✅ Training a simple, real baseline (logistic regression)
+- ✅ Choosing evaluation metrics based on data characteristics
+- ✅ Understanding accuracy vs. F1 score
+- ✅ Documenting baseline results for future comparison
 
 ### Portfolio Project
 **Baseline Model Evaluation**: Trained and evaluated dummy and logistic regression baselines with a proper train/test split, selecting evaluation metrics appropriate to the dataset's class balance.
@@ -382,12 +382,12 @@ neural_network_project/
 ```
 
 ### What You Learned
-✅ Neurons, weights, and activation functions
-✅ Implementing sigmoid and its derivative
-✅ The forward pass through a network
-✅ Backpropagation via the chain rule
-✅ Training a from-scratch network on a nonlinear problem (XOR)
-✅ Comparing a from-scratch implementation against a framework
+- ✅ Neurons, weights, and activation functions
+- ✅ Implementing sigmoid and its derivative
+- ✅ The forward pass through a network
+- ✅ Backpropagation via the chain rule
+- ✅ Training a from-scratch network on a nonlinear problem (XOR)
+- ✅ Comparing a from-scratch implementation against a framework
 
 ### Portfolio Project
 **Neural Network from Scratch**: Implemented a two-layer neural network's forward pass and backpropagation using only NumPy, and trained it to solve the XOR problem without a deep learning framework.
@@ -458,12 +458,12 @@ ablation_study_project/
 ```
 
 ### What You Learned
-✅ Designing controlled ablation variants
-✅ Writing pre-registered hypotheses before running experiments
-✅ Holding all variables fixed except the one being tested
-✅ Repeating runs to distinguish signal from noise
-✅ Comparing results against predictions
-✅ Drawing evidence-based conclusions about model components
+- ✅ Designing controlled ablation variants
+- ✅ Writing pre-registered hypotheses before running experiments
+- ✅ Holding all variables fixed except the one being tested
+- ✅ Repeating runs to distinguish signal from noise
+- ✅ Comparing results against predictions
+- ✅ Drawing evidence-based conclusions about model components
 
 ### Portfolio Project
 **Model Ablation Study**: Designed and ran a controlled ablation study on a neural network's components, testing hypotheses about hidden layers and activation functions with repeated trials.
@@ -521,11 +521,11 @@ research_report_project/
 ```
 
 ### What You Learned
-✅ Structuring a research report (abstract, intro, method, results, discussion)
-✅ Writing a method section detailed enough to reproduce
-✅ Visualizing results for clarity
-✅ Discussing limitations honestly
-✅ Writing an accurate abstract after the fact, not before
+- ✅ Structuring a research report (abstract, intro, method, results, discussion)
+- ✅ Writing a method section detailed enough to reproduce
+- ✅ Visualizing results for clarity
+- ✅ Discussing limitations honestly
+- ✅ Writing an accurate abstract after the fact, not before
 
 ### Portfolio Project
 **AI Research Report**: Wrote a structured research report on an ablation study, including a reproducible method section, a results visualization, and an honest discussion of limitations.
@@ -582,11 +582,11 @@ capstone_project/
 ```
 
 ### What You Learned
-✅ Selecting and scoping a real published result to reproduce
-✅ Applying data exploration, baseline modeling, and from-scratch implementation together
-✅ Running a small-scale ablation on a real reproduction
-✅ Writing a full, honest research report on the effort
-✅ Reflecting critically on gaps between your results and the original
+- ✅ Selecting and scoping a real published result to reproduce
+- ✅ Applying data exploration, baseline modeling, and from-scratch implementation together
+- ✅ Running a small-scale ablation on a real reproduction
+- ✅ Writing a full, honest research report on the effort
+- ✅ Reflecting critically on gaps between your results and the original
 
 ### Portfolio Project
 **Published Paper Reproduction (Capstone)**: Reproduced the core result of a published research paper from scratch, including data exploration, method implementation, baseline comparison, a small ablation study, and a full research report with an honest discussion of reproduction gaps.

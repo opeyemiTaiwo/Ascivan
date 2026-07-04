@@ -48,12 +48,12 @@ ai_product_brief_project/
 ```
 
 ### What You Learned
-✅ Identifying AI-suited problems
-✅ Defining a specific target user
-✅ Writing a clear problem statement
-✅ Separating success metrics from vanity metrics
-✅ Naming constraints and risks upfront
-✅ Assembling a one-page product brief
+- ✅ Identifying AI-suited problems
+- ✅ Defining a specific target user
+- ✅ Writing a clear problem statement
+- ✅ Separating success metrics from vanity metrics
+- ✅ Naming constraints and risks upfront
+- ✅ Assembling a one-page product brief
 
 ### Portfolio Project
 **AI Feature Product Brief**: Identified a real user problem, defined a target user and success metric, and wrote a one-page product brief proposing an AI-powered solution.
@@ -127,12 +127,12 @@ ai_feature_prototype_project/
 ```
 
 ### What You Learned
-✅ Authenticating with an API key
-✅ Making a real LLM API call
-✅ Working with JSON requests and responses
-✅ Wrapping API calls in reusable functions
-✅ Testing across multiple realistic inputs
-✅ Documenting early failure patterns
+- ✅ Authenticating with an API key
+- ✅ Making a real LLM API call
+- ✅ Working with JSON requests and responses
+- ✅ Wrapping API calls in reusable functions
+- ✅ Testing across multiple realistic inputs
+- ✅ Documenting early failure patterns
 
 ### Portfolio Project
 **AI Feature Prototype**: Built a working prototype calling a production LLM API, tested against realistic inputs from a real user problem, and documented initial failure patterns.
@@ -192,12 +192,12 @@ chatbot_prototype_project/
 ```
 
 ### What You Learned
-✅ Why LLM APIs are stateless
-✅ Building and maintaining message history
-✅ Writing an effective system prompt
-✅ Testing multi-turn conversations
-✅ Adding basic guardrails
-✅ Testing edge cases (off-topic, ambiguous, empty input)
+- ✅ Why LLM APIs are stateless
+- ✅ Building and maintaining message history
+- ✅ Writing an effective system prompt
+- ✅ Testing multi-turn conversations
+- ✅ Adding basic guardrails
+- ✅ Testing edge cases (off-topic, ambiguous, empty input)
 
 ### Portfolio Project
 **AI Chatbot Feature Prototype**: Built a multi-turn conversational prototype using an LLM API, with a tailored system prompt, guardrails, and tested edge-case handling.
@@ -250,12 +250,12 @@ discovery_doc_project/
 ```
 
 ### What You Learned
-✅ Writing behavior-based interview questions
-✅ Conducting lightweight user discovery
-✅ Getting reactions to a working prototype
-✅ Identifying patterns across multiple data points
-✅ Revising a problem statement based on evidence
-✅ Writing a discovery summary doc
+- ✅ Writing behavior-based interview questions
+- ✅ Conducting lightweight user discovery
+- ✅ Getting reactions to a working prototype
+- ✅ Identifying patterns across multiple data points
+- ✅ Revising a problem statement based on evidence
+- ✅ Writing a discovery summary doc
 
 ### Portfolio Project
 **AI Feature Discovery Research**: Conducted user interviews and prototype testing sessions, synthesized findings into key insights, and used them to validate or redirect an AI feature's direction.
@@ -302,12 +302,12 @@ feature_flow_project/
 ```
 
 ### What You Learned
-✅ Mapping a feature's happy path
-✅ Designing input collection for AI features
-✅ Masking latency during AI processing
-✅ Designing error states for AI failures
-✅ Designing for AI uncertainty (not presenting output as infallible)
-✅ Assembling a full end-to-end interaction flow
+- ✅ Mapping a feature's happy path
+- ✅ Designing input collection for AI features
+- ✅ Masking latency during AI processing
+- ✅ Designing error states for AI failures
+- ✅ Designing for AI uncertainty (not presenting output as infallible)
+- ✅ Assembling a full end-to-end interaction flow
 
 ### Portfolio Project
 **AI Feature UX Flow**: Designed a complete user interaction flow for an AI-powered feature, including input design, latency handling, error states, and uncertainty communication.
@@ -362,12 +362,12 @@ evaluation_plan_project/
 ```
 
 ### What You Learned
-✅ Building a test set from real observed failures
-✅ Writing a scoring rubric for subjective AI output
-✅ Establishing a baseline quality score
-✅ Distinguishing quality metrics from business metrics
-✅ Designing a post-launch feedback loop
-✅ Assembling a full evaluation plan
+- ✅ Building a test set from real observed failures
+- ✅ Writing a scoring rubric for subjective AI output
+- ✅ Establishing a baseline quality score
+- ✅ Distinguishing quality metrics from business metrics
+- ✅ Designing a post-launch feedback loop
+- ✅ Assembling a full evaluation plan
 
 ### Portfolio Project
 **AI Feature Evaluation Plan**: Built a test set and scoring rubric from observed prototype failures, established a baseline quality score, and designed a post-launch feedback loop.
@@ -422,12 +422,12 @@ launch_plan_project/
 ```
 
 ### What You Learned
-✅ Scoping a limited (beta) launch
-✅ Setting measurable launch criteria
-✅ Planning staged rollout
-✅ Identifying required stakeholders
-✅ Planning post-launch monitoring and rollback triggers
-✅ Assembling a complete launch plan
+- ✅ Scoping a limited (beta) launch
+- ✅ Setting measurable launch criteria
+- ✅ Planning staged rollout
+- ✅ Identifying required stakeholders
+- ✅ Planning post-launch monitoring and rollback triggers
+- ✅ Assembling a complete launch plan
 
 ### Portfolio Project
 **AI Feature Launch Plan**: Defined launch criteria based on evaluation benchmarks, planned a staged rollout with stakeholder sign-offs, and designed post-launch monitoring with rollback triggers.
@@ -485,10 +485,10 @@ capstone_project/
 ```
 
 ### What You Learned
-✅ Carrying one feature idea through the full product lifecycle
-✅ Integrating research, design, code, and evaluation into one story
-✅ Writing a summary that communicates the whole project at a glance
-✅ Presenting AI product work the way a real team would review it
+- ✅ Carrying one feature idea through the full product lifecycle
+- ✅ Integrating research, design, code, and evaluation into one story
+- ✅ Writing a summary that communicates the whole project at a glance
+- ✅ Presenting AI product work the way a real team would review it
 
 ### Portfolio Project
 **AI Feature: Idea to Prototype (Capstone)**: Took an AI-powered feature from initial problem framing through user discovery, working prototype, UX design, evaluation planning, and launch readiness.

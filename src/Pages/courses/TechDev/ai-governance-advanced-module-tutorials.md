@@ -82,13 +82,13 @@ eu_ai_act_classification_project/
 ```
 
 ### What You Learned
-✅ The four EU AI Act risk tiers
-✅ Checking for Article 5 prohibited practices first
-✅ Annex III high-risk category analysis
-✅ The self-assessment documentation exception
-✅ Limited-risk transparency triggers
-✅ Determining provider vs. deployer role
-✅ Writing a defensible risk classification memo
+- ✅ The four EU AI Act risk tiers
+- ✅ Checking for Article 5 prohibited practices first
+- ✅ Annex III high-risk category analysis
+- ✅ The self-assessment documentation exception
+- ✅ Limited-risk transparency triggers
+- ✅ Determining provider vs. deployer role
+- ✅ Writing a defensible risk classification memo
 
 ### Portfolio Project
 **EU AI Act Risk Classification** — Conducted a structured EU AI Act risk tier classification for an AI system, including prohibited-practice screening, Annex III analysis, and provider/deployer role determination, documented in a defensible memo.
@@ -171,12 +171,12 @@ obligation_mapping_project/
 ```
 
 ### What You Learned
-✅ Core high-risk provider obligations (Articles 9–15)
-✅ Core high-risk deployer obligations (Article 26)
-✅ Cross-referencing legal obligations to engineering artifacts
-✅ Identifying genuine compliance gaps
-✅ What a conformity assessment verifies
-✅ CE marking and EU database registration
+- ✅ Core high-risk provider obligations (Articles 9–15)
+- ✅ Core high-risk deployer obligations (Article 26)
+- ✅ Cross-referencing legal obligations to engineering artifacts
+- ✅ Identifying genuine compliance gaps
+- ✅ What a conformity assessment verifies
+- ✅ CE marking and EU database registration
 
 ### Portfolio Project
 **EU AI Act Obligation Mapping** — Translated a high-risk AI system classification into a concrete obligation checklist, cross-referenced against existing governance artifacts, with identified gaps and a path to conformity assessment.
@@ -249,12 +249,12 @@ technical_documentation_project/
 ```
 
 ### What You Learned
-✅ Article 11's required technical documentation sections
-✅ Writing a precise, legally-specific intended purpose statement
-✅ Documenting design specifications for regulatory review
-✅ Reusing dataset audits to satisfy data governance requirements
-✅ Documenting concrete (not vague) human oversight measures
-✅ Maintaining version history for a living compliance artifact
+- ✅ Article 11's required technical documentation sections
+- ✅ Writing a precise, legally-specific intended purpose statement
+- ✅ Documenting design specifications for regulatory review
+- ✅ Reusing dataset audits to satisfy data governance requirements
+- ✅ Documenting concrete (not vague) human oversight measures
+- ✅ Maintaining version history for a living compliance artifact
 
 ### Portfolio Project
 **EU AI Act Technical Documentation Package** — Produced Article 11-compliant technical documentation for a high-risk AI system, incorporating existing bias evaluation and data governance findings, with version-controlled change management.
@@ -364,13 +364,13 @@ human_oversight_project/
 ```
 
 ### What You Learned
-✅ The four categories of effective human oversight
-✅ Implementing a working override mechanism with logging
-✅ Implementing an emergency stop/interrupt mechanism
-✅ Extending existing logging for oversight-specific record-keeping
-✅ Building an oversight monitoring view
-✅ Testing the full oversight loop end-to-end
-✅ Assembling a conformity assessment readiness checklist
+- ✅ The four categories of effective human oversight
+- ✅ Implementing a working override mechanism with logging
+- ✅ Implementing an emergency stop/interrupt mechanism
+- ✅ Extending existing logging for oversight-specific record-keeping
+- ✅ Building an oversight monitoring view
+- ✅ Testing the full oversight loop end-to-end
+- ✅ Assembling a conformity assessment readiness checklist
 
 ### Portfolio Project
 **EU AI Act Human Oversight Implementation** — Built and tested working human oversight mechanisms (override and emergency stop) with dedicated audit logging and monitoring, culminating in a conformity assessment readiness checklist.

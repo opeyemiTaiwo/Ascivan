@@ -45,11 +45,11 @@ portfolio-site (Webflow)
 ```
 
 ### What You Learned
-✅ The box model: content, padding, border, margin
-✅ Structuring pages with sections, containers, and divs
-✅ Building layouts with flexbox
-✅ What breakpoints are and editing per device
-✅ Making columns stack responsively on mobile
+- ✅ The box model: content, padding, border, margin
+- ✅ Structuring pages with sections, containers, and divs
+- ✅ Building layouts with flexbox
+- ✅ What breakpoints are and editing per device
+- ✅ Making columns stack responsively on mobile
 
 ### Portfolio Project
 **Structured Responsive Page**: Built a clean, responsive page from scratch using the box model, flexbox, and per-breakpoint editing.
@@ -98,11 +98,11 @@ Style system
 ```
 
 ### What You Learned
-✅ What classes and combo classes are
-✅ Building reusable text and button systems
-✅ Using color swatches for site-wide consistency
-✅ Creating reusable components
-✅ Documenting a style system
+- ✅ What classes and combo classes are
+- ✅ Building reusable text and button systems
+- ✅ Using color swatches for site-wide consistency
+- ✅ Creating reusable components
+- ✅ Documenting a style system
 
 ### Portfolio Project
 **Reusable Style System**: Built a consistent, maintainable design system of classes, swatches, and components.
@@ -151,11 +151,11 @@ Multi-page site
 ```
 
 ### What You Learned
-✅ Building a multi-page site with a shared frame
-✅ What a navbar is and how to style it consistently
-✅ Using components for site-wide shared elements
-✅ Showing the current page in navigation
-✅ Building and testing responsive mobile navigation
+- ✅ Building a multi-page site with a shared frame
+- ✅ What a navbar is and how to style it consistently
+- ✅ Using components for site-wide shared elements
+- ✅ Showing the current page in navigation
+- ✅ Building and testing responsive mobile navigation
 
 ### Portfolio Project
 **Navigable Multi-Page Site**: Built a consistent, multi-page website with shared components and working responsive navigation.
@@ -204,11 +204,11 @@ CMS
 ```
 
 ### What You Learned
-✅ What a CMS, collection, and collection item are
-✅ Designing collection fields for your content
-✅ Building a collection list (auto-updating content grid)
-✅ Using a collection page template to generate many pages
-✅ Linking list items to their generated detail pages
+- ✅ What a CMS, collection, and collection item are
+- ✅ Designing collection fields for your content
+- ✅ Building a collection list (auto-updating content grid)
+- ✅ Using a collection page template to generate many pages
+- ✅ Linking list items to their generated detail pages
 
 ### Portfolio Project
 **CMS-Powered Content Section**: Built a content-managed section where a single template generates a page per item from CMS data.
@@ -258,11 +258,11 @@ Interactions + form
 ```
 
 ### What You Learned
-✅ What interactions are and how to use them tastefully
-✅ Building scroll and hover animations
-✅ What web forms are and how to build one
-✅ Adding validation to prevent junk submissions
-✅ Handling success and error states and testing delivery
+- ✅ What interactions are and how to use them tastefully
+- ✅ Building scroll and hover animations
+- ✅ What web forms are and how to build one
+- ✅ Adding validation to prevent junk submissions
+- ✅ Handling success and error states and testing delivery
 
 ### Portfolio Project
 **Interactive Site with Working Form**: Added tasteful animations and a validated, working contact form with clear feedback states.
@@ -312,11 +312,11 @@ Production
 ```
 
 ### What You Learned
-✅ Basic SEO: titles and meta descriptions
-✅ Accessibility: alt text and contrast
-✅ Optimizing images for performance
-✅ Publishing, staging, and connecting a domain
-✅ Documenting a launch
+- ✅ Basic SEO: titles and meta descriptions
+- ✅ Accessibility: alt text and contrast
+- ✅ Optimizing images for performance
+- ✅ Publishing, staging, and connecting a domain
+- ✅ Documenting a launch
 
 ### Portfolio Project
 **Published, Optimized Website**: Optimized a site for search, accessibility, and speed, then published it to a real domain.
@@ -365,11 +365,11 @@ capstone_site (Webflow)
 ```
 
 ### What You Learned
-✅ Taking a real subject from blank canvas to live site
-✅ Combining layout, style systems, CMS, and interactions
-✅ Optimizing and publishing a professional website
-✅ Documenting a site for a client or employer
-✅ Shipping a finished, original, content-managed website
+- ✅ Taking a real subject from blank canvas to live site
+- ✅ Combining layout, style systems, CMS, and interactions
+- ✅ Optimizing and publishing a professional website
+- ✅ Documenting a site for a client or employer
+- ✅ Shipping a finished, original, content-managed website
 
 ### Portfolio Project
 **Complete Client-Ready Website (Capstone)**: Designed, built, content-managed, optimized, and published an original multi-page website with a CMS, interactions, a working form, and a live domain.

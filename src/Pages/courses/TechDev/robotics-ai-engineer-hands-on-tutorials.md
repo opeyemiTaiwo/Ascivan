@@ -53,12 +53,12 @@ robot_system_diagram_project/
 ```
 
 ### What You Learned
-✅ The sense-think-act loop
-✅ Common robotics sensors (camera, LiDAR, IMU) and what they measure
-✅ Common actuators and their role
-✅ Where processing/decision-making happens in a robotic system
-✅ Diagramming a complete robotic system
-✅ Baseline safety thinking for robotic systems
+- ✅ The sense-think-act loop
+- ✅ Common robotics sensors (camera, LiDAR, IMU) and what they measure
+- ✅ Common actuators and their role
+- ✅ Where processing/decision-making happens in a robotic system
+- ✅ Diagramming a complete robotic system
+- ✅ Baseline safety thinking for robotic systems
 
 ### Portfolio Project
 **Robotic System Architecture Diagram**: Diagrammed a complete sense-think-act robotic system for a defined task, including sensor and actuator selection and a baseline safety consideration.
@@ -152,12 +152,12 @@ sensor_processing_project/
 ```
 
 ### What You Learned
-✅ Simulating realistic sensor noise
-✅ Visualizing raw sensor data
-✅ Applying a moving average filter
-✅ Comparing raw vs. filtered signal quality
-✅ Simulating and handling sensor dropout
-✅ Interpolating missing sensor readings
+- ✅ Simulating realistic sensor noise
+- ✅ Visualizing raw sensor data
+- ✅ Applying a moving average filter
+- ✅ Comparing raw vs. filtered signal quality
+- ✅ Simulating and handling sensor dropout
+- ✅ Interpolating missing sensor readings
 
 ### Portfolio Project
 **Sensor Data Processing Pipeline**: Built a script simulating noisy and intermittent sensor data, applying moving-average filtering and interpolation to produce a clean, usable signal.
@@ -250,12 +250,12 @@ coordinate_transform_project/
 ```
 
 ### What You Learned
-✅ Coordinate frames and why they matter in robotics
-✅ Rotation matrices and basic trigonometry for robotics
-✅ Transforming points from robot frame to world frame
-✅ Transforming points back from world frame to robot frame
-✅ Verifying transforms with round-trip testing
-✅ Visualizing coordinate transformations
+- ✅ Coordinate frames and why they matter in robotics
+- ✅ Rotation matrices and basic trigonometry for robotics
+- ✅ Transforming points from robot frame to world frame
+- ✅ Transforming points back from world frame to robot frame
+- ✅ Verifying transforms with round-trip testing
+- ✅ Visualizing coordinate transformations
 
 ### Portfolio Project
 **Coordinate Transformation Calculator**: Implemented and verified 2D coordinate frame transformations between robot and world reference frames using rotation matrices, with visualized results.
@@ -335,13 +335,13 @@ object_detection_project/
 ```
 
 ### What You Learned
-✅ Working with images in OpenCV (BGR color space)
-✅ Color-based object detection using HSV
-✅ Finding object locations via contours and bounding boxes
-✅ Estimating distance from apparent object size
-✅ Visually verifying detection results
-✅ Testing detection robustness across varied conditions
-✅ Smoothing noisy per-frame detections over time
+- ✅ Working with images in OpenCV (BGR color space)
+- ✅ Color-based object detection using HSV
+- ✅ Finding object locations via contours and bounding boxes
+- ✅ Estimating distance from apparent object size
+- ✅ Visually verifying detection results
+- ✅ Testing detection robustness across varied conditions
+- ✅ Smoothing noisy per-frame detections over time
 
 ### Portfolio Project
 **Camera-Based Object Detection Pipeline**: Built a color-based object detection system using OpenCV, including bounding box localization, distance estimation, and temporal smoothing, tested across varied lighting and occlusion conditions.
@@ -443,12 +443,12 @@ path_planning_project/
 ```
 
 ### What You Learned
-✅ Representing an environment as a grid map
-✅ The A* search algorithm and heuristic-guided search
-✅ Implementing A* with a priority queue
-✅ Visualizing a planned path around obstacles
-✅ Testing path planning against complex layouts
-✅ Handling the unreachable-goal case gracefully
+- ✅ Representing an environment as a grid map
+- ✅ The A* search algorithm and heuristic-guided search
+- ✅ Implementing A* with a priority queue
+- ✅ Visualizing a planned path around obstacles
+- ✅ Testing path planning against complex layouts
+- ✅ Handling the unreachable-goal case gracefully
 
 ### Portfolio Project
 **Grid-Based Path Planning with A\***: Implemented the A* search algorithm from scratch to plan obstacle-avoiding paths on a grid map, tested against simple and complex layouts including unreachable goals.
@@ -549,12 +549,12 @@ rl_agent_project/
 ```
 
 ### What You Learned
-✅ The agent/environment/reward/policy framing of RL
-✅ Implementing Q-learning from scratch
-✅ Epsilon-greedy exploration vs. exploitation
-✅ Evaluating a trained policy separately from training
-✅ Visualizing a learning curve
-✅ Comparing RL and classical planning approaches
+- ✅ The agent/environment/reward/policy framing of RL
+- ✅ Implementing Q-learning from scratch
+- ✅ Epsilon-greedy exploration vs. exploitation
+- ✅ Evaluating a trained policy separately from training
+- ✅ Visualizing a learning curve
+- ✅ Comparing RL and classical planning approaches
 
 ### Portfolio Project
 **Reinforcement Learning Agent (Q-Learning)**: Implemented Q-learning from scratch to train an agent in a simulated grid environment, evaluated success rate post-training, and compared the approach against classical path planning.
@@ -624,12 +624,12 @@ behavior_testing_project/
 ```
 
 ### What You Learned
-✅ Defining measurable success criteria for a robot behavior
-✅ Running repeated trials instead of single demo runs
-✅ Randomizing test conditions to reveal hidden failures
-✅ Calculating aggregate success metrics
-✅ Categorizing and investigating failure types
-✅ Implementing and testing a safety safeguard
+- ✅ Defining measurable success criteria for a robot behavior
+- ✅ Running repeated trials instead of single demo runs
+- ✅ Randomizing test conditions to reveal hidden failures
+- ✅ Calculating aggregate success metrics
+- ✅ Categorizing and investigating failure types
+- ✅ Implementing and testing a safety safeguard
 
 ### Portfolio Project
 **Robot Behavior Test Suite**: Built a repeated-trial testing framework for a robot navigation behavior, with randomized conditions, aggregate success metrics, categorized failure analysis, and a tested safety safeguard.
@@ -689,11 +689,11 @@ capstone_project/
 ```
 
 ### What You Learned
-✅ Integrating perception, coordinate transforms, and planning into one loop
-✅ Simulating a robot that senses, thinks, and acts repeatedly
-✅ Re-running a rigorous test suite against a fully integrated system
-✅ Identifying integration-specific failure modes
-✅ Documenting a complete robotic system for a real audience
+- ✅ Integrating perception, coordinate transforms, and planning into one loop
+- ✅ Simulating a robot that senses, thinks, and acts repeatedly
+- ✅ Re-running a rigorous test suite against a fully integrated system
+- ✅ Identifying integration-specific failure modes
+- ✅ Documenting a complete robotic system for a real audience
 
 ### Portfolio Project
 **Simulated Navigating Robot (Capstone)**: Built a complete simulated robot combining sensor processing, object detection, coordinate transforms, and path planning into a working sense-think-act loop, validated through a rigorous randomized test suite.

@@ -55,12 +55,12 @@ data_pipeline_map_project/
 ```
 
 ### What You Learned
-✅ Defining an AI use case's data requirements
-✅ Identifying data sources
-✅ The five stages of a data pipeline
-✅ Estimating data volume and frequency
-✅ Anticipating data quality risks
-✅ Turning a use case into a pipeline diagram
+- ✅ Defining an AI use case's data requirements
+- ✅ Identifying data sources
+- ✅ The five stages of a data pipeline
+- ✅ Estimating data volume and frequency
+- ✅ Anticipating data quality risks
+- ✅ Turning a use case into a pipeline diagram
 
 ### Portfolio Project
 **AI Data Pipeline Architecture Map**: Translated an AI application's data requirements into a five-stage pipeline diagram covering ingestion, cleaning, storage, transformation, and serving.
@@ -140,12 +140,12 @@ data_cleaning_project/
 ```
 
 ### What You Learned
-✅ Diagnosing missing values and duplicates
-✅ Deciding when to drop vs. fill missing data
-✅ Removing duplicate rows
-✅ Standardizing inconsistent formats
-✅ Validating cleaning results with assertions
-✅ Saving a cleaned dataset for downstream use
+- ✅ Diagnosing missing values and duplicates
+- ✅ Deciding when to drop vs. fill missing data
+- ✅ Removing duplicate rows
+- ✅ Standardizing inconsistent formats
+- ✅ Validating cleaning results with assertions
+- ✅ Saving a cleaned dataset for downstream use
 
 ### Portfolio Project
 **Data Cleaning Pipeline Script**: Built a reusable Python script that diagnoses, cleans, standardizes, and validates a messy real-world dataset, producing a verified clean output file.
@@ -223,12 +223,12 @@ schema_design_project/
 ```
 
 ### What You Learned
-✅ Identifying entities in a dataset
-✅ Defining fields and types
-✅ Modeling relationships with foreign keys
-✅ Adding dataset versioning for traceability
-✅ Writing schema as executable SQL
-✅ Diagramming a data model
+- ✅ Identifying entities in a dataset
+- ✅ Defining fields and types
+- ✅ Modeling relationships with foreign keys
+- ✅ Adding dataset versioning for traceability
+- ✅ Writing schema as executable SQL
+- ✅ Diagramming a data model
 
 ### Portfolio Project
 **Training Dataset Schema Design**: Designed a versioned, relational schema for a training dataset store, including entity relationships and executable SQL table definitions.
@@ -314,12 +314,12 @@ etl_pipeline_project/
 ```
 
 ### What You Learned
-✅ The Extract, Transform, Load pattern
-✅ Isolating pipeline stages into reusable functions
-✅ Writing to a database with SQLAlchemy
-✅ Appending vs. replacing data safely
-✅ Testing pipeline repeatability across multiple runs
-✅ Adding basic pipeline logging
+- ✅ The Extract, Transform, Load pattern
+- ✅ Isolating pipeline stages into reusable functions
+- ✅ Writing to a database with SQLAlchemy
+- ✅ Appending vs. replacing data safely
+- ✅ Testing pipeline repeatability across multiple runs
+- ✅ Adding basic pipeline logging
 
 ### Portfolio Project
 **Batch ETL Pipeline**: Built a reusable Extract-Transform-Load pipeline that ingests raw CSV data, applies cleaning logic, and loads it into a structured database, tested across multiple repeated runs.
@@ -397,12 +397,12 @@ labeled_dataset_project/
 ```
 
 ### What You Learned
-✅ Writing clear labeling criteria
-✅ Applying labels consistently
-✅ Detecting class imbalance in labeled data
-✅ Splitting data into train/validation/test with stratification
-✅ Detecting and preventing data leakage
-✅ Producing model-ready labeled datasets
+- ✅ Writing clear labeling criteria
+- ✅ Applying labels consistently
+- ✅ Detecting class imbalance in labeled data
+- ✅ Splitting data into train/validation/test with stratification
+- ✅ Detecting and preventing data leakage
+- ✅ Producing model-ready labeled datasets
 
 ### Portfolio Project
 **Labeled Training Dataset Preparation**: Defined labeling criteria, applied labels to a cleaned dataset, checked for class imbalance and data leakage, and produced stratified train/validation/test splits.
@@ -489,12 +489,12 @@ vector_store_project/
 ```
 
 ### What You Learned
-✅ Chunking long text into retrievable pieces
-✅ Generating embeddings for semantic meaning
-✅ Storing and querying a vector database
-✅ Retrieving results by meaning, not just keywords
-✅ Evaluating retrieval quality manually
-✅ Documenting chunking and embedding decisions
+- ✅ Chunking long text into retrievable pieces
+- ✅ Generating embeddings for semantic meaning
+- ✅ Storing and querying a vector database
+- ✅ Retrieving results by meaning, not just keywords
+- ✅ Evaluating retrieval quality manually
+- ✅ Documenting chunking and embedding decisions
 
 ### Portfolio Project
 **Document Vector Store for Semantic Search**: Built a chunking and embedding pipeline over a real document set, stored it in a vector database, and evaluated retrieval quality across multiple queries.
@@ -575,12 +575,12 @@ data_validation_project/
 ```
 
 ### What You Learned
-✅ Turning implicit assumptions into explicit validation rules
-✅ Schema validation (required columns, types)
-✅ Value range and category validation
-✅ Understanding data drift vs. schema violations
-✅ Implementing a simple statistical drift check
-✅ Wiring validation into a real pipeline and testing it against bad data
+- ✅ Turning implicit assumptions into explicit validation rules
+- ✅ Schema validation (required columns, types)
+- ✅ Value range and category validation
+- ✅ Understanding data drift vs. schema violations
+- ✅ Implementing a simple statistical drift check
+- ✅ Wiring validation into a real pipeline and testing it against bad data
 
 ### Portfolio Project
 **Data Pipeline Validation & Monitoring**: Built and tested schema validation, value range checks, and a statistical drift detector, integrated directly into a working ETL pipeline.
@@ -644,12 +644,12 @@ capstone_project/
 ```
 
 ### What You Learned
-✅ Connecting ingestion, cleaning, storage, and transformation into one pipeline
-✅ Running validation and drift checks as part of a live pipeline
-✅ Producing labeled, split, model-ready data from raw input
-✅ Indexing unstructured data for retrieval
-✅ Testing a full pipeline end-to-end on fresh data
-✅ Documenting a complete data pipeline for a real audience
+- ✅ Connecting ingestion, cleaning, storage, and transformation into one pipeline
+- ✅ Running validation and drift checks as part of a live pipeline
+- ✅ Producing labeled, split, model-ready data from raw input
+- ✅ Indexing unstructured data for retrieval
+- ✅ Testing a full pipeline end-to-end on fresh data
+- ✅ Documenting a complete data pipeline for a real audience
 
 ### Portfolio Project
 **End-to-End AI Data Pipeline (Capstone)**: Designed and built a complete data pipeline for an AI application: automated ingestion and cleaning, a versioned schema-backed store, validation and drift monitoring, labeled training data preparation, and a document vector store for retrieval.

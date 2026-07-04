@@ -34,6 +34,16 @@ export const renderCourse = (markdown) => {
     return `<pre><code${cls}>${escapeHtml(code)}</code></pre>`;
   };
 
+  // "What You Learned" recap items are authored as "- ✅ ...". Tag those list
+  // items so they render as a clean checklist (the check is the marker) instead
+  // of showing a disc bullet next to the check.
+  renderer.listitem = (text) => {
+    if (/^\s*✅/.test(text)) {
+      return `<li class="wyl-item">${text}</li>\n`;
+    }
+    return `<li>${text}</li>\n`;
+  };
+
   renderer.heading = (text, level, raw) => {
     let id = slugify(raw);
     if (!id) id = `section-${toc.length + 1}`;

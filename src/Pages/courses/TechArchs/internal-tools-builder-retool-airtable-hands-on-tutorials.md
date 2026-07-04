@@ -43,11 +43,11 @@ operations (Airtable base)
 ```
 
 ### What You Learned
-✅ What bases, tables, and fields are
-✅ Choosing correct field types for validation
-✅ Linking records for a relational database
-✅ Creating filtered and grouped views
-✅ Building a realistic sample dataset
+- ✅ What bases, tables, and fields are
+- ✅ Choosing correct field types for validation
+- ✅ Linking records for a relational database
+- ✅ Creating filtered and grouped views
+- ✅ Building a realistic sample dataset
 
 ### Portfolio Project
 **Relational Airtable Database**: Designed a clean, relational database with linked tables, correct field types, and useful views.
@@ -96,11 +96,11 @@ Automated base
 ```
 
 ### What You Learned
-✅ Calculating values with formula fields
-✅ Summarising linked data with rollups
-✅ Building automations inside Airtable
-✅ Protecting data integrity with constraints
-✅ Turning a database into a reactive system
+- ✅ Calculating values with formula fields
+- ✅ Summarising linked data with rollups
+- ✅ Building automations inside Airtable
+- ✅ Protecting data integrity with constraints
+- ✅ Turning a database into a reactive system
 
 ### Portfolio Project
 **Smart, Automated Database**: Added formulas, rollups, automations, and integrity safeguards that make a database compute and react on its own.
@@ -149,11 +149,11 @@ Retool app 1
 ```
 
 ### What You Learned
-✅ What resources, queries, and components are
-✅ Connecting Retool to a real data source
-✅ Displaying live data in a table
-✅ Building a master-detail layout
-✅ Binding components to data with references
+- ✅ What resources, queries, and components are
+- ✅ Connecting Retool to a real data source
+- ✅ Displaying live data in a table
+- ✅ Building a master-detail layout
+- ✅ Binding components to data with references
 
 ### Portfolio Project
 **Live Internal Dashboard**: Built a Retool app connected to real data with a table and a master-detail view.
@@ -202,11 +202,11 @@ Write actions
 ```
 
 ### What You Learned
-✅ The difference between read and mutating queries
-✅ Building edit and create forms bound to data
-✅ Triggering queries on events like button clicks
-✅ Handling success and failure with feedback
-✅ Guarding destructive actions with confirmation
+- ✅ The difference between read and mutating queries
+- ✅ Building edit and create forms bound to data
+- ✅ Triggering queries on events like button clicks
+- ✅ Handling success and failure with feedback
+- ✅ Guarding destructive actions with confirmation
 
 ### Portfolio Project
 **Full CRUD Internal Tool**: Added safe create, edit, and delete actions so a team can run its workflow inside the tool.
@@ -256,11 +256,11 @@ Access control
 ```
 
 ### What You Learned
-✅ What roles and permissions are
-✅ Referencing the current user and role
-✅ The difference between hiding and enforcing access
-✅ Restricting sensitive queries by role
-✅ Adding audit logging for accountability
+- ✅ What roles and permissions are
+- ✅ Referencing the current user and role
+- ✅ The difference between hiding and enforcing access
+- ✅ Restricting sensitive queries by role
+- ✅ Adding audit logging for accountability
 
 ### Portfolio Project
 **Role-Based Team Tool**: Added roles, enforced permissions, role-aware views, and audit logging so a tool is safe for a whole team.
@@ -311,11 +311,11 @@ Deployed tool
 ```
 
 ### What You Learned
-✅ Designing clear, usable layouts
-✅ Adding empty, loading, and labelled states
-✅ Using staging and production environments
-✅ Deploying and sharing a tool by role
-✅ Documenting, onboarding, and iterating for adoption
+- ✅ Designing clear, usable layouts
+- ✅ Adding empty, loading, and labelled states
+- ✅ Using staging and production environments
+- ✅ Deploying and sharing a tool by role
+- ✅ Documenting, onboarding, and iterating for adoption
 
 ### Portfolio Project
 **Deployed, Adopted Internal Tool**: Polished, deployed, documented, and onboarded a team onto a tool they can use daily.
@@ -363,11 +363,11 @@ capstone_tool
 ```
 
 ### What You Learned
-✅ Turning a real team process into a custom internal tool
-✅ Combining a smart database with a full-featured app
-✅ Securing a tool with roles, permissions, and auditing
-✅ Deploying, documenting, and driving adoption
-✅ Shipping a complete, impactful internal tool
+- ✅ Turning a real team process into a custom internal tool
+- ✅ Combining a smart database with a full-featured app
+- ✅ Securing a tool with roles, permissions, and auditing
+- ✅ Deploying, documenting, and driving adoption
+- ✅ Shipping a complete, impactful internal tool
 
 ### Portfolio Project
 **Complete Internal Tool (Capstone)**: Designed the database, built the app, secured it with roles, deployed it, and onboarded a team onto a custom tool that runs a real process.

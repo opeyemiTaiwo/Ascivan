@@ -6,7 +6,7 @@
 //   - PROJECTS by title or field (free and paid)
 //   - FOUNDATIONS COURSES by track or course title
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { collection, query, getDocs, limit } from 'firebase/firestore';
 import { db } from '../firebase/config';
@@ -16,8 +16,9 @@ import ProjectPayBadge from '../components/ProjectPayBadge';
 const SearchPage = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const inputRef = useRef(null);
-  const [term, setTerm] = useState('');
+  const [term, setTerm] = useState(searchParams.get('q') || '');
   const [members, setMembers] = useState([]);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,6 +27,13 @@ const SearchPage = () => {
     if (!currentUser) { navigate('/login'); return; }
     inputRef.current?.focus();
   }, [currentUser, navigate]);
+
+  // Keep the term in sync when a new search comes in from the top-bar search
+  // bar while already on this page (the ?q= param changes without a remount).
+  useEffect(() => {
+    const q = searchParams.get('q') || '';
+    setTerm(q);
+  }, [searchParams]);
 
   // Load searchable data once. Matching happens client-side as you type.
   useEffect(() => {

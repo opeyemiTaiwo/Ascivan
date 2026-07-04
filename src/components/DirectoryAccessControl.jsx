@@ -30,6 +30,16 @@ const DirectoryAccessControl = () => {
       }
 
       try {
+        // Admins have full access to every feature, including this directory -
+        // no paid or manually-approved access record required.
+        const meSnap = await getDoc(doc(db, 'users', currentUser.uid));
+        if (meSnap.exists() && meSnap.data().role === 'admin') {
+          setAccessStatus('granted');
+          setUserAccess({ accessType: 'admin' });
+          setLoading(false);
+          return;
+        }
+
         // Check if user has directory access
         const accessDoc = await getDoc(doc(db, 'directory_access', currentUser.email));
         

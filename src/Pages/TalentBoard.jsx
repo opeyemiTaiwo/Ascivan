@@ -79,8 +79,7 @@ const TalentBoard = () => {
       setLoading(false);
     };
     // Only fetch the board's data for Premium members - the Talent Board is
-    // a Premium feature. (Profiles remain viewable everywhere else: workspace,
-    // Proof Wall, community, etc.)
+    // a Premium feature.
     if (currentUser && !checkingAccess && isPremium) fetchTalents();
     else if (!checkingAccess) setLoading(false);
   }, [currentUser, checkingAccess, isPremium]);
@@ -97,9 +96,7 @@ const TalentBoard = () => {
     return <div className="flex items-center justify-center py-20"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div></div>;
   }
 
-  // Premium gate: the Talent Board is Premium-only. Individual profiles stay
-  // accessible to everyone through workspaces, the Proof Wall, community
-  // posts, and direct profile links - only this curated board is gated.
+  // Premium gate: the Talent Board is a Premium-only feature.
   if (!isPremium) {
     return (
       <div className="max-w-2xl mx-auto text-center py-16 px-4">
@@ -118,7 +115,6 @@ const TalentBoard = () => {
         <button onClick={() => navigate('/settings?tab=membership')} className="bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm px-6 py-3 rounded-xl transition-all">
           Upgrade to Premium
         </button>
-        <p className="text-gray-400 text-xs mt-4">You can still view individual member profiles from project workspaces, the Proof Wall, and community posts.</p>
       </div>
     );
   }

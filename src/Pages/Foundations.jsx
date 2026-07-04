@@ -432,7 +432,18 @@ const CourseReader = ({ course, done, showContents, setShowContents, onBack, onC
     let cancelled = false;
     import('mermaid').then(({ default: mermaid }) => {
       if (cancelled) return;
-      mermaid.initialize({ startOnLoad: false, theme: 'neutral', securityLevel: 'strict', fontFamily: 'inherit' });
+      // securityLevel 'loose' enables HTML labels, which render node text in
+      // auto-sizing foreignObject boxes. Under 'strict', htmlLabels is forced off
+      // and Mermaid draws multi-line text as raw SVG, under-measuring box height
+      // so the last line of every node gets clipped. Course markdown is authored
+      // in-repo (trusted), so 'loose' is safe here.
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'neutral',
+        securityLevel: 'loose',
+        fontFamily: 'inherit',
+        flowchart: { htmlLabels: true, useMaxWidth: true },
+      });
       nodes.forEach((node, i) => {
         const src = node.textContent || '';
         node.removeAttribute('data-mermaid');
@@ -532,6 +543,10 @@ const COURSE_PROSE_CSS = `
 .course-prose th { background:#f8fafc; font-weight:700; color:#111827; }
 .course-prose .course-mermaid { margin:1.25rem 0; padding:1rem; background:#f8fafc; border:1px solid #eef2f7; border-radius:.9rem; overflow-x:auto; text-align:center; }
 .course-prose .course-mermaid svg { max-width:100%; height:auto; }
+/* Never clip node labels: let HTML (foreignObject) labels size to their content. */
+.course-prose .course-mermaid svg foreignObject { overflow:visible; }
+.course-prose .course-mermaid svg .nodeLabel,
+.course-prose .course-mermaid svg .nodeLabel p { line-height:1.35; margin:0; white-space:normal; }
 `;
 
 export default Foundations;

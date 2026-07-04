@@ -18,6 +18,16 @@ const AppLayout = ({ children }) => {
   const [userRole, setUserRole] = useState('member');
   const [isCompany, setIsCompany] = useState(false);
   const [projectsOpen, setProjectsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Top-bar search: send the typed term to the global Search page. Works on
+  // every screen size (the bar is responsive), so this is the single entry
+  // point for search across mobile and desktop.
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    const q = searchTerm.trim();
+    navigate(q ? `/search?q=${encodeURIComponent(q)}` : '/search');
+  };
 
   // Fetch user plan/role
   useEffect(() => {
@@ -78,7 +88,6 @@ const AppLayout = ({ children }) => {
 
   const navItems = [
     { path: '/dashboard', label: 'Home', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
-    { path: '/search', label: 'Search', icon: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' },
     ...(!isCompany ? [{ path: '/foundations', label: 'Foundations', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.247m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.247' }] : []),
     ...(!isCompany ? [{ label: 'Projects', isGroup: true, icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10', children: projectChildren }] : []),
     ...(!isCompany ? [{ path: '/my-workspaces', label: 'Workspace', icon: 'M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z' }] : []),
@@ -99,13 +108,11 @@ const AppLayout = ({ children }) => {
   const mobileTabs = isCompany
     ? [
         { path: '/dashboard', label: 'Home', icon: HOME_ICON },
-        { path: '/search', label: 'Search', icon: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' },
         { path: '/foundations', label: 'Foundation', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
         { path: '/talent-board', label: 'Talents', icon: 'M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4z' },
       ]
     : [
         { path: '/dashboard', label: 'Home', icon: HOME_ICON },
-        { path: '/search', label: 'Search', icon: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' },
         { path: '/foundations', label: 'Foundations', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.247m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.247' },
         { path: '/projects', label: 'Projects', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10' },
         { path: '/my-workspaces', label: 'Workspace', icon: WORKSPACE_ICON },
@@ -235,8 +242,8 @@ const AppLayout = ({ children }) => {
       {/* Main content */}
       <div className="flex-1 min-w-0 flex flex-col">
         {/* Top bar - sticky, responsive */}
-        <header className="sticky top-0 z-30 h-16 sm:h-[72px] flex items-center justify-between px-2 sm:px-4 border-b border-gray-200 bg-white lg:px-6">
-          <div className="flex items-center gap-2">
+        <header className="sticky top-0 z-30 h-16 sm:h-[72px] flex items-center gap-2 sm:gap-3 px-2 sm:px-4 border-b border-gray-200 bg-white lg:px-6">
+          <div className="flex items-center gap-2 flex-shrink-0">
             {!hideSidebar && (
             <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 rounded-lg hover:bg-gray-100 min-h-[60px] min-w-[44px] flex items-center justify-center flex-shrink-0">
               <svg className="w-7 h-7 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -250,15 +257,27 @@ const AppLayout = ({ children }) => {
             </a>
             )}
           </div>
-          <div className="flex-1 min-w-0" />
-          <div className="flex items-stretch justify-around gap-1 pr-2 sm:pr-12 lg:pr-16 max-w-full flex-1">
-            {/* Search - visible on every screen size, including mobile/handheld */}
-            <Link to="/search" className={`relative flex-1 flex flex-col items-center justify-center gap-1 py-2.5 min-h-[60px] rounded-lg hover:bg-gray-100 transition-colors ${location.pathname === '/search' ? 'text-blue-600' : 'text-gray-500'}`}>
-              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+          {/* Global search bar - a responsive "long bar" that grows to fill the
+              available space and works on every screen size (mobile + desktop).
+              Submitting takes the user to the full Search page with their term. */}
+          <form onSubmit={handleSearchSubmit} role="search" className="flex-1 min-w-0 max-w-xl">
+            <div className="relative">
+              <svg className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-              <span className="hidden lg:block text-[11px] font-semibold leading-none">Search</span>
-            </Link>
+              <input
+                type="search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search members, projects, courses…"
+                aria-label="Search"
+                className="w-full h-10 sm:h-11 pl-10 pr-3 text-sm rounded-full bg-gray-100 border border-transparent text-gray-900 placeholder-gray-400 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none transition-colors"
+              />
+            </div>
+          </form>
+
+          <div className="flex items-stretch justify-around gap-1 flex-shrink-0">
             {/* Messaging */}
             <Link to="/messages" className={`relative flex-1 flex flex-col items-center justify-center gap-1 py-2.5 min-h-[60px] rounded-lg hover:bg-gray-100 transition-colors ${location.pathname === '/messages' ? 'text-blue-600' : 'text-gray-500'}`}>
               <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -356,6 +356,24 @@ const AdminPanel = () => {
     } catch (e) { console.error(e); toast.error('Update failed.'); }
   };
 
+  // Editors get all pro features and every Foundations course, but no elevated
+  // delete/moderation powers - they can only delete their own data, like any
+  // member. Assigning the role is admin-only (this panel + Firestore rules).
+  const toggleEditor = async (u) => {
+    if (u.id === currentUser.uid) {
+      toast.error("You can't change your own role.");
+      return;
+    }
+    const makeEditor = u.role !== 'editor';
+    const newRole = makeEditor ? 'editor' : 'member';
+    if (!window.confirm(`${makeEditor ? 'Make' : 'Remove'} editor: ${u.displayName || u.email}?`)) return;
+    try {
+      await updateDoc(doc(db, 'users', u.id), { role: newRole });
+      setUsers(prev => prev.map(x => x.id === u.id ? { ...x, role: newRole } : x));
+      toast.success(makeEditor ? 'Promoted to editor.' : 'Editor role removed.');
+    } catch (e) { console.error(e); toast.error('Update failed.'); }
+  };
+
   const deleteProject = async (p) => {
     if (!window.confirm(`Delete project "${p.projectTitle || p.title}"? This cannot be undone.`)) return;
     try {
@@ -631,6 +649,7 @@ const AdminPanel = () => {
           <StatCard label="Community Posts" value={stats.posts} sub="recent (last 50)" />
           <StatCard label="Badges Issued" value={stats.badges} />
           <StatCard label="Admins" value={users.filter(u => u.role === 'admin').length} />
+          <StatCard label="Editors" value={users.filter(u => u.role === 'editor').length} />
         </div>
       )}
 
@@ -690,14 +709,21 @@ const AdminPanel = () => {
                   <p className="text-gray-900 text-sm font-medium truncate">
                     {u.displayName || 'No name'}
                     {u.role === 'admin' && <span className="ml-2 text-[10px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">ADMIN</span>}
+                    {u.role === 'editor' && <span className="ml-2 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">EDITOR</span>}
                     {u.isCompany && <span className="ml-2 text-[10px] font-bold text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded">COMPANY</span>}
                   </p>
                   <p className="text-gray-400 text-xs truncate">{u.email} · {u.country || 'no country'} · joined {fmtDate(u.createdAt)}</p>
                 </div>
-                <button onClick={() => toggleAdmin(u)}
-                  className={`flex-shrink-0 text-xs font-semibold px-3 py-1.5 rounded-lg transition-all ${u.role === 'admin' ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' : 'bg-blue-600 text-white hover:bg-blue-700'}`}>
-                  {u.role === 'admin' ? 'Remove admin' : 'Make admin'}
-                </button>
+                <div className="flex-shrink-0 flex items-center gap-2">
+                  <button onClick={() => toggleEditor(u)}
+                    className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-all ${u.role === 'editor' ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' : 'bg-emerald-600 text-white hover:bg-emerald-700'}`}>
+                    {u.role === 'editor' ? 'Remove editor' : 'Make editor'}
+                  </button>
+                  <button onClick={() => toggleAdmin(u)}
+                    className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-all ${u.role === 'admin' ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' : 'bg-blue-600 text-white hover:bg-blue-700'}`}>
+                    {u.role === 'admin' ? 'Remove admin' : 'Make admin'}
+                  </button>
+                </div>
               </div>
             ))}
             {filteredUsers.length === 0 && <p className="text-gray-400 text-sm">No users match.</p>}

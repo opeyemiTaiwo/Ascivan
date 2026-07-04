@@ -30,12 +30,12 @@ const DirectoryAccessControl = () => {
       }
 
       try {
-        // Admins have full access to every feature, including this directory -
-        // no paid or manually-approved access record required.
+        // Admins and editors get full access to every feature, including this
+        // directory - no paid or manually-approved access record required.
         const meSnap = await getDoc(doc(db, 'users', currentUser.uid));
-        if (meSnap.exists() && meSnap.data().role === 'admin') {
+        if (meSnap.exists() && (meSnap.data().role === 'admin' || meSnap.data().role === 'editor')) {
           setAccessStatus('granted');
-          setUserAccess({ accessType: 'admin' });
+          setUserAccess({ accessType: meSnap.data().role });
           setLoading(false);
           return;
         }

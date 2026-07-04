@@ -19,7 +19,9 @@ export const PremiumBadge = ({ size = 'sm' }) => {
 
 export const isPremium = (user) => {
   if (!user) return false;
-  return user.membershipPlan === 'Premium' || user.role === 'admin';
+  // Admins and editors get all premium/pro features. (Editors do NOT get
+  // elevated delete/moderation powers - that is gated by role === 'admin'.)
+  return user.membershipPlan === 'Premium' || user.role === 'admin' || user.role === 'editor';
 };
 
 export default PremiumBadge;

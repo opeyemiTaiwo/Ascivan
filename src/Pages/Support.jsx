@@ -23,7 +23,7 @@ const Support = () => {
       getDoc(doc(db, 'users', currentUser.uid)).then(snap => {
         if (snap.exists()) {
           const data = snap.data();
-          setIsPremium(data.membershipPlan === 'Premium' || data.role === 'admin');
+          setIsPremium(data.membershipPlan === 'Premium' || data.role === 'admin' || data.role === 'editor');
         }
       }).catch(() => {});
     }
@@ -60,7 +60,7 @@ const Support = () => {
     { q: 'What are the 6 TechTalent Badges?', a: 'TechDev (Coding Developers), TechArchs (Low/No-Code Developers), TechQA (Quality Testers), TechGuard (Network & Cybersecurity, Cloud & DevOps), TechPO (Product/Project Owners), and TechLeads (Non-Technical Roles). Each has 4 levels: Novice, Associate, Advanced, and Expert.' },
     { q: 'Do project owners earn badges too?', a: 'Yes! Project owners automatically receive a TechLeads (Leadership) badge when they complete a project, plus a certificate documenting the project, team size, and badges awarded.' },
     { q: 'Can I control who sees my email?', a: 'Yes. Go to Settings and toggle Email Visibility on or off. When set to private, your email is hidden from other members. They can still message you through the platform.' },
-    { q: 'What is the Talent Board?', a: 'The Talent Board is a curated, searchable directory where hiring companies discover tech professionals by skill track, experience level, and badges earned. Being LISTED is free: you appear automatically once you earn your first badge by completing a project, and the more badges you earn, the stronger your profile looks. BROWSING the Talent Board is a Premium feature - Premium members get full access with unlimited talent messaging, and appear first in searches (priority ranking). Individual profiles are always viewable by everyone through project workspaces, the Proof Wall, and community posts.' },
+    { q: 'What is the Talent Board?', a: 'The Talent Board is a curated, searchable directory where hiring companies discover tech professionals by skill track, experience level, and badges earned. Being LISTED is free: you appear automatically once you earn your first badge by completing a project, and the more badges you earn, the stronger your profile looks. BROWSING the Talent Board is a Premium feature - Premium members get full access with unlimited talent messaging, and appear first in searches (priority ranking).' },
     { q: 'How do I report inappropriate content or users?', a: 'Use this support form below to report any issues. Include the username, content description, and any screenshots. Our team will review and take action.' },
     { q: 'Is my data safe?', a: 'Yes. All data is stored securely with encrypted connections. See our Privacy Policy for full details.' },
   ];

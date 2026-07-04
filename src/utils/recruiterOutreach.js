@@ -19,7 +19,7 @@ export const FREE_JOB_POST_LIMIT = 2; // job posts per month on the free tier
 const periodKey = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
 
 const isPremiumRecruiter = (userData) =>
-  userData?.membershipPlan === 'Premium' || userData?.role === 'admin';
+  userData?.membershipPlan === 'Premium' || userData?.role === 'admin' || userData?.role === 'editor';
 
 // A recruiter is anyone who is a company account OR has posted a job (either/both).
 const isRecruiterByFlags = (userData) =>

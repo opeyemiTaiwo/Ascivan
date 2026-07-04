@@ -34,7 +34,7 @@ const DashboardOverview = () => {
   const [companyJobs, setCompanyJobs] = useState([]);
   const [earnings, setEarnings] = useState({ earnedTotal: 0, pendingTotal: 0, rows: [] });
   const [disbursements, setDisbursements] = useState({ disbursedTotal: 0, pendingTotal: 0, rows: [] });
-  const isPremiumUser = membershipPlan === 'Premium' || userRole === 'admin';
+  const isPremiumUser = membershipPlan === 'Premium' || userRole === 'admin' || userRole === 'editor';
 
   // Account card money summary: companies see money OUT (disbursed/pending
   // payouts on their paid projects); talent sees earnings (earned/pending).

@@ -33,7 +33,7 @@ const TalentBoard = () => {
     getDoc(doc(db, 'users', currentUser.uid)).then(snap => {
       if (snap.exists()) {
         const data = snap.data();
-        setIsPremium(data.membershipPlan === 'Premium' || data.role === 'admin');
+        setIsPremium(data.membershipPlan === 'Premium' || data.role === 'admin' || data.role === 'editor');
       }
       setCheckingAccess(false);
     }).catch(() => setCheckingAccess(false));

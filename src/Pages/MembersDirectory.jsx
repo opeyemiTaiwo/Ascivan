@@ -296,7 +296,7 @@ const MembersDirectory = () => {
                         {/* Name and info */}
                         <p className="text-gray-900 text-sm font-semibold truncate flex items-center justify-center gap-1">
                           {member.name}
-                          {(member.membershipPlan === 'Premium' || member.role === 'admin') && <PremiumBadge size="xs" />}
+                          {(member.membershipPlan === 'Premium' || member.role === 'admin' || member.role === 'editor') && <PremiumBadge size="xs" />}
                         </p>
                         <p className="text-gray-500 text-xs mt-0.5 truncate">{member.specialization || member.primarySkillTrack || 'Tech Professional'}</p>
                         {(member.city || member.state) && (

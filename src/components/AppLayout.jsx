@@ -77,7 +77,7 @@ const AppLayout = ({ children }) => {
     setSidebarOpen(false);
   }, [location.pathname]);
 
-  const isPremiumOrAdmin = userPlan === 'Premium' || userRole === 'admin';
+  const isPremiumOrAdmin = userPlan === 'Premium' || userRole === 'admin' || userRole === 'editor';
 
   // For individuals, group project-related sections under one "Projects" menu to
   // reduce clutter. Companies don't get these contributor-only sections at all.
@@ -258,21 +258,22 @@ const AppLayout = ({ children }) => {
             )}
           </div>
 
-          {/* Global search bar - a responsive "long bar" that grows to fill the
-              available space and works on every screen size (mobile + desktop).
-              Submitting takes the user to the full Search page with their term. */}
+          {/* Global search bar - LinkedIn-style pill with a bold magnifier on
+              the left. This is the only search entry point (it was removed from
+              the sidebar and the mobile bottom bar). Responsive: it grows to fill
+              the top bar on desktop and shrinks gracefully on phones. */}
           <form onSubmit={handleSearchSubmit} role="search" className="flex-1 min-w-0 max-w-xl">
             <div className="relative">
-              <svg className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              <svg className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               <input
                 type="search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search members, projects, courses…"
+                placeholder="I'm looking for…"
                 aria-label="Search"
-                className="w-full h-10 sm:h-11 pl-10 pr-3 text-sm rounded-full bg-gray-100 border border-transparent text-gray-900 placeholder-gray-400 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:outline-none transition-colors"
+                className="w-full h-10 sm:h-11 pl-11 pr-4 text-sm rounded-full bg-gray-100 border border-gray-300 text-gray-900 placeholder-gray-500 focus:bg-white focus:border-gray-400 focus:ring-2 focus:ring-gray-200 focus:outline-none transition-colors"
               />
             </div>
           </form>

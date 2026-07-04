@@ -415,7 +415,7 @@ const MembershipTab = ({ profileData, navigate }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
       {/* Basic */}
-      <div className={`bg-white border-2 rounded-xl p-6 ${(profileData?.membershipPlan !== 'Premium' && profileData?.role !== 'admin') ? 'border-blue-500' : 'border-gray-200'}`}>
+      <div className={`bg-white border-2 rounded-xl p-6 ${(profileData?.membershipPlan !== 'Premium' && profileData?.role !== 'admin' && profileData?.role !== 'editor') ? 'border-blue-500' : 'border-gray-200'}`}>
         <h3 className="text-blue-600 font-bold text-lg mb-1">Basic Membership</h3>
         <p className="text-gray-900 font-bold text-2xl mb-4">Free</p>
         <p className="text-gray-500 text-sm mb-4">Everything you need to start building your tech career through real project experience.</p>
@@ -426,13 +426,13 @@ const MembershipTab = ({ profileData, navigate }) => {
           <FeatureItem label="Community, messaging, and workspace" detail="Share work on the Proof Wall, message other members, and collaborate in project workspaces. Messaging is limited within talent only - free accounts can't message company accounts." />
           <FeatureItem label="Certificates on project completion" detail="Receive a certificate for every project you complete, documenting your role and contributions." />
         </ul>
-        {(profileData?.membershipPlan !== 'Premium' && profileData?.role !== 'admin') && (
+        {(profileData?.membershipPlan !== 'Premium' && profileData?.role !== 'admin' && profileData?.role !== 'editor') && (
           <p className="text-blue-600 font-semibold text-sm">Current Plan</p>
         )}
       </div>
 
       {/* Premium */}
-      <div className={`bg-white border-2 rounded-xl p-6 relative ${(profileData?.membershipPlan === 'Premium' || profileData?.role === 'admin') ? 'border-orange-400' : 'border-gray-200'}`}>
+      <div className={`bg-white border-2 rounded-xl p-6 relative ${(profileData?.membershipPlan === 'Premium' || profileData?.role === 'admin' || profileData?.role === 'editor') ? 'border-orange-400' : 'border-gray-200'}`}>
         <div className="absolute -top-3 right-4">
           <span className="bg-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-sm">COMING SOON</span>
         </div>
@@ -451,7 +451,7 @@ const MembershipTab = ({ profileData, navigate }) => {
           <FeatureItem color="orange" label="Priority support" detail="Get faster responses and dedicated assistance from the Ascivan team." />
         </ul>
         <p className="text-gray-400 text-xs mb-4 leading-relaxed">Premium helps talent get discovered faster, and lets companies hire with confidence as verified, traceable organizations.</p>
-        {(profileData?.membershipPlan === 'Premium' || profileData?.role === 'admin') ? (
+        {(profileData?.membershipPlan === 'Premium' || profileData?.role === 'admin' || profileData?.role === 'editor') ? (
           <div>
             <div className="w-full bg-orange-500 text-white font-semibold text-sm py-2.5 rounded-lg text-center">Active Premium Member</div>
             <p className="text-gray-500 text-xs mt-2 text-center">

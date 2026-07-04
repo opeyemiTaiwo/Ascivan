@@ -35,13 +35,12 @@ const Jobs = () => {
   }, [currentUser]);
 
   const jobTypes = [
-    { id: 'all',        label: 'All Jobs' },
-    { id: 'full-time',  label: 'Full-time' },
-    { id: 'part-time',  label: 'Part-time' },
-    { id: 'contract',   label: 'Contract' },
-    { id: 'freelance',  label: 'Freelance' },
-    { id: 'internship', label: 'Internship' },
-    { id: 'remote',     label: 'Virtual / Online' },
+    { id: 'all',         label: 'All' },
+    { id: 'job',         label: 'Jobs' },
+    { id: 'freelance',   label: 'Freelance' },
+    { id: 'scholarship', label: 'Scholarships' },
+    { id: 'grant',       label: 'Grants' },
+    { id: 'partnership', label: 'Partnerships' },
   ];
 
   useEffect(() => {
@@ -70,11 +69,10 @@ const Jobs = () => {
           expiresAt: raw.expiresAt?.toDate(),
         };
       }).filter(p => {
-        const isJob = !p.category || p.category === 'job';
         const notExpired = !p.expiresAt || new Date() < p.expiresAt;
-        // Companies don't browse other companies' jobs - they only see their own.
+        // Companies only see their own posts (they don't browse others').
         const visibleToMe = !isCompany || p.posterId === currentUser?.uid || p.userId === currentUser?.uid;
-        return isJob && notExpired && visibleToMe;
+        return notExpired && visibleToMe;
       })
       // Newest first, sorted in JS (handles missing createdAt gracefully).
       .sort((a, b) => (b.createdAt?.getTime?.() || 0) - (a.createdAt?.getTime?.() || 0));
@@ -93,9 +91,13 @@ const Jobs = () => {
   useEffect(() => {
     let filtered = [...posts];
 
-    // Job type filter
+    // Category filter
     if (selectedType !== 'all') {
-      filtered = filtered.filter(p => p.jobType === selectedType);
+      if (selectedType === 'job') {
+        filtered = filtered.filter(p => !p.category || p.category === 'job');
+      } else {
+        filtered = filtered.filter(p => p.category === selectedType);
+      }
     }
 
     // Location filter
@@ -201,6 +203,17 @@ const Jobs = () => {
     return map[jobType] || { label: jobType || 'Job', cls: 'bg-orange-100 text-gray-900' };
   };
 
+  const getCategoryBadge = (cat) => {
+    const map = {
+      'job':         { label: 'Job',         cls: 'bg-orange-100 text-orange-700' },
+      'freelance':   { label: 'Freelance',   cls: 'bg-blue-100 text-blue-700' },
+      'scholarship': { label: 'Scholarship', cls: 'bg-emerald-100 text-emerald-700' },
+      'grant':       { label: 'Grant',       cls: 'bg-violet-100 text-violet-700' },
+      'partnership': { label: 'Partnership', cls: 'bg-pink-100 text-pink-700' },
+    };
+    return map[cat] || map['job'];
+  };
+
   const clearAll = () => {
     setSearchQuery('');
     setLocationFilter('');
@@ -216,7 +229,7 @@ const Jobs = () => {
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading Jobs...</p>
+            <p className="text-gray-600">Loading Opportunities...</p>
           </div>
         </div>
       </>
@@ -230,14 +243,14 @@ const Jobs = () => {
 
           {/* Hero */}
           <section className="mb-10 text-center">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-3 sm:mb-4">Jobs</h1>
-            <p className="text-gray-600 text-sm sm:text-base md:text-lg mb-5 sm:mb-6">Full-time · Part-time · Contract · Freelance · Internship · Virtual/Online</p>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-3 sm:mb-4">Opportunities</h1>
+            <p className="text-gray-600 text-sm sm:text-base md:text-lg mb-5 sm:mb-6">Jobs · Freelance · Scholarships · Grants · Partnerships</p>
             {isCompany && (
               <button
                 onClick={() => navigate('/jobs/post')}
                 className="px-6 py-3 min-h-[44px] bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all shadow-lg"
               >
-                Post a Job
+                Post an Opportunity
               </button>
             )}
           </section>
@@ -309,7 +322,7 @@ const Jobs = () => {
               {/* Results count */}
               <div className="flex items-center justify-end gap-4 text-sm">
                 <span className="text-gray-600">
-                  <span className="text-orange-400 font-semibold">{filteredPosts.length}</span> jobs found
+                  <span className="text-orange-400 font-semibold">{filteredPosts.length}</span> opportunities found
                 </span>
                 {hasActiveFilters && (
                   <button onClick={clearAll} className="text-orange-400 hover:text-orange-300 font-semibold">
@@ -338,6 +351,8 @@ const Jobs = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {filteredPosts.map(post => {
                   const typeBadge = getTypeBadge(post.jobType);
+                  const catBadge = getCategoryBadge(post.category);
+                  const showTypeBadge = (!post.category || post.category === 'job' || post.category === 'freelance') && post.jobType;
                   const isOwnPost = post.posterId === currentUser.uid;
                   const isClosed = post.status === 'closed';
                   const expiringSoon = post.expiresAt && (post.expiresAt - new Date()) < 7 * 86400000;
@@ -351,9 +366,14 @@ const Jobs = () => {
                         {/* Header row */}
                         <div className="flex items-start justify-between mb-3 gap-2">
                           <div className="flex flex-wrap gap-1.5">
-                            <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${typeBadge.cls}`}>
-                              {typeBadge.label}
+                            <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${catBadge.cls}`}>
+                              {catBadge.label}
                             </span>
+                            {showTypeBadge && (
+                              <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${typeBadge.cls}`}>
+                                {typeBadge.label}
+                              </span>
+                            )}
                             {post.workAuth === 'provided' || post.workAuthProvided ? (
                               <span className="bg-green-100 text-gray-900 px-2.5 py-1 rounded-lg text-xs font-semibold">Visa/sponsorship provided</span>
                             ) : post.workAuth === 'required' ? (

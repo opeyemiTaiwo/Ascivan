@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../../components/Navbar';
 import { Link } from 'react-router-dom';
-import { collection, query, where, onSnapshot, doc, getDoc, updateDoc, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
 
@@ -28,60 +28,6 @@ const MyProjects = () => {
   const [tab, setTab] = useState('applied');
   const [projectFilter, setProjectFilter] = useState('ongoing');
   const [sortBy, setSortBy] = useState('newest');
-
-  // Reply to a project owner's info request (link only - e.g. a portfolio URL).
-  const [replyingFor, setReplyingFor] = useState(null); // application id
-  const [replyUrl, setReplyUrl] = useState('');
-  const [sendingReply, setSendingReply] = useState(false);
-
-  const isValidLink = (v) => {
-    try {
-      const u = new URL(v.startsWith('http') ? v : `https://${v}`);
-      return !!u.hostname && u.hostname.includes('.');
-    } catch { return false; }
-  };
-
-  const sendLinkReply = async (app) => {
-    const raw = replyUrl.trim();
-    if (!raw) { toast.error('Paste a link to reply.'); return; }
-    if (/\s/.test(raw) || !isValidLink(raw)) {
-      toast.error('You can only reply with a valid link (e.g. https://yourportfolio.com).');
-      return;
-    }
-    const url = raw.startsWith('http') ? raw : `https://${raw}`;
-    setSendingReply(true);
-    try {
-      await updateDoc(doc(db, 'project_applications', app.id), {
-        feedbackResponse: {
-          url,
-          respondedAt: serverTimestamp(),
-        },
-      });
-
-      // Notify the project owner that a reply came in.
-      try {
-        const pSnap = await getDoc(doc(db, 'projects', app.projectId));
-        const ownerId = pSnap.exists() ? pSnap.data().submitterId : null;
-        if (ownerId) {
-          await addDoc(collection(db, 'notifications'), {
-            userId: ownerId,
-            type: 'application_feedback_reply',
-            message: `${app.applicantName || 'An applicant'} replied to your request on "${app.projectTitle}" with a link.`,
-            projectId: app.projectId,
-            isRead: false,
-            createdAt: serverTimestamp(),
-          });
-        }
-      } catch (_) { /* non-blocking */ }
-
-      toast.success('Link sent to the project owner.');
-      setReplyingFor(null);
-      setReplyUrl('');
-    } catch (e) {
-      toast.error('Could not send your link. Please try again.');
-    }
-    setSendingReply(false);
-  };
 
   const filteredApplications = applications.filter(app => {
     if (projectFilter === 'completed') {
@@ -267,43 +213,19 @@ const MyProjects = () => {
                       </div>
                     </Link>
 
-                    {/* Project owner asked for more info - reply with a link only */}
+                    {/* The project owner sent a message about this application -
+                        the conversation lives in Messages. */}
                     {app.status === 'submitted' && app.feedbackRequest?.message && (
                       <div className="mt-3 bg-amber-50 border border-amber-200 rounded-lg p-3">
                         <p className="text-amber-800 text-xs">
                           <span className="font-semibold">Message from the project owner:</span> "{app.feedbackRequest.message}"
                         </p>
-                        {app.feedbackResponse?.url ? (
-                          <p className="text-xs mt-2">
-                            <span className="font-semibold text-gray-700">You replied: </span>
-                            <a href={app.feedbackResponse.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-all">{app.feedbackResponse.url}</a>
-                          </p>
-                        ) : replyingFor === app.id ? (
-                          <div className="mt-2 space-y-2">
-                            <input
-                              type="url"
-                              value={replyUrl}
-                              onChange={e => setReplyUrl(e.target.value)}
-                              placeholder="https://yourportfolio.com"
-                              className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none"
-                            />
-                            <p className="text-gray-500 text-[11px]">Note: you can only reply with a link (e.g. your portfolio URL).</p>
-                            <div className="flex gap-2">
-                              <button onClick={() => sendLinkReply(app)} disabled={sendingReply}
-                                className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-1.5 rounded-lg transition-all disabled:opacity-50">
-                                {sendingReply ? 'Sending…' : 'Send link'}
-                              </button>
-                              <button onClick={() => { setReplyingFor(null); setReplyUrl(''); }} className="text-gray-500 text-xs font-semibold px-3 py-1.5">Cancel</button>
-                            </div>
-                          </div>
-                        ) : (
-                          <button
-                            onClick={() => { setReplyingFor(app.id); setReplyUrl(''); }}
-                            className="mt-2 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-4 py-1.5 rounded-lg transition-all"
-                          >
-                            Reply with a link
-                          </button>
-                        )}
+                        <Link
+                          to={app.feedbackRequest.requestedByUid ? `/messages?with=${app.feedbackRequest.requestedByUid}` : '/messages'}
+                          className="inline-block mt-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-1.5 rounded-lg transition-all"
+                        >
+                          Open conversation →
+                        </Link>
                       </div>
                     )}
                   </div>

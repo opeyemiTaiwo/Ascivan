@@ -207,3 +207,30 @@
 - The "Open projects" strip (individuals) and "Top talent" strip (companies)
   on the All Activity tab now show two items instead of three - the View all
   link covers the rest.
+
+## 23. Applicant messaging: Request Info now opens a real conversation
+- Problem: the "request portfolio" notification routed applicants to the wrong
+  page, and the link-only reply flow was clunky.
+- Now the owner's Request Info message creates (or reuses) a Messages
+  conversation between owner and applicant, drops the request in as a chat
+  message with project context ('About your application for "X" (Role): ...'),
+  and increments the applicant's unread count.
+- The applicant's notification now routes straight to that conversation
+  (/messages?with=owner); the push notification links to /messages too.
+- My Projects (applied tab) shows the owner's message with an "Open
+  conversation" button instead of the old link-only reply form (removed).
+- The owner's application card shows "You asked ..." with an "Open
+  conversation" link.
+- Deliberate: owner->applicant conversations are created directly, bypassing
+  the Premium "contact talent" gate - the applicant applied to the owner's
+  project, so this contact is legitimate; and per existing rules, replies in
+  an existing conversation are always unlimited for both sides.
+
+## 24. Request Info: message only, no notification entry
+- The owner's Request Info message no longer creates an entry on the
+  Notifications page. It goes straight to the applicant's Messages inbox as a
+  chat message, lighting up the Messages unread badge in the sidebar like any
+  other message. The push (device) notification is kept - same as normal
+  messages - and links to the inbox. The Notifications-page routing for the
+  old notification type is kept so previously-sent notifications still open
+  the right conversation.

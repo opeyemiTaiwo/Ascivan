@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import Navbar from '../../components/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
-import { collection, query, where, onSnapshot, doc, updateDoc, addDoc, getDocs, deleteDoc, increment, serverTimestamp, arrayUnion } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, doc, getDoc, setDoc, updateDoc, addDoc, getDocs, deleteDoc, increment, serverTimestamp, arrayUnion } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { sendPush } from '../../utils/pushNotifications';
 import { toast } from 'react-toastify';
@@ -193,52 +193,73 @@ const ProjectOwnerDashboard = () => {
     } catch (e) { toast.error('Error rejecting: ' + e.message); }
   };
 
-  // Third option beside Approve/Reject: ask the applicant for more info
-  // (e.g. "Send me your portfolio"). The applicant can only reply with a link.
+  // Third option beside Approve/Reject: message the applicant directly (e.g.
+  // "Send me your portfolio"). This creates/reuses a conversation between the
+  // owner and the applicant in Messages, drops the request in as the first
+  // message, and notifies the applicant - who replies right in their inbox.
   const requestApplicantInfo = async (project, app, message) => {
     const msg = (message || '').trim();
     if (!msg) { toast.error('Type a short message for the applicant.'); return; }
+    if (!app.applicantUid) { toast.error('This applicant cannot be messaged.'); return; }
     try {
+      // 1) Ensure the conversation exists (same deterministic id Messages uses).
+      const convId = [currentUser.uid, app.applicantUid].sort().join('_');
+      const convRef = doc(db, 'conversations', convId);
+      const convSnap = await getDoc(convRef);
+      if (!convSnap.exists()) {
+        await setDoc(convRef, {
+          participants: [currentUser.uid, app.applicantUid],
+          lastMessage: '',
+          lastMessageAt: serverTimestamp(),
+          createdAt: serverTimestamp(),
+          unreadBy: { [currentUser.uid]: 0, [app.applicantUid]: 0 },
+        });
+      }
+
+      // 2) Drop the request into the chat, with the project as context.
+      const chatText = `About your application for "${project.projectTitle}" (${app.role}): ${msg}`;
+      await addDoc(collection(db, 'conversations', convId, 'messages'), {
+        text: chatText,
+        senderId: currentUser.uid,
+        createdAt: serverTimestamp(),
+      });
+      await updateDoc(convRef, {
+        lastMessage: chatText,
+        lastMessageAt: serverTimestamp(),
+        [`unreadBy.${app.applicantUid}`]: increment(1),
+      });
+
+      // 3) Record the request on the application so the owner card keeps context.
       await updateDoc(doc(db, 'project_applications', app.id), {
         feedbackRequest: {
           message: msg,
           requestedBy: currentUser.email,
+          requestedByUid: currentUser.uid,
           requestedAt: serverTimestamp(),
         },
-        // Clear any previous reply so a fresh request can be answered again.
-        feedbackResponse: null,
       });
-
-      // Reflect immediately in local state.
       setMyProjects(prev => prev.map(p => {
         const applications = (p.applications || []).map(a =>
-          a.id === app.id ? { ...a, feedbackRequest: { message: msg, requestedBy: currentUser.email }, feedbackResponse: null } : a
+          a.id === app.id ? { ...a, feedbackRequest: { message: msg, requestedBy: currentUser.email, requestedByUid: currentUser.uid } } : a
         );
         return { ...p, applications };
       }));
 
-      // In-app notification to the applicant.
-      if (app.applicantUid) {
-        try {
-          await addDoc(collection(db, 'notifications'), {
-            userId: app.applicantUid,
-            type: 'application_feedback_request',
-            message: `The owner of "${project.projectTitle}" asked: "${msg}" - reply with a link from My Projects.`,
-            projectId: project.id,
-            isRead: false,
-            createdAt: serverTimestamp(),
-          });
-        } catch (_) {}
-        try {
-          await sendPush(app.applicantUid, {
-            title: 'Message about your application',
-            body: `"${project.projectTitle}": ${msg}`,
-          });
-        } catch (_) {}
-      }
+      // 4) No separate in-app notification: the chat message IS the notification -
+      // it lands in the applicant's Messages inbox with an unread badge, exactly
+      // like any other message. A push (device) notification still goes out,
+      // matching what Messages does for every normal message, and links to the inbox.
+      try {
+        await sendPush({
+          recipientUid: app.applicantUid,
+          title: 'Message about your application',
+          body: `"${project.projectTitle}": ${msg}`,
+          link: '/messages',
+        });
+      } catch (_) {}
 
-      toast.success('Message sent to the applicant.');
-    } catch (e) { toast.error('Could not send the request: ' + e.message); }
+      toast.success('Message sent - the conversation is in your inbox.');
+    } catch (e) { toast.error('Could not send the message: ' + e.message); }
   };
 
   const removeMember = async (project, app) => {
@@ -519,25 +540,20 @@ const ProjectCard = ({ project, currentUser, onApprove, onReject, onRequestInfo,
                 </div>
               </div>
 
-              {/* Earlier request + the applicant's link reply, if any */}
+              {/* Earlier request - the conversation continues in Messages */}
               {app.feedbackRequest?.message && requestingFor !== app.id && (
                 <div className="mt-3 bg-amber-50 border border-amber-100 rounded-lg p-3">
                   <p className="text-amber-800 text-xs"><span className="font-semibold">You asked:</span> "{app.feedbackRequest.message}"</p>
-                  {app.feedbackResponse?.url ? (
-                    <p className="text-xs mt-1.5">
-                      <span className="font-semibold text-gray-700">Applicant replied: </span>
-                      <a href={app.feedbackResponse.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-all">{app.feedbackResponse.url}</a>
-                    </p>
-                  ) : (
-                    <p className="text-gray-500 text-xs mt-1.5 italic">Waiting for the applicant's reply…</p>
-                  )}
+                  <Link to={`/messages?with=${app.applicantUid}`} className="inline-block mt-1.5 text-blue-600 text-xs font-semibold hover:underline">
+                    Open conversation →
+                  </Link>
                 </div>
               )}
 
               {/* Composer for the request */}
               {requestingFor === app.id && (
                 <div className="mt-3 bg-white border border-amber-200 rounded-lg p-3 space-y-2">
-                  <p className="text-gray-600 text-xs">Ask the applicant for something specific. They'll be able to reply with a <span className="font-semibold">link only</span> (e.g. their portfolio).</p>
+                  <p className="text-gray-600 text-xs">Ask the applicant for something specific (e.g. their portfolio). This starts a conversation in <span className="font-semibold">Messages</span> - they reply from their inbox and you can chat from there.</p>
                   <textarea
                     value={requestText}
                     onChange={e => setRequestText(e.target.value)}

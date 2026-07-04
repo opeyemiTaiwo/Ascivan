@@ -71,6 +71,12 @@ const NotificationsPage = () => {
 
   const handleClick = (n) => {
     if (!n.isRead) markAsRead(n.id);
+    // Application messages open the conversation with the sender in Messages.
+    if ((n.type === 'application_feedback_request' || n.type === 'application_feedback_reply') && n.fromUid) {
+      navigate(`/messages?with=${n.fromUid}`);
+      return;
+    }
+    if (n.type === 'application_feedback_request' || n.type === 'application_feedback_reply') { navigate('/messages'); return; }
     if (n.projectId && projectTypes.includes(n.type)) navigate(`/projects/${n.projectId}`);
     else if (n.type === 'follow' && n.followedBy) navigate(`/profile/${n.followedByName || n.followedBy}`);
     else if (n.postId) navigate(`/community/post/${n.postId}`);

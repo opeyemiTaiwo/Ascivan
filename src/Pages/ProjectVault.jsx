@@ -115,7 +115,9 @@ const ProjectVault = () => {
     setExpandedHistory(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
-  // Find the user's certificate for this project
+  // Find the user's certificate for this project.
+  // Paid projects still get a certificate of completion (proof of work), but
+  // NO badge appears on it - paid projects never award badges.
   const getUserCertificate = (project) => {
     const userDoc = currentUser;
     // Check if user is owner
@@ -125,7 +127,7 @@ const ProjectVault = () => {
         projectTitle: project.projectTitle || project.title,
         completedAt: project.completedAt?.toDate?.()?.toLocaleDateString() || 'N/A',
         teamSize: (project.members || []).length,
-        badgeCategory: 'leadership',
+        badgeCategory: project.isPaid ? '' : 'leadership',
         isOwner: true,
       };
     }
@@ -136,9 +138,9 @@ const ProjectVault = () => {
       role: myEval?.memberRole || 'Team Member',
       projectTitle: project.projectTitle || project.title,
       completedAt: project.completedAt?.toDate?.()?.toLocaleDateString() || 'N/A',
-      badgeName: myEval?.badgeCategory || '',
-      badgeCategory: myEval?.badgeCategory || '',
-      badgeLevel: myEval?.badgeLevel || '',
+      badgeName: project.isPaid ? '' : (myEval?.badgeCategory || ''),
+      badgeCategory: project.isPaid ? '' : (myEval?.badgeCategory || ''),
+      badgeLevel: project.isPaid ? '' : (myEval?.badgeLevel || ''),
       isOwner: false,
     };
   };
@@ -210,28 +212,31 @@ const ProjectVault = () => {
                       const printWindow = window.open('', '_blank');
                       printWindow.document.write(`
                         <html><head><title>Certificate - ${viewingCert.projectTitle}</title>
-                        <style>@page{size:A4 portrait;margin:0}*{box-sizing:border-box}html,body{margin:0;padding:0;width:100%;height:100%;-webkit-print-color-adjust:exact;print-color-adjust:exact}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
-                        .page{width:100vw;height:100vh;padding:3vh 3vw;margin:0;display:flex;overflow:hidden;page-break-after:avoid;break-after:avoid;page-break-before:avoid;break-before:avoid;page-break-inside:avoid;break-inside:avoid}
-                        .border{flex:1;min-height:0;border:3px solid #bfdbfe;border-radius:16px;padding:2.5vh 4vw;display:flex;overflow:hidden;position:relative;page-break-inside:avoid;break-inside:avoid}
+                        <style>
+                        /* Standard certificate size: US Letter 8.5in x 11in */
+                        @page{size:8.5in 11in;margin:0}
+                        *{box-sizing:border-box}html,body{margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+                        .page{width:8.5in;height:11in;padding:0.5in;margin:0 auto;display:flex;overflow:hidden;page-break-after:avoid;break-after:avoid;page-break-before:avoid;break-before:avoid;page-break-inside:avoid;break-inside:avoid}
+                        .border{flex:1;min-height:0;border:3px solid #bfdbfe;border-radius:16px;padding:0.4in 0.55in;display:flex;overflow:hidden;position:relative;page-break-inside:avoid;break-inside:avoid}
                         .border::before{content:'';position:absolute;inset:9px;border:1px solid #dbeafe;border-radius:11px;pointer-events:none}
                         .inner{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-between;align-items:center;text-align:center;position:relative;z-index:1;overflow:hidden}
                         .top{display:flex;flex-direction:column;align-items:center}
-                        img.logo{width:clamp(44px,8vh,78px);height:clamp(44px,8vh,78px);margin-bottom:1vh}
-                        .brand{color:#111827;font-size:clamp(10px,1.6vh,15px);font-weight:800;letter-spacing:4px;margin-bottom:1.2vh}
-                        .subtitle{color:#2563eb;font-size:clamp(12px,2vh,19px);font-weight:800;text-transform:uppercase;letter-spacing:4px}
-                        .rule{width:80px;height:3px;background:linear-gradient(90deg,#2563eb,#f97316);border-radius:2px;margin:1.2vh auto 0}
+                        img.logo{width:0.9in;height:0.9in;margin-bottom:0.1in}
+                        .brand{color:#111827;font-size:13pt;font-weight:800;letter-spacing:4px;margin-bottom:0.12in}
+                        .subtitle{color:#2563eb;font-size:15pt;font-weight:800;text-transform:uppercase;letter-spacing:4px}
+                        .rule{width:80px;height:3px;background:linear-gradient(90deg,#2563eb,#f97316);border-radius:2px;margin:0.12in auto 0}
                         .middle{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;min-height:0;overflow:hidden}
-                        .label{color:#6b7280;font-size:clamp(11px,1.7vh,17px);margin:0.7vh 0}
-                        .name{font-size:clamp(26px,5.5vh,54px);font-weight:800;color:#111827;margin:0.8vh 0;font-family:Georgia,'Times New Roman',serif;line-height:1.15}
-                        .project{color:#2563eb;font-size:clamp(16px,2.8vh,29px);font-weight:700;margin:0.8vh 0;max-width:85%;line-height:1.25}
-                        .role{color:#374151;font-size:clamp(12px,1.8vh,18px);margin-top:0.3vh}
-                        .meta{color:#9ca3af;font-size:clamp(9px,1.3vh,13px);margin-top:1vh}
+                        .label{color:#6b7280;font-size:12pt;margin:0.07in 0}
+                        .name{font-size:34pt;font-weight:800;color:#111827;margin:0.08in 0;font-family:Georgia,'Times New Roman',serif;line-height:1.15}
+                        .project{color:#2563eb;font-size:20pt;font-weight:700;margin:0.08in 0;max-width:85%;line-height:1.25}
+                        .role{color:#374151;font-size:13pt;margin-top:0.03in}
+                        .meta{color:#9ca3af;font-size:10pt;margin-top:0.1in}
                         .bottom{display:flex;flex-direction:column;align-items:center;width:100%}
-                        .meta-row{display:flex;justify-content:center;gap:8vw;width:100%;padding-top:1.6vh;border-top:1px solid #e5e7eb}
+                        .meta-row{display:flex;justify-content:center;gap:1.2in;width:100%;padding-top:0.16in;border-top:1px solid #e5e7eb}
                         .meta-col{text-align:center}
-                        .meta-col .l{font-size:clamp(8px,1.05vh,11px);color:#9ca3af;text-transform:uppercase;letter-spacing:2px;margin-bottom:0.3vh}
-                        .meta-col .v{font-size:clamp(11px,1.4vh,15px);color:#374151;font-weight:700}
-                        .site{color:#d1d5db;font-size:clamp(9px,1.1vh,12px);margin-top:1vh}
+                        .meta-col .l{font-size:8pt;color:#9ca3af;text-transform:uppercase;letter-spacing:2px;margin-bottom:0.03in}
+                        .meta-col .v{font-size:11pt;color:#374151;font-weight:700}
+                        .site{color:#d1d5db;font-size:9pt;margin-top:0.1in}
                         </style></head><body>
                         <div class="page">
                         <div class="border">
@@ -248,7 +253,7 @@ const ProjectVault = () => {
                         <div class="label">has successfully completed the project</div>
                         <div class="project">${viewingCert.projectTitle}</div>
                         <div class="role">serving as <strong>${viewingCert.role}</strong></div>
-                        ${getBadgeImage(viewingCert.badgeCategory) ? `<div style="margin:1.4vh auto 0.3vh;width:clamp(64px,11vh,104px);height:clamp(64px,11vh,104px);border-radius:9999px;background:${tierRingCss(deriveLevel(userBadges, viewingCert.badgeCategory))};display:flex;align-items:center;justify-content:center;padding:5px;box-sizing:border-box"><div style="width:100%;height:100%;border-radius:9999px;background:#fff;display:flex;align-items:center;justify-content:center"><img src="${window.location.origin}${getBadgeImage(viewingCert.badgeCategory)}" alt="Badge" style="width:78%;height:78%;object-fit:contain" /></div></div>` : ''}
+                        ${getBadgeImage(viewingCert.badgeCategory) ? `<div style="margin:0.15in auto 0.04in;width:1.1in;height:1.1in;border-radius:9999px;background:${tierRingCss(deriveLevel(userBadges, viewingCert.badgeCategory))};display:flex;align-items:center;justify-content:center;padding:5px;box-sizing:border-box"><div style="width:100%;height:100%;border-radius:9999px;background:#fff;display:flex;align-items:center;justify-content:center"><img src="${window.location.origin}${getBadgeImage(viewingCert.badgeCategory)}" alt="Badge" style="width:78%;height:78%;object-fit:contain" /></div></div>` : ''}
                         ${viewingCert.badgeName ? `<div class="meta">Badge earned: ${viewingCert.badgeName} (${deriveLevel(userBadges, viewingCert.badgeCategory)})</div>` : ''}
                         ${viewingCert.isOwner && viewingCert.teamSize > 0 ? `<div class="meta">Team size: ${viewingCert.teamSize} members</div>` : ''}
                         </div>

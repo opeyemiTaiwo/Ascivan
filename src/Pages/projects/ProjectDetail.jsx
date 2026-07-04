@@ -13,6 +13,8 @@ import { logActivity as logProofEvent } from '../../utils/activityFeed';
 import { sendPush } from '../../utils/pushNotifications';
 import { checkRoleEligibility } from '../../utils/roleEligibility';
 import { checkProfileComplete } from '../../utils/profileCompletion';
+import ProjectPayBadge from '../../components/ProjectPayBadge';
+import { formatMoney, getPayRangeLabel } from '../../utils/paidProjects';
 
 const industryTracks = [
   { value: 'healthcare', label: 'Healthcare / Medical' },
@@ -218,6 +220,12 @@ const ProjectDetail = () => {
         roleExperienceLevel: selectedRole?.experienceLevel || 'any-level',
         applicantBadgeLevel: eligibility.current || 'None',
         badgeCategory: eligibility.category,
+        // Paid projects: the pay for this role is locked onto the application
+        // at apply time - this is the source of truth for the member's
+        // pending/earned amounts on their Account page.
+        isPaid: !!project.isPaid,
+        payAmount: project.isPaid ? (Number(selectedRole?.payAmount) || 0) : 0,
+        payCurrency: project.payCurrency || 'USD',
         skills: applyForm.skills.trim(),
         message: applyForm.message.trim() || null,
         portfolioUrl: applyForm.portfolioUrl.trim() || null,
@@ -317,10 +325,22 @@ const ProjectDetail = () => {
             <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-8 mb-6">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">{project.projectTitle}</h1>
-                <span className={`flex-shrink-0 px-3 py-1 rounded-full text-xs font-bold border ${project.status === 'lead_recruitment' ? 'bg-amber-100 text-amber-700 border-amber-200' : 'bg-blue-600/20 text-blue-500 border-blue-600/30'}`}>
-                  {project.status === 'lead_recruitment' ? 'Looking for a Lead' : 'Collaborative Project'}
-                </span>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <ProjectPayBadge isPaid={!!project.isPaid} size="md" />
+                  <span className={`flex-shrink-0 px-3 py-1 rounded-full text-xs font-bold border ${project.status === 'lead_recruitment' ? 'bg-amber-100 text-amber-700 border-amber-200' : 'bg-blue-600/20 text-blue-500 border-blue-600/30'}`}>
+                    {project.status === 'lead_recruitment' ? 'Looking for a Lead' : project.isPaid ? 'Paid Project' : 'Collaborative Project'}
+                  </span>
+                </div>
               </div>
+
+              {project.isPaid && getPayRangeLabel(project.teamRoles) && (
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4 flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-amber-800 text-sm font-bold">{getPayRangeLabel(project.teamRoles)}</p>
+                    <p className="text-gray-500 text-xs">Pay is per person, set per role by the project owner, and paid on verified completion. Everyone's pay is visible below. No badges are awarded on paid projects.</p>
+                  </div>
+                </div>
+              )}
 
               <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-6">{project.projectDescription}</p>
 
@@ -383,6 +403,9 @@ const ProjectDetail = () => {
                         <p className="text-gray-400 text-xs mt-0.5">Skills: {role.skills}</p>
                       </div>
                       <div className="flex items-center gap-3 flex-shrink-0">
+                        {project.isPaid && (Number(role.payAmount) || 0) > 0 && (
+                          <span className="text-amber-700 text-xs font-black bg-amber-100 border border-amber-200 px-2 py-0.5 rounded-full">{formatMoney(role.payAmount)} / person</span>
+                        )}
                         {role.experienceLevel && role.experienceLevel !== 'any-level' && (
                           <span className="text-blue-500 text-xs font-bold capitalize">{role.experienceLevel}</span>
                         )}
@@ -500,9 +523,10 @@ const ProjectDetail = () => {
                           const filled = roleFill[r.role] || 0;
                           const cap = parseInt(r.count, 10) || 0;
                           const full = cap > 0 && filled >= cap;
+                          const payLabel = project.isPaid && (Number(r.payAmount) || 0) > 0 ? ` · ${formatMoney(r.payAmount)}` : '';
                           return (
                             <option key={i} value={r.role} disabled={!elig.eligible}>
-                              {r.role} · {lvl} ({filled}/{cap} filled{full ? ', full' : ''}){!elig.eligible ? ' - Locked' : ''}
+                              {r.role}{payLabel} · {lvl} ({filled}/{cap} filled{full ? ', full' : ''}){!elig.eligible ? ' - Locked' : ''}
                             </option>
                           );
                         })}
@@ -512,6 +536,16 @@ const ProjectDetail = () => {
                         const elig = checkRoleEligibility(memberProfile, sel);
                         if (elig.eligible) return null;
                         return <p className="text-red-600 text-xs mt-2 leading-relaxed">{elig.reason}</p>;
+                      })()}
+                      {project.isPaid && applyForm.role && (() => {
+                        const sel = (project.teamRoles || []).find(r => r.role === applyForm.role);
+                        const pay = Number(sel?.payAmount) || 0;
+                        if (pay <= 0) return null;
+                        return (
+                          <p className="text-amber-700 text-xs mt-2 font-semibold bg-amber-50 border border-amber-200 rounded-lg p-2">
+                            You'll be paid {formatMoney(pay)} for this role on verified completion. No badge is awarded on paid projects - you're compensated instead. Leaving mid-project forfeits your pay.
+                          </p>
+                        );
                       })()}
                       {(project.teamRoles || []).some(r => !checkRoleEligibility(memberProfile, r).eligible) && (
                         <p className="text-gray-400 text-xs mt-2">This role needs a higher badge. Apply to open roles first to earn it.</p>

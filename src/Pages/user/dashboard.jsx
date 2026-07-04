@@ -10,6 +10,7 @@ import FindFirstProject from '../../components/FindFirstProject';
 import DiscoverTrack from '../../components/DiscoverTrack';
 import { eligibleTracks } from '../../utils/foundationsContributions';
 import TierBadge from '../../components/TierBadge';
+import { computeMemberEarnings, formatMoney } from '../../utils/paidProjects';
 
 const badgeData = [
   { id: 'techmo', title: 'TechPO', image: '/Images/TechMO.png', label: 'Product / Project Owner' },
@@ -32,7 +33,16 @@ const DashboardOverview = () => {
   const [userRole, setUserRole] = useState('member');
   const [companyStats, setCompanyStats] = useState({ jobsPosted: 0, totalApplied: 0, totalViews: 0 });
   const [companyJobs, setCompanyJobs] = useState([]);
+  const [earnings, setEarnings] = useState({ earnedTotal: 0, pendingTotal: 0, rows: [] });
   const isPremiumUser = membershipPlan === 'Premium' || userRole === 'admin';
+
+  // Earnings summary for the Account card (paid projects the member was approved for).
+  useEffect(() => {
+    if (!currentUser) return;
+    computeMemberEarnings(currentUser.uid, currentUser.email)
+      .then(setEarnings)
+      .catch(e => console.log('Dashboard earnings skipped:', e.message));
+  }, [currentUser]);
 
   useEffect(() => {
     if (!currentUser) return;
@@ -370,6 +380,25 @@ const DashboardOverview = () => {
               </div>
             </div>
             )}
+
+            {/* Account & Earnings */}
+            <div className="bg-white border border-gray-200 rounded-xl p-6">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-lg font-bold text-gray-900">My Account</h3>
+                <Link to="/account" className="text-blue-600 text-sm font-medium hover:underline">View Account</Link>
+              </div>
+              <div className="grid grid-cols-2 gap-2 mb-2">
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                  <p className="text-green-700 text-[10px] uppercase tracking-wider font-semibold">Earned</p>
+                  <p className="text-lg font-black text-green-700">{formatMoney(earnings.earnedTotal)}</p>
+                </div>
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                  <p className="text-amber-700 text-[10px] uppercase tracking-wider font-semibold">Pending</p>
+                  <p className="text-lg font-black text-amber-700">{formatMoney(earnings.pendingTotal)}</p>
+                </div>
+              </div>
+              <p className="text-gray-400 text-xs">Earnings from paid projects you're approved for. Confirmed payments (including any dispute-adjusted amounts) show under Earned.</p>
+            </div>
 
             {/* Plan */}
             <div className="bg-white border border-gray-200 rounded-xl p-6">

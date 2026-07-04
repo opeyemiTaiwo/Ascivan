@@ -294,6 +294,7 @@ const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove, onTo
   const [showApps, setShowApps] = useState(false);
   const isRejected = project.reviewStatus === 'rejected';
   const isCompleted = project.status === 'completed' || isRejected;
+  const isAwaitingPayment = project.status === 'awaiting_payment_confirmation';
   const pendingApps = (project.applications || []).filter(a => a.status === 'submitted');
   const approvedApps = (project.applications || []).filter(a => a.status === 'approved');
 
@@ -306,14 +307,20 @@ const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove, onTo
           <div className="flex flex-wrap gap-2 mt-2">
             <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-600 text-[10px] font-medium">{getIndustryLabel(project.industryTrack)}</span>
             <span className="px-2 py-0.5 bg-gray-100 rounded-md text-gray-600 text-[10px] font-medium">{formatTimeline(project.timeline)}</span>
+            {project.isPaid ? (
+              <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                Paid Project
+              </span>
+            ) : (
             <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-600/20 text-blue-500">
               Collaborative
             </span>
+            )}
           </div>
         </div>
         <div className="flex gap-2">
-          <span className={`px-3 py-1 rounded-full text-xs font-bold border ${isRejected ? 'bg-red-50 text-red-600 border-red-200' : 'bg-blue-600/20 text-blue-500 border-blue-600/30'}`}>
-            {isRejected ? 'Rejected' : isCompleted ? 'Completed' : 'Active'}
+          <span className={`px-3 py-1 rounded-full text-xs font-bold border ${isRejected ? 'bg-red-50 text-red-600 border-red-200' : isAwaitingPayment ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-blue-600/20 text-blue-500 border-blue-600/30'}`}>
+            {isRejected ? 'Rejected' : isCompleted ? 'Completed' : isAwaitingPayment ? 'Awaiting Payment Confirmation' : 'Active'}
           </span>
         </div>
       </div>
@@ -327,7 +334,7 @@ const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove, onTo
               <div key={app.id} className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg p-3">
                 <div>
                   <Link to={`/profile/${encodeURIComponent(app.applicantEmail)}`} className="text-gray-900 text-sm font-semibold hover:text-blue-600 hover:underline">{app.applicantName}</Link>
-                  <p className="text-gray-500 text-xs">{app.role}</p>
+                  <p className="text-gray-500 text-xs">{app.role}{project.isPaid && (Number(app.payAmount) || 0) > 0 ? ` · $${Number(app.payAmount).toLocaleString()} on completion` : ''}</p>
                   <div className="flex items-center gap-3 mt-1">
                     {app.portfolioUrl && <a href={app.portfolioUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-[10px] hover:underline">Portfolio</a>}
                     {app.linkedinUrl && <a href={app.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-[10px] hover:underline">LinkedIn</a>}

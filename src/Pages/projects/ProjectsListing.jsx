@@ -6,6 +6,8 @@ import { useAuth } from '../../context/AuthContext';
 import { db } from '../../firebase/config';
 import Navbar from '../../components/Navbar';
 import { collection, query, orderBy, onSnapshot, where, doc, getDoc, getDocs } from 'firebase/firestore';
+import ProjectPayBadge from '../../components/ProjectPayBadge';
+import { getPayRangeLabel } from '../../utils/paidProjects';
 
 const industryTracks = [
   { value: 'healthcare', label: 'Healthcare / Medical' },
@@ -209,6 +211,8 @@ const ProjectsListing = () => {
                   >
                     <div className="flex items-start justify-between gap-3 mb-3">
                       <h3 className="text-gray-900 font-bold text-sm sm:text-base line-clamp-2">{project.projectTitle}</h3>
+                      <div className="flex items-center gap-1.5 flex-shrink-0">
+                      <ProjectPayBadge isPaid={!!project.isPaid} size="xs" />
                       <span className={`flex-shrink-0 px-2.5 py-1 rounded-full text-[10px] font-bold ${
                         project.status === 'lead_recruitment' ? 'bg-amber-100 text-gray-900'
                         : project.status === 'setup' ? 'bg-purple-100 text-gray-900'
@@ -219,7 +223,12 @@ const ProjectsListing = () => {
                           : project.applicationsOpen === false ? 'Closed'
                           : 'Open to Join'}
                       </span>
+                      </div>
                     </div>
+
+                    {project.isPaid && getPayRangeLabel(project.teamRoles) && (
+                      <p className="text-amber-700 text-xs font-black mb-2">{getPayRangeLabel(project.teamRoles)} · paid on completion</p>
+                    )}
 
                     <p className="text-gray-400 text-xs sm:text-sm line-clamp-2 mb-3">{project.projectDescription}</p>
 

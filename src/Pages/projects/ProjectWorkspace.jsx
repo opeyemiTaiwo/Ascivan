@@ -2,11 +2,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { doc, getDoc, updateDoc, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, deleteDoc, arrayUnion, where, getDocs } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, deleteDoc, arrayUnion, arrayRemove, where, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
 import { logActivity } from '../../utils/activityLog';
 import { uploadImageToBlob, validateImageFile } from '../../utils/blobStorage';
+import { formatMoney } from '../../utils/paidProjects';
 
 const formatTime = (ts) => {
   if (!ts) return '';
@@ -48,6 +49,12 @@ const ProjectWorkspace = () => {
 
   // Team state
   const [teamMembers, setTeamMembers] = useState([]);
+
+  // Leave-project state (paid projects: leaving forfeits pay, requires a
+  // reason, and automatically opens a dispute record for admin + owner review)
+  const [showLeaveModal, setShowLeaveModal] = useState(false);
+  const [leaveReason, setLeaveReason] = useState('');
+  const [leaving, setLeaving] = useState(false);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -133,6 +140,77 @@ const ProjectWorkspace = () => {
     (m.applicantUid === currentUser?.uid || m.applicantEmail === currentUser?.email)
     && (m.status === 'approved' || m.status === 'accepted' || m.isOwner)
   );
+
+  // My own approved application on this project (used for the leave flow + my pay).
+  const myMembership = teamMembers.find(m =>
+    !m.isOwner && (m.applicantUid === currentUser?.uid || m.applicantEmail === currentUser?.email)
+  );
+
+  // Leave the project. On paid projects this forfeits the member's pay,
+  // requires a stated reason, and automatically opens a dispute record so
+  // the owner and admin can review it.
+  const handleLeaveProject = async () => {
+    if (!myMembership) return;
+    if (!leaveReason.trim()) { toast.error('Please state your reason for leaving. This is required.'); return; }
+    setLeaving(true);
+    try {
+      // 1. Mark the application as left (forfeits pay on paid projects).
+      await updateDoc(doc(db, 'project_applications', myMembership.id), {
+        status: 'left',
+        leftAt: serverTimestamp(),
+        leaveReason: leaveReason.trim(),
+      });
+
+      // 2. Update the project: remove from members, record the reason, and
+      //    open an automatic dispute entry (visible to owner + admin; the
+      //    dedicated Dispute page ships in Phase B and reads this data).
+      const updates = {
+        members: arrayRemove(currentUser.uid),
+        leaveReasons: arrayUnion({
+          uid: currentUser.uid,
+          email: currentUser.email,
+          name: currentUser.displayName || currentUser.email,
+          role: myMembership.role || '',
+          reason: leaveReason.trim(),
+          at: new Date().toISOString(),
+        }),
+      };
+      if (project.isPaid) {
+        updates.disputeHistory = arrayUnion({
+          memberName: currentUser.displayName || currentUser.email,
+          memberEmail: currentUser.email,
+          action: 'left',
+          reason: leaveReason.trim(),
+          note: 'Member left mid-project. Pay forfeited. Auto-opened for review.',
+          at: new Date().toISOString(),
+        });
+        // Pay forfeiture is enforced by the application status flipping to
+        // 'left' - earnings only count APPROVED applications.
+      }
+      await updateDoc(doc(db, 'projects', projectId), updates);
+
+      // 3. Notify the owner.
+      try {
+        if (project.submitterId) {
+          await addDoc(collection(db, 'notifications'), {
+            userId: project.submitterId,
+            type: project.isPaid ? 'payment_disputed' : 'project_completed',
+            message: `${currentUser.displayName || currentUser.email} left "${project.projectTitle}"${project.isPaid ? ' (paid project - pay forfeited, auto-flagged for review)' : ''}. Reason: ${leaveReason.trim()}`,
+            projectId,
+            read: false,
+            createdAt: serverTimestamp(),
+          });
+        }
+      } catch (_) {}
+
+      toast.success('You have left the project.');
+      navigate('/projects');
+    } catch (e) {
+      console.error('Leave project failed:', e);
+      toast.error('Could not leave the project. Please try again.');
+    }
+    setLeaving(false);
+  };
 
   // Forum handlers
   const handleImageSelect = (e) => {
@@ -597,6 +675,25 @@ const ProjectWorkspace = () => {
       {/* Team */}
       {activeTab === 'team' && (
         <div className="space-y-3">
+          {/* Paid project: compensation table - everyone's pay is visible by design */}
+          {project?.isPaid && (
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-5">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-base font-bold text-gray-900">Compensation</h3>
+                <span className="text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-full">PAID PROJECT</span>
+              </div>
+              <p className="text-gray-500 text-xs mb-3">Pay per person, per role, set by the project owner. Paid on verified completion. No badges are awarded on paid projects. Leaving mid-project forfeits your pay.</p>
+              <div className="space-y-1.5">
+                {(project.teamRoles || []).map((r, i) => (
+                  <div key={i} className="flex items-center justify-between bg-white border border-amber-100 rounded-lg px-3 py-2">
+                    <span className="text-gray-900 text-sm font-medium">{r.role} <span className="text-gray-400 text-xs">x{r.count || 1}</span></span>
+                    <span className="text-amber-700 text-sm font-black">{formatMoney(r.payAmount)} / person</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="bg-white border border-gray-200 rounded-xl p-5">
             <h3 className="text-base font-bold text-gray-900 mb-4">Team Members</h3>
             {teamMembers.length === 0 ? (
@@ -625,10 +722,54 @@ const ProjectWorkspace = () => {
                     {member.isOwner && (
                       <span className="text-[10px] font-semibold bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full flex-shrink-0">Owner</span>
                     )}
+                    {project?.isPaid && !member.isOwner && (Number(member.payAmount) || 0) > 0 && (
+                      <span className="text-[10px] font-black bg-amber-100 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-full flex-shrink-0">{formatMoney(member.payAmount)}</span>
+                    )}
                   </div>
                 ))}
               </div>
             )}
+          </div>
+
+          {/* Leave project (approved members only, not the owner) */}
+          {myMembership && !isOwner && project?.status !== 'completed' && (
+            <div className="bg-white border border-gray-200 rounded-xl p-5">
+              <h3 className="text-sm font-bold text-gray-900 mb-1">Leave This Project</h3>
+              <p className="text-gray-500 text-xs mb-3">
+                {project?.isPaid
+                  ? 'Leaving a paid project mid-way means you forfeit your pay. You must state your reason, and the departure is automatically flagged for review by the project owner and admin.'
+                  : 'You must state your reason for leaving. It will be recorded on the project and visible to the owner and admin.'}
+              </p>
+              <button onClick={() => setShowLeaveModal(true)} className="text-red-600 border border-red-200 hover:bg-red-50 text-xs font-semibold px-4 py-2 rounded-lg transition-all">
+                Leave Project
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Leave-project modal */}
+      {showLeaveModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => !leaving && setShowLeaveModal(false)}>
+          <div className="bg-white rounded-2xl max-w-md w-full shadow-xl p-6" onClick={e => e.stopPropagation()}>
+            <h3 className="text-lg font-bold text-gray-900 mb-1">Leave "{project?.projectTitle}"?</h3>
+            {project?.isPaid && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-3">
+                <p className="text-red-700 text-xs font-semibold">This is a paid project. If you leave now, you forfeit your pay{myMembership && (Number(myMembership.payAmount) || 0) > 0 ? ` of ${formatMoney(myMembership.payAmount)}` : ''}. Your departure will be automatically flagged for review.</p>
+              </div>
+            )}
+            <label className="block text-gray-600 text-xs font-semibold mb-1">Reason for leaving * (required)</label>
+            <textarea value={leaveReason} onChange={e => setLeaveReason(e.target.value)} rows={3}
+              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-gray-900 text-sm focus:border-blue-500 focus:outline-none resize-none mb-4"
+              placeholder="Explain why you're leaving this project..." />
+            <div className="flex gap-2">
+              <button onClick={() => setShowLeaveModal(false)} disabled={leaving} className="flex-1 py-2.5 text-gray-600 text-sm font-semibold border border-gray-200 rounded-lg hover:bg-gray-50 transition-all">
+                Stay on Project
+              </button>
+              <button onClick={handleLeaveProject} disabled={leaving || !leaveReason.trim()} className="flex-1 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded-lg transition-all disabled:opacity-50">
+                {leaving ? 'Leaving...' : project?.isPaid ? 'Leave & Forfeit Pay' : 'Leave Project'}
+              </button>
+            </div>
           </div>
         </div>
       )}

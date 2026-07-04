@@ -131,7 +131,9 @@ const ProjectCompletion = () => {
             badgeLevel: determineBadgeLevel(count),
             contribution: 'good',
             notes: '',
-            awardBadge: true, // can be set to false
+            // Paid projects NEVER award badges - members are compensated instead.
+            awardBadge: !data.isPaid, // can be set to false (locked false when paid)
+            payAmount: Number(member.payAmount) || 0,
             projectCount: count,
           });
         }
@@ -178,9 +180,12 @@ const ProjectCompletion = () => {
 
     setSubmitting(true);
     try {
-      // Award badges for members who earned them
+      const isPaidProject = !!project.isPaid;
+      // Award badges for members who earned them.
+      // PAID PROJECTS NEVER AWARD BADGES - members are compensated with money
+      // instead, so this entire loop is skipped when the project is paid.
       for (const ev of evaluations) {
-        if (ev.awardBadge && ev.contribution !== 'poor') {
+        if (!isPaidProject && ev.awardBadge && ev.contribution !== 'poor') {
           await addDoc(collection(db, 'member_badges'), {
             memberEmail: ev.memberEmail,
             memberName: ev.memberName,
@@ -246,22 +251,43 @@ const ProjectCompletion = () => {
         }
       }
 
-      // Mark project as completed
+      // Mark project as completed.
+      // PAID projects do NOT close here - they move to payment confirmation:
+      // the owner marks everyone paid, each member confirms received, and only
+      // then does the project fully complete and move to the Project Vault.
+      // Any mismatch becomes a dispute. The paymentConfirmations map is keyed
+      // by member email; amountPaid starts at the application's payAmount and
+      // can be adjusted during a dispute - the member's Account earnings read
+      // amountPaid, so adjustments flow through automatically.
+      const paymentConfirmations = {};
+      if (isPaidProject) {
+        for (const m of members) {
+          paymentConfirmations[m.applicantEmail] = {
+            status: 'pending', // pending -> confirmed | disputed (Phase B UI)
+            amountDue: Number(m.payAmount) || 0,
+            amountPaid: null,
+            memberName: m.applicantName || m.applicantEmail,
+            role: m.role || '',
+          };
+        }
+      }
       await updateDoc(doc(db, 'projects', projectId), {
-        status: 'completed',
+        status: isPaidProject ? 'awaiting_payment_confirmation' : 'completed',
         isActive: false,
+        ...(isPaidProject ? { workDoneAt: serverTimestamp(), ownerPaidAll: false, paymentConfirmations } : {}),
         completedAt: serverTimestamp(),
         completedBy: currentUser.email,
         completionData: {
           evaluations: evaluations.map(e => ({
             memberEmail: e.memberEmail, memberName: e.memberName, role: e.memberRole,
             badgeCategory: e.badgeCategory, badgeLevel: e.badgeLevel, contribution: e.contribution,
-            awardBadge: e.awardBadge, notes: e.notes,
+            awardBadge: isPaidProject ? false : e.awardBadge, notes: e.notes,
+            ...(isPaidProject ? { payAmount: e.payAmount || 0 } : {}),
           })),
           completedAt: new Date().toISOString(),
           completedBy: currentUser.email,
           teamSize: members.length,
-          badgesAwarded: evaluations.filter(e => e.awardBadge && e.contribution !== 'poor').length,
+          badgesAwarded: isPaidProject ? 0 : evaluations.filter(e => e.awardBadge && e.contribution !== 'poor').length,
         },
       });
 
@@ -273,8 +299,9 @@ const ProjectCompletion = () => {
         meta: 'Project completed and archived',
       });
 
-      // Award owner a TechLeads badge + certificate automatically
-      try {
+      // Award owner a TechLeads badge + certificate automatically.
+      // Skipped on paid projects - no badges of any kind are awarded on them.
+      if (!isPaidProject) try {
         const ownerBadgeCount = await fetchBadgeCount(currentUser.email, 'leadership');
         const ownerBadgeLevel = determineBadgeLevel(ownerBadgeCount);
 
@@ -326,9 +353,9 @@ const ProjectCompletion = () => {
         console.error('Error awarding owner badge/certificate:', ownerBadgeErr);
       }
 
-      // Update removed/poor performers
+      // Update removed/poor performers (free projects only - badge bookkeeping)
       for (const ev of evaluations) {
-        if (!ev.awardBadge || ev.contribution === 'poor') {
+        if (!isPaidProject && (!ev.awardBadge || ev.contribution === 'poor')) {
           await updateDoc(doc(db, 'project_applications', ev.memberId), {
             completionStatus: ev.awardBadge ? 'completed_no_badge' : 'no_badge_assigned',
             completionNotes: ev.notes || 'No badge awarded',
@@ -342,11 +369,13 @@ const ProjectCompletion = () => {
           const userQ = query(collection(db, 'users'), where('email', '==', ev.memberEmail));
           const userSnap = await getDocs(userQ);
           if (!userSnap.empty) {
-            const badgeAwarded = ev.awardBadge && ev.contribution !== 'poor';
+            const badgeAwarded = !isPaidProject && ev.awardBadge && ev.contribution !== 'poor';
             await addDoc(collection(db, 'notifications'), {
               userId: userSnap.docs[0].id,
-              type: 'project_completed',
-              message: badgeAwarded
+              type: isPaidProject ? 'payment_confirmation' : 'project_completed',
+              message: isPaidProject
+                ? `Work on "${project.projectTitle || project.title}" is marked done. Your pay of $${(ev.payAmount || 0).toLocaleString()} is due from the project owner - you'll be asked to confirm once you receive it. The project closes when all members confirm payment.`
+                : badgeAwarded
                 ? `"${project.projectTitle || project.title}" is complete! You earned a ${badgeCategories[ev.badgeCategory]?.name || ev.badgeCategory} badge (${ev.badgeLevel}).`
                 : `"${project.projectTitle || project.title}" has been completed.`,
               projectId: projectId,
@@ -356,31 +385,35 @@ const ProjectCompletion = () => {
               isRead: false,
               createdAt: serverTimestamp(),
             });
-            // Push the member: badge earned (or project completed).
+            // Push the member: badge earned, payment due, or project completed.
             sendPush({
               recipientUid: userSnap.docs[0].id,
-              title: badgeAwarded ? 'Badge earned' : 'Project completed',
-              body: badgeAwarded
+              title: isPaidProject ? 'Payment due to you' : badgeAwarded ? 'Badge earned' : 'Project completed',
+              body: isPaidProject
+                ? `"${project.projectTitle || project.title}" work is done. $${(ev.payAmount || 0).toLocaleString()} is due to you.`
+                : badgeAwarded
                 ? `You earned a ${badgeCategories[ev.badgeCategory]?.name || ev.badgeCategory} badge (${ev.badgeLevel}) for "${project.projectTitle || project.title}".`
                 : `"${project.projectTitle || project.title}" has been completed.`,
-              link: '/project-vault',
+              link: isPaidProject ? '/account' : '/project-vault',
             });
           }
         } catch (notifErr) { console.error('Member completion notification error:', notifErr); }
       }
 
       setStep(4);
-      toast.success('Project completed successfully!');
+      toast.success(isPaidProject ? 'Work marked done! The project will fully close once all members confirm they were paid.' : 'Project completed successfully!');
 
       // Log completion
       await logActivity(projectId, {
         type: 'project_completed',
         actor: currentUser.email,
         actorName: currentUser.displayName || currentUser.email,
-        description: `Project completed. ${evaluations.filter(e => e.awardBadge && e.contribution !== 'poor').length} badges awarded to ${members.length} members.`,
+        description: isPaidProject
+          ? `Work marked done on a paid project. Awaiting payment confirmation from ${members.length} members. No badges awarded (paid project).`
+          : `Project completed. ${evaluations.filter(e => e.awardBadge && e.contribution !== 'poor').length} badges awarded to ${members.length} members.`,
         metadata: {
           teamSize: members.length,
-          badgesAwarded: evaluations.filter(e => e.awardBadge && e.contribution !== 'poor').length,
+          badgesAwarded: isPaidProject ? 0 : evaluations.filter(e => e.awardBadge && e.contribution !== 'poor').length,
         },
       });
     } catch (err) {
@@ -564,7 +597,14 @@ const ProjectCompletion = () => {
                   </div>
                 ) : (
                   <>
-                    <p className="text-gray-400 text-sm text-center">Evaluate each team member. You can choose to award or skip a badge.</p>
+                    {project?.isPaid ? (
+                      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                        <p className="text-gray-900 text-sm font-bold mb-1">Paid project - no badges are awarded</p>
+                        <p className="text-gray-600 text-xs">Rate each member's contribution for the record. On completion, the project moves to payment confirmation: you'll mark everyone paid, each member confirms they received their pay, and the project fully closes only when all confirmations match. Any mismatch opens a dispute.</p>
+                      </div>
+                    ) : (
+                      <p className="text-gray-400 text-sm text-center">Evaluate each team member. You can choose to award or skip a badge.</p>
+                    )}
 
                     {evaluations.map((ev, index) => (
                       <div key={ev.memberId} className="bg-gray-50 border border-gray-200 rounded-2xl p-5 space-y-4">
@@ -573,14 +613,18 @@ const ProjectCompletion = () => {
                             <p className="text-gray-900 font-bold text-sm">{ev.memberName}</p>
                             <p className="text-gray-500 text-xs">{ev.memberRole} - {ev.memberEmail}</p>
                           </div>
+                          {project?.isPaid ? (
+                            <span className="text-amber-700 text-sm font-black bg-amber-100 border border-amber-200 px-3 py-1 rounded-full">${(ev.payAmount || 0).toLocaleString()} due</span>
+                          ) : (
                           <label className="flex items-center gap-2 cursor-pointer">
                             <input type="checkbox" checked={ev.awardBadge} onChange={e => updateEval(index, 'awardBadge', e.target.checked)}
                               className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-400" />
                             <span className="text-gray-600 text-xs font-semibold">Award Badge</span>
                           </label>
+                          )}
                         </div>
 
-                        {ev.awardBadge && (
+                        {!project?.isPaid && ev.awardBadge && (
                           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                             <div>
                               <label className="block text-gray-400 text-xs mb-1">Badge Category</label>
@@ -606,13 +650,24 @@ const ProjectCompletion = () => {
                           </div>
                         )}
 
-                        {!ev.awardBadge && (
+                        {project?.isPaid && (
+                          <div>
+                            <label className="block text-gray-400 text-xs mb-1">Contribution</label>
+                            <select value={ev.contribution} onChange={e => updateEval(index, 'contribution', e.target.value)}
+                              className={inputClass + " appearance-none"}>
+                              {contributionLevels.map(c => <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
+                            </select>
+                            <p className="text-gray-400 text-[10px] mt-0.5">Recorded on the project only. No badge is granted or withheld - paid projects award money, not badges.</p>
+                          </div>
+                        )}
+
+                        {!project?.isPaid && !ev.awardBadge && (
                           <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3">
                             <p className="text-red-300 text-xs">No badge will be awarded to this member.</p>
                           </div>
                         )}
 
-                        {ev.contribution === 'poor' && ev.awardBadge && (
+                        {!project?.isPaid && ev.contribution === 'poor' && ev.awardBadge && (
                           <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl p-3">
                             <p className="text-orange-500 text-xs">Poor contribution - badge will not be awarded even if selected.</p>
                           </div>
@@ -632,7 +687,7 @@ const ProjectCompletion = () => {
                       </button>
                       <button onClick={handleComplete} disabled={submitting}
                         className="flex-1 py-3.5 min-h-[48px] bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl text-sm transition-all shadow-lg disabled:opacity-50">
-                        {submitting ? 'Completing Project...' : 'Complete Project & Award Badges'}
+                        {submitting ? 'Completing Project...' : project?.isPaid ? 'Mark Work Done & Request Payment Confirmations' : 'Complete Project & Award Badges'}
                       </button>
                     </div>
                   </>

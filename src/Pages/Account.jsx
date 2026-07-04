@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
+import { computeMemberEarnings, formatMoney } from '../utils/paidProjects';
 
 const Account = () => {
   const { currentUser } = useAuth();
@@ -12,6 +13,11 @@ const Account = () => {
   const [stats, setStats] = useState({ joined: 0, completedJoined: 0, owned: 0, completedOwned: 0, badges: 0 });
   const [memberProjects, setMemberProjects] = useState([]);
   const [ownerProjects, setOwnerProjects] = useState([]);
+  // Earnings from paid projects: EARNED (payment confirmed - including any
+  // dispute-adjusted amounts) and PENDING (approved for an ongoing or
+  // awaiting-confirmation paid project). Amounts come from the application
+  // form at apply time; dispute-page adjustments override via amountPaid.
+  const [earnings, setEarnings] = useState({ earnedTotal: 0, pendingTotal: 0, rows: [] });
 
   useEffect(() => {
     if (!currentUser) return;
@@ -59,6 +65,12 @@ const Account = () => {
           });
         } catch (e) { console.log('Owner query skipped:', e.message); }
 
+        // Earnings from paid projects
+        try {
+          const earn = await computeMemberEarnings(currentUser.uid, currentUser.email);
+          setEarnings(earn);
+        } catch (e) { console.log('Earnings skipped:', e.message); }
+
         setMemberProjects(mProjects);
         setOwnerProjects(oProjects);
         setStats({
@@ -79,7 +91,50 @@ const Account = () => {
   return (
     <div className="max-w-6xl mx-auto">
       <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Account</h1>
-      <p className="text-gray-500 text-sm mb-6">Your collaborative project activity and earned credentials.</p>
+      <p className="text-gray-500 text-sm mb-6">Your collaborative project activity, earnings, and credentials.</p>
+
+      {/* Earnings from paid projects */}
+      <div className="bg-white border border-gray-200 rounded-xl p-5 mb-6">
+        <h2 className="text-base font-bold text-gray-900 mb-1">My Earnings</h2>
+        <p className="text-gray-400 text-xs mb-4">From paid projects you were approved for. Amounts come from the project's application; if a payment is adjusted during a dispute, your total updates automatically once resolved.</p>
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+            <p className="text-green-700 text-xs uppercase tracking-wider font-semibold">Earned (Paid)</p>
+            <p className="text-2xl font-black text-green-700 mt-1">{formatMoney(earnings.earnedTotal)}</p>
+            <p className="text-gray-400 text-xs mt-0.5">payments confirmed received</p>
+          </div>
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+            <p className="text-amber-700 text-xs uppercase tracking-wider font-semibold">Pending</p>
+            <p className="text-2xl font-black text-amber-700 mt-1">{formatMoney(earnings.pendingTotal)}</p>
+            <p className="text-gray-400 text-xs mt-0.5">from ongoing paid projects</p>
+          </div>
+        </div>
+        {earnings.rows.length === 0 ? (
+          <p className="text-gray-400 text-xs text-center py-2">No paid projects yet. Join a paid project to start earning - the pay per role is shown on every paid project before you apply.</p>
+        ) : (
+          <div className="space-y-1.5">
+            {earnings.rows.map((r, i) => (
+              <div key={i} onClick={() => navigate(`/projects/${r.projectId}`)} className="flex items-center justify-between gap-2 p-2.5 bg-gray-50 rounded-lg border border-gray-100 cursor-pointer hover:bg-gray-100 transition-all">
+                <div className="min-w-0">
+                  <p className="text-gray-900 text-sm font-medium truncate">{r.projectTitle}</p>
+                  <p className="text-gray-400 text-xs">{r.role}</p>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <span className="text-gray-900 text-sm font-black">{formatMoney(r.amount)}</span>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                    r.state === 'paid' ? 'bg-green-100 text-green-700'
+                    : r.state === 'disputed' ? 'bg-red-100 text-red-700'
+                    : r.state === 'forfeited' ? 'bg-gray-200 text-gray-500'
+                    : r.state === 'awaiting' ? 'bg-blue-100 text-blue-700'
+                    : 'bg-amber-100 text-amber-700'}`}>
+                    {r.state === 'paid' ? 'Paid' : r.state === 'disputed' ? 'Disputed' : r.state === 'forfeited' ? 'Forfeited' : r.state === 'awaiting' ? 'Awaiting Confirmation' : 'Pending'}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
       {/* Summary stats */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">

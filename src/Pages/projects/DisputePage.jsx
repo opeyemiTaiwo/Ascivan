@@ -107,24 +107,44 @@ const DisputePage = () => {
             if (!isAdmin && !isOwner && !isMember) setAccessDenied(true);
           }
         } else {
-          // LIST: admin -> all open disputes; user -> disputes on their projects.
+          // LIST. Admin -> every open dispute. Everyone else -> paid projects
+          // that involve them and are still in the payment-confirmation phase
+          // (any entry pending OR disputed), so a member can find the project
+          // here to confirm receipt or report a problem. Projects drop off once
+          // all payments are confirmed and the project completes (moving to the
+          // Project Vault).
           const found = new Map();
+          // Unresolved = paid, in the payment phase, with at least one entry that
+          // still needs action.
+          const unresolved = (p) =>
+            p.isPaid && p.status === 'awaiting_payment_confirmation'
+            && Object.values(p.paymentConfirmations || {}).some(c => c && (c.status === 'pending' || c.status === 'disputed'));
+
           if (isAdmin) {
             const snap = await getDocs(query(collection(db, 'projects'), where('status', '==', 'awaiting_payment_confirmation')));
             snap.docs.forEach(d => { const p = { id: d.id, ...d.data() }; if (hasOpenDispute(p)) found.set(p.id, p); });
           } else {
+            const involved = new Map();
             try {
               const memberSnap = await getDocs(query(collection(db, 'projects'), where('members', 'array-contains', currentUser.uid)));
-              memberSnap.docs.forEach(d => found.set(d.id, { id: d.id, ...d.data() }));
+              memberSnap.docs.forEach(d => involved.set(d.id, { id: d.id, ...d.data() }));
             } catch (e) { console.log('Member disputes query:', e.message); }
             try {
               const ownerSnap = await getDocs(query(collection(db, 'projects'), where('submitterId', '==', currentUser.uid)));
-              ownerSnap.docs.forEach(d => found.set(d.id, { id: d.id, ...d.data() }));
+              ownerSnap.docs.forEach(d => involved.set(d.id, { id: d.id, ...d.data() }));
             } catch (e) { console.log('Owner disputes query:', e.message); }
-            // Keep only projects with an open dispute, or where I personally
-            // disputed / am awaiting confirmation on a disputed project.
-            for (const [id, p] of Array.from(found.entries())) {
-              if (!hasOpenDispute(p)) found.delete(id);
+            // Safety net: catch projects where the user only appears in the
+            // payment table by email (their uid may not be in `members`).
+            try {
+              const paySnap = await getDocs(query(collection(db, 'projects'), where('status', '==', 'awaiting_payment_confirmation')));
+              paySnap.docs.forEach(d => {
+                const p = { id: d.id, ...d.data() };
+                if (Object.keys(p.paymentConfirmations || {}).includes(currentUser.email)) involved.set(d.id, p);
+              });
+            } catch (e) { console.log('Payee disputes query:', e.message); }
+
+            for (const [id, p] of Array.from(involved.entries())) {
+              if (unresolved(p)) found.set(id, p);
             }
           }
           setDisputes(Array.from(found.values()));
@@ -224,15 +244,15 @@ const DisputePage = () => {
   if (!projectId) {
     return (
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Payment Disputes</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Payments &amp; Disputes</h1>
         <p className="text-gray-500 text-sm mb-6">
           {isAdmin
             ? 'All open payment disputes on paid projects. Open one to join the conversation and resolve it.'
-            : 'Paid projects with an open payment dispute that involve you. A disputed project stays here (not the Project Vault) until it is resolved and marked complete.'}
+            : 'Paid projects that involve you and are awaiting payment confirmation, plus any open disputes. Open one to confirm you were paid or report a problem. A project stays here until every payment is confirmed and it\'s marked complete (then it moves to the Project Vault).'}
         </p>
         {disputes.length === 0 ? (
           <div className="bg-white border border-gray-200 rounded-xl p-10 text-center">
-            <p className="text-gray-900 font-semibold text-lg mb-2">No open disputes</p>
+            <p className="text-gray-900 font-semibold text-lg mb-2">{isAdmin ? 'No open disputes' : 'Nothing awaiting confirmation'}</p>
             <p className="text-gray-400 text-sm">Completed paid projects with confirmed payments live in the <Link to="/project-vault" className="text-blue-600 hover:underline">Project Vault</Link>.</p>
           </div>
         ) : (
@@ -240,14 +260,16 @@ const DisputePage = () => {
             {disputes.map(p => {
               const entries = Object.values(p.paymentConfirmations || {});
               const disputedCount = entries.filter(e => e?.status === 'disputed').length;
+              const pendingCount = entries.filter(e => e?.status === 'pending').length;
+              const hasDispute = disputedCount > 0;
               return (
-                <div key={p.id} onClick={() => navigate(`/disputes/${p.id}`)} className="bg-white border border-red-200 rounded-xl p-5 cursor-pointer hover:border-red-400 hover:shadow-sm transition-all">
+                <div key={p.id} onClick={() => navigate(`/disputes/${p.id}`)} className={`bg-white border rounded-xl p-5 cursor-pointer hover:shadow-sm transition-all ${hasDispute ? 'border-red-200 hover:border-red-400' : 'border-amber-200 hover:border-amber-400'}`}>
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <h3 className="text-gray-900 font-bold text-sm sm:text-base truncate">{p.projectTitle}</h3>
-                      <p className="text-gray-500 text-xs mt-1">{entries.length} members · {disputedCount} disputed · owner: {p.contactName || p.submitterEmail}</p>
+                      <p className="text-gray-500 text-xs mt-1">{entries.length} members · {pendingCount} pending · {disputedCount} disputed · owner: {p.contactName || p.submitterEmail}</p>
                     </div>
-                    <span className="flex-shrink-0 text-[10px] font-bold bg-red-100 text-red-700 px-2.5 py-1 rounded-full">DISPUTE OPEN</span>
+                    <span className={`flex-shrink-0 text-[10px] font-bold px-2.5 py-1 rounded-full ${hasDispute ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}`}>{hasDispute ? 'DISPUTE OPEN' : 'AWAITING CONFIRMATION'}</span>
                   </div>
                 </div>
               );

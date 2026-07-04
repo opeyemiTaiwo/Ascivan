@@ -175,8 +175,7 @@ const ProjectVault = () => {
               <div id="certificate-content" className="p-8 text-center bg-white">
                 <div className="border-2 border-blue-200 rounded-xl p-8 flex flex-col justify-between">
                   <div>
-                    <img src="/Images/512X512.png" alt="Ascivan" className="w-16 h-16 mx-auto mb-2" />
-                    <p className="text-gray-900 text-xs font-extrabold tracking-[0.3em] mb-3">ASCIVAN</p>
+                    <img src="/Images/512X512.png" alt="Ascivan" className="w-16 h-16 mx-auto mb-3" />
                     <p className="text-blue-600 text-xs font-semibold uppercase tracking-widest">Certificate of Completion</p>
                     <div className="w-16 h-1 mx-auto mt-3 rounded-full" style={{ background: 'linear-gradient(90deg,#2563eb,#f97316)' }} />
                   </div>
@@ -234,8 +233,7 @@ const ProjectVault = () => {
                         .border::before{content:'';position:absolute;inset:9px;border:1px solid #dbeafe;border-radius:11px;pointer-events:none}
                         .inner{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-between;align-items:center;text-align:center;position:relative;z-index:1;overflow:hidden}
                         .top{display:flex;flex-direction:column;align-items:center}
-                        img.logo{width:0.9in;height:0.9in;margin-bottom:0.1in}
-                        .brand{color:#111827;font-size:13pt;font-weight:800;letter-spacing:4px;margin-bottom:0.12in}
+                        img.logo{width:1in;height:1in;margin-bottom:0.15in}
                         .subtitle{color:#2563eb;font-size:15pt;font-weight:800;text-transform:uppercase;letter-spacing:4px}
                         .rule{width:80px;height:3px;background:linear-gradient(90deg,#2563eb,#f97316);border-radius:2px;margin:0.12in auto 0}
                         .middle{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;min-height:0;overflow:hidden}
@@ -256,7 +254,6 @@ const ProjectVault = () => {
                         <div class="inner">
                         <div class="top">
                         <img class="logo" src="${window.location.origin}/Images/512X512.png" alt="Ascivan" />
-                        <div class="brand">ASCIVAN</div>
                         <div class="subtitle">Certificate of Completion</div>
                         <div class="rule"></div>
                         </div>
@@ -355,7 +352,7 @@ const ProjectVault = () => {
                               setBusy(true);
                               try {
                                 const completed = await markOwnerPaidAll(project, currentUser);
-                                toast.success(completed ? 'All confirmed - project completed!' : 'Marked as paid. Members have been asked to confirm receipt.');
+                                toast.success(completed ? 'All confirmed - the project is closing and will move to the Project Vault shortly.' : 'Marked as paid. Members have been asked to confirm receipt.');
                                 setRefreshKey(k => k + 1);
                               } catch (e) { toast.error(e.message || 'Action failed.'); }
                               setBusy(false);
@@ -373,7 +370,7 @@ const ProjectVault = () => {
                                 setBusy(true);
                                 try {
                                   const { completed } = await confirmPaymentReceived(project, currentUser);
-                                  toast.success(completed ? 'All payments confirmed - project moved to your completed wall!' : 'Payment confirmed. Thank you!');
+                                  toast.success(completed ? 'All payments confirmed - the project is closing and will move to your completed wall shortly.' : 'Payment confirmed. Thank you!');
                                   setRefreshKey(k => k + 1);
                                 } catch (e) { toast.error(e.message || 'Action failed.'); }
                                 setBusy(false);

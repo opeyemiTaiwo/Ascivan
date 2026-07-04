@@ -54,8 +54,8 @@ const About = () => {
 
         {/* The path: Ascend, Achieve, Advance */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">What Ascend, Achieve, Advance means</h2>
-          <p className="text-gray-500 text-sm mb-6 max-w-2xl">Our name is a path, not just a phrase. Ascivan is built to move you along it, from wherever you start, to real accomplishment, to a career that keeps moving forward.</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">What Ascend, Achieve, Advance means</h2>
+          <p className="text-gray-500 text-sm mb-6 max-w-2xl mx-auto text-center">Our name is a path, not just a phrase. Ascivan is built to move you along it, from wherever you start, to real accomplishment, to a career that keeps moving forward.</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="bg-white rounded-xl border border-gray-200 p-5">
               <div className="w-9 h-9 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center mb-3">

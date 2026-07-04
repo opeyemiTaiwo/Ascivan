@@ -105,17 +105,22 @@ const AppLayout = ({ children }) => {
   // Capped at five for easy thumb reach.
   const HOME_ICON = 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6';
   const WORKSPACE_ICON = 'M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z';
+  const MESSAGES_ICON = 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z';
+  // Messaging lives in the mobile bottom bar (it's hidden from the mobile top
+  // bar); on desktop it stays in the top bar instead.
   const mobileTabs = isCompany
     ? [
         { path: '/dashboard', label: 'Home', icon: HOME_ICON },
         { path: '/foundations', label: 'Foundation', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
         { path: '/talent-board', label: 'Talents', icon: 'M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4z' },
+        { path: '/messages', label: 'Messages', icon: MESSAGES_ICON, badge: unreadMessages },
       ]
     : [
         { path: '/dashboard', label: 'Home', icon: HOME_ICON },
         { path: '/foundations', label: 'Foundations', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.247m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.247' },
         { path: '/projects', label: 'Projects', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10' },
         { path: '/my-workspaces', label: 'Workspace', icon: WORKSPACE_ICON },
+        { path: '/messages', label: 'Messages', icon: MESSAGES_ICON, badge: unreadMessages },
       ];
 
   const isActive = (path) => {
@@ -242,7 +247,7 @@ const AppLayout = ({ children }) => {
       {/* Main content */}
       <div className="flex-1 min-w-0 flex flex-col">
         {/* Top bar - sticky, responsive */}
-        <header className="sticky top-0 z-30 h-16 sm:h-[72px] flex items-center gap-2 sm:gap-3 px-2 sm:px-4 border-b border-gray-200 bg-white lg:px-6">
+        <header className="sticky top-0 z-30 h-16 sm:h-[72px] flex items-center gap-2 sm:gap-4 px-2 sm:px-4 border-b border-gray-200 bg-white lg:px-6">
           <div className="flex items-center gap-2 flex-shrink-0">
             {!hideSidebar && (
             <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 rounded-lg hover:bg-gray-100 min-h-[60px] min-w-[44px] flex items-center justify-center flex-shrink-0">
@@ -260,9 +265,10 @@ const AppLayout = ({ children }) => {
 
           {/* Global search bar - LinkedIn-style pill with a bold magnifier on
               the left. This is the only search entry point (it was removed from
-              the sidebar and the mobile bottom bar). Responsive: it grows to fill
-              the top bar on desktop and shrinks gracefully on phones. */}
-          <form onSubmit={handleSearchSubmit} role="search" className="flex-1 min-w-0 max-w-xl">
+              the sidebar and the mobile bottom bar). Responsive: capped at max-w-xl
+              on desktop (the spacer below pushes the icons flush right) and it
+              shrinks gracefully to fill the available width on phones. */}
+          <form onSubmit={handleSearchSubmit} role="search" className="w-full min-w-0 max-w-xl">
             <div className="relative">
               <svg className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -278,9 +284,14 @@ const AppLayout = ({ children }) => {
             </div>
           </form>
 
-          <div className="flex items-stretch justify-around gap-1 flex-shrink-0">
-            {/* Messaging */}
-            <Link to="/messages" className={`relative flex-1 flex flex-col items-center justify-center gap-1 py-2.5 min-h-[60px] rounded-lg hover:bg-gray-100 transition-colors ${location.pathname === '/messages' ? 'text-blue-600' : 'text-gray-500'}`}>
+          {/* Desktop-only spacer: pushes the icon group to the far right so the
+              account/notification icons anchor to the top-right corner instead of
+              floating in the middle. On mobile there's no spare width, so it's off. */}
+          <div className="hidden lg:block flex-1" />
+
+          <div className="flex items-center justify-center gap-3 sm:gap-4 lg:gap-6 flex-shrink-0 pr-1 lg:pr-2">
+            {/* Messaging - desktop only; on mobile it lives in the bottom bar. */}
+            <Link to="/messages" className={`relative hidden lg:flex flex-col items-center justify-center gap-1 px-2 lg:px-3 py-2.5 min-h-[60px] rounded-lg hover:bg-gray-100 transition-colors ${location.pathname === '/messages' ? 'text-blue-600' : 'text-gray-500'}`}>
               <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
@@ -292,7 +303,7 @@ const AppLayout = ({ children }) => {
               )}
             </Link>
             {/* Notifications */}
-            <Link to="/notifications" className={`relative flex-1 flex flex-col items-center justify-center gap-1 py-2.5 min-h-[60px] rounded-lg hover:bg-gray-100 transition-colors ${location.pathname === '/notifications' ? 'text-blue-600' : 'text-gray-500'}`}>
+            <Link to="/notifications" className={`relative flex flex-col items-center justify-center gap-1 px-2 lg:px-3 py-2.5 min-h-[60px] rounded-lg hover:bg-gray-100 transition-colors ${location.pathname === '/notifications' ? 'text-blue-600' : 'text-gray-500'}`}>
               <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
               </svg>
@@ -305,7 +316,7 @@ const AppLayout = ({ children }) => {
             </Link>
             {/* Me */}
             {currentUser && (
-              <Link to={`/profile/${currentUser.email}`} className={`flex-1 flex flex-col items-center justify-center gap-1 py-2.5 min-h-[60px] rounded-lg hover:bg-gray-100 transition-colors ${location.pathname.startsWith('/profile') ? 'text-blue-600' : 'text-gray-500'}`}>
+              <Link to={`/profile/${currentUser.email}`} className={`flex flex-col items-center justify-center gap-1 px-2 lg:px-3 py-2.5 min-h-[60px] rounded-lg hover:bg-gray-100 transition-colors ${location.pathname.startsWith('/profile') ? 'text-blue-600' : 'text-gray-500'}`}>
                 {currentUser.photoURL ? (
                   <img src={currentUser.photoURL} alt="" className="w-7 h-7 rounded-full object-cover" />
                 ) : (

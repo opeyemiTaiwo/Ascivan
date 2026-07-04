@@ -66,7 +66,7 @@ const Foundations = () => {
         if (data.primarySkillTrack && !ordered.includes(data.primarySkillTrack)) ordered.push(data.primarySkillTrack);
 
         let valid = ordered.filter((t) => trackHasCourses(t));
-        if (data.role === 'admin' || data.role === 'editor') valid = tracksWithCourses();
+        if (data.role === 'admin') valid = tracksWithCourses();
         if (data.isCompany) valid = trackHasCourses('company') ? ['company'] : [];
         // Fallback so the page is never empty: browse whatever courses exist.
         const tabs = valid.length ? valid : tracksWithCourses();
@@ -532,6 +532,23 @@ const COURSE_PROSE_CSS = `
 .course-prose th { background:#f8fafc; font-weight:700; color:#111827; }
 .course-prose .course-mermaid { margin:1.25rem 0; padding:1rem; background:#f8fafc; border:1px solid #eef2f7; border-radius:.9rem; overflow-x:auto; text-align:center; }
 .course-prose .course-mermaid svg { max-width:100%; height:auto; }
+/*
+  Diagram box labels were getting their last line clipped. Mermaid renders node
+  text as HTML inside a foreignObject and sizes each box to fit that text using a
+  tight line-height. But .course-prose sets line-height:1.75, which cascades into
+  the injected label and makes the text ~40% taller than the box Mermaid drew, so
+  the final line spilled below the box and was cut off. Pinning the label's
+  line-height (and clearing inherited paragraph margins) makes the rendered text
+  match the box Mermaid measured, so every line stays inside. Fixes all diagrams
+  across every track at once.
+*/
+.course-prose .course-mermaid svg foreignObject,
+.course-prose .course-mermaid svg foreignObject > div,
+.course-prose .course-mermaid svg .nodeLabel,
+.course-prose .course-mermaid svg .edgeLabel,
+.course-prose .course-mermaid svg .label { line-height:1.25 !important; }
+.course-prose .course-mermaid svg .nodeLabel p,
+.course-prose .course-mermaid svg .edgeLabel p { margin:0 !important; line-height:1.25 !important; }
 `;
 
 export default Foundations;

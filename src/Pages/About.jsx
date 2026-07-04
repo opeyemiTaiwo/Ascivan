@@ -39,13 +39,9 @@ const About = () => {
 
         {/* Hero */}
         <section className="text-center mb-16">
-          <div className="mb-4 inline-block px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-blue-600 font-semibold text-sm">About Ascivan</p>
-          </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4">
-            <span className="text-blue-600">Ascend</span>{' '}
-            <span className="text-orange-500">Achieve</span>{' '}
-            <span className="text-gray-900">Advance</span>
+            <span className="text-gray-900">About</span>{' '}
+            <span className="text-blue-600">Ascivan</span>
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             Ascivan is where you turn ability into proof by doing real work. Collaborate on real products from start to finish, earn verified badges, and build a network of fellow builders, gaining applied skills you can prove, whoever you are and wherever you're from.
@@ -54,7 +50,9 @@ const About = () => {
 
         {/* The path: Ascend, Achieve, Advance */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">What Ascend, Achieve, Advance means</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">
+            <span className="text-blue-600">Ascend</span>, <span className="text-orange-500">Achieve</span>, <span className="text-gray-900">Advance</span> means
+          </h2>
           <p className="text-gray-500 text-sm mb-6 max-w-2xl mx-auto text-center">Our name is a path, not just a phrase. Ascivan is built to move you along it, from wherever you start, to real accomplishment, to a career that keeps moving forward.</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="bg-white rounded-xl border border-gray-200 p-5">
@@ -62,7 +60,7 @@ const About = () => {
                 <span className="text-blue-600 font-extrabold">1</span>
               </div>
               <h3 className="text-blue-600 font-bold text-lg mb-2">Ascend</h3>
-              <p className="text-gray-500 text-sm">Start from wherever you are and rise. Discover your path in tech, learn the foundations, and choose the skill track that fits you, then grow into someone ready to contribute, no gatekeeping and no matter your background or location.</p>
+              <p className="text-gray-500 text-sm">Start from wherever you are and rise. Discover your path in tech, learn the foundations, and choose the skill track that fits you, then grow into someone ready to contribute, no matter your background or location.</p>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-5">
               <div className="w-9 h-9 rounded-lg bg-orange-50 border border-orange-100 flex items-center justify-center mb-3">
@@ -88,8 +86,18 @@ const About = () => {
             <p className="text-gray-600 leading-relaxed mb-4">
               Talent is everywhere, but the chance to prove it is not. Many capable people have the skills but no easy way to gain real, verifiable work experience. Degrees, coursework, and competitions build ability; they rarely produce the one thing that proves it: evidence that you've shipped a real product, with a team, from start to finish. Ascivan closes that gap. We turn knowledge into applied experience, real teams building products end to end, so you gain applied skills, verified proof, and a network of people you've actually built with. Skills you own, proof that travels with you, wherever you choose to take them. No matter where you are in the world, your work speaks for you.
             </p>
+          </div>
+        </section>
+
+        {/* For Companies */}
+        <section className="mb-12">
+          <div className="bg-blue-50 rounded-xl border border-blue-100 p-6 sm:p-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">For Companies</h2>
+            <p className="text-gray-600 leading-relaxed mb-4">
+              Ascivan is also where companies find proven talent. Everyone here is verified by the work they have actually shipped, so you hire on evidence, not on resumes. Browse the Talent Board, see real project history and verified badges, and reach out to the people whose proof matches what you need.
+            </p>
             <p className="text-gray-600 leading-relaxed">
-              Ascivan closes that gap. We simulate real-world experience, collaborative teams building products end to end, so you gain applied skills, verified credentials, and a portfolio of genuine work. No matter where you are in the world, your work speaks for you.
+              You can also post paid projects and build directly from our talent pool. Bring real work to teams that are ready to deliver it, across development, QA, architecture, security, and product, and let their contribution on your project speak for itself.
             </p>
           </div>
         </section>

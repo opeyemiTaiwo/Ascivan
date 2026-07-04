@@ -271,6 +271,28 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* FOR COMPANIES */}
+      <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6">
+        <div id="companies-head" data-animate className={`fade-up text-center mb-12 ${isVisible('companies-head') ? 'visible' : ''}`}>
+          <p className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-3">For Companies</p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-800 text-gray-900 mb-4">Hire proven talent</h2>
+          <p className="text-gray-500 max-w-xl mx-auto text-base">
+            Ascivan is a community of builders verified by the work they have actually shipped. Hire from our talent pool and post paid projects, and judge every candidate on real, verifiable proof.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div id="company-0" data-animate className={`fade-up delay-1 border border-gray-200 rounded-2xl p-7 hover:border-blue-300 hover:shadow-sm transition-all ${isVisible('company-0') ? 'visible' : ''}`}>
+            <h3 className="text-xl font-700 text-gray-900 mb-2">Hire from the community</h3>
+            <p className="text-gray-500 text-sm leading-relaxed">Browse the Talent Board, review verified badges and real project history, and reach out to the people whose proof fits what you are building.</p>
+          </div>
+          <div id="company-1" data-animate className={`fade-up delay-2 border border-gray-200 rounded-2xl p-7 hover:border-blue-300 hover:shadow-sm transition-all ${isVisible('company-1') ? 'visible' : ''}`}>
+            <h3 className="text-xl font-700 text-gray-900 mb-2">Post paid projects</h3>
+            <p className="text-gray-500 text-sm leading-relaxed">Bring real work to teams ready to deliver it. Post a paid project and assemble talent across development, QA, architecture, security, and product, then let contribution speak for itself.</p>
+          </div>
+        </div>
+      </section>
+
       {/* TESTIMONIAL */}
       <section className="py-16 border-y border-gray-200 bg-gray-50">
         <div id="quote" data-animate className={`fade-up max-w-3xl mx-auto px-4 sm:px-6 text-center ${isVisible('quote') ? 'visible' : ''}`}>
@@ -281,7 +303,6 @@ const LandingPage = () => {
             <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm">TA</div>
             <div className="text-left">
               <div className="text-gray-900 text-sm font-semibold">Temitope A.</div>
-              <div className="text-gray-500 text-xs">Computer and Electrical Engineering, Morgan State University</div>
             </div>
           </div>
         </div>

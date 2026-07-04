@@ -372,7 +372,7 @@ const DisputePage = () => {
                           adjusting === email ? (
                             <div className="flex items-center gap-2 w-full">
                               <input type="number" min="0" step="0.01" value={adjustAmount} onChange={ev => setAdjustAmount(ev.target.value)}
-                                className="flex-1 bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none" placeholder={`New amount (was ${formatMoney(effective)})`} />
+                                className="flex-1 bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none" placeholder={`New amount (was ${formatMoney(effective)})`} />
                               <button onClick={() => handleAdjust(email)} disabled={busy} className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg disabled:opacity-50">Save</button>
                               <button onClick={() => { setAdjusting(null); setAdjustAmount(''); }} className="text-gray-500 text-xs px-2">Cancel</button>
                             </div>
@@ -390,7 +390,7 @@ const DisputePage = () => {
                       <div className="mt-2 bg-white border border-red-200 rounded-lg p-3">
                         <label className="block text-red-700 text-xs font-semibold mb-1">What happened? * (required)</label>
                         <textarea value={disputeReason} onChange={ev => setDisputeReason(ev.target.value)} rows={2}
-                          className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-red-400 focus:outline-none resize-none mb-2"
+                          className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-red-400 focus:outline-none resize-none mb-2"
                           placeholder="e.g., I have not received the payment as of today..." />
                         <button onClick={handleDispute} disabled={busy} className="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-4 py-1.5 rounded-lg disabled:opacity-50">
                           Open Dispute
@@ -455,7 +455,7 @@ const DisputePage = () => {
               {showResolve ? (
                 <div>
                   <textarea value={resolveNote} onChange={e => setResolveNote(e.target.value)} rows={2}
-                    className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none resize-none mb-2"
+                    className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none resize-none mb-2"
                     placeholder="Resolution note (optional but recommended)..." />
                   <div className="flex gap-2">
                     <button onClick={handleResolve} disabled={busy} className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded-lg disabled:opacity-50">

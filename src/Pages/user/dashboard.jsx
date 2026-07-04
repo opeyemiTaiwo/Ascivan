@@ -407,7 +407,7 @@ const DashboardOverview = () => {
                 <p className="text-blue-600 font-semibold text-lg">{membershipPlan} Plan</p>
                 {isPremiumUser && <PremiumBadge size="md" />}
               </div>
-              <p className="text-gray-400 text-xs mb-3">{!isPremiumUser ? 'Unlimited collaborative projects, all badge tracks, Proof Wall, and messaging.' : 'Priority Talent Board ranking, verified company badge, unlimited job posts, priority support.'}</p>
+              <p className="text-gray-400 text-xs mb-3">{!isPremiumUser ? 'Unlimited collaborative projects, free Foundation courses, all badge tracks, Proof Wall, and messaging.' : 'Full Talent Board access with unlimited talent messaging, priority ranking, verified badge, paid project posting, and priority support.'}</p>
               {!isPremiumUser && (
                 <button onClick={() => navigate('/settings?tab=membership')} className="text-blue-600 text-sm font-medium hover:underline">
                   Upgrade to Premium

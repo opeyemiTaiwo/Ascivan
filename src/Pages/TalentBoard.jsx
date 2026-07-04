@@ -78,9 +78,12 @@ const TalentBoard = () => {
       }
       setLoading(false);
     };
-    if (currentUser) fetchTalents();
-    else setLoading(false);
-  }, [currentUser]);
+    // Only fetch the board's data for Premium members - the Talent Board is
+    // a Premium feature. (Profiles remain viewable everywhere else: workspace,
+    // Proof Wall, community, etc.)
+    if (currentUser && !checkingAccess && isPremium) fetchTalents();
+    else if (!checkingAccess) setLoading(false);
+  }, [currentUser, checkingAccess, isPremium]);
 
   const filtered = talents.filter(t => {
     const matchesSearch = !searchTerm || 
@@ -92,6 +95,36 @@ const TalentBoard = () => {
 
   if (checkingAccess) {
     return <div className="flex items-center justify-center py-20"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div></div>;
+  }
+
+  // Premium gate: the Talent Board is Premium-only. Individual profiles stay
+  // accessible to everyone through workspaces, the Proof Wall, community
+  // posts, and direct profile links - only this curated board is gated.
+  if (!isPremium) {
+    return (
+      <div className="max-w-2xl mx-auto text-center py-16 px-4">
+        <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-orange-50 border border-orange-200 flex items-center justify-center">
+          <svg className="w-8 h-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+        </div>
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Talent Board</h1>
+          <PremiumBadge size="md" />
+        </div>
+        <p className="text-gray-500 text-sm mb-6 max-w-md mx-auto">
+          The Talent Board is a Premium feature - a curated, searchable directory of verified tech professionals, ranked by badges and proven work. Upgrade to browse and connect with talent directly.
+        </p>
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-6 text-left max-w-md mx-auto">
+          <p className="text-gray-900 text-sm font-semibold mb-1">Premium includes:</p>
+          <p className="text-gray-600 text-xs leading-relaxed">Full Talent Board access with unlimited talent messaging (no monthly cap), priority Talent Board ranking, verified badge, paid project posting, and priority support.</p>
+        </div>
+        <button onClick={() => navigate('/settings?tab=membership')} className="bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm px-6 py-3 rounded-xl transition-all">
+          Upgrade to Premium
+        </button>
+        <p className="text-gray-400 text-xs mt-4">You can still view individual member profiles from project workspaces, the Proof Wall, and community posts.</p>
+      </div>
+    );
   }
 
   return (

@@ -172,3 +172,13 @@
   could read as worrying); the stats grid is now three cards - Total Projects,
   Team Members, Completed. Pending applications are still fully visible per
   project via the "Applications (N)" button on each project card.
+
+## 18. Foundations: every track open to every individual
+- Previously an individual only saw tabs for tracks they held a badge in plus
+  their primary track - so a TechDev exploring TechGuard couldn't reach the
+  TechGuard courses (despite the FAQ promising free Foundations in every
+  track, and beginner Guard roles being open to them on projects).
+- Now every individual sees every track that has courses. Their own tracks
+  (badge tracks, then primary track) are listed first, the rest follow. The
+  company badges guide stays company-only; company and admin/editor behavior
+  unchanged. Progress is still tracked per track as before.

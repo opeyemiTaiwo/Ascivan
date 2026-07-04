@@ -66,6 +66,14 @@ const Foundations = () => {
         if (data.primarySkillTrack && !ordered.includes(data.primarySkillTrack)) ordered.push(data.primarySkillTrack);
 
         let valid = ordered.filter((t) => trackHasCourses(t));
+        // Foundations is free in EVERY track: individuals see all tracks with
+        // courses, so a TechDev exploring TechGuard (or any other role) can
+        // study that track before taking it on. Their own tracks (badges +
+        // primary) stay first; the rest follow. The company badges guide is
+        // excluded for individuals.
+        tracksWithCourses().forEach((t) => {
+          if (t !== 'company' && !valid.includes(t)) valid.push(t);
+        });
         // Admins and editors review/see every track that has courses.
         if (data.role === 'admin' || data.role === 'editor') valid = tracksWithCourses();
         if (data.isCompany) valid = trackHasCourses('company') ? ['company'] : [];

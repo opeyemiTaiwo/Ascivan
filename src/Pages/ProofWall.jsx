@@ -385,11 +385,6 @@ const ProofWall = () => {
       {/* Header */}
       <div className="mb-4">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Proof Wall</h1>
-        {!myData?.isCompany && (
-          <p className="text-blue-600 text-xs mt-2 bg-blue-50 border border-blue-100 rounded-lg px-3 py-2">
-            <strong>Tip:</strong> Share updates so recruiters see your progress. Link your <strong>final result</strong> (live site or demo), not your workspace.
-          </p>
-        )}
       </div>
 
       {/* Composer (work-focused, not personal) */}
@@ -453,9 +448,10 @@ const ProofWall = () => {
         </div>
       )}
 
-      {/* Filters + share, in one modern row */}
+      {/* Filters + share. The chips live on ONE horizontally-scrollable line so
+          they never wrap into a messy stack on phones (standard mobile pattern). */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-5">
-        <div className="flex flex-wrap gap-1.5 flex-1">
+        <div className="flex flex-nowrap gap-1.5 flex-1 overflow-x-auto pb-1 -mb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {filtersFor(myData?.isCompany).map(f => (
             <button
               key={f.id}

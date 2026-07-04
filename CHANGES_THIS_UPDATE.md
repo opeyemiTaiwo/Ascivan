@@ -154,3 +154,21 @@
 - Zero extra cost: it reads the cached pick straight off the user document the
   page already loads. Hidden if there's no cached pick, if the course was
   completed, or while reading a course.
+
+## 16. Proof Wall polish (mobile tabs, tip moved to FAQ)
+- The filter chips (All Activity / Updates / Needs a lead / Open projects) now
+  sit on a single horizontally-scrollable line instead of wrapping into an
+  uneven stack on phones - the standard mobile chip pattern (scrollbar hidden).
+- The blue "Tip" banner was removed from the Proof Wall header.
+- The tip now lives in the Support page FAQ as "How do I get the most out of
+  the Proof Wall?", reworded to say "hiring companies" instead of
+  "recruiters", with added guidance (attach an image, post consistently).
+
+## 17. Sidebar + owner dashboard tweaks
+- Sidebar Projects group now has three sub-items: All Projects, My Projects
+  (the manage-your-posted-projects page, /projects/owner-dashboard), and
+  Project Vault.
+- Removed the "Pending Apps" stat card from the My Projects page (jargon that
+  could read as worrying); the stats grid is now three cards - Total Projects,
+  Team Members, Completed. Pending applications are still fully visible per
+  project via the "Applications (N)" button on each project card.

@@ -314,10 +314,9 @@ const ProjectOwnerDashboard = () => {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
               {[
                 ['Total Projects', myProjects.length, 'from-blue-500 to-blue-600'],
-                ['Pending Apps', myProjects.reduce((s, p) => s + (p.pendingCount || 0), 0), 'from-orange-500 to-orange-600'],
                 ['Team Members', myProjects.reduce((s, p) => s + (p.approvedMembers?.length || 0), 0), 'from-blue-500 to-blue-600'],
                 ['Completed', myProjects.filter(p => p.status === 'completed' || p.reviewStatus === 'rejected').length, 'from-blue-500 to-blue-600'],
               ].map(([label, val, grad]) => (

@@ -83,6 +83,7 @@ const AppLayout = ({ children }) => {
   // reduce clutter. Companies don't get these contributor-only sections at all.
   const projectChildren = [
     { path: '/projects', label: 'All Projects' },
+    { path: '/projects/owner-dashboard', label: 'My Projects' },
     { path: '/project-vault', label: 'Project Vault' },
   ];
 

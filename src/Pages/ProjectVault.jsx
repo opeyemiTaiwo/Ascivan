@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import TierBadge from '../components/TierBadge';
-import { formatMoney, hasOpenDispute, confirmPaymentReceived, markOwnerPaidAll } from '../utils/paidProjects';
+import { formatMoney, hasOpenDispute, confirmPaymentReceived, markOwnerPaidAll, isReadyToComplete, healPaidProjectStatus } from '../utils/paidProjects';
 import { toast } from 'react-toastify';
 
 // Map a badge category (stored on evaluations) to its badge image in /public/Images.
@@ -97,6 +97,17 @@ const ProjectVault = () => {
         } catch (e) { console.log('Owner projects query:', e.message); }
 
         const all = Array.from(involved.values());
+
+        // SELF-HEAL: a paid project where the owner marked everyone paid AND
+        // every member confirmed should be 'completed'. If one is still stuck
+        // at 'awaiting_payment_confirmation' (e.g. the final flip failed),
+        // complete it now and show it on the completed wall immediately.
+        for (const p of all) {
+          if (isReadyToComplete(p)) {
+            const healed = await healPaidProjectStatus(p);
+            if (healed) p.status = 'completed';
+          }
+        }
 
         // Completed + rejected go on the "completed" wall.
         const completed = all

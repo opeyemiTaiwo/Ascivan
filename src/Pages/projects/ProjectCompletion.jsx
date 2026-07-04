@@ -52,12 +52,17 @@ const ProjectCompletion = () => {
   const [submitting, setSubmitting] = useState(false);
   const [step, setStep] = useState(1); // 1=review, 2=evaluate, 4=done
   const [submittingReview, setSubmittingReview] = useState(false);
+  const [ownerIsCompany, setOwnerIsCompany] = useState(false);
 
   const reviewStatus = project?.reviewStatus || REVIEW_STATUS.NONE;
-  const isApproved = reviewStatus === REVIEW_STATUS.APPROVED;
-  const isRejected = reviewStatus === REVIEW_STATUS.REJECTED;
-  const isUnderReview = reviewStatus === REVIEW_STATUS.SUBMITTED;
-  const needsChanges = reviewStatus === REVIEW_STATUS.NEEDS_CHANGES;
+  // COMPANY accounts do NOT submit their projects to Ascivan for review -
+  // they can complete their projects (and start payment confirmations on
+  // paid ones) directly. The review gate only applies to individual owners.
+  const wasReviewed = reviewStatus === REVIEW_STATUS.APPROVED;
+  const isApproved = ownerIsCompany || wasReviewed;
+  const isRejected = !ownerIsCompany && reviewStatus === REVIEW_STATUS.REJECTED;
+  const isUnderReview = !ownerIsCompany && reviewStatus === REVIEW_STATUS.SUBMITTED;
+  const needsChanges = !ownerIsCompany && reviewStatus === REVIEW_STATUS.NEEDS_CHANGES;
 
   const handleSubmitForReview = async () => {
     const submissionUrl = project?.resources?.submissionUrl;
@@ -107,8 +112,14 @@ const ProjectCompletion = () => {
         navigate('/projects'); return;
       }
 
-      if (data.status === 'completed') { setStep(4); }
+      if (data.status === 'completed' || data.status === 'awaiting_payment_confirmation') { setStep(4); }
       setProject(data);
+
+      // Company accounts skip the Ascivan review gate entirely.
+      try {
+        const meSnap = await getDoc(doc(db, 'users', currentUser.uid));
+        if (meSnap.exists()) setOwnerIsCompany(!!meSnap.data().isCompany);
+      } catch (_) {}
 
       // Fetch approved members
       const appQ = query(collection(db, 'project_applications'), where('projectId', '==', projectId), where('status', '==', 'approved'));
@@ -522,9 +533,16 @@ const ProjectCompletion = () => {
               </div>
             )}
 
-            {isApproved && step !== 4 && (
+            {/* Only show the "Approved by Ascivan" banner when an actual review
+                happened (individual owners). Companies skip review, so no banner.
+                On PAID projects there are no badges - the wording reflects that. */}
+            {wasReviewed && !ownerIsCompany && step !== 4 && (
               <div className="mb-6 bg-green-50 border border-green-200 rounded-xl p-4 text-center">
-                <p className="text-green-700 font-bold text-sm">Approved by Ascivan - you can now assign badges to your team.</p>
+                <p className="text-green-700 font-bold text-sm">
+                  {project?.isPaid
+                    ? 'Approved by Ascivan - you can now rate contributions and start payment confirmations.'
+                    : 'Approved by Ascivan - you can now assign badges to your team.'}
+                </p>
               </div>
             )}
 
@@ -534,15 +552,29 @@ const ProjectCompletion = () => {
                 <svg className="w-16 h-16 text-blue-600 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <h2 className="text-xl font-bold text-blue-500 mb-2">Project Completed</h2>
-                <p className="text-gray-400 text-sm mb-6">Badges and certificates have been awarded to all qualifying members.</p>
-                <div className="flex justify-center gap-3">
+                <h2 className="text-xl font-bold text-blue-500 mb-2">
+                  {project?.isPaid && project?.status === 'awaiting_payment_confirmation' ? 'Work Marked Done' : 'Project Completed'}
+                </h2>
+                <p className="text-gray-400 text-sm mb-6">
+                  {project?.isPaid
+                    ? (project?.status === 'awaiting_payment_confirmation'
+                        ? 'The project is now in payment confirmation: mark everyone paid and each member confirms receipt. It fully closes and moves to the Project Vault once every payment is confirmed. No badges are awarded on paid projects.'
+                        : 'All payments confirmed. The project is closed and in the Project Vault. No badges are awarded on paid projects.')
+                    : 'Badges and certificates have been awarded to all qualifying members.'}
+                </p>
+                <div className="flex justify-center gap-3 flex-wrap">
                   <Link to="/projects/owner-dashboard" className="px-6 py-2.5 bg-gray-100 hover:bg-gray-100 text-gray-900 font-semibold rounded-xl text-sm transition-all">
                     Back to Dashboard
                   </Link>
-                  <Link to="/projects" className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-gray-900 font-bold rounded-xl text-sm transition-all">
-                    Browse Projects
-                  </Link>
+                  {project?.isPaid ? (
+                    <Link to="/project-vault" className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-all">
+                      Payment Confirmations
+                    </Link>
+                  ) : (
+                    <Link to="/projects" className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-gray-900 font-bold rounded-xl text-sm transition-all">
+                      Browse Projects
+                    </Link>
+                  )}
                 </div>
               </div>
             )}

@@ -9,7 +9,7 @@ import { db } from '../../firebase/config';
 import { sendPush } from '../../utils/pushNotifications';
 import { toast } from 'react-toastify';
 import { notifyApplicationApproved, notifyApplicationRejected } from '../../utils/emailNotifications';
-import { markOwnerPaidAll } from '../../utils/paidProjects';
+import { markOwnerPaidAll, isReadyToComplete, healPaidProjectStatus } from '../../utils/paidProjects';
 
 const industryTracks = [
   { value: 'healthcare', label: 'Healthcare / Medical' },
@@ -51,6 +51,14 @@ const ProjectOwnerDashboard = () => {
       const list = [];
       for (const d of snap.docs) {
         const project = { id: d.id, ...d.data() };
+        // SELF-HEAL: a paid project where the owner marked everyone paid and
+        // every member confirmed should be 'completed' - flip it so the card
+        // stops showing "Awaiting Payment Confirmation". The write re-fires
+        // this snapshot with the corrected status.
+        if (isReadyToComplete(project)) {
+          const healed = await healPaidProjectStatus(project);
+          if (healed) project.status = 'completed';
+        }
         // Fetch applications
         try {
           const appQ = query(collection(db, 'project_applications'), where('projectId', '==', d.id));

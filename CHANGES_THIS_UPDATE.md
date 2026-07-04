@@ -1,4 +1,63 @@
-# Changes in this update
+# Changes in this update (latest)
+
+## 1. Profiles - "Projects Done" replaces the Skill Track chip
+- The stats row on member profiles now shows Badges / Certificates /
+  "Projects Done". The Skill Track chip was removed from the stats row
+  (the skill track still shows in the Details section below).
+- Projects Done auto-populates from the projects collection: every project
+  with status 'completed' where the user was a team member (matched by uid
+  OR email in the members array) or the project owner - paid or free -
+  counted once per project. Paid projects therefore count toward the total
+  but still never add badges.
+
+## 2. Company projects skip the Ascivan review
+- Company / organisation accounts no longer submit their projects for
+  review. On the Complete Project page, company owners go straight to the
+  project summary -> evaluation -> completion (payment confirmations on
+  paid projects). The review gate, "Submit for review" card, and the
+  "Approved by Ascivan" banner only apply to individual owners.
+
+## 3. Approval notifications open the right page (not the Proof Wall)
+- Clicking a "has been approved" (or needs-changes / rejected) notification
+  now opens the project itself: the completion / manage-project page for
+  the owner, the project workspace for team members. Previously it fell
+  through to /community, which redirects to the Proof Wall.
+- Fixed in BOTH the Notifications page and the bell dropdown. Payment /
+  dispute notifications in the dropdown now open the dispute room, and
+  application/completion notifications open the project.
+
+## 4. Paid projects actually close when everyone confirms (root-cause fix)
+- checkAndCompleteProject previously only *checked* readiness - the comment
+  referenced an autoCompletePaidProject Cloud Function that does not exist,
+  so a fully-confirmed paid project stayed at 'awaiting_payment_confirmation'
+  forever. It now performs the status flip to 'completed' itself, so the
+  project immediately leaves "Awaiting Payment Confirmation" on the owner's
+  Manage Projects page, the team's Project Vault, and the dispute list, and
+  moves to the completed wall.
+- SELF-HEAL for already-stuck projects: the Project Vault, the dispute room,
+  the disputes list, and the owner dashboard now detect a paid project where
+  the owner marked everyone paid AND every member confirmed, flip it to
+  'completed' on load, and show it as completed right away. This also fixes
+  projects that got stuck after a dispute was resolved via an amount
+  adjustment + re-confirmation.
+
+## 5. Paid projects - badge wording removed from the completion flow
+- The green banner after review approval now reads "Approved by Ascivan -
+  you can now rate contributions and start payment confirmations." on paid
+  projects (badges wording kept for free projects only). Companies see no
+  banner at all since they skip review.
+- The final "done" screen on paid projects now says "Work Marked Done" with
+  payment-confirmation wording (and "All payments confirmed" once closed)
+  instead of "Badges and certificates have been awarded", and its second
+  button is "Payment Confirmations" (opens the Project Vault) instead of
+  "Browse Projects".
+- Re-opening the Complete page on a paid project already in the payment
+  phase now shows the done screen instead of letting the owner re-run the
+  evaluation.
+
+---
+
+# Changes in the previous update
 
 ## 1. Vendor branding hidden from all error messages
 - New `src/utils/sanitizeError.js` strips the word "Firebase", raw codes like

@@ -27,6 +27,7 @@ import { toast } from 'react-toastify';
 import {
   formatMoney, hasOpenDispute, confirmPaymentReceived, disputePayment,
   adjustMemberPayment, resolveDispute, markOwnerPaidAll,
+  isReadyToComplete, healPaidProjectStatus,
 } from '../../utils/paidProjects';
 
 const statusPill = (status) => {
@@ -88,6 +89,13 @@ const DisputePage = () => {
     const snap = await getDoc(doc(db, 'projects', projectId));
     if (!snap.exists()) { toast.error('Project not found'); navigate('/disputes'); return null; }
     const data = { id: snap.id, ...snap.data() };
+    // SELF-HEAL: if the owner marked everyone paid and every member confirmed,
+    // the project should be 'completed' - flip it now so it stops showing as
+    // "awaiting confirmation" for the owner and the team.
+    if (isReadyToComplete(data)) {
+      const healed = await healPaidProjectStatus(data);
+      if (healed) data.status = 'completed';
+    }
     setProject(data);
     return data;
   };
@@ -144,6 +152,9 @@ const DisputePage = () => {
             } catch (e) { console.log('Payee disputes query:', e.message); }
 
             for (const [id, p] of Array.from(involved.entries())) {
+              // Self-heal fully-confirmed projects that are still stuck in
+              // the awaiting-confirmation status before filtering.
+              if (isReadyToComplete(p)) { if (await healPaidProjectStatus(p)) p.status = 'completed'; }
               if (unresolved(p)) found.set(id, p);
             }
           }

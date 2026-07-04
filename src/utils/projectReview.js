@@ -103,6 +103,7 @@ export const requestChanges = async (project, admin, feedback, memberEmails = []
     type: 'project_needs_changes',
     projectId,
     projectTitle: title,
+    forOwner: true,
     message: `"${title}" needs changes before approval. Reviewer note: ${feedback || 'See details and re-submit.'}`,
   });
   // Team
@@ -125,14 +126,16 @@ export const approveProjectReview = async (project, admin, memberEmails = []) =>
   });
 
   const title = project.projectTitle || project.title || 'your project';
-  // Owner - can now assign badges
+  // Owner - can now assign badges. forOwner routes the notification click to
+  // the project completion ("manage project") page instead of the proof wall.
   await notifyByEmail(project.reviewSubmittedBy || project.submitterEmail, {
     type: 'project_review_approved',
     projectId,
     projectTitle: title,
+    forOwner: true,
     message: `"${title}" has been approved! You can now assign badges to your team.`,
   });
-  // Team
+  // Team - clicking opens the project workspace.
   await notifyMembers(memberEmails, {
     type: 'project_review_approved',
     projectId,

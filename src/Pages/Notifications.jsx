@@ -80,6 +80,13 @@ const NotificationsPage = () => {
     // Payment + dispute notifications open that project's dispute page, where the
     // member confirms receipt / reports an issue and the payment table lives.
     if (n.projectId && disputeTypes.includes(n.type)) { navigate(`/disputes/${n.projectId}`); return; }
+    // Review notifications (approved / needs changes / rejected) open the
+    // project itself - the completion ("manage project") page for the owner,
+    // the workspace for team members - NOT the proof wall.
+    if (n.projectId && reviewTypes.includes(n.type)) {
+      navigate(n.forOwner ? `/projects/${n.projectId}/complete` : `/projects/${n.projectId}/workspace`);
+      return;
+    }
     if (n.projectId && projectTypes.includes(n.type)) navigate(`/projects/${n.projectId}`);
     else if (n.type === 'follow' && n.followedBy) navigate(`/profile/${n.followedByName || n.followedBy}`);
     else if (n.postId) navigate(`/community/post/${n.postId}`);
@@ -97,10 +104,13 @@ const NotificationsPage = () => {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
-  const projectTypes = ['payment_confirmation', 'payment_confirmed', 'payment_disputed', 'dispute_resolved', 'project_completed', 'project_application', 'application_approved', 'application_rejected'];
+  const projectTypes = ['payment_confirmation', 'payment_confirmed', 'payment_disputed', 'dispute_resolved', 'project_completed', 'project_application', 'application_approved', 'application_rejected', 'project_review_approved', 'project_needs_changes', 'project_review_rejected'];
   // Payment + dispute lifecycle notifications route to /disputes/:projectId (the
   // dispute room) rather than the project detail page.
   const disputeTypes = ['payment_confirmation', 'payment_confirmed', 'payment_disputed', 'dispute_resolved'];
+  // Admin-review lifecycle notifications route to the project workspace (team)
+  // or the completion / manage-project page (owner).
+  const reviewTypes = ['project_review_approved', 'project_needs_changes', 'project_review_rejected'];
 
   const filtered = filter === 'all' ? notifications
     : filter === 'unread' ? notifications.filter(n => !n.isRead)

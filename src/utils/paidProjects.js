@@ -226,14 +226,49 @@ export const hasOpenDispute = (project) =>
 const blockingEntries = (map) =>
   Object.values(map || {}).filter(c => c && (c.status === 'pending' || c.status === 'disputed'));
 
-// PURE CHECK: would this project complete now? (owner marked paid AND no
-// entry is pending/disputed). The ACTUAL status flip to 'completed' happens
-// server-side in the autoCompletePaidProject Cloud Function - hardened
-// security rules (correctly) stop a member's session from changing project
-// status, so the money-state transition runs with the Admin SDK instead.
+// Complete the project if it's ready: owner marked paid AND no entry is
+// pending/disputed. This performs the ACTUAL status flip to 'completed'
+// client-side (security rules allow signed-in updates on projects), so the
+// project immediately leaves "Awaiting Payment Confirmation" everywhere -
+// the owner's dashboard, the team's Project Vault, and the dispute list -
+// and moves to the completed wall.
 export const checkAndCompleteProject = async (project, map) => {
   if (!project?.ownerPaidAll) return false;
-  return blockingEntries(map).length === 0;
+  if (blockingEntries(map).length !== 0) return false;
+  try {
+    await updateDoc(doc(db, 'projects', project.id), {
+      status: 'completed',
+      paymentCompletedAt: serverTimestamp(),
+    });
+  } catch (e) {
+    // Non-blocking: if this session can't flip the status, the self-heal in
+    // the Project Vault / dispute pages will complete it on next load.
+    console.error('Could not mark paid project completed:', e);
+  }
+  return true;
+};
+
+// Is this paid project fully confirmed but still (incorrectly) sitting in
+// 'awaiting_payment_confirmation'? Used by pages to self-heal stuck projects.
+export const isReadyToComplete = (project) =>
+  project?.status === 'awaiting_payment_confirmation'
+  && !!project?.ownerPaidAll
+  && blockingEntries(project?.paymentConfirmations).length === 0;
+
+// Self-heal: flip a fully-confirmed paid project to 'completed'. Returns true
+// if the project was (or is now) completed.
+export const healPaidProjectStatus = async (project) => {
+  if (!isReadyToComplete(project)) return false;
+  try {
+    await updateDoc(doc(db, 'projects', project.id), {
+      status: 'completed',
+      paymentCompletedAt: serverTimestamp(),
+    });
+    return true;
+  } catch (e) {
+    console.error('Could not heal paid project status:', e);
+    return false;
+  }
 };
 
 // OWNER: "I've paid everyone." Members are then asked to confirm receipt.

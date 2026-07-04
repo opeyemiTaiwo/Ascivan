@@ -111,15 +111,28 @@ const UserProfile = () => {
 
         if (userData) {
           setProfile(userData);
-          // Fetch completed projects count
+          // Total projects DONE (paid or free). Auto-populates from the
+          // projects collection: any project with status 'completed' where
+          // this user was a team member (tracked by uid OR email in the
+          // members array) or the owner. Deduped by project id.
           try {
-            const completedQ = query(
-              collection(db, 'projects'),
-              where('members', 'array-contains', userData.uid),
-              where('status', '==', 'completed')
-            );
-            const completedSnap = await getDocs(completedQ);
-            setCompletedCount(completedSnap.size);
+            const done = new Set();
+            const collect = (snap) => snap.docs.forEach(d => {
+              const p = d.data();
+              if (p.status === 'completed') done.add(d.id);
+            });
+            try {
+              collect(await getDocs(query(collection(db, 'projects'), where('members', 'array-contains', userData.uid))));
+            } catch (_) {}
+            if (userData.email) {
+              try {
+                collect(await getDocs(query(collection(db, 'projects'), where('members', 'array-contains', userData.email))));
+              } catch (_) {}
+            }
+            try {
+              collect(await getDocs(query(collection(db, 'projects'), where('submitterId', '==', userData.uid))));
+            } catch (_) {}
+            setCompletedCount(done.size);
           } catch (e) {
             console.log('Could not fetch completed projects:', e.message);
           }
@@ -297,7 +310,9 @@ const UserProfile = () => {
               <p className="text-gray-400 text-xs mt-1">Member since {formatDate(profile.createdAt)}</p>
             )}
 
-            {/* Stats Row */}
+            {/* Stats Row - Badges, Certificates, and total Projects done.
+                Projects auto-populates after every successful completion,
+                paid or free. (The skill track still shows in Details below.) */}
             <div className="flex flex-wrap gap-3 mt-5">
               {!profile.isCompany && (
                 <>
@@ -309,13 +324,11 @@ const UserProfile = () => {
                     <p className="text-xl font-bold text-gray-900">{completedCount}</p>
                     <p className="text-gray-500 text-xs">Certificates</p>
                   </div>
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 text-center">
+                    <p className="text-xl font-bold text-blue-700">{completedCount}</p>
+                    <p className="text-blue-500 text-xs">Projects Done</p>
+                  </div>
                 </>
-              )}
-              {!profile.isCompany && profile.primarySkillTrack && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 text-center">
-                  <p className="text-sm font-semibold text-blue-700">{skillTrackLabels[profile.primarySkillTrack] || profile.primarySkillTrack}</p>
-                  <p className="text-blue-500 text-xs">Skill Track</p>
-                </div>
               )}
             </div>
           </div>

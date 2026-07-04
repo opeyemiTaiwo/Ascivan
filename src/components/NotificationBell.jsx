@@ -129,8 +129,43 @@ const NotificationBell = () => {
           navigate('/dashboard');
           break;
 
+        // Admin-review lifecycle: open the project itself - the completion
+        // ("manage project") page for the owner, the workspace for the team.
+        case 'project_review_approved':
+        case 'project_needs_changes':
+        case 'project_review_rejected':
+          if (notification.projectId) {
+            navigate(notification.forOwner
+              ? `/projects/${notification.projectId}/complete`
+              : `/projects/${notification.projectId}/workspace`);
+          } else {
+            navigate('/notifications');
+          }
+          break;
+
+        // Payment + dispute lifecycle: open the project's dispute room where
+        // the payment table and confirmations live.
+        case 'payment_confirmation':
+        case 'payment_confirmed':
+        case 'payment_disputed':
+        case 'dispute_resolved':
+          if (notification.projectId) navigate(`/disputes/${notification.projectId}`);
+          else navigate('/notifications');
+          break;
+
+        case 'project_completed':
+        case 'project_application':
+        case 'application_approved':
+        case 'application_rejected':
+          if (notification.projectId) navigate(`/projects/${notification.projectId}`);
+          else navigate('/notifications');
+          break;
+
         default:
-          navigate('/community');
+          // Any other project-linked notification opens the project; the rest
+          // keep the community/proof-wall fallback.
+          if (notification.projectId) navigate(`/projects/${notification.projectId}`);
+          else navigate('/community');
           break;
       }
     } catch (error) {

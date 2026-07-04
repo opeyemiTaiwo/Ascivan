@@ -168,8 +168,21 @@ const ProjectSetup = () => {
     const valid = buildTeamRoles();
     if (valid.length === 0) { toast.error('Add at least one team role'); return; }
 
+    // Skills are required for every editable role. Locked paid roles keep the
+    // skills they were posted with, so they're skipped here.
+    const missingSkills = roles.some(r => !isLocked(r) && resolveRoleName(r) && !(r.skills || '').trim());
+    if (missingSkills) { toast.error('Add the required skills for each role.'); return; }
+
     if (isPaid) {
       if (newPaidRoleMissingPay()) { toast.error('Set a pay-per-person amount (greater than 0) for each new role.'); return; }
+      // Any newly added paid role locks once saved. Confirm before saving.
+      const addingNewRoles = roles.some(r => !isLocked(r) && resolveRoleName(r));
+      if (addingNewRoles) {
+        const ok = window.confirm(
+          "Please double-check each new role, its pay-per-person amount, and the number of people.\n\nOnce you save, the new roles are LOCKED - you won't be able to edit them or their amounts afterwards (you can still add more roles later).\n\nIs everything correct?"
+        );
+        if (!ok) return;
+      }
     } else {
       // Free projects must keep a newcomer-friendly role open.
       const hasOpenRole = valid.some(r => {
@@ -352,7 +365,7 @@ const ProjectSetup = () => {
                   {experienceLevels.map(l => <option key={l} value={l}>{l === 'any-level' ? 'Any Level' : l.charAt(0).toUpperCase() + l.slice(1)}</option>)}
                 </select>
                 <input type="number" min="1" max="10" value={r.count} onChange={e => updateRole(i, 'count', e.target.value)} className={inputClass} placeholder="Count" />
-                <input type="text" value={r.skills} onChange={e => updateRole(i, 'skills', e.target.value)} className={inputClass} placeholder="Skills" />
+                <input type="text" value={r.skills} onChange={e => updateRole(i, 'skills', e.target.value)} className={inputClass} placeholder="Skills * (e.g., React, Node)" />
                 {isPaid && (
                   <input type="number" min="1" step="0.01" value={r.payAmount} onChange={e => updateRole(i, 'payAmount', e.target.value)} className={inputClass} placeholder="Pay / person ($)" />
                 )}

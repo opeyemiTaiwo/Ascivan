@@ -244,6 +244,15 @@ const ProjectSubmission = () => {
       return;
     }
 
+    // Paid projects lock their roles and pay amounts once posted (you can add
+    // new roles later, but you can't edit existing ones). Confirm before saving.
+    if (projectKind === 'paid') {
+      const ok = window.confirm(
+        "Please double-check every role, its pay-per-person amount, and the number of people.\n\nOnce you post this paid project, these roles and amounts are LOCKED - you won't be able to edit them. You'll only be able to ADD new roles later.\n\nIs everything correct?"
+      );
+      if (!ok) { setIsSubmitting(false); return; }
+    }
+
     try {
       // Check for duplicate project name
       try {

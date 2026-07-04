@@ -89,6 +89,7 @@ const AppLayout = ({ children }) => {
     { path: '/projects', label: 'All Projects' },
     { path: '/projects/owner-dashboard', label: 'My Projects' },
     { path: '/project-vault', label: 'Project Vault' },
+    { path: '/disputes', label: 'Payment Dispute' },
   ];
 
   const navItems = [
@@ -145,7 +146,7 @@ const AppLayout = ({ children }) => {
   };
 
   // Keep the Projects group open whenever the user is on one of its pages.
-  const projectPaths = ['/projects', '/my-workspaces', '/project-vault'];
+  const projectPaths = ['/projects', '/my-workspaces', '/project-vault', '/disputes'];
   useEffect(() => {
     if (projectPaths.some(p => location.pathname === p || location.pathname.startsWith(p + '/'))) {
       setProjectsOpen(true);

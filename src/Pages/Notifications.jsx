@@ -77,6 +77,9 @@ const NotificationsPage = () => {
       return;
     }
     if (n.type === 'application_feedback_request' || n.type === 'application_feedback_reply') { navigate('/messages'); return; }
+    // Payment + dispute notifications open that project's dispute page, where the
+    // member confirms receipt / reports an issue and the payment table lives.
+    if (n.projectId && disputeTypes.includes(n.type)) { navigate(`/disputes/${n.projectId}`); return; }
     if (n.projectId && projectTypes.includes(n.type)) navigate(`/projects/${n.projectId}`);
     else if (n.type === 'follow' && n.followedBy) navigate(`/profile/${n.followedByName || n.followedBy}`);
     else if (n.postId) navigate(`/community/post/${n.postId}`);
@@ -95,6 +98,9 @@ const NotificationsPage = () => {
   };
 
   const projectTypes = ['payment_confirmation', 'payment_confirmed', 'payment_disputed', 'dispute_resolved', 'project_completed', 'project_application', 'application_approved', 'application_rejected'];
+  // Payment + dispute lifecycle notifications route to /disputes/:projectId (the
+  // dispute room) rather than the project detail page.
+  const disputeTypes = ['payment_confirmation', 'payment_confirmed', 'payment_disputed', 'dispute_resolved'];
 
   const filtered = filter === 'all' ? notifications
     : filter === 'unread' ? notifications.filter(n => !n.isRead)

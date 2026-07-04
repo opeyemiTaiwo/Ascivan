@@ -38,6 +38,7 @@ const ProjectSetup = lazy(() => import('./Pages/projects/ProjectSetup'));
 const GenerateProject = lazy(() => import('./Pages/admin/GenerateProject'));
 const AdminPanel = lazy(() => import('./Pages/admin/AdminPanel'));
 const ProjectOwnerDashboard = lazy(() => import('./Pages/projects/ProjectOwnerDashboard'));
+const DisputePage = lazy(() => import('./Pages/projects/DisputePage'));
 const ProjectCompletion = lazy(() => import('./Pages/projects/ProjectCompletion'));
 const MyProjects = lazy(() => import('./Pages/projects/MyProjects'));
 const ProjectWorkspace = lazy(() => import('./Pages/projects/ProjectWorkspace'));
@@ -159,6 +160,8 @@ function App() {
 
                 <Route path="/talent-board" element={<SidebarRoute><TalentBoard /></SidebarRoute>} />
                 <Route path="/project-vault" element={<SidebarRoute><ProjectVault /></SidebarRoute>} />
+                <Route path="/disputes" element={<SidebarRoute><DisputePage /></SidebarRoute>} />
+                <Route path="/disputes/:projectId" element={<SidebarRoute><DisputePage /></SidebarRoute>} />
                 <Route path="/settings" element={<SidebarRoute><Settings /></SidebarRoute>} />
                 <Route path="/premium-success" element={<SidebarRoute><PremiumSuccess /></SidebarRoute>} />
                 <Route path="/my-connections" element={<Navigate to="/proof-wall" replace />} />

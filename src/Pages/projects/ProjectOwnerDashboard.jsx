@@ -9,6 +9,7 @@ import { db } from '../../firebase/config';
 import { sendPush } from '../../utils/pushNotifications';
 import { toast } from 'react-toastify';
 import { notifyApplicationApproved, notifyApplicationRejected } from '../../utils/emailNotifications';
+import { markOwnerPaidAll } from '../../utils/paidProjects';
 
 const industryTracks = [
   { value: 'healthcare', label: 'Healthcare / Medical' },
@@ -66,6 +67,21 @@ const ProjectOwnerDashboard = () => {
     });
     return unsub;
   }, [currentUser]);
+
+  // Paid projects: owner marks all members paid; members then confirm receipt.
+  // If everyone already confirmed, the project completes immediately.
+  const markAllPaid = async (project) => {
+    const ok = window.confirm(
+      `Confirm you have paid ALL members of "${project.projectTitle}" the amounts shown. Each member will be asked to confirm they received their payment, and the project closes when all confirmations match.`
+    );
+    if (!ok) return;
+    try {
+      const completed = await markOwnerPaidAll(project, currentUser);
+      toast.success(completed ? 'All confirmed - project completed and moved to the Project Vault!' : 'Marked as paid. Members have been asked to confirm receipt.');
+    } catch (e) {
+      toast.error(e.message || 'Could not mark as paid.');
+    }
+  };
 
   const approveApplication = async (project, app) => {
     try {
@@ -279,6 +295,7 @@ const ProjectOwnerDashboard = () => {
                     onRemove={(app) => removeMember(project, app)}
                     onToggleApplications={toggleApplications}
                     onRequestDeletion={() => requestDeletion(project)}
+                    onMarkAllPaid={markAllPaid}
                   />
                 ))}
               </div>
@@ -290,7 +307,7 @@ const ProjectOwnerDashboard = () => {
   );
 };
 
-const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove, onToggleApplications, onRequestDeletion }) => {
+const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove, onToggleApplications, onRequestDeletion, onMarkAllPaid }) => {
   const [showApps, setShowApps] = useState(false);
   const isRejected = project.reviewStatus === 'rejected';
   const isCompleted = project.status === 'completed' || isRejected;
@@ -359,21 +376,41 @@ const ProjectCard = ({ project, currentUser, onApprove, onReject, onRemove, onTo
         <Link to={`/projects/${project.id}/workspace`} className="px-4 py-2 min-h-[40px] bg-gray-100 hover:bg-gray-100 text-gray-900 font-semibold rounded-lg text-xs transition-all flex items-center">
           Workspace
         </Link>
-        {!isCompleted && (
+        {isAwaitingPayment && (
+          <>
+            {!project.ownerPaidAll && (
+              <button onClick={() => onMarkAllPaid(project)} className="px-4 py-2 min-h-[40px] bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-xs transition-all flex items-center">
+                I've Paid Everyone
+              </button>
+            )}
+            <Link to={`/disputes/${project.id}`} className="px-4 py-2 min-h-[40px] bg-amber-50 border border-amber-200 text-amber-700 hover:bg-amber-100 font-semibold rounded-lg text-xs transition-all flex items-center">
+              Payment Status{Object.values(project.paymentConfirmations || {}).some(c => c?.status === 'disputed') ? ' · Dispute Open' : ''}
+            </Link>
+          </>
+        )}
+        {!isCompleted && !isAwaitingPayment && (
           <Link to={`/projects/${project.id}/setup`} className="px-4 py-2 min-h-[40px] bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold rounded-lg text-xs transition-all flex items-center">
             Edit Project
           </Link>
         )}
-        {!isCompleted && (
+        {!isCompleted && !isAwaitingPayment && (
           <Link to={`/projects/${project.id}/complete`} className="px-4 py-2 min-h-[40px] bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-xs transition-all flex items-center">
-            {project.reviewStatus === 'approved' ? 'Assign Badges'
+            {project.isPaid ? (
+              project.reviewStatus === 'approved' ? 'Mark Work Done'
               : project.reviewStatus === 'submitted' ? 'Review Pending'
               : project.reviewStatus === 'needs_changes' ? 'Changes Requested'
               : project.reviewStatus === 'rejected' ? 'Not Approved'
-              : 'Submit for Review'}
+              : 'Submit for Review'
+            ) : (
+              project.reviewStatus === 'approved' ? 'Assign Badges'
+              : project.reviewStatus === 'submitted' ? 'Review Pending'
+              : project.reviewStatus === 'needs_changes' ? 'Changes Requested'
+              : project.reviewStatus === 'rejected' ? 'Not Approved'
+              : 'Submit for Review'
+            )}
           </Link>
         )}
-        {!isCompleted && (
+        {!isCompleted && !isAwaitingPayment && (
           <button onClick={() => onToggleApplications(project)} className={`px-4 py-2 min-h-[40px] font-semibold rounded-lg text-xs transition-all ${project.applicationsOpen === false ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-orange-50 border border-orange-200 text-orange-700 hover:bg-orange-100'}`}>
             {project.applicationsOpen === false ? 'Open Applications' : 'Close Applications'}
           </button>

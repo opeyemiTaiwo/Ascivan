@@ -1,10 +1,13 @@
 // src/Pages/ProjectVault.jsx - Completed projects with certificates
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import TierBadge from '../components/TierBadge';
+import { formatMoney, hasOpenDispute, confirmPaymentReceived, markOwnerPaidAll } from '../utils/paidProjects';
+import { toast } from 'react-toastify';
 
 // Map a badge category (stored on evaluations) to its badge image in /public/Images.
 const BADGE_IMAGES = {
@@ -54,9 +57,16 @@ const tierRingCss = (level) => {
 
 const ProjectVault = () => {
   const { currentUser } = useAuth();
+  const navigate = useNavigate();
   const [userBadges, setUserBadges] = useState([]);
   const [completedProjects, setCompletedProjects] = useState([]);
   const [disputedProjects, setDisputedProjects] = useState([]);
+  // Paid projects awaiting payment confirmation (work done; money not yet
+  // fully confirmed). They live here - NOT on the completed wall - until every
+  // member confirms payment. Disputed ones link to their dispute room.
+  const [awaitingProjects, setAwaitingProjects] = useState([]);
+  const [busy, setBusy] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
   const [loading, setLoading] = useState(true);
   const [expandedHistory, setExpandedHistory] = useState({});
   const [viewingCert, setViewingCert] = useState(null);
@@ -96,8 +106,11 @@ const ProjectVault = () => {
         completed.sort((a, b) => (b.completedAt?.toDate?.() || 0) - (a.completedAt?.toDate?.() || 0));
         setCompletedProjects(completed);
 
-        // Disputed projects (awaiting payment confirmation with a disputed entry).
-        all.filter(p => p.status === 'awaiting_payment_confirmation').forEach(data => {
+        // Paid projects awaiting payment confirmation. Disputed ones are
+        // split out; the rest show with inline confirm / mark-paid actions.
+        const awaiting = all.filter(p => p.status === 'awaiting_payment_confirmation');
+        setAwaitingProjects(awaiting);
+        awaiting.forEach(data => {
           if (Object.values(data.paymentConfirmations || {}).some(c => c.status === 'disputed')
               && !allDisputed.find(p => p.id === data.id)) {
             allDisputed.push(data);
@@ -109,7 +122,7 @@ const ProjectVault = () => {
       setLoading(false);
     };
     fetchProjects();
-  }, [currentUser]);
+  }, [currentUser, refreshKey]);
 
   const toggleHistory = (id) => {
     setExpandedHistory(prev => ({ ...prev, [id]: !prev[id] }));
@@ -287,7 +300,7 @@ const ProjectVault = () => {
           <div className="flex items-center justify-center py-20">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
           </div>
-        ) : completedProjects.length === 0 ? (
+        ) : (completedProjects.length === 0 && awaitingProjects.length === 0) ? (
           <div className="bg-white border border-gray-200 rounded-xl p-10 text-center">
             <p className="text-gray-900 font-semibold text-lg mb-2">No completed projects yet</p>
             <p className="text-gray-400 text-sm mb-4">Complete your first project to see it here with a certificate.</p>
@@ -295,57 +308,117 @@ const ProjectVault = () => {
           </div>
         ) : (
           <div className="space-y-6">
-            {/* Disputed Projects */}
-            {disputedProjects.length > 0 && (
+            {/* Paid projects awaiting payment confirmation */}
+            {awaitingProjects.length > 0 && (
               <div>
-                <h2 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-red-500"></span>
-                  Active Disputes
+                <h2 className="text-lg font-bold text-gray-900 mb-1 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+                  Payment Confirmations
                 </h2>
+                <p className="text-gray-400 text-xs mb-3">Work on these paid projects is done. They move to your completed wall once the owner marks everyone paid and every member confirms receipt. Disputes are handled in the dispute room.</p>
                 <div className="space-y-4">
-                  {disputedProjects.map(project => (
-                    <div key={project.id} className="bg-white border border-red-200 rounded-xl p-5">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="text-gray-900 font-semibold text-base truncate">{project.title || project.projectTitle || 'Untitled'}</h3>
-                        <span className="text-xs font-medium px-2 py-0.5 bg-red-50 text-red-700 rounded-md flex-shrink-0">Disputed</span>
-                      </div>
-                      <div className="space-y-2 mt-3">
-                        {Object.entries(project.paymentConfirmations || {}).map(([email, data]) => (
-                          <div key={email} className={`flex items-center justify-between p-2 rounded-lg text-xs ${data.status === 'disputed' ? 'bg-red-50' : data.status === 'confirmed' ? 'bg-blue-50' : 'bg-gray-50'}`}>
-                            <span className="text-gray-900 font-medium">{data.name} ({data.role})</span>
-                            <span className={`font-semibold ${data.status === 'disputed' ? 'text-red-600' : data.status === 'confirmed' ? 'text-blue-600' : 'text-gray-500'}`}>
-                              {data.status === 'disputed' ? 'Disputed' : data.status === 'confirmed' ? 'Confirmed' : 'Pending'}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                      {/* Dispute History */}
-                      {(project.disputeHistory || []).length > 0 && (
-                        <div className="mt-3">
-                          <button onClick={() => toggleHistory(project.id)} className="text-blue-600 text-xs font-medium hover:underline">
-                            {expandedHistory[project.id] ? 'Hide history' : 'View history'}
-                          </button>
-                          {expandedHistory[project.id] && (
-                            <div className="mt-2 space-y-1.5">
-                              {project.disputeHistory.map((h, i) => (
-                                <div key={i} className="flex items-center justify-between text-xs p-2 bg-gray-50 rounded">
-                                  <span className="text-gray-700">{h.memberName} - <span className={h.action === 'disputed' ? 'text-red-600 font-semibold' : h.action === 'confirmed' ? 'text-blue-600 font-semibold' : 'text-gray-600 font-semibold'}>{h.action}</span></span>
-                                  <span className="text-gray-400">{new Date(h.timestamp).toLocaleDateString()}</span>
-                                </div>
-                              ))}
-                            </div>
-                          )}
+                  {awaitingProjects.map(project => {
+                    const disputed = hasOpenDispute(project);
+                    const isOwner = project.isOwner;
+                    const myEntry = (project.paymentConfirmations || {})[currentUser.email] || null;
+                    const myAmount = myEntry ? (myEntry.amountPaid ?? myEntry.amountDue) : 0;
+                    return (
+                      <div key={project.id} className={`bg-white border rounded-xl p-5 ${disputed ? 'border-red-200' : 'border-amber-200'}`}>
+                        <div className="flex items-center gap-2 mb-2 flex-wrap">
+                          <h3 className="text-gray-900 font-semibold text-base truncate">{project.projectTitle || project.title || 'Untitled'}</h3>
+                          <span className="text-[10px] font-bold px-2 py-0.5 bg-amber-100 text-amber-800 border border-amber-200 rounded-full flex-shrink-0">PAID</span>
+                          <span className={`text-xs font-medium px-2 py-0.5 rounded-md flex-shrink-0 ${disputed ? 'bg-red-50 text-red-700' : 'bg-amber-50 text-amber-700'}`}>
+                            {disputed ? 'Disputed' : 'Awaiting Confirmation'}
+                          </span>
                         </div>
-                      )}
-                    </div>
-                  ))}
+
+                        {/* Member statuses */}
+                        <div className="space-y-2 mt-3">
+                          {Object.entries(project.paymentConfirmations || {}).map(([email, data]) => (
+                            <div key={email} className={`flex items-center justify-between p-2 rounded-lg text-xs ${data.status === 'disputed' ? 'bg-red-50' : data.status === 'confirmed' ? 'bg-green-50' : 'bg-gray-50'}`}>
+                              <span className="text-gray-900 font-medium">{data.memberName || data.name || email}{data.role ? ` (${data.role})` : ''}{email === currentUser.email ? ' - you' : ''}</span>
+                              <span className="flex items-center gap-2">
+                                <span className="text-gray-900 font-black">{formatMoney(data.amountPaid ?? data.amountDue)}</span>
+                                <span className={`font-semibold ${data.status === 'disputed' ? 'text-red-600' : data.status === 'confirmed' ? 'text-green-600' : 'text-gray-500'}`}>
+                                  {data.status === 'disputed' ? 'Disputed' : data.status === 'confirmed' ? 'Confirmed' : 'Pending'}
+                                </span>
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex flex-wrap gap-2 mt-3">
+                          {/* Owner: mark all paid */}
+                          {isOwner && !project.ownerPaidAll && (
+                            <button disabled={busy} onClick={async () => {
+                              setBusy(true);
+                              try {
+                                const completed = await markOwnerPaidAll(project, currentUser);
+                                toast.success(completed ? 'All confirmed - project completed!' : 'Marked as paid. Members have been asked to confirm receipt.');
+                                setRefreshKey(k => k + 1);
+                              } catch (e) { toast.error(e.message || 'Action failed.'); }
+                              setBusy(false);
+                            }} className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all disabled:opacity-50">
+                              I've Paid Everyone
+                            </button>
+                          )}
+                          {isOwner && project.ownerPaidAll && !disputed && (
+                            <span className="text-gray-400 text-xs py-2">Waiting on member confirmations...</span>
+                          )}
+                          {/* Member: confirm received */}
+                          {myEntry && myEntry.status === 'pending' && (
+                            <>
+                              <button disabled={busy} onClick={async () => {
+                                setBusy(true);
+                                try {
+                                  const { completed } = await confirmPaymentReceived(project, currentUser);
+                                  toast.success(completed ? 'All payments confirmed - project moved to your completed wall!' : 'Payment confirmed. Thank you!');
+                                  setRefreshKey(k => k + 1);
+                                } catch (e) { toast.error(e.message || 'Action failed.'); }
+                                setBusy(false);
+                              }} className="bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all disabled:opacity-50">
+                                I Received {formatMoney(myAmount)}
+                              </button>
+                              <button onClick={() => navigate(`/disputes/${project.id}`)} className="text-red-600 border border-red-200 hover:bg-red-50 text-xs font-semibold px-4 py-2 rounded-lg transition-all">
+                                I Was Not Paid
+                              </button>
+                            </>
+                          )}
+                          {/* Everyone: open the dispute room */}
+                          <button onClick={() => navigate(`/disputes/${project.id}`)} className={`text-xs font-semibold px-4 py-2 rounded-lg border transition-all ${disputed ? 'bg-red-600 hover:bg-red-700 text-white border-red-600' : 'text-blue-600 border-blue-200 hover:bg-blue-50'}`}>
+                            {disputed ? 'Open Dispute Room' : 'View Details'}
+                          </button>
+                        </div>
+
+                        {/* Dispute History */}
+                        {(project.disputeHistory || []).length > 0 && (
+                          <div className="mt-3">
+                            <button onClick={() => toggleHistory(project.id)} className="text-blue-600 text-xs font-medium hover:underline">
+                              {expandedHistory[project.id] ? 'Hide history' : 'View history'}
+                            </button>
+                            {expandedHistory[project.id] && (
+                              <div className="mt-2 space-y-1.5">
+                                {project.disputeHistory.map((h, i) => (
+                                  <div key={i} className="flex items-center justify-between text-xs p-2 bg-gray-50 rounded">
+                                    <span className="text-gray-700">{h.memberName} - <span className={h.action === 'disputed' ? 'text-red-600 font-semibold' : h.action === 'confirmed' ? 'text-blue-600 font-semibold' : 'text-gray-600 font-semibold'}>{h.action.replace(/_/g, ' ')}</span></span>
+                                    <span className="text-gray-400">{new Date(h.at || h.timestamp).toLocaleDateString()}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
 
             {/* Completed Projects */}
             <div>
-              {disputedProjects.length > 0 && <h2 className="text-lg font-bold text-gray-900 mb-3">Completed</h2>}
+              {awaitingProjects.length > 0 && completedProjects.length > 0 && <h2 className="text-lg font-bold text-gray-900 mb-3">Completed</h2>}
               <div className="space-y-4">
                 {completedProjects.map(project => (
                   <div key={project.id} className="bg-white border border-gray-200 rounded-xl p-5">

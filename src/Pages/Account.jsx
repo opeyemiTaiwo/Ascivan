@@ -114,7 +114,7 @@ const Account = () => {
         ) : (
           <div className="space-y-1.5">
             {earnings.rows.map((r, i) => (
-              <div key={i} onClick={() => navigate(`/projects/${r.projectId}`)} className="flex items-center justify-between gap-2 p-2.5 bg-gray-50 rounded-lg border border-gray-100 cursor-pointer hover:bg-gray-100 transition-all">
+              <div key={i} onClick={() => navigate((r.state === 'awaiting' || r.state === 'disputed') ? `/disputes/${r.projectId}` : `/projects/${r.projectId}`)} className="flex items-center justify-between gap-2 p-2.5 bg-gray-50 rounded-lg border border-gray-100 cursor-pointer hover:bg-gray-100 transition-all">
                 <div className="min-w-0">
                   <p className="text-gray-900 text-sm font-medium truncate">{r.projectTitle}</p>
                   <p className="text-gray-400 text-xs">{r.role}</p>

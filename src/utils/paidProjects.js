@@ -18,7 +18,7 @@
 //             payAmount. Dispute-page adjustments therefore flow into the
 //             member's totals automatically.
 
-import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc, updateDoc, addDoc, arrayUnion, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
 // Format a money amount. USD platform-wide for now.
@@ -85,6 +85,7 @@ export const computeMemberEarnings = async (uid, email) => {
         if (status === 'confirmed') { state = 'paid'; result.earnedTotal += amount; }
         else if (status === 'disputed') { state = 'disputed'; result.pendingTotal += amount; }
         else if (status === 'left' || status === 'forfeited') { state = 'forfeited'; }
+        else if (project?.status === 'awaiting_payment_confirmation') { state = 'awaiting'; result.pendingTotal += amount; }
         else { state = projectClosed ? 'awaiting' : 'pending'; result.pendingTotal += amount; }
         result.rows.push({
           projectId,
@@ -99,4 +100,224 @@ export const computeMemberEarnings = async (uid, email) => {
     console.log('Earnings computation skipped:', e.message);
   }
   return result;
+};
+
+// ============================================================================
+// PHASE B - Closing flow & disputes
+// ----------------------------------------------------------------------------
+// Lifecycle of a paid project's close:
+//   1. Owner marks work done (ProjectCompletion)  -> status 'awaiting_payment_confirmation'
+//   2. Owner clicks "I've paid everyone"          -> ownerPaidAll: true, members notified
+//   3. Each member confirms "received"            -> their entry 'confirmed'
+//      ...or reports "not received"               -> their entry 'disputed' (+ reason)
+//   4. All confirmed + ownerPaidAll               -> status 'completed', moves to Project Vault
+//      Any dispute                                -> project lives on the Dispute page
+//        - owner/admin can adjust a member's amount (amountPaid), member re-confirms
+//        - admin "Mark Resolved" force-confirms remaining entries and completes
+// Ascivan verifies that BOTH SIDES CONFIRMED payment - it does not process
+// payments and does not guarantee them. All history is recorded in
+// disputeHistory for the paper trail.
+// ============================================================================
+
+// The paymentConfirmations map is keyed by member email. Emails contain dots,
+// which Firestore updateDoc field paths interpret as nesting - so all writes
+// to the map are read-modify-write of the WHOLE map, never dotted paths.
+const writeConfirmations = async (projectId, map, extra = {}) =>
+  updateDoc(doc(db, 'projects', projectId), { paymentConfirmations: map, ...extra });
+
+const historyEntry = (memberName, memberEmail, action, extra = {}) => ({
+  memberName, memberEmail, action, at: new Date().toISOString(), ...extra,
+});
+
+// Notify a user by uid (non-blocking pattern - callers wrap in try/catch).
+const notifyUid = async (userId, type, message, projectId, projectTitle) => {
+  if (!userId) return;
+  await addDoc(collection(db, 'notifications'), {
+    userId, type, message, projectId, projectTitle: projectTitle || null,
+    isRead: false, read: false, createdAt: serverTimestamp(),
+  });
+};
+
+// Find a user's uid by email (users collection).
+const uidByEmail = async (email) => {
+  try {
+    const snap = await getDocs(query(collection(db, 'users'), where('email', '==', email)));
+    return snap.empty ? null : snap.docs[0].id;
+  } catch { return null; }
+};
+
+// All admin uids (for dispute alerts).
+export const getAdminUids = async () => {
+  try {
+    const snap = await getDocs(query(collection(db, 'users'), where('role', '==', 'admin')));
+    return snap.docs.map(d => d.id);
+  } catch { return []; }
+};
+
+// Does this project have an open payment dispute?
+export const hasOpenDispute = (project) =>
+  project?.status === 'awaiting_payment_confirmation'
+  && Object.values(project?.paymentConfirmations || {}).some(c => c?.status === 'disputed');
+
+// Entries that still block completion (pending or disputed; forfeited/left don't block).
+const blockingEntries = (map) =>
+  Object.values(map || {}).filter(c => c && (c.status === 'pending' || c.status === 'disputed'));
+
+// If owner marked paid AND no entry is pending/disputed -> complete the project.
+// Returns true if it completed.
+export const checkAndCompleteProject = async (project, map) => {
+  if (!project?.ownerPaidAll) return false;
+  if (blockingEntries(map).length > 0) return false;
+  await updateDoc(doc(db, 'projects', project.id), {
+    status: 'completed',
+    paymentCompletedAt: serverTimestamp(),
+  });
+  // Notify owner + members: project fully closed.
+  try {
+    if (project.submitterId) await notifyUid(project.submitterId, 'project_completed', `"${project.projectTitle}" is fully closed - all members confirmed payment. It's now in the Project Vault.`, project.id, project.projectTitle);
+    for (const email of Object.keys(map || {})) {
+      const uid = await uidByEmail(email);
+      if (uid) await notifyUid(uid, 'project_completed', `"${project.projectTitle}" is fully closed - all payments confirmed. Find it in your Project Vault.`, project.id, project.projectTitle);
+    }
+  } catch (_) {}
+  return true;
+};
+
+// OWNER: "I've paid everyone." Members are then asked to confirm receipt.
+export const markOwnerPaidAll = async (project, currentUser) => {
+  const map = { ...(project.paymentConfirmations || {}) };
+  const hist = historyEntry(currentUser.displayName || currentUser.email, currentUser.email, 'owner_marked_paid', {
+    note: 'Owner marked all members as paid.',
+  });
+  await updateDoc(doc(db, 'projects', project.id), {
+    ownerPaidAll: true,
+    ownerPaidAt: serverTimestamp(),
+    disputeHistory: arrayUnion(hist),
+  });
+  // Ask each still-pending member to confirm.
+  try {
+    for (const [email, entry] of Object.entries(map)) {
+      if (entry?.status !== 'pending') continue;
+      const uid = await uidByEmail(email);
+      if (uid) await notifyUid(uid, 'payment_confirmation', `The owner of "${project.projectTitle}" marked your payment of ${formatMoney(entry.amountPaid ?? entry.amountDue)} as sent. Please confirm you received it (or report if you didn't) - the project closes when everyone confirms.`, project.id, project.projectTitle);
+    }
+  } catch (_) {}
+  // Edge case: everyone already confirmed before the owner clicked.
+  return checkAndCompleteProject({ ...project, ownerPaidAll: true }, map);
+};
+
+// MEMBER: "I received my payment."
+export const confirmPaymentReceived = async (project, currentUser) => {
+  const map = { ...(project.paymentConfirmations || {}) };
+  const entry = map[currentUser.email];
+  if (!entry) throw new Error('No payment record found for your account on this project.');
+  map[currentUser.email] = {
+    ...entry,
+    status: 'confirmed',
+    amountPaid: entry.amountPaid ?? entry.amountDue,
+    confirmedAt: new Date().toISOString(),
+  };
+  await writeConfirmations(project.id, map, {
+    disputeHistory: arrayUnion(historyEntry(currentUser.displayName || currentUser.email, currentUser.email, 'confirmed', {
+      note: `Confirmed receipt of ${formatMoney(map[currentUser.email].amountPaid)}.`,
+    })),
+  });
+  try {
+    if (project.submitterId) await notifyUid(project.submitterId, 'payment_confirmed', `${currentUser.displayName || currentUser.email} confirmed receiving ${formatMoney(map[currentUser.email].amountPaid)} for "${project.projectTitle}".`, project.id, project.projectTitle);
+  } catch (_) {}
+  const completed = await checkAndCompleteProject(project, map);
+  return { map, completed };
+};
+
+// MEMBER: "I was NOT paid" - opens a dispute. Reason required.
+export const disputePayment = async (project, currentUser, reason) => {
+  const map = { ...(project.paymentConfirmations || {}) };
+  const entry = map[currentUser.email];
+  if (!entry) throw new Error('No payment record found for your account on this project.');
+  map[currentUser.email] = {
+    ...entry,
+    status: 'disputed',
+    disputeReason: reason,
+    disputedAt: new Date().toISOString(),
+  };
+  await writeConfirmations(project.id, map, {
+    disputeHistory: arrayUnion(historyEntry(currentUser.displayName || currentUser.email, currentUser.email, 'disputed', { reason })),
+  });
+  // Alert owner + all admins.
+  try {
+    const msg = `${currentUser.displayName || currentUser.email} disputed their payment on "${project.projectTitle}": ${reason}`;
+    if (project.submitterId) await notifyUid(project.submitterId, 'payment_disputed', msg, project.id, project.projectTitle);
+    for (const adminUid of await getAdminUids()) {
+      if (adminUid !== project.submitterId) await notifyUid(adminUid, 'payment_disputed', `[Admin] ${msg}`, project.id, project.projectTitle);
+    }
+  } catch (_) {}
+  return map;
+};
+
+// OWNER/ADMIN: adjust a member's payment amount (e.g. an agreed correction
+// during a dispute). Resets that entry to 'pending' so the member confirms
+// the NEW amount. The member's Account earnings read amountPaid, so once
+// confirmed the adjusted figure is what shows on their dashboard.
+export const adjustMemberPayment = async (project, memberEmail, newAmount, actorUser) => {
+  const map = { ...(project.paymentConfirmations || {}) };
+  const entry = map[memberEmail];
+  if (!entry) throw new Error('No payment record for that member.');
+  const amount = Number(newAmount) || 0;
+  map[memberEmail] = {
+    ...entry,
+    status: 'pending',
+    amountPaid: amount,
+    adjustedAt: new Date().toISOString(),
+    adjustedBy: actorUser.email,
+    disputeReason: entry.disputeReason || null,
+  };
+  await writeConfirmations(project.id, map, {
+    ownerPaidAll: false, // owner must re-mark paid after adjusting
+    disputeHistory: arrayUnion(historyEntry(actorUser.displayName || actorUser.email, actorUser.email, 'amount_adjusted', {
+      note: `Adjusted ${entry.memberName || memberEmail}'s payment from ${formatMoney(entry.amountPaid ?? entry.amountDue)} to ${formatMoney(amount)}.`,
+    })),
+  });
+  try {
+    const uid = await uidByEmail(memberEmail);
+    if (uid) await notifyUid(uid, 'payment_confirmation', `Your payment on "${project.projectTitle}" was adjusted to ${formatMoney(amount)}. Once you receive it, confirm on the dispute page - your Account earnings will update to the adjusted amount.`, project.id, project.projectTitle);
+  } catch (_) {}
+  return map;
+};
+
+// ADMIN: resolve the dispute and close the project. Remaining pending/disputed
+// entries are force-confirmed at their current amount (amountPaid if adjusted,
+// otherwise amountDue), the project completes, and everyone is notified. Use
+// after the conversation on the dispute page reaches an outcome.
+export const resolveDispute = async (project, adminUser, note) => {
+  const map = { ...(project.paymentConfirmations || {}) };
+  for (const [email, entry] of Object.entries(map)) {
+    if (!entry) continue;
+    if (entry.status === 'pending' || entry.status === 'disputed') {
+      map[email] = {
+        ...entry,
+        status: 'confirmed',
+        amountPaid: entry.amountPaid ?? entry.amountDue,
+        confirmedAt: new Date().toISOString(),
+        resolvedByAdmin: true,
+      };
+    }
+  }
+  await writeConfirmations(project.id, map, {
+    status: 'completed',
+    ownerPaidAll: true,
+    paymentCompletedAt: serverTimestamp(),
+    disputeResolved: { by: adminUser.email, byName: adminUser.displayName || adminUser.email, at: new Date().toISOString(), note: note || null },
+    disputeHistory: arrayUnion(historyEntry(adminUser.displayName || adminUser.email, adminUser.email, 'resolved', {
+      note: note || 'Dispute resolved by admin. Project moved to the Project Vault.',
+    })),
+  });
+  try {
+    const msg = `The dispute on "${project.projectTitle}" was resolved by an admin${note ? `: ${note}` : ''}. The project is now closed and in the Project Vault.`;
+    if (project.submitterId) await notifyUid(project.submitterId, 'dispute_resolved', msg, project.id, project.projectTitle);
+    for (const email of Object.keys(map)) {
+      const uid = await uidByEmail(email);
+      if (uid) await notifyUid(uid, 'dispute_resolved', msg, project.id, project.projectTitle);
+    }
+  } catch (_) {}
+  return map;
 };

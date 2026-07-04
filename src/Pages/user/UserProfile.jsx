@@ -104,14 +104,9 @@ const UserProfile = () => {
 
         if (userData) {
           setProfile(userData);
-          // Load the member's community teaching rating (if any).
-          try {
-            const { getAuthorTeachingRating } = await import('../../utils/foundationsContributions');
-            if (userData.uid) {
-              const t = await getAuthorTeachingRating(userData.uid);
-              if (t.lessons > 0) setTeaching(t);
-            }
-          } catch (_) {}
+          // Community teaching rating is hidden from the UI for now (see SHOW_TEACHING_RATING
+          // below). utils/foundationsContributions.js still has getAuthorTeachingRating if
+          // this needs to come back.
 
           // Fetch completed projects count
           try {
@@ -279,7 +274,7 @@ const UserProfile = () => {
                   </div>
                 </>
               )}
-              {!profile.isCompany && teaching && (
+              {false && !profile.isCompany && teaching && (
                 <div className="bg-orange-50 border border-orange-200 rounded-lg px-4 py-3 text-center">
                   <p className="text-xl font-bold text-orange-600">★ {teaching.avg ? teaching.avg.toFixed(1) : '-'}</p>
                   <p className="text-gray-500 text-xs">Teaching{teaching.count ? ` (${teaching.count})` : ''}</p>

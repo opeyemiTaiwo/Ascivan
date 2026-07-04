@@ -452,7 +452,7 @@ const AdminPanel = () => {
     ['projects', 'Projects'],
     ['users', 'Users'],
     ['generate', 'Generate'],
-    ['foundations', 'Foundations'],
+    // ['foundations', 'Foundations'], // hidden from UI; panel/logic below is untouched
     ['seed', 'Seed'],
     ['moderation', 'Moderation'],
     ['danger', 'Danger Zone'],

@@ -209,19 +209,20 @@ const ProofWall = () => {
           }
         });
 
-        // 2) Highly-rated community teachers.
-        const contribSnap = await getDocs(q(col(db, 'foundationsContributions'), where('status', '==', 'approved'), lim(100)));
+        // 2) Highly-rated community teachers — hidden from the UI for now.
+        // Firestore query/logic left in place (commented) so this is easy to restore.
         const teachByUser = new Map();
-        contribSnap.docs.forEach(d => {
-          const c = d.data();
-          const avg = c.ratingCount ? c.ratingSum / c.ratingCount : 0;
-          if (c.authorId && c.ratingCount > 0) {
-            const prev = teachByUser.get(c.authorId);
-            if (!prev || avg > prev.avg) {
-              teachByUser.set(c.authorId, { uid: c.authorId, name: c.authorName, avg, ratingCount: c.ratingCount, reason: 'teaching' });
-            }
-          }
-        });
+        // const contribSnap = await getDocs(q(col(db, 'foundationsContributions'), where('status', '==', 'approved'), lim(100)));
+        // contribSnap.docs.forEach(d => {
+        //   const c = d.data();
+        //   const avg = c.ratingCount ? c.ratingSum / c.ratingCount : 0;
+        //   if (c.authorId && c.ratingCount > 0) {
+        //     const prev = teachByUser.get(c.authorId);
+        //     if (!prev || avg > prev.avg) {
+        //       teachByUser.set(c.authorId, { uid: c.authorId, name: c.authorName, avg, ratingCount: c.ratingCount, reason: 'teaching' });
+        //     }
+        //   }
+        // });
 
         // Merge unique users, resolve email + photo for profile links (in parallel).
         const uids = [...new Set([...badgeByUser.keys(), ...teachByUser.keys()])];

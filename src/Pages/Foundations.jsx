@@ -22,6 +22,11 @@ import { renderCourse } from '../utils/renderCourseMarkdown';
 import { getVideoEmbed } from '../utils/videoEmbed';
 import { toast } from 'react-toastify';
 
+// Community contributions (member-authored lessons + ratings) are hidden from the UI
+// for now. Backend/Firestore logic in utils/foundationsContributions.js is untouched,
+// so flipping this back to true restores the feature.
+const SHOW_COMMUNITY_CONTRIBUTIONS = false;
+
 const Foundations = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
@@ -294,8 +299,8 @@ const Foundations = () => {
             </div>
           )}
 
-          {/* From the community: member-authored lessons (unchanged) */}
-          {(community.length > 0 || eligible) && (
+          {/* From the community: member-authored lessons (hidden from UI, see flag above) */}
+          {SHOW_COMMUNITY_CONTRIBUTIONS && (community.length > 0 || eligible) && (
             <div className="mt-2" ref={contributeRef}>
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-base font-bold text-blue-600">From the community</h2>

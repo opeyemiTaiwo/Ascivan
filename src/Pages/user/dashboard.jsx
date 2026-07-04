@@ -195,8 +195,9 @@ const DashboardOverview = () => {
           </div>
         )}
 
-        {/* Invite eligible members (Associate+ in a track) to contribute to Foundations. */}
-        {!loading && !profileData?.isCompany && eligibleTracks(profileData).length > 0 && (
+        {/* Invite eligible members (Associate+ in a track) to contribute to Foundations.
+            Hidden from the UI for now; utils/foundationsContributions.js is untouched. */}
+        {false && !loading && !profileData?.isCompany && eligibleTracks(profileData).length > 0 && (
           <div className="bg-gradient-to-br from-blue-50 to-orange-50 border border-blue-200 rounded-xl p-6 mb-6">
             <div className="flex items-start justify-between gap-4 flex-wrap">
               <div className="flex-1 min-w-0">

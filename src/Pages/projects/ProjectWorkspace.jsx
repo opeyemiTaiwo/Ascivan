@@ -508,8 +508,10 @@ const ProjectWorkspace = () => {
       {/* Resources */}
       {activeTab === 'resources' && (
         <div className="space-y-4">
-          {/* Contribute a community lesson (collaborators only, no badge required) */}
-          {isCollaborator && (
+          {/* Contribute a community lesson (collaborators only, no badge required).
+              Hidden from the UI for now; backend logic (foundationsContributions.js)
+              and the /foundations?contribute=1&fromWorkspace=1 target flow are untouched. */}
+          {false && isCollaborator && (
             <div className="bg-gradient-to-br from-blue-50 to-orange-50 border border-blue-200 rounded-xl p-5">
               <div className="flex items-start justify-between gap-4 flex-wrap">
                 <div className="flex-1 min-w-0">

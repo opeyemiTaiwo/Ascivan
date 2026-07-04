@@ -11,6 +11,7 @@ import usePosterName from '../../hooks/usePosterName';
 import { checkProfileComplete } from '../../utils/profileCompletion';
 import { isPremium } from '../../components/PremiumBadge';
 import { formatMoney, computeTotalBudget } from '../../utils/paidProjects';
+import { ROLE_TEMPLATES } from '../../utils/projectRoles';
 
 const industryTracks = [
   { value: 'healthcare', label: 'Healthcare / Medical' },
@@ -53,9 +54,8 @@ const experienceLevels = [
   { value: 'any-level', label: 'Any Level' },
 ];
 
-const roleTemplates = [
-  'Developer', 'Designer', 'QA Tester', 'Project Lead', 'Mentor', 'Security Specialist', 'Data Analyst', 'Content Writer', 'Marketing', 'Other'
-];
+// Shared with the project edit page (ProjectSetup) via src/utils/projectRoles.js
+const roleTemplates = ROLE_TEMPLATES;
 
 const ProjectSubmission = () => {
   const navigate = useNavigate();

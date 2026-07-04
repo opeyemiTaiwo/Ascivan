@@ -211,6 +211,38 @@ const Foundations = () => {
       <style>{COURSE_PROSE_CSS}</style>
 
       <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">Foundations</h1>
+      <p className="text-gray-500 text-sm mb-4">Practical, beginner-friendly courses that take you from zero to your first real project.</p>
+
+      {/* AI spotlight: the member's cached best-course pick (from the dashboard
+          recommendations). Read straight off the already-loaded user doc - no
+          extra API call, and the track library below stays in its normal,
+          predictable order. Library view only, individuals only. */}
+      {!activeSlug && !userData?.isCompany && (() => {
+        const pick = userData?.aiRecs?.data?.courses?.[0];
+        if (!pick || !getCourse(pick.track, pick.slug)) return null;
+        if (userData?.foundationsCourses?.[pick.track]?.[pick.slug]) return null; // already completed
+        const openPick = () => {
+          if (pick.track !== track) switchTrack(pick.track);
+          openCourse(pick.slug);
+        };
+        return (
+          <div className="bg-gradient-to-r from-blue-50 to-orange-50 border border-blue-200 rounded-xl p-4 mb-4 flex flex-col sm:flex-row sm:items-center gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] font-bold uppercase tracking-wide text-blue-600 mb-0.5 flex items-center gap-1">
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
+                Recommended for you
+              </p>
+              <button onClick={openPick} className="text-left text-sm font-bold text-gray-900 hover:text-blue-600 leading-snug">
+                {pick.title}
+              </button>
+              {pick.reason && <p className="text-gray-600 text-xs mt-1">{pick.reason}</p>}
+            </div>
+            <button onClick={openPick} className="flex-shrink-0 self-start sm:self-center bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all">
+              Open course →
+            </button>
+          </div>
+        );
+      })()}
 
       {/* Track tabs */}
       {allTracks.length > 1 && (

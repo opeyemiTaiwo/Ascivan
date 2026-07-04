@@ -97,9 +97,11 @@ const gatherProfile = async (currentUser) => {
 
 const gatherProjectCandidates = async (currentUser, appliedProjectIds) => {
   try {
+    // Match the same pool the Projects page shows: active projects accepting
+    // collaborators AND auto-generated projects still looking for a lead.
     const snap = await getDocs(query(
       collection(db, 'projects'),
-      where('status', '==', 'active')
+      where('status', 'in', ['active', 'lead_recruitment'])
     ));
     const applied = new Set(appliedProjectIds || []);
     return snap.docs
@@ -118,6 +120,7 @@ const gatherProjectCandidates = async (currentUser, appliedProjectIds) => {
         title: p.projectTitle || p.title || 'Untitled',
         industry: p.industryTrack || '',
         paid: !!p.isPaid,
+        needsLead: p.status === 'lead_recruitment',
         description: truncate(p.projectDescription || p.description || '', 180),
         roles: (p.teamRoles || p.proposedRoles || []).slice(0, 5)
           .map(r => `${r.role || ''}${r.skills ? ` [${truncate(r.skills, 60)}]` : ''}${r.experienceLevel ? ` (${r.experienceLevel})` : ''}`)
@@ -162,17 +165,17 @@ MEMBER PROFILE
 - Roles held/applied for: ${profile.rolesHeld}
 
 OPEN PROJECTS (candidates)
-${projects.map(p => `- id:${p.id} | ${p.title} | industry:${p.industry} | ${p.paid ? 'PAID' : 'collaborative'} | roles: ${p.roles} | ${p.description}`).join('\n') || '(none available)'}
+${projects.map(p => `- id:${p.id} | ${p.title} | industry:${p.industry} | ${p.paid ? 'PAID' : 'collaborative'} | ${p.needsLead ? 'NEEDS A LEAD (member can apply to lead it)' : 'accepting collaborators'} | roles: ${p.roles} | ${p.description}`).join('\n') || '(none available)'}
 
 FOUNDATIONS COURSES (candidates)
 ${courses.map(c => `- track:${c.track} slug:${c.slug} | ${c.title} | ${c.summary}`).join('\n') || '(none available)'}
 
 TASK
-Pick the best matches FOR THIS SPECIFIC MEMBER:
-- Up to 4 projects (only from the candidate list, referenced by their exact id).
-- Up to 4 courses (only from the candidate list, referenced by their exact track and slug).
-For each pick, write "reason": ONE short sentence (max 18 words) that references something concrete from THEIR profile (their background, a skill, a badge, or an interest). For projects also give "match": an integer 50-99 estimating fit.
-Strongly prefer projects in industries they're interested in. Prefer projects with a role at or near their experience level. Prefer courses in their track or that fill a gap their goals imply. If a candidate list is empty, return an empty array for it.
+Pick the SINGLE best match of each kind FOR THIS SPECIFIC MEMBER:
+- Exactly 1 project: the strongest fit (only from the candidate list, referenced by its exact id).
+- Exactly 1 course: the strongest fit (only from the candidate list, referenced by its exact track and slug).
+For each pick, write "reason": ONE short sentence (max 18 words) that references something concrete from THEIR profile (their background, a skill, a badge, or an interest). For the project also give "match": an integer 50-99 estimating fit.
+Strongly prefer projects in industries they're interested in. Prefer projects with a role at or near their experience level. Prefer a course in their track or one that fills a gap their goals imply. If a candidate list is empty, return an empty array for it.
 
 OUTPUT
 Respond with ONLY valid JSON, no markdown fences, no preamble, exactly this shape:
@@ -208,6 +211,7 @@ export const getAIRecommendations = async (currentUser, opts = {}) => {
   ]);
 
   const key = fingerprint({
+    v: 2, // bump when the recommendation shape/logic changes to invalidate old caches
     profile,
     p: projectCandidates.map(p => p.id),
     c: courseCandidates.length,
@@ -228,7 +232,7 @@ export const getAIRecommendations = async (currentUser, opts = {}) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model: CLAUDE_API_CONFIG.models.default,
-      max_tokens: 1200,
+      max_tokens: 400,
       messages: [{ role: 'user', content: buildPrompt(profile, projectCandidates, courseCandidates) }],
     }),
   });
@@ -244,7 +248,7 @@ export const getAIRecommendations = async (currentUser, opts = {}) => {
 
   const projects = (Array.isArray(parsed.projects) ? parsed.projects : [])
     .filter(r => r && projById.has(r.id))
-    .slice(0, 4)
+    .slice(0, 1)
     .map(r => {
       const p = projById.get(r.id);
       return {
@@ -252,6 +256,7 @@ export const getAIRecommendations = async (currentUser, opts = {}) => {
         title: p.title,
         industry: p.industry,
         paid: p.paid,
+        needsLead: !!p.needsLead,
         match: Math.max(50, Math.min(99, parseInt(r.match, 10) || 70)),
         reason: truncate(r.reason, 160) || 'A good fit for your profile.',
       };
@@ -259,7 +264,7 @@ export const getAIRecommendations = async (currentUser, opts = {}) => {
 
   const courses = (Array.isArray(parsed.courses) ? parsed.courses : [])
     .filter(r => r && courseByKey.has(`${r.track}/${r.slug}`))
-    .slice(0, 4)
+    .slice(0, 1)
     .map(r => {
       const c = courseByKey.get(`${r.track}/${r.slug}`);
       return {

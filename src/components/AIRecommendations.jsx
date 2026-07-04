@@ -1,6 +1,7 @@
 // src/components/AIRecommendations.jsx
-// "Recommended for you" - AI-matched projects and Foundations courses based on
-// the member's profile (background, roles, skills, badges, interests).
+// "Your best matches" - the single best AI-matched project and Foundations
+// course for this member, based on their profile (background, roles, skills,
+// badges, interests, industry interests).
 // Individuals only; fails quietly (renders nothing) if the AI is unavailable.
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -43,12 +44,15 @@ const AIRecommendations = ({ currentUser }) => {
   if (failed && !recs) return null;
   if (!loading && (!recs || (recs.projects.length === 0 && recs.courses.length === 0))) return null;
 
+  const project = recs?.projects?.[0] || null;
+  const course = recs?.courses?.[0] || null;
+
   return (
     <div className="bg-white border border-gray-200 rounded-2xl p-5 sm:p-6 mb-6">
       <div className="flex items-center justify-between gap-3 mb-1">
         <h2 className="flex items-center gap-2 text-lg font-bold text-gray-900">
           <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-orange-400 text-white flex items-center justify-center"><Spark /></span>
-          Recommended for you
+          Your best matches
         </h2>
         <button
           onClick={() => load(true)}
@@ -59,75 +63,66 @@ const AIRecommendations = ({ currentUser }) => {
           {refreshing ? 'Refreshing…' : 'Refresh'}
         </button>
       </div>
-      <p className="text-gray-400 text-xs mb-4">Matched to your background, skills, badges, and interests by AI.</p>
+      <p className="text-gray-400 text-xs mb-4">
+        Picked for you by AI from your skills, badges, and interests.{' '}
+        <Link to="/settings" className="text-blue-500 hover:text-blue-600 hover:underline">Keep your profile fresh</Link> for sharper matches.
+      </p>
 
       {loading ? (
-        <div className="space-y-2.5">
-          {[0, 1, 2].map(i => (
-            <div key={i} className="h-16 bg-gray-100 rounded-xl animate-pulse" />
-          ))}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          <div className="h-32 bg-gray-100 rounded-xl animate-pulse" />
+          <div className="h-32 bg-gray-100 rounded-xl animate-pulse" />
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          {/* Projects */}
-          {recs.projects.length > 0 && (
-            <div>
-              <p className="text-gray-500 text-xs font-bold uppercase tracking-wide mb-2">Projects to join</p>
-              <div className="flex flex-col gap-2.5">
-                {recs.projects.map(p => (
-                  <div key={p.id} className="border border-gray-200 rounded-xl p-3.5 hover:border-blue-300 transition-all">
-                    <div className="flex items-start justify-between gap-2">
-                      <Link to={`/projects/${p.id}`} className="text-sm font-bold text-gray-900 hover:text-blue-600 leading-snug">
-                        {p.title}
-                      </Link>
-                      <span className="flex-shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100">
-                        {p.match}% match
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap gap-1.5 mt-1.5">
-                      {p.paid && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Paid</span>}
-                      {p.industry && <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">{p.industry}</span>}
-                    </div>
-                    <p className="text-gray-600 text-xs mt-2 leading-relaxed">
-                      <Spark className="w-3 h-3 inline text-orange-400 mr-1 -mt-0.5" />{p.reason}
-                    </p>
-                    <button
-                      onClick={() => navigate(`/projects/${p.id}`)}
-                      className="mt-2.5 text-blue-600 hover:text-blue-700 text-xs font-semibold"
-                    >
-                      View & apply →
-                    </button>
-                  </div>
-                ))}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          {/* Best project */}
+          {project && (
+            <div className="border border-gray-200 rounded-xl p-4 hover:border-blue-300 transition-all flex flex-col">
+              <p className="text-gray-400 text-[10px] font-bold uppercase tracking-wide mb-1.5">Best project for you</p>
+              <div className="flex items-start justify-between gap-2">
+                <Link to={`/projects/${project.id}`} className="text-sm font-bold text-gray-900 hover:text-blue-600 leading-snug">
+                  {project.title}
+                </Link>
+                <span className="flex-shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100">
+                  {project.match}% match
+                </span>
               </div>
+              <div className="flex flex-wrap gap-1.5 mt-1.5">
+                {project.needsLead && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-50 text-orange-700 border border-orange-200">Needs a lead</span>}
+                {project.paid && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Paid</span>}
+                {project.industry && <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">{project.industry}</span>}
+              </div>
+              <p className="text-gray-600 text-xs mt-2 leading-relaxed flex-1">
+                <Spark className="w-3 h-3 inline text-orange-400 mr-1 -mt-0.5" />{project.reason}
+              </p>
+              <button
+                onClick={() => navigate(`/projects/${project.id}`)}
+                className="mt-3 self-start bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all"
+              >
+                {project.needsLead ? 'View & apply to lead →' : 'View & apply →'}
+              </button>
             </div>
           )}
 
-          {/* Courses */}
-          {recs.courses.length > 0 && (
-            <div>
-              <p className="text-gray-500 text-xs font-bold uppercase tracking-wide mb-2">Foundations courses for you</p>
-              <div className="flex flex-col gap-2.5">
-                {recs.courses.map(c => (
-                  <div key={`${c.track}/${c.slug}`} className="border border-gray-200 rounded-xl p-3.5 hover:border-orange-300 transition-all">
-                    <Link to="/foundations" className="text-sm font-bold text-gray-900 hover:text-blue-600 leading-snug">
-                      {c.title}
-                    </Link>
-                    <div className="mt-1.5">
-                      <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-orange-50 text-orange-700 border border-orange-100">{c.trackLabel}</span>
-                    </div>
-                    <p className="text-gray-600 text-xs mt-2 leading-relaxed">
-                      <Spark className="w-3 h-3 inline text-orange-400 mr-1 -mt-0.5" />{c.reason}
-                    </p>
-                    <button
-                      onClick={() => navigate('/foundations')}
-                      className="mt-2.5 text-blue-600 hover:text-blue-700 text-xs font-semibold"
-                    >
-                      Start learning →
-                    </button>
-                  </div>
-                ))}
+          {/* Best course */}
+          {course && (
+            <div className="border border-gray-200 rounded-xl p-4 hover:border-orange-300 transition-all flex flex-col">
+              <p className="text-gray-400 text-[10px] font-bold uppercase tracking-wide mb-1.5">Best course for you</p>
+              <Link to="/foundations" className="text-sm font-bold text-gray-900 hover:text-blue-600 leading-snug">
+                {course.title}
+              </Link>
+              <div className="mt-1.5">
+                <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-orange-50 text-orange-700 border border-orange-100">{course.trackLabel}</span>
               </div>
+              <p className="text-gray-600 text-xs mt-2 leading-relaxed flex-1">
+                <Spark className="w-3 h-3 inline text-orange-400 mr-1 -mt-0.5" />{course.reason}
+              </p>
+              <button
+                onClick={() => navigate('/foundations')}
+                className="mt-3 self-start bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all"
+              >
+                Start learning →
+              </button>
             </div>
           )}
         </div>

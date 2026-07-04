@@ -126,3 +126,31 @@
   Templates → pencil icon → "Customize action URL" →
   https://ascivan.com/auth/action - this also reroutes any OTHER default
   emails (e.g. email-change notices) to the branded page.
+
+## 14. Recommendations v2: best matches (bug fix + refinements)
+- BUG FIX: the candidate query only fetched status=='active' projects, but
+  most of the pool sits in 'lead_recruitment' (needs a lead) - so the AI often
+  had zero projects to pick from and only recommended courses. The query now
+  matches the Projects page pool: ['active', 'lead_recruitment'].
+- The card is now "Your best matches": exactly ONE best project + ONE best
+  course, side by side. Needs-a-lead projects get an orange chip and an
+  "apply to lead" CTA; smaller AI response budget (400 tokens).
+- Added a brief profile nudge under the heading: "Keep your profile fresh for
+  sharper matches" linking to Settings.
+- Cache fingerprint versioned (v:2) so members' old 4-item cached
+  recommendations regenerate automatically on next visit.
+- Foundations page: one-line intro added under the heading: "Practical,
+  beginner-friendly courses that take you from zero to your first real
+  project."
+
+## 15. Foundations: AI course spotlight (no shuffling)
+- Decision: the track library stays in its normal, predictable order (courses
+  are sequential learning paths - reshuffling them by AI between visits would
+  be disorienting and add API cost/latency).
+- Instead, a "Recommended for you" spotlight now appears at the top of the
+  Foundations library (individuals only) showing the member's AI-picked best
+  course with its personalized reason and an "Open course" button that jumps
+  straight into it (switching track if needed).
+- Zero extra cost: it reads the cached pick straight off the user document the
+  page already loads. Hidden if there's no cached pick, if the course was
+  completed, or while reading a course.

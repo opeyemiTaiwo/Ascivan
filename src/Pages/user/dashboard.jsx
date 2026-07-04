@@ -7,6 +7,7 @@ import { doc, getDoc, collection, query, where, getDocs, orderBy, limit } from '
 import { db } from '../../firebase/config';
 import { PremiumBadge } from '../../components/PremiumBadge';
 import FindFirstProject from '../../components/FindFirstProject';
+import AIRecommendations from '../../components/AIRecommendations';
 import DiscoverTrack from '../../components/DiscoverTrack';
 import TierBadge from '../../components/TierBadge';
 import { computeMemberEarnings, computeCompanyDisbursements, formatMoney } from '../../utils/paidProjects';
@@ -164,6 +165,11 @@ const DashboardOverview = () => {
         {/* Cold-start: show "find your first project" only if the user has joined none yet. */}
         {!loading && ongoingProjects.length === 0 && completedProjects.length === 0 && !profileData?.isCompany && (
           <FindFirstProject profile={profileData} />
+        )}
+
+        {/* AI-matched projects + Foundations courses for this member (individuals only). */}
+        {!loading && !profileData?.isCompany && (
+          <AIRecommendations currentUser={currentUser} />
         )}
 
         {/* Help users who haven't settled on a track (new to tech or unsure) discover one. */}

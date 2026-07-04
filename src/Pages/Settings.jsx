@@ -7,6 +7,7 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { updateProfile } from 'firebase/auth';
 import { db, auth } from '../firebase/config';
 import { uploadImageToBlob, validateImageFile } from '../utils/blobStorage';
+import { INDUSTRY_TRACKS } from '../utils/industryTracks';
 import { PAYMENT_CONFIG } from '../config/payment';
 import { deleteUserAccount } from '../utils/deleteUserContent';
 import { enablePushForCurrentUser } from '../utils/pushNotifications';
@@ -15,6 +16,21 @@ import { toast } from 'react-toastify';
 const skillTrackOpts = [
   { id: 'TechDev', label: 'Development' }, { id: 'TechQA', label: 'Quality Assurance' }, { id: 'TechPO', label: 'Product / Project Owner' },
   { id: 'TechArchs', label: 'Low/No-Code Developer' }, { id: 'TechLeads', label: 'Non-Technical Roles' }, { id: 'TechGuard', label: 'Cybersecurity' },
+];
+
+// Same options as onboarding step 4 ("What are you looking for?"), now editable
+// here too. These feed profile completion and the AI recommendations.
+const individualInterestOpts = [
+  { id: 'projects', label: 'Projects', desc: 'Join real-world collaborative projects' },
+  { id: 'jobs', label: 'Jobs', desc: 'Full-time, freelance, and contract roles' },
+  { id: 'community', label: 'Community', desc: 'Connect with tech professionals' },
+  { id: 'badges', label: 'Badges', desc: 'Earn verified TechTalent credentials' },
+];
+const companyInterestOpts = [
+  { id: 'jobs', label: 'Post Jobs', desc: 'Post opportunities for tech talent' },
+  { id: 'projects', label: 'Post Projects', desc: 'Find collaborators for projects' },
+  { id: 'community', label: 'Community', desc: 'Engage with the tech community' },
+  { id: 'directory', label: 'Talent Board', desc: 'Discover and recruit verified talent' },
 ];
 
 // Browser/OS detection so the "notifications blocked" help matches the device.
@@ -36,6 +52,7 @@ const Settings = () => {
     displayName: '', specialization: '', experienceLevel: '', primarySkillTrack: '',
     highestEducation: '', skills: '',
     country: '', city: '', state: '', portfolioUrl: '', linkedinUrl: '', githubUrl: '', emailPublic: false,
+    interests: [],
   });
 
   // Delete account state
@@ -93,6 +110,8 @@ const Settings = () => {
             linkedinUrl: data.linkedinUrl || '',
             githubUrl: data.githubUrl || '',
             emailPublic: data.emailPublic || false,
+            interests: Array.isArray(data.interests) ? data.interests : [],
+            industryInterests: Array.isArray(data.industryInterests) ? data.industryInterests : [],
           });
         }
       } catch (e) {
@@ -113,10 +132,14 @@ const Settings = () => {
     }
     setSaving(true);
     try {
-      const hasInterests = Array.isArray(profileData?.interests) && profileData.interests.length > 0;
+      // Interests now come from THIS form (previously read from the stale profile,
+      // which locked out members who skipped the interests step in onboarding).
+      const hasInterests = Array.isArray(form.interests) && form.interests.length > 0;
       const requiredCommon = !!form.displayName.trim() && !!form.country.trim() && hasInterests;
       await updateDoc(doc(db, 'users', currentUser.uid), {
         displayName: form.displayName.trim(),
+        interests: form.interests,
+        industryInterests: form.industryInterests,
         specialization: form.specialization.trim() || null,
         highestEducation: form.highestEducation || null,
         skillsText: form.skills.trim() || null,
@@ -267,6 +290,61 @@ const Settings = () => {
                 <input type="text" value={form.state} onChange={e => setForm(p => ({ ...p, state: e.target.value }))} className={inputCls} placeholder="e.g., Lagos State" />
               </div>
             </div>
+            <div>
+              <label className={labelCls}>What are you interested in? *</label>
+              <p className="text-xs text-gray-500 mb-2">Select all that apply. This completes your profile and improves your recommendations.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {(profileData?.isCompany ? companyInterestOpts : individualInterestOpts).map(opt => {
+                  const sel = form.interests.includes(opt.id);
+                  return (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onClick={() => setForm(p => ({
+                        ...p,
+                        interests: p.interests.includes(opt.id)
+                          ? p.interests.filter(i => i !== opt.id)
+                          : [...p.interests, opt.id],
+                      }))}
+                      className={`p-3 rounded-xl border-2 text-left transition-all ${
+                        sel ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300'
+                      }`}
+                    >
+                      <span className={`block text-sm font-semibold ${sel ? 'text-blue-700' : 'text-gray-900'}`}>{opt.label}</span>
+                      <span className="block text-xs text-gray-500 mt-0.5">{opt.desc}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            {!profileData?.isCompany && (
+              <div>
+                <label className={labelCls}>Industries you're interested in</label>
+                <p className="text-xs text-gray-500 mb-2">Optional. Used to recommend projects in industries you'll enjoy.</p>
+                <div className="flex flex-wrap gap-2">
+                  {INDUSTRY_TRACKS.map(t => {
+                    const sel = form.industryInterests.includes(t.value);
+                    return (
+                      <button
+                        key={t.value}
+                        type="button"
+                        onClick={() => setForm(p => ({
+                          ...p,
+                          industryInterests: p.industryInterests.includes(t.value)
+                            ? p.industryInterests.filter(i => i !== t.value)
+                            : [...p.industryInterests, t.value],
+                        }))}
+                        className={`px-3 py-1.5 rounded-full border text-xs font-semibold transition-all ${
+                          sel ? 'border-blue-500 bg-blue-600 text-white' : 'border-gray-300 bg-white text-gray-600 hover:border-blue-400'
+                        }`}
+                      >
+                        {t.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
             <div>
               <label className={labelCls}>LinkedIn URL{!profileData?.isCompany ? ' *' : ''}</label>
               <input type="url" value={form.linkedinUrl} onChange={e => setForm(p => ({ ...p, linkedinUrl: e.target.value }))} className={inputCls} placeholder="https://linkedin.com/in/..." />

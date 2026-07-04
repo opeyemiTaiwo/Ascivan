@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { toast } from 'react-toastify';
+import { INDUSTRY_TRACKS } from '../utils/industryTracks';
 
 const BLOCKED_EMAIL_DOMAINS = [
   'gmail.com', 'googlemail.com', 'yahoo.com', 'yahoo.co.uk', 'yahoo.co.in',
@@ -41,6 +42,7 @@ const Onboarding = () => {
     city: '',
     state: '',
     interests: [],
+    industryInterests: [],
     portfolioUrl: '',
     linkedinUrl: '',
     githubUrl: '',
@@ -193,6 +195,7 @@ const Onboarding = () => {
         city: formData.city.trim() || null,
         state: formData.state.trim() || null,
         interests: formData.interests,
+        industryInterests: formData.industryInterests,
         isCompany: isCompany,
         onboardingComplete: true,
         onboardingSkipped: false,
@@ -362,6 +365,35 @@ const Onboarding = () => {
                   </button>
                 );
               })}
+            </div>
+
+            {/* Topical interests: which industries excite them. Optional, powers
+                project matching and AI recommendations. */}
+            <div>
+              <h3 className="text-base font-bold text-gray-900 mb-1">Which industries interest you?</h3>
+              <p className="text-gray-500 text-xs mb-3">Optional. We'll use this to recommend projects you'll actually enjoy.</p>
+              <div className="flex flex-wrap gap-2">
+                {INDUSTRY_TRACKS.map(t => {
+                  const sel = formData.industryInterests.includes(t.value);
+                  return (
+                    <button
+                      key={t.value}
+                      type="button"
+                      onClick={() => setFormData(p => ({
+                        ...p,
+                        industryInterests: p.industryInterests.includes(t.value)
+                          ? p.industryInterests.filter(i => i !== t.value)
+                          : [...p.industryInterests, t.value],
+                      }))}
+                      className={`px-3 py-1.5 rounded-full border text-xs font-semibold transition-all active:scale-95 ${
+                        sel ? 'border-blue-500 bg-blue-600 text-white' : 'border-gray-300 bg-white text-gray-600 hover:border-blue-400'
+                      }`}
+                    >
+                      {t.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
         );

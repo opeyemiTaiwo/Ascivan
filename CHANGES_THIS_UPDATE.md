@@ -61,3 +61,68 @@
   and synced to the auth profile so it shows everywhere.
 - Every member (including Gmail sign-ins) already gets the "Edit Profile"
   button on their own profile page, which opens this Settings tab.
+
+## 10. AI recommendations (projects + Foundations courses)
+- New `src/utils/aiRecommendations.js`: gathers the member's profile (academic
+  background, primary track, experience level, skills, interests), badges
+  earned (`member_badges`), and roles they've held/applied for; gathers up to
+  20 open active projects (excluding their own and ones they already applied
+  to) and the Foundations course catalog (excluding courses they've finished);
+  sends ONE compact prompt to Claude (`claude-haiku-4-5-20251001`) through the
+  existing `/api/claude-proxy` (the API key stays server-side) and asks for
+  strict JSON: up to 4 projects (with a match % and a one-line personalized
+  reason) and up to 4 courses (with a reason).
+- Every id the model returns is validated against the real candidate lists -
+  anything invented is dropped - and hydrated with real titles.
+- Results are cached on the user document (`users/{uid}.aiRecs`) for 24 hours
+  or until the profile / candidate pool changes, so a dashboard visit doesn't
+  cost an API call. A Refresh button forces regeneration.
+- New `src/components/AIRecommendations.jsx`: "Recommended for you" card on the
+  member dashboard (individuals only) with two columns - Projects to join
+  (title, Paid/industry chips, match %, reason, View & apply) and Foundations
+  courses (title, track chip, reason, Start learning). Skeleton loading state;
+  fails quietly (renders nothing) if the AI is unavailable, so the dashboard
+  never breaks.
+
+## 11. Interests: editable in Settings (bug fix + AI signal)
+- Interests were only collected in onboarding step 4 ("What are you looking
+  for?"), that step is optional, and the promised "editable later" editor never
+  existed. Worse: Settings required interests for profileComplete but gave no
+  way to set them - members who skipped the step could never complete their
+  profile.
+- Settings → Edit Profile now has an "What are you interested in?" picker
+  (same options as onboarding, individual + company variants). Saved to
+  users/{uid}.interests, and profileComplete now uses the edited form value.
+- These interests also feed the AI recommendations prompt; when empty, the AI
+  falls back to education, track, level, skills, badges, and roles held.
+
+## 12. Industry interests (topical signal for recommendations)
+- New shared list `src/utils/industryTracks.js` - the exact same 21 industries
+  projects are tagged with, so member interests line up 1:1 with project tags.
+- Onboarding step 4 now also asks "Which industries interest you?" (optional
+  chip multi-select, individuals).
+- Settings → Edit Profile has the same "Industries you're interested in"
+  picker (individuals), saved to users/{uid}.industryInterests.
+- The AI recommendation prompt now includes their industry interests (as
+  human-readable labels) and is instructed to strongly prefer projects in
+  those industries. Changing industries invalidates the 24h cache
+  automatically, so fresh picks generate on the next dashboard visit.
+
+## 13. Email verification: branded page with a Sign in button
+- Problem: verification emails linked to Firebase's default hosted page
+  (ascivan-5b4f4.firebaseapp.com) which says "you can now sign in" with NO
+  link - and exposes the vendor domain.
+- New `api/auth/send-verification.js` (mirrors the existing send-reset.js):
+  generates the verification code with the Admin SDK and emails a branded
+  Ascivan message whose button links to ascivan.com/auth/action - the app's
+  existing branded page that confirms the email and shows a "Sign in now"
+  button.
+- AuthContext now sends signup + resend verification through this endpoint
+  (with the default sender kept only as a fallback if the endpoint fails).
+- Uses the SAME env vars already configured for send-reset: EMAIL_USER,
+  EMAIL_PASSWORD, FIREBASE_PROJECT_ID, FIREBASE_PRIVATE_KEY,
+  FIREBASE_CLIENT_EMAIL - nothing new to set up.
+- RECOMMENDED (console, optional): Firebase Console → Authentication →
+  Templates → pencil icon → "Customize action URL" →
+  https://ascivan.com/auth/action - this also reroutes any OTHER default
+  emails (e.g. email-change notices) to the branded page.

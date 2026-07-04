@@ -175,7 +175,19 @@ export const AuthProvider = ({ children }) => {
       try { await updateProfile(user, { displayName }); } catch (_) {}
     }
     await createUserDocIfNew(user, displayName);
-    try { await sendEmailVerification(user); } catch (_) {}
+    // Send OUR branded verification email (links to /auth/action on ascivan.com,
+    // which shows a "Sign in now" button) instead of the default sender whose
+    // link dead-ends on the plain firebaseapp.com page.
+    try {
+      await fetch('/api/auth/send-verification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: user.email, name: displayName || '' }),
+      });
+    } catch (_) {
+      // Fallback: default sender is better than no email at all.
+      try { await sendEmailVerification(user); } catch (_) {}
+    }
     return result;
   };
 
@@ -213,9 +225,23 @@ export const AuthProvider = ({ children }) => {
     return confirmPasswordReset(auth, oobCode, newPassword);
   };
 
-  // Re-send the verification email to the signed-in user.
+  // Re-send the verification email to the signed-in user (branded flow).
   const resendVerification = async () => {
-    if (auth.currentUser) return sendEmailVerification(auth.currentUser);
+    if (!auth.currentUser) return;
+    try {
+      const res = await fetch('/api/auth/send-verification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: auth.currentUser.email,
+          name: auth.currentUser.displayName || '',
+        }),
+      });
+      if (!res.ok) throw new Error('send failed');
+    } catch (_) {
+      // Fallback to the default sender rather than failing silently.
+      return sendEmailVerification(auth.currentUser);
+    }
   };
 
   // Sign out function

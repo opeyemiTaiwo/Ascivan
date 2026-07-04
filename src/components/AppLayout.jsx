@@ -127,6 +127,12 @@ const AppLayout = ({ children }) => {
   const isActive = (path) => {
     if (path === '/proof-wall') return location.pathname === '/proof-wall';
     if (path === '/dashboard') return location.pathname === '/dashboard';
+    if (path === '/projects') {
+      // "All Projects" covers the listing and project detail pages, but NOT its
+      // sibling sub-menu pages (My Projects) - otherwise both highlight at once.
+      const p = location.pathname;
+      return p === '/projects' || (p.startsWith('/projects/') && !p.startsWith('/projects/owner-dashboard') && !p.startsWith('/projects/my-projects'));
+    }
     return location.pathname === path || location.pathname.startsWith(path + '/');
   };
 
@@ -172,7 +178,7 @@ const AppLayout = ({ children }) => {
                     <svg className={`w-4 h-4 transition-transform ${projectsOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                   </button>
                   <div className={`overflow-hidden transition-all duration-200 ${projectsOpen ? 'max-h-60 mt-1' : 'max-h-0'}`}>
-                    <div className="ml-5 pl-3 border-l-2 border-gray-100 space-y-0.5">
+                    <div className="ml-5 pl-3 border-l-2 border-gray-100 space-y-1.5 py-0.5">
                       {item.children.map(child => (
                         <Link
                           key={child.path}

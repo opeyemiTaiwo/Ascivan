@@ -182,3 +182,28 @@
   (badge tracks, then primary track) are listed first, the rest follow. The
   company badges guide stays company-only; company and admin/editor behavior
   unchanged. Progress is still tracked per track as before.
+
+## 19. Profile picture viewer
+- On any member's profile page, the profile picture is now clickable: tapping
+  it opens a full-size lightbox (dark overlay, close button, tap-anywhere to
+  dismiss). Avatars elsewhere in the app (Proof Wall, Discussion, directory)
+  keep their existing behavior of navigating to the person's profile - from
+  which the picture can then be viewed full size.
+
+## 20. Sidebar: fixed double-highlight + spacing
+- Clicking "My Projects" no longer also highlights "All Projects" (the active
+  check matched any /projects/* path; it now excludes the sibling sub-pages,
+  while still highlighting All Projects on the listing and project detail
+  pages).
+- Slightly increased spacing between the Projects sub-menu items for clearer
+  separation.
+
+## 21. "Find your first project": one best match
+- The dashboard cold-start section now shows only the single best-matched
+  project instead of three (the "Browse all projects" link covers the rest).
+  Intro copy adjusted to match ("Here's a project that fits your profile").
+
+## 22. Proof Wall All Activity strips: two items
+- The "Open projects" strip (individuals) and "Top talent" strip (companies)
+  on the All Activity tab now show two items instead of three - the View all
+  link covers the rest.

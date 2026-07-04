@@ -558,7 +558,7 @@ const ProofWall = () => {
                 <button onClick={() => setFilter('open')} className="text-blue-600 text-xs font-semibold hover:underline">View all →</button>
               </div>
               <div className="flex flex-col gap-2">
-                {openProjects.slice(0, 3).map(p => (
+                {openProjects.slice(0, 2).map(p => (
                   <button key={p.id} onClick={() => navigate(`/projects/${p.id}`)} className="flex items-center justify-between gap-3 bg-white border border-gray-200 rounded-lg px-3 py-2 text-left hover:border-blue-300 transition-all">
                     <span className="text-sm font-semibold text-gray-900 truncate">{p.projectTitle || p.title || 'Untitled project'}</span>
                     <span className="flex-shrink-0 text-[10px] font-semibold px-2 py-0.5 bg-green-50 text-green-700 rounded-full border border-green-200">Accepting collaborators</span>
@@ -574,7 +574,7 @@ const ProofWall = () => {
                 <button onClick={() => setFilter('talent')} className="text-blue-600 text-xs font-semibold hover:underline">View all →</button>
               </div>
               <div className="flex flex-col gap-2">
-                {talent.slice(0, 3).map(m => (
+                {talent.slice(0, 2).map(m => (
                   <div key={m.uid} className="flex items-center gap-3 bg-white border border-gray-200 rounded-lg px-3 py-2">
                     {m.photoURL ? (
                       <img src={m.photoURL} alt={m.name} className="w-8 h-8 rounded-full object-cover border border-gray-200 flex-shrink-0" />

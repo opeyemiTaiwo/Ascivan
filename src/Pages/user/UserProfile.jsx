@@ -59,6 +59,7 @@ const UserProfile = () => {
   const [viewerProfile, setViewerProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [photoLightbox, setPhotoLightbox] = useState(false); // full-size profile picture viewer
   const [completedCount, setCompletedCount] = useState(0);
 
   useEffect(() => {
@@ -211,7 +212,14 @@ const UserProfile = () => {
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 -mt-10 mb-4">
               <div>
                 {profile.photoURL ? (
-                  <img src={profile.photoURL} alt={displayName} className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-sm" />
+                  <button
+                    type="button"
+                    onClick={() => setPhotoLightbox(true)}
+                    className="rounded-full cursor-zoom-in hover:ring-2 hover:ring-blue-300 transition-all"
+                    aria-label={`View ${displayName}'s profile picture`}
+                  >
+                    <img src={profile.photoURL} alt={displayName} className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-sm" />
+                  </button>
                 ) : (
                   <div className="w-20 h-20 rounded-full bg-blue-600 flex items-center justify-center border-4 border-white shadow-sm">
                     <span className="text-2xl text-white font-bold">{initials}</span>
@@ -426,6 +434,21 @@ const UserProfile = () => {
         </div>
 
       </div>
+
+      {/* Full-size profile picture viewer - tap the avatar to open, tap anywhere to close */}
+      {photoLightbox && profile.photoURL && (
+        <div onClick={() => setPhotoLightbox(false)} className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 cursor-zoom-out">
+          <img
+            src={profile.photoURL}
+            alt={displayName}
+            className="max-w-full max-h-full sm:max-w-md sm:max-h-[80vh] rounded-2xl object-contain shadow-2xl"
+            onClick={e => e.stopPropagation()}
+          />
+          <button onClick={() => setPhotoLightbox(false)} className="absolute top-4 right-4 text-white/80 hover:text-white bg-black/40 rounded-full w-10 h-10 flex items-center justify-center" aria-label="Close">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+      )}
     </div>
   );
 };

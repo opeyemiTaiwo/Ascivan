@@ -60,7 +60,7 @@ const Foundations = () => {
 
         // Which tracks does this learner see? Every track they hold a badge in, plus
         // their profile track, kept only where courses actually exist. Admins review
-        // every track with courses; companies get the badges-and-ratings guide.
+        // every track with courses; companies get the badges guide.
         const ordered = [];
         badgeTrackIds(data).forEach((t) => { if (t && !ordered.includes(t)) ordered.push(t); });
         if (data.primarySkillTrack && !ordered.includes(data.primarySkillTrack)) ordered.push(data.primarySkillTrack);
@@ -120,7 +120,7 @@ const Foundations = () => {
           userId: currentUser.uid,
           type: 'foundations_complete',
           message: isCompany
-            ? 'You finished the Badges & Ratings guide. You can now read member profiles with confidence.'
+            ? 'You finished the Badges guide. You can now read member profiles with confidence.'
             : 'You completed your first Foundations course. You are ready to join your first project.',
           isRead: false,
           createdAt: serverTimestamp(),
@@ -432,15 +432,7 @@ const CourseReader = ({ course, done, showContents, setShowContents, onBack, onC
     let cancelled = false;
     import('mermaid').then(({ default: mermaid }) => {
       if (cancelled) return;
-      mermaid.initialize({
-        startOnLoad: false,
-        theme: 'neutral',
-        securityLevel: 'strict',
-        // Fixed font stack (not 'inherit') so a label measures to the same size
-        // whether mermaid renders it off-screen or inside the course reader.
-        fontFamily: 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-        flowchart: { htmlLabels: true, useMaxWidth: true, padding: 12 },
-      });
+      mermaid.initialize({ startOnLoad: false, theme: 'neutral', securityLevel: 'strict', fontFamily: 'inherit' });
       nodes.forEach((node, i) => {
         const src = node.textContent || '';
         node.removeAttribute('data-mermaid');
@@ -528,9 +520,6 @@ const COURSE_PROSE_CSS = `
 .course-prose li { margin:.3rem 0; }
 .course-prose ul { list-style:disc; }
 .course-prose ol { list-style:decimal; }
-/* "What You Learned" recap items: the check is the marker, so drop the disc and
-   pull them flush left for a clean checklist with comfortable spacing. */
-.course-prose li.wyl-item { list-style:none; margin-left:-1.4rem; padding-left:.15rem; margin-top:.4rem; margin-bottom:.4rem; }
 .course-prose strong { color:#111827; font-weight:700; }
 .course-prose a { color:#2563eb; text-decoration:underline; }
 .course-prose hr { border:0; border-top:1px solid #e5e7eb; margin:2rem 0; }
@@ -541,23 +530,8 @@ const COURSE_PROSE_CSS = `
 .course-prose table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:.9rem; }
 .course-prose th, .course-prose td { border:1px solid #e5e7eb; padding:.5rem .7rem; text-align:left; }
 .course-prose th { background:#f8fafc; font-weight:700; color:#111827; }
-.course-prose .course-mermaid { margin:1.75rem 0; padding:1.5rem 1.25rem; background:#f8fafc; border:1px solid #eef2f7; border-radius:.9rem; overflow-x:auto; text-align:center; }
+.course-prose .course-mermaid { margin:1.25rem 0; padding:1rem; background:#f8fafc; border:1px solid #eef2f7; border-radius:.9rem; overflow-x:auto; text-align:center; }
 .course-prose .course-mermaid svg { max-width:100%; height:auto; }
-/* Keep flowchart node text fully readable. Mermaid sizes each label's box by
-   measuring it off-screen (under <body>, line-height 1.5), but the diagram then
-   displays inside .course-prose (line-height 1.75), so multi-line labels grow
-   taller than their box and the last line gets clipped. Pinning the label
-   line-height to a single value makes the measured and displayed heights agree. */
-.course-prose .course-mermaid foreignObject div,
-.course-prose .course-mermaid .nodeLabel,
-.course-prose .course-mermaid .edgeLabel,
-.course-prose .course-mermaid foreignObject span,
-.course-prose .course-mermaid foreignObject p { line-height:1.4 !important; margin:0 !important; }
-/* Unscoped twin of the rule above so it also applies during mermaid's off-screen
-   measurement pass, which renders under <body> rather than inside .course-prose. */
-foreignObject > div { line-height:1.4 !important; }
-/* Belt-and-suspenders: never clip label text even if a box is a hair too short. */
-.course-prose .course-mermaid svg foreignObject { overflow:visible; }
 `;
 
 export default Foundations;

@@ -423,7 +423,7 @@ const MembershipTab = ({ profileData, navigate }) => {
           <FeatureItem label="Unlimited collaborative projects" detail="Create or join as many real product-build projects as you want, in any tech field, work with real teams and earn verified badges. No caps, no fees, ever." />
           <FeatureItem label="Access to Foundation courses" detail="Free on-platform Foundations courses in every track - learn the basics with real examples and hands-on exercises, at no cost." />
           <FeatureItem label="All 6 TechTalent Badge tracks" detail="Earn badges across all tracks: TechDev, TechQA, TechPO, TechLeads, TechArchs, and TechGuard." />
-          <FeatureItem label="Community, messaging, and workspace" detail="Share work on the Proof Wall, message other members, and collaborate in project workspaces. Messaging is unlimited for talent." />
+          <FeatureItem label="Community, messaging, and workspace" detail="Share work on the Proof Wall, message other members, and collaborate in project workspaces. Messaging is limited within talent only - free accounts can't message company accounts." />
           <FeatureItem label="Certificates on project completion" detail="Receive a certificate for every project you complete, documenting your role and contributions." />
         </ul>
         {(profileData?.membershipPlan !== 'Premium' && profileData?.role !== 'admin') && (
@@ -445,7 +445,7 @@ const MembershipTab = ({ profileData, navigate }) => {
         <ul className="space-y-1 mb-4">
           <FeatureItem label="Everything in Basic" />
           <FeatureItem color="orange" label="Access to the Talent Board" detail="Browse and search the full directory of verified tech professionals. Unlimited talent messages - contact unlimited new talents, with no monthly cap." />
-          <FeatureItem color="orange" label="Priority Talent Board ranking" detail="Premium members appear first when recruiters search the Talent Board, so your work gets seen before others." />
+          <FeatureItem color="orange" label="Priority Talent Board ranking" detail="Premium members appear first when hiring companies search the Talent Board, so your work gets seen before others." />
           <FeatureItem color="orange" label="Verified Company Badge" detail="A verified badge shown on your company profile and listings." />
           <FeatureItem color="orange" label="Post paid projects" detail="Post paid projects and hire real teams: you set the pay per person for every role, it's visible to applicants before they join, and the project closes only when the work is verified done and every member confirms they were paid." />
           <FeatureItem color="orange" label="Priority support" detail="Get faster responses and dedicated assistance from the Ascivan team." />
@@ -499,8 +499,8 @@ const MembershipTab = ({ profileData, navigate }) => {
           <div className="text-gray-700">Foundation courses</div><div className="text-center text-gray-900">Free</div><div className="text-center text-gray-900">Free</div>
           <div className="text-gray-700">TechTalent Badges</div><div className="text-center text-gray-900">All 6</div><div className="text-center text-gray-900">All 6</div>
           <div className="text-gray-700">Premium Badge</div><div className="text-center text-gray-400">No</div><div className="text-center text-orange-600 font-semibold">Yes</div>
-          <div className="text-gray-700">Talent Board access</div><div className="text-center text-gray-400">Listed only</div><div className="text-center text-orange-600 font-semibold">Full + Priority</div>
-          <div className="text-gray-700">Messaging (talent)</div><div className="text-center text-gray-900">Unlimited</div><div className="text-center text-gray-900">Unlimited</div>
+          <div className="text-gray-700">Talent Board access</div><div className="text-center text-gray-400">No</div><div className="text-center text-orange-600 font-semibold">Full + Priority</div>
+          <div className="text-gray-700">Messaging</div><div className="text-center text-gray-400">Limited</div><div className="text-center text-orange-600 font-semibold">Unlimited</div>
           <div className="text-gray-700">Contact new talents</div><div className="text-center text-gray-400">No</div><div className="text-center text-orange-600 font-semibold">Unlimited</div>
           <div className="text-gray-700">Paid projects</div><div className="text-center text-gray-400">Join only</div><div className="text-center text-orange-600 font-semibold">Post unlimited</div>
           <div className="text-gray-700">Priority support</div><div className="text-center text-gray-400">No</div><div className="text-center text-orange-600 font-semibold">Yes</div>

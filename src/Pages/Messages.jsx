@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getOutreachStatus, recordOutreach, FREE_RECRUITER_OUTREACH_LIMIT } from '../utils/recruiterOutreach';
+import { isPremium } from '../components/PremiumBadge';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
 import {
@@ -65,7 +65,6 @@ const Messages = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const [followedUsers, setFollowedUsers] = useState([]);
   const [conversations, setConversations] = useState([]);
   const [activeConvId, setActiveConvId]   = useState(null);
   const [activeUser, setActiveUser]       = useState(null);
@@ -73,8 +72,6 @@ const Messages = () => {
   const [newMessage, setNewMessage]       = useState('');
   const [sending, setSending]             = useState(false);
   const [loading, setLoading]             = useState(true);
-  const [showNewChat, setShowNewChat]     = useState(false);
-  const [newChatSearch, setNewChatSearch] = useState('');
   const [unreadCounts, setUnreadCounts]   = useState({});
   const [mobileView, setMobileView]       = useState('list'); // 'list' | 'chat'
   const [myData, setMyData]               = useState(null);
@@ -86,21 +83,16 @@ const Messages = () => {
     if (!currentUser) navigate('/login');
   }, [currentUser, navigate]);
 
-  // Load users you can message - anyone on the platform (follow is no longer required).
+  // Load own profile (needed for the account-type messaging rules). The full
+  // member list is no longer fetched - conversations start from profiles only.
   useEffect(() => {
     if (!currentUser) return;
     (async () => {
       try {
         const meSnap = await getDoc(doc(db, 'users', currentUser.uid));
         if (meSnap.exists()) setMyData({ uid: currentUser.uid, ...meSnap.data() });
-
-        const snap = await getDocs(query(collection(db, 'users'), limit(500)));
-        const profiles = snap.docs
-          .map(d => ({ ...d.data(), uid: d.id }))
-          .filter(u => u.uid !== currentUser.uid);
-        setFollowedUsers(profiles);
       } catch (e) {
-        console.error('Error loading users:', e);
+        console.error('Error loading profile:', e);
       } finally {
         setLoading(false);
       }
@@ -192,18 +184,23 @@ const Messages = () => {
       const otherUser = otherSnap.exists() ? { uid: targetUid, ...otherSnap.data() } : { uid: targetUid };
 
       if (!convSnap.exists()) {
-        // NEW outreach. If a free recruiter is contacting an individual (talent),
-        // enforce the monthly cap. Talent and Premium recruiters are never blocked.
-        const targetIsTalent = otherUser.isCompany !== true;
-        if (myData && targetIsTalent) {
-          const status = await getOutreachStatus(myData, currentUser.uid);
-          if (status.limited) {
-            toast.error(
-              `You've reached your limit of ${FREE_RECRUITER_OUTREACH_LIMIT} new contacts this month. Upgrade to Premium for unlimited recruiter outreach.`
-            );
-            navigate('/settings?tab=membership');
-            return;
-          }
+        // NEW conversation. Conversations start only from a member's profile,
+        // and account-type rules apply here (existing conversations are never
+        // limited - replies are always unlimited):
+        //  - FREE COMPANY accounts can't start conversations at all
+        //    (contacting talent is a Premium feature).
+        //  - FREE INDIVIDUAL accounts can't message COMPANY accounts.
+        //  - Premium accounts (and admins) are unlimited.
+        const viewerIsPremium = isPremium(myData);
+        if (!viewerIsPremium && myData?.isCompany) {
+          toast.error('Contacting talent is a Premium feature for company accounts. Upgrade to Premium to start conversations.');
+          navigate('/settings?tab=membership');
+          return;
+        }
+        if (!viewerIsPremium && !myData?.isCompany && otherUser.isCompany === true) {
+          toast.error("Free accounts can't message company accounts. Upgrade to Premium to contact companies.");
+          navigate('/settings?tab=membership');
+          return;
         }
 
         await setDoc(convRef, {
@@ -213,16 +210,10 @@ const Messages = () => {
           createdAt:     serverTimestamp(),
           unreadBy:      { [currentUser.uid]: 0, [targetUid]: 0 },
         });
-
-        // Record the outreach (no-op unless free recruiter → talent)
-        if (otherUser.isCompany !== true) {
-          await recordOutreach(myData, currentUser.uid);
-        }
       }
 
       setActiveConvId(convId);
       setActiveUser(otherUser);
-      setShowNewChat(false);
       setMobileView('chat');
       setTimeout(() => inputRef.current?.focus(), 100);
     } catch (err) {
@@ -302,63 +293,15 @@ const Messages = () => {
               ${mobileView === 'list' ? 'flex' : 'hidden md:flex'}
             `}>
 
-              {/* Sidebar header */}
-              <div className="px-4 py-3.5 border-b border-gray-200 flex items-center justify-between flex-shrink-0">
-                <div>
-                  <h1 className="text-base sm:text-lg font-bold text-gray-900">Messages</h1>
-                  {totalUnread > 0 && (
-                    <p className="text-xs text-blue-600 font-medium mt-0.5">{totalUnread} unread</p>
-                  )}
-                </div>
-                <button
-                  onClick={() => setShowNewChat(v => !v)}
-                  className="w-9 h-9 rounded-lg bg-blue-600 hover:bg-blue-700 active:bg-orange-700 text-gray-900 transition-colors flex items-center justify-center"
-                  aria-label="New conversation"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                </button>
+              {/* Sidebar header. Conversations can ONLY be started from a
+                  member's profile (open a profile -> Message), so there is
+                  no member search / new-conversation picker here. */}
+              <div className="px-4 py-3.5 border-b border-gray-200 flex-shrink-0">
+                <h1 className="text-base sm:text-lg font-bold text-gray-900">Messages</h1>
+                {totalUnread > 0 && (
+                  <p className="text-xs text-blue-600 font-medium mt-0.5">{totalUnread} unread</p>
+                )}
               </div>
-
-              {/* New chat picker */}
-              {showNewChat && (
-                <div className="border-b border-gray-200 bg-blue-50 px-3 py-3 flex-shrink-0">
-                  <p className="text-xs font-bold text-orange-700 uppercase tracking-wide mb-2">
-                    New Conversation
-                  </p>
-                  <input
-                    value={newChatSearch}
-                    onChange={e => setNewChatSearch(e.target.value)}
-                    placeholder="Search people by name…"
-                    className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none mb-2"
-                  />
-                  {followedUsers.length === 0 ? (
-                    <p className="text-xs text-gray-500 leading-relaxed">
-                      No other members to message yet.
-                    </p>
-                  ) : (
-                    <div className="space-y-0.5 max-h-48 overflow-y-auto">
-                      {(newChatSearch
-                        ? followedUsers.filter(u => (u.displayName || u.email || '').toLowerCase().includes(newChatSearch.toLowerCase()))
-                        : followedUsers
-                      ).map(user => (
-                        <button
-                          key={user.uid}
-                          onClick={() => openConversation(user.uid)}
-                          className="w-full flex items-center gap-2.5 px-2 py-2 rounded-xl hover:bg-blue-50 active:bg-orange-200 transition-colors text-left min-h-[44px]"
-                        >
-                          <Avatar user={user} size="sm" />
-                          <div className="min-w-0">
-                            <p className="text-sm font-semibold text-gray-900 truncate leading-tight">{getDisplayName(user)}</p>
-                            <p className="text-xs text-gray-500 truncate">{user.email}</p>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
 
               {/* Conversation list */}
               <div className="flex-1 overflow-y-auto overscroll-contain">
@@ -371,7 +314,7 @@ const Messages = () => {
                     </div>
                     <p className="text-sm font-semibold text-gray-700">No conversations yet</p>
                     <p className="text-xs text-gray-500 mt-1">
-                      Tap <span className="font-bold text-blue-600">+</span> to start chatting
+                      Start a conversation from a member's profile - open their profile and tap Message
                     </p>
                   </div>
                 ) : (
@@ -381,8 +324,7 @@ const Messages = () => {
                       onClick={() => {
                         setActiveConvId(conv.id);
                         setActiveUser(conv.otherUser);
-                        setShowNewChat(false);
-                        setMobileView('chat');
+                                          setMobileView('chat');
                       }}
                       className={`
                         w-full flex items-center gap-3 px-4 py-3.5 border-b border-gray-100
@@ -518,16 +460,8 @@ const Messages = () => {
                   </div>
                   <h2 className="text-lg font-bold text-gray-900 mb-2">Your messages</h2>
                   <p className="text-sm text-gray-500 max-w-xs">
-                    Select a conversation or click <span className="font-bold text-blue-600">+</span> to start a new one.
+                    Select a conversation, or start a new one from a member's profile - open their profile and tap Message.
                   </p>
-                  {followedUsers.length > 0 && (
-                    <button
-                      onClick={() => setShowNewChat(true)}
-                      className="mt-5 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-sm transition-colors"
-                    >
-                      Start a conversation
-                    </button>
-                  )}
                 </div>
               )}
             </div>

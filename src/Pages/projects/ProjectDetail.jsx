@@ -131,6 +131,13 @@ const ProjectDetail = () => {
   const handleApplyToLead = async () => {
     if (!currentUser) { navigate('/login'); return; }
 
+    // Company accounts cannot apply to any project (free or paid) and never
+    // earn badges - they hire teams by posting paid projects instead.
+    if (memberProfile?.isCompany) {
+      toast.error("Company accounts can't apply to projects. Post a paid project to hire a team instead.");
+      return;
+    }
+
     // A complete profile is still required, but there is NO badge gate to lead -
     // leading is itself a skill-building path open to anyone.
     const profileStatus = checkProfileComplete(memberProfile);
@@ -186,6 +193,13 @@ const ProjectDetail = () => {
 
   const handleApply = async () => {
     if (!currentUser) { navigate('/login'); return; }
+
+    // Company accounts cannot apply to any project (free or paid) and never
+    // earn badges - they hire teams by posting paid projects instead.
+    if (memberProfile?.isCompany) {
+      toast.error("Company accounts can't apply to projects. Post a paid project to hire a team instead.");
+      return;
+    }
 
     // Require a complete profile before joining a project
     const profileStatus = checkProfileComplete(memberProfile);
@@ -440,6 +454,8 @@ const ProjectDetail = () => {
                   <button onClick={() => navigate('/login')} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-6 py-2.5 rounded-lg transition-all">
                     Sign in to lead this project
                   </button>
+                ) : memberProfile?.isCompany ? (
+                  <p className="text-gray-500 text-xs">Company accounts can't lead collaborative projects or earn badges. To hire a team, <button onClick={() => navigate('/projects/submit')} className="text-blue-600 underline">post a paid project</button> instead.</p>
                 ) : memberProfile && !checkProfileComplete(memberProfile).complete ? (
                   <div>
                     <p className="text-amber-700 text-xs mb-2">Complete your profile first: {checkProfileComplete(memberProfile).missing.join(', ')}.</p>
@@ -466,7 +482,15 @@ const ProjectDetail = () => {
             {/* Apply Section - only once the lead has opened the project */}
             {project.status === 'active' && !isOwner && currentUser && (
               <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sm:p-8">
-                {memberProfile && !checkProfileComplete(memberProfile).complete ? (
+                {memberProfile?.isCompany ? (
+                  <div className="text-center py-4">
+                    <p className="text-gray-900 font-semibold text-sm mb-1">Company accounts hire teams - they don't join them</p>
+                    <p className="text-gray-500 text-xs mb-3 max-w-md mx-auto">Company accounts can't apply to projects or earn badges. Instead, post a paid project: set the pay per person for every role and hire verified talent for your own team.</p>
+                    <button onClick={() => navigate('/projects/submit')} className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg transition-all">
+                      Post a Paid Project
+                    </button>
+                  </div>
+                ) : memberProfile && !checkProfileComplete(memberProfile).complete ? (
                   <div className="text-center py-4">
                     <p className="text-amber-700 font-semibold text-sm mb-1">Complete your profile to apply</p>
                     <p className="text-gray-500 text-xs mb-3">Please fill in: {checkProfileComplete(memberProfile).missing.join(', ')}. A complete profile is how recruiters and project owners find you.</p>

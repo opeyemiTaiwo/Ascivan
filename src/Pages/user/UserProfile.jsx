@@ -8,7 +8,7 @@ import TierBadge from '../../components/TierBadge';
 import { collection, query, where, limit, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import FollowButton from '../../components/community/FollowButton';
-import { PremiumBadge } from '../../components/PremiumBadge';
+import { PremiumBadge, isPremium } from '../../components/PremiumBadge';
 
 const badgeData = [
   { id: 'techmo', title: 'TechPO', image: '/Images/TechMO.png', label: 'Product / Project Owner' },
@@ -53,13 +53,19 @@ const UserProfile = () => {
   const userParam = userEmail ? decodeURIComponent(userEmail).trim() : '';
 
   const [profile, setProfile] = useState(null);
-  const [teaching, setTeaching] = useState(null);
+  // The VIEWER's own profile - needed for the messaging rules:
+  // free company accounts can't message anyone, and free individual
+  // accounts can't message company accounts.
+  const [viewerProfile, setViewerProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [completedCount, setCompletedCount] = useState(0);
 
   useEffect(() => {
     if (!currentUser) { navigate('/login'); return; }
+    getDoc(doc(db, 'users', currentUser.uid))
+      .then(snap => { if (snap.exists()) setViewerProfile(snap.data()); })
+      .catch(() => {});
   }, [currentUser, navigate]);
 
   useEffect(() => {
@@ -104,10 +110,6 @@ const UserProfile = () => {
 
         if (userData) {
           setProfile(userData);
-          // Community teaching rating is hidden from the UI for now (see SHOW_TEACHING_RATING
-          // below). utils/foundationsContributions.js still has getAuthorTeachingRating if
-          // this needs to come back.
-
           // Fetch completed projects count
           try {
             const completedQ = query(
@@ -225,15 +227,42 @@ const UserProfile = () => {
                 {!isOwnProfile && (
                   <>
                     <FollowButton targetUser={profile} currentUser={currentUser} size="sm" />
-                    <button
-                      onClick={() => navigate(`/messages?to=${profile.uid}`)}
-                      className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-all"
-                    >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                      </svg>
-                      Message
-                    </button>
+                    {(() => {
+                      // Messaging rules (new conversations start ONLY here, on
+                      // profiles): free COMPANY accounts can't message anyone;
+                      // free INDIVIDUAL accounts can't message COMPANY accounts.
+                      // Premium (and admin) accounts are unlimited.
+                      const viewerIsPremium = isPremium(viewerProfile);
+                      const blocked = !viewerIsPremium && (
+                        viewerProfile?.isCompany === true          // free company -> anyone
+                        || profile.isCompany === true              // free individual -> company
+                      );
+                      const blockedReason = viewerProfile?.isCompany === true
+                        ? 'Contacting talent is a Premium feature for company accounts.'
+                        : "Free accounts can't message company accounts.";
+                      return blocked ? (
+                        <button
+                          disabled
+                          title={`${blockedReason} Upgrade to Premium in Settings > Membership.`}
+                          className="flex items-center gap-1.5 px-4 py-2 bg-gray-200 text-gray-400 rounded-lg text-sm font-medium cursor-not-allowed"
+                        >
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                          </svg>
+                          Message
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => navigate(`/messages?to=${profile.uid}`)}
+                          className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-all"
+                        >
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                          </svg>
+                          Message
+                        </button>
+                      );
+                    })()}
                   </>
                 )}
               </div>
@@ -273,12 +302,6 @@ const UserProfile = () => {
                     <p className="text-gray-500 text-xs">Certificates</p>
                   </div>
                 </>
-              )}
-              {false && !profile.isCompany && teaching && (
-                <div className="bg-orange-50 border border-orange-200 rounded-lg px-4 py-3 text-center">
-                  <p className="text-xl font-bold text-orange-600">★ {teaching.avg ? teaching.avg.toFixed(1) : '-'}</p>
-                  <p className="text-gray-500 text-xs">Teaching{teaching.count ? ` (${teaching.count})` : ''}</p>
-                </div>
               )}
               {!profile.isCompany && profile.primarySkillTrack && (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 text-center">

@@ -103,6 +103,69 @@ export const computeMemberEarnings = async (uid, email) => {
 };
 
 // ============================================================================
+// COMPANY VIEW: money OUT, not earnings.
+// Company accounts don't earn - they pay. This computes:
+//   DISBURSED = total money confirmed received by members across all the
+//               company's paid projects (amountPaid, incl. dispute-adjusted).
+//   PENDING   = total still to be sent out: unconfirmed amounts on projects
+//               awaiting payment confirmation, plus the committed amount on
+//               ongoing paid projects - i.e. the total owed to all persons
+//               currently approved on those projects.
+// Returns { disbursedTotal, pendingTotal, rows: [{projectId, projectTitle, amount, state}] }
+export const computeCompanyDisbursements = async (uid) => {
+  const result = { disbursedTotal: 0, pendingTotal: 0, rows: [] };
+  if (!uid) return result;
+  try {
+    const projSnap = await getDocs(query(collection(db, 'projects'), where('submitterId', '==', uid)));
+    const paidProjects = projSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.isPaid);
+
+    for (const p of paidProjects) {
+      const entries = Object.values(p.paymentConfirmations || {});
+      let disbursed = 0, pending = 0, state;
+
+      if (entries.length > 0) {
+        // Payment phase reached: count per-entry statuses.
+        for (const e of entries) {
+          if (!e) continue;
+          const amount = Number(e.amountPaid ?? e.amountDue) || 0;
+          if (e.status === 'confirmed') disbursed += amount;
+          else if (e.status === 'pending' || e.status === 'disputed') pending += amount;
+          // forfeited / left entries owe nothing
+        }
+        state = p.status === 'completed' ? 'completed'
+          : entries.some(e => e?.status === 'disputed') ? 'disputed'
+          : 'awaiting';
+      } else if (p.status !== 'completed') {
+        // Ongoing project, payment phase not reached yet: the pending amount
+        // is the total to be paid to all persons currently on the project
+        // (sum of pay across approved members).
+        try {
+          const appSnap = await getDocs(query(collection(db, 'project_applications'), where('projectId', '==', p.id), where('status', '==', 'approved')));
+          pending = appSnap.docs.reduce((s, d) => s + (Number(d.data().payAmount) || 0), 0);
+        } catch (_) {}
+        state = 'ongoing';
+      } else {
+        state = 'completed';
+      }
+
+      result.disbursedTotal += disbursed;
+      result.pendingTotal += pending;
+      result.rows.push({
+        projectId: p.id,
+        projectTitle: p.projectTitle || 'Untitled',
+        amount: disbursed + pending,
+        disbursed,
+        pending,
+        state, // ongoing | awaiting | disputed | completed
+      });
+    }
+  } catch (e) {
+    console.log('Company disbursement computation skipped:', e.message);
+  }
+  return result;
+};
+
+// ============================================================================
 // PHASE B - Closing flow & disputes
 // ----------------------------------------------------------------------------
 // Lifecycle of a paid project's close:
@@ -163,24 +226,14 @@ export const hasOpenDispute = (project) =>
 const blockingEntries = (map) =>
   Object.values(map || {}).filter(c => c && (c.status === 'pending' || c.status === 'disputed'));
 
-// If owner marked paid AND no entry is pending/disputed -> complete the project.
-// Returns true if it completed.
+// PURE CHECK: would this project complete now? (owner marked paid AND no
+// entry is pending/disputed). The ACTUAL status flip to 'completed' happens
+// server-side in the autoCompletePaidProject Cloud Function - hardened
+// security rules (correctly) stop a member's session from changing project
+// status, so the money-state transition runs with the Admin SDK instead.
 export const checkAndCompleteProject = async (project, map) => {
   if (!project?.ownerPaidAll) return false;
-  if (blockingEntries(map).length > 0) return false;
-  await updateDoc(doc(db, 'projects', project.id), {
-    status: 'completed',
-    paymentCompletedAt: serverTimestamp(),
-  });
-  // Notify owner + members: project fully closed.
-  try {
-    if (project.submitterId) await notifyUid(project.submitterId, 'project_completed', `"${project.projectTitle}" is fully closed - all members confirmed payment. It's now in the Project Vault.`, project.id, project.projectTitle);
-    for (const email of Object.keys(map || {})) {
-      const uid = await uidByEmail(email);
-      if (uid) await notifyUid(uid, 'project_completed', `"${project.projectTitle}" is fully closed - all payments confirmed. Find it in your Project Vault.`, project.id, project.projectTitle);
-    }
-  } catch (_) {}
-  return true;
+  return blockingEntries(map).length === 0;
 };
 
 // OWNER: "I've paid everyone." Members are then asked to confirm receipt.

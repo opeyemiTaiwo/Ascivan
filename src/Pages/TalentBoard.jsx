@@ -115,10 +115,6 @@ const TalentBoard = () => {
         <p className="text-gray-500 text-sm mb-6 max-w-md mx-auto">
           The Talent Board is a Premium feature - a curated, searchable directory of verified tech professionals, ranked by badges and proven work. Upgrade to browse and connect with talent directly.
         </p>
-        <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-6 text-left max-w-md mx-auto">
-          <p className="text-gray-900 text-sm font-semibold mb-1">Premium includes:</p>
-          <p className="text-gray-600 text-xs leading-relaxed">Full Talent Board access with unlimited talent messaging (no monthly cap), priority Talent Board ranking, verified badge, paid project posting, and priority support.</p>
-        </div>
         <button onClick={() => navigate('/settings?tab=membership')} className="bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm px-6 py-3 rounded-xl transition-all">
           Upgrade to Premium
         </button>

@@ -8,9 +8,8 @@ import { db } from '../../firebase/config';
 import { PremiumBadge } from '../../components/PremiumBadge';
 import FindFirstProject from '../../components/FindFirstProject';
 import DiscoverTrack from '../../components/DiscoverTrack';
-import { eligibleTracks } from '../../utils/foundationsContributions';
 import TierBadge from '../../components/TierBadge';
-import { computeMemberEarnings, formatMoney } from '../../utils/paidProjects';
+import { computeMemberEarnings, computeCompanyDisbursements, formatMoney } from '../../utils/paidProjects';
 
 const badgeData = [
   { id: 'techmo', title: 'TechPO', image: '/Images/TechMO.png', label: 'Product / Project Owner' },
@@ -34,15 +33,23 @@ const DashboardOverview = () => {
   const [companyStats, setCompanyStats] = useState({ jobsPosted: 0, totalApplied: 0, totalViews: 0 });
   const [companyJobs, setCompanyJobs] = useState([]);
   const [earnings, setEarnings] = useState({ earnedTotal: 0, pendingTotal: 0, rows: [] });
+  const [disbursements, setDisbursements] = useState({ disbursedTotal: 0, pendingTotal: 0, rows: [] });
   const isPremiumUser = membershipPlan === 'Premium' || userRole === 'admin';
 
-  // Earnings summary for the Account card (paid projects the member was approved for).
+  // Account card money summary: companies see money OUT (disbursed/pending
+  // payouts on their paid projects); talent sees earnings (earned/pending).
   useEffect(() => {
-    if (!currentUser) return;
-    computeMemberEarnings(currentUser.uid, currentUser.email)
-      .then(setEarnings)
-      .catch(e => console.log('Dashboard earnings skipped:', e.message));
-  }, [currentUser]);
+    if (!currentUser || !profileData) return;
+    if (profileData.isCompany) {
+      computeCompanyDisbursements(currentUser.uid)
+        .then(setDisbursements)
+        .catch(e => console.log('Dashboard disbursements skipped:', e.message));
+    } else {
+      computeMemberEarnings(currentUser.uid, currentUser.email)
+        .then(setEarnings)
+        .catch(e => console.log('Dashboard earnings skipped:', e.message));
+    }
+  }, [currentUser, profileData]);
 
   useEffect(() => {
     if (!currentUser) return;
@@ -106,21 +113,21 @@ const DashboardOverview = () => {
     fetchData();
   }, [currentUser]);
 
-  // Company dashboard: load their job posts, applicant clicks, and views.
+  // Company dashboard: load their posted (paid) projects and applications.
+  // The job board section is retired for companies - they hire via paid projects.
   useEffect(() => {
     if (!currentUser || !profileData?.isCompany) return;
     let active = true;
     (async () => {
       try {
         const { collection: col, getDocs, query: q, where } = await import('firebase/firestore');
-        const snap = await getDocs(q(col(db, 'hub_posts'), where('posterId', '==', currentUser.uid)));
-        const jobs = snap.docs.map(d => ({ id: d.id, ...d.data() }))
-          .filter(j => j.status !== 'deleted');
-        const totalApplied = jobs.reduce((s, j) => s + (j.clickCount || 0), 0);
-        const totalViews = jobs.reduce((s, j) => s + (j.viewCount || 0), 0);
+        const snap = await getDocs(q(col(db, 'projects'), where('submitterId', '==', currentUser.uid)));
+        const projects = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const totalApplied = projects.reduce((s, p) => s + (p.applicationCount || 0), 0);
+        const activeCount = projects.filter(p => p.status === 'active' || p.status === 'awaiting_payment_confirmation').length;
         if (active) {
-          setCompanyJobs(jobs);
-          setCompanyStats({ jobsPosted: jobs.length, totalApplied, totalViews });
+          setCompanyJobs(projects);
+          setCompanyStats({ jobsPosted: projects.length, totalApplied, totalViews: activeCount });
         }
       } catch (e) { console.error('load company stats failed', e); }
     })();
@@ -170,17 +177,18 @@ const DashboardOverview = () => {
         {profileData?.isCompany ? (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             <div className="bg-white border border-gray-200 rounded-xl p-5">
-              <p className="text-gray-500 text-sm mb-1">Jobs Posted</p>
+              <p className="text-gray-500 text-sm mb-1">Paid Projects Posted</p>
               <p className="text-3xl font-bold text-gray-900">{companyStats.jobsPosted}</p>
             </div>
             <div className="bg-white border border-gray-200 rounded-xl p-5">
-              <p className="text-gray-500 text-sm mb-1">People Applied</p>
+              <p className="text-gray-500 text-sm mb-1">Applications Received</p>
               <p className="text-3xl font-bold text-gray-900">{companyStats.totalApplied}</p>
-              <p className="text-gray-400 text-xs mt-1">Clicked the apply button</p>
+              <p className="text-gray-400 text-xs mt-1">Across all your paid projects</p>
             </div>
             <div className="bg-white border border-gray-200 rounded-xl p-5">
-              <p className="text-gray-500 text-sm mb-1">Total Views</p>
+              <p className="text-gray-500 text-sm mb-1">Active Projects</p>
               <p className="text-3xl font-bold text-gray-900">{companyStats.totalViews}</p>
+              <p className="text-gray-400 text-xs mt-1">Running or awaiting payment confirmation</p>
             </div>
           </div>
         ) : (
@@ -205,21 +213,6 @@ const DashboardOverview = () => {
           </div>
         )}
 
-        {/* Invite eligible members (Associate+ in a track) to contribute to Foundations.
-            Hidden from the UI for now; utils/foundationsContributions.js is untouched. */}
-        {false && !loading && !profileData?.isCompany && eligibleTracks(profileData).length > 0 && (
-          <div className="bg-gradient-to-br from-blue-50 to-orange-50 border border-blue-200 rounded-xl p-6 mb-6">
-            <div className="flex items-start justify-between gap-4 flex-wrap">
-              <div className="flex-1 min-w-0">
-                <h3 className="text-lg font-bold text-gray-900 mb-1">Teach what you've mastered</h3>
-                <p className="text-gray-600 text-sm">You've earned an Associate badge, so you can contribute a lesson to Foundations. Help newcomers learn, build your brand, and boost your Talent Board ranking as learners rate your teaching.</p>
-              </div>
-              <button onClick={() => navigate('/foundations?contribute=1')} className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-all flex-shrink-0">
-                Contribute a lesson
-              </button>
-            </div>
-          </div>
-        )}
 
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -228,27 +221,33 @@ const DashboardOverview = () => {
             {profileData?.isCompany ? (
               <div className="bg-white border border-gray-200 rounded-xl p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-bold text-gray-900">Your Job Posts</h3>
-                  <Link to="/jobs" className="text-blue-600 text-sm font-medium hover:underline">Manage</Link>
+                  <h3 className="text-lg font-bold text-gray-900">Your Paid Projects</h3>
+                  <div className="flex items-center gap-4">
+                    <Link to="/projects/submit" className="text-blue-600 text-sm font-medium hover:underline">+ Post Paid Project</Link>
+                    <Link to="/projects/owner-dashboard" className="text-blue-600 text-sm font-medium hover:underline">Manage</Link>
+                  </div>
                 </div>
                 {companyJobs.length === 0 ? (
-                  <p className="text-gray-400 text-sm">No jobs posted yet. Post a job to start reaching talent.</p>
+                  <p className="text-gray-400 text-sm">No paid projects posted yet. Post a paid project to hire a team - you set the pay per person for every role, and it's visible to talent before they apply.</p>
                 ) : (
                   <div className="space-y-3">
-                    {companyJobs.map(job => (
-                      <div key={job.id} className="flex items-center justify-between p-3 border border-gray-100 rounded-lg">
+                    {companyJobs.map(p => (
+                      <div key={p.id} onClick={() => navigate('/projects/owner-dashboard')} className="flex items-center justify-between p-3 border border-gray-100 rounded-lg cursor-pointer hover:bg-gray-50 transition-all">
                         <div className="min-w-0 flex-1">
-                          <p className="text-gray-900 text-sm font-medium truncate">{job.title || job.jobTitle || 'Untitled job'}</p>
-                          <p className="text-gray-400 text-xs mt-0.5">{job.jobType || job.type || 'Job'}</p>
+                          <p className="text-gray-900 text-sm font-medium truncate">{p.projectTitle || 'Untitled project'}</p>
+                          <p className="text-gray-400 text-xs mt-0.5 capitalize">
+                            {p.status === 'awaiting_payment_confirmation' ? 'Awaiting payment confirmation' : p.status || 'active'}
+                            {p.isPaid && p.totalBudget > 0 ? ` · $${Number(p.totalBudget).toLocaleString()} budget` : ''}
+                          </p>
                         </div>
                         <div className="flex gap-4 flex-shrink-0 ml-3 text-center">
                           <div>
-                            <p className="text-sm font-bold text-gray-900">{job.clickCount || 0}</p>
+                            <p className="text-sm font-bold text-gray-900">{p.applicationCount || 0}</p>
                             <p className="text-gray-400 text-[11px]">applied</p>
                           </div>
                           <div>
-                            <p className="text-sm font-bold text-gray-900">{job.viewCount || 0}</p>
-                            <p className="text-gray-400 text-[11px]">views</p>
+                            <p className="text-sm font-bold text-gray-900">{(p.members || []).length}</p>
+                            <p className="text-gray-400 text-[11px]">on team</p>
                           </div>
                         </div>
                       </div>
@@ -388,16 +387,33 @@ const DashboardOverview = () => {
                 <Link to="/account" className="text-blue-600 text-sm font-medium hover:underline">View Account</Link>
               </div>
               <div className="grid grid-cols-2 gap-2 mb-2">
-                <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                  <p className="text-green-700 text-[10px] uppercase tracking-wider font-semibold">Earned</p>
-                  <p className="text-lg font-black text-green-700">{formatMoney(earnings.earnedTotal)}</p>
-                </div>
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-                  <p className="text-amber-700 text-[10px] uppercase tracking-wider font-semibold">Pending</p>
-                  <p className="text-lg font-black text-amber-700">{formatMoney(earnings.pendingTotal)}</p>
-                </div>
+                {profileData?.isCompany ? (
+                  <>
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                      <p className="text-blue-700 text-[10px] uppercase tracking-wider font-semibold">Disbursed</p>
+                      <p className="text-lg font-black text-blue-700">{formatMoney(disbursements.disbursedTotal)}</p>
+                    </div>
+                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                      <p className="text-amber-700 text-[10px] uppercase tracking-wider font-semibold">Pending</p>
+                      <p className="text-lg font-black text-amber-700">{formatMoney(disbursements.pendingTotal)}</p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                      <p className="text-green-700 text-[10px] uppercase tracking-wider font-semibold">Earned</p>
+                      <p className="text-lg font-black text-green-700">{formatMoney(earnings.earnedTotal)}</p>
+                    </div>
+                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                      <p className="text-amber-700 text-[10px] uppercase tracking-wider font-semibold">Pending</p>
+                      <p className="text-lg font-black text-amber-700">{formatMoney(earnings.pendingTotal)}</p>
+                    </div>
+                  </>
+                )}
               </div>
-              <p className="text-gray-400 text-xs">Earnings from paid projects you're approved for. Confirmed payments (including any dispute-adjusted amounts) show under Earned.</p>
+              <p className="text-gray-400 text-xs">{profileData?.isCompany
+                ? 'Money across your paid projects: Disbursed is confirmed received by members; Pending is the total to be paid to all persons on your ongoing projects.'
+                : 'Earnings from paid projects you\'re approved for. Confirmed payments (including any dispute-adjusted amounts) show under Earned.'}</p>
             </div>
 
             {/* Plan */}

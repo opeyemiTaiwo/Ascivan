@@ -89,6 +89,13 @@ const ProjectSubmission = () => {
   const [projectKind, setProjectKind] = useState('free');
   const [userProfile, setUserProfile] = useState(null);
   const posterIsPremium = isPremium(userProfile);
+  const posterIsCompany = !!userProfile?.isCompany;
+
+  // Company accounts can ONLY post paid projects - free collaborative
+  // projects (and the badges they award) are for talent. Lock the kind.
+  useEffect(() => {
+    if (posterIsCompany) setProjectKind('paid');
+  }, [posterIsCompany]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [profileGate, setProfileGate] = useState({ checked: false, complete: true, missing: [] });
@@ -176,6 +183,10 @@ const ProjectSubmission = () => {
     for (const r of validRoles) {
       if (!r.skills.trim()) errors.push(`Skills required for "${r.role}" role`);
       if (!r.count || r.count < 1) errors.push(`Number of people for "${r.role}" must be at least 1`);
+    }
+
+    if (posterIsCompany && projectKind !== 'paid') {
+      errors.push('Company accounts can only post paid projects.');
     }
 
     if (projectKind === 'paid') {
@@ -365,9 +376,20 @@ const ProjectSubmission = () => {
                   </button>
                 </div>
               )}
-              {/* Project Type: Free (collaborative) or Paid (Premium posters only) */}
+              {/* Project Type: Free (collaborative) or Paid (Premium posters only).
+                  Company accounts are paid-only - no free projects, no badges. */}
               <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 sm:p-6 mb-5">
                 <label className={labelClass}>Project Type *</label>
+                {posterIsCompany ? (
+                  <div className="mt-1">
+                    <div className="text-left rounded-xl border-2 border-amber-500 bg-amber-50 p-4">
+                      <span className="inline-flex items-center bg-amber-100 text-amber-800 border border-amber-200 font-bold rounded-full text-[10px] px-2 py-0.5 mb-2">PAID</span>
+                      <p className="text-gray-900 text-sm font-bold">Paid Project <span className="text-orange-500 text-[10px] font-black align-middle ml-1">PRO</span></p>
+                      <p className="text-gray-500 text-xs mt-1">You pay each member on completion. You set the pay per person for every role, visible to applicants before they join. No badges are awarded - members are compensated instead.</p>
+                    </div>
+                    <p className="text-gray-400 text-xs mt-2">Company accounts post paid projects only. Free collaborative projects, and the badges they award, are for talent members.</p>
+                  </div>
+                ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1">
                   <button type="button" onClick={() => setProjectKind('free')}
                     className={`text-left rounded-xl border-2 p-4 transition-all ${projectKind === 'free' ? 'border-green-500 bg-green-50' : 'border-gray-200 bg-white hover:border-gray-300'}`}>
@@ -382,6 +404,7 @@ const ProjectSubmission = () => {
                     <p className="text-gray-500 text-xs mt-1">You pay each member on completion. You set the pay per person for every role. No badges are awarded - members are compensated instead.</p>
                   </button>
                 </div>
+                )}
                 {projectKind === 'paid' && !posterIsPremium && (
                   <div className="mt-3 bg-orange-50 border border-orange-200 rounded-xl p-4">
                     <p className="text-orange-800 text-sm font-semibold mb-1">Paid projects require a Premium plan</p>

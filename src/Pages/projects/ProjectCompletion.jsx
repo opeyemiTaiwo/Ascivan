@@ -301,7 +301,14 @@ const ProjectCompletion = () => {
 
       // Award owner a TechLeads badge + certificate automatically.
       // Skipped on paid projects - no badges of any kind are awarded on them.
-      if (!isPaidProject) try {
+      // Also skipped for company accounts: companies never earn badges
+      // (safety net for any legacy free projects owned by a company).
+      let ownerIsCompany = false;
+      try {
+        const ownerSnap = await getDocs(query(collection(db, 'users'), where('email', '==', currentUser.email)));
+        if (!ownerSnap.empty) ownerIsCompany = !!ownerSnap.docs[0].data().isCompany;
+      } catch (_) {}
+      if (!isPaidProject && !ownerIsCompany) try {
         const ownerBadgeCount = await fetchBadgeCount(currentUser.email, 'leadership');
         const ownerBadgeLevel = determineBadgeLevel(ownerBadgeCount);
 

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
-import { computeMemberEarnings, formatMoney } from '../utils/paidProjects';
+import { computeMemberEarnings, computeCompanyDisbursements, formatMoney } from '../utils/paidProjects';
 
 const Account = () => {
   const { currentUser } = useAuth();
@@ -13,11 +13,13 @@ const Account = () => {
   const [stats, setStats] = useState({ joined: 0, completedJoined: 0, owned: 0, completedOwned: 0, badges: 0 });
   const [memberProjects, setMemberProjects] = useState([]);
   const [ownerProjects, setOwnerProjects] = useState([]);
-  // Earnings from paid projects: EARNED (payment confirmed - including any
-  // dispute-adjusted amounts) and PENDING (approved for an ongoing or
-  // awaiting-confirmation paid project). Amounts come from the application
-  // form at apply time; dispute-page adjustments override via amountPaid.
+  const [isCompany, setIsCompany] = useState(false);
+  // Talent: earnings from paid projects - EARNED (payment confirmed, incl.
+  // dispute-adjusted amounts) and PENDING (approved on ongoing paid projects).
+  // Company: money OUT instead - DISBURSED (total paid to members, confirmed)
+  // and PENDING (total still to be sent to all persons on ongoing projects).
   const [earnings, setEarnings] = useState({ earnedTotal: 0, pendingTotal: 0, rows: [] });
+  const [disbursements, setDisbursements] = useState({ disbursedTotal: 0, pendingTotal: 0, rows: [] });
 
   useEffect(() => {
     if (!currentUser) return;
@@ -65,11 +67,17 @@ const Account = () => {
           });
         } catch (e) { console.log('Owner query skipped:', e.message); }
 
-        // Earnings from paid projects
+        // Money view: companies see disbursements (money out); talent sees earnings.
         try {
-          const earn = await computeMemberEarnings(currentUser.uid, currentUser.email);
-          setEarnings(earn);
-        } catch (e) { console.log('Earnings skipped:', e.message); }
+          const profSnap = await getDoc(doc(db, 'users', currentUser.uid));
+          const company = profSnap.exists() && !!profSnap.data().isCompany;
+          setIsCompany(company);
+          if (company) {
+            setDisbursements(await computeCompanyDisbursements(currentUser.uid));
+          } else {
+            setEarnings(await computeMemberEarnings(currentUser.uid, currentUser.email));
+          }
+        } catch (e) { console.log('Money view skipped:', e.message); }
 
         setMemberProjects(mProjects);
         setOwnerProjects(oProjects);
@@ -93,7 +101,49 @@ const Account = () => {
       <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Account</h1>
       <p className="text-gray-500 text-sm mb-6">Your collaborative project activity, earnings, and credentials.</p>
 
-      {/* Earnings from paid projects */}
+      {/* Money view: company = payments out; talent = earnings in */}
+      {isCompany ? (
+      <div className="bg-white border border-gray-200 rounded-xl p-5 mb-6">
+        <h2 className="text-base font-bold text-gray-900 mb-1">Project Payments</h2>
+        <p className="text-gray-400 text-xs mb-4">Money across your paid projects. Disbursed is what members confirmed receiving (including dispute-adjusted amounts). Pending is the total still to be sent out - the amount owed to all persons on your ongoing projects.</p>
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+            <p className="text-blue-700 text-xs uppercase tracking-wider font-semibold">Disbursed</p>
+            <p className="text-2xl font-black text-blue-700 mt-1">{formatMoney(disbursements.disbursedTotal)}</p>
+            <p className="text-gray-400 text-xs mt-0.5">confirmed received by members</p>
+          </div>
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+            <p className="text-amber-700 text-xs uppercase tracking-wider font-semibold">Pending</p>
+            <p className="text-2xl font-black text-amber-700 mt-1">{formatMoney(disbursements.pendingTotal)}</p>
+            <p className="text-gray-400 text-xs mt-0.5">to be paid to all persons on ongoing projects</p>
+          </div>
+        </div>
+        {disbursements.rows.length === 0 ? (
+          <p className="text-gray-400 text-xs text-center py-2">No paid projects yet. Post a paid project to hire a team - you set the pay per person for every role.</p>
+        ) : (
+          <div className="space-y-1.5">
+            {disbursements.rows.map((r, i) => (
+              <div key={i} onClick={() => navigate((r.state === 'awaiting' || r.state === 'disputed') ? `/disputes/${r.projectId}` : '/projects/owner-dashboard')} className="flex items-center justify-between gap-2 p-2.5 bg-gray-50 rounded-lg border border-gray-100 cursor-pointer hover:bg-gray-100 transition-all">
+                <div className="min-w-0">
+                  <p className="text-gray-900 text-sm font-medium truncate">{r.projectTitle}</p>
+                  <p className="text-gray-400 text-xs">{formatMoney(r.disbursed)} disbursed · {formatMoney(r.pending)} pending</p>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <span className="text-gray-900 text-sm font-black">{formatMoney(r.amount)}</span>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                    r.state === 'completed' ? 'bg-green-100 text-green-700'
+                    : r.state === 'disputed' ? 'bg-red-100 text-red-700'
+                    : r.state === 'awaiting' ? 'bg-blue-100 text-blue-700'
+                    : 'bg-amber-100 text-amber-700'}`}>
+                    {r.state === 'completed' ? 'Completed' : r.state === 'disputed' ? 'Disputed' : r.state === 'awaiting' ? 'Awaiting Confirmations' : 'Ongoing'}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      ) : (
       <div className="bg-white border border-gray-200 rounded-xl p-5 mb-6">
         <h2 className="text-base font-bold text-gray-900 mb-1">My Earnings</h2>
         <p className="text-gray-400 text-xs mb-4">From paid projects you were approved for. Amounts come from the project's application; if a payment is adjusted during a dispute, your total updates automatically once resolved.</p>
@@ -135,6 +185,7 @@ const Account = () => {
           </div>
         )}
       </div>
+      )}
 
       {/* Summary stats */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">

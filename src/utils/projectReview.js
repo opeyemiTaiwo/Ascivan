@@ -15,6 +15,7 @@ import { db } from '../firebase/config';
 import {
   doc, updateDoc, addDoc, collection, query, where, getDocs, serverTimestamp,
 } from 'firebase/firestore';
+import { membersMeetMinTeamSize, MIN_TEAM_SIZE_MEMBERS_ERROR } from './projectRoles';
 
 export const REVIEW_STATUS = {
   NONE: 'none',
@@ -59,6 +60,14 @@ export const submitProjectForReview = async (project, owner, submissionUrl) => {
   if (!submissionUrl || !submissionUrl.trim()) {
     throw new Error('A submission link is required before submitting for review. Add it on the Resources tab.');
   }
+
+  // No solo projects: a project can't go to review with the owner as its only
+  // person. Checked here (not just in the UI) so every caller is covered.
+  const memberEmails = await getProjectMemberEmails(projectId);
+  if (!membersMeetMinTeamSize(memberEmails.length)) {
+    throw new Error(MIN_TEAM_SIZE_MEMBERS_ERROR);
+  }
+
   const workspaceUrl = buildWorkspaceUrl(projectId);
 
   await updateDoc(doc(db, 'projects', projectId), {

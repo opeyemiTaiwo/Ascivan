@@ -43,38 +43,40 @@ const About = () => {
             <span className="text-gray-900">About</span>{' '}
             <span className="text-blue-600">Ascivan</span>
           </h1>
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-4">
+            ASCIVAN is a collaborative tech talent development platform where individuals build in-demand technology skills by working together on real-world projects. Through cross-functional collaboration, members gain practical experience, discover the right career path in tech, and develop the expertise needed to thrive in today's technology industry.
+          </p>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Ascivan is where you turn ability into proof by doing real work. Collaborate on real products from start to finish, earn verified badges, and build a network of fellow builders, gaining applied skills you can prove, whoever you are and wherever you're from.
+            Unlike traditional learning platforms that focus on individual learning, ASCIVAN is built on collaboration. Every project is completed by a team, giving members the opportunity to collaborate, solve real-world problems, and gain practical experience in a professional environment.
           </p>
         </section>
 
         {/* The path: Ascend, Achieve, Advance */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">
-            <span className="text-blue-600">Ascend</span>, <span className="text-orange-500">Achieve</span>, <span className="text-gray-900">Advance</span> means
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+            <span className="text-blue-600">Ascend</span>, <span className="text-orange-500">Achieve</span>, <span className="text-gray-900">Advance</span>
           </h2>
-          <p className="text-gray-500 text-sm mb-6 max-w-2xl mx-auto text-center">Our name is a path, not just a phrase. Ascivan is built to move you along it, from wherever you start, to real accomplishment, to a career that keeps moving forward.</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="bg-white rounded-xl border border-gray-200 p-5">
               <div className="w-9 h-9 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center mb-3">
                 <span className="text-blue-600 font-extrabold">1</span>
               </div>
               <h3 className="text-blue-600 font-bold text-lg mb-2">Ascend</h3>
-              <p className="text-gray-500 text-sm">Start from wherever you are and rise. Discover your path in tech, learn the foundations, and choose the skill track that fits you, then grow into someone ready to contribute, no matter your background or location.</p>
+              <p className="text-gray-500 text-sm">Start your journey in tech. Whether you're discovering your path, switching careers, or beginning a new journey in technology, ASCIVAN helps you explore different career paths by collaborating on real-world projects. Through hands-on experience in different roles, you can quickly identify where your interests, strengths, and potential align.</p>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-5">
               <div className="w-9 h-9 rounded-lg bg-orange-50 border border-orange-100 flex items-center justify-center mb-3">
                 <span className="text-orange-500 font-extrabold">2</span>
               </div>
               <h3 className="text-orange-500 font-bold text-lg mb-2">Achieve</h3>
-              <p className="text-gray-500 text-sm">Do work that counts. Ship real products with real teams from start to finish, and the people you build with become collaborators, partners, and clients, while verified badges prove exactly what you can do.</p>
+              <p className="text-gray-500 text-sm">Build your skills through collaboration. Track your progress as you complete real-world projects and earn verified badges that recognize your growth at every stage. As you advance from one level to the next, you build practical experience, strengthen your confidence, and grow through meaningful collaboration with peers on real-world projects.</p>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-5">
               <div className="w-9 h-9 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center mb-3">
                 <span className="text-gray-900 font-extrabold">3</span>
               </div>
               <h3 className="text-gray-900 font-bold text-lg mb-2">Advance</h3>
-              <p className="text-gray-500 text-sm">Turn proof into momentum. The applied skills, verified work, and network you build here are yours, and they keep opening what comes next. Advance on your own terms.</p>
+              <p className="text-gray-500 text-sm">Earn recognition for your expertise. Expert badges are awarded after successfully completing a defined number of real-world projects within a specific field. These achievements showcase your verified experience and demonstrate your capabilities to employers, startups, organizations, and clients, both within and beyond the ASCIVAN ecosystem.</p>
             </div>
           </div>
         </section>
@@ -83,18 +85,31 @@ const About = () => {
         <section className="mb-12">
           <div className="bg-gray-50 rounded-xl border border-gray-200 p-6 sm:p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h2>
-            <p className="text-gray-600 leading-relaxed mb-4">
-              Talent is everywhere, but the chance to prove it is not. Many capable people have the skills but no easy way to gain real, verifiable work experience. Degrees, coursework, and competitions build ability; they rarely produce the one thing that proves it: evidence that you've shipped a real product, with a team, from start to finish. Ascivan closes that gap. We turn knowledge into applied experience, real teams building products end to end, so you gain applied skills, verified proof, and a network of people you've actually built with. Skills you own, proof that travels with you, wherever you choose to take them. No matter where you are in the world, your work speaks for you.
+            <p className="text-gray-600 leading-relaxed">
+              To empower the next generation of technology professionals by making collaboration the foundation of learning, innovation, and career development.
             </p>
           </div>
         </section>
 
-        {/* For Companies */}
+        {/* Vision */}
+        <section className="mb-12">
+          <div className="bg-gray-50 rounded-xl border border-gray-200 p-6 sm:p-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Our Vision</h2>
+            <p className="text-gray-600 leading-relaxed">
+              To become the world's leading collaborative platform where aspiring and experienced technology professionals learn, build, innovate, and grow together while solving meaningful real-world problems.
+            </p>
+          </div>
+        </section>
+
+        {/* For Startups and Organisations */}
         <section className="mb-12">
           <div className="bg-blue-50 rounded-xl border border-blue-100 p-6 sm:p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">For Companies</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">For Startups and Organisations</h2>
             <p className="text-gray-600 leading-relaxed mb-4">
-              Ascivan is also where companies find proven talent. Everyone here is verified by the work they have actually shipped, so you hire on evidence, not on resumes. Browse the Talent Board, see real project history and verified badges, and reach out to the people whose proof matches what you need.
+              ASCIVAN also connects startups and organisations with emerging tech talent ready to contribute to real-world projects. Instead of building teams from scratch, organisations can collaborate with skilled individuals to accelerate innovation, validate ideas, develop products, and solve real business challenges.
+            </p>
+            <p className="text-gray-600 leading-relaxed mb-4">
+              Everyone here is verified by the work they have actually shipped, so you hire on evidence, not on resumes. Browse the Talent Board, see real project history and verified badges, and reach out to the people whose proof matches what you need.
             </p>
             <p className="text-gray-600 leading-relaxed">
               You can also post paid projects and build directly from our talent pool. Bring real work to teams that are ready to deliver it, across development, QA, architecture, security, and product, and let their contribution on your project speak for itself.

@@ -11,6 +11,7 @@ import { notifyBadgeAwarded } from '../../utils/emailNotifications';
 import { logActivity as logProofEvent } from '../../utils/activityFeed';
 import { logActivity } from '../../utils/activityLog';
 import { REVIEW_STATUS, submitProjectForReview, getProjectMemberEmails } from '../../utils/projectReview';
+import { MIN_TEAM_SIZE, membersMeetMinTeamSize, MIN_TEAM_SIZE_MEMBERS_ERROR } from '../../utils/projectRoles';
 import { sendPush } from '../../utils/pushNotifications';
 
 const badgeCategories = {
@@ -54,6 +55,10 @@ const ProjectCompletion = () => {
   const [submittingReview, setSubmittingReview] = useState(false);
   const [ownerIsCompany, setOwnerIsCompany] = useState(false);
 
+  // No solo projects: the owner counts as one person, so the project needs
+  // enough approved members alongside them before it can be reviewed or completed.
+  const hasTeam = membersMeetMinTeamSize(members.length);
+
   const reviewStatus = project?.reviewStatus || REVIEW_STATUS.NONE;
   // COMPANY accounts do NOT submit their projects to Ascivan for review -
   // they can complete their projects (and start payment confirmations on
@@ -70,6 +75,7 @@ const ProjectCompletion = () => {
       toast.error('Add a project submission link on the workspace Resources tab before submitting for review.');
       return;
     }
+    if (!hasTeam) { toast.error(MIN_TEAM_SIZE_MEMBERS_ERROR); return; }
     setSubmittingReview(true);
     try {
       const memberEmails = await getProjectMemberEmails(projectId);
@@ -184,10 +190,12 @@ const ProjectCompletion = () => {
 
   // Finalize completion: evaluate contributions, award badges, mark complete
   const handleComplete = async () => {
-    if (members.length > 0) {
-      const hasEvals = evaluations.every(e => e.contribution);
-      if (!hasEvals) { toast.error('Please rate contribution for all members'); return; }
-    }
+    // No solo projects - a project can't be completed with the owner as its
+    // only person. There is no solo completion path any more.
+    if (!hasTeam) { toast.error(MIN_TEAM_SIZE_MEMBERS_ERROR); return; }
+
+    const hasEvals = evaluations.every(e => e.contribution);
+    if (!hasEvals) { toast.error('Please rate contribution for all members'); return; }
 
     setSubmitting(true);
     try {
@@ -514,11 +522,13 @@ const ProjectCompletion = () => {
                         ? <a href={project.resources.submissionUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{project.resources.submissionUrl}</a>
                         : <span className="text-red-500">Not set - add it on the workspace Resources tab.</span>}</p>
                       <p>You can update the link on the Resources tab and re-submit at any time.</p>
+                      <p>Team: {members.length + 1} ({members.length} approved {members.length === 1 ? 'member' : 'members'} + you).{' '}
+                        {!hasTeam && <span className="text-red-500">A project needs a team of at least {MIN_TEAM_SIZE} before it can be reviewed.</span>}</p>
                     </div>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                      <button onClick={handleSubmitForReview} disabled={submittingReview}
-                        className="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-all disabled:opacity-50">
-                        {submittingReview ? 'Submitting...' : needsChanges ? 'Re-submit for review' : 'Submit for review'}
+                      <button onClick={handleSubmitForReview} disabled={submittingReview || !hasTeam}
+                        className="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                        {submittingReview ? 'Submitting...' : !hasTeam ? `Needs a team of ${MIN_TEAM_SIZE}+` : needsChanges ? 'Re-submit for review' : 'Submit for review'}
                       </button>
                       <button onClick={() => navigate(`/projects/${projectId}/workspace`)}
                         className="w-full sm:w-auto px-6 py-3 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold rounded-xl text-sm transition-all">
@@ -595,9 +605,10 @@ const ProjectCompletion = () => {
                     </div>
                   </div>
 
-                  {members.length === 0 ? (
-                    <div className="text-center py-8">
-                      <p className="text-gray-400 text-sm mb-4">No team members. This will be completed as a solo project.</p>
+                  {!hasTeam ? (
+                    <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-center">
+                      <p className="text-red-700 text-sm font-bold mb-1">This project doesn't have a team yet</p>
+                      <p className="text-gray-600 text-xs">{MIN_TEAM_SIZE_MEMBERS_ERROR} Approve applicants from your owner dashboard, and once the team has done the work you can complete the project here.</p>
                     </div>
                   ) : (
                     <div>
@@ -616,9 +627,9 @@ const ProjectCompletion = () => {
                   )}
                 </div>
 
-                <button onClick={() => setStep(2)}
-                  className="w-full py-3.5 min-h-[48px] bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl text-sm transition-all shadow-lg">
-                  {members.length > 0 ? 'Proceed to Evaluation' : 'Complete Solo Project'}
+                <button onClick={() => setStep(2)} disabled={!hasTeam}
+                  className="w-full py-3.5 min-h-[48px] bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl text-sm transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                  {hasTeam ? 'Proceed to Evaluation' : `Needs a team of ${MIN_TEAM_SIZE}+ to complete`}
                 </button>
               </div>
             )}
@@ -626,13 +637,13 @@ const ProjectCompletion = () => {
             {/* Step 2: Evaluate */}
             {isApproved && step === 2 && (
               <div className="space-y-6">
-                {members.length === 0 ? (
-                  <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6 text-center">
-                    <p className="text-gray-600 text-sm mb-4">Solo project - no members to evaluate.</p>
-                    <button onClick={handleComplete} disabled={submitting}
-                      className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-all disabled:opacity-50">
-                      {submitting ? 'Completing...' : 'Complete Project'}
-                    </button>
+                {!hasTeam ? (
+                  <div className="bg-red-50 border border-red-200 rounded-2xl p-6 text-center">
+                    <p className="text-red-700 text-sm font-bold mb-1">No team to evaluate</p>
+                    <p className="text-gray-600 text-xs mb-4">{MIN_TEAM_SIZE_MEMBERS_ERROR}</p>
+                    <Link to="/projects/owner-dashboard" className="inline-block px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold rounded-xl text-sm transition-all">
+                      Back to Dashboard
+                    </Link>
                   </div>
                 ) : (
                   <>

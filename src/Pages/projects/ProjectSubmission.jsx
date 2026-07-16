@@ -11,7 +11,7 @@ import usePosterName from '../../hooks/usePosterName';
 import { checkProfileComplete } from '../../utils/profileCompletion';
 import { isPremium } from '../../components/PremiumBadge';
 import { formatMoney, computeTotalBudget } from '../../utils/paidProjects';
-import { ROLE_TEMPLATES } from '../../utils/projectRoles';
+import { ROLE_TEMPLATES, MIN_TEAM_SIZE, MIN_MEMBERS, rolesMeetMinTeamSize, MIN_TEAM_SIZE_ROLES_ERROR } from '../../utils/projectRoles';
 
 const industryTracks = [
   { value: 'healthcare', label: 'Healthcare / Medical' },
@@ -183,6 +183,11 @@ const ProjectSubmission = () => {
     for (const r of validRoles) {
       if (!r.skills.trim()) errors.push(`Skills required for "${r.role}" role`);
       if (!r.count || r.count < 1) errors.push(`Number of people for "${r.role}" must be at least 1`);
+    }
+    // No solo projects: the roles must offer enough seats for a real team
+    // (you count as one person, so the roles cover everyone else).
+    if (validRoles.length > 0 && !rolesMeetMinTeamSize(validRoles)) {
+      errors.push(MIN_TEAM_SIZE_ROLES_ERROR);
     }
 
     if (posterIsCompany && projectKind !== 'paid') {
@@ -495,11 +500,14 @@ const ProjectSubmission = () => {
               <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 sm:p-6 space-y-5">
                 <div className="flex items-center justify-between">
                   <h2 className="text-lg font-bold text-gray-900">Team Roles</h2>
-                  <span className="text-gray-400 text-xs">Total team: {totalTeamSize} {totalTeamSize === 1 ? 'person' : 'people'}</span>
+                  <span className={`text-xs ${totalTeamSize >= MIN_MEMBERS ? 'text-gray-400' : 'text-red-500 font-semibold'}`}>
+                    Total team: {totalTeamSize + 1} {totalTeamSize + 1 === 1 ? 'person' : 'people'} (you + {totalTeamSize})
+                  </span>
                 </div>
                 <p className="text-gray-500 text-xs -mt-2">Set an experience level per role. Intermediate and Advanced roles can only be filled by members who've earned the matching badge level in that track - keeping your team realistic and your project outcomes protected. Use Beginner or Any Level for roles open to newcomers.</p>
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                   <p className="text-gray-700 text-xs"><strong>Note:</strong> add or remove roles to fit your project. Keep at least one Beginner or Any Level role so newcomers can join.</p>
+                  <p className="text-gray-700 text-xs mt-2"><strong>No solo projects:</strong> a project is a team effort, so it needs at least {MIN_TEAM_SIZE} people. You count as one, so your roles must add up to at least {MIN_MEMBERS} {MIN_MEMBERS === 1 ? 'person' : 'people'} besides you - and you'll need that many approved members on the team before you can submit for review or complete the project.</p>
                 </div>
 
                 {teamRoles.map((role, index) => (

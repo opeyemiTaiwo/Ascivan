@@ -17,7 +17,10 @@ import { useAuth } from '../../context/AuthContext';
 import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { toast } from 'react-toastify';
-import { ROLE_TEMPLATES, EXPERIENCE_LEVELS } from '../../utils/projectRoles';
+import {
+  ROLE_TEMPLATES, EXPERIENCE_LEVELS, MIN_TEAM_SIZE, MIN_MEMBERS,
+  rolesMeetMinTeamSize, MIN_TEAM_SIZE_ROLES_ERROR,
+} from '../../utils/projectRoles';
 import { formatMoney, computeTotalBudget } from '../../utils/paidProjects';
 
 const industryTracks = [
@@ -168,6 +171,10 @@ const ProjectSetup = () => {
     const valid = buildTeamRoles();
     if (valid.length === 0) { toast.error('Add at least one team role'); return; }
 
+    // No solo projects: the roles must offer enough seats for a real team
+    // (the owner counts as one person, so the roles cover everyone else).
+    if (!rolesMeetMinTeamSize(valid)) { toast.error(MIN_TEAM_SIZE_ROLES_ERROR); return; }
+
     // Skills are required for every editable role. Locked paid roles keep the
     // skills they were posted with, so they're skipped here.
     const missingSkills = roles.some(r => !isLocked(r) && resolveRoleName(r) && !(r.skills || '').trim());
@@ -301,6 +308,10 @@ const ProjectSetup = () => {
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold text-gray-900">Team Roles</h2>
           <button onClick={addRole} className="text-blue-600 text-sm font-semibold">+ Add role</button>
+        </div>
+
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+          <p className="text-gray-700 text-xs"><strong>No solo projects:</strong> a project needs a team of at least {MIN_TEAM_SIZE}. You count as one, so your roles must add up to at least {MIN_MEMBERS} {MIN_MEMBERS === 1 ? 'person' : 'people'} besides you.</p>
         </div>
 
         {isPaid ? (

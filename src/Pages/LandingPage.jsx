@@ -46,20 +46,32 @@ const LandingPage = () => {
 
   const features = [
     {
-      title: 'Real-World Projects',
-      desc: 'Join or post collaborative tech projects and build real products with real teams, from start to finish, the kind of hands-on experience that builds real skill.',
+      title: 'Discover your career path in tech',
+      desc: 'Explore different technology domains and collaborate in various roles on real-world projects.',
     },
     {
-      title: 'TechTalent Badges',
-      desc: 'Earn verified credentials across 6 skill tracks as you complete projects. Badges progress from Novice to Expert, building a portfolio that proves what you can do.',
+      title: 'Build practical, industry-relevant skills',
+      desc: 'Learn through hands-on collaboration instead of working on isolated or theoretical projects.',
     },
     {
-      title: 'Talent Board',
-      desc: 'Your verified work builds a portfolio that speaks for itself, badges, project history, and clear proof of what you can actually build.',
+      title: 'Gain real-world experience',
+      desc: 'Contribute to projects that mirror the way technology teams operate in professional environments.',
     },
     {
-      title: 'Community & Workspace',
-      desc: 'Connect with tech professionals, collaborate in project workspaces with built-in discussion forums, and grow your network through meaningful work.',
+      title: 'Collaborate across disciplines',
+      desc: 'Work with software engineers, AI engineers, designers, data scientists, cybersecurity professionals, product managers, and other technology specialists.',
+    },
+    {
+      title: 'Develop a strong professional portfolio',
+      desc: 'Build it through meaningful collaborative projects that demonstrate your skills and experience.',
+    },
+    {
+      title: 'Transition into new technology careers with confidence',
+      desc: 'Gain practical experience across multiple domains.',
+    },
+    {
+      title: 'Continuously upskill and stay relevant',
+      desc: 'Keep pace with an ever-evolving technology landscape.',
     },
   ];
 
@@ -105,6 +117,7 @@ const LandingPage = () => {
         .fade-up.delay-4 { transition-delay: 0.4s; }
         .fade-up.delay-5 { transition-delay: 0.5s; }
         .fade-up.delay-6 { transition-delay: 0.6s; }
+        .fade-up.delay-7 { transition-delay: 0.7s; }
       `}</style>
 
       {/* NAVBAR */}
@@ -166,7 +179,7 @@ const LandingPage = () => {
           </h1>
 
           <p id="hero-desc" data-animate className={`fade-up delay-2 text-gray-600 text-lg sm:text-xl max-w-2xl mx-auto mb-10 font-normal leading-relaxed ${isVisible('hero-desc') ? 'visible' : ''}`}>
-            Build real products with real teams. Gain applied skills and verified proof of what you can do, plus a network of builders you've actually shipped with. Your work speaks for itself.
+            Build in-demand tech skills through collaboration on real-world projects. Discover your path, gain practical experience, earn verified recognition, and grow alongside a community of innovators.
           </p>
 
           <div id="hero-cta" data-animate className={`fade-up delay-3 flex flex-col sm:flex-row items-center justify-center gap-4 ${isVisible('hero-cta') ? 'visible' : ''}`}>
@@ -208,8 +221,7 @@ const LandingPage = () => {
       {/* FEATURES */}
       <section className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6">
         <div id="features-head" data-animate className={`fade-up text-center mb-14 ${isVisible('features-head') ? 'visible' : ''}`}>
-          <p className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-3">Everything You Need</p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-800 text-gray-900 mb-4">Accelerate Your Tech Career</h2>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-800 text-gray-900 mb-4">What You Can Do with ASCIVAN</h2>
           <p className="text-gray-500 max-w-xl mx-auto text-base">
             From real collaborative projects to verified credentials, Ascivan gives you everything you need to build and prove your skills.
           </p>
@@ -229,7 +241,6 @@ const LandingPage = () => {
       <section className="py-20 sm:py-28 bg-gray-50 border-y border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div id="badges-head" data-animate className={`fade-up text-center mb-14 ${isVisible('badges-head') ? 'visible' : ''}`}>
-            <p className="text-blue-600 text-sm font-semibold uppercase tracking-widest mb-3">TechTalent Badges</p>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-800 text-gray-900 mb-4">Earn Verified Credentials</h2>
             <p className="text-gray-500 max-w-xl mx-auto text-base">
               Each badge represents a verified skill track with four progression levels: Novice, Associate, Advanced, and Expert. Earn them by completing real projects.

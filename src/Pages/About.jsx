@@ -49,7 +49,7 @@ const About = () => {
         
         </section>
 
-        {/* The path: Ascend, Achieve, Advance */}
+        {/* The path: Ascend Achieve Advance */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
             <span className="text-blue-600">Ascend</span>, <span className="text-orange-500">Achieve</span>, <span className="text-gray-900">Advance</span>

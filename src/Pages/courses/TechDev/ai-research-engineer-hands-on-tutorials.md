@@ -258,7 +258,7 @@ from sklearn.linear_model import LogisticRegression
 model = LogisticRegression()
 model.fit(X_train, y_train)
 ```
-**logistic regression** is a simple, interpretable model for classification, often surprisingly hard to beat.
+**logistic regression** predicts the probability of a yes/no outcome by taking a weighted combination of your input features and squashing the result into a 0-to-1 range. It's *simple* (fast to train), *interpretable* (each feature's weight tells you how much it pushed the prediction toward yes or no), and a strong baseline that's often surprisingly hard to beat, which is why you try it before anything fancier.
 
 **Step 6: Evaluate both models.**
 ```python
@@ -334,7 +334,7 @@ input_size, hidden_size, output_size = 2, 4, 1
 W1 = np.random.randn(input_size, hidden_size) * 0.1
 W2 = np.random.randn(hidden_size, output_size) * 0.1
 ```
-**weights** are the learnable parameters connecting layers; small random initialization avoids starting the network stuck at a bad symmetric point.
+**weights** are the learnable numbers connecting the layers; training nudges them up or down to reduce the network's error. They start as *small random* values on purpose: if every weight began identical, every neuron in a layer would receive the same signal and learn the exact same thing, so the random spread lets neurons specialize (this is called "breaking symmetry").
 
 **Step 5: Implement the forward pass.**
 ```python

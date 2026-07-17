@@ -341,7 +341,7 @@ You can explain what a table, row, column, and foreign key are, and you have `mo
 
 ### Concepts
 
-**System design** is reasoning about how the pieces of your app fit together and what happens as usage grows. You don't need to be an expert yet - you need to practice asking the right questions.
+**System design** is deciding how the separate parts of your app - the browser the user sees, the server that runs your code, the database that stores data, and any outside services it calls - connect and divide the work, and predicting where that arrangement will strain as more people use it. You don't need to be an expert yet; the skill to practice is asking a few pointed questions of any design: *what breaks first when traffic spikes, where is the single point of failure, and which data must be instantly correct versus can lag a little?* Those are exactly the questions you'll answer for TrackIt below.
 
 ### Lab
 

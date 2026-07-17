@@ -46,9 +46,7 @@ const About = () => {
           <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-4">
             ASCIVAN is a collaborative tech talent development platform where individuals build in-demand technology skills by working together on real-world projects. Through cross-functional collaboration, members gain practical experience, discover the right career path in tech, and develop the expertise needed to thrive in today's technology industry.
           </p>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Unlike traditional learning platforms that focus on individual learning, ASCIVAN is built on collaboration. Every project is completed by a team, giving members the opportunity to collaborate, solve real-world problems, and gain practical experience in a professional environment.
-          </p>
+        
         </section>
 
         {/* The path: Ascend, Achieve, Advance */}

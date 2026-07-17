@@ -252,17 +252,24 @@ const Foundations = () => {
         );
       })()}
 
-      {/* Track tabs */}
+      {/* Track selector — dropdown (same control style as the Projects filters) */}
       {allTracks.length > 1 && (
-        <div className="flex flex-wrap gap-2 mb-4">
-          {allTracks.map((t) => (
-            <button key={t} onClick={() => switchTrack(t)}
-              className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-all ${
-                t === track ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-600 border-gray-300 hover:border-blue-400'
-              }`}>
-              {trackMeta(t).label}
-            </button>
-          ))}
+        <div className="mb-4">
+          <label htmlFor="foundations-track-select" className="sr-only">Choose a Foundations track</label>
+          <div className="relative inline-block w-full sm:w-auto">
+            <select
+              id="foundations-track-select"
+              value={track || ''}
+              onChange={(e) => switchTrack(e.target.value)}
+              className="w-full sm:w-auto bg-gray-100 border border-gray-200 rounded-xl pl-3 pr-10 py-2.5 min-h-[44px] text-sm font-semibold text-gray-900 focus:border-blue-500 focus:outline-none transition-all appearance-none cursor-pointer"
+            >
+              {allTracks.map((t) => (
+                <option key={t} value={t}>{trackMeta(t).label}</option>
+              ))}
+            </select>
+            <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">▾</span>
+          </div>
+          <style>{`select option { background-color: #fff; color: #111; }`}</style>
         </div>
       )}
 
